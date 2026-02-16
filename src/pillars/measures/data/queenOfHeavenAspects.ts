@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 // data ONLY — no React imports
 
 export type Aspect = {
@@ -74,3 +75,4 @@ export const queenOfHeavenAspects: readonly Aspect[] = [
     top: "74%",
   },
 ] as const;
+

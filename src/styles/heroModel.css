@@ -1,0 +1,44 @@
+/* src/styles/heroModel.css */
+
+@keyframes obsidianMicroDrift {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+    opacity: 0.48;
+  }
+  50% {
+    transform: translate3d(1.5px, -1px, 0px);
+    opacity: 0.62;
+  }
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+    opacity: 0.48;
+  }
+}
+
+@keyframes c3Pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.01);
+  }
+}
+
+/* Syndros: if the component renders a label, hide any text nodes safely */
+.heroModel-syndrosWrap * {
+  user-select: none;
+}
+
+.heroModel-syndrosWrap [data-label],
+.heroModel-syndrosWrap .label,
+.heroModel-syndrosWrap .text,
+.heroModel-syndrosWrap span,
+.heroModel-syndrosWrap p {
+  display: none !important;
+}

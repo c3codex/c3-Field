@@ -18,6 +18,10 @@ const FADE_MS = 1200;
 // optional: soften bed during the video “encounter” then restore on index
 const DUCK_DURING_VIDEO = true;
 
+// IMPORTANT: set this to match your obsidianIndex still's aspect ratio.
+// If you don't know it yet, leave as "16 / 9" temporarily and adjust later.
+const INDEX_ASPECT_RATIO = "16 / 9";
+
 export default function ObsidianGateIndex() {
   const nav = useNavigate();
   const bus = useMeasuresAudioBus();
@@ -30,10 +34,6 @@ export default function ObsidianGateIndex() {
     bus.setObsidianActive(true);
     if (DUCK_DURING_VIDEO) bus.duck(); // keeps Kumurrah cinematic + not “too present”
     return () => {
-      // Only turn off if you truly want bed to stop when leaving index.
-      // If you want continuous bed across index -> plate, KEEP IT ON elsewhere too.
-      // We do keep it on in plates/intro via their own mount hooks.
-      // So here we *don’t* force off; we just restore so it doesn’t stay ducked.
       bus.restore();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,6 +80,7 @@ export default function ObsidianGateIndex() {
           muted
           playsInline
           className="absolute inset-0 h-full w-full object-contain"
+          style={{ pointerEvents: "none" }} // never steal taps
         />
       )}
 
@@ -92,33 +93,52 @@ export default function ObsidianGateIndex() {
           pointerEvents: phase === "index" ? "auto" : "none",
         }}
       >
-        <img
-          src={MEASURES_ASSETS.obsidianIndex.still}
-          alt="Obsidian Gates of Descent"
-          draggable={false}
-          className="h-full w-full object-contain select-none"
-        />
-
-        {/* GATE HOT ZONES */}
-        {gates.map((gate) => (
-          <button
-            key={gate.id}
-            aria-label={gate.label}
-            disabled={!gate.enabled}
-            onClick={() => gate.enabled && nav(gate.route)}
-            className={`absolute z-30 rounded-xl transition ${
-              gate.enabled
-                ? "hover:bg-white/5 focus:outline-none"
-                : "cursor-not-allowed opacity-30"
-            }`}
+        {/* Centered aspect box: zones align to the actual displayed art */}
+        <div className="absolute inset-0 grid place-items-center">
+          <div
+            className="relative"
             style={{
-              top: gate.zone.top,
-              left: gate.zone.left,
-              width: gate.zone.width,
-              height: gate.zone.height,
+              aspectRatio: INDEX_ASPECT_RATIO,
+              width: "min(100vw, calc(100svh * (16/9)))",
+              height: "min(100svh, calc(100vw * (9/16)))",
+              maxWidth: "100vw",
+              maxHeight: "100svh",
             }}
-          />
-        ))}
+          >
+            <img
+              src={MEASURES_ASSETS.obsidianIndex.still}
+              alt="Obsidian Gates of Descent"
+              draggable={false}
+              className="absolute inset-0 h-full w-full select-none"
+              style={{ objectFit: "fill", pointerEvents: "none" }} // image itself shouldn't steal taps
+            />
+
+            {/* GATE HOT ZONES */}
+            {gates.map((gate) => (
+              <button
+                key={gate.id}
+                type="button"
+                aria-label={gate.label}
+                disabled={!gate.enabled}
+                onPointerDown={() => gate.enabled && nav(gate.route)}
+                onClick={() => gate.enabled && nav(gate.route)}
+                className={`absolute z-30 rounded-xl transition ${
+                  gate.enabled
+                    ? "hover:bg-white/5 focus:outline-none"
+                    : "cursor-not-allowed opacity-30"
+                }`}
+                style={{
+                  top: gate.zone.top,
+                  left: gate.zone.left,
+                  width: gate.zone.width,
+                  height: gate.zone.height,
+                  touchAction: "manipulation",
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              />
+            ))}
+          </div>
+        </div>
 
         {/* RETURN GLYPH */}
         <div className="absolute bottom-6 right-6 z-40">

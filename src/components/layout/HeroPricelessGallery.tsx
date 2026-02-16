@@ -10,6 +10,23 @@ export default function HeroPriceless() {
   const nav = useNavigate();
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  const PRICLESS_SEEN_KEY = "priceless:seen";
+
+const [mode, setMode] = useState<"video" | "static">(() => {
+  return localStorage.getItem(PRICLESS_SEEN_KEY) === "1" ? "static" : "video";
+});
+
+// when the video finishes (or after your settle timeout)
+useEffect(() => {
+  if (mode === "video") {
+    const t = window.setTimeout(() => {
+      localStorage.setItem(PRICLESS_SEEN_KEY, "1");
+      setMode("static");
+    }, 6000 /* or your priceless hero duration */);
+    return () => window.clearTimeout(t);
+  }
+}, [mode]);
+
   const [settled, setSettled] = useState(false); // once true, we show the still (and hide video)
   const [fadeOutVideo, setFadeOutVideo] = useState(false);
   const [stillLoaded, setStillLoaded] = useState(false);
