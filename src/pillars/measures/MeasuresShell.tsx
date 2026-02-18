@@ -6,40 +6,34 @@ import MeasuresTempleHome from "@/pillars/measures/MeasuresTempleHome";
 import MeasuresExhibition from "@/pillars/measures/MeasuresExhibition";
 
 import ObsidianGateIntro from "@/pillars/measures/gates/ObsidianGateIntro";
+import KumurrahPassage from "@/pillars/measures/gates/KumurrahPassage";
 import ObsidianGateIndex from "@/pillars/measures/gates/ObsidianGateIndex";
 import ObsidianGatePlate from "@/pillars/measures/gates/ObsidianGatePlate";
 
-import { MeasuresAudioBusProvider, useMeasuresAudioBus } from "@/pillars/measures/audio/MeasuresAudioBusProvider";
-
-function MeasuresAudioUnlockLayer({ children }: { children: React.ReactNode }) {
-  const bus = useMeasuresAudioBus();
-  return (
-    <div
-      className="h-full w-full"
-      onPointerDown={() => bus.unlock()}
-      onKeyDown={() => bus.unlock()}
-      role="presentation"
-    >
-      {children}
-    </div>
-  );
-}
+import CodexstoneChamber from "@/pillars/measures/mes/CodexstoneChamber";
+import MarbleMEPlate from "@/pillars/measures/mes/MarbleMEPlate";
+import { MeasuresAudioBusProvider } from "@/pillars/measures/audio/MeasuresAudioBusProvider";
 
 export default function MeasuresShell() {
   return (
     <MeasuresAudioBusProvider>
-      <MeasuresAudioUnlockLayer>
-        <Routes>
-          <Route index element={<MeasuresTempleHome />} />
-          <Route path="exhibition" element={<MeasuresExhibition />} />
+      <Routes>
+        {/* Temple */}
+        <Route index element={<MeasuresTempleHome />} />
+        <Route path="exhibition" element={<MeasuresExhibition />} />
 
-          <Route path="gates/intro" element={<ObsidianGateIntro />} />
-          <Route path="gates" element={<ObsidianGateIndex />} />
-          <Route path="gates/:gateId" element={<ObsidianGatePlate />} />
+        {/* Obsidian: tone + sequence */}
+        <Route path="gates/intro" element={<ObsidianGateIntro />} />
+        <Route path="gates/passage" element={<KumurrahPassage />} />
+        <Route path="gates" element={<ObsidianGateIndex />} />
+        <Route path="gates/:gateId" element={<ObsidianGatePlate />} />
 
-          <Route path="*" element={<Navigate to="/measures" replace />} />
-        </Routes>
-      </MeasuresAudioUnlockLayer>
+        {/* Marble: Codexstone chamber (index lives inside) */}
+        <Route path="mes" element={<CodexstoneChamber />} />
+<Route path="mes/:meId" element={<MarbleMEPlate />} />
+        {/* safety */}
+        <Route path="*" element={<Navigate to="/measures" replace />} />
+      </Routes>
     </MeasuresAudioBusProvider>
   );
 }

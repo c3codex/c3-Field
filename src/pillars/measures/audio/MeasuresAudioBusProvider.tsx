@@ -2,7 +2,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
-type BusContext = {
+export type BusContext = {
+  unlock: () => void;
   setObsidianActive: (on: boolean) => void;
   duck: () => void;
   restore: () => void;
@@ -12,11 +13,8 @@ const Ctx = createContext<BusContext | null>(null);
 
 const OBSIDIAN_VOL = 0.22;
 const DUCK_VOL = 0.07;
-
-// Put your file in /public/audio/obsidian-bed.mp3
 const OBSIDIAN_SRC = "/audio/obsidian-bed.mp3";
 
-// Route rule: Obsidian tone runs ONLY during the descent sequence
 function isObsidianRoute(pathname: string) {
   return pathname.startsWith("/measures/gates");
 }
@@ -25,7 +23,6 @@ export function MeasuresAudioBusProvider({ children }: { children: React.ReactNo
   const { pathname } = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Create the audio element once
   useEffect(() => {
     const a = new Audio(OBSIDIAN_SRC);
     a.loop = true;
@@ -40,12 +37,33 @@ export function MeasuresAudioBusProvider({ children }: { children: React.ReactNo
     };
   }, []);
 
+  const unlock = useCallback(() => {
+    const a = audioRef.current;
+    if (!a) return;
+
+    const wasMuted = a.muted;
+    const prevVol = a.volume;
+
+    a.muted = true;
+    a.volume = 0;
+
+    a.play()
+      .then(() => {
+        a.pause();
+        a.currentTime = 0;
+      })
+      .catch(() => {})
+      .finally(() => {
+        a.muted = wasMuted;
+        a.volume = prevVol;
+      });
+  }, []);
+
   const setObsidianActive = useCallback((on: boolean) => {
     const a = audioRef.current;
     if (!a) return;
 
     if (on) {
-      // play may fail until user gesture; that's okay
       a.play().catch(() => {});
       a.volume = OBSIDIAN_VOL;
     } else {
@@ -64,21 +82,23 @@ export function MeasuresAudioBusProvider({ children }: { children: React.ReactNo
   const restore = useCallback(() => {
     const a = audioRef.current;
     if (!a) return;
-    // only restore if we're actually in obsidian routes
     if (isObsidianRoute(window.location.pathname)) a.volume = OBSIDIAN_VOL;
   }, []);
 
-  // 🔥 The key fix: toggle based on route changes
   useEffect(() => {
     setObsidianActive(isObsidianRoute(pathname));
   }, [pathname, setObsidianActive]);
 
-  const value = useMemo(() => ({ setObsidianActive, duck, restore }), [setObsidianActive, duck, restore]);
+  // ✅ Force the memo type explicitly so TS cannot infer a narrower shape
+  const value = useMemo<BusContext>(
+    () => ({ unlock, setObsidianActive, duck, restore }),
+    [unlock, setObsidianActive, duck, restore]
+  );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
-export function useMeasuresAudioBus() {
+export function useMeasuresAudioBus(): BusContext {
   const ctx = useContext(Ctx);
   if (!ctx) throw new Error("useMeasuresAudioBus must be inside MeasuresAudioBusProvider");
   return ctx;

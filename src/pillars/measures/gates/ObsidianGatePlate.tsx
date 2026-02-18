@@ -1,12 +1,11 @@
 // src/pillars/measures/gates/ObsidianGatePlate.tsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { MEASURES_ASSETS } from "@/pillars/measures/measuresAssets";
+
 import MeasuresReturnGlyph from "@/pillars/measures/components/MeasuresReturnGlyph";
-
-// AspectEdgeLayer removed - using only 3 cuneiform constraint markers
-
 import { useMeasuresAudioBus } from "@/pillars/measures/audio/MeasuresAudioBusProvider";
+import { useMeasuresGatePlate } from "@/pillars/measures/data/useMeasuresGatePlate";
+import { MEASURES_ASSETS } from "@/pillars/measures/measuresAssets";
 
 const AUTO_STATIC_AFTER_MS = 5200; // video -> begin fade
 const FADE_MS = 900; // crossfade duration
@@ -15,7 +14,11 @@ const PLAQUE_OPEN_DELAY_MS = AUTO_STATIC_AFTER_MS + ENCOUNTER_PAUSE_MS;
 
 // Chamber timing after plaque closes
 const ART_YIELD_MS = 600;
-const CHAMBER_OPEN_DELAY_MS = 220; // small beat after art begins yielding
+const CHAMBER_OPEN_DELAY_MS = 220;
+
+// fallback passage (Gate Ø -> Gate I)
+const DEFAULT_GATE0_PASSAGE =
+  "https://xttrboiohqzusyaneuaw.supabase.co/storage/v1/object/public/Measures-open/gates_index_passage.mp4";
 
 // Gate 0 Cuneiform Keys (constraint marks, not decoration)
 type CuneiformKey = {
@@ -79,11 +82,34 @@ These gifts aren't always comfortable. Some arrive wrapped in loneliness, restle
 
 And when you finally laugh out loud at your own absurdity in the empty room, that's one of the sweetest ones: the realization that solitude didn't abandon you, it trusted you to keep your own company.`;
 
+// Gate I plaque (epigraph)
+const GATE_I_PLAQUE = (
+  <>
+    <p>At the gate she was received.</p>
+    <p>Her passage was decreed.</p>
+    <p className="pt-2">
+      You may enter, not as Queen of Heaven,
+      <br />
+      but as Inanna —
+      <br />
+      to meet the Queen below.
+    </p>
+    <p className="pt-2">
+      The sovereign crosses not in solitude,
+      <br />
+      but in relation.
+      <br />
+      Recognition precedes descent.
+    </p>
+  </>
+);
+
 export default function ObsidianGatePlate() {
   const nav = useNavigate();
   const { gateId } = useParams<{ gateId?: string }>();
 
   const bus = useMeasuresAudioBus();
+  const { row, loading, error } = useMeasuresGatePlate(gateId);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -95,102 +121,202 @@ export default function ObsidianGatePlate() {
   const [plaqueOpen, setPlaqueOpen] = useState(false);
   const [plaqueMinimized, setPlaqueMinimized] = useState(false);
 
-  // Chamber choreography
+  // Chamber choreography (Gate Ø only)
   const [artYield, setArtYield] = useState(false);
   const [chamberOpen, setChamberOpen] = useState(false);
+
+  // Passage overlay (Gate Ø -> Gate I)
+  const [showPassage, setShowPassage] = useState(false);
 
   // Cuneiform tooltip hover state
   const [glyphHover, setGlyphHover] = useState<number | null>(null);
 
-  // Plate selection
-  const plate = MEASURES_ASSETS.kumurrah.plates.gate0;
-
-  // Continue route
-  const continueTo = "/measures/gates/gate1";
-
-  // --- AUDIO: keep obsidian bed active through plates, duck during plaque ---
-  useEffect(() => {
-    bus.setObsidianActive(true);
-    return () => {
-      bus.restore();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // --- AUDIO (stable deps) ---
+  const { setObsidianActive, restore, duck } = bus;
 
   useEffect(() => {
-    if (plaqueOpen && !plaqueMinimized) bus.duck();
-    else bus.restore();
-  }, [plaqueOpen, plaqueMinimized, bus]);
+    setObsidianActive(true);
+    return () => restore();
+  }, [setObsidianActive, restore]);
 
-  // --- media timing: video -> still, then plaque opens ---
   useEffect(() => {
+    if (plaqueOpen && !plaqueMinimized) duck();
+    else restore();
+  }, [plaqueOpen, plaqueMinimized, duck, restore]);
+
+  const slug = row?.slug ?? null;
+  const isGate0 = row?.slug === "gate-0";
+  const isGateI = row?.slug === "gate-i";
+
+  // reset choreography when switching gates
+  useEffect(() => {
+    if (!slug) return;
+    setMediaMode("animated");
+    setShowStill(false);
+    setVideoFading(false);
+
+    setPlaqueOpen(false);
+    setPlaqueMinimized(false);
+
+    setArtYield(false);
+    setChamberOpen(false);
+
+    setShowPassage(false);
+    setGlyphHover(null);
+  }, [slug]);
+
+  // media timing: video -> still, then plaque opens (per gate)
+  useEffect(() => {
+    if (!slug) return;
+
+    const timers: number[] = [];
+    const clearAll = () => timers.forEach((t) => window.clearTimeout(t));
+
     const v = videoRef.current;
     if (v) v.playbackRate = 0.85;
 
-    const t1 = window.setTimeout(() => {
-      setShowStill(true);
-      setVideoFading(true);
-
+    timers.push(
       window.setTimeout(() => {
-        if (videoRef.current) {
-          videoRef.current.pause();
-          videoRef.current.currentTime = 0;
-        }
-        setMediaMode("still");
-      }, FADE_MS);
-    }, AUTO_STATIC_AFTER_MS);
+        setShowStill(true);
+        setVideoFading(true);
 
-    const t2 = window.setTimeout(() => {
-      setPlaqueOpen(true);
-      setPlaqueMinimized(false);
-      requestAnimationFrame(() => {
-        if (scrollRef.current) scrollRef.current.scrollTop = 0;
-      });
-    }, PLAQUE_OPEN_DELAY_MS);
+        timers.push(
+          window.setTimeout(() => {
+            if (videoRef.current) {
+              videoRef.current.pause();
+              videoRef.current.currentTime = 0;
+            }
+            setMediaMode("still");
+          }, FADE_MS)
+        );
+      }, AUTO_STATIC_AFTER_MS)
+    );
 
-    return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-    };
-  }, []);
+    timers.push(
+      window.setTimeout(() => {
+        setPlaqueOpen(true);
+        setPlaqueMinimized(false);
+        requestAnimationFrame(() => {
+          if (scrollRef.current) scrollRef.current.scrollTop = 0;
+        });
+      }, PLAQUE_OPEN_DELAY_MS)
+    );
 
-  // --- HINGE: when plaque is minimized, art yields and chamber opens ---
+    return clearAll;
+  }, [slug]);
+
+  // hinge: when plaque is minimized, art yields and chamber opens (Gate Ø only)
   useEffect(() => {
+    if (!isGate0) return;
     if (!plaqueOpen) return;
 
     if (plaqueMinimized) {
       setArtYield(true);
-
-      const t = window.setTimeout(() => {
-        setChamberOpen(true);
-      }, CHAMBER_OPEN_DELAY_MS);
-
+      const t = window.setTimeout(() => setChamberOpen(true), CHAMBER_OPEN_DELAY_MS);
       return () => window.clearTimeout(t);
-    } else {
-      // If plaque re-opened, chamber retreats and art returns
-      setChamberOpen(false);
-      setArtYield(false);
     }
-  }, [plaqueMinimized, plaqueOpen]);
 
-  const showContinueOnMedia = plaqueOpen && plaqueMinimized;
+    setChamberOpen(false);
+    setArtYield(false);
+  }, [isGate0, plaqueOpen, plaqueMinimized]);
+
+  const showContinueOnMedia = Boolean(isGate0 && plaqueOpen && plaqueMinimized);
 
   const scrollParagraphs = useMemo(() => {
     return SOLITUDE_SCROLL.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
   }, []);
 
+  // ---- early returns ----
+  if (loading) return <div className="min-h-[100svh] bg-black p-8 text-stone-200/70">Loading…</div>;
+  if (error || !row)
+    return <div className="min-h-[100svh] bg-black p-8 text-red-200/70">Error: {error ?? "Missing gate."}</div>;
+
+  // sealed screen
+  if (!row.gate_released) {
+    return (
+      <section className="min-h-[100svh] bg-black text-stone-100 flex items-center justify-center">
+        <div className="text-center px-6">
+          <div className="text-[10px] uppercase tracking-[0.35em] text-stone-200/50">Measures of Inanna</div>
+          <div className="mt-4 font-serif text-3xl text-stone-50">
+            {row.gate_numeral ? `Gate ${row.gate_numeral}` : "Gate"}
+          </div>
+          <div className="mt-2 text-stone-200/60">
+            {row.removal_item ? `The ${row.removal_item} Removed` : "Sealed"}
+          </div>
+          <div className="mt-6 text-sm text-stone-200/45">This plate remains sealed until its release phase.</div>
+
+          <div className="mt-8 flex justify-center">
+            <MeasuresReturnGlyph to="/measures/gates" ariaLabel="Return to Gates Index" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // media sources (Supabase first, fallback for Gate Ø if missing)
+  const still =
+    row.media_still_url ??
+    (isGate0 ? MEASURES_ASSETS.kumurrah.plates.gate0.still : null);
+
+  const animated =
+    row.media_animated_url ??
+    (isGate0 ? MEASURES_ASSETS.kumurrah.plates.gate0.animated : null);
+
+  const passageSrc =
+    row.media_passage_url ??
+    (isGate0 ? DEFAULT_GATE0_PASSAGE : null);
+
+  if (!still) {
+    return <div className="min-h-[100svh] bg-black p-8 text-stone-200/70">Missing media for {row.slug}.</div>;
+  }
+
+  const media = { still, animated: animated ?? still };
+
+  // navigation: Gate Ø uses passage overlay into Gate I
+  function startContinue() {
+    if (!isGate0) return;
+    setShowPassage(true);
+  }
+
+  function finishPassage() {
+    setShowPassage(false);
+    nav("/measures/gates/gate-i");
+  }
+
   return (
     <section className="relative h-[100svh] w-full overflow-hidden bg-black">
-      {/* CHAMBER DIM (only when chamber open) */}
-      {chamberOpen ? (
-        <div className="absolute inset-0 z-20 pointer-events-none bg-black/30" />
+      {/* PASSAGE OVERLAY (Gate Ø -> Gate I) */}
+      {showPassage && passageSrc ? (
+        <div className="absolute inset-0 z-[9999] bg-black">
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            onEnded={finishPassage}
+          >
+            <source src={passageSrc} />
+          </video>
+
+          <button
+            type="button"
+            className="absolute right-4 top-4 rounded-lg bg-black/50 px-3 py-2 text-sm text-white/90 hover:bg-black/70"
+            onClick={finishPassage}
+          >
+            Skip
+          </button>
+        </div>
       ) : null}
+
+      {/* CHAMBER DIM (only when chamber open) */}
+      {chamberOpen ? <div className="absolute inset-0 z-20 pointer-events-none bg-black/30" /> : null}
 
       {/* MEDIA STACK */}
       <div className="absolute inset-0">
         {/* Background fill */}
         <img
-          src={plate.still}
+          src={media.still}
           alt=""
           aria-hidden="true"
           draggable={false}
@@ -207,7 +333,7 @@ export default function ObsidianGatePlate() {
         <div className="absolute inset-0 flex items-center justify-center">
           {/* Still under video */}
           <img
-            src={plate.still}
+            src={media.still}
             alt="Obsidian Gate Plate"
             draggable={false}
             className="h-full w-full object-contain select-none"
@@ -221,12 +347,12 @@ export default function ObsidianGatePlate() {
           {mediaMode === "animated" && (
             <video
               ref={videoRef}
-              src={plate.animated}
+              src={media.animated}
               autoPlay
               muted
               playsInline
               preload="auto"
-              poster={plate.still}
+              poster={media.still}
               className="absolute inset-0 h-full w-full object-contain"
               style={{
                 opacity: videoFading ? 0 : 1,
@@ -246,8 +372,8 @@ export default function ObsidianGatePlate() {
         />
       </div>
 
-      {/* CUNEIFORM KEYS (left vertical stack - appear with chamber) */}
-      {chamberOpen && (
+      {/* CUNEIFORM KEYS (Gate Ø only; appear with chamber) */}
+      {isGate0 && chamberOpen && (
         <div className="absolute left-8 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-8">
           {GATE_0_CUNEIFORM.map((key) => (
             <div
@@ -269,20 +395,11 @@ export default function ObsidianGatePlate() {
               {/* Tooltip */}
               {glyphHover === key.displayOrder && (
                 <div
-                  className="absolute left-12 top-1/2 -translate-y-1/2 
-                             w-64 rounded-lg border border-white/10 
-                             bg-black/80 backdrop-blur-md px-4 py-3
-                             pointer-events-none"
-                  style={{
-                    animation: "fadeIn 200ms ease-out",
-                  }}
+                  className="absolute left-12 top-1/2 -translate-y-1/2 w-64 rounded-lg border border-white/10 bg-black/80 backdrop-blur-md px-4 py-3 pointer-events-none"
+                  style={{ animation: "fadeIn 200ms ease-out" }}
                 >
-                  <div className="text-xs font-sans tracking-wider uppercase text-stone-300/70">
-                    {key.label}
-                  </div>
-                  <div className="mt-1.5 text-sm leading-relaxed text-stone-100/90">
-                    {key.principle}
-                  </div>
+                  <div className="text-xs font-sans tracking-wider uppercase text-stone-300/70">{key.label}</div>
+                  <div className="mt-1.5 text-sm leading-relaxed text-stone-100/90">{key.principle}</div>
                 </div>
               )}
             </div>
@@ -316,7 +433,7 @@ export default function ObsidianGatePlate() {
         {showContinueOnMedia ? (
           <button
             type="button"
-            onClick={() => nav(continueTo)}
+            onClick={startContinue}
             className="rounded-xl bg-white/15 px-4 py-2 text-sm text-stone-100 backdrop-blur hover:bg-white/20 transition"
           >
             Continue Descent
@@ -324,27 +441,14 @@ export default function ObsidianGatePlate() {
         ) : null}
       </div>
 
-      {/* PLAQUE OVERLAY (historical layer - museum label aesthetic) */}
+      {/* PLAQUE OVERLAY */}
       {plaqueOpen && !plaqueMinimized && (
         <div className="absolute inset-x-0 bottom-8 z-40 px-4 pointer-events-none">
-          <div
-            className="
-              pointer-events-auto
-              mx-auto
-              w-full
-              max-w-2xl
-              rounded-2xl
-              border border-white/10
-              bg-black/28
-              backdrop-blur-lg
-              shadow-[0_16px_60px_rgba(0,0,0,0.45)]
-              overflow-hidden
-            "
-          >
-            {/* plaque header */}
+          <div className="pointer-events-auto mx-auto w-full max-w-2xl rounded-2xl border border-white/10 bg-black/28 backdrop-blur-lg shadow-[0_16px_60px_rgba(0,0,0,0.45)] overflow-hidden">
+            {/* header */}
             <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10">
               <div className="text-[10px] uppercase tracking-[0.3em] text-stone-200/80 font-sans">
-                Queen of Heaven
+                {isGate0 ? "Queen of Heaven" : "Gate I"}
               </div>
 
               <button
@@ -356,63 +460,62 @@ export default function ObsidianGatePlate() {
               </button>
             </div>
 
-            {/* scroll body (tighter, informational) */}
-            <div
-              ref={scrollRef}
-              className="px-5 py-4 text-stone-100/85 overflow-y-auto"
-              style={{ maxHeight: "42svh" }}
-            >
-              <div className="space-y-3 text-center leading-[1.65] text-[15px]">
-                <p>
-                  With the <em>me</em> in her possession, she prepared herself:
-                </p>
+            <div ref={scrollRef} className="px-5 py-4 text-stone-100/85 overflow-y-auto" style={{ maxHeight: "42svh" }}>
+              {isGate0 ? (
+                <div className="space-y-3 text-center leading-[1.65] text-[15px]">
+                  <p>
+                    With the <em>me</em> in her possession, she prepared herself:
+                  </p>
 
-                <p>
-                  She placed the <strong>shugurra</strong>, the crown of the steppe, on her head.
-                  <br />
-                  She arranged the dark locks of hair across her forehead.
-                  <br />
-                  She tied the small lapis beads around her neck.
-                </p>
+                  <p>
+                    She placed the <strong>shugurra</strong>, the crown of the steppe, on her head.
+                    <br />
+                    She arranged the dark locks of hair across her forehead.
+                    <br />
+                    She tied the small lapis beads around her neck.
+                  </p>
 
-                <p>
-                  Let the double strand of beads fall to her breast,
-                  <br />
-                  And wrapped the royal robe around her body.
-                </p>
+                  <p>
+                    Let the double strand of beads fall to her breast,
+                    <br />
+                    And wrapped the royal robe around her body.
+                  </p>
 
-                <p>
-                  She daubed her eyes with ointment called
-                  <br />
-                  <em>"let him come, let him come."</em>
-                </p>
+                  <p>
+                    She daubed her eyes with ointment called
+                    <br />
+                    <em>"let him come, let him come."</em>
+                  </p>
 
-                <p>
-                  Bound the breast plate called
-                  <br />
-                  <em>"Come, man, come!"</em>
-                  <br />
-                  around her chest,
-                </p>
+                  <p>
+                    Bound the breast plate called
+                    <br />
+                    <em>"Come, man, come!"</em>
+                    <br />
+                    around her chest,
+                  </p>
 
-                <p>
-                  Slipped the gold ring over her wrist,
-                  <br />
-                  And took the lapis measuring rod and line in her hand.
-                </p>
+                  <p>
+                    Slipped the gold ring over her wrist,
+                    <br />
+                    And took the lapis measuring rod and line in her hand.
+                  </p>
 
-                <p className="pt-1">Inanna set out for the underworld.</p>
+                  <p className="pt-1">Inanna set out for the underworld.</p>
 
-                <div className="pt-4">
-                  <button
-                    type="button"
-                    onClick={() => nav(continueTo)}
-                    className="w-full rounded-xl bg-white/12 px-4 py-2.5 text-sm text-stone-100 hover:bg-white/18 transition"
-                  >
-                    Continue Descent
-                  </button>
+                  <div className="pt-4">
+                    <button
+                      type="button"
+                      onClick={startContinue}
+                      className="w-full rounded-xl bg-white/12 px-4 py-2.5 text-sm text-stone-100 hover:bg-white/18 transition"
+                    >
+                      Continue Descent
+                    </button>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-3 text-center leading-[1.65] text-[15px] text-stone-100/85">{GATE_I_PLAQUE}</div>
+              )}
             </div>
 
             <div className="h-1.5 bg-gradient-to-b from-white/5 to-transparent" />
@@ -420,14 +523,11 @@ export default function ObsidianGatePlate() {
         </div>
       )}
 
-      {/* CHAMBER SCROLL (condition layer - warmer, slower, architectural) */}
-      {chamberOpen ? (
+      {/* CHAMBER SCROLL (Gate Ø only) */}
+      {isGate0 && chamberOpen ? (
         <div className="absolute inset-0 z-30 pointer-events-none">
           <div className="absolute inset-0 flex items-start justify-center px-6">
-            <div
-              className="pointer-events-auto w-full max-w-[640px]"
-              style={{ paddingTop: "8rem" }}
-            >
+            <div className="pointer-events-auto w-full max-w-[640px]" style={{ paddingTop: "8rem" }}>
               <div
                 className="mx-auto mb-8 rounded-2xl border border-white/8 bg-black/20 backdrop-blur-xl"
                 style={{
@@ -436,18 +536,13 @@ export default function ObsidianGatePlate() {
                 }}
               >
                 <div className="px-6 py-7 text-center">
-                  <div className="font-sans text-[9px] tracking-[0.4em] uppercase text-stone-200/50">
-                    aspect of the queen
-                  </div>
-                  <div className="mt-3 font-serif text-[32px] leading-[1.15] text-stone-50">
-                    Solitude as Sovereignty
-                  </div>
+                  <div className="font-sans text-[9px] tracking-[0.4em] uppercase text-stone-200/50">aspect of the queen</div>
+                  <div className="mt-3 font-serif text-[32px] leading-[1.15] text-stone-50">Solitude as Sovereignty</div>
                   <div className="mt-3 font-sans text-[15px] leading-relaxed text-stone-200/65">
                     What returns when there is no one left to perform for.
                   </div>
                 </div>
 
-                {/* Axis line (architectural vertical center) */}
                 <div className="relative">
                   <div
                     aria-hidden
@@ -455,23 +550,18 @@ export default function ObsidianGatePlate() {
                     style={{ background: "rgba(255,255,255,0.04)" }}
                   />
                   <div className="px-8 pb-9 pt-4">
-                    <div
-                      className="mx-auto max-w-[560px] text-[18px] leading-[2.0] font-serif"
-                      style={{ color: "rgba(250,246,240,0.88)" }}
-                    >
+                    <div className="mx-auto max-w-[560px] text-[18px] leading-[2.0] font-serif" style={{ color: "rgba(250,246,240,0.88)" }}>
                       {scrollParagraphs.map((p, i) => (
                         <p key={i} className="mb-6">
                           {p}
                         </p>
                       ))}
-                      {/* breathing space */}
                       <div style={{ height: "8rem" }} />
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Close chamber control */}
               <div className="flex justify-center">
                 <button
                   type="button"
@@ -479,9 +569,7 @@ export default function ObsidianGatePlate() {
                     setChamberOpen(false);
                     setArtYield(false);
                   }}
-                  className="rounded-full border border-white/8 bg-black/15 px-5 py-2.5
-                             font-sans text-[9px] tracking-[0.4em] uppercase text-stone-200/60
-                             backdrop-blur transition hover:border-white/15 hover:text-stone-100/80"
+                  className="rounded-full border border-white/8 bg-black/15 px-5 py-2.5 font-sans text-[9px] tracking-[0.4em] uppercase text-stone-200/60 backdrop-blur transition hover:border-white/15 hover:text-stone-100/80"
                 >
                   Close Chamber
                 </button>

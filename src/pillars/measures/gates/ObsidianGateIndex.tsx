@@ -1,148 +1,146 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MEASURES_ASSETS } from "@/pillars/measures/measuresAssets";
 import MeasuresReturnGlyph from "@/pillars/measures/components/MeasuresReturnGlyph";
-import { useMeasuresAudioBus } from "@/pillars/measures/audio/MeasuresAudioBusProvider";
+import { useMeasuresGatesIndex } from "@/pillars/measures/data/useMeasuresGatesIndex";
 
-type GateDef = {
-  id: number;
-  label: string;
-  route: string;
-  enabled: boolean;
-  zone: { top: string; left: string; width: string; height: string };
-};
-
-const KUMURRAH_DURATION_MS = 6200;
-const FADE_MS = 1200;
-
-// optional: soften bed during the video “encounter” then restore on index
-const DUCK_DURING_VIDEO = true;
-
-// IMPORTANT: set this to match your obsidianIndex still's aspect ratio.
-// If you don't know it yet, leave as "16 / 9" temporarily and adjust later.
-const INDEX_ASPECT_RATIO = "16 / 9";
+function gateLabel(numeral: string | null) {
+  if (!numeral) return "Gate";
+  return `Gate ${numeral}`;
+}
 
 export default function ObsidianGateIndex() {
   const nav = useNavigate();
-  const bus = useMeasuresAudioBus();
+  const { rows, loading, error } = useMeasuresGatesIndex();
+  const [hint, setHint] = useState<string | null>(null);
 
-  const [phase, setPhase] = useState<"video" | "index">("video");
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const cards = useMemo(() => rows, [rows]);
 
-  // ✅ AUDIO: start obsidian bed for the whole index page
-  useEffect(() => {
-    bus.setObsidianActive(true);
-    if (DUCK_DURING_VIDEO) bus.duck(); // keeps Kumurrah cinematic + not “too present”
-    return () => {
-      bus.restore();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (loading) {
+    return <div className="min-h-[100svh] bg-black p-8 text-stone-200/70">Loading gates…</div>;
+  }
 
-  // ✅ AUDIO: restore bed once the index still is fully available
-  useEffect(() => {
-    if (phase === "index") bus.restore();
-  }, [phase, bus]);
-
-  useEffect(() => {
-    const t = window.setTimeout(() => setPhase("index"), KUMURRAH_DURATION_MS);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  const base = MEASURES_ASSETS.kumurrah.plateBase; // "/measures/gates"
-  const gateRoute = (n: number) => `${base}/gate${n}`;
-
-  const gates: GateDef[] = [
-    {
-      id: 0,
-      label: "Queen of Heaven",
-      route: gateRoute(0),
-      enabled: true,
-      zone: { top: "18%", left: "14%", width: "22%", height: "14%" },
-    },
-    { id: 1, label: "The Crown", route: gateRoute(1), enabled: false, zone: { top: "36%", left: "14%", width: "22%", height: "14%" } },
-    { id: 2, label: "The Beads of Lapis", route: gateRoute(2), enabled: false, zone: { top: "52%", left: "14%", width: "22%", height: "14%" } },
-    { id: 3, label: "The Lapis Necklace", route: gateRoute(3), enabled: false, zone: { top: "68%", left: "14%", width: "22%", height: "14%" } },
-    { id: 4, label: "The Breastplate", route: gateRoute(4), enabled: false, zone: { top: "36%", left: "64%", width: "22%", height: "14%" } },
-    { id: 5, label: "The Golden Bracelet", route: gateRoute(5), enabled: false, zone: { top: "52%", left: "64%", width: "22%", height: "14%" } },
-    { id: 6, label: "The Measuring Rod", route: gateRoute(6), enabled: false, zone: { top: "68%", left: "64%", width: "22%", height: "14%" } },
-    { id: 7, label: "The Royal Robe", route: gateRoute(7), enabled: false, zone: { top: "84%", left: "64%", width: "22%", height: "14%" } },
-  ];
+  if (error) {
+    return (
+      <div className="min-h-[100svh] bg-black p-8 text-red-200/70">
+        Error loading gates: {error}
+      </div>
+    );
+  }
 
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden bg-black">
-      {/* KUMURRAH VIDEO */}
-      {phase === "video" && (
-        <video
-          ref={videoRef}
-          src={MEASURES_ASSETS.kumurrah.animated}
-          autoPlay
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-contain"
-          style={{ pointerEvents: "none" }} // never steal taps
-        />
-      )}
+    <section className="relative min-h-[100svh] w-full bg-black text-stone-100 overflow-hidden">
+      {/* Return */}
+      <div className="absolute top-5 right-5 z-50">
+        <MeasuresReturnGlyph to="/measures" ariaLabel="Return to Temple" />
+      </div>
 
-      {/* INDEX IMAGE */}
-      <div
-        className="absolute inset-0"
-        style={{
-          opacity: phase === "index" ? 1 : 0,
-          transition: `opacity ${FADE_MS}ms ease`,
-          pointerEvents: phase === "index" ? "auto" : "none",
-        }}
-      >
-        {/* Centered aspect box: zones align to the actual displayed art */}
-        <div className="absolute inset-0 grid place-items-center">
-          <div
-            className="relative"
-            style={{
-              aspectRatio: INDEX_ASPECT_RATIO,
-              width: "min(100vw, calc(100svh * (16/9)))",
-              height: "min(100svh, calc(100vw * (9/16)))",
-              maxWidth: "100vw",
-              maxHeight: "100svh",
-            }}
-          >
-            <img
-              src={MEASURES_ASSETS.obsidianIndex.still}
-              alt="Obsidian Gates of Descent"
-              draggable={false}
-              className="absolute inset-0 h-full w-full select-none"
-              style={{ objectFit: "fill", pointerEvents: "none" }} // image itself shouldn't steal taps
-            />
+      {/* Header */}
+      <div className="px-8 pt-14 pb-8">
+        <div className="text-[10px] uppercase tracking-[0.35em] text-stone-200/55 font-sans">
+          Measures of Inanna
+        </div>
+        <h1 className="mt-4 font-serif text-4xl text-stone-50">Obsidian Gates</h1>
+        <p className="mt-3 max-w-2xl text-stone-200/60 leading-relaxed">
+          Each gate reduces the visible form. What is removed is not lost, it is measured.
+        </p>
+      </div>
 
-            {/* GATE HOT ZONES */}
-            {gates.map((gate) => (
-              <button
-                key={gate.id}
-                type="button"
-                aria-label={gate.label}
-                disabled={!gate.enabled}
-                onPointerDown={() => gate.enabled && nav(gate.route)}
-                onClick={() => gate.enabled && nav(gate.route)}
-                className={`absolute z-30 rounded-xl transition ${
-                  gate.enabled
-                    ? "hover:bg-white/5 focus:outline-none"
-                    : "cursor-not-allowed opacity-30"
-                }`}
-                style={{
-                  top: gate.zone.top,
-                  left: gate.zone.left,
-                  width: gate.zone.width,
-                  height: gate.zone.height,
-                  touchAction: "manipulation",
-                  WebkitTapHighlightColor: "transparent",
-                }}
-              />
-            ))}
+      {/* Hint (tiny, non-modal) */}
+      {hint ? (
+        <div className="fixed left-1/2 top-8 -translate-x-1/2 z-[9999]">
+          <div className="rounded-full border border-white/10 bg-black/60 backdrop-blur px-4 py-2 text-xs tracking-[0.18em] uppercase text-stone-100/80">
+            {hint}
           </div>
         </div>
+      ) : null}
 
-        {/* RETURN GLYPH */}
-        <div className="absolute bottom-6 right-6 z-40">
-          <MeasuresReturnGlyph to="/measures" ariaLabel="Return to Temple" />
+      {/* List */}
+      <div className="px-8 pb-14">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {cards.map((g) => {
+            const title = g.removal_item ? `The ${g.removal_item}` : gateLabel(g.gate_numeral);
+            const subtitle = g.removal_item
+              ? `The ${g.removal_item} Removed`
+              : g.gate_numeral
+                ? "Reduction"
+                : "—";
+
+            const actionLabel = g.gate_released ? "Enter" : "Sealed";
+
+            return (
+              <button
+                key={g.slug}
+                type="button"
+                onClick={() => {
+                  if (!g.gate_released) {
+                    setHint("Sealed until release.");
+                    window.setTimeout(() => setHint(null), 1400);
+                    return;
+                  }
+                  nav(`/measures/gates/${g.slug}`);
+                }}
+                className="
+                  text-left
+                  rounded-2xl
+                  border border-white/10
+                  bg-white/5
+                  backdrop-blur
+                  px-5 py-5
+                  hover:bg-white/7
+                  transition
+                "
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-[0.32em] text-stone-200/55 font-sans">
+                      {gateLabel(g.gate_numeral)}
+                    </div>
+
+                    <div className="mt-2 font-serif text-2xl text-stone-50">{title}</div>
+                    <div className="mt-2 text-stone-200/60">{subtitle}</div>
+
+                    {/* Optional still preview if you want it now */}
+                    {g.media_still_url ? (
+                      <div className="mt-4 overflow-hidden rounded-xl border border-white/8">
+                        <img
+                          src={g.media_still_url}
+                          alt=""
+                          aria-hidden="true"
+                          draggable={false}
+                          className="h-40 w-full object-cover opacity-90"
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div
+                    className="
+                      shrink-0
+                      rounded-full
+                      border border-white/10
+                      px-3 py-1.5
+                      text-[11px]
+                      tracking-[0.22em]
+                      uppercase
+                    "
+                    style={{
+                      background: g.gate_released ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.04)",
+                      color: g.gate_released ? "rgba(250,246,240,0.90)" : "rgba(250,246,240,0.55)",
+                    }}
+                  >
+                    {actionLabel}
+                  </div>
+                </div>
+
+                {/* Optional time stamp */}
+                {g.gate_utc ? (
+                  <div className="mt-4 text-[11px] tracking-[0.22em] uppercase text-stone-200/40">
+                    {g.gate_released ? "Released" : "Scheduled"} · {new Date(g.gate_utc).toISOString().replace("T", " ").slice(0, 16)} UTC
+                  </div>
+                ) : null}
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>

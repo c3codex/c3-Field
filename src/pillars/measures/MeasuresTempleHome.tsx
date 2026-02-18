@@ -81,20 +81,22 @@ export default function MeasuresTempleHome() {
     if (!isStatic) return;
 
     if (zone === "obsidian") {
-    const seen = localStorage.getItem(OBSIDIAN_INTRO_SEEN_KEY) === "true";
-    nav(seen ? "/measures/gates" : "/measures/gates/intro");
-    return;
-    }
-    if (zone === "crystal") {
-      nav("/measures/epithets");
-      return;
-    }
+  let seen = false;
+  try {
+    seen = localStorage.getItem(OBSIDIAN_INTRO_SEEN_KEY) === "true";
+  } catch { /* empty */ }
+  nav(seen ? "/measures/gates" : "/measures/gates/intro");
+  return;
+}
+
+    
+    
     nav("/measures/mes");
   };
 
   return (
     <section className="relative h-[100svh] w-full overflow-hidden bg-obsidian">
-      {/* Syndros / Return */}
+   
       <div className="absolute left-6 top-6 z-40">
         <MeasuresReturnGlyph to="/priceless" ariaLabel="Return to Priceless Gallery" />
       </div>
@@ -151,7 +153,7 @@ export default function MeasuresTempleHome() {
           >
             <PillarButton label="obsidian gates" onClick={() => go("obsidian")} />
             <PillarButton label="crystal epithets" onClick={() => go("crystal")} />
-            <PillarButton label="marble mEs" onClick={() => go("marble")} />
+            <PillarButton label="marble MEs" onClick={() => go("marble")} />
           </div>
         </div>
       </div>

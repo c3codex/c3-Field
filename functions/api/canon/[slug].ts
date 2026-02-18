@@ -63,8 +63,9 @@ export async function onRequest(context: Context) {
   const objectKey = rawKey.replace(/^\/+/, "");
 
   const signRes = await fetch(
-    `${SUPABASE_URL}/storage/v1/object/sign/${BUCKET}/${encodeURIComponent(objectKey)}`,
+    `${SUPABASE_URL}/storage/v1/object/sign/${BUCKET}/${encodeURI(objectKey)}`,
     {
+      
       method: "POST",
       headers: {
         apikey: SERVICE_ROLE,

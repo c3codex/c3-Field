@@ -1,5 +1,5 @@
 // src/pillars/measures/components/EncounterStage.tsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 export type EncounterPhase = "arrive" | "settle" | "pause" | "ready";
 
@@ -7,13 +7,14 @@ type Props = {
   stillSrc: string;
   alt: string;
   videoSrc?: string | null;
+
   videoDurationMs?: number;
   settleFadeMs?: number;
   encounterPauseMs?: number;
+
   mediaFit?: "contain" | "cover";
   onPhaseChange?: (p: EncounterPhase) => void;
 
-  // ✅ NEW
   videoPlaybackRate?: number;
 
   topLeft?: React.ReactNode;
@@ -24,13 +25,13 @@ type Props = {
 export default function EncounterStage({
   stillSrc,
   alt,
-  videoSrc,
+  videoSrc = null,
   videoDurationMs = 5200,
   settleFadeMs = 900,
   encounterPauseMs = 1100,
   mediaFit = "contain",
   onPhaseChange,
-  videoPlaybackRate = 0.9, // ✅ default
+  videoPlaybackRate = 0.9,
   topLeft,
   topRight,
   children,
@@ -42,65 +43,81 @@ export default function EncounterStage({
   const [videoFading, setVideoFading] = useState(false);
   const [videoOn, setVideoOn] = useState(Boolean(videoSrc));
 
-  // phase notify helper
+  // single helper to keep state + callback in lockstep
   const setPhaseBoth = (p: EncounterPhase) => {
     setPhase(p);
     onPhaseChange?.(p);
   };
 
-  // apply playbackRate to the *real* video
+  // Tailwind-safe class for object-fit (NO dynamic template strings)
+  const fitClass = useMemo(() => (mediaFit === "cover" ? "object-cover" : "object-contain"), [mediaFit]);
+
+  // apply playback rate whenever the video is present
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
     v.playbackRate = videoPlaybackRate;
-  }, [videoPlaybackRate]);
+  }, [videoPlaybackRate, videoSrc]);
 
-  // timeline: arrive -> settle -> pause -> ready
+  // timeline controller
   useEffect(() => {
+    // reset baseline whenever media changes
+    setVideoOn(Boolean(videoSrc));
+    setShowStill(!videoSrc); // if no video, show still immediately
+    setVideoFading(false);
     setPhaseBoth("arrive");
 
-    // start settle timer at videoDurationMs
-    const t1 = window.setTimeout(() => {
-      setPhaseBoth("settle");
-      setShowStill(true);
-      setVideoFading(true);
+    const timers: number[] = [];
+    const clearAll = () => timers.forEach((t) => window.clearTimeout(t));
 
-      // after crossfade, drop video layer
-      const tFade = window.setTimeout(() => {
-        setVideoOn(false);
-      }, settleFadeMs);
-
-      // encounter pause then ready
-      const t2 = window.setTimeout(() => {
-        setPhaseBoth("pause");
-
-        const t3 = window.setTimeout(() => {
-          setPhaseBoth("ready");
-        }, encounterPauseMs);
-
-        return () => window.clearTimeout(t3);
-      }, settleFadeMs);
-
-      return () => {
-        window.clearTimeout(tFade);
-        window.clearTimeout(t2);
-      };
-    }, videoSrc ? videoDurationMs : 0);
-
-    // if no video, go straight into pause -> ready
+    // if no video: pause -> ready
     if (!videoSrc) {
-      setShowStill(true);
       setPhaseBoth("pause");
-      const t3 = window.setTimeout(() => setPhaseBoth("ready"), encounterPauseMs);
-      return () => window.clearTimeout(t3);
+      timers.push(
+        window.setTimeout(() => {
+          setPhaseBoth("ready");
+        }, encounterPauseMs)
+      );
+
+      return clearAll;
     }
 
-    return () => window.clearTimeout(t1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // with video: schedule settle at videoDurationMs
+    timers.push(
+      window.setTimeout(() => {
+        setPhaseBoth("settle");
+        setShowStill(true);
+        setVideoFading(true);
+
+        // drop video after crossfade
+        timers.push(
+          window.setTimeout(() => {
+            setVideoOn(false);
+          }, settleFadeMs)
+        );
+
+        // then pause
+        timers.push(
+          window.setTimeout(() => {
+            setPhaseBoth("pause");
+
+            // then ready
+            timers.push(
+              window.setTimeout(() => {
+                setPhaseBoth("ready");
+              }, encounterPauseMs)
+            );
+          }, settleFadeMs)
+        );
+      }, videoDurationMs)
+    );
+
+    return clearAll;
+    // We intentionally key off videoSrc (and timing knobs) to re-run cleanly
   }, [videoSrc, videoDurationMs, settleFadeMs, encounterPauseMs]);
 
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden bg-obsidian">
+    <section className="relative h-[100svh] w-full overflow-hidden bg-black">
       {/* MEDIA */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative h-[96svh] w-[min(98vw,1500px)]">
@@ -109,15 +126,15 @@ export default function EncounterStage({
             src={stillSrc}
             alt={alt}
             draggable={false}
-            className={`absolute inset-0 h-full w-full select-none object-${mediaFit} transition-opacity duration-700`}
+            className={`absolute inset-0 h-full w-full select-none ${fitClass} transition-opacity duration-700`}
             style={{ opacity: showStill || !videoOn ? 1 : 0 }}
           />
 
           {/* Video overlay */}
-          {videoOn && videoSrc && (
+          {videoOn && videoSrc ? (
             <video
               ref={videoRef}
-              className={`absolute inset-0 h-full w-full object-${mediaFit}`}
+              className={`absolute inset-0 h-full w-full ${fitClass}`}
               autoPlay
               muted
               playsInline
@@ -127,21 +144,34 @@ export default function EncounterStage({
                 opacity: videoFading ? 0 : 1,
                 transition: `opacity ${settleFadeMs}ms ease`,
               }}
-              onEnded={() => setShowStill(true)}
-              onError={() => setShowStill(true)}
+              onEnded={() => {
+                // if the video ends early, we still transition gracefully
+                setShowStill(true);
+                setVideoFading(true);
+                window.setTimeout(() => setVideoOn(false), settleFadeMs);
+              }}
+              onError={() => {
+                setShowStill(true);
+                setVideoOn(false);
+              }}
             >
               <source src={videoSrc} type="video/mp4" />
             </video>
-          )}
+          ) : null}
         </div>
       </div>
 
       {/* corners */}
-      {topLeft && <div className="absolute left-6 top-6 z-40">{topLeft}</div>}
-      {topRight && <div className="absolute right-6 top-6 z-40">{topRight}</div>}
+      {topLeft ? <div className="absolute left-6 top-6 z-40">{topLeft}</div> : null}
+      {topRight ? <div className="absolute right-6 top-6 z-40">{topRight}</div> : null}
 
       {/* children overlay */}
       {children}
+
+      {/* (optional) keep phase available for debugging without UI impact */}
+      <span className="sr-only" aria-hidden="true">
+        {phase}
+      </span>
     </section>
   );
 }
