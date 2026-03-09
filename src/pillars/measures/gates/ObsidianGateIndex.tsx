@@ -1,7 +1,10 @@
+// ✅ ObsidianGateIndex.tsx (corrected + minimal, no extra “encounter” usage yet)
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import MeasuresReturnGlyph from "@/pillars/measures/components/MeasuresReturnGlyph";
 import { useMeasuresGatesIndex } from "@/pillars/measures/data/useMeasuresGatesIndex";
+import { useMeasuresEncounter } from "@/pillars/measures/data/useMeasuresEncounter";
 
 function gateLabel(numeral: string | null) {
   if (!numeral) return "Gate";
@@ -10,22 +13,21 @@ function gateLabel(numeral: string | null) {
 
 export default function ObsidianGateIndex() {
   const nav = useNavigate();
+
   const { rows, loading, error } = useMeasuresGatesIndex();
+
+  // ✅ Hook MUST be inside the component
+  
+
   const [hint, setHint] = useState<string | null>(null);
 
   const cards = useMemo(() => rows, [rows]);
 
-  if (loading) {
-    return <div className="min-h-[100svh] bg-black p-8 text-stone-200/70">Loading gates…</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-[100svh] bg-black p-8 text-red-200/70">
-        Error loading gates: {error}
-      </div>
-    );
-  }
+  const { encounter, error: encError } = useMeasuresEncounter(
+  "enc-gateboard-obsidian",
+  { required: false }
+);
+// ignore encError or show a tiny badge if you want
 
   return (
     <section className="relative min-h-[100svh] w-full bg-black text-stone-100 overflow-hidden">
@@ -45,7 +47,7 @@ export default function ObsidianGateIndex() {
         </p>
       </div>
 
-      {/* Hint (tiny, non-modal) */}
+      {/* Hint */}
       {hint ? (
         <div className="fixed left-1/2 top-8 -translate-x-1/2 z-[9999]">
           <div className="rounded-full border border-white/10 bg-black/60 backdrop-blur px-4 py-2 text-xs tracking-[0.18em] uppercase text-stone-100/80">
@@ -99,7 +101,6 @@ export default function ObsidianGateIndex() {
                     <div className="mt-2 font-serif text-2xl text-stone-50">{title}</div>
                     <div className="mt-2 text-stone-200/60">{subtitle}</div>
 
-                    {/* Optional still preview if you want it now */}
                     {g.media_still_url ? (
                       <div className="mt-4 overflow-hidden rounded-xl border border-white/8">
                         <img
@@ -132,10 +133,10 @@ export default function ObsidianGateIndex() {
                   </div>
                 </div>
 
-                {/* Optional time stamp */}
                 {g.gate_utc ? (
                   <div className="mt-4 text-[11px] tracking-[0.22em] uppercase text-stone-200/40">
-                    {g.gate_released ? "Released" : "Scheduled"} · {new Date(g.gate_utc).toISOString().replace("T", " ").slice(0, 16)} UTC
+                    {g.gate_released ? "Released" : "Scheduled"} ·{" "}
+                    {new Date(g.gate_utc).toISOString().replace("T", " ").slice(0, 16)} UTC
                   </div>
                 ) : null}
               </button>

@@ -7,8 +7,8 @@ type Props = {
 };
 
 export default function MeasuresReturnGlyph({
-  to = "/priceless",
-  ariaLabel = "Return to Priceless Gallery",
+  to = "MeasuresTempleHome",
+  ariaLabel = "Return to Measures Temple Home",
 }: Props) {
   const nav = useNavigate();
 

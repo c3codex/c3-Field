@@ -9,7 +9,7 @@ import { GENERATED_ITEMS } from "./generated";
 // import { PROJECTS } from "./projects";
 // import { UPDATES } from "./updates";
 // import { ARTIFACTS } from "./artifacts";
-
+export { codexVaultPublicUrl, normalizeCodexVaultKey } from "./resolveHref";
 export const REGISTRY_ALL: RegistryItem[] = [
   ...ROLES,
   ...GENERATED_ITEMS,

@@ -16,17 +16,16 @@ export default function KumurrahPassage() {
 
   return (
     <EncounterStage
-      stillSrc={MEASURES_ASSETS.kumurrah.still}
+     
       alt="Kumurrah Passage"
       videoSrc={MEASURES_ASSETS.kumurrah.animated}
       videoDurationMs={5200}
       settleFadeMs={900}
       encounterPauseMs={700}
-      mediaFit="cover"
+      mediaFit="contain"
       videoPlaybackRate={1}
       onPhaseChange={setPhase}
-      topRight={<MeasuresReturnGlyph to="/measures" ariaLabel="Return to Temple" />}
-    >
+      topRight={<MeasuresReturnGlyph to="/measures" ariaLabel="Return to Temple" />} stillSrc={""}    >
       <div className="absolute bottom-6 left-6 z-50 flex items-center gap-3">
         <button
           type="button"

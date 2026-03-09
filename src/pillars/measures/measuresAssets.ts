@@ -19,13 +19,17 @@ export const MEASURES_ASSETS = {
 
 
   obsidianEpigraph: {
+    id: "obsidian-epigraph",
+        title: "Obsidian Gates",
+        epigraph: "From the Great Above she opened her ear to the Great Below.",
+        cuneiform: "𒀭𒋫𒃲𒋫 𒄑𒌆𒃲𒊺 𒀭𒈹𒁀𒀭𒌈",
     still:
       "https://xttrboiohqzusyaneuaw.supabase.co/storage/v1/object/public/Measures-open/obsidianepigraph.webp",
     animated:
       "https://xttrboiohqzusyaneuaw.supabase.co/storage/v1/object/public/Measures-open/ObsidianEpigraph.mp4",
   },
 
-  obsidianIndex: {
+  ObsidianGateboard: {
     still:
       "https://xttrboiohqzusyaneuaw.supabase.co/storage/v1/object/public/Measures-open/obsidianIndex.webp",
   },

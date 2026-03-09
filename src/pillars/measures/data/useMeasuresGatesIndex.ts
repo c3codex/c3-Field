@@ -1,32 +1,31 @@
-// src/pillars/measures/data/useMeasuresGatesIndex.ts
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import type { MeasuresGateIndexRow } from "./types";
 
-function gateOrder(n: MeasuresGateIndexRow["gate_numeral"]) {
-  switch (n) {
-    case "Ø":
-      return 0;
-    case "I":
-      return 1;
-    case "II":
-      return 2;
-    case "III":
-      return 3;
-    case "IV":
-      return 4;
-    case "V":
-      return 5;
-    case "VI":
-      return 6;
-    case "VII":
-      return 7;
-    default:
-      return 99;
-  }
+export type MeasuresGateIndexRow = {
+  slug: string;
+  gate_numeral: string | null;
+  removal_item: string | null;
+
+  media_still_url: string | null;
+  media_animated_url: string | null;
+
+  gate_released: boolean | null;
+  gate_utc: string | null; // Supabase returns timestamptz as string
+};
+
+type State = {
+  rows: MeasuresGateIndexRow[];
+  loading: boolean;
+  error: string | null;
+};
+
+function safeInt(s: string | null): number {
+  if (!s) return 9999;
+  const n = Number.parseInt(s.replace(/[^\d]/g, ""), 10);
+  return Number.isFinite(n) ? n : 9999;
 }
 
-export function useMeasuresGatesIndex() {
+export function useMeasuresGatesIndex(): State {
   const [rows, setRows] = useState<MeasuresGateIndexRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,47 +38,52 @@ export function useMeasuresGatesIndex() {
       setError(null);
 
       const { data, error } = await supabase
-        .from("v_measures_state")
+        .from("v_measures_gates_index")
         .select(
-          `
-          slug,
-          gate_numeral,
-          removal_item,
-          gate_released,
-          gate_utc,
-          media_still_url,
-          display_title,
-          display_subtitle,
-          one_liner
-        `
-        )
-        .eq("kind", "gate")
-        .eq("pillar", "obsidian")
-        .not("gate_numeral", "is", null);
+          "slug,gate_numeral,removal_item,media_still_url,media_animated_url,gate_released,gate_utc"
+        );
 
       if (!alive) return;
 
       if (error) {
-        setError(error.message);
+        setError(error.message ?? String(error));
         setRows([]);
         setLoading(false);
         return;
       }
 
-      // ✅ make TS happy without "any" and without lying
-      setRows((data ?? []) as unknown as MeasuresGateIndexRow[]);
+      setRows((data ?? []) as MeasuresGateIndexRow[]);
       setLoading(false);
     }
 
     run();
+
     return () => {
       alive = false;
     };
   }, []);
 
-  const ordered = useMemo(() => {
-    return [...rows].sort((a, b) => gateOrder(a.gate_numeral) - gateOrder(b.gate_numeral));
+  // Sort in hook so UI stays clean:
+  const sorted = useMemo(() => {
+    const copy = [...rows];
+    copy.sort((a, b) => {
+      // 1) gate numeral asc (Gate I, II, III… or "1" style)
+      const na = safeInt(a.gate_numeral);
+      const nb = safeInt(b.gate_numeral);
+      if (na !== nb) return na - nb;
+
+      // 2) then release time (nulls last)
+      const ta = a.gate_utc ? Date.parse(a.gate_utc) : Number.POSITIVE_INFINITY;
+      const tb = b.gate_utc ? Date.parse(b.gate_utc) : Number.POSITIVE_INFINITY;
+      if (ta !== tb) return ta - tb;
+
+      // 3) stable fallback
+      return a.slug.localeCompare(b.slug);
+    });
+    return copy;
   }, [rows]);
 
-  return { rows: ordered, loading, error };
+  return { rows: sorted, loading, error };
 }
+
+export default useMeasuresGatesIndex;

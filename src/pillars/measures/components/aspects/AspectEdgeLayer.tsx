@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import AspectMarker from "./AspectMarker";
 import AspectCard from "./AspectCard";
-import type { Aspect } from "./AspectTypes";
+import type { Aspect } from "./aspectTypes";
 
 type Props = {
   aspects: readonly Aspect[];

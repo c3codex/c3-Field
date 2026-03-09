@@ -5,7 +5,14 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
+    "baseUrl": ".",
+    "paths": {
+      "@structure/*": ["src/structure/*"],
+      "@pillars/*": ["src/pillars/*"],
+      "@systems/*": ["src/systems/*"],
+      "@shared/*": ["src/pillars/shared/*"],
+      "@/*": ["./src/*"]
+    },
     "types": ["vite/client"],
 
     /* Bundler mode */
@@ -21,12 +28,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitAny": false,
-    "noFallthroughCasesInSwitch": false,
-
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "noFallthroughCasesInSwitch": false
   },
   "include": ["src"]
 }
