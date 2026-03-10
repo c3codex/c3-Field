@@ -2,7 +2,6 @@
 manifest_slug: gate-01-crown-removed
 artifact_type: gate
 artifact_number: 02
-display_label: Gate I
 display_roman: Gate I
 title: Crown Removed
 text_kind: plaque

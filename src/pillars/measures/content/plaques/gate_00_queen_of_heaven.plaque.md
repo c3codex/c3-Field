@@ -1,6 +1,6 @@
 ---
 manifest_slug: gate-00-queen-of-heaven
-artifact_type: gate
+artifact_type: threshold
 artifact_number: 01
 text_kind: plaque
 title: Queen of Heaven

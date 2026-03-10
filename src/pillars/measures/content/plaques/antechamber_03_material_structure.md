@@ -2,7 +2,7 @@
 manifest_slug: antechamber_02_plaque
 artifact_type: plaque
 title: Material Structure
-text_kind: structural_plaque
+text_kind: contex
 ---
 
 # Material Structure

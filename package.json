@@ -9,8 +9,10 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+  "sync:measures-content": "node scripts/sync_measures_content.mjs",
     "export:registry": "tsx scripts/exportRegistryFromSupabase.ts"
   },
+
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@paragraph-com/sdk": "^1.2.1",
@@ -51,6 +53,7 @@
     "dotenv": "^17.3.1",
     "embla-carousel-react": "^8.3.0",
     "fast-xml-parser": "^5.4.1",
+    "gray-matter": "^4.0.3",
     "highlight.js": "^11.9.0",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",

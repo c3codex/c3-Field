@@ -1,11 +1,17 @@
->---
-manifest_slug: gate-00-queen-of-heaven
-artifact_type: gate
-artifact_number: 1
-text_kind: epigraph
-title: From the Great Above
-display_label: Gate I
 ---
+manifest_slug: gate-00-queen-of-heaven
+text_kind: epigraph
+title: Queen of Heaven
+display_label: Gate 0
+artifact_type: threshhold
+artifact_number: 1
+is_active: true
+---
+
+# Queen of Heaven
+
+
+
 
 𒀭𒈹𒁀𒀭𒌈
            𒀭𒋫𒃲𒋫 𒄑𒌆𒃲𒊺
