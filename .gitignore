@@ -5,3 +5,5 @@ dist
 .DS_Store
 .vscode
 *.wav
+.env.local
+.dev.vars

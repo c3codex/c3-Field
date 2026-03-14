@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "sync:canon": "node scripts/sync_canon.mjs",
     "sync:measures-content": "node scripts/sync_measures_content.mjs",
     "export:registry": "tsx scripts/exportRegistryFromSupabase.ts"
   },
