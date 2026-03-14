@@ -1,0 +1,38 @@
+documents:
+
+  - path: docs/COHERENTAI_SYSTEM_MAP.md
+    class: doctrine
+    binding_strength: high
+    pillar: coherentai
+    status: active
+
+  - path: docs/COHERENTAI_INSTALLATION_PROTOCOL.md
+    class: protocol
+    binding_strength: high
+    pillar: coherentai
+    status: active
+
+  - path: docs/MEASURES_INSTALLATION_LOGIC_MAP.md
+    class: logic_map
+    binding_strength: high
+    pillar: measures
+    container_ref: codexstone
+    status: active
+
+  - path: docs/MEASURES_TEXT_TAXONOMY.md
+    class: taxonomy
+    binding_strength: medium_high
+    pillar: measures
+    status: active
+
+  - path: docs/MEASURES_ENCOUNTER_TYPES.md
+    class: encounter_model
+    binding_strength: high
+    pillar: measures
+    status: active
+
+  - path: docs/COHERENTAI_FIRST_TEST.md
+    class: test_spec
+    binding_strength: medium
+    pillar: coherentai
+    status: active

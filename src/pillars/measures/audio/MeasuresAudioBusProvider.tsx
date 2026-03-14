@@ -1,5 +1,12 @@
 // src/pillars/measures/audio/MeasuresAudioBusProvider.tsx
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { useLocation } from "react-router-dom";
 
 export type BusContext = {
@@ -13,18 +20,30 @@ const Ctx = createContext<BusContext | null>(null);
 
 const OBSIDIAN_VOL = 0.22;
 const DUCK_VOL = 0.07;
-const OBSIDIAN_SRC = "/audio/obsidian-bed.mp3";
 
 function isObsidianRoute(pathname: string) {
   return pathname.startsWith("/measures/gates");
 }
 
-export function MeasuresAudioBusProvider({ children }: { children: React.ReactNode }) {
+type Props = {
+  children: React.ReactNode;
+  obsidianSrc?: string | null;
+};
+
+export function MeasuresAudioBusProvider({
+  children,
+  obsidianSrc,
+}: Props) {
   const { pathname } = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const a = new Audio(OBSIDIAN_SRC);
+    if (!obsidianSrc) {
+      audioRef.current = null;
+      return;
+    }
+
+    const a = new Audio(obsidianSrc);
     a.loop = true;
     a.preload = "auto";
     a.volume = 0;
@@ -35,7 +54,7 @@ export function MeasuresAudioBusProvider({ children }: { children: React.ReactNo
       a.src = "";
       audioRef.current = null;
     };
-  }, []);
+  }, [obsidianSrc]);
 
   const unlock = useCallback(() => {
     const a = audioRef.current;
@@ -82,14 +101,13 @@ export function MeasuresAudioBusProvider({ children }: { children: React.ReactNo
   const restore = useCallback(() => {
     const a = audioRef.current;
     if (!a) return;
-    if (isObsidianRoute(window.location.pathname)) a.volume = OBSIDIAN_VOL;
-  }, []);
+    if (isObsidianRoute(pathname)) a.volume = OBSIDIAN_VOL;
+  }, [pathname]);
 
   useEffect(() => {
     setObsidianActive(isObsidianRoute(pathname));
   }, [pathname, setObsidianActive]);
 
-  // ✅ Force the memo type explicitly so TS cannot infer a narrower shape
   const value = useMemo<BusContext>(
     () => ({ unlock, setObsidianActive, duck, restore }),
     [unlock, setObsidianActive, duck, restore]
@@ -100,6 +118,8 @@ export function MeasuresAudioBusProvider({ children }: { children: React.ReactNo
 
 export function useMeasuresAudioBus(): BusContext {
   const ctx = useContext(Ctx);
-  if (!ctx) throw new Error("useMeasuresAudioBus must be inside MeasuresAudioBusProvider");
+  if (!ctx) {
+    throw new Error("useMeasuresAudioBus must be inside MeasuresAudioBusProvider");
+  }
   return ctx;
 }

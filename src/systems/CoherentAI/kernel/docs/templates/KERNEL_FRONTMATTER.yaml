@@ -1,0 +1,20 @@
+---
+title: 
+doc_class: draft
+binding_strength: medium
+pillar: coherentai
+status: active
+
+scope: system
+container_ref:
+encounter_type:
+
+glyph:
+glyph_role:
+
+governs_layers: []
+related_docs: []
+
+source_bucket: codex-vault
+source_folder: system-kernel
+---

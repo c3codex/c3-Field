@@ -4,7 +4,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
@@ -15,7 +15,17 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 const CONTENT_ROOT = path.resolve("src/pillars/measures/content");
 const BUCKET = "Measures-open";
-const STORAGE_ROOT = "text";
+const STORAGE_ROOT = "measures";
+
+function requireField(data, field, filePath) {
+  if (
+    data[field] === undefined ||
+    data[field] === null ||
+    String(data[field]).trim() === ""
+  ) {
+    throw new Error(`Missing required frontmatter "${field}" in ${filePath}`);
+  }
+}
 
 async function walk(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -29,18 +39,11 @@ async function walk(dir) {
   return files.flat();
 }
 
-function requireField(data, field, filePath) {
-  if (
-    data[field] === undefined ||
-    data[field] === null ||
-    String(data[field]).trim() === ""
-  ) {
-    throw new Error(`Missing required frontmatter "${field}" in ${filePath}`);
-  }
-}
-
 async function main() {
   const files = await walk(CONTENT_ROOT);
+
+  console.log("FILES FOUND:");
+files.forEach((f) => console.log(f));
 
   for (const filePath of files) {
     const raw = await fs.readFile(filePath, "utf8");
@@ -52,8 +55,10 @@ async function main() {
     requireField(data, "text_kind", filePath);
     requireField(data, "title", filePath);
 
-    const relPath = path.relative(CONTENT_ROOT, filePath).replace(/\\/g, "/");
-    const storagePath = `${STORAGE_ROOT}/${relPath}`;
+    const textSlot = data.text_slot ?? "primary";
+const slug = `${data.manifest_slug}__${data.text_kind}__${textSlot}`;
+   const storagePath = `${STORAGE_ROOT}/${data.manifest_slug}/${data.text_kind}.${textSlot}.md`;
+    const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${storagePath}`;
 
     const uploadRes = await supabase.storage
       .from(BUCKET)
@@ -63,29 +68,31 @@ async function main() {
       });
 
     if (uploadRes.error) {
-      throw new Error(`Storage upload failed for ${filePath}: ${uploadRes.error.message}`);
+      throw new Error(
+        `Storage upload failed for ${filePath}: ${uploadRes.error.message}`
+      );
     }
 
-    const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${storagePath}`;
-
     const row = {
-      manifest_slug: data.manifest_slug,
-      text_kind: data.text_kind,
-      title: data.title,
-      display_label: data.display_label ?? null,
-      artifact_type: data.artifact_type ?? null,
-      artifact_number: data.artifact_number ?? null,
-      body_md: bodyMd,
-      storage_path: storagePath,
-      public_url: publicUrl,
-      is_active: data.is_active ?? true,
-      updated_at: new Date().toISOString(),
-    };
+  slug,
+  manifest_slug: data.manifest_slug,
+  text_kind: data.text_kind,
+  text_slot: data.text_slot ?? "primary",
+  title: data.title,
+  display_label: data.display_label ?? null,
+  artifact_type: data.artifact_type ?? null,
+  artifact_number: data.artifact_number ?? null,
+  body_md: bodyMd,
+  storage_path: storagePath,
+  public_url: publicUrl,
+  is_active: data.is_active ?? true,
+  updated_at: new Date().toISOString(),
+};
 
     const { error } = await supabase
       .from("measures_text_content")
       .upsert(row, {
-        onConflict: "manifest_slug,text_kind",
+        onConflict: "slug",
       });
 
     if (error) {

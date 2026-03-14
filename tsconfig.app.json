@@ -30,5 +30,5 @@
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src"]
+  "include": ["src", "src/pillars/measures/templeHome/MeasuresTempleHome.tsx"]
 }

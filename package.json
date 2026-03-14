@@ -9,10 +9,9 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-  "sync:measures-content": "node scripts/sync_measures_content.mjs",
+    "sync:measures-content": "node scripts/sync_measures_content.mjs",
     "export:registry": "tsx scripts/exportRegistryFromSupabase.ts"
   },
-
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@paragraph-com/sdk": "^1.2.1",
@@ -81,6 +80,7 @@
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^5.1.4",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
