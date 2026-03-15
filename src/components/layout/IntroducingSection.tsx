@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { SyndrosReturnGlyph } from "@/components/ui/SyndrosReturnGlyph";
-import { PRICELESS_ASSETS } from "@/assets/pricelessAssets";
+import { PRICELESS_ASSETS } from "@pillars/priceless-gallery/pricelessAssets";
 
 const INTRO_PAUSE_MS = 700;
 const BOTTOM_EPS_PX = 6;
