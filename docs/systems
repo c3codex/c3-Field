@@ -1,0 +1,13 @@
+# Systems
+
+This layer defines execution structure.
+
+Includes:
+- schema definitions
+- database doctrine
+- request and dispatch logic
+- memory and registry systems
+
+Rules:
+- machine clarity
+- no symbolic language
