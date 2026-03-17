@@ -1,0 +1,30 @@
+# c3 Field
+
+This repository is the active source of truth for the c3 Field governance architecture.
+
+It contains the canonical structure, governance protocols, system architecture, and installation framework required to maintain coherence under AI-accelerated conditions.
+
+## Structure
+
+- `docs/field-canon/` → foundational field-level truth
+- `docs/protocols/` → governance decision pathways
+- `docs/systems/` → schema, execution logic, and system structure
+- `docs/model/` → c3 model architecture
+- `docs/installations/` → external implementation and cohort structure
+
+## Exclusions
+
+This repository does not contain:
+
+- legacy token systems
+- deprecated glossary layers
+- exploratory or symbolic language
+- historical whitepapers
+
+These exist as archival materials outside the canonical system.
+
+## Status
+
+Active  
+Authoritative  
+Maintained
