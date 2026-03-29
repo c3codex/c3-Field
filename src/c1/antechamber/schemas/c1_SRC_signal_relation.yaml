@@ -1,0 +1,149 @@
+document_type: c1_src_schema
+schema_name: signal_relation
+authority_level: intake
+document_scope: antechamber
+version: v1
+status: normalized
+readonly: false
+
+intake_class: c1_SRC
+stage: antechamber
+validator: notchazz
+passage_required: true
+
+tags:
+  - c1
+  - src
+  - signal
+  - antechamber
+  - institution
+  - required
+  - objective
+  - intake
+
+purpose: >
+  Declares the submitted signal, its origin, its objective, and its present
+  relation to passage prior to Measures seating.
+
+required: true
+
+fields:
+  signal_name:
+    type: string
+    required: true
+    description: >
+      Declared name of the submitted signal surface or submission set.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  signal_type:
+    type: enum
+    required: true
+    description: >
+      Declares the primary type of signal being submitted.
+    values:
+      - document
+      - media
+      - image
+      - audio
+      - mixed
+      - structural
+      - institutional
+
+  origin_type:
+    type: enum
+    required: true
+    description: >
+      Declares whether the signal originates from a Named Individual or an Institution in Service.
+    values:
+      - named_individual
+      - institution_in_service
+
+  origin_name:
+    type: string
+    required: true
+    description: >
+      Declared answerable source of the signal.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  c3_key_present:
+    type: boolean
+    required: true
+    description: >
+      Confirms whether a c3 Key is already present for the declared origin.
+
+  signal_objective:
+    type: string
+    required: true
+    description: >
+      Declares the objective of the signal at intake.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  signal_scope:
+    type: enum
+    required: true
+    description: >
+      Declares whether the signal is seed-stage, installation-stage, or conversion-stage.
+    values:
+      - seed
+      - installation
+      - conversion
+      - institutional_mapping
+
+  codex_intent:
+    type: enum
+    required: true
+    description: >
+      Declares the intended relation of the signal to Codex.
+    values:
+      - review_only
+      - seating_requested
+      - mapping_only
+      - continuity_update
+
+  signal_state:
+    type: enum
+    required: true
+    description: >
+      Declares the present standing of the signal at intake.
+    values:
+      - unverified
+      - declared
+      - held
+      - correction_required
+      - passage_ready
+
+  bounded_claim_confirmed:
+    type: boolean
+    required: true
+    description: >
+      Confirms that the submission does not claim authority beyond what has been declared and verified.
+
+  coherence_claimed:
+    type: boolean
+    required: true
+    description: >
+      Declares whether the origin is claiming coherence as already proven at intake.
+
+notchazz_rules:
+  - signal_name must be declared
+  - signal_type must be declared
+  - origin_type must be declared
+  - origin_name must be declared
+  - signal_objective must be declared
+  - signal_scope must be declared
+  - codex_intent must be declared
+  - signal_state must be declared
+  - bounded_claim_confirmed must be true
+  - coherence_claimed must be false at intake
+  - passage_ready may not be declared unless supporting intake conditions are satisfied
+
+failure_state:
+  action: hold_in_antechamber
+  oar: append_required
+  return: correction_required

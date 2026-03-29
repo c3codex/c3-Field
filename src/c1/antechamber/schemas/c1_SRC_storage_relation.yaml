@@ -1,0 +1,113 @@
+document_type: c1_src_schema
+schema_name: storage_relation
+authority_level: intake
+document_scope: antechamber
+version: v1
+status: normalized
+readonly: false
+
+intake_class: c1_SRC
+stage: antechamber
+validator: notchazz
+passage_required: true
+
+tags:
+  - c1
+  - src
+  - storage
+  - antechamber
+  - institution
+  - required
+  - continuity
+  - protected-storage
+
+purpose: >
+  Declares the storage structure through which submitted signal surfaces are held,
+  accessed, and verified prior to passage.
+
+required: true
+
+fields:
+  bucket:
+    type: string
+    required: true
+    description: >
+      Name of the storage bucket holding the submitted surfaces.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  prefix:
+    type: string
+    required: true
+    description: >
+      Path prefix inside the bucket where the submitted surfaces are located.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  exposure:
+    type: enum
+    required: true
+    description: >
+      Declares whether the storage surface is private or public.
+    values:
+      - private
+      - public
+
+  envURL:
+    type: string_or_null
+    required: true
+    description: >
+      Public retrieval URL if exposure is public. Must be null when exposure is private.
+    validation:
+      conditional:
+        - if:
+            exposure: private
+          then:
+            must_equal: null
+        - if:
+            exposure: public
+          then:
+            min_length: 1
+
+  retrieval:
+    type: enum
+    required: true
+    description: >
+      Declares the access method by which the storage surface is retrieved.
+    values:
+      - envKey
+      - public_url
+      - signed_url
+      - internal_binding
+
+  write_mode:
+    type: enum
+    required: true
+    description: >
+      Declares how files are placed into storage.
+    values:
+      - manual
+      - automated
+      - hybrid
+
+  continuity_confirmed:
+    type: boolean
+    required: true
+    description: >
+      Confirms that bucket and prefix relation has been checked and matches the declared structure.
+
+notchazz_rules:
+  - bucket must be declared
+  - prefix must be declared
+  - exposure must be declared
+  - envURL must match exposure condition
+  - retrieval must be declared
+  - write_mode must be declared
+  - continuity_confirmed must be true before passage
+
+failure_state:
+  action: hold_in_antechamber
+  oar: append_required
+  return: correction_required

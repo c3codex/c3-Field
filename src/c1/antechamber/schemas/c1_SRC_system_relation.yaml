@@ -1,0 +1,115 @@
+document_type: c1_src_schema
+schema_name: system_relation
+authority_level: intake
+document_scope: antechamber
+version: v1
+status: normalized
+readonly: false
+
+intake_class: c1_SRC
+stage: antechamber
+validator: notchazz
+passage_required: true
+
+tags:
+  - c1
+  - src
+  - system
+  - antechamber
+  - institution
+  - required
+  - mapping
+  - authority
+  - role-boundary
+
+purpose: >
+  Declares how the submitting institution relates its own system surfaces to
+  Codex, Field, Measures, and Chazz prior to passage.
+
+required: true
+
+fields:
+  codex_mode:
+    type: enum
+    required: true
+    description: >
+      Declares whether the institution seats directly into Codex or maps from its own system.
+    values:
+      - direct
+      - mapped
+
+  authority_surface:
+    type: string
+    required: true
+    description: >
+      Declares the authority surface from which the institution's submitted truth is presently held.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  field_surface:
+    type: string
+    required: true
+    description: >
+      Declares the structural surface through which relations are organized.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  registry_surface:
+    type: string
+    required: true
+    description: >
+      Declares the registry or ordering surface through which sequence, access, or reveal is managed.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  execution_surface:
+    type: string
+    required: true
+    description: >
+      Declares the system or process surface through which execution occurs.
+    validation:
+      min_length: 1
+      allow_null: false
+
+  role_boundary_confirmed:
+    type: boolean
+    required: true
+    description: >
+      Confirms that authority, structure, registry, and execution have not been collapsed into one surface.
+
+  append_only_confirmed:
+    type: boolean
+    required: true
+    description: >
+      Confirms whether the submitted record model preserves continuity through extension rather than destructive overwrite.
+
+  public_logic_exposed:
+    type: boolean
+    required: true
+    description: >
+      Declares whether protected execution bodies or authority logic are publicly exposed.
+
+  protected_execution_confirmed:
+    type: boolean
+    required: true
+    description: >
+      Confirms that protected execution remains bounded and not reconstructible from the declared surfaces.
+
+notchazz_rules:
+  - codex_mode must be declared
+  - authority_surface must be declared
+  - field_surface must be declared
+  - registry_surface must be declared
+  - execution_surface must be declared
+  - role_boundary_confirmed must be true
+  - append_only_confirmed must be true
+  - public_logic_exposed must be false
+  - protected_execution_confirmed must be true
+
+failure_state:
+  action: hold_in_antechamber
+  oar: append_required
+  return: correction_required
