@@ -1,0 +1,14 @@
+{
+  "name": "The c3 Key",
+  "symbol": "C3K",
+  "description": "The c3 Key is the Gate Pass to the c3 Community Partners DAO — a ritual token for those who choose to Connect · Contribute · Create. Holding the Key grants access to DAO initiatives, Oracle rituals, and Codexstone stewardship within the current of the Knew.",
+  "image": "ipfs://<"ipfs://bafybeib1m23456789abcdefghi1234567890">",
+  "external_url": "https://c3communitypartners.xyz",
+  "attributes": [
+    { "trait_type": "Function", "value": "DAO Access & Recognition" },
+    { "trait_type": "Circuit", "value": "Connect · Contribute · Create" },
+    { "trait_type": "Octave", "value": "3.14" },
+    { "trait_type": "Network", "value": "Base" },
+    { "trait_type": "Codexstone Seal", "value": "True" }
+  ]
+}
