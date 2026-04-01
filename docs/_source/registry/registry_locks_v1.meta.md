@@ -1,13 +1,12 @@
----
-document_type: registry_locks
+﻿---
+document_type: registry_definition
 authority_level: working
 document_scope: registry
-title: Registry Locks v1
-status: validated
+title: Registry Locks
+status: drafting
 version: v1
-session: 4
 operator: op044
-date: 2026-03-30
+date: 2026-04-01
 native_stack:
   codex: database
   field: schema
@@ -16,141 +15,320 @@ native_stack:
 tags:
   - registry
   - locks
-  - session-4
+  - freeze
+  - governance
+  - working
+source_alignment:
+  - Session 6 Carryover — Registry Source Stack Review
+  - Seed Pattern Constraints — Chazz
+  - Seed Concordance
+  - Field Definition — Antechamber Intake Surface
+  - Session 4 Registry Identity Working
 ---
 
-# Registry Locks v1
+# Registry Locks
 
-## Extraction Rule
+## Purpose
 
-Working documents preserve discovery.
-Source documents preserve validated structure.
-Build documents preserve frozen form.
+Freeze approved distinctions in the rewritten registry source stack so later drafting does not reintroduce drift.
 
-## Count Lock
+Registry locks preserve:
 
-7 protects.
-9 distributes.
-13 governs.
+- seated identity decisions
+- seated family distinctions
+- seated material clarifications
+- bounded source-pass scope
+- dissolved legacy rows or assumptions
 
-## Governance Count Resolution
+This doc defines what is currently frozen for the rewritten pass.
 
-The full governance structure resolves as:
+It does not define:
 
-- 6 before Codex
-- Codex
-- 6 after Codex
+- structural validity conditions
+- row identity shape
+- geometric standing
+- release state
+- asset mapping
+- row-family content in full
 
-This forms:
+## Scope
 
-6 + 1 + 6 = 13
+This doc applies across the rewritten stack:
 
-## c3 Rule
+- `registry_identity_shape_v1.meta.md`
+- `registry_geometry_v1.meta.md`
+- `registry_constraints_v1.meta.md`
+- `registry_rows_spine_v1.meta.md`
+- `registry_rows_chamber_directories_v1.meta.md`
+- `registry_rows_gates_v1.meta.md`
+- `registry_rows_epithets_v1.meta.md`
+- `registry_rows_mes_v1.meta.md`
 
-c3 is the minimal operating expression.
+This doc is lock-bound.
 
-## 5 and 1 Correction
+It is not the row-family content surface itself.
 
-5 proves body.
-1 proves axis.
+## Native Distinction
 
-The 1 is quantum entangled.
-It is not duplicated.
+Codex holds.
+Field structures.
+Measures registers.
+Chazz executes.
 
-## Isomorphism Lock
+Registry locks remain subordinate to that order.
 
-The entangled remains singular.
-The isomorphic may appear across separate materials.
+Nothing here overrides Codex authority or Field structure.
 
-## Count Spine
+## Lock Distinction
 
-- 1 = axis
-- 2 = isomorphism
-- 3 = minimal operating expression
-- 4 = structure
-- 5 = full body proof
-- 7 = protection
-- 8 = Inanna
-- 9 = distribution
-- 13 = governance
+Locks are not constraints.
 
-## Count Distinction Rule
+- **Constraints** define what must be true for validity
+- **Locks** freeze what has already been reviewed and approved for the current pass
 
-These count bodies relate, but they do not collapse.
+A constraint may reject.
+A lock may hold.
 
-- 1 anchors
-- 2 preserves valid twoness
-- 3 operates
-- 4 structures
-- 5 proves body
-- 7 protects
-- 8 is Inanna
-- 9 distributes
-- 13 governs
+That is why this doc remains distinct from `registry_constraints_v1.meta.md`.
 
-## Three-Key Distinction
+## Current Lock Set
 
-The system preserves three distinct keys:
+### 1. Native-Order Lock
 
-- internal_key = structural row or unit handle
-- envKey = Envelope continuity and retrieval handle
-- c3_key = origin access standing handle
+The rewritten registry stack remains seated in native order:
 
-These keys do not replace one another.
+Codex → Field → Measures → Chazz
 
-They resolve to different scopes:
+No registry rewrite may drift into:
 
-- internal_key resolves to registry identity
-- envKey resolves to Envelope continuity
-- c3_key resolves to origin participation standing
+- UI-owned authority
+- route-string identity
+- frontend-defined reveal logic
+- system invention outside registered structure
 
-## Three-Key Rule
+### 2. Identity Lock
 
-- internal_key is not an access key
-- envKey is not a registry row handle
-- c3_key is not a structural unit identifier
+`internal_key` remains the stable registry row handle.
 
-## Identity Rule
+The following are not authority:
 
-- slug is not used
-- internal_key is the working identity handle
-- institutional_term is the normalized first-layer label
-- resolves_to_native points back to native structure
-- display_title remains optional and non-authoritative
+- display title
+- asset naming
+- slug
+- route string
 
-## Gate Lock
+Identity freeze order remains:
 
-Gates govern thresholded action through constraint.
+1. row class  
+2. internal_key  
+3. row_family  
+4. planted vs non-planted distinction  
+5. native resolution  
+6. institutional readability  
+7. functional use  
+8. material seating, where applicable  
+9. family order  
+10. later asset attachment
 
-## Phase Map Rule
+### 3. Family Lock
 
-Phase Map positions.
-It does not require material seating in the first pass.
+The rewritten row families are locked as:
 
-## Material Revision Rule
+- spine
+- chamber_directory
+- gate
+- epithet
+- me
 
-Material is assigned at the row level, not inferred automatically from unit family.
+These may relate.
+They may not collapse into one another.
 
-- unit family defines structural kind
-- material defines embodied seat, tonal relation, or support function
+### 4. Planted Distinction Lock
 
-A family may correlate with a material pattern, but family and material do not collapse into one another.
+A row may be system-known without being planted.
 
-## Participatory Lock
+System-known rows do not impersonate planted Measures units.
 
-The participatory triad is preserved in role seating only if role family and material assignment remain distinct.
+Planted Measures units do not collapse into reference-only surfaces.
 
-## Circuit Rule
+### 5. Circuit Lock
 
-A row must resolve through family, material, and circuit before participatory expression and distribution are read.
+c1, c2, and c3 remain circuit only.
 
-## Geometric Lock
+Circuit does not define:
 
-Circuit tells where a row operates.
-Right-angle directional tells how it is oriented.
-Orthocentric relational tells how it resolves.
+- chamber
+- material
+- directory
+- release state
 
-## Resolution Lock
+Circuit may relate to those layers.
+It may not collapse into them.
 
-True structure resolves.
-False structure compensates.
+### 6. Conversion Lock
+
+Conversion remains completion standing.
+
+Conversion is not:
+
+- access path
+- phase visibility
+- directory presence
+- chamberplate reachability
+
+Access may relate to conversion.
+It does not replace it.
+
+### 7. Material Clarification Lock
+
+Current rewritten material clarifications are locked as:
+
+- Temple = crystal
+- Antechamber = lapis
+- Obsidian Chamber = obsidian
+- Harrumuk Passage = null material
+- Phase Map = null material
+
+Original oracle-card alignment remains locked as:
+
+- obsidian
+- crystal
+- marble
+
+Lapis Lazuli is locked as the 4th native material in the wider system, properly seated once Temple was recognized as crystal.
+
+### 8. Oracle Alignment Lock
+
+Epithets remain the 9 role units.
+
+The original oracle-card alignment remains specifically tied to:
+
+- obsidian
+- crystal
+- marble
+
+Lapis is not used to retroactively rewrite that original oracle alignment.
+
+### 9. Spine Scope Lock
+
+The current spine-family source pass is locked as bounded from:
+
+- Temple
+- Antechamber
+- Harrumuk Passage
+- Obsidian Chamber
+- Phase Map
+
+Kumurrah Passage remains downstream and is not yet seated in the current spine-family pass.
+
+### 10. Spine Row Dissolution Lock
+
+Generic standalone `epigraph` is dissolved as a spine row in this rewritten pass.
+
+Its prior systems-communication role is no longer held there.
+
+### 11. Antechamber Function Lock
+
+Antechamber is locked in the rewritten pass as carrying:
+
+- intake
+- OAR1 origin standing
+- systems communication / control
+- passage readiness
+
+Antechamber may orient and communicate.
+It may not fake valid passage.
+
+### 12. Chamber-Directory Lock
+
+Each chamber is locked to having a chamber-local directory surface that communicates relevant chamber information and routes toward chamberplate.
+
+Chamber directory remains distinct from:
+
+- spine
+- planted units
+- chamberplate itself
+- conversion standing
+
+### 13. Exhibition-Access Lock
+
+Exhibition access is not locked to one exclusive obsidian-only bottleneck.
+
+Legacy access logic remains preserved:
+
+- chamber entry may occur from TempleHome
+- chamber entry may occur through continued gateplate pass-through
+- unlock visibility may be shown through phase-calendar or phase-state standing
+
+This does not erase conversion standing.
+It prevents false narrowing of exhibition access.
+
+### 14. Gate 0 Lock
+
+Gate 0 remains dissolved and non-native.
+
+No rewrite may reintroduce Gate 0 as a planted native gate row.
+
+## Boundary Rule
+
+Registry locks freeze approved distinctions.
+
+Registry locks do not determine whether those distinctions are structurally valid in the first place.
+That remains the job of registry constraints.
+
+## Validation Rule
+
+This doc is valid for the rewritten stack if it keeps the following from drifting:
+
+- identity authority
+- row-family distinction
+- planted distinction
+- circuit integrity
+- conversion integrity
+- current material clarifications
+- oracle-card alignment
+- bounded spine scope
+- chamber-directory pattern
+- exhibition-access breadth
+
+## Current Standing
+
+Registry locks currently provide:
+
+- freeze points for the rewritten stack
+- separation from constraints
+- material and oracle alignment holds
+- bounded source-pass scope
+- dissolution of stale spine assumptions
+- stable distinction between access, conversion, and chamber-local information
+
+It does not yet provide:
+
+- row-family content in full
+- family-specific validation matrices
+- release-state logic
+- asset mapping
+
+## Next Relation
+
+This doc must remain paired with:
+
+- `registry_identity_shape_v1.meta.md`
+- `registry_geometry_v1.meta.md`
+- `registry_constraints_v1.meta.md`
+- `registry_rows_spine_v1.meta.md`
+- `registry_rows_chamber_directories_v1.meta.md`
+- `registry_rows_gates_v1.meta.md`
+- `registry_rows_epithets_v1.meta.md`
+- `registry_rows_mes_v1.meta.md`
+
+## Closing
+
+Registry locks do not create structure.
+
+They keep approved distinctions from slipping sideways while the rewritten registry stack is being seated.
+
+Codex holds.
+Field structures.
+Measures registers.
+Chazz executes.

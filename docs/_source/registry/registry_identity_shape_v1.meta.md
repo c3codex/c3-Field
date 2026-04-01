@@ -1,13 +1,12 @@
----
-document_type: registry_shape
+﻿---
+document_type: registry_definition
 authority_level: working
 document_scope: registry
-title: Registry Identity Shape v1
-status: validated
+title: Registry Identity Shape
+status: drafting
 version: v1
-session: 4
 operator: op044
-date: 2026-03-30
+date: 2026-04-01
 native_stack:
   codex: database
   field: schema
@@ -15,160 +14,301 @@ native_stack:
   chazz: systems
 tags:
   - registry
-  - shape
   - identity
-  - session-4
+  - shape
+  - row-identity
+  - working
+source_alignment:
+  - Session 4 Registry Identity Working
+  - Session 6 Carryover — Registry Source Stack Review
+  - Seed Concordance
+  - Field Definition — Antechamber Intake Surface
 ---
 
-# Registry Identity Shape v1
+# Registry Identity Shape
 
 ## Purpose
 
-The first registry identity table preserves structural distinction before release logic, asset mapping, or Envelope instance logic is introduced.
+Define the first registry identity shape for the rewritten source stack.
 
-This table holds identity, first-layer institutional readability, functional use, native resolution, circuit resolution, planted distinction, material seating, geometric standing, and family-bound order.
+Registry identity shape exists to preserve:
 
-## Shape Rule
+- stable row identity
+- planted vs non-planted distinction
+- native resolution
+- institutional readability
+- family-bound order
 
-Every registry identity row must answer:
+This doc defines what a row is in registry terms.
+
+It does not define:
+
+- geometry
+- structural validity conditions
+- release state
+- asset mapping
+- Envelope instance logic
+- envKey
+- c3_key
+- route logic
+- chamber-directory behavior
+
+## Scope
+
+This doc applies to both:
+
+- system-known, non-planted rows
+- planted Measures rows
+
+It provides the shared identity shape used across:
+
+- spine rows
+- chamber directory rows
+- gate rows
+- epithet rows
+- ME rows
+
+This doc is identity-bound.
+
+It is not the row-family content surface itself.
+
+## Native Distinction
+
+Codex holds.
+Field structures.
+Measures registers.
+Chazz executes.
+
+Registry identity remains subordinate to that order.
+
+Nothing in this doc defines authority outside Codex or structure outside Field.
+
+## Identity Rule
+
+A registry row must answer:
 
 - what kind of thing is this
 - what job does it perform
 - what does it resolve to natively
-- what circuit does it resolve to
 - is it planted
-- what material seat does it carry
-- how is it directionally aligned
-- how does it resolve relationally
+- what family does it belong to
 - what order does it hold within its family
 
-## Row Formation Rule
+Identity shape preserves those answers before geometry, release logic, or asset seating are introduced.
 
-A row is not fully formed by name and family alone.
+## Core Distinctions
 
-A row must preserve:
+### 1. System-known vs planted
 
-- identity
-- first-layer readability
-- function
-- native resolution
-- circuit resolution
-- planted distinction
-- material seat
-- directional standing
-- relational standing
+A row may be system-known without being a planted Measures unit.
 
-## First Row Spec
+System-known rows preserve structural sequence, access relation, or chamber-local communication.
 
-| column_name | purpose |
-|---|---|
-| internal_key | stable structural row handle |
-| institutional_term | first-layer readable type label |
-| functional_use | operational job performed by the row |
-| resolves_to_native | native unit or surface the row points to |
-| resolves_to_circuit | c1, c2, or c3 operational relation |
-| planted_unit | whether the row is planted in Measures |
-| material | row-assigned material seat |
-| right_angle_directional | directional alignment of the row |
-| orthocentric_relational | convergent relational standing of the row |
-| surface_order | order within field-spine surfaces |
-| gate_order | order within progression units |
-| role_order | order within role units |
-| function_order | order within function units |
-| notes | structural clarification |
+Planted rows preserve Measures unit seating.
 
-## SQL-Oriented Draft Table Spec
+### 2. Institutional readability vs native resolution
 
-Working table name:
+Institutional readability describes the front-facing access-layer form.
 
-`registry_identity`
+Native resolution identifies what the row actually is.
 
-## Draft Column Spec
+Institutional language does not replace native resolution.
+Institutional language does not define authority.
+Institutional language does not collapse native distinctions.
 
-| column_name | sql_type | null | purpose |
-|---|---|---|---|
-| internal_key | text | no | stable structural row handle |
-| institutional_term | text | no | first-layer readable type label |
-| functional_use | text | no | first-layer operational job |
-| resolves_to_native | text | no | native surface or unit this row points to |
-| resolves_to_circuit | text | no | circuit location of the row |
-| planted_unit | boolean | no | planted Measures distinction |
-| material | text | yes | row-assigned material seat |
-| right_angle_directional | text | no | directional alignment of the row |
-| orthocentric_relational | text | no | convergent relational standing |
-| surface_order | integer | yes | field-spine order |
-| gate_order | integer | yes | progression unit order |
-| role_order | integer | yes | role unit order |
-| function_order | integer | yes | function unit order |
-| notes | text | yes | human-readable structural clarification |
+### 3. Registry identity vs access keys
 
-## Draft Structural Constraints
+This table uses `internal_key` only.
 
-- `internal_key` must be unique
-- `planted_unit` must be explicitly true or false
-- family order fields remain nullable outside their own family
-- no row may claim more than one family order at once without explicit future justification
+It does not replace:
 
-## Family Order Rule
+- `envKey`
+- `c3_key`
 
-- surface_order governs system-known field-spine surfaces
-- gate_order governs progression units
-- role_order governs role units
-- function_order governs function units
+Key roles remain distinct:
 
-No shared installation-wide registry order is seated in this shape.
+- `internal_key` = registry row handle
+- `envKey` = Envelope continuity handle
+- `c3_key` = origin access standing handle
 
-## First Table Scope
+### 4. Family vs material
 
-This first identity shape may include both:
+Family and material remain distinct.
 
-- system-known non-planted surfaces
-- planted Measures units
+- family identifies the row's registry kind
+- material identifies embodied correspondence where materially seated
 
-This is permitted because planted distinction is explicitly preserved by `planted_unit`.
+Material does not replace family.
+Family does not force material.
 
-## Value Constraint Strategy
+## Shape Columns
 
-For first seating:
+| column_name | purpose | required | value_type | notes |
+|---|---|---|---|---|
+| internal_key | stable registry row handle | yes | text | not a slug, not an access key |
+| institutional_term | front-readable type label | yes | text | access-layer readable only |
+| functional_use | operational job performed by the row | yes | text | row function |
+| resolves_to_native | native surface or unit this row points to | yes | text | native resolution |
+| row_family | row family classification | yes | text | spine, chamber_directory, gate, epithet, me |
+| planted_unit | whether the row is planted in Measures | yes | boolean | explicit true or false |
+| material | embodied correspondence seat where applicable | no | text | nullable where no material seating is valid |
+| family_order | order within the row's own family | no | integer | nullable where not yet seated |
+| notes | structural clarification | no | text | working clarification |
 
-- `material` is constrained to approved values when present
-- `institutional_term` remains open during validation
-- `functional_use` remains open during validation
+## Shape Rule
 
-## Approved Material Values
+This first identity shape is valid if it can preserve, without collapse:
 
-- lapis
+- system-known vs planted
+- front-readable term vs native resolution
+- row family vs material
+- registry identity vs access key behavior
+- family-bound order vs installation-wide order
+
+If any of these collapse, the identity shape is incomplete.
+
+## Order Rule
+
+Order remains family-bound before installation-bound.
+
+This doc does not freeze one shared installation-wide order.
+
+A row may carry order only within its own family.
+
+Examples:
+
+- spine rows use spine order
+- chamber directory rows use chamber directory order
+- gate rows use gate order
+- epithet rows use epithet order
+- ME rows use ME order
+
+Cross-family installation order is not seated in this identity doc.
+
+## Identity Freeze Logic
+
+Identity resolves in this order:
+
+1. row class
+2. internal_key
+3. row_family
+4. planted vs non-planted distinction
+5. native resolution
+6. institutional readability
+7. functional use
+8. material seating, where applicable
+9. family order
+10. later asset attachment
+
+Display title is not authority.
+Asset naming is not authority.
+Slug is not authority.
+
+## Current Families in Scope
+
+### Non-planted families
+- spine
+- chamber_directory
+
+### Planted families
+- gate
+- epithet
+- me
+
+## Current Material Clarification
+
+For the rewritten stack:
+
+- Temple = crystal
+- Antechamber = lapis
+- Obsidian Chamber = obsidian
+- Harrumuk Passage = null material
+- Phase Map = null material
+
+Original oracle-card alignment remains:
+
 - obsidian
 - crystal
 - marble
 
-## Material Constraint Rule
+Lapis Lazuli is the 4th native material in the wider system and gained proper seated place once Temple was recognized as crystal.
 
-Allowed material values are constrained.
-Family-to-material mapping is not globally inferred.
-Material is row-assigned and may remain null where seating is not yet validated.
+This identity doc preserves material as a row attribute where applicable.
+It does not define full material logic for every family.
 
-## Circuit Resolution Addition
+## Current Bounded Spine Note
 
-A row is not fully seated by family and material alone.
-It must also resolve to circuit.
+Current spine review is bounded from arrival through Phase Map.
 
-## Geometric Layer Rule
+That bounded scope does not limit the wider identity shape.
+It only limits the current spine-family pass.
 
-A row is fully described only when it preserves:
+Kumurrah Passage remains downstream and is not yet seated in the current spine-family source pass.
 
-- native resolution
-- material seat
-- circuit relation
-- right-angle directional standing
-- orthocentric relational standing
+## Example Identity Rows
 
-## Shape Validation
+These examples are for shape readability only.
 
-This draft is valid for first implementation if:
+| internal_key | institutional_term | functional_use | resolves_to_native | row_family | planted_unit | material | family_order | notes |
+|---|---|---|---|---|---|---|---:|---|
+| temple | entry_surface | arrival_holding | Temple | spine | false | crystal | 1 | pre-intake arrival surface |
+| antechamber | intake_surface | intake_control | Antechamber | spine | false | lapis | 2 | intake, OAR1 origin, systems communication |
+| gate_i | progression_unit | constraint_action | Gate I | gate | true | obsidian | 1 | planted threshold unit |
+| epithet_i | role_unit | role_stabilization | Epithet I | epithet | true | crystal | 1 | planted role unit |
+| me_01 | function_unit | function_registration | ME 01 | me | true | marble | 1 | planted function unit |
 
-- one row can represent one structural unit cleanly
+## Validation Rule
+
+This identity shape is valid for first seating if:
+
+- one row can represent one registry unit clearly
 - planted and non-planted rows remain distinguishable
-- family-bound ordering remains non-collapsed
-- internal_key remains stable and non-public-facing
+- family remains distinguishable from material
+- institutional readability remains distinguishable from native resolution
 - no access-key behavior is assigned to registry identity fields
+- cross-family order is not falsely frozen here
+
+## Current Standing
+
+Registry identity shape currently provides:
+
+- stable row identity
+- front-readable type language
+- row-family distinction
+- planted distinction
+- native resolution
+- material compatibility
+- family-bound order logic
+
+It does not yet provide:
+
+- geometric standing
+- structural validity conditions
+- row-family content in full
+- chamber-directory content in full
+- release-state logic
+- asset mapping
+
+## Next Relation
+
+This doc must remain paired with:
+
+- `registry_geometry_v1.meta.md`
+- `registry_constraints_v1.meta.md`
+- `registry_locks_v1.meta.md`
+- `registry_rows_spine_v1.meta.md`
+- `registry_rows_chamber_directories_v1.meta.md`
+- `registry_rows_gates_v1.meta.md`
+- `registry_rows_epithets_v1.meta.md`
+- `registry_rows_mes_v1.meta.md`
+
+## Closing
+
+Registry identity shape does not invent truth.
+
+It preserves row identity in a form that can be structured by Field, registered by Measures, and executed by Chazz without drift.
+
+Codex holds.
+Field structures.
+Measures registers.
+Chazz executes.
