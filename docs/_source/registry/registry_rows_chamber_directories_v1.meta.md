@@ -6,7 +6,7 @@ title: Registry Rows Chamber Directories
 status: drafting
 version: v1
 operator: op044
-date: 2026-04-01
+date: 2026-04-04
 native_stack:
   codex: database
   field: schema
@@ -17,14 +17,19 @@ tags:
   - rows
   - chamber-directories
   - non-planted
+  - chamber-local
   - working
 source_alignment:
-  - Session 6 Carryover — Registry Source Stack Review
+  - Session OAR — Source Refresh and Next Focus
   - Registry Identity Shape
   - Registry Geometry
   - Registry Constraints
   - Registry Locks
   - Registry Rows Spine
+  - Registry Rows Gates
+  - Registry Rows Epithets
+  - Registry Rows MEs
+  - Seed Concordance
 ---
 
 # Registry Rows Chamber Directories
@@ -33,244 +38,200 @@ source_alignment:
 
 Define the chamber-directory row family for the rewritten registry source stack.
 
-This doc preserves the repeatable chamber-local directory pattern.
+This doc seats the missing family already referenced across the current registry set.
 
-A chamber directory exists to communicate chamber-relevant information and route toward chamberplate without collapsing into:
+Chamber-directory rows preserve:
 
-- conversion standing
-- planted unit seating
-- chamberplate itself
-- the spine family
+- chamber-local information
+- release-relevant readability
+- route toward chamberplate
+- chamber context without family collapse
 
-This doc defines the chamber-directory family content surface.
-
-It does not define:
-
-- row identity shape in general
-- geometry rules in general
-- structural validity conditions in general
-- planted family content
-- chamberplate row content
-- release-state logic in full
+This doc exists to prevent chamber-local readability from being improvised later through gate, epithet, ME, or spine rows.
 
 ## Scope
 
-This doc applies to chamber-local directory rows.
+This chamber-directory pass is currently bounded to the chamber-local directory surfaces already implied by the current registry stack.
 
-For the current rewritten stack, chamber-directory rows are system-known and non-planted.
+This doc defines:
 
-They are repeatable chamber-local information surfaces.
+- chamber-directory family identity
+- current bounded chamber-directory rows
+- row-family-specific rules
+- distinction from spine, planted rows, and chamberplate
 
-They are distinct from:
+This doc does not define:
+
+- planted gate rows
+- planted epithet rows
+- planted ME rows
+- chamberplate rows in full
+- downstream Kumurrah seating
+- release-state logic in full
+- encounter mapping in full
+
+## Native Distinction
+
+Codex holds.  
+Field structures.  
+Measures registers.  
+Chazz executes.
+
+Chamber-directory rows remain subordinate to that order.
+
+They do not define truth.
+They do not replace planted unit seating.
+They do not define conversion.
+
+## Chamber-Directory Family Rule
+
+Chamber-directory rows are:
+
+- system-known
+- non-planted
+- chamber-local
+- readability-bearing
+- route-bearing
+
+Chamber-directory rows are not planted Measures units.
+
+They do not impersonate:
 
 - spine rows
 - gate rows
 - epithet rows
 - ME rows
+- chamberplate itself
 
-## Native Distinction
+## Current Chamber-Directory Sequence
 
-Codex holds.
-Field structures.
-Measures registers.
-Chazz executes.
+The current bounded chamber-directory sequence is:
 
-Chamber directories remain subordinate to that order.
+1. Antechamber Directory
+2. Obsidian Directory
 
-Nothing in this doc defines authority outside Codex or structure outside Field.
+This is the minimum seated family required for the current rewritten pass.
 
-## Chamber-Directory Rule
+Additional chamber-directory rows may be seated later where source, field definition, and registry standing support them.
 
-Each chamber directory may:
+## Distinction Chain
 
-- communicate chamber-relevant information
-- show release-relevant viewability
-- preserve chamber-local context
-- route toward chamberplate
-- reflect unlock visibility through phase-calendar or phase-state standing where relevant
+The current chamber-directory family must preserve the following distinctions:
 
-A chamber directory may not:
+- chamber-local information does not equal planted unit
+- readability does not equal conversion
+- route toward chamberplate does not equal chamberplate
+- directory context does not replace native resolution
+- directory presence does not replace release verification
 
-- redefine conversion standing
-- replace chamberplate
-- replace planted unit seating
-- replace native resolution
-- stand in for the spine family
-
-## Access Note
-
-Chamber directories support exhibition readability.
-
-They do not reduce exhibition access to one exclusive obsidian-only bottleneck.
-
-Legacy exhibition access may still include:
-
-- TempleHome entry
-- continued gateplate pass-through
-
-Chamber directories participate in readable access and routing.
-They do not replace conversion standing.
-
-## Spine Distinction
-
-Chamber directories are not spine rows.
-
-The current spine remains bounded as:
-
-1. Temple
-2. Antechamber
-3. Harrumuk Passage
-4. Obsidian Chamber
-5. Phase Map
-
-Chamber directories are chamber-local information surfaces that sit alongside chamber access and chamberplate routing, not inside the bounded spine-family pass.
-
-## Antechamber Distinction
-
-Antechamber remains in the spine family for the current rewritten pass.
-
-Its intake, OAR1, systems communication, and passage-readiness role is already seated there.
-
-For that reason, chamber-directory rows in this doc do not include Antechamber.
-
-## Chamber-Directory Family
-
-For the current rewritten pass, the chamber-directory family is seated as:
-
-- obsidian_directory
-- crystal_directory
-- marble_directory
-
-These are system-known, non-planted, chamber-local directory rows.
-
-## Material Note
-
-Material remains row-seated where applicable.
-
-For the current chamber-directory pass:
-
-- Obsidian Directory = obsidian
-- Crystal Directory = crystal
-- Marble Directory = marble
-
-Lapis remains a valid native material in the wider system, but it is not being seated here as a chamber-directory row because its current active structural place is already held through Antechamber in the spine family.
-
-## Circuit Note
-
-c1, c2, and c3 remain circuit only.
-
-Chamber directories are not circuits.
-
-For the current chamber-directory pass, the clean operational read is:
-
-- chamber directories are primarily c2 / c3-facing readability and routing surfaces
-- they support chamber-local visibility and onward relation
-- they do not replace circuit language
-
-So this doc may preserve circuit relation per row, but chamber directory remains a family distinction, not a circuit category.
+If those distinctions collapse, the chamber-directory family is invalid.
 
 ## Current Chamber-Directory Rows
 
-| internal_key | institutional_term | functional_use | resolves_to_native | resolves_to_circuit | planted_unit | material | family_order | notes |
-|---|---|---|---|---|---|---|---:|---|
-| obsidian_directory | chamber_directory | chamber_information_routing | Obsidian Directory | c2 | false | obsidian | 1 | chamber-local directory for obsidian surfaces and chamberplate routing |
-| crystal_directory | chamber_directory | chamber_information_routing | Crystal Directory | c2 | false | crystal | 2 | chamber-local directory for crystal surfaces and chamberplate routing |
-| marble_directory | chamber_directory | chamber_information_routing | Marble Directory | c3 | false | marble | 3 | chamber-local directory for marble surfaces and chamberplate routing |
+| internal_key | institutional_term | chamber_context | functional_use | resolves_to_native | resolves_to_circuit | planted_unit | material | family_order | notes |
+|---|---|---|---|---|---|---|---|---:|---|
+| antechamber_directory | chamber_directory | antechamber | intake_readability | Antechamber Directory | c1 | false | lapis | 1 | chamber-local communication for intake standing, systems communication, and passage readiness |
+| obsidian_directory | chamber_directory | obsidian_chamber | chamber_readability | Obsidian Directory | c2 | false | obsidian | 2 | chamber-local communication for bounded chamber standing, release-relevant viewability, and route toward chamberplate |
 
 ## Chamber-Directory Row Rules
 
-### Obsidian Directory Rule
+### Antechamber Directory Row Rule
 
-Obsidian Directory communicates chamber-relevant information for Obsidian and routes toward chamberplate.
+Antechamber Directory may:
 
-It does not replace:
+- communicate intake standing
+- communicate systems standing
+- orient Connect request or intake continuity
+- support passage readiness readability
 
-- gate logic
-- planted obsidian units
-- chamberplate itself
+It may not:
 
-### Crystal Directory Rule
+- stand in for OAR1
+- stand in for completed passage
+- replace planted gate, epithet, or ME seating
+- define conversion standing
 
-Crystal Directory communicates chamber-relevant information for Crystal and routes toward chamberplate.
+### Obsidian Directory Row Rule
 
-It does not replace:
+Obsidian Directory may:
 
-- epithet seating
-- planted role units
-- chamberplate itself
+- communicate chamber-local standing
+- communicate release-relevant viewability
+- route toward chamberplate
+- preserve bounded chamber context
 
-### Marble Directory Rule
+It may not:
 
-Marble Directory communicates chamber-relevant information for Marble and routes toward chamberplate.
+- replace planted gate seating
+- replace planted epithet seating
+- replace planted ME seating
+- stand in for chamberplate itself
+- define conversion standing
 
-It does not replace:
+## Material Note
 
-- ME seating
-- planted function units
-- chamberplate itself
+Material remains row-seated where structurally valid.
 
-## Release Visibility Rule
+For the current chamber-directory pass:
 
-A chamber directory may show what is:
+- Antechamber Directory = lapis
+- Obsidian Directory = obsidian
 
-- released
-- viewable
-- presently reachable
-- routed onward
+This does not force all future chamber-directory rows into fixed material assumptions before source seating.
 
-That visibility may reflect phase-calendar or phase-state standing.
+## Circuit Note
 
-It does not by itself prove conversion standing.
+Circuit remains circuit only.
 
-## Directory / Chamberplate Distinction
+For the current chamber-directory pass:
 
-A chamber directory communicates and routes.
+- Antechamber Directory = c1 readability-bearing directory surface
+- Obsidian Directory = c2 readability-bearing directory surface
 
-A chamberplate is the chamber-local encounter destination.
-
-Directory does not equal chamberplate.
+Circuit may relate to chamber and material.
+It does not replace them.
 
 ## Exclusion Rule
 
 This doc does not seat:
 
-- Antechamber as a chamber-directory row
+- Temple as a chamber-directory row
+- Phase Map as a chamber-directory row
 - chamberplate rows
-- gate rows
-- epithet rows
-- ME rows
-- release-state tables in full
+- Kumurrah Passage
+- planted gates
+- planted epithets
+- planted MEs
 
-Those belong to other docs.
+Those remain distinct.
 
 ## Validation Rule
 
 This doc is valid for the rewritten stack if it preserves all of the following:
 
-- chamber-directory family remains distinct from spine
-- chamber-directory family remains non-planted
-- directories communicate and route without redefining conversion
-- directories do not replace chamberplate
-- obsidian, crystal, and marble directory rows remain distinct
-- exhibition readability remains broader than one exclusive access lane
-- Antechamber remains excluded from this family because its active role is already seated in spine
+- chamber_directory as a distinct row family
+- non-planted status for all chamber-directory rows
+- Antechamber Directory seated distinctly from Antechamber spine row
+- Obsidian Directory seated distinctly from Obsidian Chamber spine row
+- directory readability distinct from planted-unit seating
+- route toward chamberplate distinct from chamberplate itself
+- conversion distinct from chamber-local readability
 
 ## Current Standing
 
 Registry rows chamber directories currently provide:
 
-- a repeatable chamber-local information pattern
-- non-planted chamber-local routing surfaces
-- separation of directory from chamberplate
-- separation of access readability from conversion standing
-- clean distinction from spine and planted families
+- the missing family content surface already referenced by the current stack
+- bounded chamber-local directory seating
+- distinct non-planted readability rows
+- route-bearing chamber-local context without planted collapse
 
 It does not yet provide:
 
-- chamberplate row content
+- full chamber-directory family expansion
+- chamberplate rows in full
 - family-specific release-state tables
-- planted family content
-- downstream routing detail in full
+- full encounter mapping
 
 ## Next Relation
 
@@ -284,14 +245,16 @@ This doc must remain paired with:
 - `registry_rows_gates_v1.meta.md`
 - `registry_rows_epithets_v1.meta.md`
 - `registry_rows_mes_v1.meta.md`
+- `registry_release_states_v1.meta.md`
+- `registry_encounter_mapping_v1.meta.md`
 
 ## Closing
 
-Chamber directories do not invent the chambers.
+Chamber directories do not invent planted meaning.
 
-They make chamber-local information readable and routeable without collapsing conversion, encounter, and family distinctions.
+They preserve chamber-local readability and route without collapsing structural families.
 
-Codex holds.
-Field structures.
-Measures registers.
+Codex holds.  
+Field structures.  
+Measures registers.  
 Chazz executes.

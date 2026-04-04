@@ -26,7 +26,8 @@ source_alignment:
   - Registry Constraints
   - Registry Locks
   - Registry Rows Spine
-  - Registry Rows Chamber Directories
+  - Registry Rows Epithets
+  - Registry Rows MEs
 ---
 
 # Registry Rows Gates
@@ -42,7 +43,7 @@ A gate row exists to govern bounded progression through constraint and permitted
 Gate rows do not collapse into:
 
 - spine rows
-- chamber-directory rows
+- directory surfaces
 - chamberplate
 - epithet rows
 - ME rows
@@ -54,7 +55,7 @@ It does not define:
 - row identity shape in general
 - geometry rules in general
 - structural validity conditions in general
-- chamber-directory content
+- directory-surface content
 - chamberplate row content
 - epithet-family content
 - ME-family content
@@ -100,7 +101,7 @@ A gate governs thresholded action through bounded condition.
 Gate rows remain distinct from:
 
 - spine rows, which are system-known and non-planted
-- chamber-directory rows, which communicate chamber-local information
+- directory surfaces, which communicate and route readable chamber or exhibition information
 - chamberplate, which is an encounter destination
 - epithet rows, which are the 9 role units
 - ME rows, which are the 13 function units
@@ -116,7 +117,7 @@ That means:
 
 - broader access visibility does not erase gate identity
 - TempleHome access does not dissolve gate function
-- continued gateplate pass-through does not redefine a gate into a directory or chamberplate
+- continued chamberplate pass-through does not redefine a gate into a directory surface or chamberplate
 
 Gate rows remain progression units even when exhibition access remains readable from more than one path.
 
@@ -173,7 +174,7 @@ It preserves:
 It does not become:
 
 - a spine row
-- a chamber directory
+- a directory surface
 - a chamberplate
 - a role row
 - a function row
@@ -193,18 +194,18 @@ It preserves:
 It does not become:
 
 - a spine row
-- a chamber directory
+- a directory surface
 - a chamberplate
 - a role row
 - a function row
 
-## Gateplate Distinction
+## Chamberplate Distinction
 
-A gate row is not the same thing as gateplate.
+A gate row is not the same thing as chamberplate.
 
 Gate rows define thresholded progression units.
 
-Gateplate may act as an encounter or pass-through surface associated with gate progression, but it is not identical to the planted gate row itself.
+Chamberplate may act as an encounter or pass-through surface associated with gate progression, but it is not identical to the planted gate row itself.
 
 ## Dissolution Note
 
@@ -218,7 +219,7 @@ This doc does not seat:
 
 - Gate 0
 - spine rows
-- chamber-directory rows
+- directory surfaces
 - chamberplate rows
 - epithet rows
 - ME rows
@@ -233,7 +234,7 @@ This doc is valid for the rewritten stack if it preserves all of the following:
 - the current gate family remains Gate I and Gate II only
 - Gate 0 remains dissolved
 - gate rows remain distinct from spine
-- gate rows remain distinct from chamber directories
+- gate rows remain distinct from directory surfaces
 - gate rows remain distinct from chamberplate
 - gate rows preserve constraint + action together
 - gate rows remain obsidian-seated in the current pass
@@ -249,11 +250,11 @@ Registry rows gates currently provide:
 - constraint + action reading
 - obsidian gate correspondence
 - Gate 0 dissolution
-- distinction from spine, directories, and planted non-gate families
+- distinction from spine, directory surfaces, and planted non-gate families
 
 It does not yet provide:
 
-- gateplate row content
+- chamberplate row content
 - family-specific release-state tables
 - downstream chamberplate mapping in full
 - epithet or ME family content
@@ -267,7 +268,6 @@ This doc must remain paired with:
 - `registry_constraints_v1.meta.md`
 - `registry_locks_v1.meta.md`
 - `registry_rows_spine_v1.meta.md`
-- `registry_rows_chamber_directories_v1.meta.md`
 - `registry_rows_epithets_v1.meta.md`
 - `registry_rows_mes_v1.meta.md`
 
