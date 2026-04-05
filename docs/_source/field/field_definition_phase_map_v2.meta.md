@@ -42,6 +42,9 @@ Phase Map does not function as chamber identity.
 Phase Map does not function as directory.
 Phase Map does not function as Chamberplate.
 
+Phase Map reads already-seated relation and cadence standing.
+It does not infer reveal from family correspondence or cadence by itself.
+
 Phase Map exists to:
 
 - position what may be encountered in relation
@@ -118,6 +121,7 @@ Phase Map must structurally relate:
 - Phase Release as reveal permission condition
 - Phase State as present reveal standing
 - cadence as registered progression condition where applicable
+- confirmed correspondence standing as upstream relation context where registered
 - dependency standing as registered condition
 - NotChazz as boundary-preserving constraint intelligence
 
@@ -235,6 +239,7 @@ Phase Map may not:
 - bypass Measures
 - bypass NotChazz
 - substitute visual arrangement for registered standing
+- treat family correspondence or cadence standing as reveal authorization without Measures-registered release and dependency standing
 
 ## Correction Rule
 
@@ -292,3 +297,4 @@ Codex holds.
 Field structures.
 Measures registers.
 Chazz executes.
+

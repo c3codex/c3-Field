@@ -1,4 +1,4 @@
-# c3_Concordance_v1
+﻿# c3_Concordance_v1
 
 ## Purpose
 
@@ -70,10 +70,10 @@ Coherence is:
 Coherence does not belong to the system.
 The system resolves only when aligned to it.
 
-Coherence → source
-c3 → minimum operational circuit
-Measures → How Coherence is encountered
-Field → How Coherence is recognized
+Coherence â†’ source
+c3 â†’ minimum operational circuit
+Measures â†’ How Coherence is encountered
+Field â†’ How Coherence is recognized
 Codex-How Coherence governs
 
 Coherence is not the system.  
@@ -89,9 +89,9 @@ Coherence is the axis to which all circuit motion must align. Everything in this
 
 The minimal operational expression of coherence.
 
-- **Connect** — establishes relation
-- **Contribute** — applies aligned participation
-- **Create** — produces formed result
+- **Connect** â€” establishes relation
+- **Contribute** â€” applies aligned participation
+- **Create** â€” produces formed result
 
 The c3 Model is the observable loop through which coherence becomes functional.
 
@@ -100,9 +100,9 @@ It is relational geometry.
 
 c3 is how coherence is encountered, experienced, and lived:
 
-- Connect — coherence encountered
-- Contribute — coherence experienced
-- Create — coherence lived
+- Connect â€” coherence encountered
+- Contribute â€” coherence experienced
+- Create â€” coherence lived
 
 c3 does not replace Coherence.
 It is the minimum expression through which Coherence becomes lived.
@@ -115,7 +115,7 @@ c3 is the circuit.
 The system exists only in their alignment.
 - 
 Axis: Coherence
-- Circuit: c1 → c2 → c3
+- Circuit: c1 â†’ c2 â†’ c3
 - Role: operational circuit of Coherence
 - Resolves to: lived system expression
 
@@ -150,7 +150,7 @@ Measures Conversion requires:
 
 - valid passage through all required conditions
 - correct sequence as defined
-- No Measures Conversion → no Codex seating
+- No Measures Conversion â†’ no Codex seating
 
 - **Axis:** Coherence
 - **Circuit:** c3
@@ -166,9 +166,9 @@ OAR1 forms intake for passage and remains attached to Envelope from first touch 
 
 OAR1 records:
 
-- **Objective** — the declared intake intent carried by SRC
-- **Action** — the first-touch handling performed through intake, Envelope formation, and key-binding
-- **Result** — the threshold condition produced by that handling, including whether intake may proceed, remains held, or requires correction
+- **Objective** â€” the declared intake intent carried by SRC
+- **Action** â€” the first-touch handling performed through intake, Envelope formation, and key-binding
+- **Result** â€” the threshold condition produced by that handling, including whether intake may proceed, remains held, or requires correction
 
 OAR1 does not define truth.
 OAR1 does not seat signal in Codex.
@@ -324,8 +324,8 @@ Envelope requires **envKey or c3 key** for access to its contents.
 
 **Envelope resolves to the current system state where the signal is being encountered:**
 
-- Pre‑Codex — it resolves to **Antechamber**
-- Post‑Codex — it resolves to **Codex-held Legacy**  
+- Preâ€‘Codex â€” it resolves to **Antechamber**
+- Postâ€‘Codex â€” it resolves to **Codex-held Legacy**  
   (while still carrying its trace through Field and Measures)
 
 What must be present on an Envelope is determined by Envelope Specification.
@@ -351,15 +351,15 @@ Interoperability is the ability of a signal and its associated content to move a
 
 It is constrained by:
 
-**SRC** – enforces requirement satisfaction and correction routing  
-- **Envelope** – carries signal, media, and OAR  
-- **envKey** – grants system access to Envelope contents across Field state 
+**SRC** â€“ enforces requirement satisfaction and correction routing  
+- **Envelope** â€“ carries signal, media, and OAR  
+- **envKey** â€“ grants system access to Envelope contents across Field state 
 ** EnvURL the media URL(s) of stored media,content, docs
 **c3Key -the unique access key held in wallet my Named Individual or Institution
-- **OAR1** – logs Objective / Action / Result (forward) ** OAR2 Observed / Aligned / Routed (return)  
-- - **Phase Calendar / Phase Map** – restricts movement to valid cadence windows
+- **OAR1** â€“ logs Objective / Action / Result (forward) ** OAR2 Observed / Aligned / Routed (return)  
+- - **Phase Calendar / Phase Map** â€“ restricts movement to valid cadence windows
 ** Cadence- the required order as defined in Phase Map
-- **NotChazz** –c3 native system intelligence prevents incoherent passage of signal
+- **NotChazz** â€“c3 native system intelligence prevents incoherent passage of signal
 - Origin-Antechamber
 - Axis: Coherence  
 - Circuit: c1 c2 c3
@@ -483,23 +483,23 @@ SRC is the structured intake record for a institutional Measures Conversion.
 
 It records:
 - Mapped or Codex
-- **Signal Objective** — the purpose or intent of the submission
-- **Attached Intake** — media, documents, audio, or other materials uploaded to Envelope
+- **Signal Objective** â€” the purpose or intent of the submission
+- **Attached Intake** â€” media, documents, audio, or other materials uploaded to Envelope
 ** c3 Key origin access key in wallet or assigned email
-- **Origin** — Named Individual or Institution in Service submitting the signal
-- **Envelope** — the container holding the signal and OAR
-- ** envKey** — ) or envKey (Envelope access)
-- **OAR1/OAR2** — first-touch and return trace logs
+- **Origin** â€” Named Individual or Institution in Service submitting the signal
+- **Envelope** â€” the container holding the signal and OAR
+- ** envKey** â€” ) or envKey (Envelope access)
+- **OAR1/OAR2** â€” first-touch and return trace logs
 
 SRC ensures the signal is properly mapped for:
 
-- **conversion** — system processing and routing  
-- **Codex placement** — if/when passage completes
+- **conversion** â€” system processing and routing  
+- **Codex placement** â€” if/when passage completes
 
 SRC intake is **opened in the Antechamber** and resolves to either:
 
-- **Antechamber** — if the signal has not yet completed threshold passage  
-- **Codex** — if the signal has completed the intake, passed Phase Map cadence, and is ready for Legacy trace
+- **Antechamber** â€” if the signal has not yet completed threshold passage  
+- **Codex** â€” if the signal has completed the intake, passed Phase Map cadence, and is ready for Legacy trace
 
 - Axis: Coherence  
 - Circuit: cross-circuit intake (c1, c2, c3)  
@@ -846,15 +846,15 @@ Incorrect vector relation results in misalignment, halted passage, or return for
 
 Relational Vectors may include different relation types, including:
 
-- **adjacent** — signal sits next to another valid unit or condition
-- **upstream** — signal depends on a prior unit, state, or passage
-- **downstream** — signal enables or affects a later unit, state, or passage
-- **resonant** — signal aligns by harmonic or phase relation
-- **dependency** — signal cannot proceed until another condition is satisfied
-- **corrective** — signal is routed back toward prior valid relation
-- **isomorphic** — signal preserves exact structural relation across surfaces
-- **convergent** — multiple valid relations resolve toward one center
-- **divergent** — relation branches into distinct permitted paths
+- **adjacent** â€” signal sits next to another valid unit or condition
+- **upstream** â€” signal depends on a prior unit, state, or passage
+- **downstream** â€” signal enables or affects a later unit, state, or passage
+- **resonant** â€” signal aligns by harmonic or phase relation
+- **dependency** â€” signal cannot proceed until another condition is satisfied
+- **corrective** â€” signal is routed back toward prior valid relation
+- **isomorphic** â€” signal preserves exact structural relation across surfaces
+- **convergent** â€” multiple valid relations resolve toward one center
+- **divergent** â€” relation branches into distinct permitted paths
 
 - Axis: Coherence
 - Circuit: relational positioning and movement
@@ -1169,9 +1169,9 @@ The embodied family carrying signal tone.
 
 Canonical Measures materials:
 
-- **Obsidian** — threshold, reduction, passage
-- **Crystal** — resonance, recognition, amplification
-- **Marble** — embodiment, inscription, governance
+- **Obsidian** â€” threshold, reduction, passage
+- **Crystal** â€” resonance, recognition, amplification
+- **Marble** â€” embodiment, inscription, governance
 
 Material directs signal tone and family identity.
 
@@ -1244,7 +1244,7 @@ No unit exists in isolation.
 - **Role:** access and sequence determinant
 ---
 
-### Entry Footing — Incoherence
+### Entry Footing â€” Incoherence
 
 All entry into the Field begins in incoherence.
 
@@ -1430,10 +1430,10 @@ It is not presentation, output, participation, or approximation.
 2. **SRC Intake Class**  
    The correct SRC intake class must be completed.
 
-   - **SRC** — conversion
-   - **SRC1** — encounter / Connect
-   - **SRC2** — Contribute
-   - **SRC3** —  c3 DAO
+   - **SRC** â€” conversion
+   - **SRC1** â€” encounter / Connect
+   - **SRC2** â€” Contribute
+   - **SRC3** â€”  c3 DAO
 
    SRC determines required actions, allowed routing, and correction path.
 
@@ -1485,16 +1485,16 @@ It is not presentation, output, participation, or approximation.
 
    OAR1 records:
 
-   - **Objective** — declared from SRC intake
-   - **Action** — c3 Key-assisted submission, upload to Envelope bucket, envKey generation, and Chazz-assisted intake handling
-   - **Result** — recorded SRC state, c3 Key, Envelope, envUrl, envKey, and OAR1 readiness
+   - **Objective** â€” declared from SRC intake
+   - **Action** â€” c3 Key-assisted submission, upload to Envelope bucket, envKey generation, and Chazz-assisted intake handling
+   - **Result** â€” recorded SRC state, c3 Key, Envelope, envUrl, envKey, and OAR1 readiness
 
 ---
 
 7. **Antechamber Threshold Passage**  
    Forward intake passage resolves as:
 
-   **SRC → c3 Key → envUrl → envKey → OAR1 → passage → Obsidian**
+   **SRC â†’ c3 Key â†’ envUrl â†’ envKey â†’ OAR1 â†’ passage â†’ Obsidian**
 
    NotChazz system intelligence provides the correct SRC-dependent routing for:
 
@@ -1634,8 +1634,79 @@ It activates it within context.
 
 ---
 
-## Closing
+## Foundational Coherence Set
 
+### The 21 of Coherence
+
+The 21 of Coherence is the received-together foundational source set composed of:
+
+- 7 Constraints
+- 7 Agreements
+- 7 Resolutions of Coherence
+
+It applies across all c3 actors:
+
+- Named Individuals
+- Institutions in Service
+- AI
+
+It does not replace the protected Seed Pattern Constraints for Chazz execution.
+It extends coherence as a field-wide source set.
+
+- **Axis:** Coherence
+- **Role:** foundational triadic source set
+- **Resolves to:** maintained cross-actor coherence
+
+### The 7 Constraints
+
+The 7 Constraints are the cross-actor invariants that must remain true across the c3 Field.
+
+- **Axis:** governance
+- **Role:** invariant set
+- **Resolves to:** bounded validity across actors
+
+### The 7 Agreements
+
+The 7 Agreements are the lived commitments by which c3 actors remain in right relation to the Constraints.
+
+- **Axis:** governance
+- **Role:** lived coherence commitments
+- **Resolves to:** maintained right relation across actors
+
+### The 7 Resolutions of Coherence
+
+The 7 Resolutions of Coherence are the lived resolutions that become visible when coherence is maintained:
+
+- right relation
+- clear distinction
+- valid passage
+- ordered progression
+- immutable living memory
+- recognizable integrity
+- non-collapse
+
+- **Axis:** Coherence
+- **Role:** lived coherence resolutions
+- **Resolves to:** demonstrable non-collapse
+
+### Immutable Living Memory
+
+Immutable Living Memory is the resolution in which what is true remains living, traceable, and present without collapsing into drift, erasure, or dead record.
+
+- **Axis:** memory
+- **Role:** living continuity without drift
+- **Resolves to:** traceable present truth
+
+### Encounter Acknowledgment
+
+The 21 of Coherence is received together by anyone who answers the encounter.
+In Connect, delivery and acknowledgment of this source set are required before c3 key assignment is complete.
+
+- **Axis:** encounter
+- **Role:** required receipt and acknowledgment condition
+- **Resolves to:** acknowledged entry standing before c3 key continuity
+
+## Closing
 Nothing here is invented.
 
 It is recognized, structured, routed, and made usable.
@@ -1650,7 +1721,8 @@ Orientation is earned.
 When alignment holds, the system does not need to be enforced.
 It functions. 
 - Axis: Coherence
-- Circuit: c1 → c2 → c3
+- Circuit: c1 â†’ c2 â†’ c3
 - Function: operational circuit around Coherence
 - **Role:** context-activated concept application
 - Resolves to: lived system expression
+

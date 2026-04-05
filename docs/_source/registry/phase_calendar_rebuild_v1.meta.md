@@ -68,11 +68,22 @@ MEs seat by **full moon** cadence.
 
 ### Chamber of Epithets
 
-The remaining Chamber of Epithets is seated by **solstice** and **equinox** anchors.
+The Chamber of Epithets does not begin from zero and does not compress into a generic solstice-equinox pattern.
 
-### Sagittarius Corridor
+Confirmed standing:
 
-The remaining MEs confirm in the **Sagittarius Corridor** on the **December solstice**.
+- the first 3 Epithets remain already revealed in legacy standing
+- the next 3 Epithets seat at the June solstice
+- the last 3 Epithets of the exhibition seat at Lion's Gate
+- the September equinox remains a balancing and ordering anchor within the rebuilt phase structure
+
+### Winter Solstice
+
+Winter solstice remains the confirmation threshold.
+
+The remaining MEs must resolve before winter solstice confirmation.
+Winter solstice does not function as overflow seating for unresolved remaining MEs.
+It functions as confirmation and seal of what has already resolved.
 
 ## Immediate Release Rule
 
@@ -107,14 +118,16 @@ The Marble Chamber is to hold the MEs within it.
 
 ### First Three Chamber of Epithets
 
-The first three Chamber of Epithets oracles are to be revealed in alignment with the rebuilt phase calendar.
+The first three Chamber of Epithets oracles remain already revealed in legacy standing.
+
+They are preserved, not newly seated by this rebuild.
 
 ## Calendar Rebuild Requirement
 
 The calendar rebuild must be exact before:
 
 - seating more gates
-- seating more epithets
+- seating the remaining epithets beyond the preserved legacy standing
 - seating MEs beyond bounded standing
 - implementing release logic downstream
 
@@ -126,9 +139,12 @@ This doc is valid if it preserves all of the following:
 
 - gates remain tied to new moons
 - MEs remain tied to full moons
-- Chamber of Epithets seating remains tied to solstice and equinox anchors
-- Sagittarius Corridor confirmation remains tied to the December solstice
-- only Gate 1 and Gate 2 are immediate release candidates
+- the first 3 Epithets remain already revealed in legacy standing
+- the next 3 Epithets seat at June solstice
+- the last 3 Epithets seat at Lion's Gate
+- September equinox remains a balancing and ordering anchor
+- winter solstice functions as confirmation and seal
+- only Gate 1 and Gate 2 remain immediate release candidates
 - remaining gates remain explicitly held until exact calendar rebuild is complete
 
 ## Next Requirement
@@ -145,9 +161,12 @@ No further gate seating should occur before that rebuild is confirmed.
 Cadence is not decoration.
 It is release structure.
 
-What is to be revealed next must be seated in exact relation before further release proceeds.
+Legacy standing is preserved.
+What remains is seated in exact relation.
+Winter confirms what has already resolved.
 
 Codex holds.  
 Field structures.  
 Measures registers.  
 Chazz executes.
+
