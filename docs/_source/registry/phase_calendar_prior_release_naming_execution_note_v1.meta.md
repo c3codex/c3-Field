@@ -51,9 +51,9 @@ The correct file formation surface remains:
 
 The SQL step must include:
 
-- update of standing_type constraint vocabulary
+- update of standing_type from legacy_preserved to phased_ritual_release
 - update of affected existing row values
-- update of affected phase_key values
+- update of affected phase_key values to phased_ritual_release naming
 - verification that no legacy-based naming remains in the phase calendar standing layer
 
 ## Boundary
@@ -67,3 +67,4 @@ It preserves native distinction by removing incorrect use of Legacy language fro
 The database correction occurs in Supabase.  
 The documents are formed through transfer surface.  
 The thread remains the first review surface.
+

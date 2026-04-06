@@ -53,7 +53,7 @@ Replace:
 
 With:
 
-- `preserved_prior_release`
+- `phased_ritual_release`
 
 ### phase_key correction
 
@@ -65,9 +65,9 @@ Replace:
 
 With:
 
-- `gate_1_preserved_prior_release`
-- `gate_2_preserved_prior_release`
-- `epithet_first_3_preserved_prior_release`
+- `gate_1_phased_ritual_release`
+- `gate_2_phased_ritual_release`
+- `epithet_first_3_phased_ritual_release`
 
 ## Distinction Preserved
 
@@ -97,3 +97,4 @@ Codex holds.
 Field structures.  
 Measures registers.  
 Chazz routes.
+

@@ -60,15 +60,15 @@ This correction is required because:
 
 Confirmed replacement:
 
-- `preserved_prior_release`
+- `phased_ritual_release`
 
 ### phase_key replacements
 
 Confirmed replacements:
 
-- `gate_1_preserved_prior_release`
-- `gate_2_preserved_prior_release`
-- `epithet_first_3_preserved_prior_release`
+- `gate_1_phased_ritual_release`
+- `gate_2_phased_ritual_release`
+- `epithet_first_3_phased_ritual_release`
 
 ## Execution Boundary
 
@@ -83,3 +83,4 @@ This correction must proceed in bounded order:
 ## Closing
 
 This confirmation clears the naming correction for execution preparation.
+
