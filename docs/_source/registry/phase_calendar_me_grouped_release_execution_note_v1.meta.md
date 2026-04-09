@@ -42,6 +42,18 @@ Each group inserts one row:
 
 ## Boundary
 
+
+## Execution Distinction
+
+This execution route applies to grouped ME phase-row insertion only.
+
+It is distinct from ME encounter seating already resolved through `measures_encounter_def`.
+
+No inference should be made from this route that:
+
+- encounter_defs are created here
+- exhibition gates are seated here
+- Phase Map attachment is completed here
 - no individual ME rows inserted
 - no cadence logic introduced
 - no axis collapse
@@ -49,3 +61,4 @@ Each group inserts one row:
 ## Closing
 
 Grouping resolves constraint without compromising structure.
+

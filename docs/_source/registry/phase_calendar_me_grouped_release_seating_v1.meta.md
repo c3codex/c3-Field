@@ -44,12 +44,32 @@ Seat the 13 MEs in `measures_phase_calendar` using grouped phased ritual release
 
 ## Release Mode
 
+
+## Scope Distinction
+
+This doc seats grouped ME release standing in `measures_phase_calendar`.
+
+It does not seat:
+
+- ME encounter definitions
+- Marble encounter surface binding
+- exhibition gate rows
+- exhibition gate attachment to Phase Map
+
+Grouped phased ritual release remains separate from encounter seating.
 - phased ritual release
 - not cadence
 - not conversion timing
 
 ## Result Target
 
+
+## Current Relation to Encounter Seating
+
+The 13 ME rows may be encounter-seated separately in `measures_encounter_def` without altering the grouped phase seating logic defined here.
+
+Encounter seating does not replace grouped release standing.
+Grouped release standing does not replace encounter seating.
 - 5 ME rows inserted into `measures_phase_calendar`
 - each row represents grouped release
 - all 13 MEs resolved prior to corridor
@@ -57,3 +77,5 @@ Seat the 13 MEs in `measures_phase_calendar` using grouped phased ritual release
 ## Closing
 
 Grouping preserves identity while satisfying structural constraint.
+
+

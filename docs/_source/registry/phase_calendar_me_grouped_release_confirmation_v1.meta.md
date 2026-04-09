@@ -42,6 +42,19 @@ Confirm that ME phase seating proceeds using grouped phased ritual release.
 
 ## Boundary
 
+
+## Confirmation Scope Note
+
+This confirmation applies to grouped ME release seating only.
+
+It does not confirm:
+
+- ME encounter surface seating
+- Marble `inscription` encounter binding
+- exhibition gate seating
+- exhibition attachment to Phase Map
+
+Those require their own validated source surfaces.
 This step:
 
 - inserts grouped ME release rows
@@ -54,3 +67,4 @@ This step does not:
 ## Closing
 
 Grouped phased ritual release is confirmed as valid and required.
+

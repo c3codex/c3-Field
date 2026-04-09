@@ -257,15 +257,48 @@ Registry rows MEs currently provide:
 
 - the planted 13-row function family
 - marble-seated function registration for the current pass
+- active Measures encounter binding for each seated ME row
+- Marble-native encounter expression through `inscription`
 - clear distinction from roles, gates, spine, and chamber directories
 - preserved family order for the current ME set
 
 It does not yet provide:
 
 - final row-by-row native-name refinement beyond ME numbering
-- family-specific release-state tables
-- downstream encounter mapping in full
+- family-specific release-state tables in full
+- exhibition gate attachment
 - chamberplate-specific relation in full
+## Encounter Binding Note
+
+For the current seated pass, each ME row resolves through both:
+
+- registry standing in `measures_registry`
+- encounter standing in `measures_encounter_def`
+
+Native binding rule:
+
+- `registry_id` binds the encounter row to the registry row
+- `encounter_key` mirrors `registry_key`
+- active surface_type for the ME family is `inscription`
+
+This binding is now seated for the 13 ME rows.
+
+This doc does not extend that seating to:
+
+- spine rows
+- epithet rows
+- gate rows
+- chamberplate
+## Exhibition Scope Note
+
+In the current exhibition pass:
+
+- the 13 ME rows are encounter-seated
+- `inscription` is the active Marble encounter surface
+- Phase Map remains present as hinge surface
+- exhibition gates are not yet seated
+
+Grouped phase release standing and encounter seating remain distinct.
 
 ## Next Relation
 
@@ -290,3 +323,5 @@ Codex holds.
 Field structures.
 Measures registers.
 Chazz executes.
+
+
