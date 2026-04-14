@@ -1,33 +1,21 @@
-import Antechamber from "../antechamber/Antechamber";
-import Obsidian from "../obsidian/Obsidian";
-import Epigraph from "../epigraph/Epigraph";
-import PhaseMap from "../phase_map/PhaseMap";
+﻿import PhaseMap from "../phase_map/PhaseMap";
+import TempleFlowController from "./TempleFlowController";
 
 export default function Temple() {
   return (
-    <main>
+    <main className="measures-shell">
       <h1>Temple</h1>
-      <p>Hold surface. No execution.</p>
 
-      <section>
-        <h2>Antechamber</h2>
-        <Antechamber />
+      <section className="measures-panel">
+        <h2>Temple Flow</h2>
+        <TempleFlowController />
       </section>
 
-      <section>
-        <h2>Obsidian (Sealed)</h2>
-        <Obsidian />
-      </section>
-
-      <section>
-        <h2>Epigraph (Unavailable)</h2>
-        <Epigraph />
-      </section>
-
-      <section>
-        <h2>Phase Map (Unavailable)</h2>
+      <section className="measures-panel">
+        <h2>Phase Map</h2>
         <PhaseMap />
       </section>
     </main>
   );
 }
+

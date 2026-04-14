@@ -1,0 +1,48 @@
+pre_codex_exhibition_contribution:
+  - staging_key
+  - c3_key
+  - env_key
+  - contributor_type
+  - contribution_class
+  - contribution_route
+  - contribution_title
+  - contribution_description
+  - target_context
+  - target_surface_type
+  - target_surface_key
+  - render_state
+  - render_order
+  - ready_for_render
+  - ready_for_codex_seating
+  - oar1_status
+  - oar1_ref
+  - metadata
+  - created_at
+  - updated_at
+
+  pre_codex_exhibition_asset:
+  - asset_key
+  - staging_key
+  - env_key
+  - env_url
+  - upload_type
+  - file_name
+  - mime_type
+  - storage_bucket
+  - storage_path
+  - asset_role
+  - asset_order
+  - is_primary
+  - ready_for_render
+  - created_at
+  - updated_at
+
+  render_preconditions:
+  - c3_key valid
+  - env_key present
+  - oar1_status = accepted
+  - ready_for_render = true
+  - target_context set
+  - target_surface_type set
+  - target_surface_key set
+  - at least one asset row exists for upload-bearing contribution
