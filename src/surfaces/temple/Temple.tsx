@@ -1,21 +1,68 @@
-﻿import PhaseMap from "../phase_map/PhaseMap";
-import TempleFlowController from "./TempleFlowController";
+﻿import { useEffect, useState } from "react"
+import GenericEncounter from "@/surfaces/encounter/GenericEncounter"
+import { resolveEncounter } from "@/systems/measures/resolve_encounter"
+import type {
+  EncounterResolution,
+  ResolvedAction,
+} from "@/systems/measures/types"
 
 export default function Temple() {
-  return (
-    <main className="measures-shell">
-      <h1>Temple</h1>
+  const [resolution, setResolution] = useState<EncounterResolution | null>(null)
+  const [currentRegistryKey, setCurrentRegistryKey] = useState("temple")
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
-      <section className="measures-panel">
-        <h2>Temple Flow</h2>
-        <TempleFlowController />
-      </section>
+  useEffect(() => {
+    let active = true
 
-      <section className="measures-panel">
-        <h2>Phase Map</h2>
-        <PhaseMap />
-      </section>
-    </main>
-  );
+    async function load() {
+      try {
+        setLoading(true)
+        setError(null)
+        const next = await resolveEncounter(currentRegistryKey)
+        if (active) setResolution(next)
+      } catch (err) {
+        if (active) {
+          setError(err instanceof Error ? err.message : "Failed to resolve encounter.")
+          setResolution(null)
+        }
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+
+    void load()
+
+    return () => {
+      active = false
+    }
+  }, [currentRegistryKey])
+
+  async function handleAction(action: ResolvedAction) {
+    if (action.blocked) {
+      return
+    }
+
+    if (action.promptEnabled && action.promptKind === "connect_request") {
+      return
+    }
+
+    if (action.targetRegistryKey) {
+      setCurrentRegistryKey(action.targetRegistryKey)
+    }
+  }
+
+  if (loading) {
+    return <section>Loading encounter…</section>
+  }
+
+  if (error) {
+    return <section>{error}</section>
+  }
+
+  if (!resolution) {
+    return <section>No encounter resolved.</section>
+  }
+
+  return <GenericEncounter resolution={resolution} onAction={handleAction} />
 }
-
