@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+﻿import { useEffect, useMemo, useRef, useState } from "react"
 import { ActionRail } from "@/components/actions/ActionRail"
 import EncounterStageMedia from "@/surfaces/encounter/EncounterStageMedia"
 import TempleSingleSurfaceStage from "@/surfaces/encounter/TempleSingleSurfaceStage"
@@ -52,7 +52,6 @@ type PlaybackConfig = {
 
 export default function GenericEncounter({ resolution, onAction }: Props) {
   const { encounter, state, renderer, media, actions } = resolution
-
   const presentation =
     (encounter.metadata?.presentation as Record<string, unknown> | undefined) ??
     {}
@@ -371,3 +370,6 @@ export default function GenericEncounter({ resolution, onAction }: Props) {
     </section>
   )
 }
+
+
+

@@ -1,8 +1,8 @@
----
+git ---
 document_type: notchazz_rr
 authority_level: working
 document_scope: drift_resolution
-title: Session 18 NotChazz R&R — Phase Map Boundary Resolution
+title: Session 18 NotChazz R&R ï¿½ Phase Map Boundary Resolution
 status: complete
 version: v1
 operator: op044
@@ -21,7 +21,7 @@ tags:
   - temp-bridge
 ---
 
-# Session 18 NotChazz R&R — Phase Map Boundary Resolution
+# Session 18 NotChazz R&R ï¿½ Phase Map Boundary Resolution
 
 ## Repeated Flag
 

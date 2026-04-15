@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+﻿import { useEffect, useMemo, useState } from "react"
 import { supabase } from "@/integrations/supabase/client"
 
 type PhaseMapRow = {
@@ -115,8 +115,7 @@ function isInteractive(accessState: string | null) {
 export default function PhaseMap({
   activeRegistryKey,
   onNodeAction,
-}: Props) {
-  const [rows, setRows] = useState<PhaseMapRow[]>([])
+}: Props) {  const [rows, setRows] = useState<PhaseMapRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [hoveredKey, setHoveredKey] = useState<string | null>(null)
@@ -176,7 +175,7 @@ export default function PhaseMap({
           nodeRadius: getNodeRadius(row.band),
         }
       })
-  }, [rows, activeRegistryKey])
+  }, [rows, activeRegistryKey, cx, cy, scale])
 
   const hoveredNode =
     nodes.find((node) => node.registry_key === hoveredKey) ?? null
@@ -411,10 +410,16 @@ export default function PhaseMap({
             }}
           >
             {hoveredNode.band}
-            {hoveredNode.phase_label ? ` � ${hoveredNode.phase_label}` : ""}
+            {hoveredNode.phase_label ? ` • ${hoveredNode.phase_label}` : ""}
           </div>
         </div>
       ) : null}
     </section>
   )
 }
+
+
+
+
+
+
