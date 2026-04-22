@@ -1,4 +1,4 @@
-﻿import Temple from "../surfaces/temple/Temple";
+﻿import Temple from "../temple/Temple";
 
 export default function App() {
   return <Temple />;

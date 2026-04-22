@@ -141,17 +141,19 @@ export default function GenericEncounter({ resolution, onAction }: Props) {
     [media]
   )
 
-  const primaryImageAction = useMemo(
+  const singleSurfaceAction = useMemo(
     () =>
-      isCrystalTempleHome
-        ? actions.find(
-            (action) =>
-              !action.blocked &&
-              action.targetRegistryKey === "temple_antechamber"
-          ) ?? null
-        : null,
-    [actions, isCrystalTempleHome]
+      actions.find(
+        (action) =>
+          !action.blocked &&
+          action.metadata?.interaction_mode === "single_surface" &&
+          action.metadata?.interaction_target === "temple_image"
+      ) ?? null,
+    [actions]
   )
+
+  const useSingleSurfaceTempleInteraction =
+    isCrystalTempleHome && singleSurfaceAction !== null
 
   useEffect(() => {
     setShowStill(false)
@@ -167,7 +169,7 @@ export default function GenericEncounter({ resolution, onAction }: Props) {
         window.clearTimeout(autoAdvanceTimeoutRef.current)
       }
     }
-  }, [encounter.encounterKey, primaryStill, primaryVideo])
+  }, [encounter.encounterKey])
 
   function triggerAutoAdvance() {
     if (!playback.autoAdvanceOnVideoEnd && !isIntroEncounter) return
@@ -218,17 +220,10 @@ export default function GenericEncounter({ resolution, onAction }: Props) {
         justifyContent: "center",
         marginBottom: 24,
       }
-    : isPhaseMapEncounter
-      ? {
-          minHeight: "100vh",
-          position: "relative",
-          overflow: "visible",
-          marginBottom: 0,
-          display: "block",
-        }
     : isCrystalTempleHome ||
         isTempleAntechamber ||
-        isTempleHarrumukPassage
+        isTempleHarrumukPassage ||
+        isPhaseMapEncounter
       ? {
           minHeight: "100vh",
           position: "relative",
@@ -252,21 +247,15 @@ export default function GenericEncounter({ resolution, onAction }: Props) {
         display: "grid",
         gap: 16,
       }
-    : isPhaseMapEncounter
-      ? {
-          position: "relative",
-          width: "100%",
-          minHeight: "100vh",
-          margin: "0 auto",
-          overflow: "visible",
-        }
     : isCrystalTempleHome ||
         isTempleAntechamber ||
-        isTempleHarrumukPassage
+        isTempleHarrumukPassage ||
+        isPhaseMapEncounter
       ? {
           position: "relative",
           width: "100%",
-          maxWidth: isTempleHarrumukPassage ? "100vw" : "520px",
+          maxWidth:
+            isTempleHarrumukPassage || isPhaseMapEncounter ? "100vw" : "520px",
           minHeight: "100vh",
           margin: "0 auto",
         }
@@ -321,8 +310,6 @@ export default function GenericEncounter({ resolution, onAction }: Props) {
                 showStill={showStill}
                 videoVisible={videoVisible}
                 onPrimaryVideoEnded={handlePrimaryVideoEnded}
-                primaryImageAction={primaryImageAction}
-                onAction={onAction}
               />
 
               {(isCrystalTempleHome || isTempleAntechamber) &&
@@ -421,9 +408,6 @@ export default function GenericEncounter({ resolution, onAction }: Props) {
     </section>
   )
 }
-
-
-
 
 
 

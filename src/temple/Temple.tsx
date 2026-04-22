@@ -8,7 +8,7 @@ import type {
 
 export default function Temple() {
   const [resolution, setResolution] = useState<EncounterResolution | null>(null)
-  const [currentRegistryKey, setCurrentRegistryKey] = useState("temple")
+  const [currentRegistryKey, setCurrentRegistryKey] = useState("inanna_encounter")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -38,14 +38,9 @@ export default function Temple() {
     }
   }, [currentRegistryKey])
 
-  async function handleAction(action: ResolvedAction) {
-    if (action.blocked) {
-      return
-    }
-
-    if (action.promptEnabled && action.promptKind === "connect_request") {
-      return
-    }
+  function handleAction(action: ResolvedAction) {
+    if (action.blocked) return
+    if (action.promptEnabled && action.promptKind === "connect_request") return
 
     if (action.targetRegistryKey) {
       setCurrentRegistryKey(action.targetRegistryKey)

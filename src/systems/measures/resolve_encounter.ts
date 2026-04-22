@@ -1,5 +1,4 @@
 ﻿import { supabase } from "@/integrations/supabase/client"
-import { normalizeAction } from "@/systems/measures/normalize_actions"
 import type {
   EncounterResolution,
   EncounterRow,
@@ -103,6 +102,27 @@ function isBlocked(row: TransitionRow): boolean {
   return false
 }
 
+function normalizeAction(
+  row: TransitionRow,
+  blocked: boolean,
+  blockedReason: string | null,
+) {
+  const metadata = asRecord(row.metadata)
+  const actionMeta = asRecord(metadata?.action)
+
+  return {
+    id: asString(actionMeta?.id, row.id),
+    kind: row.transition_kind,
+    label: asString(actionMeta?.label, row.to_encounter_title ?? "Continue"),
+    blocked,
+    blockedReason,
+    targetRegistryKey: row.to_registry_key,
+    targetEncounterKey: row.to_encounter_key,
+    requiresConnectPrompt: row.requires_connect_prompt,
+    metadata,
+  }
+}
+
 function buildPublicMediaUrl(bucketName: string, storagePath: string) {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 
@@ -145,7 +165,7 @@ async function fetchEncounterRow(registryKey: string): Promise<EncounterRow> {
 
   if (error) {
     throw new Error(
-      `Failed to resolve encounter for registry key: ${registryKey} (${error.message})`
+      `Failed to resolve encounter for registry key: ${registryKey} (${error.message})`,
     )
   }
 
@@ -210,7 +230,7 @@ async function fetchTransitionRows(encounter: EncounterRow): Promise<TransitionR
 
   if (error) {
     throw new Error(
-      `Failed to resolve transition rules for: ${encounter.encounter_key} (${error.message})`
+      `Failed to resolve transition rules for: ${encounter.encounter_key} (${error.message})`,
     )
   }
 
@@ -256,7 +276,7 @@ async function fetchMediaRows(encounter: EncounterRow): Promise<RuntimeMediaItem
 
   if (error) {
     throw new Error(
-      `Failed to resolve media for: ${encounter.encounter_key} (${error.message})`
+      `Failed to resolve media for: ${encounter.encounter_key} (${error.message})`,
     )
   }
 
@@ -285,7 +305,8 @@ export async function resolveEncounter(
   const encounterMeta = asRecord(encounter.encounter_metadata)
   const rendererMeta = asRecord(encounterMeta?.renderer)
   const behaviorMeta = asRecord(encounterMeta?.behavior)
-  const playbackMeta = asRecord(encounterMeta?.playback)
+  const presentationMeta = asRecord(encounterMeta?.presentation)
+  const playbackMeta = asRecord(presentationMeta?.playback)
 
   const defaults = deriveRendererDefaults(encounter.surface_type)
 
@@ -296,6 +317,7 @@ export async function resolveEncounter(
   })
 
   return {
+    registryKey: encounter.registry_key,
     encounter: {
       registryId: encounter.registry_id,
       registryKey: encounter.registry_key,
@@ -310,7 +332,10 @@ export async function resolveEncounter(
       sequenceOrder: encounter.sequence_order,
       pauseAllowed: encounter.pause_allowed,
       isEntrySurface: encounter.is_entry_surface,
-      metadata: encounterMeta,
+      metadata: {
+        ...(encounterMeta ?? {}),
+        presentation: presentationMeta,
+      },
     },
     state: {
       releaseState: encounter.live_release_state,
@@ -327,14 +352,18 @@ export async function resolveEncounter(
       showHeader: asBoolean(behaviorMeta?.show_header, true),
       showSubheader: asBoolean(behaviorMeta?.show_subheader, true),
       playback: {
-        videoMode: asString(playbackMeta?.video_mode, "default"),
-        audioMode: asString(playbackMeta?.audio_mode, "default"),
-        settleToStill: asBoolean(playbackMeta?.settle_to_still, false),
-        autoAdvanceOnVideoEnd: asBoolean(playbackMeta?.auto_advance_on_video_end, false),
-        advanceDelayMs: asNumber(playbackMeta?.advance_delay_ms, 0),
+        videoMode: asString(playbackMeta?.videoMode ?? playbackMeta?.video_mode, "default"),
+        audioMode: asString(playbackMeta?.audioMode ?? playbackMeta?.audio_mode, "default"),
+        settleToStill: asBoolean(playbackMeta?.settleToStill ?? playbackMeta?.settle_to_still, false),
+        autoAdvanceOnVideoEnd: asBoolean(
+          playbackMeta?.autoAdvanceOnVideoEnd ?? playbackMeta?.auto_advance_on_video_end,
+          false,
+        ),
+        advanceDelayMs: asNumber(playbackMeta?.advanceDelayMs ?? playbackMeta?.advance_delay_ms, 0),
       },
     },
     media,
     actions,
   }
 }
+

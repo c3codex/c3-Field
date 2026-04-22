@@ -1,5 +1,5 @@
 ﻿import { toPublicMediaUrl } from "@/systems/measures/resolve_encounter"
-import type { RuntimeMediaItem , ResolvedAction} from "@/systems/measures/types"
+import type { RuntimeMediaItem } from "@/systems/measures/types"
 
 type PlaybackConfig = {
   videoMode?: string
@@ -22,8 +22,6 @@ type Props = {
   showStill?: boolean
   videoVisible?: boolean
   onPrimaryVideoEnded?: () => void
-  primaryImageAction?: ResolvedAction | null
-  onAction?: (action: ResolvedAction) => void
   extraItem?: RuntimeMediaItem
 }
 
@@ -102,7 +100,7 @@ function RenderMediaItem({
         style={{ display: hidden ? "none" : "block" }}
         ref={(node) => {
           if (node) {
-            node.volume = 0.14
+            node.volume = 1
           }
         }}
       />
@@ -135,8 +133,6 @@ export default function EncounterStageMedia({
   showStill,
   videoVisible,
   onPrimaryVideoEnded,
-  primaryImageAction,
-  onAction,
   extraItem,
 }: Props) {
   if (extraItem) {
@@ -173,36 +169,13 @@ export default function EncounterStageMedia({
       ) : null}
 
       {primaryStill ? (
-        primaryImageAction ? (
-          <button
-            type="button"
-            onClick={() => onAction?.(primaryImageAction)}
-            style={{
-              all: "unset",
-              cursor: "pointer",
-              display: "block",
-              width: "100%",
-              height: "100%",
-            }}
-            aria-label={primaryImageAction.label || "Continue"}
-          >
-            <RenderMediaItem
-              item={primaryStill}
-              hidden={Boolean(primaryVideo) && playback?.settleToStill && !showStill}
-              fit={fit}
-              stageMode={stageMode}
-              opacity={showStill || !primaryVideo ? 1 : 0}
-            />
-          </button>
-        ) : (
-          <RenderMediaItem
-            item={primaryStill}
-            hidden={Boolean(primaryVideo) && playback?.settleToStill && !showStill}
-            fit={fit}
-            stageMode={stageMode}
-            opacity={showStill || !primaryVideo ? 1 : 0}
-          />
-        )
+        <RenderMediaItem
+          item={primaryStill}
+          hidden={Boolean(primaryVideo) && playback?.settleToStill && !showStill}
+          fit={fit}
+          stageMode={stageMode}
+          opacity={showStill || !primaryVideo ? 1 : 0}
+        />
       ) : null}
 
       {shouldRenderTonalAudio ? (
@@ -222,5 +195,3 @@ export default function EncounterStageMedia({
     </>
   )
 }
-
-
