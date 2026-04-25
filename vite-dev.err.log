@@ -1,0 +1,561 @@
+[2m7:26:07 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[31m     [36mreturn[31m (
+ [90m 409 |[31m       [33m<[31m[33mPhaseMap[31m
+[31m[1m>[22m[31m[90m 410 |[31m         phaseMap[33m=[31m{resolution[33m.[31mphase_map}[32m`r`[31mn            nodes[33m=[31m{resolution[33m.[31mphase_map[33m?[31m[33m.[31mnodes [33m?[31m[33m?[31m []}
+ [90m     |[31m                                        [31m[1m^[22m[31m
+ [90m 411 |[31m         onNavigate[33m=[31m{onNavigate}
+ [90m 412 |[31m       [33m/[31m[33m>[31m
+ [90m 413 |[31m     )[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+      at constructor (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4569:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4576:23)
+      at TypeScriptParserMixin.jsxParseAttribute (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4652:22)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4667:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10043:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4662:17)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4686:33)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12421:16)
+      at TypeScriptParserMixin.parseExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.parseReturnStatement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13142:28)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12798:21)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13309:10)
+[2m7:28:41 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[39m     [36mreturn[39m (
+ [90m 409 |[39m       [33m<[39m[33mPhaseMap[39m
+[31m[1m>[22m[39m[90m 410 |[39m         phaseMap[33m=[39m{resolution[33m.[39mphase_map}[32m`r`[39mn            nodes[33m=[39m{resolution[33m.[39mphase_map[33m?[39m[33m.[39mnodes [33m?[39m[33m?[39m []}
+ [90m     |[39m                                        [31m[1m^[22m[39m
+ [90m 411 |[39m         onNavigate[33m=[39m{onNavigate}
+ [90m 412 |[39m       [33m/[39m[33m>[39m
+ [90m 413 |[39m     )[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+[2m7:28:43 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[31m     [36mreturn[31m (
+ [90m 409 |[31m       [33m<[31m[33mPhaseMap[31m
+[31m[1m>[22m[31m[90m 410 |[31m         phaseMap[33m=[31m{resolution[33m.[31mphase_map}[32m`r`[31mn            nodes[33m=[31m{resolution[33m.[31mphase_map[33m?[31m[33m.[31mnodes [33m?[31m[33m?[31m []}
+ [90m     |[31m                                        [31m[1m^[22m[31m
+ [90m 411 |[31m         onNavigate[33m=[31m{onNavigate}
+ [90m 412 |[31m       [33m/[31m[33m>[31m
+ [90m 413 |[31m     )[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+      at constructor (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4569:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4576:23)
+      at TypeScriptParserMixin.jsxParseAttribute (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4652:22)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4667:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10043:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4662:17)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4686:33)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12421:16)
+      at TypeScriptParserMixin.parseExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.parseReturnStatement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13142:28)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12798:21)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13309:10)
+[2m7:29:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[39m     [36mreturn[39m (
+ [90m 409 |[39m       [33m<[39m[33mPhaseMap[39m
+[31m[1m>[22m[39m[90m 410 |[39m         phaseMap[33m=[39m{resolution[33m.[39mphase_map}[32m`r`[39mn            nodes[33m=[39m{resolution[33m.[39mphase_map[33m?[39m[33m.[39mnodes [33m?[39m[33m?[39m []}
+ [90m     |[39m                                        [31m[1m^[22m[39m
+ [90m 411 |[39m         onNavigate[33m=[39m{onNavigate}
+ [90m 412 |[39m       [33m/[39m[33m>[39m
+ [90m 413 |[39m     )[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+[2m7:29:21 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[31m     [36mreturn[31m (
+ [90m 409 |[31m       [33m<[31m[33mPhaseMap[31m
+[31m[1m>[22m[31m[90m 410 |[31m         phaseMap[33m=[31m{resolution[33m.[31mphase_map}[32m`r`[31mn            nodes[33m=[31m{resolution[33m.[31mphase_map[33m?[31m[33m.[31mnodes [33m?[31m[33m?[31m []}
+ [90m     |[31m                                        [31m[1m^[22m[31m
+ [90m 411 |[31m         onNavigate[33m=[31m{onNavigate}
+ [90m 412 |[31m       [33m/[31m[33m>[31m
+ [90m 413 |[31m     )[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+      at constructor (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4569:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4576:23)
+      at TypeScriptParserMixin.jsxParseAttribute (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4652:22)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4667:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10043:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4662:17)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4686:33)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12421:16)
+      at TypeScriptParserMixin.parseExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.parseReturnStatement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13142:28)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12798:21)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13309:10)
+[2m7:30:57 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[39m     [36mreturn[39m (
+ [90m 409 |[39m       [33m<[39m[33mPhaseMap[39m
+[31m[1m>[22m[39m[90m 410 |[39m         phaseMap[33m=[39m{resolution[33m.[39mphase_map}[32m`r`[39mn            nodes[33m=[39m{resolution[33m.[39mphase_map[33m?[39m[33m.[39mnodes [33m?[39m[33m?[39m []}
+ [90m     |[39m                                        [31m[1m^[22m[39m
+ [90m 411 |[39m         onNavigate[33m=[39m{onNavigate}
+ [90m 412 |[39m       [33m/[39m[33m>[39m
+ [90m 413 |[39m     )[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+[2m7:30:57 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[31m     [36mreturn[31m (
+ [90m 409 |[31m       [33m<[31m[33mPhaseMap[31m
+[31m[1m>[22m[31m[90m 410 |[31m         phaseMap[33m=[31m{resolution[33m.[31mphase_map}[32m`r`[31mn            nodes[33m=[31m{resolution[33m.[31mphase_map[33m?[31m[33m.[31mnodes [33m?[31m[33m?[31m []}
+ [90m     |[31m                                        [31m[1m^[22m[31m
+ [90m 411 |[31m         onNavigate[33m=[31m{onNavigate}
+ [90m 412 |[31m       [33m/[31m[33m>[31m
+ [90m 413 |[31m     )[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+      at constructor (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4569:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4576:23)
+      at TypeScriptParserMixin.jsxParseAttribute (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4652:22)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4667:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10043:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4662:17)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4686:33)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12421:16)
+      at TypeScriptParserMixin.parseExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.parseReturnStatement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13142:28)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12798:21)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13309:10)
+[2m7:33:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[39m     [36mreturn[39m (
+ [90m 409 |[39m       [33m<[39m[33mPhaseMap[39m
+[31m[1m>[22m[39m[90m 410 |[39m         phaseMap[33m=[39m{resolution[33m.[39mphase_map}[32m`r`[39mn            nodes[33m=[39m{resolution[33m.[39mphase_map[33m?[39m[33m.[39mnodes [33m?[39m[33m?[39m []}
+ [90m     |[39m                                        [31m[1m^[22m[39m
+ [90m 411 |[39m         onNavigate[33m=[39m{onNavigate}
+ [90m 412 |[39m       [33m/[39m[33m>[39m
+ [90m 413 |[39m     )[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+[2m7:33:08 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[31m     [36mreturn[31m (
+ [90m 409 |[31m       [33m<[31m[33mPhaseMap[31m
+[31m[1m>[22m[31m[90m 410 |[31m         phaseMap[33m=[31m{resolution[33m.[31mphase_map}[32m`r`[31mn            nodes[33m=[31m{resolution[33m.[31mphase_map[33m?[31m[33m.[31mnodes [33m?[31m[33m?[31m []}
+ [90m     |[31m                                        [31m[1m^[22m[31m
+ [90m 411 |[31m         onNavigate[33m=[31m{onNavigate}
+ [90m 412 |[31m       [33m/[31m[33m>[31m
+ [90m 413 |[31m     )[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+      at constructor (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4569:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4576:23)
+      at TypeScriptParserMixin.jsxParseAttribute (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4652:22)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4667:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10043:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4662:17)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4686:33)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12421:16)
+      at TypeScriptParserMixin.parseExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.parseReturnStatement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13142:28)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12798:21)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13309:10)
+[2m7:33:16 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: parsing C:/Users/c3DAO/OneDrive/Apps/c3Field/tsconfig.app.json failed: SyntaxError: Unexpected token '$', "$json = @'"... is not valid JSON
+  Plugin: [35mvite:esbuild[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/main.tsx[39m
+[2m7:33:17 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: parsing C:/Users/c3DAO/OneDrive/Apps/c3Field/tsconfig.app.json failed: SyntaxError: Unexpected token '$', "$json = @'"... is not valid JSON[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/main.tsx[39m
+      at file:///C:/Users/c3DAO/OneDrive/Apps/c3Field/node_modules/vite/dist/node/chunks/config.js:5719:9
+[2m7:33:24 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[39m     [36mreturn[39m (
+ [90m 409 |[39m       [33m<[39m[33mPhaseMap[39m
+[31m[1m>[22m[39m[90m 410 |[39m         phaseMap[33m=[39m{resolution[33m.[39mphase_map}[32m`r`[39mn            nodes[33m=[39m{resolution[33m.[39mphase_map[33m?[39m[33m.[39mnodes [33m?[39m[33m?[39m []}
+ [90m     |[39m                                        [31m[1m^[22m[39m
+ [90m 411 |[39m         onNavigate[33m=[39m{onNavigate}
+ [90m 412 |[39m       [33m/[39m[33m>[39m
+ [90m 413 |[39m     )[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+[2m7:33:24 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[31m     [36mreturn[31m (
+ [90m 409 |[31m       [33m<[31m[33mPhaseMap[31m
+[31m[1m>[22m[31m[90m 410 |[31m         phaseMap[33m=[31m{resolution[33m.[31mphase_map}[32m`r`[31mn            nodes[33m=[31m{resolution[33m.[31mphase_map[33m?[31m[33m.[31mnodes [33m?[31m[33m?[31m []}
+ [90m     |[31m                                        [31m[1m^[22m[31m
+ [90m 411 |[31m         onNavigate[33m=[31m{onNavigate}
+ [90m 412 |[31m       [33m/[31m[33m>[31m
+ [90m 413 |[31m     )[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+      at constructor (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4569:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4576:23)
+      at TypeScriptParserMixin.jsxParseAttribute (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4652:22)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4667:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10043:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4662:17)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4686:33)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12421:16)
+      at TypeScriptParserMixin.parseExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.parseReturnStatement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13142:28)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12798:21)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13309:10)
+[2m7:37:31 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx: Unexpected token (410:39)
+
+[0m [90m 408 |[31m     [36mreturn[31m (
+ [90m 409 |[31m       [33m<[31m[33mPhaseMap[31m
+[31m[1m>[22m[31m[90m 410 |[31m         phaseMap[33m=[31m{resolution[33m.[31mphase_map}[32m`r`[31mn            nodes[33m=[31m{resolution[33m.[31mphase_map[33m?[31m[33m.[31mnodes [33m?[31m[33m?[31m []}
+ [90m     |[31m                                        [31m[1m^[22m[31m
+ [90m 411 |[31m         onNavigate[33m=[31m{onNavigate}
+ [90m 412 |[31m       [33m/[31m[33m>[31m
+ [90m 413 |[31m     )[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/c3DAO/OneDrive/Apps/c3Field/src/measures_of_inanna/GenericEncounter.tsx[39m:410:39
+[33m  408 |      return (
+  409 |        <PhaseMap
+  410 |          phaseMap={resolution.phase_map}`r`n            nodes={resolution.phase_map?.nodes ?? []}
+      |                                           ^
+  411 |          onNavigate={onNavigate}
+  412 |        />[39m
+      at constructor (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6619:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4569:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4576:23)
+      at TypeScriptParserMixin.jsxParseAttribute (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4652:22)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4667:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10043:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4662:17)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4686:33)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4749:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4759:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:39
+      at TypeScriptParserMixin.tryParse (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:6907:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9775:18)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12426:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10800:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12493:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11675:28)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11331:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:4764:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11081:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9837:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9786:20)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10784:23)
+      at C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12421:16)
+      at TypeScriptParserMixin.parseExpression (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:10780:17)
+      at TypeScriptParserMixin.parseReturnStatement (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13142:28)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12798:21)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\c3DAO\OneDrive\Apps\c3Field\node_modules\@babel\parser\lib\index.js:13309:10)

@@ -1,0 +1,32 @@
+﻿C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\EncounterStageMedia.tsx:63: ref={(node) => {
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\EncounterStageMedia.tsx:64: if (node && autoPlayMuted) {
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\EncounterStageMedia.tsx:65: node.muted = true
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\EncounterStageMedia.tsx:66: node.defaultMuted = true
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\EncounterStageMedia.tsx:85: ref={(node) => {
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\EncounterStageMedia.tsx:86: if (node) node.volume = 0.14
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:4: PhaseMapNode,
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:72: function resolveNodeKey(node: PhaseMapNode) {
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:73: return node.registryKey ?? node.registry_key ?? null
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:76: function resolveNodeLabel(node: PhaseMapNode) {
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:77: return node.label ?? node.displayTitle ?? node.display_title ?? null
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:132: function PhaseMap({
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:133: nodes,
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:136: nodes: PhaseMapNode[]
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:139: if (nodes.length === 0) {
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:145: <div className="phase-map-node-field">
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:146: {nodes.map((node, index) => {
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:147: const registryKey = resolveNodeKey(node)
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:148: const label = resolveNodeLabel(node)
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:156: className="phase-map-node"
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:158: disabled={node.isInteractive === false || node.is_interactive === false}
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:159: data-family={node.family}
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:160: data-material={node.material}
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:162: <span className="phase-map-node-mark" />
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:163: <span className="phase-map-node-label">{label}</span>
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:164: {(node.family || node.material) && (
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:165: <span className="phase-map-node-meta">
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:166: {[node.family, node.material].filter(Boolean).join(" / ")}
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:228: const isPhaseMapEncounter =
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:330: if (isPhaseMapEncounter) {
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:332: <PhaseMap
+C:\Users\c3DAO\OneDrive\Apps\c3Field\src\measures_of_inanna\GenericEncounter.tsx:333: nodes={resolution.metadata.phase_map?.nodes ?? resolution.phase_map?.nodes ?? []}

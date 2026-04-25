@@ -1,0 +1,109 @@
+
+---
+
+## 3/3 — `design_surface_mechanics_manifest.meta.md`
+
+```md
+---
+document_type: design_manifest
+authority_level: working
+document_scope: encounter_design
+title: Design Surface Mechanics Manifest
+status: draft
+version: v1
+operator: op044
+native_stack:
+  codex: database
+  field: schema
+  measures: registry
+  chazz: systems
+---
+
+# Design Surface Mechanics Manifest
+
+## Purpose
+
+Define what belongs to design/CSS after DB and frontend contracts are seated.
+
+Design expresses contract.  
+It does not define contract.
+
+## Boundary
+
+Design controls:
+
+- layout spacing  
+- scale  
+- positioning  
+- animation mechanics  
+- opacity / fade  
+- responsiveness  
+- layering  
+- typography  
+- media containment  
+- node visuals  
+- edge drawing  
+
+Design does NOT control:
+
+- what exists  
+- what opens  
+- what is sealed  
+- what routes fire  
+- what actions exist  
+- what text means  
+- where data is stored  
+
+## Media Mechanics
+
+CSS must respect:
+
+- media_fit  
+- media_max_width  
+- media_max_height  
+- plaque_max_height  
+- panel_max_height  
+- mobile_stack  
+
+Goals:
+
+- media remains contained  
+- no cropping of primary form  
+- smooth visual transitions  
+- consistent mobile behavior  
+
+## Phase Map Mechanics
+
+Render from DB:
+
+- nodes → positioned elements  
+- positions → absolute layout  
+- edges → SVG lines  
+- legend → separate block  
+- explanation → separate block  
+
+Visual rules:
+
+- material drives styling  
+- family drives grouping  
+- edges reflect relation  
+- nodes reflect state  
+
+Do not collapse:
+
+- legend ≠ explanation  
+- label ≠ meaning  
+- edge ≠ decoration  
+
+## Recommended Structure
+
+```tsx
+<section className="phase-map-contract">
+  <h1 />
+  <div className="phase-map-node-field">
+    <svg className="phase-map-edges" />
+    <button className="phase-map-node" />
+  </div>
+  <aside className="phase-map-legend" />
+  <section className="phase-map-explanation" />
+</section>

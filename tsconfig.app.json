@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
     "paths": {
       "@structure/*": ["./src/structure/*"],
       "@pillars/*": ["./src/pillars/*"],
@@ -15,19 +15,21 @@
       "@/*": ["./src/*"]
     },
     "types": ["vite/client"],
-
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src", "src/pillars/measures/templeHome/MeasuresTempleHome.tsx"]
+  "include": [
+    "src",
+    "src/pillars/measures/templeHome/MeasuresTempleHome.tsx",
+    "types.ts"
+  ]
 }
