@@ -11,6 +11,9 @@ export default function ConnectCaptureForm({ capture, sourceRegistryKey }: Props
   const [isOpen, setIsOpen] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [walletAddress, setWalletAddress] = useState("")
+  const [coherenceReceived, setCoherenceReceived] = useState(false)
+  const [coherenceAcknowledged, setCoherenceAcknowledged] = useState(false)
   const [message, setMessage] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState<string | null>(null)
@@ -22,6 +25,8 @@ export default function ConnectCaptureForm({ capture, sourceRegistryKey }: Props
 
   const triggerLabel = capture.trigger_label ?? capture.submit_label
   if (!triggerLabel) return null
+  const fields = capture.fields ?? ["name", "email", "message"]
+  const requiredFields = capture.required_fields ?? []
 
   async function submitCapture(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -36,7 +41,12 @@ export default function ConnectCaptureForm({ capture, sourceRegistryKey }: Props
       email,
       message: message || null,
       metadata: {
-        source: "temple_antechamber_capture",
+        source: sourceRegistryKey === "src1_connect"
+          ? "src1_connect_capture"
+          : "temple_antechamber_capture",
+        wallet_address: walletAddress || null,
+        coherence_received: coherenceReceived,
+        coherence_acknowledged: coherenceAcknowledged,
       },
     })
 
@@ -49,6 +59,9 @@ export default function ConnectCaptureForm({ capture, sourceRegistryKey }: Props
 
     setName("")
     setEmail("")
+    setWalletAddress("")
+    setCoherenceReceived(false)
+    setCoherenceAcknowledged(false)
     setMessage("")
     setSuccess(capture.success_message || "Your connect request has been received.")
   }
@@ -66,34 +79,76 @@ export default function ConnectCaptureForm({ capture, sourceRegistryKey }: Props
 
       {isOpen ? (
         <form className="connect-capture-form" onSubmit={submitCapture}>
-          <input
-            name="name"
-            type="text"
-            autoComplete="name"
-            placeholder="Name"
-            value={name}
-            required={capture.required_fields?.includes("name")}
-            onChange={(event) => setName(event.target.value)}
-          />
+          {fields.includes("name") ? (
+            <input
+              name="name"
+              type="text"
+              autoComplete="name"
+              placeholder="Name"
+              value={name}
+              required={requiredFields.includes("name")}
+              onChange={(event) => setName(event.target.value)}
+            />
+          ) : null}
 
-          <input
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="Email"
-            value={email}
-            required={capture.required_fields?.includes("email")}
-            onChange={(event) => setEmail(event.target.value)}
-          />
+          {fields.includes("email") ? (
+            <input
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="Email"
+              value={email}
+              required={requiredFields.includes("email")}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          ) : null}
 
-          {capture.fields?.includes("message") && (
+          {fields.includes("wallet_address") ? (
+            <input
+              name="wallet_address"
+              type="text"
+              autoComplete="off"
+              placeholder="Wallet address"
+              value={walletAddress}
+              required={requiredFields.includes("wallet_address")}
+              onChange={(event) => setWalletAddress(event.target.value)}
+            />
+          ) : null}
+
+          {fields.includes("coherence_received") ? (
+            <label className="connect-capture-check">
+              <input
+                name="coherence_received"
+                type="checkbox"
+                checked={coherenceReceived}
+                required={requiredFields.includes("coherence_received")}
+                onChange={(event) => setCoherenceReceived(event.target.checked)}
+              />
+              <span>21 of Coherence received</span>
+            </label>
+          ) : null}
+
+          {fields.includes("coherence_acknowledged") ? (
+            <label className="connect-capture-check">
+              <input
+                name="coherence_acknowledged"
+                type="checkbox"
+                checked={coherenceAcknowledged}
+                required={requiredFields.includes("coherence_acknowledged")}
+                onChange={(event) => setCoherenceAcknowledged(event.target.checked)}
+              />
+              <span>21 of Coherence acknowledged</span>
+            </label>
+          ) : null}
+
+          {fields.includes("message") ? (
             <textarea
               name="message"
               placeholder="Message"
               value={message}
               onChange={(event) => setMessage(event.target.value)}
             />
-          )}
+          ) : null}
 
           <button type="submit" disabled={submitting}>
             {submitting ? "Receiving..." : capture.submit_label || triggerLabel}

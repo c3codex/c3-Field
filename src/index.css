@@ -95,13 +95,28 @@ body {
 .encounter[data-surface-type="chamberplate"],
 .encounter[data-surface-type="passage"] {
   --encounter-media-object-fit: contain;
-  --encounter-stage-max-width: min(82vw, 92rem);
-  --encounter-stage-max-height: min(68svh, calc(100svh - 9rem));
+  --encounter-stage-max-width: min(90vw, 104rem);
+  --encounter-stage-max-height: min(78svh, calc(100svh - 7rem));
 }
 
 .encounter[data-registry-key="temple_antechamber"] {
   --encounter-stage-max-width: min(84vw, 92rem);
   --encounter-stage-max-height: min(70svh, calc(100svh - 8rem));
+}
+
+.encounter[data-registry-key="epigraph"] {
+  --encounter-stage-max-width: min(82vw, 86rem);
+  --encounter-stage-max-height: min(72svh, calc(100svh - 8rem));
+}
+
+.encounter[data-registry-key="crystal_temple_home"] {
+  --encounter-stage-max-width: min(96vw, 112rem);
+  --encounter-stage-max-height: min(84svh, calc(100svh - 5rem));
+}
+
+.encounter[data-registry-key="temple_harrumuk_passage"] {
+  --encounter-stage-max-width: min(82vw, 92rem);
+  --encounter-stage-max-height: min(68svh, calc(100svh - 9rem));
 }
 
 .media-still {
@@ -120,12 +135,16 @@ body {
 .actions,
 .phase-map-actions {
   position: absolute;
-  left: 50%;
+  left: auto;
+  right: clamp(1rem, 5vw, 4rem);
   bottom: 2rem;
-  transform: translateX(-50%);
+  transform: none;
   display: flex;
   gap: 0.75rem;
   z-index: 40;
+  justify-content: flex-end;
+  max-width: min(34rem, calc(100vw - 2rem));
+  flex-wrap: wrap;
 }
 
 .encounter-action {
@@ -163,6 +182,7 @@ body {
   position: absolute;
   top: 12%;
   left: 6%;
+  bottom: clamp(5.5rem, 12vh, 8rem);
   z-index: 15;
   max-width: 28rem;
   padding: 0.95rem 1.05rem;
@@ -172,6 +192,8 @@ body {
   backdrop-filter: blur(10px);
   line-height: 1.45;
   font-size: 0.9rem;
+  max-height: none;
+  overflow-y: auto;
 }
 
 .plaque h2 {
@@ -375,6 +397,11 @@ body {
   width: min(84vw, 48rem);
   justify-content: center;
 }	
+
+.phase-map-actions {
+  width: auto;
+  justify-content: flex-end;
+}
 
 .phase_map {
   background:
@@ -628,7 +655,8 @@ body {
   display: grid;
   gap: 0.55rem;
   color: rgba(232, 238, 248, 0.76);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
+  max-width: min(16rem, 22vw);
 }
 
 .phase-map-release-counter {
@@ -696,12 +724,14 @@ body {
 .phase-map-explanation {
   position: absolute;
   right: clamp(1rem, 4vw, 2.5rem);
-  top: 50%;
-  transform: translateY(-50%);
+  top: clamp(4rem, 12vh, 7rem);
+  transform: none;
   z-index: 3;
-  width: min(23rem, 28vw);
+  width: min(17rem, 23vw);
+  max-height: 9rem;
+  overflow-y: auto;
   color: rgba(232, 238, 248, 0.78);
-  font-size: 0.86rem;
+  font-size: 0.72rem;
   line-height: 1.42;
 }
 
@@ -761,6 +791,7 @@ body,
 .threshold .plaque {
   top: 10%;
   left: 6%;
+  bottom: clamp(5.5rem, 12vh, 8rem);
   width: min(40rem, 42vw);
 }
 
@@ -775,8 +806,8 @@ body,
 }
 
 .encounter[data-registry-key="temple_antechamber"] .actions {
-  left: auto;
-  right: clamp(1rem, 6vw, 4rem);
+  left: clamp(1rem, 4vw, 3rem);
+  right: auto;
   bottom: clamp(1rem, 6vh, 4rem);
   transform: none;
 }
@@ -867,10 +898,10 @@ body,
     top: auto;
     left: 1rem;
     right: 1rem;
-    bottom: 1rem;
+    bottom: 5.25rem;
     width: auto;
     max-width: none;
-    max-height: 42svh;
+    max-height: 38svh;
     font-size: 0.92rem;
     padding: 0.9rem;
   }
@@ -921,9 +952,12 @@ body,
   .actions,
   .phase-map-actions {
     bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
     width: calc(100vw - 2rem);
     gap: 0.5rem;
     flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .encounter-action {
@@ -953,16 +987,20 @@ body,
     top: auto;
     left: 1rem;
     right: 1rem;
-    bottom: 5.25rem;
+    bottom: 9rem;
     width: auto;
-    max-height: 38svh;
+    max-height: 33svh;
   }
 
   .encounter[data-registry-key="temple_antechamber"] .actions {
     left: 1rem;
     right: 1rem;
-    bottom: 1rem;
+    bottom: 5rem;
     width: auto;
     transform: none;
+  }
+
+  .encounter[data-registry-key="temple_antechamber"] .connect-capture {
+    bottom: 1rem;
   }
 }

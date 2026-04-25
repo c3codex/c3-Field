@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import GenericEncounter from "./GenericEncounter"
+import {
+  loadViewedRegistryKeys,
+  recordEncounterView,
+} from "./encounter_history"
 import { resolveEncounter } from "./resolve_encounter"
 import type { EncounterResolution } from "./types"
 
@@ -15,11 +19,67 @@ export default function Temple() {
   const [error, setError] = useState<string | null>(null)
   const [viewedKeys, setViewedKeys] = useState<string[]>([])
   const [pendingPassageTarget, setPendingPassageTarget] = useState<string | null>(null)
+  const viewedKeysRef = useRef<string[]>([])
 
   function navigate(registryKey: string, options?: NavigateOptions) {
     setPendingPassageTarget(options?.targetAfterPassage ?? null)
     setCurrentKey(registryKey)
   }
+
+  function mergeViewedKeys(keys: string[]) {
+    setViewedKeys((current) => {
+      const merged = [...new Set([...current, ...keys])]
+      viewedKeysRef.current = merged
+      return merged
+    })
+  }
+
+  function withPhaseMapViewedKeys(
+    nextResolution: EncounterResolution,
+    nextViewedKeys = viewedKeysRef.current,
+  ): EncounterResolution {
+    if (!nextResolution.phase_map) return nextResolution
+
+    const viewed_registry_keys = [
+      ...new Set([
+        ...(nextResolution.phase_map.viewed_registry_keys ?? []),
+        ...nextViewedKeys,
+      ]),
+    ]
+
+    return {
+      ...nextResolution,
+      metadata: {
+        ...nextResolution.metadata,
+        phase_map: {
+          ...nextResolution.phase_map,
+          viewed_registry_keys,
+        },
+      },
+      phase_map: {
+        ...nextResolution.phase_map,
+        viewed_registry_keys,
+      },
+    }
+  }
+
+  useEffect(() => {
+    let cancelled = false
+
+    loadViewedRegistryKeys().then((keys) => {
+      if (!cancelled) mergeViewedKeys(keys)
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    setResolution((current) =>
+      current?.phase_map ? withPhaseMapViewedKeys(current, viewedKeys) : current,
+    )
+  }, [viewedKeys])
 
   useEffect(() => {
     let cancelled = false
@@ -41,16 +101,16 @@ export default function Temple() {
                   },
                 }
               : nextResolution
+          const nextViewedKeys = [
+            ...new Set([...viewedKeysRef.current, nextResolution.registryKey]),
+          ]
 
-          setResolution(resolved)
+          setResolution(withPhaseMapViewedKeys(resolved, nextViewedKeys))
           if (nextResolution.surfaceType !== "passage" && pendingPassageTarget) {
             setPendingPassageTarget(null)
           }
-          setViewedKeys((current) =>
-            current.includes(nextResolution.registryKey)
-              ? current
-              : [...current, nextResolution.registryKey],
-          )
+          mergeViewedKeys([nextResolution.registryKey])
+          recordEncounterView(nextResolution)
         }
       })
       .catch(() => {

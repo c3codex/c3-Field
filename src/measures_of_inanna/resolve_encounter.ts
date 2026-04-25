@@ -66,11 +66,15 @@ function resolveRegistryKey(data: EncounterRow, fallback: string) {
 }
 
 function resolveActions(metadata: JsonRecord): ResolvedAction[] {
-  const actions = metadata.actions
+  const resolution = asRecord(metadata.resolution)
+  const actions = [
+    ...(Array.isArray(metadata.actions) ? metadata.actions : []),
+    ...(Array.isArray(resolution?.actions) ? resolution.actions : []),
+  ]
 
-  if (!Array.isArray(actions)) return []
+  if (!actions.length) return []
 
-  return actions.flatMap((value, index) => {
+  const resolved = actions.flatMap((value, index) => {
     const action = asRecord(value)
     if (!action) return []
 
@@ -96,7 +100,17 @@ function resolveActions(metadata: JsonRecord): ResolvedAction[] {
       sortOrder: asNumber(action.sortOrder) ?? asNumber(action.sort_order),
       metadata: action,
     }
-  }).sort((left, right) => (left.sortOrder ?? 999) - (right.sortOrder ?? 999))
+  })
+
+  const deduped = new Map<string, ResolvedAction>()
+  for (const action of resolved) {
+    const key = action.id || `${action.kind}:${action.targetRegistryKey ?? ""}`
+    if (!deduped.has(key)) deduped.set(key, action)
+  }
+
+  return [...deduped.values()].sort(
+    (left, right) => (left.sortOrder ?? 999) - (right.sortOrder ?? 999),
+  )
 }
 
 function resolveTransitionActions(rows: TransitionRuntimeRow[]): ResolvedAction[] {

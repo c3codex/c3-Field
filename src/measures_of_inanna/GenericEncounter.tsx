@@ -426,11 +426,11 @@ function PhaseMap({
       route?.targetRegistryKey ??
       (routing.on_open_node === "navigate" ? key : null)
 
-    if (!node || !targetRegistryKey || stateOverride === "sealed") return false
-    if (node.is_interactive === false || node.isInteractive === false) return false
+    if (!targetRegistryKey || stateOverride === "sealed") return false
+    if (node?.is_interactive === false || node?.isInteractive === false) return false
     if (state?.is_interactive === false) return false
-    if (node.access_state === "gated" || state?.access_state === "gated") return false
-    if (node.release_state === "held" || state?.release_state === "held") return false
+    if (node?.access_state === "gated" || state?.access_state === "gated") return false
+    if (node?.release_state === "held" || state?.release_state === "held") return false
 
     return true
   }
@@ -892,18 +892,30 @@ export default function GenericEncounter({
 
   if (isPhaseMapEncounter) {
     return (
-      <PhaseMap
-        phaseMap={resolution.phase_map}
-        nodes={resolution.phase_map?.nodes ?? []}
-        onNavigate={onNavigate}
-        activeRegistryKey={activeRegistryKey}
-        viewedRegistryKeys={viewedRegistryKeys}
-      />
+      <>
+        <PhaseMap
+          phaseMap={resolution.phase_map}
+          nodes={resolution.phase_map?.nodes ?? []}
+          onNavigate={onNavigate}
+          activeRegistryKey={activeRegistryKey}
+          viewedRegistryKeys={viewedRegistryKeys}
+        />
+
+        {showActionRail ? (
+          <ActionRail
+            actions={railActions}
+            onAction={handleAction}
+            className="phase-map-actions"
+          />
+        ) : null}
+      </>
     )
   }
 
   const showMutedAutoplayVideo =
     playback.videoMode === "muted_autoplay" ||
+    playback.videoMode === "motion_then_still" ||
+    playback.videoMode === "settle_to_still" ||
     playback.autoAdvanceOnVideoEnd ||
     hasAutoAdvanceAction ||
     isIntroEncounter
