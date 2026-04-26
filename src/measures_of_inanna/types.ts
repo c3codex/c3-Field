@@ -215,6 +215,12 @@ export type PlaqueContract = {
   secondary_title?: string
   secondary_body?: string[]
   position?: string
+  collapse?: {
+    enabled?: boolean
+    collapse_label?: string
+    expand_label?: string
+    default_collapsed?: boolean
+  }
 }
 
 export type EncounterMetadata = {

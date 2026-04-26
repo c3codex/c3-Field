@@ -301,24 +301,44 @@ function ChamberplateAbsence({
 }
 
 function Plaque({ plaque }: { plaque: PlaqueContract }) {
+  const [isCollapsed, setIsCollapsed] = useState(
+    plaque.collapse?.default_collapsed === true,
+  )
   const body = Array.isArray(plaque.body) ? plaque.body.filter(Boolean) : []
   const secondaryBody = Array.isArray(plaque.secondary_body)
     ? plaque.secondary_body.filter(Boolean)
     : []
+  const canCollapse = plaque.collapse?.enabled === true
+  const collapseLabel = plaque.collapse?.collapse_label ?? "Collapse text"
+  const expandLabel = plaque.collapse?.expand_label ?? "Show text"
 
   if (body.length === 0 && secondaryBody.length === 0) return null
 
   return (
-    <div className="plaque">
+    <div className="plaque" data-collapsed={canCollapse && isCollapsed}>
       {plaque.title ? <h2>{plaque.title}</h2> : null}
-      {body.map((paragraph, index) => (
-        <p key={`plaque-body-${index}`}>{paragraph}</p>
-      ))}
+      {canCollapse ? (
+        <button
+          type="button"
+          className="plaque-collapse"
+          onClick={() => setIsCollapsed((value) => !value)}
+          aria-expanded={!isCollapsed}
+        >
+          {isCollapsed ? expandLabel : collapseLabel}
+        </button>
+      ) : null}
+      {!canCollapse || !isCollapsed ? (
+        <div className="plaque-body">
+          {body.map((paragraph, index) => (
+            <p key={`plaque-body-${index}`}>{paragraph}</p>
+          ))}
 
-      {plaque.secondary_title ? <h2>{plaque.secondary_title}</h2> : null}
-      {secondaryBody.map((paragraph, index) => (
-        <p key={`plaque-secondary-${index}`}>{paragraph}</p>
-      ))}
+          {plaque.secondary_title ? <h2>{plaque.secondary_title}</h2> : null}
+          {secondaryBody.map((paragraph, index) => (
+            <p key={`plaque-secondary-${index}`}>{paragraph}</p>
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 }

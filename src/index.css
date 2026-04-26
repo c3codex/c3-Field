@@ -201,6 +201,31 @@ body {
   font-size: 1.18rem;
 }
 
+.plaque[data-collapsed="true"] {
+  bottom: auto;
+  max-height: none;
+}
+
+.plaque-collapse {
+  appearance: none;
+  border: 1px solid rgba(244, 248, 255, 0.24);
+  background: rgba(4, 7, 13, 0.42);
+  color: rgba(248, 250, 255, 0.86);
+  padding: 0.42rem 0.58rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  line-height: 1;
+  margin: 0 0 0.75rem;
+}
+
+.plaque-collapse:hover,
+.plaque-collapse:focus-visible {
+  border-color: rgba(255, 255, 255, 0.54);
+  background: rgba(18, 24, 38, 0.62);
+  outline: none;
+}
+
 .plaque p {
   margin: 0 0 0.55rem;
 }
