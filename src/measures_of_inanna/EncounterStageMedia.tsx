@@ -42,7 +42,7 @@ function RenderMediaItem({
   }
 
   const commonStyle: CSSProperties = {
-    objectFit: "var(--encounter-media-object-fit, cover)",
+    objectFit: "var(--encounter-media-object-fit, cover)" as CSSProperties["objectFit"],
     display: hidden ? "none" : "block",
     transition: "opacity 1400ms ease",
   }
@@ -94,7 +94,7 @@ function RenderMediaItem({
             : { display: "block" }
         }
         ref={(node) => {
-          if (node) node.volume = 0.14
+          if (node) node.volume = 0.07
         }}
       />
     )
