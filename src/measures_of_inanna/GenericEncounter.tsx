@@ -374,6 +374,7 @@ function PhaseMap({
   const explanation = phaseMap?.explanation ?? null
   const layoutMode = phaseMap?.layout?.mode ?? null
   const className = phaseMap?.layout?.class_name ?? "phase-map-node-field"
+  const rings = phaseMap?.layout?.rings ?? []
   const positions = phaseMap?.positions ?? {}
   const routing = phaseMap?.routing ?? {}
   const nodeRouting = routing.nodes ?? {}
@@ -499,6 +500,22 @@ function PhaseMap({
           </button>
         ) : null}
 
+        {rings.map((ring) =>
+          typeof ring.radius === "number" ? (
+            <span
+              key={`${ring.family ?? ring.label}-${ring.radius}`}
+              className="phase-map-ring"
+              data-family={ring.family}
+              style={{
+                width: `${ring.radius * 2}%`,
+                height: `${ring.radius * 2}%`,
+              }}
+            >
+              {ring.label ? <span>{ring.label}</span> : null}
+            </span>
+          ) : null,
+        )}
+
         <svg className="phase-map-edges" viewBox="0 0 100 100" preserveAspectRatio="none">
           {edges.map((edge, index) => {
             const fromNode = findNode(edge.from)
@@ -544,6 +561,12 @@ function PhaseMap({
             stateOverride === "sealed" ||
             !isViewed ||
             !targetRegistryKey
+          const isSealed =
+            stateOverride === "sealed" ||
+            node.release_state === "held" ||
+            state?.release_state === "held" ||
+            node.access_state === "gated" ||
+            state?.access_state === "gated"
 
           if (!registryKey || !position) return null
 
@@ -560,6 +583,8 @@ function PhaseMap({
               data-standing={nodeStanding}
               data-current={isCurrent}
               data-viewed={isViewed}
+              data-accessible={!disabled}
+              data-sealed={isSealed}
               title={nodeTitle(node, label, nodeStanding)}
               disabled={disabled}
               style={{
