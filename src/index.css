@@ -7,6 +7,90 @@ body,
   width: 100%;
 }
 
+.measures-registry-runtime {
+  min-height: 100svh;
+  width: 100vw;
+  overflow: auto;
+  background: #07090d;
+  color: #f6f8fb;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.measures-registry-header {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+}
+
+.measures-registry-header p {
+  margin: 0;
+  color: rgba(232, 238, 248, 0.62);
+  font-size: 0.82rem;
+}
+
+.measures-registry-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4.8rem);
+  line-height: 0.95;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.registry-status-grid,
+.registry-source-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.registry-status-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 1.25rem;
+}
+
+.registry-status-grid article,
+.registry-source-list article {
+  border: 1px solid rgba(235, 240, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 0.95rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.registry-source-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.registry-status-grid span,
+.registry-source-list span {
+  color: rgba(232, 238, 248, 0.58);
+  font-size: 0.78rem;
+}
+
+.registry-status-grid strong,
+.registry-source-list strong {
+  color: #f8fbff;
+  font-size: 1rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.registry-source-list article[data-seated="false"] strong,
+.registry-read-error {
+  color: #ffd8d8;
+}
+
+.registry-read-error {
+  margin: 1rem 0 0;
+}
+
+@media (max-width: 760px) {
+  .registry-status-grid,
+  .registry-source-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 body {
   background: #05070d;
   color: #f5f7fa;

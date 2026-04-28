@@ -7,6 +7,7 @@ import type {
   PlaqueContract,
   ResolvedAction,
 } from "./types"
+import { resolveOar2Governance, type Oar2Governance } from "@/shared/c3/oar2Governance"
 import ConnectCaptureForm from "./ConnectCaptureForm"
 import EncounterStageMedia from "./EncounterStageMedia"
 
@@ -380,12 +381,14 @@ function PhaseMap({
   onNavigate,
   activeRegistryKey,
   viewedRegistryKeys = [],
+  governance,
 }: {
   phaseMap?: PhaseMapContract
   nodes: PhaseMapNode[]
   onNavigate: (registryKey: string) => void
   activeRegistryKey?: string | null
   viewedRegistryKeys?: string[]
+  governance: Oar2Governance
 }) {
   const mapNodes: PhaseMapNode[] = phaseMap?.nodes ?? nodes ?? []
   const edges = phaseMap?.edges ?? []
@@ -496,8 +499,18 @@ function PhaseMap({
   }
 
   return (
-    <section className="phase-map-contract" data-layout-mode={layoutMode}>
+    <section
+      className="phase-map-contract"
+      data-layout-mode={layoutMode}
+      data-phase-map-state={governance.phase_map_state}
+      data-integrity-alignment={governance.integrity_governance.alignment_status}
+    >
       {labels.title && <h1 className="phase-map-title">{labels.title}</h1>}
+
+      <aside className="phase-map-governance" aria-label="Phase Map governance">
+        <span>{governance.phase_map_state}</span>
+        <strong>{governance.integrity_governance.alignment_status}</strong>
+      </aside>
 
       <div className={className}>
         {centerNode && centerNodeKey() ? (
@@ -671,6 +684,10 @@ export default function GenericEncounter({
   viewedRegistryKeys,
 }: Props) {
   const { renderer, capture, actions, media, chamberplate } = resolution
+  const governance = useMemo(
+    () => resolveOar2Governance(resolution.metadata),
+    [resolution.metadata],
+  )
   const playback = useMemo(() => normalizePlayback(resolution), [resolution])
   const autoAdvanceTimeoutRef = useRef<number | null>(null)
   const [showStill, setShowStill] = useState(false)
@@ -944,6 +961,7 @@ export default function GenericEncounter({
           onNavigate={onNavigate}
           activeRegistryKey={activeRegistryKey}
           viewedRegistryKeys={viewedRegistryKeys}
+          governance={governance}
         />
 
         {showActionRail ? (
