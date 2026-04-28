@@ -12,5 +12,5 @@ export default function App() {
     return <Temple />
   }
 
-  return <Temple />
+  return <MeasuresRegistryRuntime />
 }
