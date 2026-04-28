@@ -13,7 +13,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "npm run build && wrangler dev",
     "confirm:seed": "tsx scripts/confirm-seed.ts",
     "upload:seed": "tsx scripts/upload-seed.ts",
     "upload:seed:overwrite": "tsx scripts/upload-seed.ts --overwrite",
@@ -21,9 +21,10 @@
     "seed:run": "tsx scripts/seed-run.ts",
     "seed:run:overwrite": "tsx scripts/seed-run.ts --overwrite",
     "dev:registry": "vite --mode registry",
-"dev:inanna": "vite --mode inanna",
-"build:registry": "vite build --mode registry",
-"build:inanna": "vite build --mode inanna"
+    "dev:inanna": "vite --mode inanna",
+    "build:registry": "vite build --mode registry",
+    "build:inanna": "vite build --mode inanna",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -86,6 +87,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.33.2",
     "@cloudflare/workers-types": "^4.20260214.0",
     "@eslint/js": "^9.9.0",
     "@tailwindcss/typography": "^0.5.16",
@@ -107,6 +109,7 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^7.3.1",
+    "wrangler": "^4.85.0",
     "yaml": "^2.8.3"
   }
 }
