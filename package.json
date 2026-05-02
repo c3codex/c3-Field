@@ -21,9 +21,9 @@
     "seed:run": "tsx scripts/seed-run.ts",
     "seed:run:overwrite": "tsx scripts/seed-run.ts --overwrite",
     "dev:registry": "vite --mode registry",
-"dev:inanna": "vite --mode inanna",
-"build:registry": "vite build --mode registry",
-"build:inanna": "vite build --mode inanna"
+    "dev:inanna": "vite --mode inanna",
+    "build:registry": "vite build --mode registry --outDir dist-registry",
+    "build:inanna": "vite build --mode inanna --outDir dist-inanna"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
