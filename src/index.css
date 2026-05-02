@@ -9,11 +9,149 @@ body,
 
 .measures-registry-runtime {
   min-height: 100svh;
-  width: 100vw;
+  width: 100%;
   overflow: auto;
   background: #07090d;
   color: #f6f8fb;
+  padding: 0;
+}
+
+.registry-landing-hero {
+  position: relative;
+  min-height: min(88svh, 58rem);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
   padding: clamp(1.25rem, 4vw, 3.5rem);
+  background: #07090d;
+}
+
+.registry-landing-hero > video,
+.registry-landing-hero > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.48;
+}
+
+.registry-landing-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(7, 9, 13, 0.94), rgba(7, 9, 13, 0.38)),
+    linear-gradient(0deg, rgba(7, 9, 13, 0.98), rgba(7, 9, 13, 0));
+}
+
+.registry-landing-hero-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.85rem;
+  max-width: min(48rem, 92vw);
+}
+
+.registry-mark {
+  width: clamp(3rem, 8vw, 5.5rem);
+  height: auto;
+}
+
+.registry-landing-hero-content p,
+.registry-landing-section > span,
+.registry-missing-records > span,
+.reserve-seat-copy span,
+.registry-diagnostics span {
+  margin: 0;
+  color: rgba(232, 238, 248, 0.62);
+  font-size: 0.78rem;
+}
+
+.registry-landing-hero-content h1 {
+  margin: 0;
+  max-width: 14ch;
+  font-size: clamp(3rem, 8vw, 7.4rem);
+  line-height: 0.9;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.registry-landing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+
+.registry-landing-actions a,
+.reserve-seat-form button {
+  border: 1px solid rgba(244, 248, 255, 0.32);
+  border-radius: 8px;
+  background: rgba(246, 248, 251, 0.12);
+  color: #f8fbff;
+  padding: 0.74rem 1rem;
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.registry-banner {
+  display: block;
+  width: min(72rem, calc(100% - 2rem));
+  max-height: 12rem;
+  object-fit: contain;
+  margin: 1.5rem auto 0;
+}
+
+.registry-landing-section,
+.registry-missing-records,
+.reserve-seat-panel,
+.registry-diagnostics {
+  width: min(72rem, calc(100% - 2rem));
+  margin: 1.5rem auto 0;
+}
+
+.registry-landing-section {
+  border-top: 1px solid rgba(235, 240, 255, 0.15);
+  padding-top: clamp(1rem, 3vw, 1.5rem);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.registry-landing-section h2,
+.registry-missing-records h2 {
+  margin: 0;
+  color: #f8fbff;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  line-height: 1;
+  font-weight: 620;
+}
+
+.registry-landing-section p,
+.registry-missing-records p {
+  margin: 0;
+  max-width: 56rem;
+  color: rgba(232, 238, 248, 0.78);
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  line-height: 1.55;
+}
+
+.registry-landing-section ul,
+.registry-missing-records ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: rgba(232, 238, 248, 0.78);
+}
+
+.registry-missing-records {
+  border: 1px solid rgba(255, 216, 216, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 216, 216, 0.055);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  display: grid;
+  gap: 0.75rem;
 }
 
 .measures-registry-header {
@@ -84,10 +222,129 @@ body,
   margin: 1rem 0 0;
 }
 
+.reserve-seat-panel {
+  margin-top: 1.5rem;
+  border: 1px solid rgba(235, 240, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(1rem, 3vw, 1.5rem);
+}
+
+.reserve-seat-copy {
+  align-content: start;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.reserve-seat-copy span {
+  color: rgba(232, 238, 248, 0.58);
+  font-size: 0.78rem;
+}
+
+.reserve-seat-copy h2 {
+  margin: 0;
+  color: #f8fbff;
+  font-size: clamp(1.35rem, 3vw, 2.2rem);
+  line-height: 1;
+  font-weight: 620;
+}
+
+.reserve-seat-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.reserve-seat-form label {
+  display: grid;
+  gap: 0.35rem;
+  color: rgba(232, 238, 248, 0.68);
+  font-size: 0.78rem;
+}
+
+.reserve-seat-form input,
+.reserve-seat-form select,
+.reserve-seat-form textarea {
+  width: 100%;
+  border: 1px solid rgba(235, 240, 255, 0.18);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.075);
+  color: #f8fbff;
+  padding: 0.68rem 0.75rem;
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.reserve-seat-form select option {
+  color: #07090d;
+}
+
+.reserve-seat-form textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.reserve-seat-message {
+  grid-column: 1 / -1;
+}
+
+.reserve-seat-form button:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+.reserve-seat-form button {
+  justify-self: start;
+}
+
+.registry-diagnostics {
+  padding-bottom: clamp(1.25rem, 4vw, 3.5rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.registry-diagnostics article {
+  border: 1px solid rgba(235, 240, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 0.95rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.reserve-seat-success,
+.reserve-seat-error {
+  margin: 0;
+  align-self: center;
+  font-size: 0.88rem;
+}
+
+.reserve-seat-success {
+  color: #d7ffe8;
+}
+
+.reserve-seat-error {
+  color: #ffd8d8;
+}
+
 @media (max-width: 760px) {
   .registry-status-grid,
   .registry-source-list {
     grid-template-columns: 1fr;
+  }
+
+  .reserve-seat-panel,
+  .reserve-seat-form,
+  .registry-diagnostics {
+    grid-template-columns: 1fr;
+  }
+
+  .registry-landing-hero {
+    min-height: 82svh;
   }
 }
 
@@ -1172,5 +1429,41 @@ body,
 
   .encounter[data-registry-key="temple_antechamber"] .connect-capture {
     bottom: 1rem;
+  }
+}
+
+@media (max-width: 1024px), (pointer: coarse) {
+  .actions,
+  .phase-map-actions {
+    position: fixed;
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
+    bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    width: auto;
+    max-width: none;
+    max-height: min(32svh, 12rem);
+    padding-bottom: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    justify-content: flex-end;
+    z-index: 80;
+  }
+
+  .encounter[data-surface-type="chamberplate"] .actions,
+  .encounter[data-registry-key="temple_antechamber"] .actions,
+  .choice-actions {
+    position: fixed;
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
+    bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    width: auto;
+    justify-content: flex-end;
+  }
+
+  .encounter-action {
+    flex: 0 1 auto;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
