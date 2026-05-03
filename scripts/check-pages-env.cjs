@@ -13,3 +13,10 @@ console.log("[pages-env] CF_PAGES_BRANCH:", process.env.CF_PAGES_BRANCH || "miss
 for (const name of requiredVars) {
   console.log(`[pages-env] ${name}:`, process.env[name] ? "present" : "missing")
 }
+
+console.log(
+  "[pages-env] RESOLVED_SUPABASE_URL:",
+  process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+    ? "env"
+    : "public-fallback",
+)
