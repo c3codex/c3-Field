@@ -89,7 +89,7 @@ function sectionCopy(row?: LandingSectionRow) {
   return {
     eyebrow: asString(metadata.eyebrow),
     title: asString(metadata.title) ?? row?.display_title ?? null,
-    body: asString(metadata.body),
+    subtitle: asString(metadata.subtitle),
     more: asRecord(metadata.more),
     coherence: asRecord(metadata.coherence),
     actions: asActionArray(metadata.actions),
@@ -348,7 +348,7 @@ export default function MeasuresRegistryRuntime() {
           <div className="registry-path-choice-copy">
             {pathChoiceCopy.eyebrow ? <span>{pathChoiceCopy.eyebrow}</span> : null}
             {pathChoiceCopy.title ? <h1>{pathChoiceCopy.title}</h1> : null}
-            {pathChoiceCopy.body ? <p>{pathChoiceCopy.body}</p> : null}
+            {pathChoiceCopy.subtitle ? <p>{pathChoiceCopy.subtitle}</p> : null}
           </div>
 
           <div className="registry-path-choice-contrast">

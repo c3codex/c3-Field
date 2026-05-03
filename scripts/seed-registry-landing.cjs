@@ -15,10 +15,13 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 const landingRows = [
   {
     key: "landing_intro_video",
-    title: "Measures Registry Intro",
+    title: "Integrity Governance for AI Systems",
     sequence: 1010,
     metadata: {
       renderer: "measures_registry_intro_video",
+      title: "Integrity Governance for AI Systems",
+      subtitle: "Behavior that is not registered cannot be governed.",
+      completion_target: "landing_path_choice",
       playback: {
         mode: "fullscreen_intro",
         media_role: "hero_video",
@@ -36,15 +39,19 @@ const landingRows = [
       renderer: "measures_registry_path_choice",
       eyebrow: "Measures Registry",
       title: "Choose Your Path",
-      body: "More acceleration or coherent alignment. Choose the route you are entering through.",
+      subtitle: "More acceleration or coherent alignment. Choose the route you are entering through.",
       background_media_role: "path_choice_background",
       more: {
         label: "MORE",
         body: "More nodes. More connections. Still no resolution.",
+        action_label: "Explore System",
+        action_key: "explore_system",
       },
       coherence: {
         label: "COHERENCE",
         body: "Fewer elements. Precise alignment. Complete resolution.",
+        action_label: "Reserve Your Seat",
+        action_key: "reserve_seat",
       },
       actions: [
         {
@@ -167,6 +174,21 @@ async function run() {
         usage: "path_choice_background",
       },
     },
+    {
+      registry_key: "landing_intro_video",
+      encounter_key: "landing_intro_video",
+      campaign_key: "agents_of_chaos_integrity_governance",
+      media_role: "hero_poster",
+      storage_bucket: "measures-registry",
+      storage_path: "measures_registry_poster.webp",
+      mime_type: "image/webp",
+      sort_order: 2,
+      is_active: true,
+      metadata: {
+        surface: "landing_intro_video",
+        usage: "hero_poster",
+      },
+    },
   ]
 
   for (const mediaRow of mediaPayload) {
@@ -211,7 +233,7 @@ async function run() {
       .from("measures_media_map")
       .select("media_role, storage_bucket, storage_path, is_active")
       .eq("campaign_key", "agents_of_chaos_integrity_governance")
-      .in("media_role", ["hero_video", "path_choice_background"])
+      .in("media_role", ["hero_video", "hero_poster", "path_choice_background"])
       .eq("is_active", true),
     "Landing media verification failed",
   )
@@ -223,6 +245,9 @@ async function run() {
         landingEncounterCount: seated.length,
         introVideoFromMeasuresMediaMap: media.some(
           (row) => row.media_role === "hero_video" && row.storage_path,
+        ),
+        heroPosterFromMeasuresMediaMap: media.some(
+          (row) => row.media_role === "hero_poster" && row.storage_path,
         ),
         pathChoiceBackgroundFromMeasuresMediaMap: media.some(
           (row) =>
