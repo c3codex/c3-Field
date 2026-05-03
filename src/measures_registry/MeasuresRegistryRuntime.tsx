@@ -220,6 +220,7 @@ export default function MeasuresRegistryRuntime() {
   const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const registryBannerUrl = mediaUrl(mediaMap.get("registry_banner"))
+  const heroCopy = sectionCopy(sectionMap.get("landing_video_hero"))
 
   function updateForm<K extends keyof ReserveSeatForm>(key: K, value: ReserveSeatForm[K]) {
     setForm((current) => ({ ...current, [key]: value }))
@@ -298,12 +299,17 @@ export default function MeasuresRegistryRuntime() {
 
         <div className="registry-landing-hero-content">
           {registryMarkUrl ? <img src={registryMarkUrl} alt="" className="registry-mark" /> : null}
-          <p>Measures Registry</p>
-          <h1>Integrity Governance for AI Systems</h1>
-          <div className="registry-landing-actions">
-            <a href="#reserve-seat">Reserve Your Seat</a>
-            <a href="#orientation">Explore System</a>
-          </div>
+          {heroCopy.eyebrow ? <p>{heroCopy.eyebrow}</p> : null}
+          {heroCopy.title ? <h1>{heroCopy.title}</h1> : null}
+          {heroCopy.items.length > 0 ? (
+            <div className="registry-landing-actions">
+              {heroCopy.items.slice(0, 2).map((item, index) => (
+                <a href={index === 0 ? "#reserve-seat" : "#orientation"} key={item}>
+                  {item}
+                </a>
+              ))}
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -338,7 +344,7 @@ export default function MeasuresRegistryRuntime() {
         </section>
       ) : null}
 
-      {REQUIRED_SECTION_KEYS.map(renderSection)}
+      {REQUIRED_SECTION_KEYS.filter((key) => key !== "landing_video_hero").map(renderSection)}
 
       <section id="orientation" className="registry-landing-section">
         <span>Orientation</span>
