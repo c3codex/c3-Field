@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import type { FormEvent } from "react"
-import { supabase } from "@/integrations/supabase/client"
+import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 import {
   DB_HELD_CODEX_SOURCE_RECORDS,
   resolveOar2Governance,
@@ -129,6 +129,14 @@ export default function MeasuresRegistryRuntime() {
       setIsLoading(true)
       setReadError(null)
 
+      if (supabaseConfigError) {
+        setReadError(supabaseConfigError)
+        setSections([])
+        setMediaRows([])
+        setIsLoading(false)
+        return
+      }
+
       const [runtimeResult, sectionResult, mediaResult] = await Promise.all([
         supabase
           .from("measures_encounter_def")
@@ -220,6 +228,12 @@ export default function MeasuresRegistryRuntime() {
 
   async function handleReserveSeatSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
+    if (supabaseConfigError) {
+      setSubmitState("error")
+      return
+    }
+
     setSubmitState("submitting")
 
     const { data, error } = await supabase.rpc("submit_src_intake_request", {

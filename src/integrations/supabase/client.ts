@@ -1,14 +1,15 @@
-﻿import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@supabase/supabase-js"
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!supabaseUrl) {
-  throw new Error("VITE_SUPABASE_URL is required")
-}
+export const supabaseConfigError = !supabaseUrl
+  ? "VITE_SUPABASE_URL is required"
+  : !supabaseAnonKey
+    ? "VITE_SUPABASE_ANON_KEY is required"
+    : null
 
-if (!supabaseAnonKey) {
-  throw new Error("VITE_SUPABASE_ANON_KEY is required")
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(
+  supabaseUrl || "https://missing-supabase-config.invalid",
+  supabaseAnonKey || "missing-supabase-anon-key",
+)
