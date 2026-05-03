@@ -22,7 +22,7 @@
     "seed:run:overwrite": "tsx scripts/seed-run.ts --overwrite",
     "dev:registry": "vite --mode registry",
     "dev:inanna": "vite --mode inanna",
-    "build:registry": "vite build --mode registry --outDir dist-registry",
+    "build:registry": "node scripts/check-pages-env.cjs && vite build --mode registry --outDir dist-registry",
     "build:inanna": "vite build --mode inanna --outDir dist-inanna"
   },
   "dependencies": {
