@@ -8,21 +8,51 @@ import { resolveEncounter } from "./resolve_encounter"
 import type { EncounterResolution } from "./types"
 
 const ENTRY_REGISTRY_KEY = "epigraph"
+const HISTORY_SOURCE = "measures_of_inanna"
 
 type NavigateOptions = {
   targetAfterPassage?: string | null
 }
 
 export default function Temple() {
-  const [currentKey, setCurrentKey] = useState(ENTRY_REGISTRY_KEY)
+  const [currentKey, setCurrentKey] = useState(() => {
+    const registryKey = new URLSearchParams(window.location.search).get("registry_key")
+    return registryKey || ENTRY_REGISTRY_KEY
+  })
   const [resolution, setResolution] = useState<EncounterResolution | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [viewedKeys, setViewedKeys] = useState<string[]>([])
   const [pendingPassageTarget, setPendingPassageTarget] = useState<string | null>(null)
   const viewedKeysRef = useRef<string[]>([])
+  const navigationSourceRef = useRef<"app" | "history">("app")
+
+  function historyUrl(registryKey: string) {
+    const url = new URL(window.location.href)
+    url.searchParams.set("registry_key", registryKey)
+    return `${url.pathname}${url.search}${url.hash}`
+  }
+
+  function writeHistory(
+    method: "pushState" | "replaceState",
+    registryKey: string,
+    options?: NavigateOptions,
+  ) {
+    window.history[method](
+      {
+        source: HISTORY_SOURCE,
+        registryKey,
+        targetAfterPassage: options?.targetAfterPassage ?? null,
+      },
+      "",
+      historyUrl(registryKey),
+    )
+  }
 
   function navigate(registryKey: string, options?: NavigateOptions) {
     setPendingPassageTarget(options?.targetAfterPassage ?? null)
+    if (navigationSourceRef.current === "app") {
+      writeHistory("pushState", registryKey, options)
+    }
     setCurrentKey(registryKey)
   }
 
@@ -62,6 +92,27 @@ export default function Temple() {
       },
     }
   }
+
+  useEffect(() => {
+    const currentState = window.history.state
+    if (currentState?.source !== HISTORY_SOURCE || currentState.registryKey !== currentKey) {
+      writeHistory("replaceState", currentKey)
+    }
+
+    function handlePopState(event: PopStateEvent) {
+      if (event.state?.source !== HISTORY_SOURCE || !event.state.registryKey) return
+
+      navigationSourceRef.current = "history"
+      setPendingPassageTarget(event.state.targetAfterPassage ?? null)
+      setCurrentKey(event.state.registryKey)
+      window.setTimeout(() => {
+        navigationSourceRef.current = "app"
+      }, 0)
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
 
   useEffect(() => {
     let cancelled = false

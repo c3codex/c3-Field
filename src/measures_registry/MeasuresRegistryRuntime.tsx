@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties, FormEvent } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 
@@ -8,6 +8,18 @@ const REQUIRED_SECTION_KEYS = ["landing_intro_video", "landing_path_choice"] as 
 const REQUIRED_MEDIA_ROLES = ["hero_video", "path_choice_background"] as const
 
 type SurfaceState = "intro" | "path_choice" | "orientation" | "reserve_seat"
+const HISTORY_SOURCE = "measures_registry"
+const SURFACE_QUERY: Record<SurfaceState, string> = {
+  intro: "landing_intro_video",
+  path_choice: "landing_path_choice",
+  orientation: "orientation_placeholder",
+  reserve_seat: "reserve_seat",
+}
+
+function surfaceFromQuery(value: string | null): SurfaceState {
+  const match = Object.entries(SURFACE_QUERY).find(([, queryValue]) => queryValue === value)
+  return (match?.[0] as SurfaceState | undefined) ?? "intro"
+}
 type RequiredSectionKey = (typeof REQUIRED_SECTION_KEYS)[number]
 type RequiredMediaRole = (typeof REQUIRED_MEDIA_ROLES)[number]
 
@@ -85,7 +97,9 @@ function sectionCopy(row?: LandingSectionRow) {
 }
 
 export default function MeasuresRegistryRuntime() {
-  const [activeSurface, setActiveSurface] = useState<SurfaceState>("intro")
+  const [activeSurface, setActiveSurface] = useState<SurfaceState>(() =>
+    surfaceFromQuery(new URLSearchParams(window.location.search).get("surface")),
+  )
   const [sections, setSections] = useState<LandingSectionRow[]>([])
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [readError, setReadError] = useState<string | null>(null)
@@ -93,6 +107,52 @@ export default function MeasuresRegistryRuntime() {
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">(
     "idle",
   )
+  const navigationSourceRef = useRef<"app" | "history">("app")
+
+  function historyUrl(surface: SurfaceState) {
+    const url = new URL(window.location.href)
+    url.searchParams.set("surface", SURFACE_QUERY[surface])
+    return `${url.pathname}${url.search}${url.hash}`
+  }
+
+  function writeHistory(method: "pushState" | "replaceState", surface: SurfaceState) {
+    window.history[method](
+      {
+        source: HISTORY_SOURCE,
+        surface,
+        surface_key: SURFACE_QUERY[surface],
+      },
+      "",
+      historyUrl(surface),
+    )
+  }
+
+  function navigateSurface(surface: SurfaceState) {
+    if (navigationSourceRef.current === "app") {
+      writeHistory("pushState", surface)
+    }
+    setActiveSurface(surface)
+  }
+
+  useEffect(() => {
+    const currentState = window.history.state
+    if (currentState?.source !== HISTORY_SOURCE || currentState.surface !== activeSurface) {
+      writeHistory("replaceState", activeSurface)
+    }
+
+    function handlePopState(event: PopStateEvent) {
+      if (event.state?.source !== HISTORY_SOURCE || !event.state.surface) return
+
+      navigationSourceRef.current = "history"
+      setActiveSurface(event.state.surface)
+      window.setTimeout(() => {
+        navigationSourceRef.current = "app"
+      }, 0)
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -174,12 +234,12 @@ export default function MeasuresRegistryRuntime() {
 
   function handlePathAction(actionKey: string | null) {
     if (actionKey === "reserve_seat") {
-      setActiveSurface("reserve_seat")
+      navigateSurface("reserve_seat")
       return
     }
 
     if (actionKey === "explore_system") {
-      setActiveSurface("orientation")
+      navigateSurface("orientation")
     }
   }
 
@@ -258,14 +318,14 @@ export default function MeasuresRegistryRuntime() {
               autoPlay
               muted
               playsInline
-              onEnded={() => setActiveSurface("path_choice")}
+              onEnded={() => navigateSurface("path_choice")}
               aria-label={introCopy.title ?? "Measures Registry intro video"}
             />
           ) : null}
           <button
             type="button"
             className="registry-intro-skip"
-            onClick={() => setActiveSurface("path_choice")}
+            onClick={() => navigateSurface("path_choice")}
           >
             Skip
           </button>
@@ -321,7 +381,7 @@ export default function MeasuresRegistryRuntime() {
         <section id="orientation" className="registry-landing-section">
           <span>Orientation</span>
           <h2>Public orientation surface pending</h2>
-          <button type="button" onClick={() => setActiveSurface("path_choice")}>
+          <button type="button" onClick={() => navigateSurface("path_choice")}>
             Back to Path Choice
           </button>
         </section>
@@ -422,7 +482,7 @@ export default function MeasuresRegistryRuntime() {
             <button type="submit" disabled={submitState === "submitting"}>
               {submitState === "submitting" ? "Submitting..." : actionLabel("reserve_seat")}
             </button>
-            <button type="button" onClick={() => setActiveSurface("path_choice")}>
+            <button type="button" onClick={() => navigateSurface("path_choice")}>
               Back to Path Choice
             </button>
 
