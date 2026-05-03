@@ -1,38 +1,15 @@
 import { useEffect, useMemo, useState } from "react"
-import type { FormEvent } from "react"
+import type { CSSProperties, FormEvent } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
-import {
-  DB_HELD_CODEX_SOURCE_RECORDS,
-  resolveOar2Governance,
-  type Oar2Governance,
-} from "@/shared/c3/oar2Governance"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 
-const REQUIRED_SECTION_KEYS = [
-  "landing_video_hero",
-  "landing_problem",
-  "landing_path_choice",
-  "landing_courses",
-  "landing_principle",
-  "landing_final_cta",
-] as const
+const REQUIRED_SECTION_KEYS = ["landing_intro_video", "landing_path_choice"] as const
+const REQUIRED_MEDIA_ROLES = ["hero_video", "path_choice_background"] as const
 
-const REQUIRED_MEDIA_ROLES = [
-  "hero_video",
-  "hero_poster",
-  "registry_mark",
-  "registry_banner",
-  "social_card",
-  "paragraph_cover",
-] as const
-
+type SurfaceState = "intro" | "path_choice" | "orientation" | "reserve_seat"
 type RequiredSectionKey = (typeof REQUIRED_SECTION_KEYS)[number]
 type RequiredMediaRole = (typeof REQUIRED_MEDIA_ROLES)[number]
-
-type RuntimeEncounterRow = {
-  metadata: Record<string, unknown> | null
-}
 
 type LandingSectionRow = {
   encounter_key: string
@@ -84,9 +61,9 @@ function asString(value: unknown) {
   return typeof value === "string" ? value : null
 }
 
-function asStringArray(value: unknown) {
+function asActionArray(value: unknown) {
   return Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === "string")
+    ? value.filter((item): item is Record<string, unknown> => Boolean(asRecord(item)))
     : []
 }
 
@@ -101,21 +78,16 @@ function sectionCopy(row?: LandingSectionRow) {
     eyebrow: asString(metadata.eyebrow),
     title: asString(metadata.title) ?? row?.display_title ?? null,
     body: asString(metadata.body),
-    items: asStringArray(metadata.items),
+    more: asRecord(metadata.more),
+    coherence: asRecord(metadata.coherence),
+    actions: asActionArray(metadata.actions),
   }
 }
 
-function statusText(governance: Oar2Governance) {
-  if (governance.missing_paths.length > 0) return "correction_required"
-  if (governance.blocked_paths.length > 0) return "blocked"
-  return "routable"
-}
-
 export default function MeasuresRegistryRuntime() {
-  const [runtimeMetadata, setRuntimeMetadata] = useState<Record<string, unknown> | null>(null)
+  const [activeSurface, setActiveSurface] = useState<SurfaceState>("intro")
   const [sections, setSections] = useState<LandingSectionRow[]>([])
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [readError, setReadError] = useState<string | null>(null)
   const [form, setForm] = useState<ReserveSeatForm>(initialReserveSeatForm)
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">(
@@ -126,31 +98,16 @@ export default function MeasuresRegistryRuntime() {
     let cancelled = false
 
     async function loadLanding() {
-      setIsLoading(true)
       setReadError(null)
 
       if (supabaseConfigError) {
         setReadError(supabaseConfigError)
         setSections([])
         setMediaRows([])
-        setIsLoading(false)
         return
       }
 
-      const [runtimeResult, sectionResult, mediaResult] = await Promise.all([
-        supabase
-          .from("measures_encounter_def")
-          .select(
-            `
-            metadata,
-            measures_registry!inner (
-              registry_key
-            )
-          `,
-          )
-          .eq("measures_registry.registry_key", "measures_registry_runtime")
-          .eq("encounter_key", "measures_registry_runtime")
-          .single(),
+      const [sectionResult, mediaResult] = await Promise.all([
         supabase
           .from("measures_encounter_def")
           .select("encounter_key, display_title, metadata")
@@ -166,27 +123,15 @@ export default function MeasuresRegistryRuntime() {
 
       if (cancelled) return
 
-      if (runtimeResult.error) {
-        setRuntimeMetadata(null)
-      } else {
-        setRuntimeMetadata(
-          ((runtimeResult.data as RuntimeEncounterRow | null)?.metadata ?? null) as Record<
-            string,
-            unknown
-          > | null,
-        )
-      }
-
       if (sectionResult.error || mediaResult.error) {
         setReadError("Measures Registry landing records could not be read.")
         setSections([])
         setMediaRows([])
-      } else {
-        setSections(((sectionResult.data ?? []) as LandingSectionRow[]) ?? [])
-        setMediaRows(((mediaResult.data ?? []) as MediaRow[]) ?? [])
+        return
       }
 
-      setIsLoading(false)
+      setSections(((sectionResult.data ?? []) as LandingSectionRow[]) ?? [])
+      setMediaRows(((mediaResult.data ?? []) as MediaRow[]) ?? [])
     }
 
     loadLanding()
@@ -196,10 +141,6 @@ export default function MeasuresRegistryRuntime() {
     }
   }, [])
 
-  const governance = useMemo(
-    () => resolveOar2Governance(runtimeMetadata ?? {}),
-    [runtimeMetadata],
-  )
   const sectionMap = useMemo(
     () => new Map(sections.map((section) => [section.encounter_key, section])),
     [sections],
@@ -216,15 +157,30 @@ export default function MeasuresRegistryRuntime() {
   const missingSections = REQUIRED_SECTION_KEYS.filter((key) => !sectionMap.has(key))
   const missingMediaRoles = REQUIRED_MEDIA_ROLES.filter((role) => !mediaMap.has(role))
   const showDiagnostics = new URLSearchParams(window.location.search).get("diagnostics") === "1"
+  const introCopy = sectionCopy(sectionMap.get("landing_intro_video"))
+  const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
-  const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
-  const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
-  const registryBannerUrl = mediaUrl(mediaMap.get("registry_banner"))
-  const heroCopy = sectionCopy(sectionMap.get("landing_video_hero"))
+  const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
 
   function updateForm<K extends keyof ReserveSeatForm>(key: K, value: ReserveSeatForm[K]) {
     setForm((current) => ({ ...current, [key]: value }))
     if (submitState !== "idle") setSubmitState("idle")
+  }
+
+  function actionLabel(actionKey: string) {
+    const action = pathChoiceCopy.actions.find((item) => asString(item.action_key) === actionKey)
+    return asString(action?.label)
+  }
+
+  function handlePathAction(actionKey: string | null) {
+    if (actionKey === "reserve_seat") {
+      setActiveSurface("reserve_seat")
+      return
+    }
+
+    if (actionKey === "explore_system") {
+      setActiveSurface("orientation")
+    }
   }
 
   async function handleReserveSeatSubmit(event: FormEvent<HTMLFormElement>) {
@@ -259,226 +215,232 @@ export default function MeasuresRegistryRuntime() {
     setSubmitState("success")
   }
 
-  function renderSection(key: RequiredSectionKey) {
-    const copy = sectionCopy(sectionMap.get(key))
-
-    if (!sectionMap.has(key)) return null
+  function renderCorrectionReport() {
+    if (!showDiagnostics) return null
+    if (missingSections.length === 0 && missingMediaRoles.length === 0 && !readError) return null
 
     return (
-      <section className="registry-landing-section" data-section={key} key={key}>
-        {copy.eyebrow ? <span>{copy.eyebrow}</span> : null}
-        {copy.title ? <h2>{copy.title}</h2> : null}
-        {copy.body ? <p>{copy.body}</p> : null}
-        {copy.items.length > 0 ? (
-          <ul>
-            {copy.items.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+      <section className="registry-missing-records" aria-label="Missing DB records">
+        <h2>Missing DB Records</h2>
+        {readError ? <p>{readError}</p> : null}
+        {missingSections.length > 0 ? (
+          <>
+            <span>measures_encounter_def.encounter_key</span>
+            <ul>
+              {missingSections.map((key: RequiredSectionKey) => (
+                <li key={key}>{key}</li>
+              ))}
+            </ul>
+          </>
+        ) : null}
+        {missingMediaRoles.length > 0 ? (
+          <>
+            <span>measures_media_map.media_role</span>
+            <ul>
+              {missingMediaRoles.map((role: RequiredMediaRole) => (
+                <li key={role}>{role}</li>
+              ))}
+            </ul>
+          </>
         ) : null}
       </section>
     )
   }
 
-  return (
-    <main className="measures-registry-runtime">
-      <section className="registry-landing-hero" data-loading={isLoading}>
-        {heroVideoUrl ? (
-          <video
-            src={heroVideoUrl}
-            poster={heroPosterUrl ?? undefined}
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-label="Measures Registry launch media"
-          />
-        ) : heroPosterUrl ? (
-          <img src={heroPosterUrl} alt="" />
-        ) : null}
-
-        <div className="registry-landing-hero-content">
-          {registryMarkUrl ? <img src={registryMarkUrl} alt="" className="registry-mark" /> : null}
-          {heroCopy.eyebrow ? <p>{heroCopy.eyebrow}</p> : null}
-          {heroCopy.title ? <h1>{heroCopy.title}</h1> : null}
-          {heroCopy.items.length > 0 ? (
-            <div className="registry-landing-actions">
-              {heroCopy.items.slice(0, 2).map((item, index) => (
-                <a href={index === 0 ? "#reserve-seat" : "#orientation"} key={item}>
-                  {item}
-                </a>
-              ))}
-            </div>
+  function renderIntroSurface() {
+    return (
+      <main className="measures-registry-runtime" data-surface="landing_intro_video">
+        {renderCorrectionReport()}
+        <section className="registry-intro-video" aria-label={introCopy.title ?? undefined}>
+          {heroVideoUrl ? (
+            <video
+              src={heroVideoUrl}
+              autoPlay
+              muted
+              playsInline
+              onEnded={() => setActiveSurface("path_choice")}
+              aria-label={introCopy.title ?? "Measures Registry intro video"}
+            />
           ) : null}
-        </div>
-      </section>
-
-      {registryBannerUrl ? (
-        <img src={registryBannerUrl} alt="" className="registry-banner" />
-      ) : null}
-
-      {missingSections.length > 0 || missingMediaRoles.length > 0 || readError ? (
-        <section className="registry-missing-records" aria-label="Missing DB records">
-          <h2>Missing DB Records</h2>
-          {readError ? <p>{readError}</p> : null}
-          {missingSections.length > 0 ? (
-            <>
-              <span>measures_encounter_def.encounter_key</span>
-              <ul>
-                {missingSections.map((key) => (
-                  <li key={key}>{key}</li>
-                ))}
-              </ul>
-            </>
-          ) : null}
-          {missingMediaRoles.length > 0 ? (
-            <>
-              <span>measures_media_map.media_role</span>
-              <ul>
-                {missingMediaRoles.map((role) => (
-                  <li key={role}>{role}</li>
-                ))}
-              </ul>
-            </>
-          ) : null}
-        </section>
-      ) : null}
-
-      {REQUIRED_SECTION_KEYS.filter((key) => key !== "landing_video_hero").map(renderSection)}
-
-      <section id="orientation" className="registry-landing-section">
-        <span>Orientation</span>
-        <h2>Public orientation surface pending</h2>
-      </section>
-
-      <section id="reserve-seat" className="reserve-seat-panel" aria-label="Reserve your seat">
-        <div className="reserve-seat-copy">
-          <span>June Cohort</span>
-          <h2>Reserve Your Seat</h2>
-        </div>
-
-        <form className="reserve-seat-form" onSubmit={handleReserveSeatSubmit}>
-          <label>
-            Origin
-            <select
-              required
-              value={form.origin_type}
-              onChange={(event) =>
-                updateForm(
-                  "origin_type",
-                  event.target.value as ReserveSeatForm["origin_type"],
-                )
-              }
-            >
-              <option value="named_individual">Named individual</option>
-              <option value="institution_in_service">Institution in service</option>
-            </select>
-          </label>
-
-          <label>
-            Full name
-            <input
-              required
-              value={form.full_name}
-              onChange={(event) => updateForm("full_name", event.target.value)}
-              autoComplete="name"
-            />
-          </label>
-
-          <label>
-            Email
-            <input
-              required
-              type="email"
-              value={form.email}
-              onChange={(event) => updateForm("email", event.target.value)}
-              autoComplete="email"
-            />
-          </label>
-
-          <label>
-            Role or title
-            <input
-              value={form.role_or_title}
-              onChange={(event) => updateForm("role_or_title", event.target.value)}
-              autoComplete="organization-title"
-            />
-          </label>
-
-          <label>
-            Institution
-            <input
-              value={form.institution_name}
-              onChange={(event) => updateForm("institution_name", event.target.value)}
-              autoComplete="organization"
-            />
-          </label>
-
-          <label>
-            Interest area
-            <input
-              value={form.interest_area}
-              onChange={(event) => updateForm("interest_area", event.target.value)}
-            />
-          </label>
-
-          <label>
-            Course intent
-            <input
-              value={form.course_intent}
-              onChange={(event) => updateForm("course_intent", event.target.value)}
-            />
-          </label>
-
-          <label className="reserve-seat-message">
-            Message
-            <textarea
-              value={form.message}
-              onChange={(event) => updateForm("message", event.target.value)}
-            />
-          </label>
-
-          <button type="submit" disabled={submitState === "submitting"}>
-            {submitState === "submitting" ? "Submitting..." : "Reserve Your Seat"}
+          <button
+            type="button"
+            className="registry-intro-skip"
+            onClick={() => setActiveSurface("path_choice")}
+          >
+            Skip
           </button>
-
-          {submitState === "success" ? (
-            <p className="reserve-seat-success">Your seat request has been received.</p>
-          ) : null}
-          {submitState === "error" ? (
-            <p className="reserve-seat-error">Submission failed. Please try again.</p>
-          ) : null}
-        </form>
-      </section>
-
-      {showDiagnostics ? (
-        <section className="registry-diagnostics" aria-label="Operator diagnostics">
-          <article>
-            <span>Codex Sources</span>
-            <strong>{`${governance.codex_source_records.length}/4 seated`}</strong>
-          </article>
-          <article>
-            <span>OAR2 Route</span>
-            <strong>{statusText(governance)}</strong>
-          </article>
-          <article>
-            <span>Integrity Alignment</span>
-            <strong>{governance.integrity_governance.alignment_status}</strong>
-          </article>
-          <article>
-            <span>Phase Map</span>
-            <strong>{governance.phase_map_state}</strong>
-          </article>
-          <article>
-            <span>Antechamber</span>
-            <strong>{governance.antechamber_state}</strong>
-          </article>
-          <article>
-            <span>DB-held Codex Source Records</span>
-            <strong>{DB_HELD_CODEX_SOURCE_RECORDS.join(", ")}</strong>
-          </article>
         </section>
-      ) : null}
-    </main>
-  )
+      </main>
+    )
+  }
+
+  function renderPathChoiceSurface() {
+    const more = pathChoiceCopy.more
+    const coherence = pathChoiceCopy.coherence
+    const style = pathChoiceBackgroundUrl
+      ? ({ "--path-choice-background": `url(${pathChoiceBackgroundUrl})` } as CSSProperties)
+      : undefined
+
+    return (
+      <main className="measures-registry-runtime" data-surface="landing_path_choice">
+        {renderCorrectionReport()}
+        <section className="registry-path-choice" style={style}>
+          <div className="registry-path-choice-copy">
+            {pathChoiceCopy.eyebrow ? <span>{pathChoiceCopy.eyebrow}</span> : null}
+            {pathChoiceCopy.title ? <h1>{pathChoiceCopy.title}</h1> : null}
+            {pathChoiceCopy.body ? <p>{pathChoiceCopy.body}</p> : null}
+          </div>
+
+          <div className="registry-path-choice-contrast">
+            <article data-choice="more">
+              <span>{asString(more?.label)}</span>
+              <p>{asString(more?.body)}</p>
+            </article>
+            <article data-choice="coherence">
+              <span>{asString(coherence?.label)}</span>
+              <p>{asString(coherence?.body)}</p>
+            </article>
+          </div>
+
+          <div className="registry-path-choice-actions">
+            <button type="button" onClick={() => handlePathAction("explore_system")}>
+              {actionLabel("explore_system")}
+            </button>
+            <button type="button" onClick={() => handlePathAction("reserve_seat")}>
+              {actionLabel("reserve_seat")}
+            </button>
+          </div>
+        </section>
+      </main>
+    )
+  }
+
+  function renderOrientationSurface() {
+    return (
+      <main className="measures-registry-runtime" data-surface="orientation_placeholder">
+        <section id="orientation" className="registry-landing-section">
+          <span>Orientation</span>
+          <h2>Public orientation surface pending</h2>
+          <button type="button" onClick={() => setActiveSurface("path_choice")}>
+            Back to Path Choice
+          </button>
+        </section>
+      </main>
+    )
+  }
+
+  function renderReserveSeatSurface() {
+    return (
+      <main className="measures-registry-runtime" data-surface="reserve_seat">
+        <section id="reserve-seat" className="reserve-seat-panel" aria-label="Reserve your seat">
+          <div className="reserve-seat-copy">
+            <span>June Cohort</span>
+            <h2>{actionLabel("reserve_seat")}</h2>
+          </div>
+
+          <form className="reserve-seat-form" onSubmit={handleReserveSeatSubmit}>
+            <label>
+              Origin
+              <select
+                required
+                value={form.origin_type}
+                onChange={(event) =>
+                  updateForm(
+                    "origin_type",
+                    event.target.value as ReserveSeatForm["origin_type"],
+                  )
+                }
+              >
+                <option value="named_individual">Named individual</option>
+                <option value="institution_in_service">Institution in service</option>
+              </select>
+            </label>
+
+            <label>
+              Full name
+              <input
+                required
+                value={form.full_name}
+                onChange={(event) => updateForm("full_name", event.target.value)}
+                autoComplete="name"
+              />
+            </label>
+
+            <label>
+              Email
+              <input
+                required
+                type="email"
+                value={form.email}
+                onChange={(event) => updateForm("email", event.target.value)}
+                autoComplete="email"
+              />
+            </label>
+
+            <label>
+              Role or title
+              <input
+                value={form.role_or_title}
+                onChange={(event) => updateForm("role_or_title", event.target.value)}
+                autoComplete="organization-title"
+              />
+            </label>
+
+            <label>
+              Institution
+              <input
+                value={form.institution_name}
+                onChange={(event) => updateForm("institution_name", event.target.value)}
+                autoComplete="organization"
+              />
+            </label>
+
+            <label>
+              Interest area
+              <input
+                value={form.interest_area}
+                onChange={(event) => updateForm("interest_area", event.target.value)}
+              />
+            </label>
+
+            <label>
+              Course intent
+              <input
+                value={form.course_intent}
+                onChange={(event) => updateForm("course_intent", event.target.value)}
+              />
+            </label>
+
+            <label className="reserve-seat-message">
+              Message
+              <textarea
+                value={form.message}
+                onChange={(event) => updateForm("message", event.target.value)}
+              />
+            </label>
+
+            <button type="submit" disabled={submitState === "submitting"}>
+              {submitState === "submitting" ? "Submitting..." : actionLabel("reserve_seat")}
+            </button>
+            <button type="button" onClick={() => setActiveSurface("path_choice")}>
+              Back to Path Choice
+            </button>
+
+            {submitState === "success" ? (
+              <p className="reserve-seat-success">Your seat request has been received.</p>
+            ) : null}
+            {submitState === "error" ? (
+              <p className="reserve-seat-error">Submission failed. Please try again.</p>
+            ) : null}
+          </form>
+        </section>
+      </main>
+    )
+  }
+
+  if (activeSurface === "path_choice") return renderPathChoiceSurface()
+  if (activeSurface === "orientation") return renderOrientationSurface()
+  if (activeSurface === "reserve_seat") return renderReserveSeatSurface()
+
+  return renderIntroSurface()
 }

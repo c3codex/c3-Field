@@ -14,50 +14,53 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 const landingRows = [
   {
-    key: "landing_video_hero",
-    title: "Integrity Governance for AI Systems",
-    eyebrow: "Measures Registry",
-    body: "A public orientation surface for agents, institutions, and systems entering governed acceleration.",
-    items: ["Reserve Your Seat", "Explore System"],
-  },
-  {
-    key: "landing_problem",
-    title: "AI acceleration is outpacing institutional coherence.",
-    eyebrow: "Problem",
-    body: "Measures Registry creates a governance surface where system behavior, human accountability, and operational trust can be reviewed before scale hardens drift.",
-    items: [
-      "Unverified automation compounds risk.",
-      "Institutional AI needs traceable decision surfaces.",
-      "Governance must be operational, not decorative.",
-    ],
+    key: "landing_intro_video",
+    title: "Measures Registry Intro",
+    sequence: 1010,
+    metadata: {
+      renderer: "measures_registry_intro_video",
+      playback: {
+        mode: "fullscreen_intro",
+        media_role: "hero_video",
+        muted_autoplay: true,
+        next_encounter_key: "landing_path_choice",
+        skip_enabled: true,
+      },
+    },
   },
   {
     key: "landing_path_choice",
-    title: "Choose a path into accountable implementation.",
-    eyebrow: "Path Choice",
-    body: "The registry distinguishes orientation, cohort readiness, and contribution intake so each actor enters through the correct governance route.",
-    items: ["Individuals", "Institutions", "Operators"],
-  },
-  {
-    key: "landing_courses",
-    title: "Courses seat practice before deployment pressure.",
-    eyebrow: "Courses",
-    body: "Training surfaces convert abstract AI governance into repeatable review habits, source discipline, and implementation constraints.",
-    items: ["Integrity governance", "AI operating protocols", "Source-backed implementation"],
-  },
-  {
-    key: "landing_principle",
-    title: "Measure precedes acceleration.",
-    eyebrow: "Principle",
-    body: "A system should not move faster than its ability to account for what it is doing, who it affects, and what it changes.",
-    items: ["Trace before trust", "Constraint before scale", "Governance before automation"],
-  },
-  {
-    key: "landing_final_cta",
-    title: "Enter the June cohort with the system in view.",
-    eyebrow: "Final Call",
-    body: "Reserve a seat to begin orientation through Measures Registry and its integrity governance pathway.",
-    items: ["Reserve Your Seat"],
+    title: "Choose Your Path",
+    sequence: 1020,
+    metadata: {
+      renderer: "measures_registry_path_choice",
+      eyebrow: "Measures Registry",
+      title: "Choose Your Path",
+      body: "More acceleration or coherent alignment. Choose the route you are entering through.",
+      background_media_role: "path_choice_background",
+      more: {
+        label: "MORE",
+        body: "More nodes. More connections. Still no resolution.",
+      },
+      coherence: {
+        label: "COHERENCE",
+        body: "Fewer elements. Precise alignment. Complete resolution.",
+      },
+      actions: [
+        {
+          action_key: "explore_system",
+          label: "Explore System",
+          behavior: "route_surface",
+          target_encounter_key: "orientation_placeholder",
+        },
+        {
+          action_key: "reserve_seat",
+          label: "Reserve Your Seat",
+          behavior: "open_src_intake",
+          rpc: "submit_src_intake_request",
+        },
+      ],
+    },
   },
 ]
 
@@ -74,13 +77,13 @@ async function run() {
     "DB connection failed",
   )
 
-  const registryPayload = landingRows.map((row, index) => ({
+  const registryPayload = landingRows.map((row) => ({
     registry_key: row.key,
     display_title: row.title,
     registry_family: "spine",
     encounter_type: "view",
     material_family: "lapis",
-    sequence_order: 1010 + index * 10,
+    sequence_order: row.sequence,
     release_state: "released",
     access_state: "callable",
     is_active: true,
@@ -112,24 +115,18 @@ async function run() {
     registryRows.map((row) => [row.registry_key, row.id]),
   )
 
-  const encounterPayload = landingRows.map((row, index) => ({
+  const encounterPayload = landingRows.map((row) => ({
     registry_id: registryIdByKey.get(row.key),
     encounter_key: row.key,
     display_title: row.title,
     encounter_type: "view",
     material_family: "lapis",
     surface_type: "threshold",
-    sequence_order: 1010 + index * 10,
+    sequence_order: row.sequence,
     pause_allowed: false,
-    is_entry_surface: row.key === "landing_video_hero",
+    is_entry_surface: row.key === "landing_intro_video",
     is_active: true,
-    metadata: {
-      renderer: "measures_registry_landing",
-      eyebrow: row.eyebrow,
-      title: row.title,
-      body: row.body,
-      items: row.items,
-    },
+    metadata: row.metadata,
   }))
 
   await assertOk(
@@ -138,6 +135,65 @@ async function run() {
       .upsert(encounterPayload, { onConflict: "registry_id" }),
     "Landing encounter upsert failed",
   )
+
+  const mediaPayload = [
+    {
+      registry_key: "landing_intro_video",
+      encounter_key: "landing_intro_video",
+      campaign_key: "agents_of_chaos_integrity_governance",
+      media_role: "hero_video",
+      storage_bucket: "measures-registry-public",
+      storage_path: "measures_registry/video/integrity_governance_intro.mp4",
+      mime_type: "video/mp4",
+      sort_order: 1,
+      is_active: true,
+      metadata: {
+        surface: "landing_intro_video",
+        usage: "fullscreen_intro",
+      },
+    },
+    {
+      registry_key: "landing_path_choice",
+      encounter_key: "landing_path_choice",
+      campaign_key: "agents_of_chaos_integrity_governance",
+      media_role: "path_choice_background",
+      storage_bucket: "measures-registry-public",
+      storage_path: "measures_registry/images/more_vs_coherence_path.webp",
+      mime_type: "image/webp",
+      sort_order: 2,
+      is_active: true,
+      metadata: {
+        surface: "landing_path_choice",
+        usage: "path_choice_background",
+      },
+    },
+  ]
+
+  for (const mediaRow of mediaPayload) {
+    const existingRows = await assertOk(
+      await supabase
+        .from("measures_media_map")
+        .select("id")
+        .eq("campaign_key", mediaRow.campaign_key)
+        .eq("media_role", mediaRow.media_role),
+      `Landing media lookup failed: ${mediaRow.media_role}`,
+    )
+
+    if (existingRows.length > 0) {
+      await assertOk(
+        await supabase
+          .from("measures_media_map")
+          .update(mediaRow)
+          .eq("id", existingRows[0].id),
+        `Landing media update failed: ${mediaRow.media_role}`,
+      )
+    } else {
+      await assertOk(
+        await supabase.from("measures_media_map").insert(mediaRow),
+        `Landing media insert failed: ${mediaRow.media_role}`,
+      )
+    }
+  }
 
   const seated = await assertOk(
     await supabase
@@ -150,14 +206,14 @@ async function run() {
     "Landing encounter verification failed",
   )
 
-  const heroVideo = await assertOk(
+  const media = await assertOk(
     await supabase
       .from("measures_media_map")
       .select("media_role, storage_bucket, storage_path, is_active")
       .eq("campaign_key", "agents_of_chaos_integrity_governance")
-      .eq("media_role", "hero_video")
+      .in("media_role", ["hero_video", "path_choice_background"])
       .eq("is_active", true),
-    "Hero video verification failed",
+    "Landing media verification failed",
   )
 
   console.log(
@@ -165,10 +221,14 @@ async function run() {
       {
         dbConnection: "active",
         landingEncounterCount: seated.length,
-        heroVideoFromMeasuresMediaMap:
-          heroVideo.length > 0 &&
-          Boolean(heroVideo[0].storage_bucket) &&
-          Boolean(heroVideo[0].storage_path),
+        introVideoFromMeasuresMediaMap: media.some(
+          (row) => row.media_role === "hero_video" && row.storage_path,
+        ),
+        pathChoiceBackgroundFromMeasuresMediaMap: media.some(
+          (row) =>
+            row.media_role === "path_choice_background" &&
+            row.storage_path === "measures_registry/images/more_vs_coherence_path.webp",
+        ),
       },
       null,
       2,
