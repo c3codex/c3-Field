@@ -142,8 +142,8 @@ async function run() {
       encounter_key: "landing_intro_video",
       campaign_key: "agents_of_chaos_integrity_governance",
       media_role: "hero_video",
-      storage_bucket: "measures-registry-public",
-      storage_path: "measures_registry/video/integrity_governance_intro.mp4",
+      storage_bucket: "measures-registry",
+      storage_path: "integrity_governance_intro.mp4",
       mime_type: "video/mp4",
       sort_order: 1,
       is_active: true,
@@ -157,8 +157,8 @@ async function run() {
       encounter_key: "landing_path_choice",
       campaign_key: "agents_of_chaos_integrity_governance",
       media_role: "path_choice_background",
-      storage_bucket: "measures-registry-public",
-      storage_path: "measures_registry/images/more_vs_coherence_path.webp",
+      storage_bucket: "measures-registry",
+      storage_path: "more_vs_coherence_path.webp",
       mime_type: "image/webp",
       sort_order: 2,
       is_active: true,
@@ -227,7 +227,7 @@ async function run() {
         pathChoiceBackgroundFromMeasuresMediaMap: media.some(
           (row) =>
             row.media_role === "path_choice_background" &&
-            row.storage_path === "measures_registry/images/more_vs_coherence_path.webp",
+            row.storage_path === "more_vs_coherence_path.webp",
         ),
       },
       null,
