@@ -107,6 +107,7 @@ type DesignTokenRow = {
 }
 
 type NotificationReviewRow = {
+  capture_id: string
   email: string
   offering_key: string | null
   source_encounter_key: string | null
@@ -205,6 +206,7 @@ export default function MeasuresRegistryRuntime() {
   const [reviewRows, setReviewRows] = useState<NotificationReviewRow[]>([])
   const [reviewError, setReviewError] = useState<string | null>(null)
   const [reviewTransitioning, setReviewTransitioning] = useState<string | null>(null)
+  const [reviewDispatching, setReviewDispatching] = useState<string | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
 
   function historyUrl(surface: SurfaceState) {
@@ -370,7 +372,7 @@ export default function MeasuresRegistryRuntime() {
 
     const { data, error } = await supabase
       .from("measures_seat_hold_notification_review_v1")
-      .select("email, offering_key, source_encounter_key, notification_state, created_at")
+      .select("capture_id, email, offering_key, source_encounter_key, notification_state, created_at")
       .order("created_at", { ascending: false })
 
     if (error) {
@@ -395,7 +397,7 @@ export default function MeasuresRegistryRuntime() {
   }
 
   async function transitionNotification(row: NotificationReviewRow, nextState: string) {
-    const key = `${row.email}-${row.source_encounter_key}-${row.created_at}`
+    const key = row.capture_id
     setReviewTransitioning(key)
     setReviewError(null)
 
@@ -410,6 +412,24 @@ export default function MeasuresRegistryRuntime() {
 
     if (error) {
       setReviewError("Notification transition was blocked.")
+      return
+    }
+
+    await loadNotificationReviewRows()
+  }
+
+  async function dispatchNotification(row: NotificationReviewRow) {
+    setReviewDispatching(row.capture_id)
+    setReviewError(null)
+
+    const { error } = await supabase.rpc("dispatch_measures_seat_hold_notification", {
+      capture_id: row.capture_id,
+    })
+
+    setReviewDispatching(null)
+
+    if (error) {
+      setReviewError("Notification dispatch was blocked.")
       return
     }
 
@@ -1008,7 +1028,7 @@ export default function MeasuresRegistryRuntime() {
 
             {reviewRows.map((row) => {
               const options = transitionOptions(row.notification_state)
-              const key = `${row.email}-${row.source_encounter_key}-${row.created_at}`
+              const key = row.capture_id
 
               return (
                 <div className="registry-review-row" role="row" key={key}>
@@ -1018,12 +1038,21 @@ export default function MeasuresRegistryRuntime() {
                   <span role="cell">{row.notification_state}</span>
                   <span role="cell">{new Date(row.created_at).toLocaleString()}</span>
                   <span role="cell" className="registry-review-actions">
+                    {row.notification_state === "queued" ? (
+                      <button
+                        type="button"
+                        disabled={reviewDispatching === key}
+                        onClick={() => dispatchNotification(row)}
+                      >
+                        Dispatch
+                      </button>
+                    ) : null}
                     {options.length > 0 ? (
                       options.map((option) => (
                         <button
                           key={option}
                           type="button"
-                          disabled={reviewTransitioning === key}
+                          disabled={reviewTransitioning === key || reviewDispatching === key}
                           onClick={() => transitionNotification(row, option)}
                         >
                           {option}

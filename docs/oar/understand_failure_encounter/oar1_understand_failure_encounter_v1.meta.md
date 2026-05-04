@@ -1,4 +1,4 @@
----
+confirmed ---
 document_type: oar1
 title: OAR1 Understand Failure Encounter
 version: v1
