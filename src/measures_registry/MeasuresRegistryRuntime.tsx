@@ -207,6 +207,9 @@ export default function MeasuresRegistryRuntime() {
   const [reviewError, setReviewError] = useState<string | null>(null)
   const [reviewTransitioning, setReviewTransitioning] = useState<string | null>(null)
   const [reviewDispatching, setReviewDispatching] = useState<string | null>(null)
+  const [operatorDispatchKey, setOperatorDispatchKey] = useState(() =>
+    window.sessionStorage.getItem("measures_registry_operator_dispatch_key") ?? "",
+  )
   const navigationSourceRef = useRef<"app" | "history">("app")
 
   function historyUrl(surface: SurfaceState) {
@@ -419,16 +422,33 @@ export default function MeasuresRegistryRuntime() {
   }
 
   async function dispatchNotification(row: NotificationReviewRow) {
+    if (!operatorDispatchKey.trim()) {
+      setReviewError("Operator dispatch key is required.")
+      return
+    }
+
+    window.sessionStorage.setItem(
+      "measures_registry_operator_dispatch_key",
+      operatorDispatchKey.trim(),
+    )
+
     setReviewDispatching(row.capture_id)
     setReviewError(null)
 
-    const { error } = await supabase.rpc("dispatch_measures_seat_hold_notification", {
-      capture_id: row.capture_id,
+    const response = await fetch("/api/dispatch-seat-hold-notification", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-operator-dispatch-key": operatorDispatchKey.trim(),
+      },
+      body: JSON.stringify({
+        capture_id: row.capture_id,
+      }),
     })
 
     setReviewDispatching(null)
 
-    if (error) {
+    if (!response.ok) {
       setReviewError("Notification dispatch was blocked.")
       return
     }
@@ -1011,8 +1031,18 @@ export default function MeasuresRegistryRuntime() {
 
           <div className="registry-review-note">
             <span>Operator only</span>
-            <p>No email is sent from this surface. State changes only update DB readiness.</p>
+            <p>Dispatch sends one queued notification through the server-side Resend provider.</p>
           </div>
+
+          <label className="registry-review-key">
+            <span>Operator dispatch key</span>
+            <input
+              type="password"
+              value={operatorDispatchKey}
+              onChange={(event) => setOperatorDispatchKey(event.target.value)}
+              autoComplete="off"
+            />
+          </label>
 
           {reviewError ? <p className="reserve-seat-error">{reviewError}</p> : null}
 

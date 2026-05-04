@@ -583,6 +583,28 @@ body,
   color: var(--registry-text-secondary);
 }
 
+.registry-review-key {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 28rem;
+  color: var(--registry-text-muted);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.registry-review-key input {
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 10px;
+  background: rgba(246, 248, 251, 0.08);
+  color: var(--registry-text-primary);
+  padding: 0.72rem 0.85rem;
+  font: inherit;
+  font-size: var(--registry-body-active);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .registry-review-table {
   overflow-x: auto;
   border: 1px solid var(--registry-border-subtle);
