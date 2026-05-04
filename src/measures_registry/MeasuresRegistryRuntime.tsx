@@ -82,6 +82,12 @@ function surfaceFromQuery(value: string | null): SurfaceState {
   const match = Object.entries(SURFACE_QUERY).find(([, queryValue]) => queryValue === value)
   return (match?.[0] as SurfaceState | undefined) ?? "intro"
 }
+
+function surfaceFromEncounterKey(value: string | null): SurfaceState | null {
+  const match = Object.entries(SURFACE_QUERY).find(([, queryValue]) => queryValue === value)
+  return (match?.[0] as SurfaceState | undefined) ?? null
+}
+
 type RequiredSectionKey = (typeof REQUIRED_SECTION_KEYS)[number]
 type RequiredMediaRole = (typeof REQUIRED_MEDIA_ROLES)[number]
 
@@ -950,33 +956,28 @@ export default function MeasuresRegistryRuntime() {
       return
     }
 
-    if (copy.capture?.target_table !== "measures_seat_hold_capture") {
+    if (!copy.offeringKey) {
       setHoldError((current) => ({
         ...current,
-        [encounterKey]: "Seat hold capture is not seated correctly.",
+        [encounterKey]: "Seat hold offering is not seated correctly.",
       }))
       return
     }
 
     setHoldSubmitting(true)
 
-    const { error } = await supabase.from("measures_seat_hold_capture").insert({
-      registry_key: "measures_registry",
-      encounter_key: encounterKey,
-      source_encounter_key: encounterKey,
-      offering_key: copy.offeringKey,
-      notification_state: "captured",
-      seat_lifecycle_state: "held",
-      email: normalizedEmail,
-      metadata: {
-        source: "measures_registry_hold_surface",
-        no_automatic_email: true,
-      },
+    const response = await fetch("/api/create-seat-hold-capture", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        email: normalizedEmail,
+        offering_key: copy.offeringKey,
+      }),
     })
 
     setHoldSubmitting(false)
 
-    if (error) {
+    if (!response.ok) {
       setHoldError((current) => ({
         ...current,
         [encounterKey]: "Seat hold could not be recorded.",
@@ -984,11 +985,20 @@ export default function MeasuresRegistryRuntime() {
       return
     }
 
+    const result = (await response.json().catch(() => ({}))) as {
+      hold_target_key?: string
+    }
+    const targetSurface = surfaceFromEncounterKey(result.hold_target_key ?? null)
+
     setHoldEmail("")
     setHoldStatus((current) => ({
       ...current,
       [encounterKey]: copy.successMessage ?? "Your seat hold has been recorded.",
     }))
+
+    if (targetSurface) {
+      navigateSurface(targetSurface)
+    }
   }
 
   function renderHoldSurface(
