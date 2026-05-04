@@ -9,6 +9,7 @@ const REQUIRED_SECTION_KEYS = [
   "landing_intro_video",
   "landing_path_choice",
   "understand_failure",
+  "reserve_seat",
 ] as const
 const REQUIRED_MEDIA_ROLES = [
   "hero_video",
@@ -143,6 +144,9 @@ function cssTokenName(tokenKey: string, mediaQuery: string | null) {
 function sectionCopy(row?: LandingSectionRow) {
   const metadata = asRecord(row?.metadata) ?? {}
   return {
+    functionLayer: asString(metadata.function_layer),
+    stateExpression: asString(metadata.state_expression),
+    renderer: asString(metadata.renderer),
     header: asRecord(metadata.header),
     eyebrow: asString(metadata.eyebrow),
     title: asString(metadata.title) ?? row?.display_title ?? null,
@@ -313,6 +317,7 @@ export default function MeasuresRegistryRuntime() {
   const introCopy = sectionCopy(sectionMap.get("landing_intro_video"))
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
+  const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
   const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
@@ -442,6 +447,19 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function reportMissingClassification(surface: string, copy: ReturnType<typeof sectionCopy>) {
+    if (copy.functionLayer && copy.stateExpression && copy.renderer) return false
+
+    console.error("Measures Registry classification missing", {
+      surface,
+      function_layer: copy.functionLayer,
+      state_expression: copy.stateExpression,
+      renderer: copy.renderer,
+    })
+
+    return true
+  }
+
   function renderHeader(headerOverride?: Record<string, unknown> | null, actionsOverride?: Record<string, unknown>[]) {
     const header = headerOverride ?? pathChoiceCopy.header
     const headerActions = asActionArray(header?.actions)
@@ -472,6 +490,8 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function renderIntroSurface() {
+    if (reportMissingClassification("landing_intro_video", introCopy)) return null
+
     return (
       <main
         className="measures-registry-runtime"
@@ -508,6 +528,8 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function renderPathChoiceSurface() {
+    if (reportMissingClassification("landing_path_choice", pathChoiceCopy)) return null
+
     const plaques =
       pathChoiceCopy.plaques.length > 0
         ? pathChoiceCopy.plaques
@@ -558,6 +580,8 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function renderUnderstandFailureSurface() {
+    if (reportMissingClassification("understand_failure", understandFailureCopy)) return null
+
     const actions = understandFailureCopy.actions
 
     return (
@@ -625,6 +649,8 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function renderReserveSeatSurface() {
+    if (reportMissingClassification("reserve_seat", reserveSeatCopy)) return null
+
     return (
       <main
         className="measures-registry-runtime"

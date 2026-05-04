@@ -20,7 +20,9 @@ const landingRows = [
     title: "AI isn't broken. Systems are.",
     sequence: 1010,
     metadata: {
-      renderer: "measures_registry_intro_video",
+      function_layer: "entry",
+      state_expression: "public_intro_video",
+      renderer: "measures_registry_intro",
       title: "AI isn't broken. Systems are.",
       subtitle: "Most AI failures aren't intelligence problems.\nThey're system failures.",
       completion_target: "landing_path_choice",
@@ -38,6 +40,8 @@ const landingRows = [
     title: "AI isn't broken. Systems are.",
     sequence: 1020,
     metadata: {
+      function_layer: "choice",
+      state_expression: "public_binary_path_choice",
       renderer: "measures_registry_path_choice",
       header: {
         title: "Measures Registry",
@@ -110,6 +114,8 @@ const landingRows = [
     title: "UNDERSTAND FAILURE",
     sequence: 1030,
     metadata: {
+      function_layer: "encounter",
+      state_expression: "public_system_encounter",
       renderer: "generic_media_encounter",
       header: {
         title: "Measures Registry",
@@ -153,6 +159,16 @@ const landingRows = [
           target_encounter_key: "landing_path_choice",
         },
       ],
+    },
+  },
+  {
+    key: "reserve_seat",
+    title: "Reserve Your Seat",
+    sequence: 1040,
+    metadata: {
+      function_layer: "intake",
+      state_expression: "src_intake_entry",
+      renderer: "src_intake_surface",
     },
   },
 ]
