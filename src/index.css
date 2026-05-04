@@ -552,6 +552,92 @@ body,
   outline: none;
 }
 
+.registry-review-surface {
+  min-height: 100svh;
+  width: min(1200px, calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: var(--registry-section-spacing-active) 0 var(--registry-page-padding-active);
+  display: grid;
+  gap: 1.4rem;
+}
+
+.registry-review-note {
+  display: grid;
+  gap: 0.3rem;
+  max-width: var(--registry-text-max-width);
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 14px;
+  background: var(--registry-panel-obsidian);
+  padding: 1rem;
+}
+
+.registry-review-note span {
+  color: var(--registry-accent-warm);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.registry-review-note p {
+  margin: 0;
+  color: var(--registry-text-secondary);
+}
+
+.registry-review-table {
+  overflow-x: auto;
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 18px;
+  background: var(--registry-panel-obsidian);
+}
+
+.registry-review-row {
+  min-width: 980px;
+  display: grid;
+  grid-template-columns: 1.6fr 0.8fr 1fr 0.7fr 1fr 1.2fr;
+  gap: 0.75rem;
+  align-items: center;
+  border-top: 1px solid var(--registry-border-subtle);
+  padding: 0.9rem 1rem;
+  color: var(--registry-text-secondary);
+}
+
+.registry-review-row:first-child {
+  border-top: 0;
+}
+
+.registry-review-head {
+  color: var(--registry-text-muted);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.registry-review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.registry-review-actions button {
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 999px;
+  background: rgba(246, 248, 251, 0.08);
+  color: var(--registry-text-primary);
+  padding: 0.42rem 0.68rem;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.registry-review-actions button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.registry-review-actions small {
+  color: var(--registry-text-muted);
+}
+
 .registry-path-choice-actions button,
 .registry-path-choice-contrast article button,
 .registry-landing-section button,
@@ -866,7 +952,13 @@ body,
 }
 
 .reserve-seat-success {
+  display: grid;
+  gap: 0.25rem;
   color: #d7ffe8;
+}
+
+.reserve-seat-success span {
+  color: var(--registry-text-secondary);
 }
 
 .reserve-seat-error {

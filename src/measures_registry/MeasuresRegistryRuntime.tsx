@@ -15,6 +15,8 @@ const REQUIRED_SECTION_KEYS = [
   "foundation_seat_hold",
   "systems_seat_hold",
 ] as const
+const OPERATOR_SECTION_KEYS = ["seat_hold_notification_review"] as const
+const QUERY_SECTION_KEYS = [...REQUIRED_SECTION_KEYS, ...OPERATOR_SECTION_KEYS] as const
 const REQUIRED_MEDIA_ROLES = [
   "hero_video",
   "hero_poster",
@@ -61,6 +63,7 @@ type SurfaceState =
   | "systems_offering"
   | "foundation_seat_hold"
   | "systems_seat_hold"
+  | "seat_hold_notification_review"
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
   intro: "landing_intro_video",
@@ -72,6 +75,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   systems_offering: "systems_offering",
   foundation_seat_hold: "foundation_seat_hold",
   systems_seat_hold: "systems_seat_hold",
+  seat_hold_notification_review: "seat_hold_notification_review",
 }
 
 function surfaceFromQuery(value: string | null): SurfaceState {
@@ -100,6 +104,14 @@ type DesignTokenRow = {
   token_value: string
   media_query: string | null
   is_active: boolean | null
+}
+
+type NotificationReviewRow = {
+  email: string
+  offering_key: string | null
+  source_encounter_key: string | null
+  notification_state: string | null
+  created_at: string
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -158,6 +170,12 @@ function sectionCopy(row?: LandingSectionRow) {
     fields: asRecordArray(metadata.fields),
     ctaPrimary: asString(metadata.cta_primary),
     ctaSecondary: asString(metadata.cta_secondary),
+    successMessage: asString(metadata.success_message),
+    successSubtext: asString(metadata.success_subtext),
+    offeringKey: asString(metadata.offering_key),
+    dataSource: asString(metadata.data_source),
+    allowedTransitions: asRecord(metadata.allowed_transitions),
+    constraints: asRecord(metadata.constraints),
     capture: asRecord(metadata.capture),
     mediaRenderMode: asString(metadata.media_render_mode),
     videoMode: asString(metadata.video_mode),
@@ -184,6 +202,9 @@ export default function MeasuresRegistryRuntime() {
   const [holdSubmitting, setHoldSubmitting] = useState(false)
   const [holdStatus, setHoldStatus] = useState<Record<string, string | null>>({})
   const [holdError, setHoldError] = useState<Record<string, string | null>>({})
+  const [reviewRows, setReviewRows] = useState<NotificationReviewRow[]>([])
+  const [reviewError, setReviewError] = useState<string | null>(null)
+  const [reviewTransitioning, setReviewTransitioning] = useState<string | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
 
   function historyUrl(surface: SurfaceState) {
@@ -249,7 +270,7 @@ export default function MeasuresRegistryRuntime() {
         supabase
           .from("measures_encounter_def")
           .select("encounter_key, display_title, metadata")
-          .in("encounter_key", [...REQUIRED_SECTION_KEYS])
+          .in("encounter_key", [...QUERY_SECTION_KEYS])
           .order("sequence_order", { ascending: true }),
         supabase
           .from("measures_media_map")
@@ -325,6 +346,7 @@ export default function MeasuresRegistryRuntime() {
   const systemsOfferingCopy = sectionCopy(sectionMap.get("systems_offering"))
   const foundationSeatHoldCopy = sectionCopy(sectionMap.get("foundation_seat_hold"))
   const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
+  const notificationReviewCopy = sectionCopy(sectionMap.get("seat_hold_notification_review"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
   const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
@@ -341,6 +363,57 @@ export default function MeasuresRegistryRuntime() {
   function actionByKey(actionKey: string | null, actions = pathChoiceCopy.actions) {
     if (!actionKey) return null
     return actions.find((item) => asString(item.action_key) === actionKey) ?? null
+  }
+
+  const loadNotificationReviewRows = async () => {
+    setReviewError(null)
+
+    const { data, error } = await supabase
+      .from("measures_seat_hold_notification_review_v1")
+      .select("email, offering_key, source_encounter_key, notification_state, created_at")
+      .order("created_at", { ascending: false })
+
+    if (error) {
+      setReviewRows([])
+      setReviewError("Operator review records could not be read.")
+      return
+    }
+
+    setReviewRows((data ?? []) as NotificationReviewRow[])
+  }
+
+  useEffect(() => {
+    if (activeSurface !== "seat_hold_notification_review") return
+    void loadNotificationReviewRows()
+  }, [activeSurface])
+
+  function transitionOptions(state: string | null) {
+    const options = notificationReviewCopy.allowedTransitions?.[state ?? ""]
+    return Array.isArray(options)
+      ? options.filter((option): option is string => typeof option === "string")
+      : []
+  }
+
+  async function transitionNotification(row: NotificationReviewRow, nextState: string) {
+    const key = `${row.email}-${row.source_encounter_key}-${row.created_at}`
+    setReviewTransitioning(key)
+    setReviewError(null)
+
+    const { error } = await supabase.rpc("update_measures_seat_hold_notification_state", {
+      p_email: row.email,
+      p_source_encounter_key: row.source_encounter_key,
+      p_created_at: row.created_at,
+      p_next_state: nextState,
+    })
+
+    setReviewTransitioning(null)
+
+    if (error) {
+      setReviewError("Notification transition was blocked.")
+      return
+    }
+
+    await loadNotificationReviewRows()
   }
 
   function handleAction(actionKey: string | null, actions = pathChoiceCopy.actions) {
@@ -799,9 +872,13 @@ export default function MeasuresRegistryRuntime() {
     const { error } = await supabase.from("measures_seat_hold_capture").insert({
       registry_key: "measures_registry",
       encounter_key: encounterKey,
+      source_encounter_key: encounterKey,
+      offering_key: copy.offeringKey,
+      notification_state: "captured",
       email: normalizedEmail,
       metadata: {
         source: "measures_registry_hold_surface",
+        no_automatic_email: true,
       },
     })
 
@@ -818,7 +895,7 @@ export default function MeasuresRegistryRuntime() {
     setHoldEmail("")
     setHoldStatus((current) => ({
       ...current,
-      [encounterKey]: "Your seat hold has been recorded.",
+      [encounterKey]: copy.successMessage ?? "Your seat hold has been recorded.",
     }))
   }
 
@@ -882,12 +959,84 @@ export default function MeasuresRegistryRuntime() {
             </div>
 
             {holdStatus[encounterKey] ? (
-              <p className="reserve-seat-success">{holdStatus[encounterKey]}</p>
+              <p className="reserve-seat-success">
+                {holdStatus[encounterKey]}
+                {copy.successSubtext ? <span>{copy.successSubtext}</span> : null}
+              </p>
             ) : null}
             {holdError[encounterKey] ? (
               <p className="reserve-seat-error">{holdError[encounterKey]}</p>
             ) : null}
           </form>
+        </section>
+      </main>
+    )
+  }
+
+  function renderNotificationReviewSurface() {
+    if (reportMissingClassification("seat_hold_notification_review", notificationReviewCopy)) return null
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="seat_hold_notification_review"
+        style={registryTokenStyle}
+      >
+        <section className="registry-review-surface" aria-label={notificationReviewCopy.entryLabel ?? undefined}>
+          <div className="registry-encounter-entry">
+            {notificationReviewCopy.entryLabel ? <span>{notificationReviewCopy.entryLabel}</span> : null}
+            {notificationReviewCopy.entryHeadline ? <h1>{notificationReviewCopy.entryHeadline}</h1> : null}
+            {notificationReviewCopy.entrySub ? <p>{notificationReviewCopy.entrySub}</p> : null}
+          </div>
+
+          <div className="registry-review-note">
+            <span>Operator only</span>
+            <p>No email is sent from this surface. State changes only update DB readiness.</p>
+          </div>
+
+          {reviewError ? <p className="reserve-seat-error">{reviewError}</p> : null}
+
+          <div className="registry-review-table" role="table" aria-label="Seat hold notification review">
+            <div className="registry-review-row registry-review-head" role="row">
+              <span role="columnheader">Email</span>
+              <span role="columnheader">Offering</span>
+              <span role="columnheader">Source</span>
+              <span role="columnheader">State</span>
+              <span role="columnheader">Created</span>
+              <span role="columnheader">Transitions</span>
+            </div>
+
+            {reviewRows.map((row) => {
+              const options = transitionOptions(row.notification_state)
+              const key = `${row.email}-${row.source_encounter_key}-${row.created_at}`
+
+              return (
+                <div className="registry-review-row" role="row" key={key}>
+                  <span role="cell">{row.email}</span>
+                  <span role="cell">{row.offering_key}</span>
+                  <span role="cell">{row.source_encounter_key}</span>
+                  <span role="cell">{row.notification_state}</span>
+                  <span role="cell">{new Date(row.created_at).toLocaleString()}</span>
+                  <span role="cell" className="registry-review-actions">
+                    {options.length > 0 ? (
+                      options.map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          disabled={reviewTransitioning === key}
+                          onClick={() => transitionNotification(row, option)}
+                        >
+                          {option}
+                        </button>
+                      ))
+                    ) : (
+                      <small>No transition</small>
+                    )}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
         </section>
       </main>
     )
@@ -908,6 +1057,9 @@ export default function MeasuresRegistryRuntime() {
   }
   if (activeSurface === "systems_seat_hold") {
     return renderHoldSurface("systems_seat_hold", systemsSeatHoldCopy)
+  }
+  if (activeSurface === "seat_hold_notification_review") {
+    return renderNotificationReviewSurface()
   }
 
   return renderIntroSurface()
