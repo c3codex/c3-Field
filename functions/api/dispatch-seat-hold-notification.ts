@@ -78,8 +78,9 @@ async function supabaseFetch<T>(
     throw new Error(detail || `Supabase request failed: ${response.status}`)
   }
 
-  if (response.status === 204) return undefined as T
-  return response.json() as Promise<T>
+  const text = await response.text()
+  if (!text) return undefined as T
+  return JSON.parse(text) as T
 }
 
 async function insertDispatchLog(
@@ -106,62 +107,155 @@ async function updateCapture(
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
-  if (!env.RESEND_API_KEY) {
-    return jsonResponse({ error: "RESEND_API_KEY is not configured" }, 503)
-  }
+  try {
+    if (!env.RESEND_API_KEY) {
+      return jsonResponse({ error: "RESEND_API_KEY is not configured" }, 503)
+    }
 
-  if (!env.OPERATOR_DISPATCH_KEY) {
-    return jsonResponse({ error: "OPERATOR_DISPATCH_KEY is not configured" }, 503)
-  }
+    if (!env.OPERATOR_DISPATCH_KEY) {
+      return jsonResponse({ error: "OPERATOR_DISPATCH_KEY is not configured" }, 503)
+    }
 
-  const operatorKey = request.headers.get("x-operator-dispatch-key")
-  if (operatorKey !== env.OPERATOR_DISPATCH_KEY) {
-    return jsonResponse({ error: "dispatch access denied" }, 403)
-  }
+    const operatorKey = request.headers.get("x-operator-dispatch-key")
+    if (operatorKey !== env.OPERATOR_DISPATCH_KEY) {
+      return jsonResponse({ error: "dispatch access denied" }, 403)
+    }
 
-  const { capture_id: captureId } = (await request.json().catch(() => ({}))) as {
-    capture_id?: string
-  }
+    const { capture_id: captureId } = (await request.json().catch(() => ({}))) as {
+      capture_id?: string
+    }
 
-  if (!captureId) {
-    return jsonResponse({ error: "capture_id is required" }, 400)
-  }
+    if (!captureId) {
+      return jsonResponse({ error: "capture_id is required" }, 400)
+    }
 
-  const [capture] = await supabaseFetch<CaptureRow[]>(
-    env,
-    `measures_seat_hold_capture?id=eq.${captureId}&select=id,email,offering_key,source_encounter_key,notification_state,metadata&limit=1`,
-  )
+    const [capture] = await supabaseFetch<CaptureRow[]>(
+      env,
+      `measures_seat_hold_capture?id=eq.${captureId}&select=id,email,offering_key,source_encounter_key,notification_state,metadata&limit=1`,
+    )
 
-  if (!capture) {
-    return jsonResponse({ error: "seat hold capture row not found" }, 404)
-  }
+    if (!capture) {
+      return jsonResponse({ error: "seat hold capture row not found" }, 404)
+    }
 
-  if (capture.notification_state !== "queued") {
+    if (capture.notification_state !== "queued") {
+      await insertDispatchLog(env, {
+        capture_id: capture.id,
+        offering_key: capture.offering_key,
+        source_encounter_key: capture.source_encounter_key,
+        recipient_email: capture.email,
+        dispatch_state: "failed",
+        provider: "resend_error",
+        error_message: "capture is not queued",
+        metadata: { source_oar2: "seat_hold_notification_provider_integration_v1" },
+      })
+
+      return jsonResponse({ error: "capture is not queued" }, 409)
+    }
+
+    const [template] = await supabaseFetch<TemplateRow[]>(
+      env,
+      `measures_seat_hold_notification_template?offering_key=eq.${capture.offering_key}&is_active=eq.true&select=subject,body&limit=1`,
+    )
+
+    if (!template) {
+      await updateCapture(env, capture.id, {
+        notification_state: "failed",
+        metadata: {
+          ...(capture.metadata ?? {}),
+          dispatch_error: "active template missing",
+          source_oar2: "seat_hold_notification_provider_integration_v1",
+        },
+      })
+
+      await insertDispatchLog(env, {
+        capture_id: capture.id,
+        offering_key: capture.offering_key,
+        source_encounter_key: capture.source_encounter_key,
+        recipient_email: capture.email,
+        dispatch_state: "failed",
+        provider: "resend_error",
+        error_message: "active template missing",
+        metadata: { source_oar2: "seat_hold_notification_provider_integration_v1" },
+      })
+
+      return jsonResponse({ error: "active template missing" }, 409)
+    }
+
     await insertDispatchLog(env, {
       capture_id: capture.id,
       offering_key: capture.offering_key,
       source_encounter_key: capture.source_encounter_key,
       recipient_email: capture.email,
-      dispatch_state: "failed",
-      provider: "resend_error",
-      error_message: "capture is not queued",
-      metadata: { source_oar2: "seat_hold_notification_provider_integration_v1" },
+      dispatch_state: "attempted",
+      provider: "resend",
+      metadata: {
+        source_oar2: "seat_hold_notification_provider_integration_v1",
+        explicit_operator_dispatch: true,
+        subject: template.subject,
+      },
     })
 
-    return jsonResponse({ error: "capture is not queued" }, 409)
-  }
+    const resendResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Measures Registry <connect@measuresregistry.com>",
+        to: [capture.email],
+        reply_to: "connect@measuresregistry.com",
+        subject: template.subject,
+        text: textBody(template.body),
+        html: htmlBody(template.body),
+      }),
+    })
 
-  const [template] = await supabaseFetch<TemplateRow[]>(
-    env,
-    `measures_seat_hold_notification_template?offering_key=eq.${capture.offering_key}&is_active=eq.true&select=subject,body&limit=1`,
-  )
+    const resendPayload = (await resendResponse.json().catch(() => ({}))) as {
+      id?: string
+      message?: string
+      name?: string
+    }
 
-  if (!template) {
+    if (!resendResponse.ok || !resendPayload.id) {
+      const errorMessage =
+        resendPayload.message ??
+        resendPayload.name ??
+        `Resend request failed: ${resendResponse.status}`
+
+      await updateCapture(env, capture.id, {
+        notification_state: "failed",
+        metadata: {
+          ...(capture.metadata ?? {}),
+          dispatch_error: errorMessage,
+          source_oar2: "seat_hold_notification_provider_integration_v1",
+        },
+      })
+
+      await insertDispatchLog(env, {
+        capture_id: capture.id,
+        offering_key: capture.offering_key,
+        source_encounter_key: capture.source_encounter_key,
+        recipient_email: capture.email,
+        dispatch_state: "failed",
+        provider: "resend_error",
+        error_message: errorMessage,
+        metadata: { source_oar2: "seat_hold_notification_provider_integration_v1" },
+      })
+
+      return jsonResponse({ error: errorMessage }, 502)
+    }
+
+    const notifiedAt = new Date().toISOString()
     await updateCapture(env, capture.id, {
-      notification_state: "failed",
+      notification_state: "notified",
+      notified_at: notifiedAt,
       metadata: {
         ...(capture.metadata ?? {}),
-        dispatch_error: "active template missing",
+        last_dispatch_provider: "resend",
+        last_dispatch_provider_message_id: resendPayload.id,
+        last_dispatch_subject: template.subject,
         source_oar2: "seat_hold_notification_provider_integration_v1",
       },
     })
@@ -171,116 +265,32 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       offering_key: capture.offering_key,
       source_encounter_key: capture.source_encounter_key,
       recipient_email: capture.email,
-      dispatch_state: "failed",
-      provider: "resend_error",
-      error_message: "active template missing",
-      metadata: { source_oar2: "seat_hold_notification_provider_integration_v1" },
-    })
-
-    return jsonResponse({ error: "active template missing" }, 409)
-  }
-
-  await insertDispatchLog(env, {
-    capture_id: capture.id,
-    offering_key: capture.offering_key,
-    source_encounter_key: capture.source_encounter_key,
-    recipient_email: capture.email,
-    dispatch_state: "attempted",
-    provider: "resend",
-    metadata: {
-      source_oar2: "seat_hold_notification_provider_integration_v1",
-      explicit_operator_dispatch: true,
-      subject: template.subject,
-    },
-  })
-
-  const resendResponse = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      from: "Measures Registry <connect@measuresregistry.com>",
-      to: [capture.email],
-      reply_to: "connect@measuresregistry.com",
-      subject: template.subject,
-      text: textBody(template.body),
-      html: htmlBody(template.body),
-    }),
-  })
-
-  const resendPayload = (await resendResponse.json().catch(() => ({}))) as {
-    id?: string
-    message?: string
-    name?: string
-  }
-
-  if (!resendResponse.ok || !resendPayload.id) {
-    const errorMessage =
-      resendPayload.message ??
-      resendPayload.name ??
-      `Resend request failed: ${resendResponse.status}`
-
-    await updateCapture(env, capture.id, {
-      notification_state: "failed",
+      dispatch_state: "sent",
+      provider: "resend",
+      provider_message_id: resendPayload.id,
       metadata: {
-        ...(capture.metadata ?? {}),
-        dispatch_error: errorMessage,
         source_oar2: "seat_hold_notification_provider_integration_v1",
+        explicit_operator_dispatch: true,
+        subject: template.subject,
       },
     })
 
-    await insertDispatchLog(env, {
+    return jsonResponse({
       capture_id: capture.id,
-      offering_key: capture.offering_key,
-      source_encounter_key: capture.source_encounter_key,
-      recipient_email: capture.email,
-      dispatch_state: "failed",
-      provider: "resend_error",
-      error_message: errorMessage,
-      metadata: { source_oar2: "seat_hold_notification_provider_integration_v1" },
+      dispatch_state: "sent",
+      notification_state: "notified",
+      provider: "resend",
+      provider_message_id: resendPayload.id,
+      notified_at: notifiedAt,
     })
-
-    return jsonResponse({ error: errorMessage }, 502)
+  } catch (error) {
+    return jsonResponse(
+      {
+        error: error instanceof Error ? error.message : "dispatch failed",
+      },
+      500,
+    )
   }
-
-  const notifiedAt = new Date().toISOString()
-  await updateCapture(env, capture.id, {
-    notification_state: "notified",
-    notified_at: notifiedAt,
-    metadata: {
-      ...(capture.metadata ?? {}),
-      last_dispatch_provider: "resend",
-      last_dispatch_provider_message_id: resendPayload.id,
-      last_dispatch_subject: template.subject,
-      source_oar2: "seat_hold_notification_provider_integration_v1",
-    },
-  })
-
-  await insertDispatchLog(env, {
-    capture_id: capture.id,
-    offering_key: capture.offering_key,
-    source_encounter_key: capture.source_encounter_key,
-    recipient_email: capture.email,
-    dispatch_state: "sent",
-    provider: "resend",
-    provider_message_id: resendPayload.id,
-    metadata: {
-      source_oar2: "seat_hold_notification_provider_integration_v1",
-      explicit_operator_dispatch: true,
-      subject: template.subject,
-    },
-  })
-
-  return jsonResponse({
-    capture_id: capture.id,
-    dispatch_state: "sent",
-    notification_state: "notified",
-    provider: "resend",
-    provider_message_id: resendPayload.id,
-    notified_at: notifiedAt,
-  })
 }
 
 export const onRequest: PagesFunction<Env> = async () =>
