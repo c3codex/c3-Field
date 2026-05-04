@@ -440,6 +440,70 @@ body,
   cursor: default;
 }
 
+.registry-offering-surface {
+  min-height: 100svh;
+  width: min(var(--registry-content-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + var(--registry-section-spacing-active)) 0 var(--registry-page-padding-active);
+  display: grid;
+  gap: var(--registry-section-spacing-active);
+}
+
+.registry-offering-surface > video {
+  width: 100%;
+  max-height: 42svh;
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 18px;
+  background: var(--registry-panel-obsidian);
+  object-fit: cover;
+}
+
+.registry-offering-core,
+.registry-offering-outcome {
+  max-width: var(--registry-text-max-width);
+  margin: 0;
+  white-space: pre-line;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-body-active);
+  line-height: 1.55;
+}
+
+.registry-offering-outcome {
+  color: var(--registry-text-primary);
+  font-size: var(--registry-section-headline);
+  line-height: 1.2;
+}
+
+.registry-offering-sections {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.registry-offering-sections article {
+  min-height: 13rem;
+  display: grid;
+  align-content: end;
+  gap: 0.75rem;
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 18px;
+  background: var(--registry-panel-obsidian);
+  padding: var(--registry-plaque-padding-active);
+}
+
+.registry-offering-sections span {
+  color: var(--registry-text-primary);
+  font-size: var(--registry-plaque-title-active);
+  letter-spacing: 0.08em;
+}
+
+.registry-offering-sections p {
+  margin: 0;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-plaque-body-active);
+  line-height: 1.35;
+}
+
 .registry-path-choice-actions button,
 .registry-path-choice-contrast article button,
 .registry-landing-section button,
@@ -803,6 +867,10 @@ body,
 
   .registry-encounter-surface {
     width: min(var(--registry-content-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  }
+
+  .registry-offering-sections {
+    grid-template-columns: 1fr;
   }
 }
 

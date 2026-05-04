@@ -10,6 +10,7 @@ const REQUIRED_SECTION_KEYS = [
   "landing_path_choice",
   "understand_failure",
   "reserve_seat",
+  "systems_offering",
 ] as const
 const REQUIRED_MEDIA_ROLES = [
   "hero_video",
@@ -17,6 +18,8 @@ const REQUIRED_MEDIA_ROLES = [
   "path_choice_background",
   "registry_mark",
 ] as const
+const OPTIONAL_MEDIA_ROLES = ["systems_intro_video"] as const
+const QUERY_MEDIA_ROLES = [...REQUIRED_MEDIA_ROLES, ...OPTIONAL_MEDIA_ROLES] as const
 const REQUIRED_DESIGN_TOKEN_KEYS = [
   "text_primary",
   "text_secondary",
@@ -45,7 +48,13 @@ const REQUIRED_DESIGN_TOKEN_KEYS = [
   "mobile_breakpoint",
 ] as const
 
-type SurfaceState = "intro" | "path_choice" | "understand_failure" | "orientation" | "reserve_seat"
+type SurfaceState =
+  | "intro"
+  | "path_choice"
+  | "understand_failure"
+  | "orientation"
+  | "reserve_seat"
+  | "systems_offering"
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
   intro: "landing_intro_video",
@@ -53,6 +62,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   understand_failure: "understand_failure",
   orientation: "orientation_placeholder",
   reserve_seat: "reserve_seat",
+  systems_offering: "systems_offering",
 }
 
 function surfaceFromQuery(value: string | null): SurfaceState {
@@ -133,6 +143,12 @@ function sectionCopy(row?: LandingSectionRow) {
       : [],
     resolutionShift: asString(metadata.resolution_shift),
     transitionStatement: asString(metadata.transition_statement),
+    coreStatement: asString(metadata.core_statement),
+    sections: asRecordArray(metadata.sections),
+    outcomeStatement: asString(metadata.outcome_statement),
+    mediaRenderMode: asString(metadata.media_render_mode),
+    videoMode: asString(metadata.video_mode),
+    fallback: asString(metadata.fallback),
     options: asRecordArray(metadata.options),
     mediaRoles: Array.isArray(metadata.media_roles)
       ? metadata.media_roles.filter((item): item is string => typeof item === "string")
@@ -222,7 +238,7 @@ export default function MeasuresRegistryRuntime() {
           .from("measures_media_map")
           .select("media_role, storage_bucket, storage_path, mime_type, is_active")
           .eq("campaign_key", CAMPAIGN_KEY)
-          .in("media_role", [...REQUIRED_MEDIA_ROLES])
+          .in("media_role", [...QUERY_MEDIA_ROLES])
           .order("sort_order", { ascending: true }),
         supabase
           .from("measures_design_token")
@@ -288,6 +304,7 @@ export default function MeasuresRegistryRuntime() {
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
   const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
+  const systemsOfferingCopy = sectionCopy(sectionMap.get("systems_offering"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
   const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
@@ -328,6 +345,11 @@ export default function MeasuresRegistryRuntime() {
 
     if (behavior === "route_surface" && target === "orientation_placeholder") {
       navigateSurface("orientation")
+      return
+    }
+
+    if (behavior === "route_surface" && target === "systems_offering") {
+      navigateSurface("systems_offering")
     }
   }
 
@@ -618,7 +640,11 @@ export default function MeasuresRegistryRuntime() {
                   data-state={state ?? undefined}
                   disabled={!isOpen}
                   onClick={() => {
-                    if (target === "foundation_offering" || target === "systems_offering") {
+                    if (target === "systems_offering") {
+                      navigateSurface("systems_offering")
+                    }
+
+                    if (target === "foundation_offering") {
                       navigateSurface("orientation")
                     }
                   }}
@@ -635,10 +661,82 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function renderSystemsOfferingSurface() {
+    if (reportMissingClassification("systems_offering", systemsOfferingCopy)) return null
+    const systemsVideoUrl = mediaUrl(mediaMap.get("systems_intro_video"))
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="systems_offering"
+        style={registryTokenStyle}
+      >
+        {renderHeader(null, systemsOfferingCopy.actions)}
+        <section className="registry-offering-surface">
+          {systemsVideoUrl ? (
+            <video
+              src={systemsVideoUrl}
+              autoPlay={systemsOfferingCopy.videoMode === "muted_autoplay"}
+              muted={systemsOfferingCopy.videoMode === "muted_autoplay"}
+              playsInline
+            />
+          ) : null}
+
+          <div className="registry-encounter-entry">
+            {systemsOfferingCopy.entryLabel ? <span>{systemsOfferingCopy.entryLabel}</span> : null}
+            {systemsOfferingCopy.entryHeadline ? <h1>{systemsOfferingCopy.entryHeadline}</h1> : null}
+            {systemsOfferingCopy.entrySub ? <p>{systemsOfferingCopy.entrySub}</p> : null}
+          </div>
+
+          {systemsOfferingCopy.coreStatement ? (
+            <p className="registry-offering-core">{systemsOfferingCopy.coreStatement}</p>
+          ) : null}
+
+          <div className="registry-offering-sections">
+            {systemsOfferingCopy.sections.map((section) => {
+              const title = asString(section.title)
+              const body = asString(section.body)
+
+              return (
+                <article key={title ?? body}>
+                  {title ? <span>{title}</span> : null}
+                  {body ? <p>{body}</p> : null}
+                </article>
+              )
+            })}
+          </div>
+
+          {systemsOfferingCopy.outcomeStatement ? (
+            <p className="registry-offering-outcome">{systemsOfferingCopy.outcomeStatement}</p>
+          ) : null}
+
+          <div className="registry-encounter-actions">
+            {systemsOfferingCopy.actions.map((action) => {
+              const actionKey = asString(action.action_key)
+              if (!actionKey) return null
+
+              return (
+                <button
+                  key={actionKey}
+                  type="button"
+                  onClick={() => handleAction(actionKey, systemsOfferingCopy.actions)}
+                  disabled={asString(action.target_encounter_key) === "systems_seat_hold"}
+                >
+                  {actionLabel(actionKey, systemsOfferingCopy.actions)}
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      </main>
+    )
+  }
+
   if (activeSurface === "path_choice") return renderPathChoiceSurface()
   if (activeSurface === "understand_failure") return renderUnderstandFailureSurface()
   if (activeSurface === "orientation") return renderOrientationSurface()
   if (activeSurface === "reserve_seat") return renderReserveSeatSurface()
+  if (activeSurface === "systems_offering") return renderSystemsOfferingSurface()
 
   return renderIntroSurface()
 }
