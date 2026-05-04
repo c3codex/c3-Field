@@ -106,6 +106,19 @@ type DesignTokenRow = {
   is_active: boolean | null
 }
 
+type SeatOfferingRow = {
+  offering_key: string
+  label: string
+  short_label: string | null
+  description: string | null
+  offering_type: string
+  sequence_order: number
+  enrollment_state: "open" | "coming_soon" | "held" | "closed"
+  hold_target_key: string | null
+  offering_surface_key: string | null
+  metadata: Record<string, unknown> | null
+}
+
 type NotificationReviewRow = {
   capture_id: string
   email: string
@@ -200,6 +213,7 @@ export default function MeasuresRegistryRuntime() {
   const [sections, setSections] = useState<LandingSectionRow[]>([])
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
+  const [seatOfferings, setSeatOfferings] = useState<SeatOfferingRow[]>([])
   const [readError, setReadError] = useState<string | null>(null)
   const [holdEmail, setHoldEmail] = useState("")
   const [holdSubmitting, setHoldSubmitting] = useState(false)
@@ -270,10 +284,11 @@ export default function MeasuresRegistryRuntime() {
         setSections([])
         setMediaRows([])
         setDesignTokens([])
+        setSeatOfferings([])
         return
       }
 
-      const [sectionResult, mediaResult, tokenResult] = await Promise.all([
+      const [sectionResult, mediaResult, tokenResult, offeringResult] = await Promise.all([
         supabase
           .from("measures_encounter_def")
           .select("encounter_key, display_title, metadata")
@@ -290,21 +305,28 @@ export default function MeasuresRegistryRuntime() {
           .select("token_key, token_value, media_query, is_active")
           .eq("registry_key", DESIGN_REGISTRY_KEY)
           .eq("is_active", true),
+        supabase
+          .from("measures_seat_offering")
+          .select("offering_key, label, short_label, description, offering_type, sequence_order, enrollment_state, hold_target_key, offering_surface_key, metadata")
+          .eq("system_key", DESIGN_REGISTRY_KEY)
+          .order("sequence_order", { ascending: true }),
       ])
 
       if (cancelled) return
 
-      if (sectionResult.error || mediaResult.error || tokenResult.error) {
+      if (sectionResult.error || mediaResult.error || tokenResult.error || offeringResult.error) {
         setReadError("Measures Registry landing records could not be read.")
         setSections([])
         setMediaRows([])
         setDesignTokens([])
+        setSeatOfferings([])
         return
       }
 
       setSections(((sectionResult.data ?? []) as LandingSectionRow[]) ?? [])
       setMediaRows(((mediaResult.data ?? []) as MediaRow[]) ?? [])
       setDesignTokens(((tokenResult.data ?? []) as DesignTokenRow[]) ?? [])
+      setSeatOfferings(((offeringResult.data ?? []) as SeatOfferingRow[]) ?? [])
     }
 
     loadLanding()
@@ -789,6 +811,7 @@ export default function MeasuresRegistryRuntime() {
     const backAction = reserveSeatCopy.actions.find(
       (action) => asString(action.action_key) === "back_to_path",
     )
+    const offerings = seatOfferings
 
     return (
       <main
@@ -805,34 +828,29 @@ export default function MeasuresRegistryRuntime() {
           </div>
 
           <div className="registry-reserve-options">
-            {reserveSeatCopy.options.map((option) => {
-              const key = asString(option.key)
-              const label = asString(option.label)
-              const description = asString(option.description)
-              const state = asString(option.state)
-              const target = asString(option.target_encounter_key)
-              const isOpen = state === "open"
+            {offerings.map((offering) => {
+              const isOpen = offering.enrollment_state === "open"
 
               return (
                 <button
-                  key={key ?? label}
+                  key={offering.offering_key}
                   type="button"
                   className="registry-reserve-option"
-                  data-state={state ?? undefined}
+                  data-state={offering.enrollment_state}
                   disabled={!isOpen}
                   onClick={() => {
-                    if (target === "systems_offering") {
+                    if (offering.offering_surface_key === "systems_offering") {
                       navigateSurface("systems_offering")
                     }
 
-                    if (target === "foundation_offering") {
+                    if (offering.offering_surface_key === "foundation_offering") {
                       navigateSurface("foundation_offering")
                     }
                   }}
                 >
-                  {label ? <span>{label}</span> : null}
-                  {description ? <p>{description}</p> : null}
-                  {state ? <small>{state.replaceAll("_", " ")}</small> : null}
+                  <span>{offering.label}</span>
+                  {offering.description ? <p>{offering.description}</p> : null}
+                  <small>{offering.enrollment_state.replaceAll("_", " ")}</small>
                 </button>
               )
             })}
