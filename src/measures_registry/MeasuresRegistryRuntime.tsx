@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import type { CSSProperties, FormEvent } from "react"
+import type { CSSProperties } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
@@ -83,33 +83,6 @@ type DesignTokenRow = {
   is_active: boolean | null
 }
 
-type ReserveSeatForm = {
-  origin_type: "named_individual" | "institution_in_service"
-  full_name: string
-  email: string
-  role_or_title: string
-  institution_name: string
-  interest_area: string
-  course_intent: string
-  message: string
-}
-
-const initialReserveSeatForm: ReserveSeatForm = {
-  origin_type: "named_individual",
-  full_name: "",
-  email: "",
-  role_or_title: "",
-  institution_name: "",
-  interest_area: "",
-  course_intent: "",
-  message: "",
-}
-
-function optionalValue(value: string) {
-  const trimmed = value.trim()
-  return trimmed.length > 0 ? trimmed : null
-}
-
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null
   return value as Record<string, unknown>
@@ -160,6 +133,7 @@ function sectionCopy(row?: LandingSectionRow) {
       : [],
     resolutionShift: asString(metadata.resolution_shift),
     transitionStatement: asString(metadata.transition_statement),
+    options: asRecordArray(metadata.options),
     mediaRoles: Array.isArray(metadata.media_roles)
       ? metadata.media_roles.filter((item): item is string => typeof item === "string")
       : [],
@@ -177,10 +151,6 @@ export default function MeasuresRegistryRuntime() {
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
   const [readError, setReadError] = useState<string | null>(null)
-  const [form, setForm] = useState<ReserveSeatForm>(initialReserveSeatForm)
-  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">(
-    "idle",
-  )
   const navigationSourceRef = useRef<"app" | "history">("app")
 
   function historyUrl(surface: SurfaceState) {
@@ -323,11 +293,6 @@ export default function MeasuresRegistryRuntime() {
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
 
-  function updateForm<K extends keyof ReserveSeatForm>(key: K, value: ReserveSeatForm[K]) {
-    setForm((current) => ({ ...current, [key]: value }))
-    if (submitState !== "idle") setSubmitState("idle")
-  }
-
   function actionLabel(actionKey: string, actions = pathChoiceCopy.actions) {
     const plaque = pathChoiceCopy.plaques.find(
       (item) => asString(item.action_key) === actionKey,
@@ -364,38 +329,6 @@ export default function MeasuresRegistryRuntime() {
     if (behavior === "route_surface" && target === "orientation_placeholder") {
       navigateSurface("orientation")
     }
-  }
-
-  async function handleReserveSeatSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    if (supabaseConfigError) {
-      setSubmitState("error")
-      return
-    }
-
-    setSubmitState("submitting")
-
-    const { data, error } = await supabase.rpc("submit_src_intake_request", {
-      p_origin_type: form.origin_type,
-      p_full_name: form.full_name.trim(),
-      p_email: form.email.trim(),
-      p_role_or_title: optionalValue(form.role_or_title),
-      p_institution_name: optionalValue(form.institution_name),
-      p_interest_area: optionalValue(form.interest_area),
-      p_course_intent: optionalValue(form.course_intent),
-      p_message: optionalValue(form.message),
-    })
-
-    const response = data as { ok?: boolean } | null
-
-    if (error || response?.ok !== true) {
-      setSubmitState("error")
-      return
-    }
-
-    setForm(initialReserveSeatForm)
-    setSubmitState("success")
   }
 
   function renderCorrectionReport() {
@@ -650,6 +583,9 @@ export default function MeasuresRegistryRuntime() {
 
   function renderReserveSeatSurface() {
     if (reportMissingClassification("reserve_seat", reserveSeatCopy)) return null
+    const backAction = reserveSeatCopy.actions.find(
+      (action) => asString(action.action_key) === "back_to_path",
+    )
 
     return (
       <main
@@ -657,108 +593,43 @@ export default function MeasuresRegistryRuntime() {
         data-surface="reserve_seat"
         style={registryTokenStyle}
       >
-        {renderHeader()}
-        <section id="reserve-seat" className="reserve-seat-panel" aria-label="Reserve your seat">
-          <div className="reserve-seat-copy">
-            <span>June Cohort</span>
-            <h2>{actionLabel("reserve_seat")}</h2>
+        {renderHeader(null, backAction ? [backAction] : reserveSeatCopy.actions)}
+        <section id="reserve-seat" className="registry-reserve-selector" aria-label={reserveSeatCopy.entryLabel ?? undefined}>
+          <div className="registry-encounter-entry">
+            {reserveSeatCopy.entryLabel ? <span>{reserveSeatCopy.entryLabel}</span> : null}
+            {reserveSeatCopy.entryHeadline ? <h1>{reserveSeatCopy.entryHeadline}</h1> : null}
+            {reserveSeatCopy.entrySub ? <p>{reserveSeatCopy.entrySub}</p> : null}
           </div>
 
-          <form className="reserve-seat-form" onSubmit={handleReserveSeatSubmit}>
-            <label>
-              Origin
-              <select
-                required
-                value={form.origin_type}
-                onChange={(event) =>
-                  updateForm(
-                    "origin_type",
-                    event.target.value as ReserveSeatForm["origin_type"],
-                  )
-                }
-              >
-                <option value="named_individual">Named individual</option>
-                <option value="institution_in_service">Institution in service</option>
-              </select>
-            </label>
+          <div className="registry-reserve-options">
+            {reserveSeatCopy.options.map((option) => {
+              const key = asString(option.key)
+              const label = asString(option.label)
+              const description = asString(option.description)
+              const state = asString(option.state)
+              const target = asString(option.target_encounter_key)
+              const isOpen = state === "open"
 
-            <label>
-              Full name
-              <input
-                required
-                value={form.full_name}
-                onChange={(event) => updateForm("full_name", event.target.value)}
-                autoComplete="name"
-              />
-            </label>
-
-            <label>
-              Email
-              <input
-                required
-                type="email"
-                value={form.email}
-                onChange={(event) => updateForm("email", event.target.value)}
-                autoComplete="email"
-              />
-            </label>
-
-            <label>
-              Role or title
-              <input
-                value={form.role_or_title}
-                onChange={(event) => updateForm("role_or_title", event.target.value)}
-                autoComplete="organization-title"
-              />
-            </label>
-
-            <label>
-              Institution
-              <input
-                value={form.institution_name}
-                onChange={(event) => updateForm("institution_name", event.target.value)}
-                autoComplete="organization"
-              />
-            </label>
-
-            <label>
-              Interest area
-              <input
-                value={form.interest_area}
-                onChange={(event) => updateForm("interest_area", event.target.value)}
-              />
-            </label>
-
-            <label>
-              Course intent
-              <input
-                value={form.course_intent}
-                onChange={(event) => updateForm("course_intent", event.target.value)}
-              />
-            </label>
-
-            <label className="reserve-seat-message">
-              Message
-              <textarea
-                value={form.message}
-                onChange={(event) => updateForm("message", event.target.value)}
-              />
-            </label>
-
-            <button type="submit" disabled={submitState === "submitting"}>
-              {submitState === "submitting" ? "Submitting..." : actionLabel("reserve_seat")}
-            </button>
-            <button type="button" onClick={() => navigateSurface("path_choice")}>
-              Back to Path Choice
-            </button>
-
-            {submitState === "success" ? (
-              <p className="reserve-seat-success">Your seat request has been received.</p>
-            ) : null}
-            {submitState === "error" ? (
-              <p className="reserve-seat-error">Submission failed. Please try again.</p>
-            ) : null}
-          </form>
+              return (
+                <button
+                  key={key ?? label}
+                  type="button"
+                  className="registry-reserve-option"
+                  data-state={state ?? undefined}
+                  disabled={!isOpen}
+                  onClick={() => {
+                    if (target === "foundation_offering" || target === "systems_offering") {
+                      navigateSurface("orientation")
+                    }
+                  }}
+                >
+                  {label ? <span>{label}</span> : null}
+                  {description ? <p>{description}</p> : null}
+                  {state ? <small>{state.replaceAll("_", " ")}</small> : null}
+                </button>
+              )
+            })}
+          </div>
         </section>
       </main>
     )
