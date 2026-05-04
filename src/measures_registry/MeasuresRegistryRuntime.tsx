@@ -10,6 +10,7 @@ const REQUIRED_SECTION_KEYS = [
   "landing_path_choice",
   "understand_failure",
   "reserve_seat",
+  "foundation_offering",
   "systems_offering",
   "foundation_seat_hold",
   "systems_seat_hold",
@@ -20,7 +21,7 @@ const REQUIRED_MEDIA_ROLES = [
   "path_choice_background",
   "registry_mark",
 ] as const
-const OPTIONAL_MEDIA_ROLES = ["systems_intro_video"] as const
+const OPTIONAL_MEDIA_ROLES = ["foundation_intro_video", "systems_intro_video"] as const
 const QUERY_MEDIA_ROLES = [...REQUIRED_MEDIA_ROLES, ...OPTIONAL_MEDIA_ROLES] as const
 const REQUIRED_DESIGN_TOKEN_KEYS = [
   "text_primary",
@@ -56,6 +57,7 @@ type SurfaceState =
   | "understand_failure"
   | "orientation"
   | "reserve_seat"
+  | "foundation_offering"
   | "systems_offering"
   | "foundation_seat_hold"
   | "systems_seat_hold"
@@ -66,6 +68,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   understand_failure: "understand_failure",
   orientation: "orientation_placeholder",
   reserve_seat: "reserve_seat",
+  foundation_offering: "foundation_offering",
   systems_offering: "systems_offering",
   foundation_seat_hold: "foundation_seat_hold",
   systems_seat_hold: "systems_seat_hold",
@@ -318,6 +321,7 @@ export default function MeasuresRegistryRuntime() {
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
   const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
+  const foundationOfferingCopy = sectionCopy(sectionMap.get("foundation_offering"))
   const systemsOfferingCopy = sectionCopy(sectionMap.get("systems_offering"))
   const foundationSeatHoldCopy = sectionCopy(sectionMap.get("foundation_seat_hold"))
   const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
@@ -380,7 +384,7 @@ export default function MeasuresRegistryRuntime() {
     }
 
     if (behavior === "route_surface" && target === "foundation_offering") {
-      navigateSurface("orientation")
+      navigateSurface("foundation_offering")
     }
   }
 
@@ -676,7 +680,7 @@ export default function MeasuresRegistryRuntime() {
                     }
 
                     if (target === "foundation_offering") {
-                      navigateSurface("orientation")
+                      navigateSurface("foundation_offering")
                     }
                   }}
                 >
@@ -692,39 +696,43 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
-  function renderSystemsOfferingSurface() {
-    if (reportMissingClassification("systems_offering", systemsOfferingCopy)) return null
-    const systemsVideoUrl = mediaUrl(mediaMap.get("systems_intro_video"))
+  function renderOfferingSurface(
+    encounterKey: "foundation_offering" | "systems_offering",
+    copy: ReturnType<typeof sectionCopy>,
+    mediaRole: "foundation_intro_video" | "systems_intro_video",
+  ) {
+    if (reportMissingClassification(encounterKey, copy)) return null
+    const offeringVideoUrl = mediaUrl(mediaMap.get(mediaRole))
 
     return (
       <main
         className="measures-registry-runtime"
-        data-surface="systems_offering"
+        data-surface={encounterKey}
         style={registryTokenStyle}
       >
-        {renderHeader(null, systemsOfferingCopy.actions)}
+        {renderHeader(null, copy.actions)}
         <section className="registry-offering-surface">
-          {systemsVideoUrl ? (
+          {offeringVideoUrl ? (
             <video
-              src={systemsVideoUrl}
-              autoPlay={systemsOfferingCopy.videoMode === "muted_autoplay"}
-              muted={systemsOfferingCopy.videoMode === "muted_autoplay"}
+              src={offeringVideoUrl}
+              autoPlay={copy.videoMode === "muted_autoplay"}
+              muted={copy.videoMode === "muted_autoplay"}
               playsInline
             />
           ) : null}
 
           <div className="registry-encounter-entry">
-            {systemsOfferingCopy.entryLabel ? <span>{systemsOfferingCopy.entryLabel}</span> : null}
-            {systemsOfferingCopy.entryHeadline ? <h1>{systemsOfferingCopy.entryHeadline}</h1> : null}
-            {systemsOfferingCopy.entrySub ? <p>{systemsOfferingCopy.entrySub}</p> : null}
+            {copy.entryLabel ? <span>{copy.entryLabel}</span> : null}
+            {copy.entryHeadline ? <h1>{copy.entryHeadline}</h1> : null}
+            {copy.entrySub ? <p>{copy.entrySub}</p> : null}
           </div>
 
-          {systemsOfferingCopy.coreStatement ? (
-            <p className="registry-offering-core">{systemsOfferingCopy.coreStatement}</p>
+          {copy.coreStatement ? (
+            <p className="registry-offering-core">{copy.coreStatement}</p>
           ) : null}
 
           <div className="registry-offering-sections">
-            {systemsOfferingCopy.sections.map((section) => {
+            {copy.sections.map((section) => {
               const title = asString(section.title)
               const body = asString(section.body)
 
@@ -737,12 +745,12 @@ export default function MeasuresRegistryRuntime() {
             })}
           </div>
 
-          {systemsOfferingCopy.outcomeStatement ? (
-            <p className="registry-offering-outcome">{systemsOfferingCopy.outcomeStatement}</p>
+          {copy.outcomeStatement ? (
+            <p className="registry-offering-outcome">{copy.outcomeStatement}</p>
           ) : null}
 
           <div className="registry-encounter-actions">
-            {systemsOfferingCopy.actions.map((action) => {
+            {copy.actions.map((action) => {
               const actionKey = asString(action.action_key)
               if (!actionKey) return null
 
@@ -750,9 +758,9 @@ export default function MeasuresRegistryRuntime() {
                 <button
                   key={actionKey}
                   type="button"
-                  onClick={() => handleAction(actionKey, systemsOfferingCopy.actions)}
+                  onClick={() => handleAction(actionKey, copy.actions)}
                 >
-                  {actionLabel(actionKey, systemsOfferingCopy.actions)}
+                  {actionLabel(actionKey, copy.actions)}
                 </button>
               )
             })}
@@ -889,7 +897,12 @@ export default function MeasuresRegistryRuntime() {
   if (activeSurface === "understand_failure") return renderUnderstandFailureSurface()
   if (activeSurface === "orientation") return renderOrientationSurface()
   if (activeSurface === "reserve_seat") return renderReserveSeatSurface()
-  if (activeSurface === "systems_offering") return renderSystemsOfferingSurface()
+  if (activeSurface === "foundation_offering") {
+    return renderOfferingSurface("foundation_offering", foundationOfferingCopy, "foundation_intro_video")
+  }
+  if (activeSurface === "systems_offering") {
+    return renderOfferingSurface("systems_offering", systemsOfferingCopy, "systems_intro_video")
+  }
   if (activeSurface === "foundation_seat_hold") {
     return renderHoldSurface("foundation_seat_hold", foundationSeatHoldCopy)
   }
