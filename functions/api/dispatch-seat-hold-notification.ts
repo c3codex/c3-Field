@@ -12,6 +12,7 @@ type CaptureRow = {
   offering_key: string
   source_encounter_key: string
   notification_state: string
+  seat_lifecycle_state: string
   metadata: Record<string, unknown> | null
 }
 
@@ -131,7 +132,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
     const [capture] = await supabaseFetch<CaptureRow[]>(
       env,
-      `measures_seat_hold_capture?id=eq.${captureId}&select=id,email,offering_key,source_encounter_key,notification_state,metadata&limit=1`,
+      `measures_seat_hold_capture?id=eq.${captureId}&select=id,email,offering_key,source_encounter_key,notification_state,seat_lifecycle_state,metadata&limit=1`,
     )
 
     if (!capture) {
@@ -151,6 +152,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       })
 
       return jsonResponse({ error: "capture is not queued" }, 409)
+    }
+
+    if (capture.seat_lifecycle_state !== "approved") {
+      await insertDispatchLog(env, {
+        capture_id: capture.id,
+        offering_key: capture.offering_key,
+        source_encounter_key: capture.source_encounter_key,
+        recipient_email: capture.email,
+        dispatch_state: "failed",
+        provider: "resend_error",
+        error_message: "seat lifecycle is not approved",
+        metadata: { source_oar2: "seat_hold_lifecycle_control_v1" },
+      })
+
+      return jsonResponse({ error: "seat lifecycle is not approved" }, 409)
     }
 
     const [template] = await supabaseFetch<TemplateRow[]>(
@@ -250,6 +266,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     const notifiedAt = new Date().toISOString()
     await updateCapture(env, capture.id, {
       notification_state: "notified",
+      seat_lifecycle_state: "notified",
       notified_at: notifiedAt,
       metadata: {
         ...(capture.metadata ?? {}),

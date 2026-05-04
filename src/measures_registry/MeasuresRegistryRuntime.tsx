@@ -112,7 +112,9 @@ type NotificationReviewRow = {
   offering_key: string | null
   source_encounter_key: string | null
   notification_state: string | null
+  seat_lifecycle_state: string | null
   created_at: string
+  notified_at: string | null
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -375,7 +377,7 @@ export default function MeasuresRegistryRuntime() {
 
     const { data, error } = await supabase
       .from("measures_seat_hold_notification_review_v1")
-      .select("capture_id, email, offering_key, source_encounter_key, notification_state, created_at")
+      .select("capture_id, email, offering_key, source_encounter_key, notification_state, seat_lifecycle_state, created_at, notified_at")
       .order("created_at", { ascending: false })
 
     if (error) {
@@ -393,9 +395,20 @@ export default function MeasuresRegistryRuntime() {
   }, [activeSurface])
 
   function transitionOptions(state: string | null) {
-    const options = notificationReviewCopy.allowedTransitions?.[state ?? ""]
+    const notificationTransitions =
+      asRecord(notificationReviewCopy.allowedTransitions?.notification_state) ??
+      notificationReviewCopy.allowedTransitions
+    const options = notificationTransitions?.[state ?? ""]
     return Array.isArray(options)
       ? options.filter((option): option is string => typeof option === "string")
+      : []
+  }
+
+  function lifecycleTransitionOptions(state: string | null) {
+    const options = notificationReviewCopy.allowedTransitions?.seat_lifecycle_state
+    const currentOptions = asRecord(options)?.[state ?? ""]
+    return Array.isArray(currentOptions)
+      ? currentOptions.filter((option): option is string => typeof option === "string")
       : []
   }
 
@@ -415,6 +428,26 @@ export default function MeasuresRegistryRuntime() {
 
     if (error) {
       setReviewError("Notification transition was blocked.")
+      return
+    }
+
+    await loadNotificationReviewRows()
+  }
+
+  async function transitionLifecycle(row: NotificationReviewRow, nextState: string) {
+    const key = row.capture_id
+    setReviewTransitioning(key)
+    setReviewError(null)
+
+    const { error } = await supabase.rpc("update_measures_seat_hold_lifecycle_state", {
+      p_capture_id: row.capture_id,
+      p_next_state: nextState,
+    })
+
+    setReviewTransitioning(null)
+
+    if (error) {
+      setReviewError("Lifecycle transition was blocked.")
       return
     }
 
@@ -915,6 +948,7 @@ export default function MeasuresRegistryRuntime() {
       source_encounter_key: encounterKey,
       offering_key: copy.offeringKey,
       notification_state: "captured",
+      seat_lifecycle_state: "held",
       email: normalizedEmail,
       metadata: {
         source: "measures_registry_hold_surface",
@@ -1051,14 +1085,20 @@ export default function MeasuresRegistryRuntime() {
               <span role="columnheader">Email</span>
               <span role="columnheader">Offering</span>
               <span role="columnheader">Source</span>
-              <span role="columnheader">State</span>
+              <span role="columnheader">Notification</span>
+              <span role="columnheader">Lifecycle</span>
               <span role="columnheader">Created</span>
+              <span role="columnheader">Notified</span>
               <span role="columnheader">Transitions</span>
             </div>
 
             {reviewRows.map((row) => {
               const options = transitionOptions(row.notification_state)
+              const lifecycleOptions = lifecycleTransitionOptions(row.seat_lifecycle_state)
               const key = row.capture_id
+              const canDispatch =
+                row.notification_state === "queued" && row.seat_lifecycle_state === "approved"
+              const hasAnyTransition = options.length > 0 || lifecycleOptions.length > 0
 
               return (
                 <div className="registry-review-row" role="row" key={key}>
@@ -1066,9 +1106,13 @@ export default function MeasuresRegistryRuntime() {
                   <span role="cell">{row.offering_key}</span>
                   <span role="cell">{row.source_encounter_key}</span>
                   <span role="cell">{row.notification_state}</span>
+                  <span role="cell">{row.seat_lifecycle_state}</span>
                   <span role="cell">{new Date(row.created_at).toLocaleString()}</span>
+                  <span role="cell">
+                    {row.notified_at ? new Date(row.notified_at).toLocaleString() : "Not sent"}
+                  </span>
                   <span role="cell" className="registry-review-actions">
-                    {row.notification_state === "queued" ? (
+                    {canDispatch ? (
                       <button
                         type="button"
                         disabled={reviewDispatching === key}
@@ -1080,7 +1124,7 @@ export default function MeasuresRegistryRuntime() {
                     {options.length > 0 ? (
                       options.map((option) => (
                         <button
-                          key={option}
+                          key={`notification-${option}`}
                           type="button"
                           disabled={reviewTransitioning === key || reviewDispatching === key}
                           onClick={() => transitionNotification(row, option)}
@@ -1088,9 +1132,20 @@ export default function MeasuresRegistryRuntime() {
                           {option}
                         </button>
                       ))
-                    ) : (
-                      <small>No transition</small>
-                    )}
+                    ) : null}
+                    {lifecycleOptions.map((option) => (
+                      <button
+                        key={`lifecycle-${option}`}
+                        type="button"
+                        disabled={reviewTransitioning === key || reviewDispatching === key}
+                        onClick={() => transitionLifecycle(row, option)}
+                      >
+                        {option === "reviewed"
+                          ? "Mark Reviewed"
+                          : option.charAt(0).toUpperCase() + option.slice(1)}
+                      </button>
+                    ))}
+                    {!hasAnyTransition && !canDispatch ? <small>No transition</small> : null}
                   </span>
                 </div>
               )
