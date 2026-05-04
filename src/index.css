@@ -42,6 +42,44 @@ body,
   object-fit: cover;
 }
 
+.registry-intro-video::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(3, 4, 6, 0.84), rgba(3, 4, 6, 0.16)),
+    linear-gradient(0deg, rgba(3, 4, 6, 0.78), rgba(3, 4, 6, 0));
+  pointer-events: none;
+}
+
+.registry-intro-copy {
+  position: absolute;
+  left: clamp(1.25rem, 5vw, 5rem);
+  bottom: clamp(5rem, 12vh, 8rem);
+  z-index: 1;
+  display: grid;
+  gap: 0.85rem;
+  width: min(48rem, calc(100vw - 2.5rem));
+}
+
+.registry-intro-copy h1 {
+  margin: 0;
+  max-width: 11ch;
+  color: #f8fbff;
+  font-size: clamp(3.4rem, 9vw, 8.6rem);
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+}
+
+.registry-intro-copy p {
+  margin: 0;
+  max-width: 36rem;
+  white-space: pre-line;
+  color: rgba(236, 242, 250, 0.78);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.45;
+}
+
 .registry-intro-skip {
   position: fixed;
   right: clamp(1rem, 3vw, 2rem);
@@ -59,6 +97,59 @@ body,
   cursor: pointer;
 }
 
+.registry-public-header {
+  position: fixed;
+  left: clamp(1rem, 3vw, 2.5rem);
+  right: clamp(1rem, 3vw, 2.5rem);
+  top: clamp(0.85rem, 2.5vw, 1.5rem);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid rgba(245, 248, 255, 0.13);
+  border-radius: 999px;
+  background: rgba(3, 6, 12, 0.44);
+  backdrop-filter: blur(16px);
+}
+
+.registry-public-brand,
+.registry-public-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+}
+
+.registry-public-brand img {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  object-fit: contain;
+}
+
+.registry-public-brand span {
+  color: rgba(248, 251, 255, 0.94);
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+.registry-public-nav button {
+  border: 0;
+  background: transparent;
+  color: rgba(238, 244, 252, 0.72);
+  padding: 0.35rem 0.45rem;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.registry-public-nav button:hover,
+.registry-public-nav button:focus-visible {
+  color: #f8fbff;
+  outline: none;
+}
+
 .registry-path-choice {
   position: relative;
   min-height: 100svh;
@@ -66,7 +157,7 @@ body,
   align-content: center;
   gap: clamp(1.5rem, 4vw, 3rem);
   overflow: hidden;
-  padding: clamp(1.25rem, 4vw, 4rem);
+  padding: clamp(6.5rem, 10vw, 8rem) clamp(1.25rem, 4vw, 4rem) clamp(1.25rem, 4vw, 4rem);
   background:
     linear-gradient(90deg, rgba(3, 4, 6, 0.96), rgba(3, 4, 6, 0.42)),
     var(--path-choice-background),
@@ -115,6 +206,7 @@ body,
 .registry-path-choice-copy p {
   max-width: 44rem;
   margin: 0;
+  white-space: pre-line;
   color: rgba(232, 238, 248, 0.74);
   font-size: clamp(1rem, 2vw, 1.25rem);
   line-height: 1.55;
@@ -139,14 +231,14 @@ body,
   backdrop-filter: blur(14px);
 }
 
-.registry-path-choice-contrast article[data-choice="more"] {
+.registry-path-choice-contrast article[data-choice="left"] {
   border-color: rgba(255, 255, 255, 0.12);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
     rgba(3, 6, 12, 0.48);
 }
 
-.registry-path-choice-contrast article[data-choice="coherence"] {
+.registry-path-choice-contrast article[data-choice="right"] {
   border-color: rgba(210, 232, 255, 0.42);
   box-shadow: 0 0 40px rgba(158, 199, 255, 0.16);
 }
@@ -165,7 +257,13 @@ body,
   gap: 0.75rem;
 }
 
+.registry-path-choice-contrast article button {
+  justify-self: start;
+  margin-top: 0.35rem;
+}
+
 .registry-path-choice-actions button,
+.registry-path-choice-contrast article button,
 .registry-landing-section button,
 .reserve-seat-form button[type="button"] {
   border: 1px solid rgba(244, 248, 255, 0.28);
@@ -497,6 +595,15 @@ body,
 
   .registry-landing-hero {
     min-height: 82svh;
+  }
+
+  .registry-public-header {
+    align-items: flex-start;
+    border-radius: 18px;
+  }
+
+  .registry-path-choice-contrast {
+    grid-template-columns: 1fr;
   }
 }
 

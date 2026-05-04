@@ -4,7 +4,9 @@ const { createClient } = require("@supabase/supabase-js")
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
 const supabaseKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error("Supabase credentials missing")
@@ -15,12 +17,12 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 const landingRows = [
   {
     key: "landing_intro_video",
-    title: "Integrity Governance for AI Systems",
+    title: "AI isn't broken. Systems are.",
     sequence: 1010,
     metadata: {
       renderer: "measures_registry_intro_video",
-      title: "Integrity Governance for AI Systems",
-      subtitle: "Behavior that is not registered cannot be governed.",
+      title: "AI isn't broken. Systems are.",
+      subtitle: "Most AI failures aren't intelligence problems.\nThey're system failures.",
       completion_target: "landing_path_choice",
       playback: {
         mode: "fullscreen_intro",
@@ -33,23 +35,57 @@ const landingRows = [
   },
   {
     key: "landing_path_choice",
-    title: "Choose Your Path",
+    title: "AI isn't broken. Systems are.",
     sequence: 1020,
     metadata: {
       renderer: "measures_registry_path_choice",
+      header: {
+        title: "Measures Registry",
+        mark_media_role: "registry_mark",
+        actions: [
+          {
+            action_key: "about",
+            label: "About",
+            behavior: "route_surface",
+            target_encounter_key: "orientation_placeholder",
+          },
+          {
+            action_key: "contact",
+            label: "Contact",
+            behavior: "open_src_intake",
+            rpc: "submit_src_intake_request",
+          },
+        ],
+      },
       eyebrow: "Measures Registry",
-      title: "Choose Your Path",
-      subtitle: "More acceleration or coherent alignment. Choose the route you are entering through.",
+      title: "AI isn't broken. Systems are.",
+      subtitle: "Most AI failures aren't intelligence problems.\nThey're system failures.",
       background_media_role: "path_choice_background",
+      plaques: [
+        {
+          side: "left",
+          title: "UNDERSTAND FAILURE",
+          body: "Why AI integrations break inside ungoverned systems.",
+          action_label: "Explore System",
+          action_key: "explore_system",
+        },
+        {
+          side: "right",
+          title: "BUILD COHERENCE",
+          body: "How to structure systems that actually resolve.",
+          action_label: "Reserve Your Seat",
+          action_key: "reserve_seat",
+        },
+      ],
       more: {
-        label: "MORE",
-        body: "More nodes. More connections. Still no resolution.",
+        label: "UNDERSTAND FAILURE",
+        body: "Why AI integrations break inside ungoverned systems.",
         action_label: "Explore System",
         action_key: "explore_system",
       },
       coherence: {
-        label: "COHERENCE",
-        body: "Fewer elements. Precise alignment. Complete resolution.",
+        label: "BUILD COHERENCE",
+        body: "How to structure systems that actually resolve.",
         action_label: "Reserve Your Seat",
         action_key: "reserve_seat",
       },
@@ -189,6 +225,21 @@ async function run() {
         usage: "hero_poster",
       },
     },
+    {
+      registry_key: "landing_path_choice",
+      encounter_key: "landing_path_choice",
+      campaign_key: "agents_of_chaos_integrity_governance",
+      media_role: "registry_mark",
+      storage_bucket: "measures-registry",
+      storage_path: "measures_registry_mark.webp",
+      mime_type: "image/webp",
+      sort_order: 3,
+      is_active: true,
+      metadata: {
+        surface: "landing_path_choice",
+        usage: "registry_header_mark",
+      },
+    },
   ]
 
   for (const mediaRow of mediaPayload) {
@@ -233,7 +284,7 @@ async function run() {
       .from("measures_media_map")
       .select("media_role, storage_bucket, storage_path, is_active")
       .eq("campaign_key", "agents_of_chaos_integrity_governance")
-      .in("media_role", ["hero_video", "hero_poster", "path_choice_background"])
+      .in("media_role", ["hero_video", "hero_poster", "path_choice_background", "registry_mark"])
       .eq("is_active", true),
     "Landing media verification failed",
   )
@@ -253,6 +304,12 @@ async function run() {
           (row) =>
             row.media_role === "path_choice_background" &&
             row.storage_path === "more_vs_coherence_path.webp",
+        ),
+        registryMarkFromMeasuresMediaMap: media.some(
+          (row) =>
+            row.media_role === "registry_mark" &&
+            row.storage_bucket === "measures-registry" &&
+            row.storage_path === "measures_registry_mark.webp",
         ),
       },
       null,

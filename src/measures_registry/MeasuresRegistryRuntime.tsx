@@ -5,7 +5,12 @@ import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 
 const REQUIRED_SECTION_KEYS = ["landing_intro_video", "landing_path_choice"] as const
-const REQUIRED_MEDIA_ROLES = ["hero_video", "path_choice_background"] as const
+const REQUIRED_MEDIA_ROLES = [
+  "hero_video",
+  "hero_poster",
+  "path_choice_background",
+  "registry_mark",
+] as const
 
 type SurfaceState = "intro" | "path_choice" | "orientation" | "reserve_seat"
 const HISTORY_SOURCE = "measures_registry"
@@ -79,6 +84,12 @@ function asActionArray(value: unknown) {
     : []
 }
 
+function asRecordArray(value: unknown) {
+  return Array.isArray(value)
+    ? value.filter((item): item is Record<string, unknown> => Boolean(asRecord(item)))
+    : []
+}
+
 function mediaUrl(row?: MediaRow) {
   if (!row?.storage_bucket || !row.storage_path) return null
   return supabase.storage.from(row.storage_bucket).getPublicUrl(row.storage_path).data.publicUrl
@@ -87,9 +98,11 @@ function mediaUrl(row?: MediaRow) {
 function sectionCopy(row?: LandingSectionRow) {
   const metadata = asRecord(row?.metadata) ?? {}
   return {
+    header: asRecord(metadata.header),
     eyebrow: asString(metadata.eyebrow),
     title: asString(metadata.title) ?? row?.display_title ?? null,
     subtitle: asString(metadata.subtitle),
+    plaques: asRecordArray(metadata.plaques),
     more: asRecord(metadata.more),
     coherence: asRecord(metadata.coherence),
     actions: asActionArray(metadata.actions),
@@ -216,11 +229,13 @@ export default function MeasuresRegistryRuntime() {
   )
   const missingSections = REQUIRED_SECTION_KEYS.filter((key) => !sectionMap.has(key))
   const missingMediaRoles = REQUIRED_MEDIA_ROLES.filter((role) => !mediaMap.has(role))
-  const showDiagnostics = new URLSearchParams(window.location.search).get("diagnostics") === "1"
+  const showDiagnostics = false
   const introCopy = sectionCopy(sectionMap.get("landing_intro_video"))
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
+  const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
+  const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
 
   function updateForm<K extends keyof ReserveSeatForm>(key: K, value: ReserveSeatForm[K]) {
     setForm((current) => ({ ...current, [key]: value }))
@@ -228,17 +243,29 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function actionLabel(actionKey: string) {
+    const plaque = pathChoiceCopy.plaques.find(
+      (item) => asString(item.action_key) === actionKey,
+    )
     const action = pathChoiceCopy.actions.find((item) => asString(item.action_key) === actionKey)
-    return asString(action?.label)
+    return asString(plaque?.action_label) ?? asString(action?.label) ?? actionKey
+  }
+
+  function actionByKey(actionKey: string | null) {
+    if (!actionKey) return null
+    return pathChoiceCopy.actions.find((item) => asString(item.action_key) === actionKey) ?? null
   }
 
   function handlePathAction(actionKey: string | null) {
-    if (actionKey === "reserve_seat") {
+    const action = actionByKey(actionKey)
+    const behavior = asString(action?.behavior)
+    const target = asString(action?.target_encounter_key)
+
+    if (behavior === "open_src_intake" || actionKey === "reserve_seat") {
       navigateSurface("reserve_seat")
       return
     }
 
-    if (actionKey === "explore_system") {
+    if (behavior === "route_surface" && target === "orientation_placeholder") {
       navigateSurface("orientation")
     }
   }
@@ -307,6 +334,34 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function renderHeader() {
+    const header = pathChoiceCopy.header
+    const headerActions = asActionArray(header?.actions)
+    const title = asString(header?.title)
+
+    return (
+      <header className="registry-public-header" aria-label={title ?? undefined}>
+        <div className="registry-public-brand">
+          {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
+          {title ? <span>{title}</span> : null}
+        </div>
+        <nav className="registry-public-nav" aria-label="Measures Registry navigation">
+          {headerActions.map((action) => {
+            const actionKey = asString(action.action_key)
+            const label = asString(action.label)
+            if (!actionKey || !label) return null
+
+            return (
+              <button key={actionKey} type="button" onClick={() => handlePathAction(actionKey)}>
+                {label}
+              </button>
+            )
+          })}
+        </nav>
+      </header>
+    )
+  }
+
   function renderIntroSurface() {
     return (
       <main className="measures-registry-runtime" data-surface="landing_intro_video">
@@ -315,6 +370,7 @@ export default function MeasuresRegistryRuntime() {
           {heroVideoUrl ? (
             <video
               src={heroVideoUrl}
+              poster={heroPosterUrl ?? undefined}
               autoPlay
               muted
               playsInline
@@ -322,6 +378,10 @@ export default function MeasuresRegistryRuntime() {
               aria-label={introCopy.title ?? "Measures Registry intro video"}
             />
           ) : null}
+          <div className="registry-intro-copy">
+            {introCopy.title ? <h1>{introCopy.title}</h1> : null}
+            {introCopy.subtitle ? <p>{introCopy.subtitle}</p> : null}
+          </div>
           <button
             type="button"
             className="registry-intro-skip"
@@ -335,8 +395,12 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function renderPathChoiceSurface() {
-    const more = pathChoiceCopy.more
-    const coherence = pathChoiceCopy.coherence
+    const plaques =
+      pathChoiceCopy.plaques.length > 0
+        ? pathChoiceCopy.plaques
+        : [pathChoiceCopy.more, pathChoiceCopy.coherence].filter(
+            (item): item is Record<string, unknown> => Boolean(item),
+          )
     const style = pathChoiceBackgroundUrl
       ? ({ "--path-choice-background": `url(${pathChoiceBackgroundUrl})` } as CSSProperties)
       : undefined
@@ -344,6 +408,7 @@ export default function MeasuresRegistryRuntime() {
     return (
       <main className="measures-registry-runtime" data-surface="landing_path_choice">
         {renderCorrectionReport()}
+        {renderHeader()}
         <section className="registry-path-choice" style={style}>
           <div className="registry-path-choice-copy">
             {pathChoiceCopy.eyebrow ? <span>{pathChoiceCopy.eyebrow}</span> : null}
@@ -352,23 +417,23 @@ export default function MeasuresRegistryRuntime() {
           </div>
 
           <div className="registry-path-choice-contrast">
-            <article data-choice="more">
-              <span>{asString(more?.label)}</span>
-              <p>{asString(more?.body)}</p>
-            </article>
-            <article data-choice="coherence">
-              <span>{asString(coherence?.label)}</span>
-              <p>{asString(coherence?.body)}</p>
-            </article>
-          </div>
+            {plaques.map((plaque, index) => {
+              const actionKey = asString(plaque.action_key)
+              const title = asString(plaque.title) ?? asString(plaque.label)
+              const body = asString(plaque.body)
 
-          <div className="registry-path-choice-actions">
-            <button type="button" onClick={() => handlePathAction("explore_system")}>
-              {actionLabel("explore_system")}
-            </button>
-            <button type="button" onClick={() => handlePathAction("reserve_seat")}>
-              {actionLabel("reserve_seat")}
-            </button>
+              return (
+                <article key={actionKey ?? title ?? index} data-choice={asString(plaque.side)}>
+                  <span>{title}</span>
+                  <p>{body}</p>
+                  {actionKey ? (
+                    <button type="button" onClick={() => handlePathAction(actionKey)}>
+                      {actionLabel(actionKey)}
+                    </button>
+                  ) : null}
+                </article>
+              )
+            })}
           </div>
         </section>
       </main>
@@ -378,6 +443,7 @@ export default function MeasuresRegistryRuntime() {
   function renderOrientationSurface() {
     return (
       <main className="measures-registry-runtime" data-surface="orientation_placeholder">
+        {renderHeader()}
         <section id="orientation" className="registry-landing-section">
           <span>Orientation</span>
           <h2>Public orientation surface pending</h2>
@@ -392,6 +458,7 @@ export default function MeasuresRegistryRuntime() {
   function renderReserveSeatSurface() {
     return (
       <main className="measures-registry-runtime" data-surface="reserve_seat">
+        {renderHeader()}
         <section id="reserve-seat" className="reserve-seat-panel" aria-label="Reserve your seat">
           <div className="reserve-seat-copy">
             <span>June Cohort</span>
