@@ -504,6 +504,54 @@ body,
   line-height: 1.35;
 }
 
+.registry-hold-surface {
+  min-height: 100svh;
+  width: min(var(--registry-text-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + var(--registry-section-spacing-active)) 0 var(--registry-page-padding-active);
+  display: grid;
+  align-content: center;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.registry-hold-form {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(214,132,62,0.1), transparent 34%),
+    var(--registry-panel-obsidian);
+  padding: var(--registry-plaque-padding-active);
+}
+
+.registry-hold-form label {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.registry-hold-form input {
+  width: 100%;
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 10px;
+  background: rgba(246, 248, 251, 0.08);
+  color: var(--registry-text-primary);
+  padding: 0.9rem 1rem;
+  font: inherit;
+  font-size: var(--registry-body-active);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.registry-hold-form input:focus {
+  border-color: var(--registry-accent-cool);
+  outline: none;
+}
+
 .registry-path-choice-actions button,
 .registry-path-choice-contrast article button,
 .registry-landing-section button,

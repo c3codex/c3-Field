@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import type { CSSProperties } from "react"
+import type { CSSProperties, FormEvent } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
@@ -11,6 +11,8 @@ const REQUIRED_SECTION_KEYS = [
   "understand_failure",
   "reserve_seat",
   "systems_offering",
+  "foundation_seat_hold",
+  "systems_seat_hold",
 ] as const
 const REQUIRED_MEDIA_ROLES = [
   "hero_video",
@@ -55,6 +57,8 @@ type SurfaceState =
   | "orientation"
   | "reserve_seat"
   | "systems_offering"
+  | "foundation_seat_hold"
+  | "systems_seat_hold"
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
   intro: "landing_intro_video",
@@ -63,6 +67,8 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   orientation: "orientation_placeholder",
   reserve_seat: "reserve_seat",
   systems_offering: "systems_offering",
+  foundation_seat_hold: "foundation_seat_hold",
+  systems_seat_hold: "systems_seat_hold",
 }
 
 function surfaceFromQuery(value: string | null): SurfaceState {
@@ -146,6 +152,10 @@ function sectionCopy(row?: LandingSectionRow) {
     coreStatement: asString(metadata.core_statement),
     sections: asRecordArray(metadata.sections),
     outcomeStatement: asString(metadata.outcome_statement),
+    fields: asRecordArray(metadata.fields),
+    ctaPrimary: asString(metadata.cta_primary),
+    ctaSecondary: asString(metadata.cta_secondary),
+    capture: asRecord(metadata.capture),
     mediaRenderMode: asString(metadata.media_render_mode),
     videoMode: asString(metadata.video_mode),
     fallback: asString(metadata.fallback),
@@ -167,6 +177,10 @@ export default function MeasuresRegistryRuntime() {
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
   const [readError, setReadError] = useState<string | null>(null)
+  const [holdEmail, setHoldEmail] = useState("")
+  const [holdSubmitting, setHoldSubmitting] = useState(false)
+  const [holdStatus, setHoldStatus] = useState<Record<string, string | null>>({})
+  const [holdError, setHoldError] = useState<Record<string, string | null>>({})
   const navigationSourceRef = useRef<"app" | "history">("app")
 
   function historyUrl(surface: SurfaceState) {
@@ -305,6 +319,8 @@ export default function MeasuresRegistryRuntime() {
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
   const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
   const systemsOfferingCopy = sectionCopy(sectionMap.get("systems_offering"))
+  const foundationSeatHoldCopy = sectionCopy(sectionMap.get("foundation_seat_hold"))
+  const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
   const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
@@ -350,6 +366,21 @@ export default function MeasuresRegistryRuntime() {
 
     if (behavior === "route_surface" && target === "systems_offering") {
       navigateSurface("systems_offering")
+      return
+    }
+
+    if (behavior === "route_surface" && target === "systems_seat_hold") {
+      navigateSurface("systems_seat_hold")
+      return
+    }
+
+    if (behavior === "route_surface" && target === "foundation_seat_hold") {
+      navigateSurface("foundation_seat_hold")
+      return
+    }
+
+    if (behavior === "route_surface" && target === "foundation_offering") {
+      navigateSurface("orientation")
     }
   }
 
@@ -720,7 +751,6 @@ export default function MeasuresRegistryRuntime() {
                   key={actionKey}
                   type="button"
                   onClick={() => handleAction(actionKey, systemsOfferingCopy.actions)}
-                  disabled={asString(action.target_encounter_key) === "systems_seat_hold"}
                 >
                   {actionLabel(actionKey, systemsOfferingCopy.actions)}
                 </button>
@@ -732,11 +762,140 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  async function submitSeatHold(
+    event: FormEvent<HTMLFormElement>,
+    encounterKey: "foundation_seat_hold" | "systems_seat_hold",
+    copy: ReturnType<typeof sectionCopy>,
+  ) {
+    event.preventDefault()
+
+    const normalizedEmail = holdEmail.trim().toLowerCase()
+    setHoldStatus((current) => ({ ...current, [encounterKey]: null }))
+    setHoldError((current) => ({ ...current, [encounterKey]: null }))
+
+    if (!normalizedEmail) {
+      setHoldError((current) => ({ ...current, [encounterKey]: "Email is required." }))
+      return
+    }
+
+    if (copy.capture?.target_table !== "measures_seat_hold_capture") {
+      setHoldError((current) => ({
+        ...current,
+        [encounterKey]: "Seat hold capture is not seated correctly.",
+      }))
+      return
+    }
+
+    setHoldSubmitting(true)
+
+    const { error } = await supabase.from("measures_seat_hold_capture").insert({
+      registry_key: "measures_registry",
+      encounter_key: encounterKey,
+      email: normalizedEmail,
+      metadata: {
+        source: "measures_registry_hold_surface",
+      },
+    })
+
+    setHoldSubmitting(false)
+
+    if (error) {
+      setHoldError((current) => ({
+        ...current,
+        [encounterKey]: "Seat hold could not be recorded.",
+      }))
+      return
+    }
+
+    setHoldEmail("")
+    setHoldStatus((current) => ({
+      ...current,
+      [encounterKey]: "Your seat hold has been recorded.",
+    }))
+  }
+
+  function renderHoldSurface(
+    encounterKey: "foundation_seat_hold" | "systems_seat_hold",
+    copy: ReturnType<typeof sectionCopy>,
+  ) {
+    if (reportMissingClassification(encounterKey, copy)) return null
+
+    const emailField = copy.fields.find(
+      (field) =>
+        asString(field.key) === "email" &&
+        asString(field.type) === "email" &&
+        field.required === true,
+    )
+    const actions = copy.actions
+    const backAction = actions.find((action) => asString(action.action_key) === "back_to_offering")
+    const primaryLabel =
+      copy.ctaPrimary ??
+      asString(actions.find((action) => asString(action.action_key) === "reserve_seat_hold")?.label)
+    const secondaryLabel = copy.ctaSecondary ?? asString(backAction?.label)
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface={encounterKey}
+        style={registryTokenStyle}
+      >
+        {renderHeader(null, backAction ? [backAction] : actions)}
+        <section className="registry-hold-surface" aria-label={copy.entryLabel ?? undefined}>
+          <div className="registry-encounter-entry">
+            {copy.entryLabel ? <span>{copy.entryLabel}</span> : null}
+            {copy.entryHeadline ? <h1>{copy.entryHeadline}</h1> : null}
+            {copy.entrySub ? <p>{copy.entrySub}</p> : null}
+          </div>
+
+          <form className="registry-hold-form" onSubmit={(event) => submitSeatHold(event, encounterKey, copy)}>
+            {emailField ? (
+              <label>
+                <span>Email</span>
+                <input
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={holdEmail}
+                  onChange={(event) => setHoldEmail(event.target.value)}
+                />
+              </label>
+            ) : null}
+
+            <div className="registry-encounter-actions">
+              <button type="submit" disabled={holdSubmitting || !emailField}>
+                {holdSubmitting ? "Reserving..." : primaryLabel}
+              </button>
+              {backAction ? (
+                <button type="button" onClick={() => handleAction(asString(backAction.action_key), actions)}>
+                  {secondaryLabel}
+                </button>
+              ) : null}
+            </div>
+
+            {holdStatus[encounterKey] ? (
+              <p className="reserve-seat-success">{holdStatus[encounterKey]}</p>
+            ) : null}
+            {holdError[encounterKey] ? (
+              <p className="reserve-seat-error">{holdError[encounterKey]}</p>
+            ) : null}
+          </form>
+        </section>
+      </main>
+    )
+  }
+
   if (activeSurface === "path_choice") return renderPathChoiceSurface()
   if (activeSurface === "understand_failure") return renderUnderstandFailureSurface()
   if (activeSurface === "orientation") return renderOrientationSurface()
   if (activeSurface === "reserve_seat") return renderReserveSeatSurface()
   if (activeSurface === "systems_offering") return renderSystemsOfferingSurface()
+  if (activeSurface === "foundation_seat_hold") {
+    return renderHoldSurface("foundation_seat_hold", foundationSeatHoldCopy)
+  }
+  if (activeSurface === "systems_seat_hold") {
+    return renderHoldSurface("systems_seat_hold", systemsSeatHoldCopy)
+  }
 
   return renderIntroSurface()
 }
