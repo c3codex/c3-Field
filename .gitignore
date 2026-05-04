@@ -7,3 +7,4 @@ dist
 *.wav
 .env.local
 .dev.vars
+.wrangler/
