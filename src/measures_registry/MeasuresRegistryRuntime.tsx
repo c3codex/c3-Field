@@ -3,6 +3,7 @@ import type { CSSProperties, FormEvent } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
+const DESIGN_REGISTRY_KEY = "measures_registry"
 
 const REQUIRED_SECTION_KEYS = ["landing_intro_video", "landing_path_choice"] as const
 const REQUIRED_MEDIA_ROLES = [
@@ -10,6 +11,33 @@ const REQUIRED_MEDIA_ROLES = [
   "hero_poster",
   "path_choice_background",
   "registry_mark",
+] as const
+const REQUIRED_DESIGN_TOKEN_KEYS = [
+  "text_primary",
+  "text_secondary",
+  "text_muted",
+  "background_obsidian",
+  "panel_obsidian",
+  "border_subtle",
+  "accent_warm",
+  "accent_cool",
+  "entry_label",
+  "entry_headline",
+  "entry_sub",
+  "body",
+  "section_headline",
+  "plaque_title",
+  "plaque_body",
+  "section_spacing_desktop",
+  "section_spacing_mobile",
+  "page_padding_desktop",
+  "page_padding_mobile",
+  "plaque_padding_desktop",
+  "plaque_padding_mobile",
+  "content_max_width",
+  "text_max_width",
+  "header_height",
+  "mobile_breakpoint",
 ] as const
 
 type SurfaceState = "intro" | "path_choice" | "orientation" | "reserve_seat"
@@ -39,6 +67,13 @@ type MediaRow = {
   storage_bucket: string
   storage_path: string
   mime_type?: string | null
+  is_active: boolean | null
+}
+
+type DesignTokenRow = {
+  token_key: string
+  token_value: string
+  media_query: string | null
   is_active: boolean | null
 }
 
@@ -95,6 +130,11 @@ function mediaUrl(row?: MediaRow) {
   return supabase.storage.from(row.storage_bucket).getPublicUrl(row.storage_path).data.publicUrl
 }
 
+function cssTokenName(tokenKey: string, mediaQuery: string | null) {
+  const suffix = mediaQuery ? "-mobile" : ""
+  return `--registry-${tokenKey.replaceAll("_", "-")}${suffix}`
+}
+
 function sectionCopy(row?: LandingSectionRow) {
   const metadata = asRecord(row?.metadata) ?? {}
   return {
@@ -115,6 +155,7 @@ export default function MeasuresRegistryRuntime() {
   )
   const [sections, setSections] = useState<LandingSectionRow[]>([])
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
+  const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
   const [readError, setReadError] = useState<string | null>(null)
   const [form, setForm] = useState<ReserveSeatForm>(initialReserveSeatForm)
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">(
@@ -177,10 +218,11 @@ export default function MeasuresRegistryRuntime() {
         setReadError(supabaseConfigError)
         setSections([])
         setMediaRows([])
+        setDesignTokens([])
         return
       }
 
-      const [sectionResult, mediaResult] = await Promise.all([
+      const [sectionResult, mediaResult, tokenResult] = await Promise.all([
         supabase
           .from("measures_encounter_def")
           .select("encounter_key, display_title, metadata")
@@ -192,19 +234,26 @@ export default function MeasuresRegistryRuntime() {
           .eq("campaign_key", CAMPAIGN_KEY)
           .in("media_role", [...REQUIRED_MEDIA_ROLES])
           .order("sort_order", { ascending: true }),
+        supabase
+          .from("measures_design_token")
+          .select("token_key, token_value, media_query, is_active")
+          .eq("registry_key", DESIGN_REGISTRY_KEY)
+          .eq("is_active", true),
       ])
 
       if (cancelled) return
 
-      if (sectionResult.error || mediaResult.error) {
+      if (sectionResult.error || mediaResult.error || tokenResult.error) {
         setReadError("Measures Registry landing records could not be read.")
         setSections([])
         setMediaRows([])
+        setDesignTokens([])
         return
       }
 
       setSections(((sectionResult.data ?? []) as LandingSectionRow[]) ?? [])
       setMediaRows(((mediaResult.data ?? []) as MediaRow[]) ?? [])
+      setDesignTokens(((tokenResult.data ?? []) as DesignTokenRow[]) ?? [])
     }
 
     loadLanding()
@@ -229,6 +278,21 @@ export default function MeasuresRegistryRuntime() {
   )
   const missingSections = REQUIRED_SECTION_KEYS.filter((key) => !sectionMap.has(key))
   const missingMediaRoles = REQUIRED_MEDIA_ROLES.filter((role) => !mediaMap.has(role))
+  const activeTokenKeys = useMemo(
+    () => new Set(designTokens.filter((token) => !token.media_query).map((token) => token.token_key)),
+    [designTokens],
+  )
+  const missingDesignTokens = REQUIRED_DESIGN_TOKEN_KEYS.filter((key) => !activeTokenKeys.has(key))
+  const registryTokenStyle = useMemo(() => {
+    const style: Record<string, string> = {}
+
+    for (const token of designTokens) {
+      if (token.is_active === false) continue
+      style[cssTokenName(token.token_key, token.media_query)] = token.token_value
+    }
+
+    return style as CSSProperties
+  }, [designTokens])
   const showDiagnostics = false
   const introCopy = sectionCopy(sectionMap.get("landing_intro_video"))
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
@@ -304,7 +368,14 @@ export default function MeasuresRegistryRuntime() {
 
   function renderCorrectionReport() {
     if (!showDiagnostics) return null
-    if (missingSections.length === 0 && missingMediaRoles.length === 0 && !readError) return null
+    if (
+      missingSections.length === 0 &&
+      missingMediaRoles.length === 0 &&
+      missingDesignTokens.length === 0 &&
+      !readError
+    ) {
+      return null
+    }
 
     return (
       <section className="registry-missing-records" aria-label="Missing DB records">
@@ -326,6 +397,16 @@ export default function MeasuresRegistryRuntime() {
             <ul>
               {missingMediaRoles.map((role: RequiredMediaRole) => (
                 <li key={role}>{role}</li>
+              ))}
+            </ul>
+          </>
+        ) : null}
+        {missingDesignTokens.length > 0 ? (
+          <>
+            <span>measures_design_token.token_key</span>
+            <ul>
+              {missingDesignTokens.map((key) => (
+                <li key={key}>{key}</li>
               ))}
             </ul>
           </>
@@ -364,7 +445,11 @@ export default function MeasuresRegistryRuntime() {
 
   function renderIntroSurface() {
     return (
-      <main className="measures-registry-runtime" data-surface="landing_intro_video">
+      <main
+        className="measures-registry-runtime"
+        data-surface="landing_intro_video"
+        style={registryTokenStyle}
+      >
         {renderCorrectionReport()}
         <section className="registry-intro-video" aria-label={introCopy.title ?? undefined}>
           {heroVideoUrl ? (
@@ -406,7 +491,11 @@ export default function MeasuresRegistryRuntime() {
       : undefined
 
     return (
-      <main className="measures-registry-runtime" data-surface="landing_path_choice">
+      <main
+        className="measures-registry-runtime"
+        data-surface="landing_path_choice"
+        style={registryTokenStyle}
+      >
         {renderCorrectionReport()}
         {renderHeader()}
         <section className="registry-path-choice" style={style}>
@@ -442,7 +531,11 @@ export default function MeasuresRegistryRuntime() {
 
   function renderOrientationSurface() {
     return (
-      <main className="measures-registry-runtime" data-surface="orientation_placeholder">
+      <main
+        className="measures-registry-runtime"
+        data-surface="orientation_placeholder"
+        style={registryTokenStyle}
+      >
         {renderHeader()}
         <section id="orientation" className="registry-landing-section">
           <span>Orientation</span>
@@ -457,7 +550,11 @@ export default function MeasuresRegistryRuntime() {
 
   function renderReserveSeatSurface() {
     return (
-      <main className="measures-registry-runtime" data-surface="reserve_seat">
+      <main
+        className="measures-registry-runtime"
+        data-surface="reserve_seat"
+        style={registryTokenStyle}
+      >
         {renderHeader()}
         <section id="reserve-seat" className="reserve-seat-panel" aria-label="Reserve your seat">
           <div className="reserve-seat-copy">
