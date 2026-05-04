@@ -5,7 +5,11 @@ import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
 
-const REQUIRED_SECTION_KEYS = ["landing_intro_video", "landing_path_choice"] as const
+const REQUIRED_SECTION_KEYS = [
+  "landing_intro_video",
+  "landing_path_choice",
+  "understand_failure",
+] as const
 const REQUIRED_MEDIA_ROLES = [
   "hero_video",
   "hero_poster",
@@ -40,11 +44,12 @@ const REQUIRED_DESIGN_TOKEN_KEYS = [
   "mobile_breakpoint",
 ] as const
 
-type SurfaceState = "intro" | "path_choice" | "orientation" | "reserve_seat"
+type SurfaceState = "intro" | "path_choice" | "understand_failure" | "orientation" | "reserve_seat"
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
   intro: "landing_intro_video",
   path_choice: "landing_path_choice",
+  understand_failure: "understand_failure",
   orientation: "orientation_placeholder",
   reserve_seat: "reserve_seat",
 }
@@ -143,6 +148,17 @@ function sectionCopy(row?: LandingSectionRow) {
     title: asString(metadata.title) ?? row?.display_title ?? null,
     subtitle: asString(metadata.subtitle),
     plaques: asRecordArray(metadata.plaques),
+    entryLabel: asString(metadata.entry_label),
+    entryHeadline: asString(metadata.entry_headline),
+    entrySub: asString(metadata.entry_sub),
+    breakdownBlocks: Array.isArray(metadata.breakdown_blocks)
+      ? metadata.breakdown_blocks.filter((item): item is string => typeof item === "string")
+      : [],
+    resolutionShift: asString(metadata.resolution_shift),
+    transitionStatement: asString(metadata.transition_statement),
+    mediaRoles: Array.isArray(metadata.media_roles)
+      ? metadata.media_roles.filter((item): item is string => typeof item === "string")
+      : [],
     more: asRecord(metadata.more),
     coherence: asRecord(metadata.coherence),
     actions: asActionArray(metadata.actions),
@@ -296,6 +312,7 @@ export default function MeasuresRegistryRuntime() {
   const showDiagnostics = false
   const introCopy = sectionCopy(sectionMap.get("landing_intro_video"))
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
+  const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
   const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
@@ -306,26 +323,36 @@ export default function MeasuresRegistryRuntime() {
     if (submitState !== "idle") setSubmitState("idle")
   }
 
-  function actionLabel(actionKey: string) {
+  function actionLabel(actionKey: string, actions = pathChoiceCopy.actions) {
     const plaque = pathChoiceCopy.plaques.find(
       (item) => asString(item.action_key) === actionKey,
     )
-    const action = pathChoiceCopy.actions.find((item) => asString(item.action_key) === actionKey)
+    const action = actions.find((item) => asString(item.action_key) === actionKey)
     return asString(plaque?.action_label) ?? asString(action?.label) ?? actionKey
   }
 
-  function actionByKey(actionKey: string | null) {
+  function actionByKey(actionKey: string | null, actions = pathChoiceCopy.actions) {
     if (!actionKey) return null
-    return pathChoiceCopy.actions.find((item) => asString(item.action_key) === actionKey) ?? null
+    return actions.find((item) => asString(item.action_key) === actionKey) ?? null
   }
 
-  function handlePathAction(actionKey: string | null) {
-    const action = actionByKey(actionKey)
+  function handleAction(actionKey: string | null, actions = pathChoiceCopy.actions) {
+    const action = actionByKey(actionKey, actions)
     const behavior = asString(action?.behavior)
     const target = asString(action?.target_encounter_key)
 
     if (behavior === "open_src_intake" || actionKey === "reserve_seat") {
       navigateSurface("reserve_seat")
+      return
+    }
+
+    if (behavior === "route_surface" && target === "understand_failure") {
+      navigateSurface("understand_failure")
+      return
+    }
+
+    if (behavior === "route_surface" && target === "landing_path_choice") {
+      navigateSurface("path_choice")
       return
     }
 
@@ -415,9 +442,10 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
-  function renderHeader() {
-    const header = pathChoiceCopy.header
+  function renderHeader(headerOverride?: Record<string, unknown> | null, actionsOverride?: Record<string, unknown>[]) {
+    const header = headerOverride ?? pathChoiceCopy.header
     const headerActions = asActionArray(header?.actions)
+    const actions = actionsOverride ?? headerActions
     const title = asString(header?.title)
 
     return (
@@ -427,13 +455,13 @@ export default function MeasuresRegistryRuntime() {
           {title ? <span>{title}</span> : null}
         </div>
         <nav className="registry-public-nav" aria-label="Measures Registry navigation">
-          {headerActions.map((action) => {
+          {actions.map((action) => {
             const actionKey = asString(action.action_key)
             const label = asString(action.label)
             if (!actionKey || !label) return null
 
             return (
-              <button key={actionKey} type="button" onClick={() => handlePathAction(actionKey)}>
+              <button key={actionKey} type="button" onClick={() => handleAction(actionKey, actions)}>
                 {label}
               </button>
             )
@@ -516,11 +544,59 @@ export default function MeasuresRegistryRuntime() {
                   <span>{title}</span>
                   <p>{body}</p>
                   {actionKey ? (
-                    <button type="button" onClick={() => handlePathAction(actionKey)}>
+                    <button type="button" onClick={() => handleAction(actionKey)}>
                       {actionLabel(actionKey)}
                     </button>
                   ) : null}
                 </article>
+              )
+            })}
+          </div>
+        </section>
+      </main>
+    )
+  }
+
+  function renderUnderstandFailureSurface() {
+    const actions = understandFailureCopy.actions
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="understand_failure"
+        style={registryTokenStyle}
+      >
+        {renderCorrectionReport()}
+        {renderHeader(understandFailureCopy.header, actions)}
+        <section className="registry-encounter-surface">
+          <div className="registry-encounter-entry">
+            {understandFailureCopy.entryLabel ? <span>{understandFailureCopy.entryLabel}</span> : null}
+            {understandFailureCopy.entryHeadline ? <h1>{understandFailureCopy.entryHeadline}</h1> : null}
+            {understandFailureCopy.entrySub ? <p>{understandFailureCopy.entrySub}</p> : null}
+          </div>
+
+          <div className="registry-breakdown-grid">
+            {understandFailureCopy.breakdownBlocks.map((block) => (
+              <article key={block}>
+                <p>{block}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="registry-resolution-shift">
+            {understandFailureCopy.resolutionShift ? <p>{understandFailureCopy.resolutionShift}</p> : null}
+            {understandFailureCopy.transitionStatement ? <h2>{understandFailureCopy.transitionStatement}</h2> : null}
+          </div>
+
+          <div className="registry-encounter-actions">
+            {actions.map((action) => {
+              const actionKey = asString(action.action_key)
+              if (!actionKey) return null
+
+              return (
+                <button key={actionKey} type="button" onClick={() => handleAction(actionKey, actions)}>
+                  {actionLabel(actionKey, actions)}
+                </button>
               )
             })}
           </div>
@@ -663,6 +739,7 @@ export default function MeasuresRegistryRuntime() {
   }
 
   if (activeSurface === "path_choice") return renderPathChoiceSurface()
+  if (activeSurface === "understand_failure") return renderUnderstandFailureSurface()
   if (activeSurface === "orientation") return renderOrientationSurface()
   if (activeSurface === "reserve_seat") return renderReserveSeatSurface()
 
