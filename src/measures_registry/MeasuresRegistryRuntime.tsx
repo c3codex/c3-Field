@@ -811,6 +811,13 @@ export default function MeasuresRegistryRuntime() {
             {pathChoiceCopy.eyebrow ? <span>{pathChoiceCopy.eyebrow}</span> : null}
             {pathChoiceCopy.title ? <h1>{pathChoiceCopy.title}</h1> : null}
             {pathChoiceCopy.subtitle ? <p>{pathChoiceCopy.subtitle}</p> : null}
+            {pathChoiceCopy.breakdownBlocks.length > 0 ? (
+              <div className="registry-path-signal" aria-label="System signal">
+                {pathChoiceCopy.breakdownBlocks.map((block) => (
+                  <p key={block}>{block}</p>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           <div className="registry-path-choice-contrast">
@@ -959,6 +966,19 @@ export default function MeasuresRegistryRuntime() {
             {reserveSeatCopy.entryHeadline ? <h1>{reserveSeatCopy.entryHeadline}</h1> : null}
             {reserveSeatCopy.entrySub ? <p>{reserveSeatCopy.entrySub}</p> : null}
           </div>
+
+          {reserveSeatCopy.coreStatement ? (
+            <p className="registry-offering-core">{reserveSeatCopy.coreStatement}</p>
+          ) : null}
+
+          {reserveSeatCopy.sections.length > 0 ? (
+            <div className="registry-path-signal" aria-label="Governance structure">
+              {reserveSeatCopy.sections.map((section) => {
+                const body = asString(section.body)
+                return body ? <p key={body}>{body}</p> : null
+              })}
+            </div>
+          ) : null}
 
           <div className="registry-reserve-options">
             {offerings.map((offering) => {
