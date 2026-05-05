@@ -1,6 +1,6 @@
----
+﻿---
 document_type: oar1
-title: OAR1 — Intro Hook Epigraph Replacement
+title: OAR1 â€” Intro Hook Epigraph Replacement
 version: v1
 status: executed_with_asset_gap
 system: measures_registry
@@ -17,7 +17,7 @@ Replace the public first encounter surface with a gesture-gated epigraph video s
 - Updated `landing_intro_video` runtime behavior into an epigraph playback surface.
 - Set media source to Supabase Storage:
   - bucket: `measures-registry`
-  - path: `intro_hook_15s.mp4`
+  - path: `intro_hook_15sec.mp4`
 - Removed frontend overlay copy from the intro surface.
 - Removed primary skip button.
 - Added mark-only enter surface before playback.
@@ -46,10 +46,10 @@ Replace the public first encounter surface with a gesture-gated epigraph video s
 ```json
 {
   "videoSourceBucket": "measures-registry",
-  "videoSourcePath": "intro_hook_15s.mp4",
-  "resolvedPublicUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/intro_hook_15s.mp4",
+  "videoSourcePath": "intro_hook_15sec.mp4",
+  "resolvedPublicUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/intro_hook_15sec.mp4",
   "storageResponse": {
-    "name": "intro_hook_15s.mp4",
+    "name": "intro_hook_15sec.mp4",
     "mimetype": "video/mp4",
     "size": 15819429
   },
@@ -63,7 +63,7 @@ Replace the public first encounter surface with a gesture-gated epigraph video s
 ```
 
 ## Media Validation
-The epigraph asset is present in the public Supabase `measures-registry` bucket as `intro_hook_15s.mp4`.
+The epigraph asset is present in the public Supabase `measures-registry` bucket as `intro_hook_15sec.mp4`.
 
 ## Files
 - docs/oar/measures_registry/oar2_intro_hook_epigraph_v1.meta.md
