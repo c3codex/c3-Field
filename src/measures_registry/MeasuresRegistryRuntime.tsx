@@ -9,6 +9,7 @@ const REQUIRED_SECTION_KEYS = [
   "landing_intro_video",
   "landing_path_choice",
   "understand_failure",
+  "orientation_placeholder",
   "reserve_seat",
   "foundation_offering",
   "systems_offering",
@@ -125,6 +126,14 @@ type SeatOfferingRow = {
   metadata: Record<string, unknown> | null
 }
 
+type CodexEntityRow = {
+  entity_key: string
+  entity_name: string
+  entity_type: string | null
+  legal_status: string | null
+  jurisdiction: string | null
+}
+
 type NotificationReviewRow = {
   capture_id: string
   email: string
@@ -189,6 +198,8 @@ function sectionCopy(row?: LandingSectionRow) {
     coreStatement: asString(metadata.core_statement),
     sections: asRecordArray(metadata.sections),
     outcomeStatement: asString(metadata.outcome_statement),
+    closingStatement: asString(metadata.closing_statement),
+    entityReference: asString(metadata.entity_reference),
     fields: asRecordArray(metadata.fields),
     ctaPrimary: asString(metadata.cta_primary),
     ctaSecondary: asString(metadata.cta_secondary),
@@ -220,6 +231,7 @@ export default function MeasuresRegistryRuntime() {
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
   const [seatOfferings, setSeatOfferings] = useState<SeatOfferingRow[]>([])
+  const [codexEntities, setCodexEntities] = useState<CodexEntityRow[]>([])
   const [readError, setReadError] = useState<string | null>(null)
   const [holdEmail, setHoldEmail] = useState("")
   const [holdSubmitting, setHoldSubmitting] = useState(false)
@@ -291,6 +303,7 @@ export default function MeasuresRegistryRuntime() {
         setMediaRows([])
         setDesignTokens([])
         setSeatOfferings([])
+        setCodexEntities([])
         return
       }
 
@@ -326,13 +339,33 @@ export default function MeasuresRegistryRuntime() {
         setMediaRows([])
         setDesignTokens([])
         setSeatOfferings([])
+        setCodexEntities([])
         return
       }
 
-      setSections(((sectionResult.data ?? []) as LandingSectionRow[]) ?? [])
+      const nextSections = ((sectionResult.data ?? []) as LandingSectionRow[]) ?? []
+      const entityReferences = Array.from(
+        new Set(
+          nextSections
+            .map((section) => asString(asRecord(section.metadata)?.entity_reference))
+            .filter((reference): reference is string => Boolean(reference)),
+        ),
+      )
+      const entityResult =
+        entityReferences.length > 0
+          ? await supabase
+              .from("codex_entity")
+              .select("entity_key, entity_name, entity_type, legal_status, jurisdiction")
+              .in("entity_key", entityReferences)
+          : { data: [], error: null }
+
+      if (cancelled) return
+
+      setSections(nextSections)
       setMediaRows(((mediaResult.data ?? []) as MediaRow[]) ?? [])
       setDesignTokens(((tokenResult.data ?? []) as DesignTokenRow[]) ?? [])
       setSeatOfferings(((offeringResult.data ?? []) as SeatOfferingRow[]) ?? [])
+      setCodexEntities(entityResult.error ? [] : (((entityResult.data ?? []) as CodexEntityRow[]) ?? []))
     }
 
     loadLanding()
@@ -376,6 +409,7 @@ export default function MeasuresRegistryRuntime() {
   const introCopy = sectionCopy(sectionMap.get("landing_intro_video"))
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
+  const orientationCopy = sectionCopy(sectionMap.get("orientation_placeholder"))
   const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
   const foundationOfferingCopy = sectionCopy(sectionMap.get("foundation_offering"))
   const systemsOfferingCopy = sectionCopy(sectionMap.get("systems_offering"))
@@ -398,6 +432,24 @@ export default function MeasuresRegistryRuntime() {
   function actionByKey(actionKey: string | null, actions = pathChoiceCopy.actions) {
     if (!actionKey) return null
     return actions.find((item) => asString(item.action_key) === actionKey) ?? null
+  }
+
+  function formatCodexValue(value: string | null) {
+    if (!value) return null
+    return value
+      .split("_")
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ")
+  }
+
+  function entityRoleLabel(entityType: string | null) {
+    if (entityType === "institution_in_service") return "Institution in Service"
+    return formatCodexValue(entityType)
+  }
+
+  function entityByReference(entityReference: string | null) {
+    if (!entityReference) return null
+    return codexEntities.find((entity) => entity.entity_key === entityReference) ?? null
   }
 
   const loadNotificationReviewRows = async () => {
@@ -794,19 +846,52 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function renderOrientationSurface() {
+    if (reportMissingClassification("orientation_placeholder", orientationCopy)) return null
+    const entity = entityByReference(orientationCopy.entityReference)
+
     return (
       <main
         className="measures-registry-runtime"
         data-surface="orientation_placeholder"
         style={registryTokenStyle}
       >
-        {renderHeader()}
-        <section id="orientation" className="registry-landing-section">
-          <span>Orientation</span>
-          <h2>Public orientation surface pending</h2>
-          <button type="button" onClick={() => navigateSurface("path_choice")}>
-            Back to Path Choice
-          </button>
+        {renderHeader(orientationCopy.header, orientationCopy.actions)}
+        <section id="orientation" className="registry-landing-section" aria-label={orientationCopy.entryLabel ?? undefined}>
+          <div className="registry-encounter-entry">
+            {orientationCopy.entryLabel ? <span>{orientationCopy.entryLabel}</span> : null}
+            {orientationCopy.entryHeadline ? <h1>{orientationCopy.entryHeadline}</h1> : null}
+            {orientationCopy.entrySub ? <p>{orientationCopy.entrySub}</p> : null}
+          </div>
+
+          <div className="registry-offering-sections">
+            {orientationCopy.sections.map((section) => {
+              const title = asString(section.title)
+              const body = asString(section.body)
+
+              return (
+                <article key={title ?? body}>
+                  {title ? <span>{title}</span> : null}
+                  {body ? <p>{body}</p> : null}
+                </article>
+              )
+            })}
+          </div>
+
+          {entity ? (
+            <div className="registry-entity-reference">
+              <strong>{entity.entity_name}</strong>
+              {entityRoleLabel(entity.entity_type) ? <span>{entityRoleLabel(entity.entity_type)}</span> : null}
+              <small>
+                {[formatCodexValue(entity.legal_status), entity.jurisdiction]
+                  .filter(Boolean)
+                  .join(" — ")}
+              </small>
+            </div>
+          ) : null}
+
+          {orientationCopy.closingStatement ? (
+            <p className="registry-offering-outcome">{orientationCopy.closingStatement}</p>
+          ) : null}
         </section>
       </main>
     )

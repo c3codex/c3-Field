@@ -474,6 +474,26 @@ body,
   line-height: 1.2;
 }
 
+.registry-entity-reference {
+  display: grid;
+  gap: 0.35rem;
+  max-width: var(--registry-text-max-width);
+  color: var(--registry-text-secondary);
+}
+
+.registry-entity-reference strong {
+  color: var(--registry-text-primary);
+  font-size: var(--registry-plaque-title-active);
+  letter-spacing: 0.02em;
+}
+
+.registry-entity-reference span,
+.registry-entity-reference small {
+  color: var(--registry-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .registry-offering-sections {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
