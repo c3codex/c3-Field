@@ -4,6 +4,8 @@ import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
+const EPIGRAPH_VIDEO_BUCKET = "measures-registry"
+const EPIGRAPH_VIDEO_PATH = "intro_hook_15s.mp4"
 
 const REQUIRED_SECTION_KEYS = [
   "landing_intro_video",
@@ -244,6 +246,10 @@ export default function MeasuresRegistryRuntime() {
   const [operatorDispatchKey, setOperatorDispatchKey] = useState(() =>
     window.sessionStorage.getItem("measures_registry_operator_dispatch_key") ?? "",
   )
+  const [epigraphEntered, setEpigraphEntered] = useState(false)
+  const [epigraphMuted, setEpigraphMuted] = useState(false)
+  const [epigraphFailed, setEpigraphFailed] = useState(false)
+  const epigraphVideoRef = useRef<HTMLVideoElement | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
 
   function historyUrl(surface: SurfaceState) {
@@ -375,6 +381,17 @@ export default function MeasuresRegistryRuntime() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!epigraphEntered || epigraphFailed) return
+    const video = epigraphVideoRef.current
+    if (!video) return
+
+    video.muted = epigraphMuted
+    void video.play().catch(() => {
+      setEpigraphFailed(true)
+    })
+  }, [epigraphEntered, epigraphFailed, epigraphMuted])
+
   const sectionMap = useMemo(
     () => new Map(sections.map((section) => [section.encounter_key, section])),
     [sections],
@@ -418,6 +435,9 @@ export default function MeasuresRegistryRuntime() {
   const notificationReviewCopy = sectionCopy(sectionMap.get("seat_hold_notification_review"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
   const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
+  const epigraphVideoUrl = supabase.storage
+    .from(EPIGRAPH_VIDEO_BUCKET)
+    .getPublicUrl(EPIGRAPH_VIDEO_PATH).data.publicUrl
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
 
@@ -715,29 +735,51 @@ export default function MeasuresRegistryRuntime() {
         style={registryTokenStyle}
       >
         {renderCorrectionReport()}
-        <section className="registry-intro-video" aria-label={introCopy.title ?? undefined}>
-          {heroVideoUrl ? (
+        <section
+          className="registry-intro-video"
+          aria-label="Measures Registry epigraph"
+          data-entered={epigraphEntered}
+          data-failed={epigraphFailed}
+        >
+          {!epigraphEntered || epigraphFailed ? (
+            <button
+              type="button"
+              className="registry-epigraph-enter"
+              aria-label={epigraphFailed ? "Continue" : "Enter"}
+              onClick={() => {
+                if (epigraphFailed) {
+                  navigateSurface("path_choice")
+                  return
+                }
+
+                setEpigraphEntered(true)
+              }}
+            >
+              {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
+            </button>
+          ) : (
             <video
-              src={heroVideoUrl}
+              ref={epigraphVideoRef}
+              src={epigraphVideoUrl}
               poster={heroPosterUrl ?? undefined}
               autoPlay
-              muted
+              muted={epigraphMuted}
               playsInline
               onEnded={() => navigateSurface("path_choice")}
-              aria-label={introCopy.title ?? "Measures Registry intro video"}
+              onError={() => setEpigraphFailed(true)}
+              aria-label="Measures Registry epigraph"
             />
+          )}
+          {epigraphEntered && !epigraphFailed ? (
+            <button
+              type="button"
+              className="registry-epigraph-mute"
+              aria-label={epigraphMuted ? "Unmute" : "Mute"}
+              onClick={() => setEpigraphMuted((current) => !current)}
+            >
+              {epigraphMuted ? "○" : "●"}
+            </button>
           ) : null}
-          <div className="registry-intro-copy">
-            {introCopy.title ? <h1>{introCopy.title}</h1> : null}
-            {introCopy.subtitle ? <p>{introCopy.subtitle}</p> : null}
-          </div>
-          <button
-            type="button"
-            className="registry-intro-skip"
-            onClick={() => navigateSurface("path_choice")}
-          >
-            Skip
-          </button>
         </section>
       </main>
     )
