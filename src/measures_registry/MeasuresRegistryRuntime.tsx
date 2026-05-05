@@ -831,17 +831,21 @@ export default function MeasuresRegistryRuntime() {
               const actionKey = asString(plaque.action_key)
               const title = asString(plaque.title) ?? asString(plaque.label)
               const body = asString(plaque.body)
+              const side = asString(plaque.side) ?? (index === 0 ? "left" : "right")
 
               return (
-                <article key={actionKey ?? title ?? index} data-choice={asString(plaque.side)}>
+                <button
+                  key={actionKey ?? title ?? index}
+                  type="button"
+                  className="registry-route-plate"
+                  data-choice={side}
+                  onClick={() => handleAction(actionKey)}
+                  disabled={!actionKey}
+                >
                   <span>{title}</span>
                   <p>{body}</p>
-                  {actionKey ? (
-                    <button type="button" onClick={() => handleAction(actionKey)}>
-                      {actionLabel(actionKey)}
-                    </button>
-                  ) : null}
-                </article>
+                  {actionKey ? <strong>{actionLabel(actionKey)}</strong> : null}
+                </button>
               )
             })}
           </div>
