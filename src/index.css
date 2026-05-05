@@ -36,36 +36,37 @@ body,
 }
 
 .registry-intro-video {
-  position: relative;
-  min-height: 100svh;
-  width: 100%;
+  position: fixed;
+  inset: 0;
+  min-height: 100vh;
+  width: 100vw;
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: var(--registry-background-obsidian);
+  background: #000;
 }
 
 .registry-intro-video video {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   object-fit: cover;
 }
 
 .registry-epigraph-enter {
-  width: min(9rem, 38vw);
-  aspect-ratio: 1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   display: grid;
   place-items: center;
   border: 0;
   background: transparent;
+  color: var(--registry-text-secondary);
+  font: inherit;
   cursor: pointer;
-}
-
-.registry-epigraph-enter img {
-  max-width: 100%;
-  max-height: 100%;
 }
 
 .registry-epigraph-mute {
@@ -84,20 +85,21 @@ body,
 }
 
 .registry-public-header {
-  position: fixed;
-  left: clamp(1rem, 3vw, 2.5rem);
-  right: clamp(1rem, 3vw, 2.5rem);
-  top: clamp(0.85rem, 2.5vw, 1.5rem);
+  position: absolute;
+  left: clamp(0.75rem, 2vw, 1.5rem);
+  right: clamp(0.75rem, 2vw, 1.5rem);
+  top: clamp(0.45rem, 1.5vw, 0.8rem);
   z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.72rem 0.85rem;
-  border: 1px solid rgba(245, 248, 255, 0.13);
-  border-radius: 999px;
-  background: var(--registry-panel-obsidian);
-  backdrop-filter: blur(16px);
+  min-height: clamp(1.9rem, 3vw, 2.35rem);
+  padding: 0.22rem 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  opacity: 0.75;
 }
 
 .registry-public-brand,
@@ -108,15 +110,15 @@ body,
 }
 
 .registry-public-brand img {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 1.05rem;
+  height: 1.05rem;
   border-radius: 999px;
   object-fit: contain;
 }
 
 .registry-public-brand span {
   color: var(--registry-text-primary);
-  font-size: 0.88rem;
+  font-size: 0.72rem;
   letter-spacing: 0.02em;
 }
 
@@ -124,9 +126,9 @@ body,
   border: 0;
   background: transparent;
   color: var(--registry-text-secondary);
-  padding: 0.35rem 0.45rem;
+  padding: 0.18rem 0.28rem;
   font: inherit;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   cursor: pointer;
 }
 
@@ -162,12 +164,12 @@ body,
 
 .registry-path-choice::before {
   background:
-    linear-gradient(90deg, transparent calc(50% - 1px), rgba(242, 247, 255, 0.84) 50%, transparent calc(50% + 1px)),
+    linear-gradient(90deg, transparent calc(50% - 1.5px), rgba(242, 247, 255, 0.94) 50%, transparent calc(50% + 1.5px)),
     radial-gradient(circle at 21% 72%, rgba(214, 132, 62, 0.16), transparent 20rem),
     radial-gradient(circle at 14% 24%, rgba(165, 58, 48, 0.14), transparent 18rem),
-    radial-gradient(circle at 78% 48%, rgba(197, 224, 255, 0.22), transparent 28rem),
-    linear-gradient(108deg, transparent 54%, rgba(79, 124, 181, 0.16) 74%, rgba(246, 248, 251, 0.12));
-  opacity: 0.78;
+    radial-gradient(circle at 78% 48%, rgba(214, 232, 255, 0.28), transparent 28rem),
+    linear-gradient(108deg, transparent 52%, rgba(79, 124, 181, 0.2) 74%, rgba(246, 248, 251, 0.16));
+  opacity: 0.86;
 }
 
 .registry-path-choice::after {
@@ -176,8 +178,8 @@ body,
     repeating-linear-gradient(0deg, transparent 0 4.2rem, rgba(208, 230, 255, 0.075) 4.2rem calc(4.2rem + 1px));
   clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
   transform: translate3d(-0.35rem, 0.15rem, 0) rotate(-0.45deg);
-  animation: registry-failure-drift 22s ease-in-out infinite alternate;
-  opacity: 0.68;
+  animation: registry-failure-drift 28s ease-in-out infinite alternate;
+  opacity: 0.48;
 }
 
 .registry-path-choice-copy,
@@ -276,15 +278,15 @@ body,
   background:
     linear-gradient(117deg, rgba(166, 63, 46, 0.11), transparent 42%),
     repeating-linear-gradient(28deg, rgba(214, 132, 62, 0.09) 0 1px, transparent 1px 4.5rem);
-  opacity: 0.42;
+  opacity: 0.32;
   transform: skewY(-1.8deg);
-  animation: registry-failure-drift 18s ease-in-out infinite alternate;
+  animation: registry-failure-drift 26s ease-in-out infinite alternate;
 }
 
 .registry-route-plate[data-choice="right"] {
   padding-left: clamp(4rem, 9vw, 9rem);
   padding-right: clamp(2rem, 6vw, 7rem);
-  transform: translate3d(0.8rem, -0.45rem, 0) scale(1.035);
+  transform: translate3d(1rem, -0.45rem, 0) scale(1.07);
 }
 
 .registry-route-plate[data-choice="right"]::before {
@@ -298,6 +300,24 @@ body,
   opacity: 0.36;
   transform-origin: 50% 50%;
   animation: registry-coherence-align 20s ease-in-out infinite alternate;
+}
+
+.registry-route-plate[data-choice="right"]::after {
+  content: "";
+  position: absolute;
+  right: clamp(2.5rem, 8vw, 8rem);
+  top: clamp(2.5rem, 7vw, 6.5rem);
+  width: clamp(8rem, 18vw, 16rem);
+  aspect-ratio: 1;
+  background:
+    linear-gradient(30deg, transparent 49.35%, rgba(242, 247, 255, 0.42) 49.7% 50.3%, transparent 50.65%),
+    linear-gradient(150deg, transparent 49.35%, rgba(242, 247, 255, 0.38) 49.7% 50.3%, transparent 50.65%),
+    linear-gradient(90deg, transparent 49.35%, rgba(242, 247, 255, 0.3) 49.7% 50.3%, transparent 50.65%),
+    conic-gradient(from 22.5deg, transparent 0 21deg, rgba(242, 247, 255, 0.36) 21deg 24deg, transparent 24deg 66deg, rgba(242, 247, 255, 0.28) 66deg 69deg, transparent 69deg 111deg, rgba(242, 247, 255, 0.32) 111deg 114deg, transparent 114deg 156deg, rgba(242, 247, 255, 0.24) 156deg 159deg, transparent 159deg 360deg);
+  clip-path: polygon(50% 7%, 92% 82%, 8% 82%);
+  opacity: 0.28;
+  transform: translate3d(0.25rem, -0.2rem, 0) scale(0.96);
+  animation: registry-coherence-resolve 24s ease-in-out infinite alternate;
 }
 
 .registry-route-plate p,
@@ -353,7 +373,7 @@ body,
 .registry-route-plate[data-choice="right"]:hover,
 .registry-route-plate[data-choice="right"]:focus-visible {
   outline: none;
-  transform: translate3d(1.15rem, -0.75rem, 0) scale(1.055);
+  transform: translate3d(1.25rem, -0.75rem, 0) scale(1.085);
   filter: drop-shadow(0 0 1.8rem rgba(174, 214, 255, 0.18));
 }
 
@@ -373,6 +393,21 @@ body,
   to {
     transform: translate3d(0, 0, 0) scale(1);
   }
+}
+
+@keyframes registry-coherence-resolve {
+  from {
+    opacity: 0.14;
+    transform: translate3d(0.6rem, -0.35rem, 0) scale(0.9);
+  }
+  to {
+    opacity: 0.32;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.measures-registry-runtime[data-surface="landing_path_choice"] .registry-public-brand {
+  display: none;
 }
 
 .registry-encounter-surface {
@@ -598,6 +633,58 @@ body,
   color: var(--registry-text-secondary);
   font-size: var(--registry-body-active);
   line-height: 1.58;
+}
+
+.registry-authority-video {
+  width: 100%;
+  max-height: 62svh;
+  margin: clamp(1rem, 3vw, 2rem) 0;
+  border: 0;
+  background: transparent;
+  object-fit: cover;
+}
+
+.registry-field-expressions {
+  display: grid;
+  gap: clamp(1.1rem, 2.5vw, 1.75rem);
+  margin-top: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.registry-field-expressions h2,
+.registry-field-expressions h3,
+.registry-field-expressions p {
+  margin: 0;
+}
+
+.registry-field-expressions h2 {
+  color: var(--registry-text-primary);
+  font-size: var(--registry-plaque-title-active);
+  font-weight: 520;
+  letter-spacing: 0.08em;
+}
+
+.registry-field-expressions section {
+  display: grid;
+  gap: 0.35rem;
+  max-width: var(--registry-text-max-width);
+}
+
+.registry-field-expressions h3 {
+  width: fit-content;
+  border-bottom: 1px solid transparent;
+  color: var(--registry-text-primary);
+  font-size: var(--registry-body-active);
+  font-weight: 520;
+}
+
+.registry-field-expressions section:hover h3 {
+  border-bottom-color: rgba(246, 248, 251, 0.42);
+}
+
+.registry-field-expressions p {
+  color: var(--registry-text-muted);
+  font-size: var(--registry-body-active);
+  line-height: 1.55;
 }
 
 .registry-entity-reference {

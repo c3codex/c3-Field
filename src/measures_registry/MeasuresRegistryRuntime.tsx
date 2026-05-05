@@ -26,7 +26,7 @@ const REQUIRED_MEDIA_ROLES = [
   "path_choice_background",
   "registry_mark",
 ] as const
-const OPTIONAL_MEDIA_ROLES = ["foundation_intro_video", "systems_intro_video"] as const
+const OPTIONAL_MEDIA_ROLES = ["foundation_intro_video", "systems_intro_video", "c3_field_video"] as const
 const QUERY_MEDIA_ROLES = [...REQUIRED_MEDIA_ROLES, ...OPTIONAL_MEDIA_ROLES] as const
 const REQUIRED_DESIGN_TOKEN_KEYS = [
   "text_primary",
@@ -206,6 +206,7 @@ function sectionCopy(row?: LandingSectionRow) {
     closingStatement: asString(metadata.closing_statement),
     entityReference: asString(metadata.entity_reference),
     fields: asRecordArray(metadata.fields),
+    fieldExpressions: asRecordArray(metadata.field_expressions),
     ctaPrimary: asString(metadata.cta_primary),
     ctaSecondary: asString(metadata.cta_secondary),
     successMessage: asString(metadata.success_message),
@@ -437,12 +438,12 @@ export default function MeasuresRegistryRuntime() {
   const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
   const notificationReviewCopy = sectionCopy(sectionMap.get("seat_hold_notification_review"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
-  const heroPosterUrl = mediaUrl(mediaMap.get("hero_poster"))
   const epigraphVideoUrl = supabase.storage
     .from(EPIGRAPH_VIDEO_BUCKET)
     .getPublicUrl(EPIGRAPH_VIDEO_PATH).data.publicUrl
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
+  const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
 
   function actionLabel(actionKey: string, actions = pathChoiceCopy.actions) {
     const plaque = pathChoiceCopy.plaques.find(
@@ -761,13 +762,13 @@ export default function MeasuresRegistryRuntime() {
                 setEpigraphEntered(true)
               }}
             >
-              {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
+              {epigraphFailed ? "Continue" : null}
             </button>
           ) : (
             <video
               ref={epigraphVideoRef}
               src={epigraphVideoUrl}
-              poster={heroPosterUrl ?? undefined}
+              preload="auto"
               autoPlay
               muted={epigraphMuted}
               playsInline
@@ -918,6 +919,34 @@ export default function MeasuresRegistryRuntime() {
           {c3FieldCopy.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
+          {c3FieldVideoUrl ? (
+            <video
+              className="registry-authority-video"
+              src={c3FieldVideoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-label="c3 Field expression"
+            />
+          ) : null}
+          {c3FieldCopy.fieldExpressions.length > 0 ? (
+            <div className="registry-field-expressions" aria-label="Field Expressions">
+              <h2>Field Expressions</h2>
+              {c3FieldCopy.fieldExpressions.map((expression) => {
+                const name = asString(expression.name)
+                const description = asString(expression.description)
+
+                return (
+                  <section key={name ?? description}>
+                    {name ? <h3>{name}</h3> : null}
+                    {description ? <p>{description}</p> : null}
+                  </section>
+                )
+              })}
+            </div>
+          ) : null}
         </section>
       </main>
     )
