@@ -464,6 +464,34 @@ body,
   line-height: 1.2;
 }
 
+.registry-authority-surface {
+  min-height: 100svh;
+  width: min(var(--registry-text-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + var(--registry-section-spacing-active)) 0 var(--registry-page-padding-active);
+  display: grid;
+  align-content: center;
+  gap: clamp(1rem, 2vw, 1.4rem);
+  text-align: left;
+}
+
+.registry-authority-surface h1 {
+  margin: 0 0 clamp(0.75rem, 2vw, 1.5rem);
+  color: var(--registry-text-primary);
+  font-size: var(--registry-entry-label-active);
+  line-height: 0.95;
+  font-weight: 620;
+  letter-spacing: -0.035em;
+}
+
+.registry-authority-surface p {
+  margin: 0;
+  white-space: pre-line;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-body-active);
+  line-height: 1.58;
+}
+
 .registry-entity-reference {
   display: grid;
   gap: 0.35rem;

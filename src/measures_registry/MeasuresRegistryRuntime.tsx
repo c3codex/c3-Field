@@ -11,7 +11,7 @@ const REQUIRED_SECTION_KEYS = [
   "landing_intro_video",
   "landing_path_choice",
   "understand_failure",
-  "orientation_placeholder",
+  "c3_field",
   "reserve_seat",
   "foundation_offering",
   "systems_offering",
@@ -60,7 +60,7 @@ type SurfaceState =
   | "intro"
   | "path_choice"
   | "understand_failure"
-  | "orientation"
+  | "c3_field"
   | "reserve_seat"
   | "foundation_offering"
   | "systems_offering"
@@ -72,7 +72,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   intro: "landing_intro_video",
   path_choice: "landing_path_choice",
   understand_failure: "understand_failure",
-  orientation: "orientation_placeholder",
+  c3_field: "c3_field",
   reserve_seat: "reserve_seat",
   foundation_offering: "foundation_offering",
   systems_offering: "systems_offering",
@@ -198,6 +198,9 @@ function sectionCopy(row?: LandingSectionRow) {
     resolutionShift: asString(metadata.resolution_shift),
     transitionStatement: asString(metadata.transition_statement),
     coreStatement: asString(metadata.core_statement),
+    paragraphs: Array.isArray(metadata.paragraphs)
+      ? metadata.paragraphs.filter((item): item is string => typeof item === "string")
+      : [],
     sections: asRecordArray(metadata.sections),
     outcomeStatement: asString(metadata.outcome_statement),
     closingStatement: asString(metadata.closing_statement),
@@ -426,7 +429,7 @@ export default function MeasuresRegistryRuntime() {
   const introCopy = sectionCopy(sectionMap.get("landing_intro_video"))
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
-  const orientationCopy = sectionCopy(sectionMap.get("orientation_placeholder"))
+  const c3FieldCopy = sectionCopy(sectionMap.get("c3_field"))
   const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
   const foundationOfferingCopy = sectionCopy(sectionMap.get("foundation_offering"))
   const systemsOfferingCopy = sectionCopy(sectionMap.get("systems_offering"))
@@ -609,8 +612,11 @@ export default function MeasuresRegistryRuntime() {
       return
     }
 
-    if (behavior === "route_surface" && target === "orientation_placeholder") {
-      navigateSurface("orientation")
+    if (
+      behavior === "route_surface" &&
+      (target === "c3_field" || target === "orientation_placeholder")
+    ) {
+      navigateSurface("c3_field")
       return
     }
 
@@ -894,58 +900,24 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
-  function renderOrientationSurface() {
-    if (reportMissingClassification("orientation_placeholder", orientationCopy)) return null
-    const entity = entityByReference(orientationCopy.entityReference)
+  function renderC3FieldSurface() {
+    if (reportMissingClassification("c3_field", c3FieldCopy)) return null
 
     return (
       <main
         className="measures-registry-runtime"
-        data-surface="orientation_placeholder"
+        data-surface="c3_field"
         style={registryTokenStyle}
       >
-        {renderHeader(orientationCopy.header, orientationCopy.actions)}
-        <section id="orientation" className="registry-landing-section" aria-label={orientationCopy.entryLabel ?? undefined}>
-          <div className="registry-encounter-entry">
-            {orientationCopy.entryLabel ? <span>{orientationCopy.entryLabel}</span> : null}
-            {orientationCopy.entryHeadline ? <h1>{orientationCopy.entryHeadline}</h1> : null}
-            {orientationCopy.entrySub ? <p>{orientationCopy.entrySub}</p> : null}
-          </div>
-
-          <div className="registry-offering-sections">
-            {orientationCopy.sections.map((section) => {
-              const title = asString(section.title)
-              const body = asString(section.body)
-
-              return (
-                <article key={title ?? body}>
-                  {title ? <span>{title}</span> : null}
-                  {body ? <p>{body}</p> : null}
-                </article>
-              )
-            })}
-          </div>
-
-          {entity ? (
-            <div className="registry-entity-reference">
-              <strong>{entity.entity_name}</strong>
-              {entityRoleLabel(entity.entity_type) ? <span>{entityRoleLabel(entity.entity_type)}</span> : null}
-              <small>
-                {[formatCodexValue(entity.legal_status), entity.jurisdiction]
-                  .filter(Boolean)
-                  .join(" — ")}
-              </small>
-            </div>
-          ) : null}
-
-          {orientationCopy.closingStatement ? (
-            <p className="registry-offering-outcome">{orientationCopy.closingStatement}</p>
-          ) : null}
+        <section id="c3-field" className="registry-authority-surface" aria-label={c3FieldCopy.title ?? undefined}>
+          {c3FieldCopy.title ? <h1>{c3FieldCopy.title}</h1> : null}
+          {c3FieldCopy.paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </section>
       </main>
     )
   }
-
   function renderReserveSeatSurface() {
     if (reportMissingClassification("reserve_seat", reserveSeatCopy)) return null
     const backAction = reserveSeatCopy.actions.find(
@@ -1333,7 +1305,7 @@ export default function MeasuresRegistryRuntime() {
 
   if (activeSurface === "path_choice") return renderPathChoiceSurface()
   if (activeSurface === "understand_failure") return renderUnderstandFailureSurface()
-  if (activeSurface === "orientation") return renderOrientationSurface()
+  if (activeSurface === "c3_field") return renderC3FieldSurface()
   if (activeSurface === "reserve_seat") return renderReserveSeatSurface()
   if (activeSurface === "foundation_offering") {
     return renderOfferingSurface("foundation_offering", foundationOfferingCopy, "foundation_intro_video")
