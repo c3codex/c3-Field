@@ -22,11 +22,10 @@ canonical_keys:
     - cohort_conversion_encounter
     - iis_eval_gate1
 
-  media_roles:
-    - epigraph_video
-    - hero_fracture_image
-    - hero_measured_image
-    - explainer_video
+  media_roles:  located in bucket measures_registry
+    - epigraph_video registry_epigraph_fracture_to_alignment_15s
+    - hero image hero_fracture_measuire.webp
+           - explainer_video structural_coherence_explainer_45s.webp
 
   action_keys:
     - route_educate_eval

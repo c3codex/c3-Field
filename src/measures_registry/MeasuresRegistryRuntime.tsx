@@ -4,12 +4,13 @@ import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
-const EPIGRAPH_VIDEO_BUCKET = "measures-registry"
-const EPIGRAPH_VIDEO_PATH = "intro_hook_15s.mp4"
 
 const REQUIRED_SECTION_KEYS = [
-  "landing_intro_video",
+  "landing_root",
   "landing_path_choice",
+  "educate_eval_encounter",
+  "cohort_conversion_encounter",
+  "iis_eval_gate1",
   "understand_failure",
   "c3_field",
   "reserve_seat",
@@ -21,6 +22,9 @@ const REQUIRED_SECTION_KEYS = [
 const OPERATOR_SECTION_KEYS = ["seat_hold_notification_review"] as const
 const QUERY_SECTION_KEYS = [...REQUIRED_SECTION_KEYS, ...OPERATOR_SECTION_KEYS] as const
 const REQUIRED_MEDIA_ROLES = [
+  "epigraph_video",
+  "hero_image",
+  "explainer_video",
   "hero_video",
   "hero_poster",
   "path_choice_background",
@@ -59,6 +63,9 @@ const REQUIRED_DESIGN_TOKEN_KEYS = [
 type SurfaceState =
   | "intro"
   | "path_choice"
+  | "educate_eval"
+  | "cohort_conversion"
+  | "iis_eval_gate1"
   | "understand_failure"
   | "c3_field"
   | "reserve_seat"
@@ -69,8 +76,11 @@ type SurfaceState =
   | "seat_hold_notification_review"
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
-  intro: "landing_intro_video",
+  intro: "landing_root",
   path_choice: "landing_path_choice",
+  educate_eval: "educate_eval_encounter",
+  cohort_conversion: "cohort_conversion_encounter",
+  iis_eval_gate1: "iis_eval_gate1",
   understand_failure: "understand_failure",
   c3_field: "c3_field",
   reserve_seat: "reserve_seat",
@@ -202,6 +212,9 @@ function sectionCopy(row?: LandingSectionRow) {
       ? metadata.paragraphs.filter((item): item is string => typeof item === "string")
       : [],
     sections: asRecordArray(metadata.sections),
+    heroPaths: asRecordArray(metadata.hero_paths),
+    evaluationSections: asRecordArray(metadata.evaluation_sections),
+    resolutionText: asString(metadata.resolution_text),
     outcomeStatement: asString(metadata.outcome_statement),
     closingStatement: asString(metadata.closing_statement),
     entityReference: asString(metadata.entity_reference),
@@ -250,9 +263,15 @@ export default function MeasuresRegistryRuntime() {
   const [operatorDispatchKey, setOperatorDispatchKey] = useState(() =>
     window.sessionStorage.getItem("measures_registry_operator_dispatch_key") ?? "",
   )
-  const [epigraphEntered, setEpigraphEntered] = useState(false)
+  const [epigraphEntered, setEpigraphEntered] = useState(true)
   const [epigraphMuted, setEpigraphMuted] = useState(false)
   const [epigraphFailed, setEpigraphFailed] = useState(false)
+  const [landingHeroReady, setLandingHeroReady] = useState(false)
+  const [evalFields, setEvalFields] = useState<Record<string, string>>({})
+  const [evalAnswers, setEvalAnswers] = useState<Record<string, string>>({})
+  const [evalSubmitting, setEvalSubmitting] = useState(false)
+  const [evalSubmitted, setEvalSubmitted] = useState(false)
+  const [evalError, setEvalError] = useState<string | null>(null)
   const epigraphVideoRef = useRef<HTMLVideoElement | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
 
@@ -427,8 +446,12 @@ export default function MeasuresRegistryRuntime() {
     return style as CSSProperties
   }, [designTokens])
   const showDiagnostics = false
-  const introCopy = sectionCopy(sectionMap.get("landing_intro_video"))
+  const landingRootCopy = sectionCopy(sectionMap.get("landing_root"))
+  const introCopy = landingRootCopy
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
+  const educateEvalCopy = sectionCopy(sectionMap.get("educate_eval_encounter"))
+  const cohortConversionCopy = sectionCopy(sectionMap.get("cohort_conversion_encounter"))
+  const iisEvalCopy = sectionCopy(sectionMap.get("iis_eval_gate1"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
   const c3FieldCopy = sectionCopy(sectionMap.get("c3_field"))
   const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
@@ -438,9 +461,9 @@ export default function MeasuresRegistryRuntime() {
   const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
   const notificationReviewCopy = sectionCopy(sectionMap.get("seat_hold_notification_review"))
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
-  const epigraphVideoUrl = supabase.storage
-    .from(EPIGRAPH_VIDEO_BUCKET)
-    .getPublicUrl(EPIGRAPH_VIDEO_PATH).data.publicUrl
+  const epigraphVideoUrl = mediaUrl(mediaMap.get("epigraph_video"))
+  const splitHeroImageUrl = mediaUrl(mediaMap.get("hero_image"))
+  const explainerVideoUrl = mediaUrl(mediaMap.get("explainer_video"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
@@ -598,6 +621,41 @@ export default function MeasuresRegistryRuntime() {
     const behavior = asString(action?.behavior)
     const target = asString(action?.target_encounter_key)
 
+    if (behavior === "route_surface" && target === "landing_root") {
+      setLandingHeroReady(true)
+      navigateSurface("intro")
+      return
+    }
+
+    if (
+      behavior === "route_surface" &&
+      (target === "educate_eval_encounter" || actionKey === "route_educate_eval")
+    ) {
+      navigateSurface("educate_eval")
+      return
+    }
+
+    if (
+      behavior === "route_surface" &&
+      (target === "cohort_conversion_encounter" || actionKey === "route_cohort_conversion")
+    ) {
+      navigateSurface("cohort_conversion")
+      return
+    }
+
+    if (
+      behavior === "route_surface" &&
+      (target === "iis_eval_gate1" || actionKey === "begin_evaluation")
+    ) {
+      navigateSurface("iis_eval_gate1")
+      return
+    }
+
+    if (behavior === "route_surface" && actionKey === "route_course_review") {
+      navigateSurface("reserve_seat")
+      return
+    }
+
     if (behavior === "open_src_intake" || actionKey === "reserve_seat") {
       navigateSurface("reserve_seat")
       return
@@ -732,62 +790,163 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function setEvalField(key: string, value: string) {
+    setEvalFields((current) => ({ ...current, [key]: value }))
+  }
+
+  function setEvalAnswer(key: string, value: string) {
+    setEvalAnswers((current) => ({ ...current, [key]: value }))
+  }
+
+  async function submitIisEvaluation(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setEvalSubmitting(true)
+    setEvalError(null)
+
+    const requiredFields = [
+      "institution_name",
+      "institution_address",
+      "institution_phone",
+      "contact_name",
+      "contact_position",
+      "contact_email",
+    ]
+    const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
+
+    if (missing.length > 0) {
+      setEvalSubmitting(false)
+      setEvalError(`Missing required fields: ${missing.join(", ")}`)
+      return
+    }
+
+    const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
+      institution_name: evalFields.institution_name.trim(),
+      institution_address: evalFields.institution_address.trim(),
+      institution_phone: evalFields.institution_phone.trim(),
+      contact_name: evalFields.contact_name.trim(),
+      contact_position: evalFields.contact_position.trim(),
+      contact_email: evalFields.contact_email.trim(),
+      evaluation_answers: evalAnswers,
+      capture_context: "iis_eval_gate1",
+      intent: "system_evaluation_request",
+      eligibility: {
+        foundational_courses: true,
+        conversion_assessment: "pending_review",
+      },
+      campaign_tag: "iis_eval_gate1",
+      notification_state: "queued",
+      confirmation_email_state: "queued",
+    })
+
+    setEvalSubmitting(false)
+
+    if (error) {
+      setEvalError("Evaluation could not be seated. Please try again.")
+      return
+    }
+
+    setEvalSubmitted(true)
+  }
+
   function renderIntroSurface() {
-    if (reportMissingClassification("landing_intro_video", introCopy)) return null
+    if (reportMissingClassification("landing_root", landingRootCopy)) return null
+    const style = splitHeroImageUrl
+      ? ({ "--split-hero-image": `url(${splitHeroImageUrl})` } as CSSProperties)
+      : undefined
 
     return (
       <main
         className="measures-registry-runtime"
-        data-surface="landing_intro_video"
+        data-surface="landing_root"
         style={registryTokenStyle}
       >
         {renderCorrectionReport()}
-        <section
-          className="registry-intro-video"
-          aria-label="Measures Registry epigraph"
-          data-entered={epigraphEntered}
-          data-failed={epigraphFailed}
-        >
-          {!epigraphEntered || epigraphFailed ? (
-            <button
-              type="button"
-              className="registry-epigraph-enter"
-              aria-label={epigraphFailed ? "Continue" : "Enter"}
-              onClick={() => {
-                if (epigraphFailed) {
-                  navigateSurface("path_choice")
-                  return
-                }
+        {!landingHeroReady ? (
+          <section
+            className="registry-intro-video"
+            aria-label="Measures Registry epigraph"
+            data-entered={epigraphEntered}
+            data-failed={epigraphFailed}
+          >
+            {epigraphEntered && !epigraphFailed && epigraphVideoUrl ? (
+              <video
+                ref={epigraphVideoRef}
+                src={epigraphVideoUrl}
+                preload="auto"
+                autoPlay
+                muted={epigraphMuted}
+                playsInline
+                onEnded={() => setLandingHeroReady(true)}
+                onError={() => setEpigraphFailed(true)}
+                aria-label="Measures Registry epigraph"
+              />
+            ) : null}
+            {!epigraphEntered || epigraphFailed || !epigraphVideoUrl ? (
+              <button
+                type="button"
+                className="registry-epigraph-enter"
+                aria-label={epigraphFailed ? "Continue" : "Enter"}
+                onClick={() => {
+                  if (epigraphFailed || !epigraphVideoUrl) {
+                    setLandingHeroReady(true)
+                    return
+                  }
 
-                setEpigraphEntered(true)
-              }}
-            >
-              {epigraphFailed ? "Continue" : null}
-            </button>
-          ) : (
-            <video
-              ref={epigraphVideoRef}
-              src={epigraphVideoUrl}
-              preload="auto"
-              autoPlay
-              muted={epigraphMuted}
-              playsInline
-              onEnded={() => navigateSurface("path_choice")}
-              onError={() => setEpigraphFailed(true)}
-              aria-label="Measures Registry epigraph"
-            />
-          )}
-          {epigraphEntered && !epigraphFailed ? (
-            <button
-              type="button"
-              className="registry-epigraph-mute"
-              aria-label={epigraphMuted ? "Unmute" : "Mute"}
-              onClick={() => setEpigraphMuted((current) => !current)}
-            >
-              {epigraphMuted ? "○" : "●"}
-            </button>
-          ) : null}
-        </section>
+                  setEpigraphEntered(true)
+                }}
+              >
+                {epigraphFailed || !epigraphVideoUrl ? "Continue" : null}
+              </button>
+            ) : null}
+            {epigraphEntered && !epigraphFailed && epigraphVideoUrl ? (
+              <div className="registry-epigraph-controls">
+                <button
+                  type="button"
+                  className="registry-epigraph-mute"
+                  aria-label={epigraphMuted ? "Unmute" : "Mute"}
+                  onClick={() => setEpigraphMuted((current) => !current)}
+                >
+                  {epigraphMuted ? "Unmute" : "Mute"}
+                </button>
+                <button
+                  type="button"
+                  className="registry-epigraph-skip"
+                  onClick={() => setLandingHeroReady(true)}
+                >
+                  Skip
+                </button>
+              </div>
+            ) : null}
+          </section>
+        ) : (
+          <section className="registry-split-hero" style={style} aria-label={landingRootCopy.title ?? undefined}>
+            <div className="registry-split-hero-copy">
+              {landingRootCopy.eyebrow ? <span>{landingRootCopy.eyebrow}</span> : null}
+              {landingRootCopy.title ? <h1>{landingRootCopy.title}</h1> : null}
+              {landingRootCopy.subtitle ? <p>{landingRootCopy.subtitle}</p> : null}
+            </div>
+            <div className="registry-split-hero-routes">
+              {landingRootCopy.heroPaths.map((path, index) => {
+                const actionKey = asString(path.action_key)
+                const title = asString(path.title)
+                const subtitle = asString(path.subtitle)
+                const side = asString(path.side) ?? (index === 0 ? "left" : "right")
+
+                return (
+                  <button
+                    key={actionKey ?? title ?? index}
+                    type="button"
+                    data-choice={side}
+                    onClick={() => handleAction(actionKey, landingRootCopy.actions)}
+                  >
+                    {title ? <span>{title}</span> : null}
+                    {subtitle ? <p>{subtitle}</p> : null}
+                  </button>
+                )
+              })}
+            </div>
+          </section>
+        )}
       </main>
     )
   }
@@ -850,6 +1009,171 @@ export default function MeasuresRegistryRuntime() {
               )
             })}
           </div>
+        </section>
+      </main>
+    )
+  }
+
+  function renderEducateEvalSurface() {
+    if (reportMissingClassification("educate_eval_encounter", educateEvalCopy)) return null
+    const beginAction = educateEvalCopy.actions.find(
+      (action) => asString(action.action_key) === "begin_evaluation",
+    )
+
+    return (
+      <main className="measures-registry-runtime" data-surface="educate_eval_encounter" style={registryTokenStyle}>
+        {renderHeader(null, educateEvalCopy.actions)}
+        <section className="registry-eval-intro" aria-label={educateEvalCopy.title ?? undefined}>
+          {explainerVideoUrl ? (
+            <video src={explainerVideoUrl} controls playsInline preload="metadata" />
+          ) : null}
+          <div>
+            {educateEvalCopy.eyebrow ? <span>{educateEvalCopy.eyebrow}</span> : null}
+            {educateEvalCopy.title ? <h1>{educateEvalCopy.title}</h1> : null}
+            {educateEvalCopy.subtitle ? <p>{educateEvalCopy.subtitle}</p> : null}
+          </div>
+          {educateEvalCopy.sections.map((section) => {
+            const title = asString(section.title)
+            const body = asString(section.body)
+
+            return (
+              <section key={title ?? body}>
+                {title ? <h2>{title}</h2> : null}
+                {body ? <p>{body}</p> : null}
+              </section>
+            )
+          })}
+          {beginAction ? (
+            <button type="button" onClick={() => handleAction("begin_evaluation", educateEvalCopy.actions)}>
+              {asString(beginAction.label) ?? "Begin Evaluation"}
+            </button>
+          ) : null}
+        </section>
+      </main>
+    )
+  }
+
+  function renderCohortConversionSurface() {
+    if (reportMissingClassification("cohort_conversion_encounter", cohortConversionCopy)) return null
+
+    return (
+      <main className="measures-registry-runtime" data-surface="cohort_conversion_encounter" style={registryTokenStyle}>
+        {renderHeader(null, cohortConversionCopy.actions)}
+        <section className="registry-cohort-conversion" aria-label={cohortConversionCopy.title ?? undefined}>
+          {cohortConversionCopy.eyebrow ? <span>{cohortConversionCopy.eyebrow}</span> : null}
+          {cohortConversionCopy.title ? <h1>{cohortConversionCopy.title}</h1> : null}
+          {cohortConversionCopy.subtitle ? <p>{cohortConversionCopy.subtitle}</p> : null}
+          {cohortConversionCopy.sections.map((section) => {
+            const title = asString(section.title)
+            const body = asString(section.body)
+
+            return (
+              <section key={title ?? body}>
+                {title ? <h2>{title}</h2> : null}
+                {body ? <p>{body}</p> : null}
+              </section>
+            )
+          })}
+          <div className="registry-encounter-actions">
+            {cohortConversionCopy.actions.map((action) => {
+              const actionKey = asString(action.action_key)
+              const label = asString(action.label)
+              if (!actionKey || !label) return null
+
+              return (
+                <button key={actionKey} type="button" onClick={() => handleAction(actionKey, cohortConversionCopy.actions)}>
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      </main>
+    )
+  }
+
+  function renderIisEvalGateSurface() {
+    if (reportMissingClassification("iis_eval_gate1", iisEvalCopy)) return null
+
+    return (
+      <main className="measures-registry-runtime" data-surface="iis_eval_gate1" style={registryTokenStyle}>
+        {renderHeader(null, iisEvalCopy.actions)}
+        <section className="registry-iis-eval" aria-label={iisEvalCopy.title ?? undefined}>
+          {iisEvalCopy.eyebrow ? <span>{iisEvalCopy.eyebrow}</span> : null}
+          {iisEvalCopy.title ? <h1>{iisEvalCopy.title}</h1> : null}
+          {iisEvalCopy.subtitle ? <p>{iisEvalCopy.subtitle}</p> : null}
+
+          {evalSubmitted ? (
+            <div className="registry-eval-resolution">
+              <p>{iisEvalCopy.resolutionText}</p>
+            </div>
+          ) : (
+            <form className="registry-iis-eval-form" onSubmit={submitIisEvaluation}>
+              <fieldset>
+                <legend>Institution</legend>
+                {[
+                  ["institution_name", "Institution Name"],
+                  ["institution_address", "Institution Address"],
+                  ["institution_phone", "Institution Phone"],
+                ].map(([key, label]) => (
+                  <label key={key}>
+                    <span>{label}</span>
+                    <input
+                      value={evalFields[key] ?? ""}
+                      onChange={(event) => setEvalField(key, event.target.value)}
+                      required
+                    />
+                  </label>
+                ))}
+              </fieldset>
+
+              <fieldset>
+                <legend>Contact</legend>
+                {[
+                  ["contact_name", "Contact Name"],
+                  ["contact_position", "Contact Position"],
+                  ["contact_email", "Contact Email"],
+                ].map(([key, label]) => (
+                  <label key={key}>
+                    <span>{label}</span>
+                    <input
+                      type={key === "contact_email" ? "email" : "text"}
+                      value={evalFields[key] ?? ""}
+                      onChange={(event) => setEvalField(key, event.target.value)}
+                      required
+                    />
+                  </label>
+                ))}
+              </fieldset>
+
+              {iisEvalCopy.evaluationSections.map((section) => {
+                const title = asString(section.title)
+                const questions = Array.isArray(section.questions)
+                  ? section.questions.filter((item): item is string => typeof item === "string")
+                  : []
+
+                return (
+                  <fieldset key={title}>
+                    {title ? <legend>{title}</legend> : null}
+                    {questions.map((question) => (
+                      <label key={question}>
+                        <span>{question}</span>
+                        <textarea
+                          value={evalAnswers[question] ?? ""}
+                          onChange={(event) => setEvalAnswer(question, event.target.value)}
+                        />
+                      </label>
+                    ))}
+                  </fieldset>
+                )
+              })}
+
+              {evalError ? <p className="registry-form-error">{evalError}</p> : null}
+              <button type="submit" disabled={evalSubmitting}>
+                {evalSubmitting ? "Seating Evaluation" : "Submit Evaluation"}
+              </button>
+            </form>
+          )}
         </section>
       </main>
     )
@@ -1337,6 +1661,9 @@ export default function MeasuresRegistryRuntime() {
   }
 
   if (activeSurface === "path_choice") return renderPathChoiceSurface()
+  if (activeSurface === "educate_eval") return renderEducateEvalSurface()
+  if (activeSurface === "cohort_conversion") return renderCohortConversionSurface()
+  if (activeSurface === "iis_eval_gate1") return renderIisEvalGateSurface()
   if (activeSurface === "understand_failure") return renderUnderstandFailureSurface()
   if (activeSurface === "c3_field") return renderC3FieldSurface()
   if (activeSurface === "reserve_seat") return renderReserveSeatSurface()

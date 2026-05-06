@@ -70,18 +70,151 @@ body,
 }
 
 .registry-epigraph-mute {
+  position: static;
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 999px;
+  background: rgba(3, 4, 6, 0.52);
+  color: var(--registry-text-secondary);
+  padding: 0.46rem 0.72rem;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.registry-epigraph-controls {
   position: fixed;
   right: clamp(1rem, 3vw, 2rem);
   bottom: clamp(1rem, 3vw, 2rem);
   z-index: 2;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.registry-epigraph-skip {
   border: 1px solid var(--registry-border-subtle);
-  border-radius: 50%;
-  background: rgba(3, 4, 6, 0.52);
+  border-radius: 999px;
+  background: rgba(3, 4, 6, 0.38);
   color: var(--registry-text-secondary);
-  width: 2.75rem;
-  height: 2.75rem;
+  padding: 0.46rem 0.72rem;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.registry-split-hero {
+  min-height: 100svh;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: minmax(18rem, 0.85fr) minmax(24rem, 1.15fr);
+  padding-top: calc(var(--registry-header-height) + clamp(1rem, 3vw, 2rem));
+  background:
+    linear-gradient(90deg, rgba(5, 6, 9, 0.96) 0%, rgba(5, 6, 9, 0.9) 49.8%, rgba(5, 6, 9, 0.5) 50.2%, rgba(5, 6, 9, 0.3) 100%),
+    var(--split-hero-image),
+    var(--registry-background-obsidian);
+  background-size: cover;
+  background-position: center;
+}
+
+.registry-split-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 1.5px), rgba(246, 248, 251, 0.92) 50%, transparent calc(50% + 1.5px)),
+    radial-gradient(circle at 20% 72%, rgba(214, 132, 62, 0.16), transparent 21rem),
+    radial-gradient(circle at 78% 48%, rgba(210, 231, 255, 0.22), transparent 30rem);
+}
+
+.registry-split-hero-copy,
+.registry-split-hero-routes {
+  position: relative;
+  z-index: 1;
+}
+
+.registry-split-hero-copy {
+  align-self: end;
+  display: grid;
+  gap: 0.85rem;
+  width: min(44rem, calc(50% - var(--registry-page-padding-active)));
+  margin-left: var(--registry-page-padding-active);
+}
+
+.registry-split-hero-copy span,
+.registry-split-hero-routes span {
+  color: var(--registry-text-muted);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.registry-split-hero-copy h1 {
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: var(--registry-entry-headline-active);
+  line-height: 1;
+}
+
+.registry-split-hero-copy p {
+  margin: 0;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-entry-sub-active);
+  line-height: 1.5;
+}
+
+.registry-split-hero-routes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.registry-split-hero-routes button {
+  min-height: 100%;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 0.85rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: clamp(2rem, 6vw, 6rem) var(--registry-page-padding-active);
+  text-align: left;
   font: inherit;
   cursor: pointer;
+}
+
+.registry-split-hero-routes button[data-choice="left"] {
+  align-content: end;
+  opacity: 0.78;
+  transform: translate3d(-0.25rem, 0.35rem, 0);
+}
+
+.registry-split-hero-routes button[data-choice="right"] {
+  padding-left: clamp(4rem, 9vw, 9rem);
+  transform: translate3d(0.9rem, -0.4rem, 0) scale(1.06);
+}
+
+.registry-split-hero-routes button[data-choice="right"] span,
+.registry-split-hero-routes button[data-choice="right"] p {
+  color: var(--registry-text-primary);
+}
+
+.registry-split-hero-routes p {
+  max-width: 28rem;
+  margin: 0;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-plaque-body-active);
+  line-height: 1.35;
+}
+
+.registry-split-hero-routes button:hover,
+.registry-split-hero-routes button:focus-visible {
+  outline: none;
+}
+
+.registry-split-hero-routes button[data-choice="right"]:hover,
+.registry-split-hero-routes button[data-choice="right"]:focus-visible {
+  transform: translate3d(1.15rem, -0.65rem, 0) scale(1.08);
 }
 
 .registry-public-header {
@@ -758,6 +891,117 @@ body,
   padding: var(--registry-plaque-padding-active);
 }
 
+.registry-eval-intro,
+.registry-cohort-conversion,
+.registry-iis-eval {
+  min-height: 100svh;
+  width: min(var(--registry-content-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + var(--registry-section-spacing-active)) 0 var(--registry-page-padding-active);
+  display: grid;
+  align-content: center;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.registry-eval-intro > video {
+  width: 100%;
+  max-height: 56svh;
+  object-fit: cover;
+  background: #000;
+}
+
+.registry-eval-intro h1,
+.registry-cohort-conversion h1,
+.registry-iis-eval h1 {
+  margin: 0;
+  max-width: var(--registry-text-max-width);
+  color: var(--registry-text-primary);
+  font-size: var(--registry-entry-headline-active);
+  line-height: 1;
+}
+
+.registry-eval-intro > div,
+.registry-eval-intro > section,
+.registry-cohort-conversion > section,
+.registry-iis-eval > p,
+.registry-eval-resolution {
+  max-width: var(--registry-text-max-width);
+}
+
+.registry-eval-intro span,
+.registry-cohort-conversion > span,
+.registry-iis-eval > span {
+  color: var(--registry-text-muted);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.registry-eval-intro h2,
+.registry-cohort-conversion h2 {
+  margin: 0 0 0.45rem;
+  color: var(--registry-text-primary);
+  font-size: var(--registry-plaque-title-active);
+}
+
+.registry-eval-intro p,
+.registry-cohort-conversion p,
+.registry-iis-eval p {
+  margin: 0;
+  max-width: var(--registry-text-max-width);
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-body-active);
+  line-height: 1.55;
+}
+
+.registry-iis-eval-form {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.registry-iis-eval-form fieldset {
+  display: grid;
+  gap: 0.9rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  max-width: var(--registry-text-max-width);
+}
+
+.registry-iis-eval-form legend {
+  margin-bottom: 0.25rem;
+  color: var(--registry-text-primary);
+  font-size: var(--registry-plaque-title-active);
+}
+
+.registry-iis-eval-form label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--registry-text-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
+.registry-iis-eval-form input,
+.registry-iis-eval-form textarea {
+  width: 100%;
+  border: 1px solid var(--registry-border-subtle);
+  border-radius: 10px;
+  background: rgba(246, 248, 251, 0.06);
+  color: var(--registry-text-primary);
+  padding: 0.8rem 0.9rem;
+  font: inherit;
+}
+
+.registry-iis-eval-form textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.registry-form-error {
+  color: #ffb7a8;
+}
+
 .registry-hold-form label {
   display: grid;
   gap: 0.5rem;
@@ -894,6 +1138,9 @@ body,
 }
 
 .registry-landing-section button,
+.registry-eval-intro button,
+.registry-cohort-conversion button,
+.registry-iis-eval-form button,
 .reserve-seat-form button[type="button"] {
   border: 1px solid var(--registry-border-subtle);
   border-radius: 8px;
@@ -1253,6 +1500,33 @@ body,
   .registry-path-choice-contrast {
     grid-template-columns: 1fr;
     min-height: auto;
+  }
+
+  .registry-split-hero {
+    grid-template-rows: auto auto;
+    padding-bottom: var(--registry-page-padding-active);
+  }
+
+  .registry-split-hero-copy {
+    width: min(var(--registry-text-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+    margin: 0 auto;
+    padding-top: clamp(4rem, 18vw, 7rem);
+  }
+
+  .registry-split-hero-routes {
+    grid-template-columns: 1fr;
+  }
+
+  .registry-split-hero-routes button {
+    min-height: 18rem;
+  }
+
+  .registry-split-hero-routes button[data-choice="left"],
+  .registry-split-hero-routes button[data-choice="right"],
+  .registry-split-hero-routes button[data-choice="right"]:hover,
+  .registry-split-hero-routes button[data-choice="right"]:focus-visible {
+    padding-left: var(--registry-page-padding-active);
+    transform: none;
   }
 
   .registry-path-choice {
