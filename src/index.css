@@ -1115,6 +1115,170 @@ body,
   line-height: 1.55;
 }
 
+.registry-diagnostic-encounter {
+  min-height: 100svh;
+  width: min(var(--registry-content-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + clamp(1.2rem, 3vw, 2rem)) 0 var(--registry-page-padding-active);
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.4rem);
+}
+
+.registry-diagnostic-threshold {
+  display: grid;
+  gap: clamp(0.8rem, 2vw, 1.1rem);
+}
+
+.registry-diagnostic-threshold video {
+  width: 100%;
+  max-height: min(58svh, 34rem);
+  object-fit: cover;
+  background: #000;
+}
+
+.registry-diagnostic-threshold span,
+.registry-diagnostic-recognition span,
+.registry-education-resources span,
+.registry-diagnostic-entry span {
+  color: var(--registry-text-muted);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.registry-diagnostic-threshold h1 {
+  max-width: min(52rem, 100%);
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: clamp(2.2rem, 6vw, var(--registry-entry-headline-active));
+  line-height: 1;
+}
+
+.registry-diagnostic-recognition {
+  max-width: min(58rem, 100%);
+  border-left: 1px solid var(--registry-accent-cool);
+  padding-left: var(--registry-plaque-padding-active);
+  display: grid;
+  gap: 0.8rem;
+}
+
+.registry-diagnostic-recognition p {
+  margin: 0;
+  color: var(--registry-text-secondary);
+  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+  line-height: 1.48;
+}
+
+.registry-education-resources {
+  display: grid;
+  gap: 1rem;
+}
+
+.registry-education-resources h2,
+.registry-diagnostic-entry h2 {
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: var(--registry-section-headline);
+  line-height: 1.14;
+}
+
+.registry-education-resource-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.registry-education-resource-list article {
+  min-height: 13rem;
+  display: grid;
+  align-content: end;
+  gap: 0.65rem;
+  border-top: 1px solid var(--registry-border-subtle);
+  padding: var(--registry-plaque-padding-active) 0 0;
+}
+
+.registry-education-resource-list h3 {
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: var(--registry-plaque-title-active);
+  line-height: 1.18;
+}
+
+.registry-education-resource-list p,
+.registry-diagnostic-entry p {
+  margin: 0;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-body-active);
+  line-height: 1.5;
+}
+
+.registry-education-resource-list a {
+  width: fit-content;
+  color: var(--registry-text-primary);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.registry-diagnostic-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(15rem, 0.65fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: end;
+  border-block: 1px solid rgba(246, 248, 251, 0.24);
+  padding: clamp(1.2rem, 3vw, 2rem) 0;
+}
+
+.registry-diagnostic-entry > div {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.registry-diagnostic-entry ul {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+  color: var(--registry-text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.35;
+  list-style: none;
+}
+
+.registry-diagnostic-entry li {
+  border-left: 1px solid var(--registry-border-subtle);
+  padding-left: 0.72rem;
+}
+
+.registry-diagnostic-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.registry-diagnostic-actions button {
+  border: 1px solid rgba(246, 248, 251, 0.64);
+  border-radius: 0;
+  background: rgba(246, 248, 251, 0.92);
+  color: #050608;
+  padding: 0.9rem 1.15rem;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.registry-diagnostic-actions button + button {
+  background: transparent;
+  color: var(--registry-text-secondary);
+  border-color: var(--registry-border-subtle);
+}
+
 .registry-cohort-core {
   border-left: 1px solid var(--registry-accent-cool);
   padding-left: var(--registry-plaque-padding-active);
@@ -1800,6 +1964,38 @@ body,
   .registry-route-plate[data-choice="right"]:hover,
   .registry-route-plate[data-choice="right"]:focus-visible {
     transform: translate3d(0, -0.35rem, 0) scale(1.03);
+  }
+
+  .registry-diagnostic-encounter {
+    padding-top: calc(var(--registry-header-height) + 1rem);
+    gap: 1.35rem;
+  }
+
+  .registry-diagnostic-threshold video {
+    max-height: 34svh;
+  }
+
+  .registry-diagnostic-threshold h1 {
+    font-size: var(--registry-entry-headline-active);
+  }
+
+  .registry-diagnostic-recognition {
+    padding-left: 1rem;
+  }
+
+  .registry-education-resource-list {
+    grid-template-columns: 1fr;
+  }
+
+  .registry-education-resource-list article {
+    min-height: auto;
+    align-content: start;
+    padding-top: 1rem;
+  }
+
+  .registry-diagnostic-entry {
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 
   .registry-breakdown-grid {

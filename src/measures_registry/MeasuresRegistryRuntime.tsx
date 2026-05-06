@@ -221,6 +221,9 @@ function sectionCopy(row?: LandingSectionRow) {
       ? metadata.paragraphs.filter((item): item is string => typeof item === "string")
       : [],
     sections: asRecordArray(metadata.sections),
+    diagnosticText: asString(metadata.diagnostic_text),
+    educationalResources: asRecordArray(metadata.educational_resources),
+    evaluationEntry: asRecord(metadata.evaluation_entry),
     heroPaths: asRecordArray(metadata.hero_paths),
     evaluationSections: asRecordArray(metadata.evaluation_sections),
     cohortStructure: asRecordArray(metadata.cohort_structure),
@@ -1105,35 +1108,108 @@ export default function MeasuresRegistryRuntime() {
     const beginAction = educateEvalCopy.actions.find(
       (action) => asString(action.action_key) === "begin_evaluation",
     )
+    const backAction = educateEvalCopy.actions.find(
+      (action) => asString(action.action_key) === "back_landing_root",
+    )
+    const diagnosticText =
+      educateEvalCopy.diagnosticText ??
+      educateEvalCopy.subtitle ??
+      "Unstable AI behavior is rarely isolated to a single output. It usually indicates missing authority, validation, implementation structure, or governance capacity inside the environment producing it."
+    const resources =
+      educateEvalCopy.educationalResources.length > 0
+        ? educateEvalCopy.educationalResources
+        : educateEvalCopy.sections
+    const evaluationTitle =
+      asString(educateEvalCopy.evaluationEntry?.title) ?? "Begin Structured Institutional Assessment"
+    const evaluationBody =
+      asString(educateEvalCopy.evaluationEntry?.body) ??
+      "Enter the diagnostic intake when your institution is ready to name its AI usage scope, deployment conditions, witnessed instability, and governance gaps."
+    const evaluationSignals = Array.isArray(educateEvalCopy.evaluationEntry?.signals)
+      ? educateEvalCopy.evaluationEntry?.signals.filter((item): item is string => typeof item === "string")
+      : [
+          "AI usage scope",
+          "Deployment duration",
+          "Website or system structure condition",
+          "Witnessed instability or ambiguity",
+          "Implementation and governance gaps",
+        ]
 
     return (
       <main className="measures-registry-runtime" data-surface="educate_eval_encounter" style={registryTokenStyle}>
         {renderHeader(null, educateEvalCopy.actions)}
-        <section className="registry-eval-intro" aria-label={educateEvalCopy.title ?? undefined}>
-          {explainerVideoUrl ? (
-            <video src={explainerVideoUrl} controls playsInline preload="metadata" />
-          ) : null}
-          <div>
+        <section className="registry-diagnostic-encounter" aria-label={educateEvalCopy.title ?? undefined}>
+          <div className="registry-diagnostic-threshold">
+            {explainerVideoUrl ? (
+              <video
+                src={explainerVideoUrl}
+                autoPlay
+                controls
+                playsInline
+                preload="auto"
+                aria-label="Measures Registry diagnostic explainer"
+              />
+            ) : null}
             {educateEvalCopy.eyebrow ? <span>{educateEvalCopy.eyebrow}</span> : null}
             {educateEvalCopy.title ? <h1>{educateEvalCopy.title}</h1> : null}
-            {educateEvalCopy.subtitle ? <p>{educateEvalCopy.subtitle}</p> : null}
           </div>
-          {educateEvalCopy.sections.map((section) => {
-            const title = asString(section.title)
-            const body = asString(section.body)
 
-            return (
-              <section key={title ?? body}>
-                {title ? <h2>{title}</h2> : null}
-                {body ? <p>{body}</p> : null}
-              </section>
-            )
-          })}
-          {beginAction ? (
-            <button type="button" onClick={() => handleAction("begin_evaluation", educateEvalCopy.actions)}>
-              {asString(beginAction.label) ?? "Begin Evaluation"}
-            </button>
-          ) : null}
+          <section className="registry-diagnostic-recognition" aria-label="Diagnostic recognition">
+            <span>Diagnostic Recognition</span>
+            <p>{diagnosticText}</p>
+          </section>
+
+          <section className="registry-education-resources" aria-label="Educational resources">
+            <div>
+              <span>Educational Grounding</span>
+              <h2>Context before evaluation.</h2>
+            </div>
+            <div className="registry-education-resource-list">
+              {resources.map((resource, index) => {
+                const title = asString(resource.title) ?? asString(resource.label)
+                const body = asString(resource.body) ?? asString(resource.description)
+                const type = asString(resource.type)
+                const href = asString(resource.href) ?? asString(resource.url)
+
+                return (
+                  <article key={title ?? body ?? index}>
+                    {type ? <span>{type}</span> : null}
+                    {title ? <h3>{title}</h3> : null}
+                    {body ? <p>{body}</p> : null}
+                    {href ? (
+                      <a href={href} target="_blank" rel="noreferrer">
+                        Open Resource
+                      </a>
+                    ) : null}
+                  </article>
+                )
+              })}
+            </div>
+          </section>
+
+          <section className="registry-diagnostic-entry" aria-label="Evaluation entry">
+            <div>
+              <span>Operational Diagnostic Intake</span>
+              <h2>{evaluationTitle}</h2>
+              <p>{evaluationBody}</p>
+            </div>
+            <ul>
+              {evaluationSignals.map((signal) => (
+                <li key={signal}>{signal}</li>
+              ))}
+            </ul>
+            <div className="registry-diagnostic-actions">
+              {beginAction ? (
+                <button type="button" onClick={() => handleAction("begin_evaluation", educateEvalCopy.actions)}>
+                  {asString(beginAction.label) ?? "Begin Evaluation"}
+                </button>
+              ) : null}
+              {backAction ? (
+                <button type="button" onClick={() => handleAction("back_landing_root", educateEvalCopy.actions)}>
+                  {asString(backAction.label) ?? "Back"}
+                </button>
+              ) : null}
+            </div>
+          </section>
         </section>
       </main>
     )
