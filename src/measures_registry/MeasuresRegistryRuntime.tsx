@@ -7,6 +7,7 @@ const DESIGN_REGISTRY_KEY = "measures_registry"
 
 const REQUIRED_SECTION_KEYS = [
   "landing_root",
+  "educational_diagnostic_passage",
   "landing_path_choice",
   "educate_eval_encounter",
   "cohort_conversion_encounter",
@@ -39,6 +40,7 @@ const OPTIONAL_MEDIA_ROLES = [
   "left_hero_fracture_motion",
   "right_measured_hero",
   "measured_hero_motion_graphic",
+  "paragraph_agents_of_chaos",
 ] as const
 const QUERY_MEDIA_ROLES = [...REQUIRED_MEDIA_ROLES, ...OPTIONAL_MEDIA_ROLES] as const
 const REQUIRED_DESIGN_TOKEN_KEYS = [
@@ -71,6 +73,7 @@ const REQUIRED_DESIGN_TOKEN_KEYS = [
 
 type SurfaceState =
   | "intro"
+  | "educational_diagnostic_passage"
   | "path_choice"
   | "educate_eval"
   | "cohort_conversion"
@@ -86,6 +89,7 @@ type SurfaceState =
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
   intro: "landing_root",
+  educational_diagnostic_passage: "educational_diagnostic_passage",
   path_choice: "landing_path_choice",
   educate_eval: "educate_eval_encounter",
   cohort_conversion: "cohort_conversion_encounter",
@@ -224,6 +228,8 @@ function sectionCopy(row?: LandingSectionRow) {
     diagnosticText: asString(metadata.diagnostic_text),
     educationalResources: asRecordArray(metadata.educational_resources),
     evaluationEntry: asRecord(metadata.evaluation_entry),
+    featuredPublication: asRecord(metadata.featured_publication),
+    subscriptionEntry: asRecord(metadata.subscription_entry),
     heroPaths: asRecordArray(metadata.hero_paths),
     evaluationSections: asRecordArray(metadata.evaluation_sections),
     cohortStructure: asRecordArray(metadata.cohort_structure),
@@ -478,6 +484,7 @@ export default function MeasuresRegistryRuntime() {
   }, [designTokens])
   const showDiagnostics = false
   const landingRootCopy = sectionCopy(sectionMap.get("landing_root"))
+  const educationalDiagnosticPassageCopy = sectionCopy(sectionMap.get("educational_diagnostic_passage"))
   const introCopy = landingRootCopy
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const educateEvalCopy = sectionCopy(sectionMap.get("educate_eval_encounter"))
@@ -500,6 +507,7 @@ export default function MeasuresRegistryRuntime() {
   const thresholdLeftMotionUrl = mediaUrl(mediaMap.get("left_hero_fracture_motion"))
   const thresholdRightStillUrl = mediaUrl(mediaMap.get("right_measured_hero")) ?? heroMeasuredImageUrl ?? splitHeroImageUrl
   const thresholdRightMotionUrl = mediaUrl(mediaMap.get("measured_hero_motion_graphic"))
+  const agentsOfChaosImageUrl = mediaUrl(mediaMap.get("paragraph_agents_of_chaos"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
@@ -665,7 +673,15 @@ export default function MeasuresRegistryRuntime() {
 
     if (
       behavior === "route_surface" &&
-      (target === "educate_eval_encounter" || actionKey === "route_educate_eval")
+      (target === "educational_diagnostic_passage" || actionKey === "route_educate_eval")
+    ) {
+      navigateSurface("educational_diagnostic_passage")
+      return
+    }
+
+    if (
+      behavior === "route_surface" &&
+      (target === "educate_eval_encounter" || actionKey === "continue_to_evaluation")
     ) {
       navigateSurface("educate_eval")
       return
@@ -1103,6 +1119,47 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function renderEducationalDiagnosticPassageSurface() {
+    if (reportMissingClassification("educational_diagnostic_passage", educationalDiagnosticPassageCopy)) return null
+
+    const continueAction =
+      educationalDiagnosticPassageCopy.actions.find((action) => asString(action.action_key) === "continue_to_evaluation") ??
+      educationalDiagnosticPassageCopy.actions.find((action) => asString(action.target_encounter_key) === "educate_eval_encounter")
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="educational_diagnostic_passage"
+        style={registryTokenStyle}
+      >
+        <section className="registry-diagnostic-passage" aria-label={educationalDiagnosticPassageCopy.title ?? undefined}>
+          {explainerVideoUrl ? (
+            <video
+              src={explainerVideoUrl}
+              autoPlay
+              controls
+              playsInline
+              preload="auto"
+              onEnded={() => navigateSurface("educate_eval")}
+              aria-label="Measures Registry diagnostic passage"
+            />
+          ) : null}
+          <div>
+            {educationalDiagnosticPassageCopy.eyebrow ? <span>{educationalDiagnosticPassageCopy.eyebrow}</span> : null}
+            {educationalDiagnosticPassageCopy.title ? <h1>{educationalDiagnosticPassageCopy.title}</h1> : null}
+            {educationalDiagnosticPassageCopy.subtitle ? <p>{educationalDiagnosticPassageCopy.subtitle}</p> : null}
+          </div>
+          <button
+            type="button"
+            onClick={() => handleAction(asString(continueAction?.action_key) ?? "continue_to_evaluation", educationalDiagnosticPassageCopy.actions)}
+          >
+            {asString(continueAction?.label) ?? "Continue to Evaluation"}
+          </button>
+        </section>
+      </main>
+    )
+  }
+
   function renderEducateEvalSurface() {
     if (reportMissingClassification("educate_eval_encounter", educateEvalCopy)) return null
     const beginAction = educateEvalCopy.actions.find(
@@ -1133,22 +1190,27 @@ export default function MeasuresRegistryRuntime() {
           "Witnessed instability or ambiguity",
           "Implementation and governance gaps",
         ]
+    const featuredPublication = educateEvalCopy.featuredPublication
+    const publicationTitle = asString(featuredPublication?.title) ?? "Agents of Chaos"
+    const publicationSubtitle =
+      asString(featuredPublication?.subtitle) ??
+      asString(featuredPublication?.description) ??
+      "A Measures Registry publication context for recognizing system instability, authority absence, and governed evaluation need."
+    const publicationUrl = asString(featuredPublication?.url)
+    const publicationSource = asString(featuredPublication?.source) ?? "Paragraph"
+    const publicationRelevance = asString(featuredPublication?.registry_relevance)
+    const subscriptionEntry = educateEvalCopy.subscriptionEntry
+    const subscriptionTitle = asString(subscriptionEntry?.title) ?? "Receive Registry Dispatches"
+    const subscriptionBody =
+      asString(subscriptionEntry?.body) ??
+      "Subscribe for Measures Registry publication updates, diagnostic context, and institutional governance dispatches."
+    const subscriptionUrl = asString(subscriptionEntry?.url) ?? publicationUrl
 
     return (
       <main className="measures-registry-runtime" data-surface="educate_eval_encounter" style={registryTokenStyle}>
         {renderHeader(null, educateEvalCopy.actions)}
         <section className="registry-diagnostic-encounter" aria-label={educateEvalCopy.title ?? undefined}>
           <div className="registry-diagnostic-threshold">
-            {explainerVideoUrl ? (
-              <video
-                src={explainerVideoUrl}
-                autoPlay
-                controls
-                playsInline
-                preload="auto"
-                aria-label="Measures Registry diagnostic explainer"
-              />
-            ) : null}
             {educateEvalCopy.eyebrow ? <span>{educateEvalCopy.eyebrow}</span> : null}
             {educateEvalCopy.title ? <h1>{educateEvalCopy.title}</h1> : null}
           </div>
@@ -1156,6 +1218,21 @@ export default function MeasuresRegistryRuntime() {
           <section className="registry-diagnostic-recognition" aria-label="Diagnostic recognition">
             <span>Diagnostic Recognition</span>
             <p>{diagnosticText}</p>
+          </section>
+
+          <section className="registry-featured-publication" aria-label="Featured publication">
+            {agentsOfChaosImageUrl ? <img src={agentsOfChaosImageUrl} alt="" /> : null}
+            <div>
+              <span>{publicationSource}</span>
+              <h2>{publicationTitle}</h2>
+              <p>{publicationSubtitle}</p>
+              {publicationRelevance ? <p>{publicationRelevance}</p> : null}
+              {publicationUrl ? (
+                <a href={publicationUrl} target="_blank" rel="noreferrer">
+                  Open Publication
+                </a>
+              ) : null}
+            </div>
           </section>
 
           <section className="registry-education-resources" aria-label="Educational resources">
@@ -1209,6 +1286,21 @@ export default function MeasuresRegistryRuntime() {
                 </button>
               ) : null}
             </div>
+          </section>
+
+          <section className="registry-publication-subscription" aria-label="Measures Registry subscription">
+            <div>
+              <span>Registry Publication</span>
+              <h2>{subscriptionTitle}</h2>
+              <p>{subscriptionBody}</p>
+            </div>
+            {subscriptionUrl ? (
+              <a href={subscriptionUrl} target="_blank" rel="noreferrer">
+                {asString(subscriptionEntry?.label) ?? "Subscribe to Measures Registry"}
+              </a>
+            ) : (
+              <span>{asString(subscriptionEntry?.label) ?? "Subscribe to Measures Registry"}</span>
+            )}
           </section>
         </section>
       </main>
@@ -1927,6 +2019,7 @@ export default function MeasuresRegistryRuntime() {
   }
 
   if (activeSurface === "path_choice") return renderPathChoiceSurface()
+  if (activeSurface === "educational_diagnostic_passage") return renderEducationalDiagnosticPassageSurface()
   if (activeSurface === "educate_eval") return renderEducateEvalSurface()
   if (activeSurface === "cohort_conversion") return renderCohortConversionSurface()
   if (activeSurface === "iis_eval_gate1") return renderIisEvalGateSurface()
