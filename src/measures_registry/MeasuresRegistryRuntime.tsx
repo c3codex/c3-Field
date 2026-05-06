@@ -30,7 +30,12 @@ const REQUIRED_MEDIA_ROLES = [
   "path_choice_background",
   "registry_mark",
 ] as const
-const OPTIONAL_MEDIA_ROLES = ["foundation_intro_video", "systems_intro_video", "c3_field_video"] as const
+const OPTIONAL_MEDIA_ROLES = [
+  "foundation_intro_video",
+  "systems_intro_video",
+  "c3_field_video",
+  "hero_measured_image",
+] as const
 const QUERY_MEDIA_ROLES = [...REQUIRED_MEDIA_ROLES, ...OPTIONAL_MEDIA_ROLES] as const
 const REQUIRED_DESIGN_TOKEN_KEYS = [
   "text_primary",
@@ -214,6 +219,21 @@ function sectionCopy(row?: LandingSectionRow) {
     sections: asRecordArray(metadata.sections),
     heroPaths: asRecordArray(metadata.hero_paths),
     evaluationSections: asRecordArray(metadata.evaluation_sections),
+    cohortStructure: asRecordArray(metadata.cohort_structure),
+    liveStructuralReview: asRecord(metadata.live_structural_review),
+    structuralDriftIndex: Array.isArray(metadata.structural_drift_index)
+      ? metadata.structural_drift_index.filter((item): item is string => typeof item === "string")
+      : [],
+    readinessConditions: Array.isArray(metadata.readiness_conditions)
+      ? metadata.readiness_conditions.filter((item): item is string => typeof item === "string")
+      : [],
+    recognitionTouchpoints: Array.isArray(metadata.recognition_touchpoints)
+      ? metadata.recognition_touchpoints.filter((item): item is string => typeof item === "string")
+      : [],
+    threshold: asRecord(metadata.threshold),
+    governedConversionTouchpoints: Array.isArray(metadata.governed_conversion_touchpoints)
+      ? metadata.governed_conversion_touchpoints.filter((item): item is string => typeof item === "string")
+      : [],
     resolutionText: asString(metadata.resolution_text),
     outcomeStatement: asString(metadata.outcome_statement),
     closingStatement: asString(metadata.closing_statement),
@@ -464,6 +484,7 @@ export default function MeasuresRegistryRuntime() {
   const epigraphVideoUrl = mediaUrl(mediaMap.get("epigraph_video"))
   const splitHeroImageUrl = mediaUrl(mediaMap.get("hero_image"))
   const explainerVideoUrl = mediaUrl(mediaMap.get("explainer_video"))
+  const heroMeasuredImageUrl = mediaUrl(mediaMap.get("hero_measured_image"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
@@ -652,6 +673,11 @@ export default function MeasuresRegistryRuntime() {
     }
 
     if (behavior === "route_surface" && actionKey === "route_course_review") {
+      navigateSurface("reserve_seat")
+      return
+    }
+
+    if (actionKey === "request_cohort_consideration") {
       navigateSurface("reserve_seat")
       return
     }
@@ -1055,14 +1081,118 @@ export default function MeasuresRegistryRuntime() {
 
   function renderCohortConversionSurface() {
     if (reportMissingClassification("cohort_conversion_encounter", cohortConversionCopy)) return null
+    const thresholdTitle = asString(cohortConversionCopy.threshold?.title)
+    const thresholdBody = asString(cohortConversionCopy.threshold?.body)
+    const liveReviewTitle = asString(cohortConversionCopy.liveStructuralReview?.title)
+    const liveReviewBody = asString(cohortConversionCopy.liveStructuralReview?.body)
 
     return (
       <main className="measures-registry-runtime" data-surface="cohort_conversion_encounter" style={registryTokenStyle}>
         {renderHeader(null, cohortConversionCopy.actions)}
         <section className="registry-cohort-conversion" aria-label={cohortConversionCopy.title ?? undefined}>
+          {heroMeasuredImageUrl ? <img src={heroMeasuredImageUrl} alt="" /> : null}
           {cohortConversionCopy.eyebrow ? <span>{cohortConversionCopy.eyebrow}</span> : null}
           {cohortConversionCopy.title ? <h1>{cohortConversionCopy.title}</h1> : null}
           {cohortConversionCopy.subtitle ? <p>{cohortConversionCopy.subtitle}</p> : null}
+          {cohortConversionCopy.coreStatement ? (
+            <p className="registry-cohort-core">{cohortConversionCopy.coreStatement}</p>
+          ) : null}
+
+          {cohortConversionCopy.cohortStructure.length > 0 ? (
+            <div className="registry-cohort-phases" aria-label="3-Phase Cohort">
+              {cohortConversionCopy.cohortStructure.map((phase) => {
+                const title = asString(phase.title)
+                const session = asString(phase.session)
+                const failureSignature = asString(phase.failure_signature)
+                const artifact = asString(phase.artifact)
+                const gates = Array.isArray(phase.three_gates)
+                  ? phase.three_gates.filter((item): item is string => typeof item === "string")
+                  : []
+                const roleContracts = Array.isArray(phase.three_ai_role_contracts)
+                  ? phase.three_ai_role_contracts.filter((item): item is string => typeof item === "string")
+                  : []
+                const implementations = Array.isArray(phase.three_governing_implementations)
+                  ? phase.three_governing_implementations.filter((item): item is string => typeof item === "string")
+                  : []
+
+                return (
+                  <article key={title ?? session}>
+                    {title ? <h2>{title}</h2> : null}
+                    {session ? <p><strong>Session:</strong> {session}</p> : null}
+                    {failureSignature ? <p><strong>Failure Signature:</strong> {failureSignature}</p> : null}
+                    {artifact ? <p><strong>Artifact:</strong> {artifact}</p> : null}
+                    {gates.length > 0 ? (
+                      <ol>
+                        {gates.map((gate) => <li key={gate}>{gate}</li>)}
+                      </ol>
+                    ) : null}
+                    {roleContracts.length > 0 ? (
+                      <ol>
+                        {roleContracts.map((contract) => <li key={contract}>{contract}</li>)}
+                      </ol>
+                    ) : null}
+                    {implementations.length > 0 ? (
+                      <ol>
+                        {implementations.map((implementation) => <li key={implementation}>{implementation}</li>)}
+                      </ol>
+                    ) : null}
+                  </article>
+                )
+              })}
+            </div>
+          ) : null}
+
+          {liveReviewTitle || liveReviewBody ? (
+            <section className="registry-cohort-review">
+              {liveReviewTitle ? <h2>{liveReviewTitle}</h2> : null}
+              {liveReviewBody ? <p>{liveReviewBody}</p> : null}
+            </section>
+          ) : null}
+
+          {cohortConversionCopy.structuralDriftIndex.length > 0 ? (
+            <section>
+              <h2>Structural Drift Index</h2>
+              <p>No scoring system permitted.</p>
+              <ul>
+                {cohortConversionCopy.structuralDriftIndex.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </section>
+          ) : null}
+
+          {cohortConversionCopy.readinessConditions.length > 0 ? (
+            <section>
+              <h2>Conversion Readiness Conditions</h2>
+              <ul>
+                {cohortConversionCopy.readinessConditions.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </section>
+          ) : null}
+
+          {cohortConversionCopy.recognitionTouchpoints.length > 0 ? (
+            <section>
+              <h2>Recognition Circuit — 6 Touchpoints</h2>
+              <ol>
+                {cohortConversionCopy.recognitionTouchpoints.map((item) => <li key={item}>{item}</li>)}
+              </ol>
+            </section>
+          ) : null}
+
+          {thresholdTitle || thresholdBody ? (
+            <section>
+              {thresholdTitle ? <h2>{thresholdTitle}</h2> : null}
+              {thresholdBody ? <p>{thresholdBody}</p> : null}
+            </section>
+          ) : null}
+
+          {cohortConversionCopy.governedConversionTouchpoints.length > 0 ? (
+            <section>
+              <h2>Governed Conversion Circuit — 6 Touchpoints</h2>
+              <ol>
+                {cohortConversionCopy.governedConversionTouchpoints.map((item) => <li key={item}>{item}</li>)}
+              </ol>
+            </section>
+          ) : null}
+
           {cohortConversionCopy.sections.map((section) => {
             const title = asString(section.title)
             const body = asString(section.body)
