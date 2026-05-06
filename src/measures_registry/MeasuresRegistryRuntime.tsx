@@ -284,7 +284,7 @@ export default function MeasuresRegistryRuntime() {
     window.sessionStorage.getItem("measures_registry_operator_dispatch_key") ?? "",
   )
   const [epigraphEntered, setEpigraphEntered] = useState(true)
-  const [epigraphMuted, setEpigraphMuted] = useState(false)
+  const [epigraphMuted, setEpigraphMuted] = useState(true)
   const [epigraphFailed, setEpigraphFailed] = useState(false)
   const [landingHeroReady, setLandingHeroReady] = useState(false)
   const [evalFields, setEvalFields] = useState<Record<string, string>>({})
@@ -924,15 +924,22 @@ export default function MeasuresRegistryRuntime() {
                 {epigraphFailed || !epigraphVideoUrl ? "Continue" : null}
               </button>
             ) : null}
+            {epigraphEntered && !epigraphFailed && epigraphVideoUrl && epigraphMuted ? (
+              <div className="registry-epigraph-context">
+                <p>AI is not broken.</p>
+                <p>The systems are.</p>
+                <span>Integrity Governance begins where behavior becomes measurable.</span>
+              </div>
+            ) : null}
             {epigraphEntered && !epigraphFailed && epigraphVideoUrl ? (
               <div className="registry-epigraph-controls">
                 <button
                   type="button"
                   className="registry-epigraph-mute"
-                  aria-label={epigraphMuted ? "Unmute" : "Mute"}
+                  aria-label={epigraphMuted ? "Enable sound" : "Mute"}
                   onClick={() => setEpigraphMuted((current) => !current)}
                 >
-                  {epigraphMuted ? "Unmute" : "Mute"}
+                  {epigraphMuted ? "Sound" : "Mute"}
                 </button>
                 <button
                   type="button"

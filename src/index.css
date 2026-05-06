@@ -81,6 +81,48 @@ body,
   cursor: pointer;
 }
 
+.registry-epigraph-context {
+  position: fixed;
+  left: clamp(1rem, 4vw, 4rem);
+  bottom: clamp(4.5rem, 13vh, 8rem);
+  z-index: 2;
+  max-width: min(32rem, calc(100vw - 2rem));
+  display: grid;
+  gap: 0.18rem;
+  padding: clamp(0.8rem, 2vw, 1rem) clamp(0.9rem, 2.4vw, 1.25rem);
+  background: linear-gradient(90deg, rgba(2, 4, 8, 0.56), rgba(2, 4, 8, 0.2), transparent);
+  color: rgba(246, 248, 251, 0.92);
+  pointer-events: none;
+  animation: registry-epigraph-context-soften 5s ease forwards;
+}
+
+.registry-epigraph-context p {
+  margin: 0;
+  font-size: clamp(1.35rem, 4vw, 3.1rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.registry-epigraph-context span {
+  max-width: 24rem;
+  margin-top: 0.65rem;
+  color: rgba(238, 242, 249, 0.74);
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  line-height: 1.45;
+}
+
+@keyframes registry-epigraph-context-soften {
+  from {
+    opacity: 0.96;
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    opacity: 0.46;
+    transform: translate3d(0, 0.15rem, 0);
+  }
+}
+
 .registry-epigraph-controls {
   position: fixed;
   right: clamp(1rem, 3vw, 2rem);
