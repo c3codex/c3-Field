@@ -1208,7 +1208,6 @@ export default function MeasuresRegistryRuntime() {
 
     return (
       <main className="measures-registry-runtime" data-surface="educate_eval_encounter" style={registryTokenStyle}>
-        {renderHeader(null, educateEvalCopy.actions)}
         <section className="registry-diagnostic-encounter" aria-label={educateEvalCopy.title ?? undefined}>
           <div className="registry-diagnostic-threshold">
             {educateEvalCopy.eyebrow ? <span>{educateEvalCopy.eyebrow}</span> : null}
