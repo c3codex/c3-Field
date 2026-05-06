@@ -259,6 +259,118 @@ body,
   transform: translate3d(1.15rem, -0.65rem, 0) scale(1.08);
 }
 
+.registry-threshold-hero {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  overflow: hidden;
+  background: #040507;
+  isolation: isolate;
+}
+
+.registry-threshold-seat {
+  position: relative;
+  min-width: 0;
+  min-height: 100svh;
+  display: grid;
+  align-items: end;
+  border: 0;
+  border-radius: 0;
+  padding: clamp(1.4rem, 4vw, 4.75rem);
+  overflow: hidden;
+  background: #050608;
+  color: var(--registry-text-primary);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.registry-threshold-seat[data-side="left"] {
+  justify-items: start;
+}
+
+.registry-threshold-seat[data-side="right"] {
+  justify-items: end;
+  text-align: right;
+}
+
+.registry-threshold-still,
+.registry-threshold-motion {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+.registry-threshold-still {
+  z-index: 0;
+}
+
+.registry-threshold-motion {
+  z-index: 1;
+}
+
+.registry-threshold-copy {
+  position: relative;
+  z-index: 3;
+  width: min(27rem, 86%);
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.45rem);
+  color: rgba(248, 250, 252, 0.94);
+  text-shadow: 0 0.08rem 0.35rem rgba(0, 0, 0, 0.72), 0 0 1.4rem rgba(0, 0, 0, 0.58);
+}
+
+.registry-threshold-copy span {
+  font-size: clamp(1.08rem, 1.7vw, 1.55rem);
+  line-height: 1.28;
+}
+
+.registry-threshold-copy strong {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.6rem;
+  border-block: 1px solid rgba(248, 250, 252, 0.72);
+  color: rgba(255, 255, 255, 0.98);
+  font-size: clamp(0.78rem, 1vw, 0.92rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.registry-threshold-seat[data-side="right"] .registry-threshold-copy strong {
+  justify-self: end;
+}
+
+.registry-threshold-divide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 4;
+  width: clamp(0.22rem, 0.5vw, 0.42rem);
+  transform: translateX(-50%);
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.82) 16%, rgba(255, 255, 255, 0.98) 50%, rgba(255, 255, 255, 0.82) 84%, transparent 100%);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.62), 0 0 2.4rem rgba(248, 250, 252, 0.22);
+  pointer-events: none;
+}
+
+.registry-threshold-seat:hover,
+.registry-threshold-seat:focus-visible {
+  outline: none;
+}
+
+.registry-threshold-seat:focus-visible .registry-threshold-copy strong {
+  border-block-color: #ffffff;
+}
+
 .registry-public-header {
   position: absolute;
   left: clamp(0.75rem, 2vw, 1.5rem);
@@ -1607,6 +1719,46 @@ body,
   .registry-split-hero-routes button[data-choice="right"]:focus-visible {
     padding-left: var(--registry-page-padding-active);
     transform: none;
+  }
+
+  .registry-threshold-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .registry-threshold-seat {
+    min-height: 100svh;
+    padding: clamp(1rem, 5vw, 1.35rem);
+  }
+
+  .registry-threshold-seat[data-side="left"] {
+    align-items: start;
+    padding-top: clamp(3rem, 12svh, 5rem);
+  }
+
+  .registry-threshold-seat[data-side="right"] {
+    align-items: end;
+    padding-bottom: clamp(3rem, 12svh, 5rem);
+  }
+
+  .registry-threshold-still,
+  .registry-threshold-motion {
+    object-position: center;
+  }
+
+  .registry-threshold-copy {
+    width: min(11.25rem, 92%);
+    gap: 0.8rem;
+  }
+
+  .registry-threshold-copy span {
+    font-size: clamp(0.92rem, 4.4vw, 1.08rem);
+    line-height: 1.22;
+  }
+
+  .registry-threshold-copy strong {
+    min-height: 2.3rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
   }
 
   .registry-path-choice {

@@ -35,6 +35,10 @@ const OPTIONAL_MEDIA_ROLES = [
   "systems_intro_video",
   "c3_field_video",
   "hero_measured_image",
+  "left_hero_fracture",
+  "left_hero_fracture_motion",
+  "right_measured_hero",
+  "measured_hero_motion_graphic",
 ] as const
 const QUERY_MEDIA_ROLES = [...REQUIRED_MEDIA_ROLES, ...OPTIONAL_MEDIA_ROLES] as const
 const REQUIRED_DESIGN_TOKEN_KEYS = [
@@ -287,6 +291,10 @@ export default function MeasuresRegistryRuntime() {
   const [epigraphMuted, setEpigraphMuted] = useState(true)
   const [epigraphFailed, setEpigraphFailed] = useState(false)
   const [landingHeroReady, setLandingHeroReady] = useState(false)
+  const [thresholdMotionSettled, setThresholdMotionSettled] = useState({
+    left: false,
+    right: false,
+  })
   const [evalFields, setEvalFields] = useState<Record<string, string>>({})
   const [evalAnswers, setEvalAnswers] = useState<Record<string, string>>({})
   const [evalSubmitting, setEvalSubmitting] = useState(false)
@@ -485,6 +493,10 @@ export default function MeasuresRegistryRuntime() {
   const splitHeroImageUrl = mediaUrl(mediaMap.get("hero_image"))
   const explainerVideoUrl = mediaUrl(mediaMap.get("explainer_video"))
   const heroMeasuredImageUrl = mediaUrl(mediaMap.get("hero_measured_image"))
+  const thresholdLeftStillUrl = mediaUrl(mediaMap.get("left_hero_fracture")) ?? splitHeroImageUrl
+  const thresholdLeftMotionUrl = mediaUrl(mediaMap.get("left_hero_fracture_motion"))
+  const thresholdRightStillUrl = mediaUrl(mediaMap.get("right_measured_hero")) ?? heroMeasuredImageUrl ?? splitHeroImageUrl
+  const thresholdRightMotionUrl = mediaUrl(mediaMap.get("measured_hero_motion_graphic"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
@@ -876,9 +888,62 @@ export default function MeasuresRegistryRuntime() {
 
   function renderIntroSurface() {
     if (reportMissingClassification("landing_root", landingRootCopy)) return null
-    const style = splitHeroImageUrl
-      ? ({ "--split-hero-image": `url(${splitHeroImageUrl})` } as CSSProperties)
-      : undefined
+    const leftAction =
+      asString(landingRootCopy.heroPaths.find((path) => asString(path.side) === "left")?.action_key) ??
+      "route_educate_eval"
+    const rightAction =
+      asString(landingRootCopy.heroPaths.find((path) => asString(path.side) === "right")?.action_key) ??
+      "route_cohort_conversion"
+
+    function settleThresholdMotion(side: "left" | "right") {
+      setThresholdMotionSettled((current) =>
+        current[side] ? current : { ...current, [side]: true },
+      )
+    }
+
+    function renderThresholdSeat(
+      side: "left" | "right",
+      stillUrl: string | null,
+      motionUrl: string | null,
+      copy: {
+        body: string
+        cta: string
+        actionKey: string
+        ariaLabel: string
+      },
+    ) {
+      const isSettled = thresholdMotionSettled[side] || !motionUrl
+
+      return (
+        <button
+          type="button"
+          className="registry-threshold-seat"
+          data-side={side}
+          onClick={() => handleAction(copy.actionKey, landingRootCopy.actions)}
+        >
+          {stillUrl ? (
+            <img className="registry-threshold-still" src={stillUrl} alt="" aria-hidden="true" />
+          ) : null}
+          {motionUrl && !isSettled ? (
+            <video
+              className="registry-threshold-motion"
+              src={motionUrl}
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              onEnded={() => settleThresholdMotion(side)}
+              onError={() => settleThresholdMotion(side)}
+              aria-label={copy.ariaLabel}
+            />
+          ) : null}
+          <span className="registry-threshold-copy">
+            <span>{copy.body}</span>
+            <strong>{copy.cta}</strong>
+          </span>
+        </button>
+      )
+    }
 
     return (
       <main
@@ -952,32 +1017,20 @@ export default function MeasuresRegistryRuntime() {
             ) : null}
           </section>
         ) : (
-          <section className="registry-split-hero" style={style} aria-label={landingRootCopy.title ?? undefined}>
-            <div className="registry-split-hero-copy">
-              {landingRootCopy.eyebrow ? <span>{landingRootCopy.eyebrow}</span> : null}
-              {landingRootCopy.title ? <h1>{landingRootCopy.title}</h1> : null}
-              {landingRootCopy.subtitle ? <p>{landingRootCopy.subtitle}</p> : null}
-            </div>
-            <div className="registry-split-hero-routes">
-              {landingRootCopy.heroPaths.map((path, index) => {
-                const actionKey = asString(path.action_key)
-                const title = asString(path.title)
-                const subtitle = asString(path.subtitle)
-                const side = asString(path.side) ?? (index === 0 ? "left" : "right")
-
-                return (
-                  <button
-                    key={actionKey ?? title ?? index}
-                    type="button"
-                    data-choice={side}
-                    onClick={() => handleAction(actionKey, landingRootCopy.actions)}
-                  >
-                    {title ? <span>{title}</span> : null}
-                    {subtitle ? <p>{subtitle}</p> : null}
-                  </button>
-                )
-              })}
-            </div>
+          <section className="registry-threshold-hero" aria-label={landingRootCopy.title ?? "Measures Registry threshold"}>
+            {renderThresholdSeat("left", thresholdLeftStillUrl, thresholdLeftMotionUrl, {
+              body: "Complexity is scaling faster than clarity. Your systems are producing outcomes nobody can fully explain.",
+              cta: "Evaluate the Environment",
+              actionKey: leftAction,
+              ariaLabel: "Fractured environment motion",
+            })}
+            <div className="registry-threshold-divide" aria-hidden="true" />
+            {renderThresholdSeat("right", thresholdRightStillUrl, thresholdRightMotionUrl, {
+              body: "Coherence must be structured. Measured environments produce stable and governable outcomes.",
+              cta: "Structure the Environment",
+              actionKey: rightAction,
+              ariaLabel: "Measured environment motion",
+            })}
           </section>
         )}
       </main>
