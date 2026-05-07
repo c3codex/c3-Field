@@ -1121,18 +1121,24 @@ body,
   min-height: 100svh;
   width: min(100%, calc(100% - 2 * var(--registry-page-padding-active)));
   margin: 0 auto;
-  padding: clamp(1rem, 3vw, 2rem) 0;
+  padding: clamp(0.8rem, 2.2vw, 1.35rem) 0;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto auto;
-  gap: clamp(1rem, 2vw, 1.4rem);
+  grid-template-rows: minmax(0, auto) auto auto auto;
+  gap: clamp(0.75rem, 1.6vw, 1.05rem);
   align-items: end;
 }
 
 .registry-diagnostic-passage video {
   width: 100%;
-  height: min(72svh, 44rem);
-  object-fit: cover;
+  height: min(58svh, 38rem);
+  object-fit: contain;
   background: #000;
+}
+
+.registry-diagnostic-passage-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
 }
 
 .registry-diagnostic-passage > div {
@@ -1181,14 +1187,16 @@ body,
   min-height: 100svh;
   width: min(var(--registry-content-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
   margin: 0 auto;
-  padding: calc(var(--registry-header-height) + clamp(1.2rem, 3vw, 2rem)) 0 var(--registry-page-padding-active);
+  padding: calc(var(--registry-header-height) + clamp(0.85rem, 2vw, 1.35rem)) 0 var(--registry-page-padding-active);
   display: grid;
-  gap: clamp(1.25rem, 3vw, 2.4rem);
+  gap: clamp(1rem, 2.2vw, 1.75rem);
 }
 
 .registry-diagnostic-threshold {
   display: grid;
-  gap: clamp(0.8rem, 2vw, 1.1rem);
+  gap: clamp(0.55rem, 1.4vw, 0.9rem);
+  border-bottom: 1px solid rgba(246, 248, 251, 0.14);
+  padding-bottom: clamp(0.8rem, 2vw, 1.2rem);
 }
 
 .registry-diagnostic-threshold video {
@@ -1212,23 +1220,23 @@ body,
   max-width: min(52rem, 100%);
   margin: 0;
   color: var(--registry-text-primary);
-  font-size: clamp(2.2rem, 6vw, var(--registry-entry-headline-active));
-  line-height: 1;
+  font-size: clamp(2rem, 5vw, 4.8rem);
+  line-height: 1.02;
 }
 
 .registry-diagnostic-recognition {
   max-width: min(58rem, 100%);
   border-left: 1px solid var(--registry-accent-cool);
-  padding-left: var(--registry-plaque-padding-active);
+  padding: 0.25rem 0 0.25rem var(--registry-plaque-padding-active);
   display: grid;
-  gap: 0.8rem;
+  gap: 0.65rem;
 }
 
 .registry-diagnostic-recognition p {
   margin: 0;
   color: var(--registry-text-secondary);
-  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
-  line-height: 1.48;
+  font-size: clamp(1rem, 1.45vw, 1.18rem);
+  line-height: 1.58;
 }
 
 .registry-featured-publication {
@@ -1347,13 +1355,102 @@ body,
   border-bottom: 1px solid currentColor;
 }
 
+.registry-structural-preview {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.3rem);
+  border-block: 1px solid rgba(246, 248, 251, 0.2);
+  padding: clamp(1rem, 2.5vw, 1.6rem) 0;
+}
+
+.registry-structural-preview-heading {
+  max-width: min(48rem, 100%);
+  display: grid;
+  gap: 0.55rem;
+}
+
+.registry-structural-preview span,
+.registry-structural-preview-heading span,
+.registry-system-footer span {
+  color: var(--registry-text-muted);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.registry-structural-preview-heading h2 {
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: clamp(1.65rem, 3.2vw, 3rem);
+  line-height: 1.04;
+}
+
+.registry-structural-preview-heading p,
+.registry-structural-preview-grid p {
+  margin: 0;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-body-active);
+  line-height: 1.5;
+}
+
+.registry-structural-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.8rem, 1.8vw, 1rem);
+}
+
+.registry-structural-preview-grid article {
+  min-height: 15rem;
+  display: grid;
+  align-content: end;
+  gap: 0.55rem;
+  border-top: 1px solid rgba(194, 213, 241, 0.36);
+  padding-top: 1rem;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.registry-structural-preview-grid article:hover {
+  border-color: rgba(127, 177, 235, 0.72);
+  transform: translateY(-2px);
+}
+
+.registry-structural-preview-grid strong {
+  color: var(--registry-text-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.registry-structural-preview-grid h3 {
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: clamp(1.35rem, 2.8vw, 2.2rem);
+  line-height: 1.05;
+}
+
+.registry-structural-preview-grid a,
+.registry-structural-preview > button {
+  width: fit-content;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  color: var(--registry-text-primary);
+  padding: 0 0 0.15rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 680;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .registry-diagnostic-entry {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(15rem, 0.65fr);
   gap: clamp(1rem, 3vw, 2rem);
   align-items: end;
-  border-block: 1px solid rgba(246, 248, 251, 0.24);
-  padding: clamp(1.2rem, 3vw, 2rem) 0;
+  border-bottom: 1px solid rgba(246, 248, 251, 0.24);
+  padding: clamp(1rem, 2.4vw, 1.5rem) 0 clamp(1.2rem, 3vw, 1.8rem);
 }
 
 .registry-diagnostic-entry > div {
@@ -1594,6 +1691,34 @@ body,
   background: transparent;
   color: var(--registry-text-secondary);
   border-color: var(--registry-border-subtle);
+}
+
+.registry-field-guide-footer {
+  display: none;
+}
+
+.registry-system-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem 1rem;
+  border-top: 1px solid var(--registry-border-subtle);
+  padding-top: 0.85rem;
+}
+
+.registry-system-footer p,
+.registry-system-footer a {
+  margin: 0;
+  color: rgba(246, 248, 251, 0.56);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.registry-system-footer a {
+  color: rgba(246, 248, 251, 0.72);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
 }
 
 .registry-publication-dispatch {
@@ -2483,7 +2608,7 @@ body,
   }
 
   .registry-diagnostic-passage video {
-    height: 54svh;
+    height: 48svh;
   }
 
   .registry-diagnostic-encounter {
@@ -2516,10 +2641,19 @@ body,
     grid-template-columns: 1fr;
   }
 
+  .registry-structural-preview-grid {
+    grid-template-columns: 1fr;
+  }
+
   .registry-education-resource-list article {
     min-height: auto;
     align-content: start;
     padding-top: 1rem;
+  }
+
+  .registry-structural-preview-grid article {
+    min-height: auto;
+    align-content: start;
   }
 
   .registry-diagnostic-entry {
@@ -2528,6 +2662,11 @@ body,
   }
 
   .registry-publication-subscription {
+    display: grid;
+    align-items: start;
+  }
+
+  .registry-system-footer {
     display: grid;
     align-items: start;
   }
@@ -2571,6 +2710,35 @@ body,
 
   .registry-offering-sections {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 761px) {
+  .registry-diagnostic-passage {
+    min-height: 100svh;
+    gap: 0.65rem;
+  }
+
+  .registry-diagnostic-passage video {
+    height: 48svh;
+    max-height: 30rem;
+  }
+
+  .registry-diagnostic-passage h1 {
+    font-size: clamp(1.75rem, 4vw, 3.4rem);
+  }
+
+  .registry-diagnostic-passage p {
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  }
+
+  .registry-diagnostic-encounter {
+    gap: 1rem;
+  }
+
+  .registry-education-resource-list article,
+  .registry-structural-preview-grid article {
+    min-height: 11rem;
   }
 }
 

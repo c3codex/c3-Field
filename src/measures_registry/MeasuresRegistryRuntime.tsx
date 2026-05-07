@@ -345,6 +345,7 @@ export default function MeasuresRegistryRuntime() {
   )
   const [epigraphEntered, setEpigraphEntered] = useState(true)
   const [epigraphMuted, setEpigraphMuted] = useState(true)
+  const [passageMuted, setPassageMuted] = useState(true)
   const [epigraphFailed, setEpigraphFailed] = useState(false)
   const [landingHeroReady, setLandingHeroReady] = useState(false)
   const [thresholdMotionSettled, setThresholdMotionSettled] = useState({
@@ -591,7 +592,6 @@ export default function MeasuresRegistryRuntime() {
   const thresholdLeftMotionUrl = mediaUrl(mediaMap.get("left_hero_fracture_motion"))
   const thresholdRightStillUrl = mediaUrl(mediaMap.get("right_measured_hero")) ?? heroMeasuredImageUrl ?? splitHeroImageUrl
   const thresholdRightMotionUrl = mediaUrl(mediaMap.get("measured_hero_motion_graphic"))
-  const agentsOfChaosImageUrl = mediaUrl(mediaMap.get("paragraph_agents_of_chaos"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
@@ -941,6 +941,19 @@ export default function MeasuresRegistryRuntime() {
           })}
         </nav>
       </header>
+    )
+  }
+
+  function renderSystemFooter() {
+    return (
+      <footer className="registry-system-footer">
+        <p>&copy; 2026 c3 Community Partners DAO, LLC</p>
+        <p>
+          Measures Registry is a registered{" "}
+          <a href="/about">c3 Field</a>
+          {" "}system.
+        </p>
+      </footer>
     )
   }
 
@@ -1305,6 +1318,7 @@ export default function MeasuresRegistryRuntime() {
             <video
               src={explainerVideoUrl}
               autoPlay
+              muted={passageMuted}
               controls
               playsInline
               preload="auto"
@@ -1312,6 +1326,17 @@ export default function MeasuresRegistryRuntime() {
               aria-label="Measures Registry diagnostic passage"
             />
           ) : null}
+          <div className="registry-diagnostic-passage-controls" aria-label="Passage controls">
+            <button
+              type="button"
+              onClick={() => handleAction(asString(continueAction?.action_key) ?? "continue_to_evaluation", educationalDiagnosticPassageCopy.actions)}
+            >
+              Skip
+            </button>
+            <button type="button" onClick={() => setPassageMuted((current) => !current)}>
+              {passageMuted ? "Sound" : "Mute"}
+            </button>
+          </div>
           <div>
             {educationalDiagnosticPassageCopy.eyebrow ? <span>{educationalDiagnosticPassageCopy.eyebrow}</span> : null}
             {educationalDiagnosticPassageCopy.title ? <h1>{educationalDiagnosticPassageCopy.title}</h1> : null}
@@ -1347,8 +1372,6 @@ export default function MeasuresRegistryRuntime() {
       educateEvalCopy.educationalResources.length > 0
         ? educateEvalCopy.educationalResources
         : educateEvalCopy.sections
-    const evaluationTitle =
-      asString(educateEvalCopy.evaluationEntry?.title) ?? "Begin Structured Institutional Assessment"
     const evaluationBody =
       asString(educateEvalCopy.evaluationEntry?.body) ??
       "Enter the diagnostic intake when your institution is ready to name its AI usage scope, deployment conditions, witnessed instability, and governance gaps."
@@ -1361,21 +1384,12 @@ export default function MeasuresRegistryRuntime() {
           "Witnessed instability or ambiguity",
           "Implementation and governance gaps",
         ]
-    const featuredPublication = educateEvalCopy.featuredPublication
-    const publicationTitle = asString(featuredPublication?.title) ?? "Agents of Chaos"
-    const publicationSubtitle =
-      asString(featuredPublication?.subtitle) ??
-      asString(featuredPublication?.description) ??
-      "A Measures Registry publication context for recognizing system instability, authority absence, and governed evaluation need."
-    const publicationUrl = asString(featuredPublication?.url)
-    const publicationSource = asString(featuredPublication?.source) ?? "Paragraph"
-    const publicationRelevance = asString(featuredPublication?.registry_relevance)
     const subscriptionEntry = educateEvalCopy.subscriptionEntry
     const subscriptionTitle = asString(subscriptionEntry?.title) ?? "Receive Registry Dispatches"
     const subscriptionBody =
       asString(subscriptionEntry?.body) ??
       "Subscribe for Measures Registry publication updates, diagnostic context, and institutional governance dispatches."
-    const subscriptionUrl = asString(subscriptionEntry?.url) ?? publicationUrl
+    const subscriptionUrl = asString(subscriptionEntry?.url) ?? structuralDriftPublication?.external_url
 
     return (
       <main className="measures-registry-runtime" data-surface="educate_eval_encounter" style={registryTokenStyle}>
@@ -1388,26 +1402,6 @@ export default function MeasuresRegistryRuntime() {
           <section className="registry-diagnostic-recognition" aria-label="Diagnostic recognition">
             <span>Diagnostic Recognition</span>
             <p>{diagnosticText}</p>
-          </section>
-
-          <section className="registry-featured-publication" aria-label="Featured publication">
-            {agentsOfChaosImageUrl ? <img src={agentsOfChaosImageUrl} alt="" /> : null}
-            <div>
-              <span>{publicationSource}</span>
-              <h2>{publicationTitle}</h2>
-              <p>{publicationSubtitle}</p>
-              {publicationRelevance ? <p>{publicationRelevance}</p> : null}
-              {publicationUrl ? (
-                <a href={publicationUrl} target="_blank" rel="noreferrer">
-                  Open Publication
-                </a>
-              ) : null}
-              {fieldGuideAction ? (
-                <button type="button" onClick={() => handleAction("route_structural_drift_article", educateEvalCopy.actions)}>
-                  {asString(fieldGuideAction.label) ?? "Open Structural Drift"}
-                </button>
-              ) : null}
-            </div>
           </section>
 
           <section className="registry-education-resources" aria-label="Educational resources">
@@ -1438,10 +1432,34 @@ export default function MeasuresRegistryRuntime() {
             </div>
           </section>
 
+          <section className="registry-structural-preview" aria-label="Structural Drift dispatches">
+            <div className="registry-structural-preview-heading">
+              <span>Structural Drift</span>
+              <h2>{structuralDriftPublication?.subtitle ?? "Dispatches from the Measures Registry"}</h2>
+              <p>Registered observations before structural evaluation.</p>
+            </div>
+            <div className="registry-structural-preview-grid">
+              {structuralDriftDispatches.map((dispatch) => (
+                <article key={dispatch.dispatch_key}>
+                  <span>{dispatchIssueLabel(dispatch)}</span>
+                  <strong>{dispatchTypeLabel(dispatch)}</strong>
+                  <h3>{dispatch.title}</h3>
+                  {dispatchThesis(dispatch) ? <p>{dispatchThesis(dispatch)}</p> : null}
+                  {dispatch.internal_route ? <a href={dispatch.internal_route}>Read Dispatch</a> : null}
+                </article>
+              ))}
+            </div>
+            {fieldGuideAction ? (
+              <button type="button" onClick={() => handleAction("route_structural_drift_article", educateEvalCopy.actions)}>
+                Read Dispatches
+              </button>
+            ) : null}
+          </section>
+
           <section className="registry-diagnostic-entry" aria-label="Evaluation entry">
             <div>
               <span>Operational Diagnostic Intake</span>
-              <h2>{evaluationTitle}</h2>
+              <h2>Begin Structural Evaluation</h2>
               <p>{evaluationBody}</p>
             </div>
             <ul>
@@ -1452,7 +1470,7 @@ export default function MeasuresRegistryRuntime() {
             <div className="registry-diagnostic-actions">
               {beginAction ? (
                 <button type="button" onClick={() => handleAction("begin_evaluation", educateEvalCopy.actions)}>
-                  {asString(beginAction.label) ?? "Begin Evaluation"}
+                  Begin Structural Evaluation
                 </button>
               ) : null}
               {backAction ? (
@@ -1477,6 +1495,8 @@ export default function MeasuresRegistryRuntime() {
               <span>{asString(subscriptionEntry?.label) ?? "Subscribe to Measures Registry"}</span>
             )}
           </section>
+
+          {renderSystemFooter()}
         </section>
       </main>
     )
@@ -2293,6 +2313,7 @@ export default function MeasuresRegistryRuntime() {
             </button>
           </section>
 
+          {renderSystemFooter()}
           <footer className="registry-field-guide-footer">
             <p>© 2026 c3 Community Partners DAO, LLC</p>
             <p>Measures Registry is a registered c3 Field system.</p>
