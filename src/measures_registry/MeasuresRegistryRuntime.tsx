@@ -85,6 +85,7 @@ type SurfaceState =
   | "systems_offering"
   | "foundation_seat_hold"
   | "systems_seat_hold"
+  | "publication_dispatch"
   | "seat_hold_notification_review"
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
@@ -101,8 +102,11 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   systems_offering: "systems_offering",
   foundation_seat_hold: "foundation_seat_hold",
   systems_seat_hold: "systems_seat_hold",
+  publication_dispatch: "publication_dispatch",
   seat_hold_notification_review: "seat_hold_notification_review",
 }
+
+const STRUCTURAL_DRIFT_DISPATCH_ROUTE = "/publication/structural_drift/agents_of_chaos_dispatch_v1"
 
 function surfaceFromQuery(value: string | null): SurfaceState {
   const match = Object.entries(SURFACE_QUERY).find(([, queryValue]) => queryValue === value)
@@ -151,6 +155,11 @@ type SeatOfferingRow = {
   metadata: Record<string, unknown> | null
 }
 
+function initialSurfaceFromLocation() {
+  if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCH_ROUTE) return "publication_dispatch"
+  return surfaceFromQuery(new URLSearchParams(window.location.search).get("surface"))
+}
+
 type CodexEntityRow = {
   entity_key: string
   entity_name: string
@@ -168,6 +177,36 @@ type NotificationReviewRow = {
   seat_lifecycle_state: string | null
   created_at: string
   notified_at: string | null
+}
+
+type PublicationRegistryRow = {
+  publication_key: string
+  title: string
+  subtitle: string | null
+  publication_type: string
+  status: string
+  external_url: string | null
+  tone: string[] | null
+  metadata: Record<string, unknown> | null
+}
+
+type PublicationDispatchRow = {
+  publication_key: string
+  dispatch_key: string
+  title: string
+  dispatch_body: string
+  excerpt: string | null
+  seo_description: string | null
+  tags: string[] | null
+  primary_cta: string | null
+  secondary_cta: string | null
+  references: Record<string, unknown>[] | null
+  media_manifest: Record<string, unknown> | null
+  internal_route: string | null
+  external_url: string | null
+  status: string
+  published_at: string | null
+  metadata: Record<string, unknown> | null
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -276,14 +315,14 @@ function sectionCopy(row?: LandingSectionRow) {
 }
 
 export default function MeasuresRegistryRuntime() {
-  const [activeSurface, setActiveSurface] = useState<SurfaceState>(() =>
-    surfaceFromQuery(new URLSearchParams(window.location.search).get("surface")),
-  )
+  const [activeSurface, setActiveSurface] = useState<SurfaceState>(() => initialSurfaceFromLocation())
   const [sections, setSections] = useState<LandingSectionRow[]>([])
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
   const [seatOfferings, setSeatOfferings] = useState<SeatOfferingRow[]>([])
   const [codexEntities, setCodexEntities] = useState<CodexEntityRow[]>([])
+  const [publicationRows, setPublicationRows] = useState<PublicationRegistryRow[]>([])
+  const [publicationDispatchRows, setPublicationDispatchRows] = useState<PublicationDispatchRow[]>([])
   const [readError, setReadError] = useState<string | null>(null)
   const [holdEmail, setHoldEmail] = useState("")
   const [holdSubmitting, setHoldSubmitting] = useState(false)
@@ -309,6 +348,11 @@ export default function MeasuresRegistryRuntime() {
   const [evalSubmitting, setEvalSubmitting] = useState(false)
   const [evalSubmitted, setEvalSubmitted] = useState(false)
   const [evalError, setEvalError] = useState<string | null>(null)
+  const [publicationEmail, setPublicationEmail] = useState("")
+  const [publicationOrganization, setPublicationOrganization] = useState("")
+  const [publicationSubmitting, setPublicationSubmitting] = useState(false)
+  const [publicationStatus, setPublicationStatus] = useState<string | null>(null)
+  const [publicationError, setPublicationError] = useState<string | null>(null)
   const epigraphVideoRef = useRef<HTMLVideoElement | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
 
@@ -363,17 +407,19 @@ export default function MeasuresRegistryRuntime() {
     async function loadLanding() {
       setReadError(null)
 
-      if (supabaseConfigError) {
+    if (supabaseConfigError) {
         setReadError(supabaseConfigError)
         setSections([])
         setMediaRows([])
         setDesignTokens([])
         setSeatOfferings([])
         setCodexEntities([])
+        setPublicationRows([])
+        setPublicationDispatchRows([])
         return
       }
 
-      const [sectionResult, mediaResult, tokenResult, offeringResult] = await Promise.all([
+      const [sectionResult, mediaResult, tokenResult, offeringResult, publicationResult, dispatchResult] = await Promise.all([
         supabase
           .from("measures_encounter_def")
           .select("encounter_key, display_title, metadata")
@@ -395,17 +441,36 @@ export default function MeasuresRegistryRuntime() {
           .select("offering_key, label, short_label, description, offering_type, sequence_order, enrollment_state, hold_target_key, offering_surface_key, metadata")
           .eq("system_key", DESIGN_REGISTRY_KEY)
           .order("sequence_order", { ascending: true }),
+        supabase
+          .from("measures_publication_registry")
+          .select("publication_key, title, subtitle, publication_type, status, external_url, tone, metadata")
+          .eq("publication_key", "structural_drift")
+          .eq("status", "published"),
+        supabase
+          .from("measures_publication_dispatch")
+          .select("publication_key, dispatch_key, title, dispatch_body, excerpt, seo_description, tags, primary_cta, secondary_cta, references, media_manifest, internal_route, external_url, status, published_at, metadata")
+          .eq("dispatch_key", "agents_of_chaos_dispatch_v1")
+          .eq("status", "published"),
       ])
 
       if (cancelled) return
 
-      if (sectionResult.error || mediaResult.error || tokenResult.error || offeringResult.error) {
+      if (
+        sectionResult.error ||
+        mediaResult.error ||
+        tokenResult.error ||
+        offeringResult.error ||
+        publicationResult.error ||
+        dispatchResult.error
+      ) {
         setReadError("Measures Registry landing records could not be read.")
         setSections([])
         setMediaRows([])
         setDesignTokens([])
         setSeatOfferings([])
         setCodexEntities([])
+        setPublicationRows([])
+        setPublicationDispatchRows([])
         return
       }
 
@@ -432,6 +497,8 @@ export default function MeasuresRegistryRuntime() {
       setDesignTokens(((tokenResult.data ?? []) as DesignTokenRow[]) ?? [])
       setSeatOfferings(((offeringResult.data ?? []) as SeatOfferingRow[]) ?? [])
       setCodexEntities(entityResult.error ? [] : (((entityResult.data ?? []) as CodexEntityRow[]) ?? []))
+      setPublicationRows(((publicationResult.data ?? []) as PublicationRegistryRow[]) ?? [])
+      setPublicationDispatchRows(((dispatchResult.data ?? []) as PublicationDispatchRow[]) ?? [])
     }
 
     loadLanding()
@@ -498,6 +565,8 @@ export default function MeasuresRegistryRuntime() {
   const foundationSeatHoldCopy = sectionCopy(sectionMap.get("foundation_seat_hold"))
   const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
   const notificationReviewCopy = sectionCopy(sectionMap.get("seat_hold_notification_review"))
+  const structuralDriftPublication = publicationRows.find((row) => row.publication_key === "structural_drift")
+  const agentsOfChaosDispatch = publicationDispatchRows.find((row) => row.dispatch_key === "agents_of_chaos_dispatch_v1")
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
   const epigraphVideoUrl = mediaUrl(mediaMap.get("epigraph_video"))
   const splitHeroImageUrl = mediaUrl(mediaMap.get("hero_image"))
@@ -845,6 +914,77 @@ export default function MeasuresRegistryRuntime() {
         </nav>
       </header>
     )
+  }
+
+  function publicationAssetUrl(path: string | null) {
+    if (!path) return null
+    const normalized = path.startsWith("measures-registry/")
+      ? path.slice("measures-registry/".length)
+      : path
+    return supabase.storage.from("measures-registry").getPublicUrl(normalized).data.publicUrl
+  }
+
+  function youtubeEmbedUrl(url: string | null) {
+    if (!url) return null
+    const shortMatch = url.match(/youtu\.be\/([^?&]+)/)
+    if (shortMatch?.[1]) return `https://www.youtube.com/embed/${shortMatch[1]}`
+    const watchMatch = url.match(/[?&]v=([^?&]+)/)
+    if (watchMatch?.[1]) return `https://www.youtube.com/embed/${watchMatch[1]}`
+    return null
+  }
+
+  function markdownBlocks(markdown: string) {
+    return markdown
+      .split(/\n{2,}/)
+      .map((block) => block.trim())
+      .filter(Boolean)
+      .filter((block) => !/^\[!\[\]\(.+\)\]\(.+\)$/.test(block))
+      .filter((block) => !/^!\[\]\(.+\)$/.test(block))
+      .filter((block) => !/^\[Subscribe\]\(.+\)$/.test(block))
+  }
+
+  function cleanMarkdownText(value: string) {
+    return value
+      .replace(/^#+\s*/, "")
+      .replace(/^[-*]\s+/, "")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/[*_`]/g, "")
+      .trim()
+  }
+
+  async function submitPublicationSubscription(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setPublicationStatus(null)
+    setPublicationError(null)
+
+    const email = publicationEmail.trim().toLowerCase()
+    if (!email) {
+      setPublicationError("Email is required.")
+      return
+    }
+
+    setPublicationSubmitting(true)
+    const { error } = await supabase.from("measures_publication_subscription_capture").insert({
+      publication_key: "structural_drift",
+      dispatch_key: "agents_of_chaos_dispatch_v1",
+      email,
+      organization: publicationOrganization.trim() || null,
+      capture_source: "structural_drift_dispatch",
+      metadata: {
+        source: "publication_dispatch_renderer",
+        internal_route: STRUCTURAL_DRIFT_DISPATCH_ROUTE,
+      },
+    })
+    setPublicationSubmitting(false)
+
+    if (error) {
+      setPublicationError("Subscription could not be recorded.")
+      return
+    }
+
+    setPublicationEmail("")
+    setPublicationOrganization("")
+    setPublicationStatus("Registry dispatch subscription recorded.")
   }
 
   function setEvalField(key: string, value: string) {
@@ -2017,6 +2157,153 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function renderPublicationDispatchSurface() {
+    if (!structuralDriftPublication || !agentsOfChaosDispatch) {
+      return (
+        <main className="measures-registry-runtime" data-surface="publication_dispatch" style={registryTokenStyle}>
+          <section className="registry-publication-dispatch">
+            <p>Publication dispatch is not seated.</p>
+          </section>
+        </main>
+      )
+    }
+
+    const mediaManifest = agentsOfChaosDispatch.media_manifest ?? {}
+    const bannerUrl = publicationAssetUrl(
+      asString(mediaManifest.resolved_banner_image) ?? asString(mediaManifest.banner_image),
+    )
+    const publicationVideo = asRecord(mediaManifest.publication_video)
+    const embedUrl = youtubeEmbedUrl(asString(publicationVideo?.external_url))
+    const references = agentsOfChaosDispatch.references ?? []
+    const tags = Array.isArray(agentsOfChaosDispatch.tags) ? agentsOfChaosDispatch.tags : []
+
+    return (
+      <main className="measures-registry-runtime" data-surface="publication_dispatch" style={registryTokenStyle}>
+        <article className="registry-publication-dispatch" aria-label={agentsOfChaosDispatch.title}>
+          <header className="registry-publication-dispatch-header">
+            <span>{structuralDriftPublication.title}</span>
+            <p>{structuralDriftPublication.subtitle}</p>
+            <h1>{agentsOfChaosDispatch.title}</h1>
+            {agentsOfChaosDispatch.excerpt ? <p>{agentsOfChaosDispatch.excerpt}</p> : null}
+            {tags.length > 0 ? (
+              <div className="registry-publication-tags" aria-label="Dispatch tags">
+                {tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+            ) : null}
+          </header>
+
+          {bannerUrl ? <img className="registry-publication-banner" src={bannerUrl} alt="" /> : null}
+
+          {embedUrl ? (
+            <div className="registry-publication-video">
+              <iframe
+                src={embedUrl}
+                title={asString(publicationVideo?.title) ?? "Publication video"}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          ) : null}
+
+          <section className="registry-publication-body">
+            {markdownBlocks(agentsOfChaosDispatch.dispatch_body).map((block, index) => {
+              const text = cleanMarkdownText(block)
+              if (!text) return null
+
+              if (block.startsWith("# ")) return <h2 key={`${text}-${index}`}>{text}</h2>
+              if (block.startsWith("## ")) return <h3 key={`${text}-${index}`}>{text}</h3>
+              if (block.startsWith("*") && block.endsWith("*")) {
+                return <p key={`${text}-${index}`} className="registry-publication-emphasis">{text}</p>
+              }
+              if (block.includes("\n*")) {
+                return (
+                  <ul key={`${text}-${index}`}>
+                    {block
+                      .split("\n")
+                      .map((line) => cleanMarkdownText(line))
+                      .filter(Boolean)
+                      .map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                )
+              }
+
+              return <p key={`${text}-${index}`}>{text}</p>
+            })}
+          </section>
+
+          {references.length > 0 ? (
+            <section className="registry-publication-references" aria-label="References">
+              <h2>References</h2>
+              {references.map((reference, index) => {
+                const title = asString(reference.title)
+                const year = asString(reference.year)
+                const type = asString(reference.type)
+                const citation = asString(reference.citation)
+
+                return (
+                  <article key={title ?? index}>
+                    {title ? <h3>{title}</h3> : null}
+                    <p>{[year, type, citation].filter(Boolean).join(" - ")}</p>
+                  </article>
+                )
+              })}
+            </section>
+          ) : null}
+
+          <section className="registry-publication-cta" aria-label="Publication actions">
+            <div>
+              <h2>{agentsOfChaosDispatch.primary_cta}</h2>
+              <p>{agentsOfChaosDispatch.secondary_cta}</p>
+            </div>
+            <div>
+              <button type="button" onClick={() => navigateSurface("educational_diagnostic_passage")}>
+                {agentsOfChaosDispatch.primary_cta ?? "Evaluate Structural Coherence"}
+              </button>
+              {agentsOfChaosDispatch.external_url ? (
+                <a href={agentsOfChaosDispatch.external_url} target="_blank" rel="noreferrer">
+                  Read on Paragraph
+                </a>
+              ) : null}
+            </div>
+          </section>
+
+          <section className="registry-publication-subscribe-capture" aria-label="Subscribe to Structural Drift">
+            <div>
+              <span>Structural Drift</span>
+              <h2>Receive Registry Dispatches</h2>
+              <p>Paragraph subscription remains available. This Codex-native capture records registry dispatch interest.</p>
+            </div>
+            <form onSubmit={submitPublicationSubscription}>
+              <label>
+                <span>Email</span>
+                <input
+                  type="email"
+                  required
+                  value={publicationEmail}
+                  onChange={(event) => setPublicationEmail(event.target.value)}
+                />
+              </label>
+              <label>
+                <span>Organization</span>
+                <input
+                  value={publicationOrganization}
+                  onChange={(event) => setPublicationOrganization(event.target.value)}
+                />
+              </label>
+              <button type="submit" disabled={publicationSubmitting}>
+                {publicationSubmitting ? "Recording..." : "Receive Registry Dispatches"}
+              </button>
+              {publicationStatus ? <p className="reserve-seat-success">{publicationStatus}</p> : null}
+              {publicationError ? <p className="reserve-seat-error">{publicationError}</p> : null}
+            </form>
+          </section>
+        </article>
+      </main>
+    )
+  }
+
   if (activeSurface === "path_choice") return renderPathChoiceSurface()
   if (activeSurface === "educational_diagnostic_passage") return renderEducationalDiagnosticPassageSurface()
   if (activeSurface === "educate_eval") return renderEducateEvalSurface()
@@ -2039,6 +2326,9 @@ export default function MeasuresRegistryRuntime() {
   }
   if (activeSurface === "seat_hold_notification_review") {
     return renderNotificationReviewSurface()
+  }
+  if (activeSurface === "publication_dispatch") {
+    return renderPublicationDispatchSurface()
   }
 
   return renderIntroSurface()
