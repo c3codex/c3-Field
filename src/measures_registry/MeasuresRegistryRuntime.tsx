@@ -10,6 +10,7 @@ const REQUIRED_SECTION_KEYS = [
   "educational_diagnostic_passage",
   "landing_path_choice",
   "educate_eval_encounter",
+  "structural_drift_dispatches",
   "cohort_conversion_encounter",
   "iis_eval_gate1",
   "understand_failure",
@@ -76,6 +77,7 @@ type SurfaceState =
   | "educational_diagnostic_passage"
   | "path_choice"
   | "educate_eval"
+  | "structural_drift_dispatches"
   | "cohort_conversion"
   | "iis_eval_gate1"
   | "understand_failure"
@@ -93,6 +95,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   educational_diagnostic_passage: "educational_diagnostic_passage",
   path_choice: "landing_path_choice",
   educate_eval: "educate_eval_encounter",
+  structural_drift_dispatches: "structural_drift_dispatches",
   cohort_conversion: "cohort_conversion_encounter",
   iis_eval_gate1: "iis_eval_gate1",
   understand_failure: "understand_failure",
@@ -107,6 +110,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
 }
 
 const STRUCTURAL_DRIFT_DISPATCH_ROUTE = "/publication/structural_drift/agents_of_chaos_dispatch_v1"
+const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
 
 function surfaceFromQuery(value: string | null): SurfaceState {
   const match = Object.entries(SURFACE_QUERY).find(([, queryValue]) => queryValue === value)
@@ -157,6 +161,8 @@ type SeatOfferingRow = {
 
 function initialSurfaceFromLocation() {
   if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCH_ROUTE) return "publication_dispatch"
+  if (window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
+  if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCHES_ROUTE) return "structural_drift_dispatches"
   return surfaceFromQuery(new URLSearchParams(window.location.search).get("surface"))
 }
 
@@ -193,6 +199,7 @@ type PublicationRegistryRow = {
 type PublicationDispatchRow = {
   publication_key: string
   dispatch_key: string
+  issue_number: string | null
   title: string
   dispatch_body: string
   excerpt: string | null
@@ -203,6 +210,7 @@ type PublicationDispatchRow = {
   references: Record<string, unknown>[] | null
   media_manifest: Record<string, unknown> | null
   internal_route: string | null
+  article_url: string | null
   external_url: string | null
   status: string
   published_at: string | null
@@ -448,9 +456,10 @@ export default function MeasuresRegistryRuntime() {
           .eq("status", "published"),
         supabase
           .from("measures_publication_dispatch")
-          .select("publication_key, dispatch_key, title, dispatch_body, excerpt, seo_description, tags, primary_cta, secondary_cta, references, media_manifest, internal_route, external_url, status, published_at, metadata")
-          .eq("dispatch_key", "agents_of_chaos_dispatch_v1")
-          .eq("status", "published"),
+          .select("publication_key, dispatch_key, issue_number, title, dispatch_body, excerpt, seo_description, tags, primary_cta, secondary_cta, references, media_manifest, internal_route, article_url, external_url, status, published_at, metadata")
+          .eq("publication_key", "structural_drift")
+          .eq("status", "published")
+          .order("issue_number", { ascending: true }),
       ])
 
       if (cancelled) return
@@ -555,6 +564,7 @@ export default function MeasuresRegistryRuntime() {
   const introCopy = landingRootCopy
   const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
   const educateEvalCopy = sectionCopy(sectionMap.get("educate_eval_encounter"))
+  const structuralDriftDispatchesCopy = sectionCopy(sectionMap.get("structural_drift_dispatches"))
   const cohortConversionCopy = sectionCopy(sectionMap.get("cohort_conversion_encounter"))
   const iisEvalCopy = sectionCopy(sectionMap.get("iis_eval_gate1"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
@@ -566,7 +576,12 @@ export default function MeasuresRegistryRuntime() {
   const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
   const notificationReviewCopy = sectionCopy(sectionMap.get("seat_hold_notification_review"))
   const structuralDriftPublication = publicationRows.find((row) => row.publication_key === "structural_drift")
-  const agentsOfChaosDispatch = publicationDispatchRows.find((row) => row.dispatch_key === "agents_of_chaos_dispatch_v1")
+  const structuralDriftDispatches = publicationDispatchRows.filter((row) => row.publication_key === "structural_drift")
+  const selectedDispatchKey = window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)
+    ? window.location.pathname.slice(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`.length)
+    : null
+  const selectedPublicationDispatch =
+    structuralDriftDispatches.find((row) => row.dispatch_key === selectedDispatchKey) ?? structuralDriftDispatches[0] ?? null
   const heroVideoUrl = mediaUrl(mediaMap.get("hero_video"))
   const epigraphVideoUrl = mediaUrl(mediaMap.get("epigraph_video"))
   const splitHeroImageUrl = mediaUrl(mediaMap.get("hero_image"))
@@ -772,6 +787,19 @@ export default function MeasuresRegistryRuntime() {
       return
     }
 
+    if (
+      behavior === "route_surface" &&
+      (target === "structural_drift_dispatches" || actionKey === "route_structural_drift_article")
+    ) {
+      navigateSurface("structural_drift_dispatches")
+      return
+    }
+
+    if (actionKey === "begin_structural_evaluation") {
+      navigateSurface("iis_eval_gate1")
+      return
+    }
+
     if (behavior === "route_surface" && actionKey === "route_course_review") {
       navigateSurface("reserve_seat")
       return
@@ -965,14 +993,14 @@ export default function MeasuresRegistryRuntime() {
 
     setPublicationSubmitting(true)
     const { error } = await supabase.from("measures_publication_subscription_capture").insert({
-      publication_key: "structural_drift",
-      dispatch_key: "agents_of_chaos_dispatch_v1",
+      publication_key: structuralDriftPublication?.publication_key ?? "structural_drift",
+      dispatch_key: selectedPublicationDispatch?.dispatch_key ?? null,
       email,
       organization: publicationOrganization.trim() || null,
-      capture_source: "structural_drift_dispatch",
+      capture_source: asString(selectedPublicationDispatch?.metadata?.capture_source) ?? "structural_drift_dispatch",
       metadata: {
         source: "publication_dispatch_renderer",
-        internal_route: STRUCTURAL_DRIFT_DISPATCH_ROUTE,
+        internal_route: selectedPublicationDispatch?.internal_route ?? STRUCTURAL_DRIFT_DISPATCHES_ROUTE,
       },
     })
     setPublicationSubmitting(false)
@@ -1305,6 +1333,9 @@ export default function MeasuresRegistryRuntime() {
     const beginAction = educateEvalCopy.actions.find(
       (action) => asString(action.action_key) === "begin_evaluation",
     )
+    const fieldGuideAction = educateEvalCopy.actions.find(
+      (action) => asString(action.action_key) === "route_structural_drift_article",
+    )
     const backAction = educateEvalCopy.actions.find(
       (action) => asString(action.action_key) === "back_landing_root",
     )
@@ -1370,6 +1401,11 @@ export default function MeasuresRegistryRuntime() {
                 <a href={publicationUrl} target="_blank" rel="noreferrer">
                   Open Publication
                 </a>
+              ) : null}
+              {fieldGuideAction ? (
+                <button type="button" onClick={() => handleAction("route_structural_drift_article", educateEvalCopy.actions)}>
+                  {asString(fieldGuideAction.label) ?? "Open Structural Drift"}
+                </button>
               ) : null}
             </div>
           </section>
@@ -2157,8 +2193,120 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function dispatchIssueLabel(dispatch: PublicationDispatchRow) {
+    const metadata = dispatch.metadata ?? {}
+    return (
+      asString(metadata.issue_number) ??
+      asString(metadata.issue) ??
+      asString(metadata.issue_label) ??
+      dispatch.issue_number ??
+      "Issue metadata not seated"
+    )
+  }
+
+  function dispatchTypeLabel(dispatch: PublicationDispatchRow) {
+    const metadata = dispatch.metadata ?? {}
+    return asString(metadata.dispatch_type) ?? asString(metadata.type) ?? "Field Note"
+  }
+
+  function dispatchThesis(dispatch: PublicationDispatchRow) {
+    const metadata = dispatch.metadata ?? {}
+    return asString(metadata.diagnostic_thesis) ?? dispatch.excerpt ?? dispatch.seo_description
+  }
+
+  function renderStructuralDriftDispatchesSurface() {
+    if (reportMissingClassification("structural_drift_dispatches", structuralDriftDispatchesCopy)) return null
+
+    const featuredDispatch = structuralDriftDispatches[0] ?? null
+    const dispatchActions = structuralDriftDispatchesCopy.actions
+    const beginAction =
+      dispatchActions.find((action) => asString(action.action_key) === "begin_structural_evaluation") ??
+      dispatchActions.find((action) => asString(action.target_encounter_key) === "iis_eval_gate1")
+
+    return (
+      <main className="measures-registry-runtime" data-surface="structural_drift_dispatches" style={registryTokenStyle}>
+        <section className="registry-field-guide" aria-label={structuralDriftPublication?.title ?? "Structural Drift"}>
+          <header className="registry-field-guide-masthead">
+            <span>Measures Registry Analysis Surface</span>
+            <h1>{structuralDriftPublication?.title ?? "Structural Drift publication state missing"}</h1>
+            {structuralDriftPublication?.subtitle ? <p>{structuralDriftPublication.subtitle}</p> : null}
+            <p>
+              Structural Drift documents recurring implementation failures, governance gaps, authority fragmentation,
+              and environmental instability observed across AI-accelerated systems.
+            </p>
+          </header>
+
+          {featuredDispatch ? (
+            <article className="registry-field-guide-featured">
+              <div>
+                <span>{dispatchIssueLabel(featuredDispatch)}</span>
+                <strong>{dispatchTypeLabel(featuredDispatch)}</strong>
+              </div>
+              <h2>{featuredDispatch.title}</h2>
+              {dispatchThesis(featuredDispatch) ? <p>{dispatchThesis(featuredDispatch)}</p> : null}
+              {featuredDispatch.internal_route ? (
+                <a href={featuredDispatch.internal_route}>Read dispatch</a>
+              ) : (
+                <span>Article route not seated</span>
+              )}
+            </article>
+          ) : (
+            <section className="registry-field-guide-empty" aria-label="Missing dispatch state">
+              <span>Article registry state</span>
+              <p>No published Structural Drift dispatch rows are currently seated.</p>
+            </section>
+          )}
+
+          <section className="registry-field-guide-index" aria-label="Dispatch index">
+            <div>
+              <span>Dispatch Index</span>
+              <h2>Registered field notes</h2>
+            </div>
+            <div className="registry-field-guide-grid">
+              {structuralDriftDispatches.map((dispatch) => (
+                <article key={dispatch.dispatch_key}>
+                  <span>{dispatchIssueLabel(dispatch)}</span>
+                  <strong>{dispatchTypeLabel(dispatch)}</strong>
+                  <h3>{dispatch.title}</h3>
+                  {dispatchThesis(dispatch) ? <p>{dispatchThesis(dispatch)}</p> : null}
+                  {dispatch.internal_route ? (
+                    <a href={dispatch.internal_route}>Read dispatch</a>
+                  ) : (
+                    <small>Article route not seated</small>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="registry-field-guide-cta" aria-label="Evaluation entry">
+            <div>
+              <span>Diagnostic Intake</span>
+              <h2>Begin Structural Evaluation</h2>
+              <p>Move from recognition into structured diagnostic intake.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleAction(asString(beginAction?.action_key) ?? "begin_structural_evaluation", dispatchActions)}
+            >
+              {asString(beginAction?.label) ?? "Begin Structural Evaluation"}
+            </button>
+          </section>
+
+          <footer className="registry-field-guide-footer">
+            <p>© 2026 c3 Community Partners DAO, LLC</p>
+            <p>Measures Registry is a registered c3 Field system.</p>
+            <button type="button" onClick={() => navigateSurface("c3_field")}>
+              c3 Field
+            </button>
+          </footer>
+        </section>
+      </main>
+    )
+  }
+
   function renderPublicationDispatchSurface() {
-    if (!structuralDriftPublication || !agentsOfChaosDispatch) {
+    if (!structuralDriftPublication || !selectedPublicationDispatch) {
       return (
         <main className="measures-registry-runtime" data-surface="publication_dispatch" style={registryTokenStyle}>
           <section className="registry-publication-dispatch">
@@ -2168,23 +2316,23 @@ export default function MeasuresRegistryRuntime() {
       )
     }
 
-    const mediaManifest = agentsOfChaosDispatch.media_manifest ?? {}
+    const mediaManifest = selectedPublicationDispatch.media_manifest ?? {}
     const bannerUrl = publicationAssetUrl(
       asString(mediaManifest.resolved_banner_image) ?? asString(mediaManifest.banner_image),
     )
     const publicationVideo = asRecord(mediaManifest.publication_video)
     const embedUrl = youtubeEmbedUrl(asString(publicationVideo?.external_url))
-    const references = agentsOfChaosDispatch.references ?? []
-    const tags = Array.isArray(agentsOfChaosDispatch.tags) ? agentsOfChaosDispatch.tags : []
+    const references = selectedPublicationDispatch.references ?? []
+    const tags = Array.isArray(selectedPublicationDispatch.tags) ? selectedPublicationDispatch.tags : []
 
     return (
       <main className="measures-registry-runtime" data-surface="publication_dispatch" style={registryTokenStyle}>
-        <article className="registry-publication-dispatch" aria-label={agentsOfChaosDispatch.title}>
+        <article className="registry-publication-dispatch" aria-label={selectedPublicationDispatch.title}>
           <header className="registry-publication-dispatch-header">
             <span>{structuralDriftPublication.title}</span>
             <p>{structuralDriftPublication.subtitle}</p>
-            <h1>{agentsOfChaosDispatch.title}</h1>
-            {agentsOfChaosDispatch.excerpt ? <p>{agentsOfChaosDispatch.excerpt}</p> : null}
+            <h1>{selectedPublicationDispatch.title}</h1>
+            {selectedPublicationDispatch.excerpt ? <p>{selectedPublicationDispatch.excerpt}</p> : null}
             {tags.length > 0 ? (
               <div className="registry-publication-tags" aria-label="Dispatch tags">
                 {tags.map((tag) => (
@@ -2208,7 +2356,7 @@ export default function MeasuresRegistryRuntime() {
           ) : null}
 
           <section className="registry-publication-body">
-            {markdownBlocks(agentsOfChaosDispatch.dispatch_body).map((block, index) => {
+            {markdownBlocks(selectedPublicationDispatch.dispatch_body).map((block, index) => {
               const text = cleanMarkdownText(block)
               if (!text) return null
 
@@ -2254,15 +2402,15 @@ export default function MeasuresRegistryRuntime() {
 
           <section className="registry-publication-cta" aria-label="Publication actions">
             <div>
-              <h2>{agentsOfChaosDispatch.primary_cta}</h2>
-              <p>{agentsOfChaosDispatch.secondary_cta}</p>
+              <h2>{selectedPublicationDispatch.primary_cta}</h2>
+              <p>{selectedPublicationDispatch.secondary_cta}</p>
             </div>
             <div>
               <button type="button" onClick={() => navigateSurface("educational_diagnostic_passage")}>
-                {agentsOfChaosDispatch.primary_cta ?? "Evaluate Structural Coherence"}
+                {selectedPublicationDispatch.primary_cta ?? "Evaluate Structural Coherence"}
               </button>
-              {agentsOfChaosDispatch.external_url ? (
-                <a href={agentsOfChaosDispatch.external_url} target="_blank" rel="noreferrer">
+              {selectedPublicationDispatch.article_url ?? selectedPublicationDispatch.external_url ? (
+                <a href={selectedPublicationDispatch.article_url ?? selectedPublicationDispatch.external_url ?? ""} target="_blank" rel="noreferrer">
                   Read on Paragraph
                 </a>
               ) : null}
@@ -2307,6 +2455,7 @@ export default function MeasuresRegistryRuntime() {
   if (activeSurface === "path_choice") return renderPathChoiceSurface()
   if (activeSurface === "educational_diagnostic_passage") return renderEducationalDiagnosticPassageSurface()
   if (activeSurface === "educate_eval") return renderEducateEvalSurface()
+  if (activeSurface === "structural_drift_dispatches") return renderStructuralDriftDispatchesSurface()
   if (activeSurface === "cohort_conversion") return renderCohortConversionSurface()
   if (activeSurface === "iis_eval_gate1") return renderIisEvalGateSurface()
   if (activeSurface === "understand_failure") return renderUnderstandFailureSurface()
