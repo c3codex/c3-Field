@@ -1,0 +1,17 @@
+﻿{
+    "publication_key":  "structural_drift",
+    "dispatch_key":  "automation_validation_dispatch_v1",
+    "title":  "Automation Validation Dispatch",
+    "subtitle":  "OPERATOR_APPROVED_EXCERPT_REQUIRED",
+    "preview":  "OPERATOR_APPROVED_SEO_DESCRIPTION_REQUIRED",
+    "tags":  [
+
+             ],
+    "cover_image_path":  "OPERATOR_APPROVED_COVER_IMAGE_PATH_REQUIRED",
+    "external_platform":  "paragraph",
+    "external_slug":  "automation-validation-dispatch",
+    "external_url":  "https://paragraph.com/@measures-registry/automation-validation-dispatch",
+    "primary_cta":  "OPERATOR_APPROVED_PRIMARY_CTA_REQUIRED",
+    "secondary_cta":  "OPERATOR_APPROVED_SECONDARY_CTA_REQUIRED",
+    "approval_required_before_publication":  true
+}

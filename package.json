@@ -23,7 +23,8 @@
     "dev:registry": "vite --mode registry",
     "dev:inanna": "vite --mode inanna",
     "build:registry": "node scripts/check-pages-env.cjs && vite build --mode registry --outDir dist-registry",
-    "build:inanna": "vite build --mode inanna --outDir dist-inanna"
+    "build:inanna": "vite build --mode inanna --outDir dist-inanna",
+    "validate:publication-dispatch": "node scripts/validate-publication-dispatch.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
