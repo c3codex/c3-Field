@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-05-07T23:52:35.186Z",
+  "bucket": "measures-seed",
+  "bucketPrivate": true,
+  "transferCount": 5,
+  "transfers": [
+    {
+      "relation": "governing_candidate",
+      "sourcePath": "docs/process/oar_lifecycle.meta.md",
+      "objectPath": "process/oar_lifecycle.meta.md",
+      "objectFound": true,
+      "sourceBytes": 1757,
+      "storedBytes": 1757,
+      "sourceSha256": "49695b1300c6bd08792fd83f857481668f03772b2860483c5025f9ed1c818dac",
+      "storedSha256": "49695b1300c6bd08792fd83f857481668f03772b2860483c5025f9ed1c818dac",
+      "contentUnchanged": true,
+      "transferOnly": true,
+      "seededStandingClaimed": false
+    },
+    {
+      "relation": "governing_candidate",
+      "sourcePath": "docs/process/oar/oar2_generation_and_handoff_process.meta.md",
+      "objectPath": "process/oar/oar2_generation_and_handoff_process.meta.md",
+      "objectFound": true,
+      "sourceBytes": 781,
+      "storedBytes": 781,
+      "sourceSha256": "d4af3dbbd75b3c6dd220d35f131895cd106f0529515b018492315af68faf84e7",
+      "storedSha256": "d4af3dbbd75b3c6dd220d35f131895cd106f0529515b018492315af68faf84e7",
+      "contentUnchanged": true,
+      "transferOnly": true,
+      "seededStandingClaimed": false
+    },
+    {
+      "relation": "reference_candidate",
+      "sourcePath": "docs/process/oar/templates/oar1_template.meta.md",
+      "objectPath": "process/oar/templates/oar1_template.meta.md",
+      "objectFound": true,
+      "sourceBytes": 350,
+      "storedBytes": 350,
+      "sourceSha256": "ebf40cf7e5cad96549dde3440530f7437634fdef7561c55fb8d55fc6a23ca309",
+      "storedSha256": "ebf40cf7e5cad96549dde3440530f7437634fdef7561c55fb8d55fc6a23ca309",
+      "contentUnchanged": true,
+      "transferOnly": true,
+      "seededStandingClaimed": false
+    },
+    {
+      "relation": "reference_candidate",
+      "sourcePath": "docs/process/oar/templates/oar2_template.meta.md",
+      "objectPath": "process/oar/templates/oar2_template.meta.md",
+      "objectFound": true,
+      "sourceBytes": 553,
+      "storedBytes": 553,
+      "sourceSha256": "9691bd40b7e5982f7856a22b66855c6824545dffa486c28d2640cdac08209a9d",
+      "storedSha256": "9691bd40b7e5982f7856a22b66855c6824545dffa486c28d2640cdac08209a9d",
+      "contentUnchanged": true,
+      "transferOnly": true,
+      "seededStandingClaimed": false
+    },
+    {
+      "relation": "reference_candidate",
+      "sourcePath": "docs/process/oar/db_role_contract_supabase.meta.md",
+      "objectPath": "process/oar/db_role_contract_supabase.meta.md",
+      "objectFound": true,
+      "sourceBytes": 932,
+      "storedBytes": 932,
+      "sourceSha256": "f63472af6ac373ac460da2fb644015bfcc349180bca13fffb05951480fd958be",
+      "storedSha256": "f63472af6ac373ac460da2fb644015bfcc349180bca13fffb05951480fd958be",
+      "contentUnchanged": true,
+      "transferOnly": true,
+      "seededStandingClaimed": false
+    }
+  ],
+  "heldCandidates": [
+    {
+      "objectPath": "process/publication/new-publication-dispatch.ps1",
+      "transferred": false
+    },
+    {
+      "objectPath": "process/oar/new-oar.ps1",
+      "transferred": false
+    }
+  ],
+  "seededStandingClaimed": false,
+  "seededStandingWithheld": true,
+  "notchazz_flags_prevented": [
+    "BUCKET_TRANSFER_NOT_SEEDED",
+    "REFERENCE_PROMOTED_WITHOUT_QUALIFICATION",
+    "TOOL_SEEDED_WITHOUT_DEPENDENCY",
+    "BULK_SEEDING_ATTEMPT"
+  ]
+}
