@@ -143,6 +143,184 @@ body,
   cursor: pointer;
 }
 
+.registry-process-log {
+  min-height: 100svh;
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-content: start;
+  padding: calc(var(--registry-header-height) + 2rem) var(--registry-page-padding-active) 4rem;
+  background:
+    linear-gradient(180deg, rgba(7, 9, 12, 0.98), rgba(12, 15, 17, 0.96)),
+    var(--registry-background-obsidian);
+}
+
+.registry-process-log-header {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 64rem;
+}
+
+.registry-process-log-header span,
+.registry-process-record-title span,
+.registry-process-rule span {
+  color: var(--registry-text-muted);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.registry-process-log-header h1 {
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: clamp(2.4rem, 6vw, 5.4rem);
+  line-height: 1;
+}
+
+.registry-process-log-header p {
+  max-width: 46rem;
+  margin: 0;
+  color: var(--registry-text-secondary);
+  font-size: var(--registry-entry-sub-active);
+  line-height: 1.45;
+}
+
+.registry-process-pattern,
+.registry-process-rule,
+.registry-process-log-rows {
+  width: min(100%, 76rem);
+}
+
+.registry-process-pattern {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.registry-process-pattern span {
+  border: 1px solid rgba(229, 222, 210, 0.2);
+  border-radius: 999px;
+  padding: 0.5rem 0.75rem;
+  background: rgba(224, 214, 198, 0.07);
+  color: var(--registry-text-secondary);
+  font-size: 0.86rem;
+}
+
+.registry-process-rule {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid rgba(229, 222, 210, 0.16);
+  background: rgba(229, 222, 210, 0.16);
+}
+
+.registry-process-rule article {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: rgba(8, 10, 12, 0.92);
+}
+
+.registry-process-rule p {
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: 1rem;
+}
+
+.registry-process-log-rows {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.registry-process-record {
+  display: grid;
+  gap: 1rem;
+  border-top: 1px solid rgba(229, 222, 210, 0.2);
+  padding: 1.25rem 0 1.5rem;
+}
+
+.registry-process-record-title {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.4rem 1rem;
+  align-items: end;
+}
+
+.registry-process-record-title span {
+  grid-column: 1 / -1;
+}
+
+.registry-process-record-title h2 {
+  margin: 0;
+  color: var(--registry-text-primary);
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  line-height: 1.1;
+}
+
+.registry-process-record-title strong {
+  border: 1px solid rgba(214, 132, 62, 0.34);
+  border-radius: 999px;
+  padding: 0.42rem 0.7rem;
+  color: var(--registry-accent-warm);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.registry-process-status-grid,
+.registry-process-role-grid,
+.registry-process-dates {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  background: rgba(229, 222, 210, 0.14);
+}
+
+.registry-process-status-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.registry-process-role-grid,
+.registry-process-dates {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.registry-process-dates {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.registry-process-status-grid div,
+.registry-process-role-grid div,
+.registry-process-dates div {
+  min-width: 0;
+  padding: 0.85rem;
+  background: rgba(8, 10, 12, 0.92);
+}
+
+.registry-process-status-grid dt,
+.registry-process-role-grid dt,
+.registry-process-dates dt {
+  margin: 0 0 0.28rem;
+  color: var(--registry-text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.registry-process-status-grid dd,
+.registry-process-role-grid dd,
+.registry-process-dates dd {
+  margin: 0;
+  color: var(--registry-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.registry-process-proof {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--registry-text-secondary);
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
 .registry-split-hero {
   min-height: 100svh;
   position: relative;
@@ -3624,6 +3802,26 @@ body,
 }
 
 @media (max-width: 760px) {
+  .registry-process-log {
+    padding: calc(var(--registry-header-height) + 1rem) 1rem 2rem;
+  }
+
+  .registry-process-log-header h1 {
+    font-size: 2.35rem;
+  }
+
+  .registry-process-rule,
+  .registry-process-status-grid,
+  .registry-process-role-grid,
+  .registry-process-dates,
+  .registry-process-record-title {
+    grid-template-columns: 1fr;
+  }
+
+  .registry-process-record-title strong {
+    justify-self: start;
+  }
+
   .phase-map-contract {
     height: 100svh;
     overflow: hidden;

@@ -20,6 +20,7 @@ const REQUIRED_SECTION_KEYS = [
   "systems_offering",
   "foundation_seat_hold",
   "systems_seat_hold",
+  "registered_process_log",
 ] as const
 const OPERATOR_SECTION_KEYS = ["seat_hold_notification_review"] as const
 const QUERY_SECTION_KEYS = [...REQUIRED_SECTION_KEYS, ...OPERATOR_SECTION_KEYS] as const
@@ -87,6 +88,7 @@ type SurfaceState =
   | "systems_offering"
   | "foundation_seat_hold"
   | "systems_seat_hold"
+  | "registered_process_log"
   | "publication_dispatch"
   | "seat_hold_notification_review"
 const HISTORY_SOURCE = "measures_registry"
@@ -105,6 +107,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   systems_offering: "systems_offering",
   foundation_seat_hold: "foundation_seat_hold",
   systems_seat_hold: "systems_seat_hold",
+  registered_process_log: "registered_process_log",
   publication_dispatch: "publication_dispatch",
   seat_hold_notification_review: "seat_hold_notification_review",
 }
@@ -215,6 +218,26 @@ type PublicationDispatchRow = {
   status: string
   published_at: string | null
   metadata: Record<string, unknown> | null
+}
+
+type RegisteredProcessLogRow = {
+  process_key: string
+  process_type: string
+  standing: string
+  oar2_reference: string | null
+  oar1_reference: string | null
+  execution_status: string
+  validation_status: string
+  deploy_status: string
+  seeded_status: string
+  executor: string | null
+  validator: string | null
+  operator: string | null
+  created_at: string
+  validated_at: string | null
+  deployed_at: string | null
+  closeout_state: string
+  pattern_steps: string[] | null
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -331,6 +354,7 @@ export default function MeasuresRegistryRuntime() {
   const [codexEntities, setCodexEntities] = useState<CodexEntityRow[]>([])
   const [publicationRows, setPublicationRows] = useState<PublicationRegistryRow[]>([])
   const [publicationDispatchRows, setPublicationDispatchRows] = useState<PublicationDispatchRow[]>([])
+  const [registeredProcessRows, setRegisteredProcessRows] = useState<RegisteredProcessLogRow[]>([])
   const [readError, setReadError] = useState<string | null>(null)
   const [holdEmail, setHoldEmail] = useState("")
   const [holdSubmitting, setHoldSubmitting] = useState(false)
@@ -425,10 +449,11 @@ export default function MeasuresRegistryRuntime() {
         setCodexEntities([])
         setPublicationRows([])
         setPublicationDispatchRows([])
+        setRegisteredProcessRows([])
         return
       }
 
-      const [sectionResult, mediaResult, tokenResult, offeringResult, publicationResult, dispatchResult] = await Promise.all([
+      const [sectionResult, mediaResult, tokenResult, offeringResult, publicationResult, dispatchResult, processLogResult] = await Promise.all([
         supabase
           .from("measures_encounter_def")
           .select("encounter_key, display_title, metadata")
@@ -461,6 +486,10 @@ export default function MeasuresRegistryRuntime() {
           .eq("publication_key", "structural_drift")
           .eq("status", "published")
           .order("issue_number", { ascending: true }),
+        supabase
+          .from("registered_process_log")
+          .select("process_key, process_type, standing, oar2_reference, oar1_reference, execution_status, validation_status, deploy_status, seeded_status, executor, validator, operator, created_at, validated_at, deployed_at, closeout_state, pattern_steps")
+          .order("created_at", { ascending: false }),
       ])
 
       if (cancelled) return
@@ -471,7 +500,8 @@ export default function MeasuresRegistryRuntime() {
         tokenResult.error ||
         offeringResult.error ||
         publicationResult.error ||
-        dispatchResult.error
+        dispatchResult.error ||
+        processLogResult.error
       ) {
         setReadError("Measures Registry landing records could not be read.")
         setSections([])
@@ -481,6 +511,7 @@ export default function MeasuresRegistryRuntime() {
         setCodexEntities([])
         setPublicationRows([])
         setPublicationDispatchRows([])
+        setRegisteredProcessRows([])
         return
       }
 
@@ -509,6 +540,7 @@ export default function MeasuresRegistryRuntime() {
       setCodexEntities(entityResult.error ? [] : (((entityResult.data ?? []) as CodexEntityRow[]) ?? []))
       setPublicationRows(((publicationResult.data ?? []) as PublicationRegistryRow[]) ?? [])
       setPublicationDispatchRows(((dispatchResult.data ?? []) as PublicationDispatchRow[]) ?? [])
+      setRegisteredProcessRows(((processLogResult.data ?? []) as RegisteredProcessLogRow[]) ?? [])
     }
 
     loadLanding()
@@ -575,6 +607,7 @@ export default function MeasuresRegistryRuntime() {
   const systemsOfferingCopy = sectionCopy(sectionMap.get("systems_offering"))
   const foundationSeatHoldCopy = sectionCopy(sectionMap.get("foundation_seat_hold"))
   const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
+  const registeredProcessLogCopy = sectionCopy(sectionMap.get("registered_process_log"))
   const notificationReviewCopy = sectionCopy(sectionMap.get("seat_hold_notification_review"))
   const structuralDriftPublication = publicationRows.find((row) => row.publication_key === "structural_drift")
   const structuralDriftDispatches = publicationDispatchRows.filter((row) => row.publication_key === "structural_drift")
@@ -615,6 +648,15 @@ export default function MeasuresRegistryRuntime() {
       .split("_")
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join(" ")
+  }
+
+  function formatProcessDate(value: string | null) {
+    if (!value) return "Not seated"
+    return new Date(value).toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
   }
 
   function entityRoleLabel(entityType: string | null) {
@@ -850,6 +892,12 @@ export default function MeasuresRegistryRuntime() {
 
     if (behavior === "route_surface" && target === "foundation_offering") {
       navigateSurface("foundation_offering")
+      return
+    }
+
+    const routedSurface = surfaceFromEncounterKey(target)
+    if (behavior === "route_surface" && routedSurface) {
+      navigateSurface(routedSurface)
     }
   }
 
@@ -2104,6 +2152,126 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function renderRegisteredProcessLogSurface() {
+    if (reportMissingClassification("registered_process_log", registeredProcessLogCopy)) return null
+    const patternSteps = registeredProcessLogCopy.more?.pattern_steps
+    const fallbackPattern = ["define", "execute", "prove", "validate", "authorize", "reveal"]
+    const pattern = Array.isArray(patternSteps)
+      ? patternSteps.filter((step): step is string => typeof step === "string")
+      : fallbackPattern
+
+    return (
+      <main className="measures-registry-runtime" data-surface="registered_process_log" style={registryTokenStyle}>
+        {renderHeader(null, registeredProcessLogCopy.actions)}
+        <section className="registry-process-log" aria-label={registeredProcessLogCopy.title ?? "Registered Process Log"}>
+          <header className="registry-process-log-header">
+            {registeredProcessLogCopy.entryLabel ? <span>{registeredProcessLogCopy.entryLabel}</span> : null}
+            <h1>{registeredProcessLogCopy.entryHeadline ?? registeredProcessLogCopy.title ?? "Registered Process Log"}</h1>
+            {registeredProcessLogCopy.entrySub ? <p>{registeredProcessLogCopy.entrySub}</p> : null}
+          </header>
+
+          <div className="registry-process-pattern" aria-label="Registered execution pattern">
+            {pattern.map((step, index) => (
+              <span key={`${step}-${index}`}>{formatCodexValue(step)}</span>
+            ))}
+          </div>
+
+          <section className="registry-process-rule" aria-label="Process visibility rule">
+            <article>
+              <span>Cody</span>
+              <p>Execution</p>
+            </article>
+            <article>
+              <span>Chazz</span>
+              <p>Validation</p>
+            </article>
+            <article>
+              <span>Operator</span>
+              <p>Authority</p>
+            </article>
+          </section>
+
+          {registeredProcessRows.length === 0 ? (
+            <section className="registry-field-guide-empty" aria-label="Missing process log state">
+              <span>Process log state</span>
+              <p>No registered process records are currently seated.</p>
+            </section>
+          ) : (
+            <section className="registry-process-log-rows" aria-label="Registered process records">
+              {registeredProcessRows.map((row) => (
+                <article key={row.process_key} className="registry-process-record">
+                  <div className="registry-process-record-title">
+                    <span>{formatCodexValue(row.process_type)}</span>
+                    <h2>{formatCodexValue(row.process_key)}</h2>
+                    <strong>{formatCodexValue(row.standing)}</strong>
+                  </div>
+
+                  <dl className="registry-process-status-grid">
+                    <div>
+                      <dt>Execution</dt>
+                      <dd>{formatCodexValue(row.execution_status)}</dd>
+                    </div>
+                    <div>
+                      <dt>Validation</dt>
+                      <dd>{formatCodexValue(row.validation_status)}</dd>
+                    </div>
+                    <div>
+                      <dt>Deploy</dt>
+                      <dd>{formatCodexValue(row.deploy_status)}</dd>
+                    </div>
+                    <div>
+                      <dt>Seeded</dt>
+                      <dd>{formatCodexValue(row.seeded_status)}</dd>
+                    </div>
+                  </dl>
+
+                  <dl className="registry-process-role-grid">
+                    <div>
+                      <dt>Executor</dt>
+                      <dd>{row.executor ?? "Not seated"}</dd>
+                    </div>
+                    <div>
+                      <dt>Validator</dt>
+                      <dd>{row.validator ?? "Not seated"}</dd>
+                    </div>
+                    <div>
+                      <dt>Operator</dt>
+                      <dd>{row.operator ?? "Not seated"}</dd>
+                    </div>
+                  </dl>
+
+                  <div className="registry-process-proof">
+                    <span>OAR2: {row.oar2_reference ?? "Not seated"}</span>
+                    <span>OAR1: {row.oar1_reference ?? "Not seated"}</span>
+                  </div>
+
+                  <dl className="registry-process-dates">
+                    <div>
+                      <dt>Created</dt>
+                      <dd>{formatProcessDate(row.created_at)}</dd>
+                    </div>
+                    <div>
+                      <dt>Validated</dt>
+                      <dd>{formatProcessDate(row.validated_at)}</dd>
+                    </div>
+                    <div>
+                      <dt>Deployed</dt>
+                      <dd>{formatProcessDate(row.deployed_at)}</dd>
+                    </div>
+                    <div>
+                      <dt>Closeout</dt>
+                      <dd>{formatCodexValue(row.closeout_state)}</dd>
+                    </div>
+                  </dl>
+                </article>
+              ))}
+            </section>
+          )}
+        </section>
+      </main>
+    )
+  }
+
   function renderNotificationReviewSurface() {
     if (reportMissingClassification("seat_hold_notification_review", notificationReviewCopy)) return null
 
@@ -2493,6 +2661,9 @@ export default function MeasuresRegistryRuntime() {
   }
   if (activeSurface === "systems_seat_hold") {
     return renderHoldSurface("systems_seat_hold", systemsSeatHoldCopy)
+  }
+  if (activeSurface === "registered_process_log") {
+    return renderRegisteredProcessLogSurface()
   }
   if (activeSurface === "seat_hold_notification_review") {
     return renderNotificationReviewSurface()

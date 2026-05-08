@@ -1,0 +1,91 @@
+{
+  "dbConnection": "active",
+  "reused_table_assessment": {
+    "inspected_table": "public.system_oar_log",
+    "suitable_for_required_runtime_fields": false,
+    "missing_required_fields": [
+      "process_type",
+      "oar2_reference",
+      "oar1_reference",
+      "execution_status",
+      "validation_status",
+      "deploy_status",
+      "seeded_status",
+      "executor",
+      "validator",
+      "operator",
+      "validated_at",
+      "deployed_at",
+      "closeout_state"
+    ]
+  },
+  "table_view_name": "public.registered_process_log",
+  "registered_process_log_columns": [
+    "id",
+    "process_key",
+    "process_type",
+    "standing",
+    "oar2_reference",
+    "oar1_reference",
+    "execution_status",
+    "validation_status",
+    "deploy_status",
+    "seeded_status",
+    "executor",
+    "validator",
+    "operator",
+    "validated_at",
+    "deployed_at",
+    "closeout_state",
+    "pattern_steps",
+    "metadata",
+    "created_at",
+    "updated_at"
+  ],
+  "inserted_or_read_record_count": 4,
+  "key_fields_used": [
+    "process_key",
+    "execution_status",
+    "validation_status",
+    "deploy_status",
+    "seeded_status"
+  ],
+  "status_values_present": {
+    "standing": [
+      "executed",
+      "governing_seeded",
+      "transferred"
+    ],
+    "execution_status": [
+      "executed"
+    ],
+    "validation_status": [
+      "hash_verified",
+      "pending",
+      "transfer_validated",
+      "validated"
+    ],
+    "deploy_status": [
+      "deployed",
+      "not_required",
+      "requires_confirmation"
+    ],
+    "seeded_status": [
+      "governing_seeded",
+      "not_seeded",
+      "transferred"
+    ]
+  },
+  "runtime_surface": {
+    "registry_key": "registered_process_log",
+    "encounter_key": "registered_process_log",
+    "renderer": "registered_process_log",
+    "data_source": "public.registered_process_log"
+  },
+  "standing_distinctions_preserved": true,
+  "role_distinctions_preserved": true,
+  "no_protected_surfaces_modified": true,
+  "build_command": "npm.cmd run build:registry",
+  "build_result": "passed",
+  "deploy_performed": false
+}
