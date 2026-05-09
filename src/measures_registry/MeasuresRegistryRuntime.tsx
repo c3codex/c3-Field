@@ -659,6 +659,37 @@ export default function MeasuresRegistryRuntime() {
     })
   }
 
+  function formatProcessValue(value: string | null | undefined, fallback = "not recorded") {
+    if (!value) return fallback
+    return formatCodexValue(value)
+  }
+
+  function processStandingSummary(rows: RegisteredProcessLogRow[]) {
+    const validatedStatuses = new Set(["validated", "hash_verified", "transfer_validated", "chazz_validated"])
+    const seededStatuses = new Set(["reference_seeded", "governing_seeded"])
+
+    return [
+      { label: "Total Records", value: rows.length },
+      { label: "Executed", value: rows.filter((row) => row.execution_status === "executed").length },
+      { label: "Validated", value: rows.filter((row) => validatedStatuses.has(row.validation_status)).length },
+      { label: "Requires Deploy Confirmation", value: rows.filter((row) => row.deploy_status === "requires_confirmation").length },
+      { label: "Deployed", value: rows.filter((row) => row.deploy_status === "deployed").length },
+      { label: "Seeded", value: rows.filter((row) => seededStatuses.has(row.seeded_status)).length },
+      { label: "Transferred", value: rows.filter((row) => row.seeded_status === "transferred" || row.standing === "transferred").length },
+      {
+        label: "Held",
+        value: rows.filter(
+          (row) =>
+            row.standing === "held" ||
+            row.execution_status === "held" ||
+            row.validation_status === "held" ||
+            row.deploy_status === "held" ||
+            row.seeded_status === "held",
+        ).length,
+      },
+    ]
+  }
+
   function entityRoleLabel(entityType: string | null) {
     if (entityType === "institution_in_service") return "Institution in Service"
     return formatCodexValue(entityType)
@@ -2159,22 +2190,39 @@ export default function MeasuresRegistryRuntime() {
     const pattern = Array.isArray(patternSteps)
       ? patternSteps.filter((step): step is string => typeof step === "string")
       : fallbackPattern
+    const summary = processStandingSummary(registeredProcessRows)
 
     return (
       <main className="measures-registry-runtime" data-surface="registered_process_log" style={registryTokenStyle}>
         {renderHeader(null, registeredProcessLogCopy.actions)}
         <section className="registry-process-log" aria-label={registeredProcessLogCopy.title ?? "Registered Process Log"}>
           <header className="registry-process-log-header">
-            {registeredProcessLogCopy.entryLabel ? <span>{registeredProcessLogCopy.entryLabel}</span> : null}
-            <h1>{registeredProcessLogCopy.entryHeadline ?? registeredProcessLogCopy.title ?? "Registered Process Log"}</h1>
-            {registeredProcessLogCopy.entrySub ? <p>{registeredProcessLogCopy.entrySub}</p> : null}
+            <span>{registeredProcessLogCopy.entryLabel ?? "Execution Governance"}</span>
+            <h1>Registered Process Log</h1>
+            <p>Governed execution visibility for Measures Registry.</p>
           </header>
 
           <div className="registry-process-pattern" aria-label="Registered execution pattern">
             {pattern.map((step, index) => (
-              <span key={`${step}-${index}`}>{formatCodexValue(step)}</span>
+              <span key={`${step}-${index}`}>
+                {formatCodexValue(step)}
+                {index < pattern.length - 1 ? <small>{"->"}</small> : null}
+              </span>
             ))}
           </div>
+
+          <section className="registry-process-summary" aria-label="Process standing summary">
+            {registeredProcessRows.length === 0 ? (
+              <p>Process standing counts are unavailable because no registered process records are seated.</p>
+            ) : (
+              summary.map((item) => (
+                <article key={item.label}>
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </article>
+              ))
+            )}
+          </section>
 
           <section className="registry-process-rule" aria-label="Process visibility rule">
             <article>
@@ -2201,48 +2249,48 @@ export default function MeasuresRegistryRuntime() {
               {registeredProcessRows.map((row) => (
                 <article key={row.process_key} className="registry-process-record">
                   <div className="registry-process-record-title">
-                    <span>{formatCodexValue(row.process_type)}</span>
-                    <h2>{formatCodexValue(row.process_key)}</h2>
-                    <strong>{formatCodexValue(row.standing)}</strong>
+                    <span>{formatProcessValue(row.process_type)}</span>
+                    <h2>{row.process_key}</h2>
+                    <strong>{formatProcessValue(row.standing)}</strong>
                   </div>
 
                   <dl className="registry-process-status-grid">
                     <div>
                       <dt>Execution</dt>
-                      <dd>{formatCodexValue(row.execution_status)}</dd>
+                      <dd>{formatProcessValue(row.execution_status, "pending")}</dd>
                     </div>
                     <div>
                       <dt>Validation</dt>
-                      <dd>{formatCodexValue(row.validation_status)}</dd>
+                      <dd>{formatProcessValue(row.validation_status, "pending")}</dd>
                     </div>
                     <div>
                       <dt>Deploy</dt>
-                      <dd>{formatCodexValue(row.deploy_status)}</dd>
+                      <dd>{formatProcessValue(row.deploy_status, "not required")}</dd>
                     </div>
                     <div>
                       <dt>Seeded</dt>
-                      <dd>{formatCodexValue(row.seeded_status)}</dd>
+                      <dd>{formatProcessValue(row.seeded_status)}</dd>
                     </div>
                   </dl>
 
                   <dl className="registry-process-role-grid">
                     <div>
                       <dt>Executor</dt>
-                      <dd>{row.executor ?? "Not seated"}</dd>
+                      <dd>{row.executor ?? "not recorded"}</dd>
                     </div>
                     <div>
                       <dt>Validator</dt>
-                      <dd>{row.validator ?? "Not seated"}</dd>
+                      <dd>{row.validator ?? "not recorded"}</dd>
                     </div>
                     <div>
                       <dt>Operator</dt>
-                      <dd>{row.operator ?? "Not seated"}</dd>
+                      <dd>{row.operator ?? "not recorded"}</dd>
                     </div>
                   </dl>
 
                   <div className="registry-process-proof">
-                    <span>OAR2: {row.oar2_reference ?? "Not seated"}</span>
-                    <span>OAR1: {row.oar1_reference ?? "Not seated"}</span>
+                    <span>OAR2: {row.oar2_reference ?? "not recorded"}</span>
+                    <span>OAR1: {row.oar1_reference ?? "not recorded"}</span>
                   </div>
 
                   <dl className="registry-process-dates">
@@ -2260,13 +2308,30 @@ export default function MeasuresRegistryRuntime() {
                     </div>
                     <div>
                       <dt>Closeout</dt>
-                      <dd>{formatCodexValue(row.closeout_state)}</dd>
+                      <dd>{formatProcessValue(row.closeout_state, "pending")}</dd>
                     </div>
                   </dl>
                 </article>
               ))}
             </section>
           )}
+
+          <section className="registry-process-legend" aria-label="Status legend">
+            <article>
+              <h2>Standing</h2>
+              <p>Transferred, verified, reference seeded, governing seeded, executed, deployed, deprecated, and held remain separate.</p>
+            </article>
+            <article>
+              <h2>Roles</h2>
+              <p>Cody executes. Chazz validates. Operator authorizes. The runtime reports those roles without merging authority.</p>
+            </article>
+            <article>
+              <h2>Proof</h2>
+              <p>OAR1 proves execution. It is not deploy permission. Deploy state remains explicit in the seated record.</p>
+            </article>
+          </section>
+
+          {renderSystemFooter()}
         </section>
       </main>
     )

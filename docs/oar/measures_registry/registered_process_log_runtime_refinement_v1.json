@@ -1,0 +1,44 @@
+{
+  "dbConnection": "active",
+  "readOnly": true,
+  "table": "public.registered_process_log",
+  "recordCount": 4,
+  "schemaChangesPerformed": false,
+  "recordsInsertedOrModified": false,
+  "statuses": {
+    "execution": [
+      "executed"
+    ],
+    "validation": [
+      "hash_verified",
+      "pending",
+      "transfer_validated",
+      "validated"
+    ],
+    "deploy": [
+      "deployed",
+      "not_required",
+      "requires_confirmation"
+    ],
+    "seeded": [
+      "governing_seeded",
+      "not_seeded",
+      "transferred"
+    ]
+  },
+  "roleDistinctionsVisible": true,
+  "presentationRefinement": {
+    "masthead": true,
+    "registeredPatternLine": true,
+    "processStandingSummary": true,
+    "processLogCards": true,
+    "statusLegend": true,
+    "footer": true,
+    "newestRecordsFirst": true
+  },
+  "build": {
+    "command": "npm.cmd run build:registry",
+    "result": "passed"
+  },
+  "deployPerformed": false
+}
