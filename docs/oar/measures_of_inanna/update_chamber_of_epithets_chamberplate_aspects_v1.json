@@ -1,0 +1,96 @@
+{
+  "dbConnection": "active",
+  "executionStanding": "held_before_db_mutation",
+  "frontendSupport": {
+    "metadataDrivenFeaturedVideo": false,
+    "metadataDrivenSkipReveal": false,
+    "metadataDrivenAspectReveal": false,
+    "metadataDrivenAudioVolume": false,
+    "currentMediaSource": "public.temp_exhibition_media",
+    "requiredMediaSource": "public.measures_surface_media_map joined to public.codex_media_asset"
+  },
+  "observedChamberplateSurfaceKeys": [
+    "chamber_epithets_01_primus_artus",
+    "chamber_epithets_02_gemynd_corpus",
+    "chamber_epithets_03_percipari",
+    "chamber_epithets_04_lady_of_the_largest_heart",
+    "chamber_epithets_05_spiritus_stellaris",
+    "chamber_epithets_06_concursus_cubicali",
+    "chamber_epithets_07_aphrodite",
+    "chamber_epithets_08_the_last_oracle",
+    "chamber_epithets_09_she_who_rises_with_the_dog_star"
+  ],
+  "insertedOrUpsertedMediaAssetCount": 0,
+  "newFeaturedVideoMappingCount": 0,
+  "preservedOracleCardCount": 3,
+  "preservedFullSongCount": 3,
+  "addedOriginalArtworkAspectCount": 0,
+  "addedLapisToneAspectCount": 0,
+  "addedEpithetDescriptionAspectCount": 0,
+  "missingSuppliedAssets": [
+    "No new chamberplate featured video path list was supplied in repo artifacts.",
+    "No original artwork path list was supplied in repo artifacts.",
+    "No lapis tone path list was supplied in repo artifacts.",
+    "No epithet description text payload was supplied in repo artifacts."
+  ],
+  "registeredAspectMappings": [],
+  "currentRuntimeMediaRows": [
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "label": "Primus Artus Chamberplate",
+      "media_type": "image",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "render_order": 10,
+      "is_active": true
+    },
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "label": "Primus Artus Audio",
+      "media_type": "audio",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "primus_artus.mp3",
+      "render_order": 20,
+      "is_active": true
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "label": "Gemynd Corpus Chamberplate",
+      "media_type": "image",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus.png",
+      "render_order": 10,
+      "is_active": true
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "label": "Gemynd Corpus Audio",
+      "media_type": "audio",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus.mp3",
+      "render_order": 20,
+      "is_active": true
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "label": "Percipari Chamberplate",
+      "media_type": "image",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "render_order": 10,
+      "is_active": true
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "label": "Percipari Audio",
+      "media_type": "audio",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "percipari.mp3",
+      "render_order": 20,
+      "is_active": true
+    }
+  ],
+  "frontendMutationPerformed": false,
+  "dbMutationPerformed": false,
+  "deployPerformed": false
+}
