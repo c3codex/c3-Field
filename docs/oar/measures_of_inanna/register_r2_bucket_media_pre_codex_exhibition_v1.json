@@ -1,0 +1,219 @@
+{
+  "dbConnection": "active",
+  "createdOrReusedTables": {
+    "codex_media_asset": "reused",
+    "measures_surface_media_map": "reused"
+  },
+  "manifestPath": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+  "bucket": "pre-codex-exhibition",
+  "insertedMediaCount": 16,
+  "mappedMediaCount": 16,
+  "skippedManifestRows": [
+    {
+      "object_path": "docs/exhibition_bridge/pre_codex_exhibition_bridge_db_confirmation_v1.meta.md",
+      "media_type": "text/markdown; charset=utf-8",
+      "reason": "not_image_video_or_audio"
+    },
+    {
+      "object_path": "docs/exhibition_bridge/pre_codex_exhibition_bridge_definition_v1.meta.md",
+      "media_type": "text/markdown; charset=utf-8",
+      "reason": "not_image_video_or_audio"
+    },
+    {
+      "object_path": "docs/exhibition_bridge/pre_codex_exhibition_bridge_surface_roles_v1.meta.md",
+      "media_type": "text/markdown; charset=utf-8",
+      "reason": "not_image_video_or_audio"
+    }
+  ],
+  "duplicateMediaKeys": [],
+  "missingOarExamplePaths": [
+    "primus_artus.webp",
+    "primus_artus.mp4",
+    "primus_artus.mp3",
+    "gemynd_corpus.webp",
+    "gemynd_corpus.mp4",
+    "gemynd_corpus.mp3",
+    "percipari.webp",
+    "percipari.mp4",
+    "percipari.mp3"
+  ],
+  "validationQueryOutput": [
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 10,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1",
+      "title": "Primus Artus Epithet01 Chamberplate",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 30,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1",
+      "title": "Percipari Epithet03 Chamberplate",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 100,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_7a748aab_4339_44c2_8136_d45a541054e3_image_v1",
+      "title": "7A748AAB 4339 44C2 8136 D45A541054E3",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "7A748AAB-4339-44C2-8136-D45A541054E3.png",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 110,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "title": "Crystal Temple",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "crystal_temple.png",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 151,
+      "role": "video",
+      "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+      "title": "Harrumuk Passage",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "harrumuk_passage.mp4",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 160,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_inanna_encounter_image_v1",
+      "title": "Inanna Encounter",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "inanna_encounter.webp",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 171,
+      "role": "video",
+      "media_key": "pre_codex_exhibition_inanna_temple_encounter_intro_video_v1",
+      "title": "Inanna Temple Encounter Intro",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "inanna_temple_encounter_intro.mp4",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 180,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_kumurrah_image_v1",
+      "title": "Kumurrah",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "kumurrah.png",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 191,
+      "role": "video",
+      "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+      "title": "Kumurrah Passage",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "kumurrah_passage.mp4",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 200,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_marble_chamber_codexstone_image_v1",
+      "title": "Marble Chamber Codexstone",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "marble_chamber_codexstone.webp",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 210,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "title": "Obsidian Chamberplate Gate01",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate01.jpeg",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 221,
+      "role": "video",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "title": "Obsidian Chamberplate Gate01",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate01.mov",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 231,
+      "role": "video",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1",
+      "title": "Obsidian Chamberplate Gate02",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate02.mp4",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 240,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+      "title": "Obsidian Chamberplate Gate02",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate02.webp",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 250,
+      "role": "image",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate03.jpeg",
+      "status": "active"
+    },
+    {
+      "surface_key": "pre_codex_exhibition",
+      "sequence_index": 261,
+      "role": "video",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate03.mp4",
+      "status": "active"
+    }
+  ],
+  "frontendMutationPerformed": false
+}
