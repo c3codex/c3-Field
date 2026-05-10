@@ -1,0 +1,308 @@
+{
+  "dbConnection": "active",
+  "roleConstraintExpanded": true,
+  "insertedOrUpsertedMediaAssetCount": 9,
+  "insertedOrUpsertedMappingCount": 9,
+  "deactivatedSupersededMappingCount": 0,
+  "activeFeaturedVideoMappingCount": 0,
+  "activeOracleCardMappingCount": 3,
+  "activeEpithetDescriptionMappingCount": 0,
+  "activeOriginalArtworkMappingCount": 3,
+  "activeFullSongMappingCount": 3,
+  "activeLapisMaterialToneMappingCount": 0,
+  "missingManifestAssetsOrTextPayloads": [
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "role": "featured_video",
+      "expected_storage_path": "primus_artus.mp4",
+      "reason": "featured video object not supplied in bucket listing"
+    },
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "role": "epithet_description",
+      "reason": "description text payload not supplied"
+    },
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "role": "lapis_tone",
+      "reason": "lapis/material tone support audio not supplied"
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "role": "featured_video",
+      "expected_storage_path": "gemynd_corpus.mp4",
+      "reason": "featured video object not supplied in bucket listing"
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "role": "epithet_description",
+      "reason": "description text payload not supplied"
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "role": "lapis_tone",
+      "reason": "lapis/material tone support audio not supplied"
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "role": "featured_video",
+      "expected_storage_path": "percipari.mp4",
+      "reason": "featured video object not supplied in bucket listing"
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "role": "epithet_description",
+      "reason": "description text payload not supplied"
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "role": "lapis_tone",
+      "reason": "lapis/material tone support audio not supplied"
+    }
+  ],
+  "bucketListError": null,
+  "validationQueryOutput": [
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "sequence_index": 20,
+      "role": "oracle_card",
+      "is_active": true,
+      "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "title": "Primus Artus Oracle Card",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "preserved_from": "public.temp_exhibition_media",
+        "render_behavior": "image_expand",
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "sequence_index": 40,
+      "role": "original_artwork",
+      "is_active": true,
+      "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+      "title": "Primus Artus Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus_original_artwork.webp",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "image_expand",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "sequence_index": 50,
+      "role": "full_song",
+      "is_active": true,
+      "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+      "title": "Primus Artus Full Song",
+      "media_type": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus.mp3",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "audio_role": "full_song",
+        "aspect_type": "audio",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "audio_play",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "sequence_index": 20,
+      "role": "oracle_card",
+      "is_active": true,
+      "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "title": "Gemynd Corpus Oracle Card",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus.png",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "preserved_from": "public.temp_exhibition_media",
+        "render_behavior": "image_expand",
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "sequence_index": 40,
+      "role": "original_artwork",
+      "is_active": true,
+      "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+      "title": "Gemynd Corpus Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus_original_art.webp",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "image_expand",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "sequence_index": 50,
+      "role": "full_song",
+      "is_active": true,
+      "media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+      "title": "Gemynd Corpus Full Song",
+      "media_type": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus.mp3",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "audio_role": "full_song",
+        "aspect_type": "audio",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "audio_play",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "sequence_index": 20,
+      "role": "oracle_card",
+      "is_active": true,
+      "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "title": "Percipari Oracle Card",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "preserved_from": "public.temp_exhibition_media",
+        "render_behavior": "image_expand",
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "sequence_index": 40,
+      "role": "original_artwork",
+      "is_active": true,
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "title": "Percipari Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari_original_artwork.webp",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "image_expand",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "sequence_index": 50,
+      "role": "full_song",
+      "is_active": true,
+      "media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "title": "Percipari Full Song",
+      "media_type": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari.mp3",
+      "public_url": null,
+      "poster_url": null,
+      "status": "active",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "audio_role": "full_song",
+        "aspect_type": "audio",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "audio_play",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    }
+  ],
+  "frontendMutationPerformed": false,
+  "tempExhibitionMediaMutationPerformed": false
+}
