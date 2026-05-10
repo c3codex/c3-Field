@@ -130,6 +130,16 @@ export type RuntimeMediaItem = {
   storagePath: string
   renderOrder: number
   isActive?: boolean
+  source?: "registry_media" | "temp_exhibition_media"
+  surfaceKey?: string | null
+  role?: string | null
+  mediaKey?: string | null
+  title?: string | null
+  publicUrl?: string | null
+  posterUrl?: string | null
+  status?: string | null
+  mapMetadata?: Record<string, unknown> | null
+  assetMetadata?: Record<string, unknown> | null
 }
 
 export type ChamberplateMode =

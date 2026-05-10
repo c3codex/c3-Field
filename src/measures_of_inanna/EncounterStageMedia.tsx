@@ -22,18 +22,37 @@ type Props = {
   primaryImageAction?: ResolvedAction | null
   onAction?: (action: ResolvedAction) => void
   extraItem?: RuntimeMediaItem
+  audioVolume?: number
+  primaryVideoMuted?: boolean
+}
+
+function mediaDefaultVolume(item?: RuntimeMediaItem | null, fallback = 0.07) {
+  const mapVolume = item?.mapMetadata?.default_volume
+  const assetVolume = item?.assetMetadata?.default_volume
+  const value =
+    typeof mapVolume === "number"
+      ? mapVolume
+      : typeof assetVolume === "number"
+        ? assetVolume
+        : fallback
+
+  return Math.min(1, Math.max(0, value))
 }
 
 function RenderMediaItem({
   item,
   autoPlayMuted,
+  muted,
   onEnded,
   hidden,
+  audioVolume,
 }: {
   item: RuntimeMediaItem
   autoPlayMuted?: boolean
+  muted?: boolean
   onEnded?: () => void
   hidden?: boolean
+  audioVolume?: number
 }) {
   const src = toPublicMediaUrl(item)
 
@@ -48,21 +67,23 @@ function RenderMediaItem({
   }
 
   if (item.mediaType === "video") {
+    const videoMuted = muted ?? autoPlayMuted
+
     return (
       <video
         src={src}
         autoPlay={autoPlayMuted}
-        muted={autoPlayMuted}
+        muted={videoMuted}
         playsInline
         preload="auto"
-        controls={!autoPlayMuted}
+        controls={!autoPlayMuted || !videoMuted}
         onEnded={onEnded}
         onError={onEnded}
         style={commonStyle}
         ref={(node) => {
-          if (node && autoPlayMuted) {
-            node.muted = true
-            node.defaultMuted = true
+          if (node) {
+            node.muted = Boolean(videoMuted)
+            node.defaultMuted = Boolean(videoMuted)
           }
         }}
       />
@@ -94,7 +115,7 @@ function RenderMediaItem({
             : { display: "block" }
         }
         ref={(node) => {
-          if (node) node.volume = 0.07
+          if (node) node.volume = audioVolume ?? mediaDefaultVolume(item)
         }}
       />
     )
@@ -119,6 +140,8 @@ export default function EncounterStageMedia({
   primaryImageAction,
   onAction,
   extraItem,
+  audioVolume,
+  primaryVideoMuted,
 }: Props) {
   const shouldShowVideo = Boolean(primaryVideo && videoVisible)
   const shouldShowStill = Boolean(primaryStill && showStill)
@@ -140,6 +163,7 @@ export default function EncounterStageMedia({
           <RenderMediaItem
             item={primaryVideo}
             autoPlayMuted={showMutedAutoplayVideo}
+            muted={primaryVideoMuted}
             onEnded={onPrimaryVideoEnded}
           />
         </div>
@@ -163,13 +187,20 @@ export default function EncounterStageMedia({
 
       {shouldRenderTonalAudio && tonalAudio && (
         <div className="media-audio">
-          <RenderMediaItem item={tonalAudio} hidden />
+          <RenderMediaItem
+            item={tonalAudio}
+            hidden
+            audioVolume={mediaDefaultVolume(tonalAudio, audioVolume)}
+          />
         </div>
       )}
 
       {extraItem && (
         <div className="media-extra">
-          <RenderMediaItem item={extraItem} />
+          <RenderMediaItem
+            item={extraItem}
+            audioVolume={extraItem.mediaType === "audio" ? mediaDefaultVolume(extraItem, audioVolume) : undefined}
+          />
         </div>
       )}
     </section>

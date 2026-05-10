@@ -45,6 +45,67 @@ function isAudio(item: EncounterResolution["media"][number]) {
   return item.mediaType === "audio"
 }
 
+function mediaRole(item: EncounterResolution["media"][number]) {
+  return item.role ?? item.mediaType
+}
+
+function mediaMetadata(item: EncounterResolution["media"][number]) {
+  return {
+    ...(item.assetMetadata ?? {}),
+    ...(item.mapMetadata ?? {}),
+  } as Record<string, unknown>
+}
+
+function metadataString(item: EncounterResolution["media"][number], key: string) {
+  const value = mediaMetadata(item)[key]
+  return typeof value === "string" ? value : null
+}
+
+function metadataBoolean(item: EncounterResolution["media"][number], key: string) {
+  const value = mediaMetadata(item)[key]
+  return typeof value === "boolean" ? value : null
+}
+
+function isRole(item: EncounterResolution["media"][number], roles: string[]) {
+  return roles.includes(mediaRole(item))
+}
+
+function isFeaturedAutoplayVideo(item: EncounterResolution["media"][number]) {
+  return (
+    item.mediaType === "video" &&
+    mediaRole(item) === "featured_video" &&
+    metadataString(item, "render_behavior") === "autoplay_after_passage"
+  )
+}
+
+function aspectBehavior(item: EncounterResolution["media"][number]) {
+  return (
+    metadataString(item, "render_behavior") ??
+    (item.mediaType === "audio"
+      ? "audio_play"
+      : item.mediaType === "image"
+        ? "image_expand"
+        : "click_to_expand")
+  )
+}
+
+const CHAMBERPLATE_ASPECT_ROLES = [
+  "epithet_description",
+  "original_artwork",
+  "full_song",
+  "lapis_tone",
+  "material_tone",
+]
+
+const CHAMBERPLATE_RECOGNIZED_ROLES = [
+  "featured_video",
+  "oracle_card",
+  "audio",
+  "image",
+  "video",
+  ...CHAMBERPLATE_ASPECT_ROLES,
+]
+
 function isActionAvailable(action: ResolvedAction) {
   return action.blocked !== true && Boolean(action.targetRegistryKey)
 }
@@ -168,6 +229,8 @@ function isChamberplateSurface(resolution: EncounterResolution) {
 }
 
 function mediaRank(item: EncounterResolution["media"][number], chamberplate?: ChamberplateContract | null) {
+  if (item.role) return item.renderOrder
+
   const order = chamberplate?.render_order
   if (!Array.isArray(order) || order.length === 0) return item.renderOrder
 
@@ -297,6 +360,57 @@ function ChamberplateAbsence({
     <section className="chamberplate-absence">
       {missingMedia ? <p>media contract unresolved</p> : null}
       {missingText ? <p>text body contract unresolved</p> : null}
+    </section>
+  )
+}
+
+function ChamberplateAspects({
+  aspects,
+}: {
+  aspects: EncounterResolution["media"]
+}) {
+  const [openKey, setOpenKey] = useState<string | null>(null)
+
+  if (aspects.length === 0) return null
+
+  return (
+    <section className="chamberplate-aspects" aria-label="Chamberplate aspects">
+      {aspects.map((item) => {
+        const key = item.mediaKey ?? `${item.bucketName}/${item.storagePath}/${item.renderOrder}`
+        const isOpen = openKey === key
+        const behavior = aspectBehavior(item)
+        const title = item.title ?? item.label ?? mediaRole(item)
+        const body =
+          typeof item.mapMetadata?.text === "string"
+            ? item.mapMetadata.text
+            : typeof item.assetMetadata?.text === "string"
+              ? item.assetMetadata.text
+              : typeof item.mapMetadata?.description === "string"
+                ? item.mapMetadata.description
+                : typeof item.assetMetadata?.description === "string"
+                  ? item.assetMetadata.description
+                  : null
+
+        return (
+          <article key={key} className="chamberplate-aspect" data-role={mediaRole(item)} data-open={isOpen}>
+            <button type="button" onClick={() => setOpenKey(isOpen ? null : key)}>
+              <span className="chamberplate-aspect-title">{title}</span>
+              <small className="chamberplate-aspect-role">{mediaRole(item).replaceAll("_", " ")}</small>
+            </button>
+            {isOpen ? (
+              <div className="chamberplate-aspect-body" data-behavior={behavior}>
+                {item.mediaType === "image" || item.mediaType === "audio" || item.mediaType === "video" ? (
+                  <EncounterStageMedia extraItem={item} />
+                ) : null}
+                {body ? <p>{body}</p> : null}
+                {!body && item.mediaType !== "image" && item.mediaType !== "audio" && item.mediaType !== "video" ? (
+                  <p>aspect media registered</p>
+                ) : null}
+              </div>
+            ) : null}
+          </article>
+        )
+      })}
     </section>
   )
 }
@@ -705,24 +819,41 @@ export default function GenericEncounter({
   )
 
   const primaryVideo = useMemo(
-    () => orderedMedia.find(isVideo) ?? null,
+    () => orderedMedia.find(isFeaturedAutoplayVideo) ?? orderedMedia.find(isVideo) ?? null,
     [orderedMedia],
   )
   const primaryStill = useMemo(
-    () => orderedMedia.find(isImage) ?? null,
+    () =>
+      orderedMedia.find((item) => isRole(item, ["oracle_card", "image"])) ??
+      orderedMedia.find(isImage) ??
+      null,
     [orderedMedia],
   )
   const tonalAudio = useMemo(
-    () => orderedMedia.find(isAudio) ?? null,
+    () =>
+      orderedMedia.find((item) => isRole(item, ["full_song", "lapis_tone", "material_tone", "audio"])) ??
+      orderedMedia.find(isAudio) ??
+      null,
+    [orderedMedia],
+  )
+  const aspectMedia = useMemo(
+    () =>
+      orderedMedia.filter((item) =>
+        isRole(item, CHAMBERPLATE_ASPECT_ROLES) ||
+        Boolean(item.role && item.source === "registry_media" && !CHAMBERPLATE_RECOGNIZED_ROLES.includes(item.role)),
+      ),
     [orderedMedia],
   )
   const extraMedia = useMemo(
     () =>
       orderedMedia.filter(
         (item) =>
-          item !== primaryVideo && item !== primaryStill && item !== tonalAudio,
+          item !== primaryVideo &&
+          item !== primaryStill &&
+          item !== tonalAudio &&
+          !aspectMedia.includes(item),
       ),
-    [orderedMedia, primaryStill, primaryVideo, tonalAudio],
+    [aspectMedia, orderedMedia, primaryStill, primaryVideo, tonalAudio],
   )
 
   const plaque =
@@ -748,6 +879,10 @@ export default function GenericEncounter({
     playback.motionAfterAction &&
     videoVisible &&
     !showStill
+  const hasFeaturedAutoplayVideo = Boolean(primaryVideo && isFeaturedAutoplayVideo(primaryVideo))
+  const revealChamberplateAspects = !hasFeaturedAutoplayVideo || showStill || !videoVisible
+  const suppressVideoTextOverlay =
+    Boolean(primaryVideo && metadataBoolean(primaryVideo, "show_text_overlay") === false && videoVisible)
 
   const isIntroEncounter =
     resolution.encounterKey === "inanna_encounter" ||
@@ -830,7 +965,8 @@ export default function GenericEncounter({
     const startsWithMotionThenStill =
       Boolean(primaryVideo) &&
       !playback.stillFirst &&
-      (playback.videoMode === "motion_then_still" ||
+      (hasFeaturedAutoplayVideo ||
+        playback.videoMode === "motion_then_still" ||
         playback.videoMode === "muted_autoplay")
 
     const startsWithStill =
@@ -849,7 +985,7 @@ export default function GenericEncounter({
         window.clearTimeout(autoAdvanceTimeoutRef.current)
       }
     }
-  }, [playback.stillFirst, playback.videoMode, primaryStill, primaryVideo, resolution.registryKey])
+  }, [hasFeaturedAutoplayVideo, playback.stillFirst, playback.videoMode, primaryStill, primaryVideo, resolution.registryKey])
 
   useEffect(() => {
     setTextReady(false)
@@ -929,9 +1065,14 @@ export default function GenericEncounter({
       return
     }
 
+    if (hasFeaturedAutoplayVideo) {
+      revealAfterFeaturedVideo()
+      return
+    }
+
     const shouldSettleToStill =
       Boolean(primaryStill) &&
-      (playback.settleToStill ||
+        (playback.settleToStill ||
         playback.videoMode === "settle_to_still" ||
         playback.videoMode === "motion_then_still" ||
         playback.videoMode === "muted_autoplay")
@@ -944,6 +1085,12 @@ export default function GenericEncounter({
     }
 
     triggerAutoAdvance()
+  }
+
+  function revealAfterFeaturedVideo() {
+    setShowStill(true)
+    setVideoVisible(false)
+    setVideoAdvanceTarget(null)
   }
 
   if (!renderer) return <main className="encounter-error">renderer contract missing</main>
@@ -980,6 +1127,7 @@ export default function GenericEncounter({
     playback.videoMode === "motion_then_still" ||
     playback.videoMode === "settle_to_still" ||
     playback.autoAdvanceOnVideoEnd ||
+    hasFeaturedAutoplayVideo ||
     hasAutoAdvanceAction ||
     isIntroEncounter
 
@@ -1005,6 +1153,13 @@ export default function GenericEncounter({
           showStill={showStill}
           videoVisible={videoVisible}
           onPrimaryVideoEnded={handlePrimaryVideoEnded}
+          primaryVideoMuted={
+            primaryVideo &&
+            hasFeaturedAutoplayVideo &&
+            metadataBoolean(primaryVideo, "audio_embedded") === true
+              ? false
+              : undefined
+          }
           primaryImageAction={
             playback.stillFirst && playback.motionAfterAction
               ? null
@@ -1021,6 +1176,19 @@ export default function GenericEncounter({
         ))}
       </div>
 
+      {primaryVideo &&
+      hasFeaturedAutoplayVideo &&
+      videoVisible &&
+      metadataBoolean(primaryVideo, "skip_enabled") !== false ? (
+        <button
+          type="button"
+          className="chamberplate-video-skip"
+          onClick={revealAfterFeaturedVideo}
+        >
+          Skip
+        </button>
+      ) : null}
+
       {(isCrystalTempleHome || isTempleAntechamber) &&
       refractionMode === "crystal_soft" ? (
         <>
@@ -1031,13 +1199,18 @@ export default function GenericEncounter({
 
       {textReady &&
       !collapseTextForMotion &&
+      !suppressVideoTextOverlay &&
       plaque &&
       chamberplateAllowsText(chamberplate, "plaque") ? (
         <Plaque plaque={plaque} />
       ) : null}
 
-      {textReady && !collapseTextForMotion && chamberplate ? (
+      {textReady && !collapseTextForMotion && !suppressVideoTextOverlay && chamberplate ? (
         <ChamberplateTextBodies chamberplate={chamberplate} presentation={presentation} />
+      ) : null}
+
+      {chamberplate && revealChamberplateAspects ? (
+        <ChamberplateAspects aspects={aspectMedia} />
       ) : null}
 
       {chamberplate ? (

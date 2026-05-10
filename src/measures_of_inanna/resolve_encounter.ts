@@ -32,12 +32,44 @@ type TransitionRuntimeRow = {
 }
 
 type MediaBridgeRow = {
+  surface_key?: string | null
   label: string | null
   media_type: string
   bucket_name: string
   storage_path: string
   render_order: number | null
   is_active: boolean | null
+}
+
+type RegistryMediaRow = {
+  surface_key: string
+  sequence_index: number | null
+  role: string
+  status: string | null
+  metadata: JsonRecord | null
+  codex_media_asset:
+    | {
+        media_key: string
+        title: string
+        media_type: string
+        bucket: string
+        storage_path: string
+        public_url: string | null
+        poster_url: string | null
+        status: string | null
+        metadata: JsonRecord | null
+      }
+    | Array<{
+        media_key: string
+        title: string
+        media_type: string
+        bucket: string
+        storage_path: string
+        public_url: string | null
+        poster_url: string | null
+        status: string | null
+        metadata: JsonRecord | null
+      }>
 }
 
 function asRecord(value: unknown): JsonRecord | null {
@@ -175,6 +207,8 @@ function resolveAutoAdvanceTo(metadata: JsonRecord): string | null {
 }
 
 export function toPublicMediaUrl(item: RuntimeMediaItem): string {
+  if (item.publicUrl) return item.publicUrl
+
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 
   if (!supabaseUrl || !item.bucketName || !item.storagePath) {
@@ -182,6 +216,36 @@ export function toPublicMediaUrl(item: RuntimeMediaItem): string {
   }
 
   return `${supabaseUrl}/storage/v1/object/public/${item.bucketName}/${item.storagePath}`
+}
+
+function registryMediaAsset(row: RegistryMediaRow) {
+  return Array.isArray(row.codex_media_asset)
+    ? row.codex_media_asset[0]
+    : row.codex_media_asset
+}
+
+function registryMediaToRuntime(row: RegistryMediaRow): RuntimeMediaItem | null {
+  const asset = registryMediaAsset(row)
+  if (!asset) return null
+
+  return {
+    label: asset.title ?? row.role,
+    mediaType: asset.media_type,
+    bucketName: asset.bucket,
+    storagePath: asset.storage_path,
+    renderOrder: row.sequence_index ?? 999,
+    isActive: row.status !== "inactive" && asset.status !== "inactive",
+    source: "registry_media",
+    surfaceKey: row.surface_key,
+    role: row.role,
+    mediaKey: asset.media_key,
+    title: asset.title,
+    publicUrl: asset.public_url,
+    posterUrl: asset.poster_url,
+    status: asset.status,
+    mapMetadata: row.metadata ?? null,
+    assetMetadata: asset.metadata ?? null,
+  }
 }
 
 export async function resolveEncounter(registryKey: string): Promise<EncounterResolution> {
@@ -237,26 +301,59 @@ export async function resolveEncounter(registryKey: string): Promise<EncounterRe
     })
   }
 
-  const { data: mediaData, error: mediaError } = await supabase
-    .from("temp_exhibition_media")
-    .select("label, media_type, bucket_name, storage_path, render_order, is_active")
-    .in("surface_key", [resolvedRegistryKey, encounter.encounter_key])
-    .order("render_order", { ascending: true })
+  let media: RuntimeMediaItem[] = []
+  const isChamberplate = encounter.surface_type === "chamberplate"
 
-  if (mediaError) {
-    console.error("Media lookup failed", { registryKey: resolvedRegistryKey, mediaError })
+  if (isChamberplate) {
+    const { data: registryMediaData, error: registryMediaError } = await supabase
+      .from("measures_surface_media_map")
+      .select("surface_key, sequence_index, role, status, metadata, codex_media_asset!inner(media_key, title, media_type, bucket, storage_path, public_url, poster_url, status, metadata)")
+      .in("surface_key", [resolvedRegistryKey, encounter.encounter_key])
+      .eq("status", "active")
+      .order("sequence_index", { ascending: true })
+
+    if (registryMediaError) {
+      console.error("Registry media lookup failed", { registryKey: resolvedRegistryKey, registryMediaError })
+    }
+
+    media = ((registryMediaData ?? []) as RegistryMediaRow[])
+      .map(registryMediaToRuntime)
+      .filter((item): item is RuntimeMediaItem => Boolean(item))
+      .filter((item) => item.isActive !== false)
   }
 
-  const media: RuntimeMediaItem[] = ((mediaData ?? []) as MediaBridgeRow[])
-    .filter((row) => row.is_active !== false)
-    .map((row) => ({
-      label: row.label ?? null,
-      mediaType: row.media_type,
-      bucketName: row.bucket_name,
-      storagePath: row.storage_path,
-      renderOrder: row.render_order ?? 999,
-      isActive: row.is_active ?? true,
-    }))
+  if (media.length === 0) {
+    const { data: mediaData, error: mediaError } = await supabase
+      .from("temp_exhibition_media")
+      .select("surface_key, label, media_type, bucket_name, storage_path, render_order, is_active")
+      .in("surface_key", [resolvedRegistryKey, encounter.encounter_key])
+      .order("render_order", { ascending: true })
+
+    if (mediaError) {
+      console.error("Media lookup failed", { registryKey: resolvedRegistryKey, mediaError })
+    }
+
+    media = ((mediaData ?? []) as MediaBridgeRow[])
+      .filter((row) => row.is_active !== false)
+      .map((row) => ({
+        label: row.label ?? null,
+        mediaType: row.media_type,
+        bucketName: row.bucket_name,
+        storagePath: row.storage_path,
+        renderOrder: row.render_order ?? 999,
+        isActive: row.is_active ?? true,
+        source: "temp_exhibition_media",
+        surfaceKey: row.surface_key ?? null,
+        role: row.media_type,
+        mediaKey: null,
+        title: row.label ?? null,
+        publicUrl: null,
+        posterUrl: null,
+        status: row.is_active === false ? "inactive" : "active",
+        mapMetadata: null,
+        assetMetadata: null,
+      }))
+  }
   const metadataActions = resolveActions(metadata)
   const transitionActions = resolveTransitionActions(
     ((transitionData ?? []) as TransitionRuntimeRow[]) ?? []

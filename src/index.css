@@ -3248,6 +3248,95 @@ body {
   margin: 0 0 0.55rem;
 }
 
+.chamberplate-video-skip {
+  position: absolute;
+  right: clamp(1rem, 4vw, 3rem);
+  bottom: clamp(1rem, 5vh, 3rem);
+  z-index: 24;
+  min-width: 4.5rem;
+  min-height: 2.35rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid rgba(255,255,255,0.32);
+  border-radius: 6px;
+  color: rgba(248, 250, 255, 0.92);
+  background: rgba(0, 0, 0, 0.44);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.chamberplate-aspects {
+  position: absolute;
+  left: clamp(1rem, 5vw, 4rem);
+  bottom: clamp(1rem, 6vh, 4rem);
+  z-index: 17;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.65rem;
+  width: min(42rem, 58vw);
+  max-height: 52svh;
+  overflow-y: auto;
+}
+
+.chamberplate-aspect {
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 8px;
+  color: rgba(248, 250, 255, 0.88);
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(9px);
+}
+
+.chamberplate-aspect > button {
+  display: grid;
+  gap: 0.22rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chamberplate-aspect-role {
+  font-size: 0.67rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(248, 250, 255, 0.56);
+}
+
+.chamberplate-aspect-title {
+  font-size: 0.92rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.chamberplate-aspect-body {
+  margin-top: 0.65rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(248, 250, 255, 0.76);
+}
+
+.chamberplate-aspect-body .encounter-stage-media {
+  min-height: 0;
+  height: auto;
+  pointer-events: auto;
+}
+
+.chamberplate-aspect-body .media-extra {
+  position: relative;
+  inset: auto;
+}
+
+.chamberplate-aspect-body img,
+.chamberplate-aspect-body video {
+  max-height: 14rem;
+  border-radius: 6px;
+}
+
 .chamberplate-absence {
   position: absolute;
   left: 50%;
@@ -3989,6 +4078,20 @@ body,
     transform: none;
     font-size: 0.92rem;
     padding: 0.9rem;
+  }
+
+  .chamberplate-video-skip {
+    right: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .chamberplate-aspects {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    width: auto;
+    max-height: 42svh;
+    grid-template-columns: 1fr;
   }
 
   .chamberplate-absence {

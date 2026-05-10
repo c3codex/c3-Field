@@ -1,0 +1,66 @@
+{
+  "executionStanding": "implemented_runtime_only",
+  "dbMutationPerformed": false,
+  "deployPerformed": false,
+  "runtimeSupport": {
+    "registryMediaResolver": true,
+    "legacyTempMediaFallback": true,
+    "metadataDrivenFeaturedVideo": true,
+    "metadataDrivenSkipReveal": true,
+    "metadataDrivenCompletionReveal": true,
+    "metadataDrivenAspectReveal": true,
+    "metadataDrivenAudioVolume": true,
+    "overlaySuppressionFromMetadata": true
+  },
+  "resolverBehavior": {
+    "registrySource": "public.measures_surface_media_map joined to public.codex_media_asset",
+    "fallbackSource": "public.temp_exhibition_media",
+    "registryOverrideRule": "active chamberplate registry mappings are used as the complete media set; fallback runs only when no registry media resolves",
+    "fallbackMergeBehavior": "no merge, no overwrite, no reorder over registry media"
+  },
+  "supportedRoles": [
+    "featured_video",
+    "oracle_card",
+    "epithet_description",
+    "original_artwork",
+    "full_song",
+    "lapis_tone",
+    "material_tone",
+    "audio",
+    "image",
+    "video",
+    "unknown registry roles as generic aspects"
+  ],
+  "supportedMetadataKeys": [
+    "render_behavior",
+    "show_text_overlay",
+    "skip_enabled",
+    "audio_embedded",
+    "default_volume",
+    "text",
+    "description"
+  ],
+  "observedChamberplateSurfaceKeys": [
+    "chamber_epithets_01_primus_artus",
+    "chamber_epithets_02_gemynd_corpus",
+    "chamber_epithets_03_percipari",
+    "chamber_epithets_04_lady_of_the_largest_heart",
+    "chamber_epithets_05_spiritus_stellaris",
+    "chamber_epithets_06_concursus_cubicali",
+    "chamber_epithets_07_aphrodite",
+    "chamber_epithets_08_the_last_oracle",
+    "chamber_epithets_09_she_who_rises_with_the_dog_star"
+  ],
+  "readOnlyDbValidation": {
+    "registryQueryOk": true,
+    "registryCount": 0,
+    "tempFallbackQueryOk": true,
+    "activeTempFallbackCount": 6
+  },
+  "buildValidation": {
+    "command": "npm.cmd run build:inanna",
+    "result": "pass",
+    "note": "Initial sandbox run failed with esbuild spawn EPERM; elevated rerun passed."
+  },
+  "chamberplateDbSeatingOarMayBeRerun": true
+}
