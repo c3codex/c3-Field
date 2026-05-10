@@ -1,0 +1,70 @@
+{
+  "manifestFound": true,
+  "manifestPath": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+  "l2ObjectCountFromManifest": 24,
+  "storageRegistrySurface": "reused",
+  "activeL2StorageRegistryRow": {
+    "storage_key": "l2_shared_media",
+    "provider": "cloudflare_r2",
+    "bucket": "measures-media",
+    "status": "active",
+    "scope": "shared_runtime_media",
+    "metadata": {
+      "used_by": [
+        "measures_of_inanna",
+        "measures_registry"
+      ],
+      "contains": [
+        "mp3",
+        "mp4",
+        "mov",
+        "wav"
+      ],
+      "manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+      "manifest_object_count": 24,
+      "frontend_hardcode_allowed": false
+    },
+    "created_at": "2026-05-10T16:21:44.550711+00:00",
+    "updated_at": "2026-05-10T16:21:44.550711+00:00"
+  },
+  "observedPriorBucketsStorageProviders": {
+    "codex_media_asset": {
+      "buckets": {
+        "l2_chamberplate": 3,
+        "pre-codex-exhibition": 25
+      },
+      "storageProviders": {
+        "cloudflare_r2": 28
+      }
+    },
+    "temp_exhibition_media": {
+      "buckets": {
+        "pre-codex-exhibition": 73
+      }
+    },
+    "measures_media_map": {
+      "buckets": {
+        "measures-registry": 15,
+        "measures-registry-public": 3
+      }
+    },
+    "publication_dispatch_media_manifest_count": 1
+  },
+  "mediaRowsRequiringMigrationBySystem": {
+    "measures_of_inanna": {
+      "codex_media_asset_non_l2_count": 28,
+      "measures_surface_media_map_non_l2_count": 28,
+      "temp_exhibition_media_non_l2_count": 73
+    },
+    "measures_registry": {
+      "measures_media_map_non_l2_count": 18,
+      "publication_dispatches_with_media_manifest_count": 1
+    },
+    "unknown_needs_classification": {
+      "codex_media_asset_non_l2_count": 3
+    }
+  },
+  "oldStorageReferencesPreserved": true,
+  "perSiteMediaMigrationPerformed": false,
+  "frontendMutationPerformed": false
+}

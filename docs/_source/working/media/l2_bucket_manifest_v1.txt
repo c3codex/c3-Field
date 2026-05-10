@@ -1,0 +1,191 @@
+c3_field.mp4
+video/mp4
+Standard
+5.24 MB
+09 May 2026 17:38:10
+CDT
+
+
+crystal_tone_rise_return_5min.wav
+audio/x-wav
+Standard
+26.46 MB
+09 May 2026 18:30:16
+CDT
+
+
+epithet_passage_01.mp4
+video/mp4
+Standard
+1.77 MB
+09 May 2026 14:36:19
+CDT
+
+
+gates_passage_01.mp4
+video/mp4
+Standard
+4.37 MB
+09 May 2026 14:36:18
+CDT
+
+
+gates_passage_07.mp4
+video/mp4
+Standard
+5.04 MB
+09 May 2026 14:35:54
+CDT
+
+
+gemynd_corpus.mp3
+audio/mpeg
+Standard
+5.67 MB
+09 May 2026 14:34:10
+CDT
+
+
+gemynd_corpus_knew_album.mp3
+audio/mpeg
+Standard
+5.67 MB
+09 May 2026 20:01:59
+CDT
+
+
+gemynd_corpus_lapis_tone .MOV
+video/quicktime
+Standard
+113.16 MB
+09 May 2026 19:21:08
+CDT
+
+
+governance_framework.mp4
+video/mp4
+Standard
+4.34 MB
+09 May 2026 17:37:56
+CDT
+
+
+harrumuk_passage.mp4
+video/mp4
+Standard
+9.23 MB
+09 May 2026 14:35:43
+CDT
+
+
+inanna_encounter_intro.mp4
+video/mp4
+Standard
+3.06 MB
+09 May 2026 14:35:40
+CDT
+
+
+kumurrah_passage.mp4
+video/mp4
+Standard
+7.02 MB
+09 May 2026 14:35:34
+CDT
+
+
+lapis_tone_rise_return_5min.wav
+audio/x-wav
+Standard
+26.46 MB
+09 May 2026 18:30:18
+CDT
+
+
+left_hero_fracture_motion.mp4
+video/mp4
+Standard
+7.54 MB
+09 May 2026 17:38:17
+CDT
+
+
+marble_tone_rise_return_5min.wav
+audio/x-wav
+Standard
+26.46 MB
+09 May 2026 18:30:17
+CDT
+
+
+me_passage_01.mp4
+video/mp4
+Standard
+1.97 MB
+09 May 2026 14:35:26
+CDT
+
+
+me_passage_03.mp4
+video/mp4
+Standard
+657.34 kB
+09 May 2026 14:35:22
+CDT
+
+
+me_passage_04.mp4
+video/mp4
+Standard
+846.48 kB
+09 May 2026 14:35:08
+CDT
+
+
+me_passage_05.mp4
+video/mp4
+Standard
+1.57 MB
+09 May 2026 14:35:00
+CDT
+
+
+meue_breath_tone_binaural.wav
+audio/wav
+Standard
+34.93 MB
+09 May 2026 15:45:51
+CDT
+
+
+meue_knew_album.mp3
+audio/mpeg
+Standard
+4.76 MB
+09 May 2026 20:02:00
+CDT
+
+
+nexus_of_perception_knew_album.mp3
+audio/mpeg
+Standard
+3.81 MB
+09 May 2026 20:02:00
+CDT
+
+
+obsidian_bed_etonal_rise_return_generator.py
+text/x-python
+Standard
+1.6 kB
+09 May 2026 17:42:06
+CDT
+
+
+obsidian_chamberplate_gate01.mov
+video/quicktime
+Standard
+2.69 MB
+09 May 2026 15:43:52
+CDT
+
