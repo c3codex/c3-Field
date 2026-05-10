@@ -1,0 +1,760 @@
+{
+  "l2StorageRowFound": true,
+  "l2ManifestFound": true,
+  "l2ManifestObjectCount": 24,
+  "codexMediaAssetRowsMigratedCount": 7,
+  "migratedMediaKeys": [
+    {
+      "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_path": "harrumuk_passage.mp4",
+      "new_bucket": "measures-media",
+      "new_storage_path": "harrumuk_passage.mp4",
+      "match_strategy": "exact_filename_match"
+    },
+    {
+      "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_path": "kumurrah_passage.mp4",
+      "new_bucket": "measures-media",
+      "new_storage_path": "kumurrah_passage.mp4",
+      "match_strategy": "exact_filename_match"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_path": "obsidian_chamberplate_gate01.mov",
+      "new_bucket": "measures-media",
+      "new_storage_path": "obsidian_chamberplate_gate01.mov",
+      "match_strategy": "exact_filename_match"
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_path": "gemynd_corpus.mp3",
+      "new_bucket": "measures-media",
+      "new_storage_path": "gemynd_corpus.mp3",
+      "match_strategy": "exact_filename_match"
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+      "previous_bucket": "l2_chamberplate",
+      "previous_storage_path": "gemynd_corpus_lapis_tone .MOV",
+      "new_bucket": "measures-media",
+      "new_storage_path": "gemynd_corpus_lapis_tone .MOV",
+      "match_strategy": "exact_filename_match"
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_lapis_tone_lapis_tone_rise_return_5min_v1",
+      "previous_bucket": "l2_chamberplate",
+      "previous_storage_path": "lapis_tone_rise_return_5min.wav",
+      "new_bucket": "measures-media",
+      "new_storage_path": "lapis_tone_rise_return_5min.wav",
+      "match_strategy": "exact_filename_match"
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+      "previous_bucket": "l2_chamberplate",
+      "previous_storage_path": "crystal_tone_rise_return_5min.wav",
+      "new_bucket": "measures-media",
+      "new_storage_path": "crystal_tone_rise_return_5min.wav",
+      "match_strategy": "exact_filename_match"
+    }
+  ],
+  "measuresSurfaceMediaMapRowsPreservedCount": 28,
+  "tempExhibitionMediaRowsUnchangedCount": 73,
+  "tempExhibitionMediaLegacyMarkedCount": 0,
+  "chamberplateFeaturedVideosSeatedCount": 1,
+  "chamberplateTonesSeatedCount": 2,
+  "unmatchedMediaRows": [
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_7a748aab_4339_44c2_8136_d45a541054e3_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "7A748AAB-4339-44C2-8136-D45A541054E3.png",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "crystal_temple.png",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_inanna_encounter_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "inanna_encounter.webp",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_inanna_temple_encounter_intro_video_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "inanna_temple_encounter_intro.mp4",
+      "media_type": "video",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_kumurrah_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "kumurrah.png",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_marble_chamber_codexstone_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "marble_chamber_codexstone.webp",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate01.jpeg",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate02.mp4",
+      "media_type": "video",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate02.webp",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate03.jpeg",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "obsidian_chamberplate_gate03.mp4",
+      "media_type": "video",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus_original_artwork.webp",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus.mp3",
+      "media_type": "audio",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus.png",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus_original_art.webp",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari_original_artwork.webp",
+      "media_type": "image",
+      "reason": "no deterministic L2 manifest match"
+    },
+    {
+      "table": "codex_media_asset",
+      "media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari.mp3",
+      "media_type": "audio",
+      "reason": "no deterministic L2 manifest match"
+    }
+  ],
+  "validationQueryOutput": [
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+      "title": "Gemynd Corpus Featured Video",
+      "media_type": "video",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "gemynd_corpus_lapis_tone .MOV",
+      "status": "active",
+      "metadata": {
+        "role": "featured_video",
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "contains_song": true,
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "manifest_size": "113.16 MB",
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "previous_bucket": "l2_chamberplate",
+        "manifest_media_type": "video/quicktime",
+        "manifest_updated_at": "09 May 2026 19:21:08 CDT",
+        "l2_manifest_authority": true,
+        "previous_storage_path": "gemynd_corpus_lapis_tone .MOV",
+        "contains_material_tone": true,
+        "manifest_storage_class": "Standard",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      }
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+      "title": "Gemynd Corpus Full Song",
+      "media_type": "audio",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "gemynd_corpus.mp3",
+      "status": "active",
+      "metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "preserved_from": "public.temp_exhibition_media",
+        "previous_bucket": "pre-codex-exhibition",
+        "previous_storage_path": "gemynd_corpus.mp3",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      }
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_lapis_tone_lapis_tone_rise_return_5min_v1",
+      "title": "Gemynd Corpus Lapis Tone",
+      "media_type": "audio",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "lapis_tone_rise_return_5min.wav",
+      "status": "active",
+      "metadata": {
+        "role": "lapis_tone",
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "audio_role": "lapis_tone",
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "manifest_size": "26.46 MB",
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "material_family": "lapis",
+        "previous_bucket": "l2_chamberplate",
+        "manifest_media_type": "audio/x-wav",
+        "manifest_updated_at": "09 May 2026 18:30:18 CDT",
+        "l2_manifest_authority": true,
+        "previous_storage_path": "lapis_tone_rise_return_5min.wav",
+        "manifest_storage_class": "Standard",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      }
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+      "title": "Percipari Material Tone",
+      "media_type": "audio",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "crystal_tone_rise_return_5min.wav",
+      "status": "active",
+      "metadata": {
+        "role": "material_tone",
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "audio_role": "material_tone",
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "manifest_size": "26.46 MB",
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "material_family": "crystal",
+        "previous_bucket": "l2_chamberplate",
+        "manifest_media_type": "audio/x-wav",
+        "manifest_updated_at": "09 May 2026 18:30:16 CDT",
+        "l2_manifest_authority": true,
+        "previous_storage_path": "crystal_tone_rise_return_5min.wav",
+        "manifest_storage_class": "Standard",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+      "title": "Harrumuk Passage",
+      "media_type": "video",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "harrumuk_passage.mp4",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 9234795,
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "previous_bucket": "pre-codex-exhibition",
+        "manifest_mime_type": "video/mp4",
+        "previous_storage_path": "harrumuk_passage.mp4",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true,
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+      "title": "Kumurrah Passage",
+      "media_type": "video",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "kumurrah_passage.mp4",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 7016086,
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "previous_bucket": "pre-codex-exhibition",
+        "manifest_mime_type": "video/mp4",
+        "previous_storage_path": "kumurrah_passage.mp4",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true,
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "title": "Obsidian Chamberplate Gate01",
+      "media_type": "video",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate01.mov",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 2690332,
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "previous_bucket": "pre-codex-exhibition",
+        "manifest_mime_type": "video/quicktime",
+        "previous_storage_path": "obsidian_chamberplate_gate01.mov",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true,
+        "r2_presence_is_not_codex_seating": true
+      }
+    }
+  ],
+  "chamberplateValidationQueryOutput": [
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "sequence_index": 20,
+      "role": "oracle_card",
+      "status": "active",
+      "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "preserved_from": "public.temp_exhibition_media",
+        "render_behavior": "image_expand",
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "sequence_index": 40,
+      "role": "original_artwork",
+      "status": "active",
+      "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus_original_artwork.webp",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "image_expand",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_01_primus_artus",
+      "sequence_index": 50,
+      "role": "full_song",
+      "status": "active",
+      "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+      "media_type": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "primus_artus.mp3",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "audio_role": "full_song",
+        "aspect_type": "audio",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "audio_play",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "sequence_index": 10,
+      "role": "featured_video",
+      "status": "active",
+      "media_key": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+      "media_type": "video",
+      "bucket": "measures-media",
+      "storage_path": "gemynd_corpus_lapis_tone .MOV",
+      "map_metadata": {
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "on_skip": "reveal_chamberplate_aspects",
+        "featured": true,
+        "on_complete": "reveal_chamberplate_aspects",
+        "skip_enabled": true,
+        "contains_song": true,
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "audio_embedded": true,
+        "render_behavior": "autoplay_after_passage",
+        "show_text_overlay": false,
+        "contains_material_tone": true,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "featured_video",
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "contains_song": true,
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "manifest_size": "113.16 MB",
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "previous_bucket": "l2_chamberplate",
+        "manifest_media_type": "video/quicktime",
+        "manifest_updated_at": "09 May 2026 19:21:08 CDT",
+        "l2_manifest_authority": true,
+        "previous_storage_path": "gemynd_corpus_lapis_tone .MOV",
+        "contains_material_tone": true,
+        "manifest_storage_class": "Standard",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "sequence_index": 20,
+      "role": "oracle_card",
+      "status": "active",
+      "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus.png",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "preserved_from": "public.temp_exhibition_media",
+        "render_behavior": "image_expand",
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "sequence_index": 40,
+      "role": "original_artwork",
+      "status": "active",
+      "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "gemynd_corpus_original_art.webp",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "image_expand",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "sequence_index": 50,
+      "role": "full_song",
+      "status": "active",
+      "media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+      "media_type": "audio",
+      "bucket": "measures-media",
+      "storage_path": "gemynd_corpus.mp3",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "audio_role": "full_song",
+        "aspect_type": "audio",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "audio_play",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "preserved_from": "public.temp_exhibition_media",
+        "previous_bucket": "pre-codex-exhibition",
+        "previous_storage_path": "gemynd_corpus.mp3",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_02_gemynd_corpus",
+      "sequence_index": 60,
+      "role": "lapis_tone",
+      "status": "active",
+      "media_key": "chamber_epithets_02_gemynd_corpus_lapis_tone_lapis_tone_rise_return_5min_v1",
+      "media_type": "audio",
+      "bucket": "measures-media",
+      "storage_path": "lapis_tone_rise_return_5min.wav",
+      "map_metadata": {
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "audio_role": "lapis_tone",
+        "aspect_type": "audio",
+        "mix_behavior": "underlay",
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "aspect_support": true,
+        "default_volume": 0.22,
+        "available_after": "featured_video_complete_or_skip",
+        "material_family": "lapis",
+        "render_behavior": "audio_play",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "lapis_tone",
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "audio_role": "lapis_tone",
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "manifest_size": "26.46 MB",
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "material_family": "lapis",
+        "previous_bucket": "l2_chamberplate",
+        "manifest_media_type": "audio/x-wav",
+        "manifest_updated_at": "09 May 2026 18:30:18 CDT",
+        "l2_manifest_authority": true,
+        "previous_storage_path": "lapis_tone_rise_return_5min.wav",
+        "manifest_storage_class": "Standard",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "sequence_index": 20,
+      "role": "oracle_card",
+      "status": "active",
+      "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "preserved_from": "public.temp_exhibition_media",
+        "render_behavior": "image_expand",
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "sequence_index": 40,
+      "role": "original_artwork",
+      "status": "active",
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari_original_artwork.webp",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "aspect_type": "image",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "image_expand",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "sequence_index": 50,
+      "role": "full_song",
+      "status": "active",
+      "media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "media_type": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storage_path": "percipari.mp3",
+      "map_metadata": {
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "audio_role": "full_song",
+        "aspect_type": "audio",
+        "available_after": "featured_video_complete_or_skip",
+        "render_behavior": "audio_play",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "sequence_index": 60,
+      "role": "material_tone",
+      "status": "active",
+      "media_key": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+      "media_type": "audio",
+      "bucket": "measures-media",
+      "storage_path": "crystal_tone_rise_return_5min.wav",
+      "map_metadata": {
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "audio_role": "material_tone",
+        "aspect_type": "audio",
+        "mix_behavior": "underlay",
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "aspect_support": true,
+        "default_volume": 0.22,
+        "available_after": "featured_video_complete_or_skip",
+        "material_family": "crystal",
+        "render_behavior": "audio_play",
+        "show_over_video": false,
+        "frontend_hardcode_allowed": false
+      },
+      "asset_metadata": {
+        "role": "material_tone",
+        "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+        "audio_role": "material_tone",
+        "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+        "manifest_size": "26.46 MB",
+        "migration_oar": "oar2_migrate_exhibition_media_references_to_l2_v1",
+        "material_family": "crystal",
+        "previous_bucket": "l2_chamberplate",
+        "manifest_media_type": "audio/x-wav",
+        "manifest_updated_at": "09 May 2026 18:30:16 CDT",
+        "l2_manifest_authority": true,
+        "previous_storage_path": "crystal_tone_rise_return_5min.wav",
+        "manifest_storage_class": "Standard",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "exact_filename_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      }
+    }
+  ],
+  "mappingsMutated": false,
+  "tempExhibitionMediaMutated": false,
+  "frontendMutationPerformed": false
+}
