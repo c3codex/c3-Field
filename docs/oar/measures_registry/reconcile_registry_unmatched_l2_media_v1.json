@@ -3,25 +3,35 @@
   "l2ManifestFound": true,
   "manifestSource": "cloudflare_r2_list_objects_v2",
   "manifestPath": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
-  "r2ObjectCount": 38,
-  "exactMediaRowsMigratedCount": 2,
+  "r2ObjectCount": 39,
+  "exactMediaRowsMigratedCount": 3,
   "migratedRows": [
     {
       "id": "4164fbf4-dff5-4ac8-8c53-48f2f3c3040b",
       "registry_key": "measures_registry_landing",
       "encounter_key": "landing_root",
       "media_role": "explainer_video",
-      "previous_bucket": "measures-registry",
+      "previous_bucket": "measures-media",
       "previous_storage_path": "structural_coherence_explainer_45s.mp4",
       "new_bucket": "measures-media",
       "new_storage_path": "structural_coherence_explainer_45s.mp4"
+    },
+    {
+      "id": "ad23610c-f66b-48d8-a3c9-2e75df80ff04",
+      "registry_key": "measures_registry_landing",
+      "encounter_key": "landing_root",
+      "media_role": "epigraph_video",
+      "previous_bucket": "measures-registry",
+      "previous_storage_path": "registry_epigraph_fracture_to_alignment_15s.mp4",
+      "new_bucket": "measures-media",
+      "new_storage_path": "registry_epigraph_fracture_to_alignment_15s.mp4"
     },
     {
       "id": "c42ae734-cad3-45aa-80d1-d2393f2e3985",
       "registry_key": "measures_registry_landing",
       "encounter_key": "landing_root",
       "media_role": "measured_hero_motion_graphic",
-      "previous_bucket": "measures-registry",
+      "previous_bucket": "measures-media",
       "previous_storage_path": "right_measured_hero_motion_graphic.mp4",
       "new_bucket": "measures-media",
       "new_storage_path": "right_measured_hero_motion_graphic.mp4"
@@ -30,17 +40,12 @@
   "integrityGovernanceIntroUsageStanding": {
     "presentInMediaMap": true,
     "isActive": true,
-    "presentInR2": false,
+    "presentInR2": true,
     "action": "not_mutated",
-    "standing": "active_reference_missing_l2_payload"
+    "standing": "active_reference_present_in_r2_but_not_routed_for_migration"
   },
   "imageRowsPreservedCount": 12,
   "unmatchedRowsRemaining": [
-    {
-      "id": "ad23610c-f66b-48d8-a3c9-2e75df80ff04",
-      "storage_path": "registry_epigraph_fracture_to_alignment_15s.mp4",
-      "reason": "exact object key not returned by R2 list"
-    },
     {
       "id": "1d78c181-7f1f-4651-83d2-9f5836790233",
       "registry_key": "landing_intro_video",
@@ -48,17 +53,6 @@
       "media_role": "hero_video",
       "storage_bucket": "measures-registry",
       "storage_path": "integrity_governance_intro.mp4",
-      "mime_type": "video/mp4",
-      "is_active": true,
-      "reason": "remaining non-L2 heavy media reference"
-    },
-    {
-      "id": "ad23610c-f66b-48d8-a3c9-2e75df80ff04",
-      "registry_key": "measures_registry_landing",
-      "encounter_key": "landing_root",
-      "media_role": "epigraph_video",
-      "storage_bucket": "measures-registry",
-      "storage_path": "registry_epigraph_fracture_to_alignment_15s.mp4",
       "mime_type": "video/mp4",
       "is_active": true,
       "reason": "remaining non-L2 heavy media reference"
@@ -112,7 +106,7 @@
         "oar_role": "explainer_video",
         "storage_size": 47144235,
         "migration_oar": "oar2_reconcile_registry_unmatched_l2_media_v1",
-        "previous_bucket": "measures-registry",
+        "previous_bucket": "measures-media",
         "heavy_media_only": true,
         "previous_storage_path": "structural_coherence_explainer_45s.mp4",
         "migrated_to_storage_key": "l2_shared_media",
@@ -150,6 +144,33 @@
       "updated_at": "2026-05-05T18:49:32.302845+00:00"
     },
     {
+      "id": "ad23610c-f66b-48d8-a3c9-2e75df80ff04",
+      "registry_key": "measures_registry_landing",
+      "encounter_key": "landing_root",
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": "epigraph_video",
+      "storage_bucket": "measures-media",
+      "storage_path": "registry_epigraph_fracture_to_alignment_15s.mp4",
+      "mime_type": "video/mp4",
+      "sort_order": 41,
+      "is_active": true,
+      "metadata": {
+        "source": "landing_epigraph_split_hero_v1",
+        "oar_role": "epigraph_video",
+        "storage_size": 24980322,
+        "migration_oar": "oar2_reconcile_registry_unmatched_l2_media_v1",
+        "previous_bucket": "measures-registry",
+        "heavy_media_only": true,
+        "previous_storage_path": "registry_epigraph_fracture_to_alignment_15s.mp4",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "r2_exact_object_key_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      },
+      "created_at": "2026-05-06T04:05:37.84588+00:00",
+      "updated_at": "2026-05-06T04:05:37.84588+00:00"
+    },
+    {
       "id": "c42ae734-cad3-45aa-80d1-d2393f2e3985",
       "registry_key": "measures_registry_landing",
       "encounter_key": "landing_root",
@@ -168,7 +189,7 @@
         "resolved_path": "right_measured_hero_motion_graphic.mp4",
         "expected_asset": "measured_hero_motion_graphic.mp4",
         "resolved_asset": "right_measured_hero_motion_graphic.mp4",
-        "previous_bucket": "measures-registry",
+        "previous_bucket": "measures-media",
         "accepted_aliases": [
           "right_measured_hero_motion_graphic.mp4"
         ],

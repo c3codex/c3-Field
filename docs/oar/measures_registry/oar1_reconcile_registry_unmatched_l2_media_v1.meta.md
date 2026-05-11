@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: execution_closeout
 document_scope: measures_registry_l2_media_reconciliation
 title: OAR1 - Reconcile Registry Unmatched L2 Media
-status: completed_partial_r2_exact_matches
+status: completed_corrected_r2_exact_matches
 version: v1
 source_oar2: oar2_reconcile_registry_unmatched_l2_media_v1.meta.md
 operator: op044
@@ -14,7 +14,7 @@ executor: Cody
 
 ## Result
 
-Measures Registry unmatched heavy media reconciliation completed against live Cloudflare R2 listing.
+Measures Registry unmatched heavy media reconciliation was rerun against live Cloudflare R2 listing after the corrected bucket objects were added.
 
 The routed manifest was refreshed from R2 `ListObjectsV2` output:
 
@@ -32,20 +32,27 @@ L2 storage row found: yes
 
 L2 manifest found: yes
 
-R2 object count: 38
+R2 object count: 39
 
-Exact media rows migrated count: 2
+Exact media rows processed count: 3
+
+Newly migrated from non-L2 storage on this rerun: 1
 
 Image rows preserved count: 12
 
 ## Migrated Rows
 
-The following exact R2 object-key matches were migrated to `storage_bucket = measures-media`:
+The following exact R2 object-key matches were processed to `storage_bucket = measures-media`:
 
 - `structural_coherence_explainer_45s.mp4`
+- `registry_epigraph_fracture_to_alignment_15s.mp4`
 - `right_measured_hero_motion_graphic.mp4`
 
-Both rows preserved row id, registry key, encounter key, media role, status, sort order, and prior metadata.
+`registry_epigraph_fracture_to_alignment_15s.mp4` was the newly effective migration in this rerun, moving from `measures-registry` to `measures-media` after the corrected exact object key appeared in R2.
+
+`structural_coherence_explainer_45s.mp4` and `right_measured_hero_motion_graphic.mp4` were already seated on `measures-media` by the prior execution and were revalidated by the executor.
+
+All processed rows preserved row id, registry key, encounter key, media role, status, sort order, and prior metadata.
 
 Migration metadata was added:
 
@@ -60,19 +67,12 @@ Migration metadata was added:
 
 ## Not Migrated
 
-`registry_epigraph_fracture_to_alignment_15s.mp4`
-
-- active DB row exists
-- exact object key was not returned by live R2 listing
-- R2 returned `registry_epigraph_fracture_to_alignment_15s.mp4.mp4`, which was not treated as an exact match
-- not mutated
-
 `integrity_governance_intro.mp4`
 
 - active DB row exists
-- exact object key was not returned by live R2 listing
+- exact object key is now present in live R2 listing
 - not mutated
-- standing: active reference missing L2 payload
+- standing: active reference present in R2 but not routed for migration by this OAR2
 
 ## Evidence
 

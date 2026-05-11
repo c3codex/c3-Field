@@ -82,6 +82,13 @@ Standard
 2026-05-09T19:35:40.398Z
 UTC
 
+integrity_governance_intro.mp4
+video/mp4
+Standard
+33589912 bytes
+2026-05-11T14:48:44.855Z
+UTC
+
 kumurrah_passage.mp4
 video/mp4
 Standard
@@ -222,11 +229,11 @@ Standard
 2026-05-09T20:36:17.391Z
 UTC
 
-registry_epigraph_fracture_to_alignment_15s.mp4.mp4
+registry_epigraph_fracture_to_alignment_15s.mp4
 video/mp4
 Standard
 24980322 bytes
-2026-05-10T23:21:45.738Z
+2026-05-11T14:41:16.624Z
 UTC
 
 returning_again_knew_album.mp3
