@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: execution_closeout
 document_scope: shared_l2_runtime_media_delivery
 title: OAR1 - Validate L2 Runtime Media Delivery
-status: completed_runtime_resolver_repaired_public_route_required
+status: completed_runtime_resolver_repaired_public_route_embedded
 version: v1
 source_oar2: oar2_validate_l2_runtime_media_delivery_v1.meta.md
 operator: op044
@@ -141,3 +141,33 @@ Supabase storage handling remains supported for non-R2 buckets.
 R2 heavy media rows no longer route through Supabase storage URL construction.
 
 Runtime delivery still requires the public R2 base URL and verified CORS/public access configuration.
+
+## Follow-Up Correction
+
+After Cloudflare CORS policy and the public R2 URL were configured, live media still did not load.
+
+Cause:
+
+- `.env.cloudflare` contained `VITE_R2_PUBLIC_BASE_URL`.
+- Vite did not load `.env.cloudflare` by default.
+- The committed bundles therefore still contained the safe-failure empty R2 base value.
+
+Correction:
+
+- `vite.config.ts` now reads `.env.cloudflare` through `dotenv`.
+- Only `VITE_R2_PUBLIC_BASE_URL` is consumed from that file for client build output.
+- Cloudflare/R2 secret values in `.env.cloudflare` remain unexposed.
+- Registry and Inanna bundles were rebuilt.
+
+Validation:
+
+- `VITE_R2_PUBLIC_BASE_URL` present: yes
+- generated JS bundles containing configured R2 base URL: 2 of 2
+- `npm.cmd run build:registry`: passed
+- `npm.cmd run build:inanna`: passed
+
+Public sample delivery previously returned:
+
+- status: `200`
+- content type: `video/mp4`
+- accept ranges: `bytes`
