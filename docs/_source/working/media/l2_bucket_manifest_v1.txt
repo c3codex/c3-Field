@@ -1,191 +1,266 @@
+all_four_tones_standing_wave_rise_return_5min.wav
+audio/wav
+Standard
+26460044 bytes
+2026-05-09T23:30:12.781Z
+UTC
+
 c3_field.mp4
 video/mp4
 Standard
-5.24 MB
-09 May 2026 17:38:10
-CDT
-
+5241718 bytes
+2026-05-09T22:38:10.653Z
+UTC
 
 crystal_tone_rise_return_5min.wav
-audio/x-wav
+audio/wav
 Standard
-26.46 MB
-09 May 2026 18:30:16
-CDT
-
+26460044 bytes
+2026-05-09T23:30:16.380Z
+UTC
 
 epithet_passage_01.mp4
 video/mp4
 Standard
-1.77 MB
-09 May 2026 14:36:19
-CDT
-
+1768976 bytes
+2026-05-09T19:36:19.571Z
+UTC
 
 gates_passage_01.mp4
 video/mp4
 Standard
-4.37 MB
-09 May 2026 14:36:18
-CDT
-
+4372033 bytes
+2026-05-09T19:36:18.934Z
+UTC
 
 gates_passage_07.mp4
 video/mp4
 Standard
-5.04 MB
-09 May 2026 14:35:54
-CDT
-
-
-gemynd_corpus.mp3
-audio/mpeg
-Standard
-5.67 MB
-09 May 2026 14:34:10
-CDT
-
+5039096 bytes
+2026-05-09T19:35:54.566Z
+UTC
 
 gemynd_corpus_knew_album.mp3
 audio/mpeg
 Standard
-5.67 MB
-09 May 2026 20:01:59
-CDT
-
+5673309 bytes
+2026-05-10T01:01:59.459Z
+UTC
 
 gemynd_corpus_lapis_tone .MOV
 video/quicktime
 Standard
-113.16 MB
-09 May 2026 19:21:08
-CDT
+113156298 bytes
+2026-05-10T00:21:08.045Z
+UTC
 
+gemynd_corpus.mp3
+audio/mpeg
+Standard
+5673309 bytes
+2026-05-09T19:34:10.993Z
+UTC
 
 governance_framework.mp4
 video/mp4
 Standard
-4.34 MB
-09 May 2026 17:37:56
-CDT
-
+4337354 bytes
+2026-05-09T22:37:56.630Z
+UTC
 
 harrumuk_passage.mp4
 video/mp4
 Standard
-9.23 MB
-09 May 2026 14:35:43
-CDT
-
+9234795 bytes
+2026-05-09T19:35:43.715Z
+UTC
 
 inanna_encounter_intro.mp4
 video/mp4
 Standard
-3.06 MB
-09 May 2026 14:35:40
-CDT
-
+3062399 bytes
+2026-05-09T19:35:40.398Z
+UTC
 
 kumurrah_passage.mp4
 video/mp4
 Standard
-7.02 MB
-09 May 2026 14:35:34
-CDT
-
+7016086 bytes
+2026-05-09T19:35:34.392Z
+UTC
 
 lapis_tone_rise_return_5min.wav
-audio/x-wav
+audio/wav
 Standard
-26.46 MB
-09 May 2026 18:30:18
-CDT
-
+26460044 bytes
+2026-05-09T23:30:18.061Z
+UTC
 
 left_hero_fracture_motion.mp4
 video/mp4
 Standard
-7.54 MB
-09 May 2026 17:38:17
-CDT
-
+7537934 bytes
+2026-05-09T22:38:17.923Z
+UTC
 
 marble_tone_rise_return_5min.wav
-audio/x-wav
+audio/wav
 Standard
-26.46 MB
-09 May 2026 18:30:17
-CDT
-
+26460044 bytes
+2026-05-09T23:30:17.995Z
+UTC
 
 me_passage_01.mp4
 video/mp4
 Standard
-1.97 MB
-09 May 2026 14:35:26
-CDT
-
+1974409 bytes
+2026-05-09T19:35:26.989Z
+UTC
 
 me_passage_03.mp4
 video/mp4
 Standard
-657.34 kB
-09 May 2026 14:35:22
-CDT
-
+657343 bytes
+2026-05-09T19:35:22.857Z
+UTC
 
 me_passage_04.mp4
 video/mp4
 Standard
-846.48 kB
-09 May 2026 14:35:08
-CDT
-
+846478 bytes
+2026-05-09T19:35:08.037Z
+UTC
 
 me_passage_05.mp4
 video/mp4
 Standard
-1.57 MB
-09 May 2026 14:35:00
-CDT
-
+1572273 bytes
+2026-05-09T19:35:00.886Z
+UTC
 
 meue_breath_tone_binaural.wav
 audio/wav
 Standard
-34.93 MB
-09 May 2026 15:45:51
-CDT
-
+34927244 bytes
+2026-05-09T20:45:51.022Z
+UTC
 
 meue_knew_album.mp3
 audio/mpeg
 Standard
-4.76 MB
-09 May 2026 20:02:00
-CDT
-
+4761916 bytes
+2026-05-10T01:02:00.046Z
+UTC
 
 nexus_of_perception_knew_album.mp3
 audio/mpeg
 Standard
-3.81 MB
-09 May 2026 20:02:00
-CDT
-
+3807285 bytes
+2026-05-10T01:02:00.335Z
+UTC
 
 obsidian_bed_etonal_rise_return_generator.py
-text/x-python
+application/octet-stream
 Standard
-1.6 kB
-09 May 2026 17:42:06
-CDT
-
+1604 bytes
+2026-05-09T22:42:06.946Z
+UTC
 
 obsidian_chamberplate_gate01.mov
 video/quicktime
 Standard
-2.69 MB
-09 May 2026 15:43:52
-CDT
+2690332 bytes
+2026-05-09T20:43:52.343Z
+UTC
+
+obsidian_tone_rise_return_5min.wav
+audio/wav
+Standard
+26460044 bytes
+2026-05-09T22:44:43.854Z
+UTC
+
+percipari_crystal_tone.MOV
+video/quicktime
+Standard
+71003414 bytes
+2026-05-10T00:20:58.229Z
+UTC
+
+percipari_knew_album.mp3
+audio/mpeg
+Standard
+5660104 bytes
+2026-05-10T01:02:00.919Z
+UTC
+
+percipari.mp3
+audio/mpeg
+Standard
+5660104 bytes
+2026-05-09T20:36:09.531Z
+UTC
+
+primus_artus_knew_album.mp3
+audio/mpeg
+Standard
+4538573 bytes
+2026-05-10T01:02:01.037Z
+UTC
+
+primus_artus_obsidian_tone.MOV
+video/quicktime
+Standard
+86889116 bytes
+2026-05-10T15:59:44.247Z
+UTC
+
+primus_artus.mp3
+audio/mpeg
+Standard
+4538573 bytes
+2026-05-09T20:36:17.391Z
+UTC
+
+registry_epigraph_fracture_to_alignment_15s.mp4.mp4
+video/mp4
+Standard
+24980322 bytes
+2026-05-10T23:21:45.738Z
+UTC
+
+returning_again_knew_album.mp3
+audio/mpeg
+Standard
+4588380 bytes
+2026-05-10T01:02:02.061Z
+UTC
+
+right_measured_hero_motion_graphic.mp4
+video/mp4
+Standard
+2977050 bytes
+2026-05-09T22:37:23.344Z
+UTC
+
+rise_inanna_knew _album.mp3
+audio/mpeg
+Standard
+7524032 bytes
+2026-05-10T01:02:04.349Z
+UTC
+
+structural_coherence_explainer_45s.mp4
+video/mp4
+Standard
+47144235 bytes
+2026-05-09T22:39:49.312Z
+UTC
+
+the_last_oracle_knew_album.mp3
+audio/mpeg
+Standard
+4704793 bytes
+2026-05-10T01:02:04.054Z
+UTC
 
