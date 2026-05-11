@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties, FormEvent } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
+import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
@@ -262,8 +263,10 @@ function asRecordArray(value: unknown) {
 }
 
 function mediaUrl(row?: MediaRow) {
-  if (!row?.storage_bucket || !row.storage_path) return null
-  return supabase.storage.from(row.storage_bucket).getPublicUrl(row.storage_path).data.publicUrl
+  return resolveRuntimeMediaUrl({
+    bucketName: row?.storage_bucket,
+    storagePath: row?.storage_path,
+  })
 }
 
 function cssTokenName(tokenKey: string, mediaQuery: string | null) {

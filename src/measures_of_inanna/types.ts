@@ -128,6 +128,7 @@ export type RuntimeMediaItem = {
   mediaType: string
   bucketName: string
   storagePath: string
+  storageProvider?: string | null
   renderOrder: number
   isActive?: boolean
   source?: "registry_media" | "temp_exhibition_media"

@@ -18,12 +18,17 @@ export default defineConfig(({ mode }) => {
     env.VITE_SUPABASE_ANON_KEY ||
     env.SUPABASE_ANON_KEY ||
     ""
+  const r2PublicBaseUrl =
+    process.env.VITE_R2_PUBLIC_BASE_URL ||
+    env.VITE_R2_PUBLIC_BASE_URL ||
+    ""
 
   return {
     plugins: [react()],
     define: {
       "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(supabaseUrl),
       "import.meta.env.VITE_SUPABASE_ANON_KEY": JSON.stringify(supabaseAnonKey),
+      "import.meta.env.VITE_R2_PUBLIC_BASE_URL": JSON.stringify(r2PublicBaseUrl),
     },
     resolve: {
       alias: {

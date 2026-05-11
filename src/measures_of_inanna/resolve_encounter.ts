@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client"
+import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type {
   ChamberplateContract,
   CaptureContract,
@@ -54,6 +55,7 @@ type RegistryMediaRow = {
         media_type: string
         bucket: string
         storage_path: string
+        storage_provider: string | null
         public_url: string | null
         poster_url: string | null
         status: string | null
@@ -65,6 +67,7 @@ type RegistryMediaRow = {
         media_type: string
         bucket: string
         storage_path: string
+        storage_provider: string | null
         public_url: string | null
         poster_url: string | null
         status: string | null
@@ -207,15 +210,7 @@ function resolveAutoAdvanceTo(metadata: JsonRecord): string | null {
 }
 
 export function toPublicMediaUrl(item: RuntimeMediaItem): string {
-  if (item.publicUrl) return item.publicUrl
-
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-
-  if (!supabaseUrl || !item.bucketName || !item.storagePath) {
-    return ""
-  }
-
-  return `${supabaseUrl}/storage/v1/object/public/${item.bucketName}/${item.storagePath}`
+  return resolveRuntimeMediaUrl(item) ?? ""
 }
 
 function registryMediaAsset(row: RegistryMediaRow) {
@@ -233,6 +228,7 @@ function registryMediaToRuntime(row: RegistryMediaRow): RuntimeMediaItem | null 
     mediaType: asset.media_type,
     bucketName: asset.bucket,
     storagePath: asset.storage_path,
+    storageProvider: asset.storage_provider,
     renderOrder: row.sequence_index ?? 999,
     isActive: row.status !== "inactive" && asset.status !== "inactive",
     source: "registry_media",
@@ -307,7 +303,7 @@ export async function resolveEncounter(registryKey: string): Promise<EncounterRe
   if (isChamberplate) {
     const { data: registryMediaData, error: registryMediaError } = await supabase
       .from("measures_surface_media_map")
-      .select("surface_key, sequence_index, role, status, metadata, codex_media_asset!inner(media_key, title, media_type, bucket, storage_path, public_url, poster_url, status, metadata)")
+      .select("surface_key, sequence_index, role, status, metadata, codex_media_asset!inner(media_key, title, media_type, bucket, storage_path, storage_provider, public_url, poster_url, status, metadata)")
       .in("surface_key", [resolvedRegistryKey, encounter.encounter_key])
       .eq("status", "active")
       .order("sequence_index", { ascending: true })
