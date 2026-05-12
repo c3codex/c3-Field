@@ -1249,7 +1249,6 @@ export default function GenericEncounter({
 
       {!isIntroEncounter &&
       !isCrystalTempleHome &&
-      !isTempleHarrumukPassage &&
       showActionRail ? (
         <ActionRail actions={railActions} onAction={handleAction} />
       ) : null}

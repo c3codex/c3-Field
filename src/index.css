@@ -3957,11 +3957,6 @@ body,
   overflow-y: auto;
 }
 
-.passage .actions,
-.passage .encounter-action {
-  display: none !important;
-}
-
 @media (max-width: 760px) {
   .registry-process-log {
     padding: calc(var(--registry-header-height) + 1rem) 1rem 2rem;
