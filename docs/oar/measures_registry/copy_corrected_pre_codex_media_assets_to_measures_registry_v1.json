@@ -1,0 +1,143 @@
+{
+  "oar2": "oar2_copy_corrected_pre_codex_media_assets_to_measures_registry_v1",
+  "sourceBucket": "pre-codex-exhibition",
+  "targetBucket": "measures-registry",
+  "targetPrefix": "measures_registry/pre_codex_exhibition/images",
+  "expectedCorrectionCount": 3,
+  "verifiedSourceCount": 2,
+  "verifiedSources": [
+    {
+      "source_path": "inanna_encounter.webp",
+      "target_filename": "inanna_epigraph.webp",
+      "normalization": "inanna_encounter_source_normalized_to_inanna_epigraph_target",
+      "source_bucket": "pre-codex-exhibition",
+      "source_verification": {
+        "bucket": "pre-codex-exhibition",
+        "path": "inanna_encounter.webp",
+        "exists": false,
+        "nonzero_size": false,
+        "retrievable": false,
+        "reason": "object missing"
+      },
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+    },
+    {
+      "source_path": "obsidian_chamberplate_gate01.webp",
+      "target_filename": "obsidian_chamberplate_gate01.webp",
+      "normalization": "filename_preserved",
+      "source_bucket": "pre-codex-exhibition",
+      "source_verification": {
+        "bucket": "pre-codex-exhibition",
+        "path": "obsidian_chamberplate_gate01.webp",
+        "name": "obsidian_chamberplate_gate01.webp",
+        "size": 462136,
+        "mimetype": "image/webp",
+        "updated_at": "2026-05-12T03:56:17.985Z",
+        "exists": true,
+        "nonzero_size": true,
+        "signed_url_generated": true,
+        "retrievable": true,
+        "retrieval_status": 200,
+        "retrieved_bytes": 462136
+      },
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+    },
+    {
+      "source_path": "og.webp",
+      "target_filename": "og.webp",
+      "normalization": "filename_preserved",
+      "source_bucket": "pre-codex-exhibition",
+      "source_verification": {
+        "bucket": "pre-codex-exhibition",
+        "path": "og.webp",
+        "name": "og.webp",
+        "size": 22896,
+        "mimetype": "image/webp",
+        "updated_at": "2026-05-12T03:48:39.563Z",
+        "exists": true,
+        "nonzero_size": true,
+        "signed_url_generated": true,
+        "retrievable": true,
+        "retrieval_status": 200,
+        "retrieved_bytes": 22896
+      },
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/og.webp"
+    }
+  ],
+  "copiedTargetCount": 2,
+  "copiedTargets": [
+    {
+      "source_path": "obsidian_chamberplate_gate01.webp",
+      "target_filename": "obsidian_chamberplate_gate01.webp",
+      "normalization": "filename_preserved",
+      "source_bucket": "pre-codex-exhibition",
+      "source_size": 462136,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+      "action": "copied",
+      "target_verification": {
+        "bucket": "measures-registry",
+        "path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+        "name": "obsidian_chamberplate_gate01.webp",
+        "size": 462136,
+        "mimetype": "image/webp",
+        "updated_at": "2026-05-12T04:19:00.058Z",
+        "exists": true,
+        "nonzero_size": true,
+        "signed_url_generated": true,
+        "retrievable": true,
+        "retrieval_status": 200,
+        "retrieved_bytes": 462136
+      }
+    },
+    {
+      "source_path": "og.webp",
+      "target_filename": "og.webp",
+      "normalization": "filename_preserved",
+      "source_bucket": "pre-codex-exhibition",
+      "source_size": 22896,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/og.webp",
+      "action": "copied",
+      "target_verification": {
+        "bucket": "measures-registry",
+        "path": "measures_registry/pre_codex_exhibition/images/og.webp",
+        "name": "og.webp",
+        "size": 22896,
+        "mimetype": "image/webp",
+        "updated_at": "2026-05-12T04:19:02.184Z",
+        "exists": true,
+        "nonzero_size": true,
+        "signed_url_generated": true,
+        "retrievable": true,
+        "retrieval_status": 200,
+        "retrieved_bytes": 22896
+      }
+    }
+  ],
+  "verifiedTargetCount": 2,
+  "copiedCountEqualsExpectedCount": false,
+  "normalizedEpigraphNaming": {
+    "source_path": "inanna_encounter.webp",
+    "target_filename": "inanna_epigraph.webp",
+    "duplicate_epigraph_remap_recommendation_active": false
+  },
+  "heldCorrections": [
+    {
+      "source_path": "inanna_encounter.webp",
+      "target_filename": "inanna_epigraph.webp",
+      "normalization": "inanna_encounter_source_normalized_to_inanna_epigraph_target",
+      "target_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+      "hold_reason": "object missing"
+    }
+  ],
+  "dbMutationPerformed": false,
+  "dbMutationCount": 0,
+  "frontendMutationPerformed": false,
+  "frontendMutationCount": 0,
+  "mediaResolverMutationPerformed": false,
+  "sourceObjectsDeleted": false
+}
