@@ -1,0 +1,341 @@
+{
+  "oar2": "oar2_correct_measures_registry_media_rows_and_migrate_inanna_fallbacks_v1",
+  "generatedAt": "2026-05-12T06:33:34.644Z",
+  "mutationPerformed": true,
+  "sourceObjectsDeleted": false,
+  "frontendMutationPerformed": false,
+  "resolverMutationPerformed": false,
+  "broadFallbackMigrationPerformed": false,
+  "copyPerformed": false,
+  "heroVideo": {
+    "corrected": true,
+    "previous": {
+      "storage_bucket": "measures-registry",
+      "storage_path": "integrity_governance_intro.mp4"
+    },
+    "current": {
+      "storage_bucket": "measures-media",
+      "storage_path": "integrity_governance_intro.mp4",
+      "is_active": true
+    },
+    "expectedR2Url": "https://media.c3field.online/integrity_governance_intro.mp4",
+    "expectedR2Retrieval": {
+      "tested": true,
+      "ok": true,
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": "33589912"
+    },
+    "runtimeUrl": "https://media.c3field.online/integrity_governance_intro.mp4",
+    "runtimeRetrieval": {
+      "tested": true,
+      "ok": true,
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": "33589912"
+    },
+    "storageProviderColumnPresent": false
+  },
+  "staleRows": {
+    "activeField": "is_active",
+    "heldCount": 6,
+    "held": [
+      {
+        "media_role": "registry_banner",
+        "storage_bucket": "measures-registry-public",
+        "storage_path": "measures_registry/brand/measures_registry_banner.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "76"
+        },
+        "previous_is_active": true,
+        "current_is_active": false,
+        "non_destructive_hold": true
+      },
+      {
+        "media_role": "social_card",
+        "storage_bucket": "measures-registry-public",
+        "storage_path": "measures_registry/brand/measures_registry_social_card.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "76"
+        },
+        "previous_is_active": true,
+        "current_is_active": false,
+        "non_destructive_hold": true
+      },
+      {
+        "media_role": "paragraph_cover",
+        "storage_bucket": "measures-registry-public",
+        "storage_path": "measures_registry/images/paragraph_cover_agents_of_chaos.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "76"
+        },
+        "previous_is_active": true,
+        "current_is_active": false,
+        "non_destructive_hold": true
+      },
+      {
+        "media_role": "path_choice_background",
+        "storage_bucket": "measures-registry",
+        "storage_path": "more_vs_coherence_path.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "previous_is_active": true,
+        "current_is_active": false,
+        "non_destructive_hold": true
+      },
+      {
+        "media_role": "hero_image",
+        "storage_bucket": "measures-registry",
+        "storage_path": "hero_fracture_measure.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "previous_is_active": true,
+        "current_is_active": false,
+        "non_destructive_hold": true
+      },
+      {
+        "media_role": "hero_measured_image",
+        "storage_bucket": "measures-registry",
+        "storage_path": "measured_hero_right.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "previous_is_active": true,
+        "current_is_active": false,
+        "non_destructive_hold": true
+      }
+    ]
+  },
+  "seatedAssets": {
+    "seated": true,
+    "upsertedMediaAssetCount": 2,
+    "upsertedMappingCount": 2,
+    "validationsBefore": [
+      {
+        "media_key": "temple_antechamber_still_image_v1",
+        "bucket": "measures-registry",
+        "storage_path": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "138916"
+        }
+      },
+      {
+        "media_key": "epigraph_still_image_support_v1",
+        "bucket": "measures-registry",
+        "storage_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "116152"
+        }
+      }
+    ],
+    "validationWithRetrieval": [
+      {
+        "surface_key": "epigraph",
+        "media_key": "epigraph_still_image_support_v1",
+        "role": "image",
+        "map_status": "active",
+        "media_type": "image",
+        "storage_provider": "supabase",
+        "bucket": "measures-registry",
+        "storage_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "asset_status": "active",
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "116152"
+        }
+      },
+      {
+        "surface_key": "temple_antechamber",
+        "media_key": "temple_antechamber_still_image_v1",
+        "role": "image",
+        "map_status": "active",
+        "media_type": "image",
+        "storage_provider": "supabase",
+        "bucket": "measures-registry",
+        "storage_path": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "asset_status": "active",
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "138916"
+        }
+      }
+    ]
+  },
+  "fallback": {
+    "deactivatedFallbackCount": 0,
+    "reasonFallbacksRemainActive": "current resolve_encounter runtime only reads measures_surface_media_map for surface_type=chamberplate; temple_antechamber is threshold and epigraph is aspect, so disabling fallback would remove current runtime media before a resolver OAR.",
+    "rows": [
+      {
+        "id": "aefaa611-6274-4391-9005-b7975ad4ca5d",
+        "surface_key": "epigraph",
+        "media_type": "video",
+        "bucket_name": "pre-codex-exhibition",
+        "storage_path": "inanna_encounter_intro.mp4",
+        "is_active": true,
+        "standing": "held; no valid video replacement authorized"
+      },
+      {
+        "id": "8e65a1ff-9f57-4638-8b52-5fd0518be436",
+        "surface_key": "temple_antechamber",
+        "media_type": "image",
+        "bucket_name": "pre-codex-exhibition",
+        "storage_path": "antechamber.png",
+        "is_active": true,
+        "standing": "left active until resolver supports governed non-chamberplate mappings"
+      }
+    ]
+  },
+  "epigraphVideoStanding": {
+    "storage_path": "inanna_encounter_intro.mp4",
+    "standing": "held",
+    "reason": "no valid epigraph video object authorized; inanna_epigraph.webp seated as image support only"
+  },
+  "copyDecisionAssetsHeld": [
+    "obsidian_chamberplate_gate01 (1).jpeg",
+    "temple_antechamber_return.webp"
+  ],
+  "registryValidation": [
+    {
+      "media_role": "hero_image",
+      "storage_bucket": "measures-registry",
+      "storage_path": "hero_fracture_measure.webp",
+      "is_active": false,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/hero_fracture_measure.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "69"
+      }
+    },
+    {
+      "media_role": "hero_measured_image",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measured_hero_right.webp",
+      "is_active": false,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measured_hero_right.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "69"
+      }
+    },
+    {
+      "media_role": "hero_video",
+      "storage_bucket": "measures-media",
+      "storage_path": "integrity_governance_intro.mp4",
+      "is_active": true,
+      "resolvedUrl": "https://media.c3field.online/integrity_governance_intro.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "33589912"
+      }
+    },
+    {
+      "media_role": "paragraph_cover",
+      "storage_bucket": "measures-registry-public",
+      "storage_path": "measures_registry/images/paragraph_cover_agents_of_chaos.webp",
+      "is_active": false,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/images/paragraph_cover_agents_of_chaos.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "76"
+      }
+    },
+    {
+      "media_role": "path_choice_background",
+      "storage_bucket": "measures-registry",
+      "storage_path": "more_vs_coherence_path.webp",
+      "is_active": false,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/more_vs_coherence_path.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "69"
+      }
+    },
+    {
+      "media_role": "registry_banner",
+      "storage_bucket": "measures-registry-public",
+      "storage_path": "measures_registry/brand/measures_registry_banner.webp",
+      "is_active": false,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/brand/measures_registry_banner.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "76"
+      }
+    },
+    {
+      "media_role": "social_card",
+      "storage_bucket": "measures-registry-public",
+      "storage_path": "measures_registry/brand/measures_registry_social_card.webp",
+      "is_active": false,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/brand/measures_registry_social_card.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "76"
+      }
+    }
+  ]
+}
