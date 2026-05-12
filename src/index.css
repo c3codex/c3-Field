@@ -3270,9 +3270,9 @@ body {
   bottom: clamp(1rem, 6vh, 4rem);
   z-index: 17;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.65rem;
-  width: min(42rem, 58vw);
+  width: min(44rem, 68vw);
   max-height: 52svh;
   overflow-y: auto;
 }
@@ -3297,6 +3297,11 @@ body {
   background: transparent;
   text-align: left;
   cursor: pointer;
+}
+
+.chamberplate-aspect[data-absent="true"] > button {
+  cursor: not-allowed;
+  opacity: 0.72;
 }
 
 .chamberplate-aspect-role {
@@ -3335,6 +3340,10 @@ body {
 .chamberplate-aspect-body video {
   max-height: 14rem;
   border-radius: 6px;
+}
+
+.chamberplate-aspect[data-absent="true"] .chamberplate-aspect-body {
+  color: rgba(248, 250, 255, 0.6);
 }
 
 .chamberplate-absence {

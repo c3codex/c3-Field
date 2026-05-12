@@ -73,7 +73,7 @@ function isRole(item: EncounterResolution["media"][number], roles: string[]) {
 function isFeaturedAutoplayVideo(item: EncounterResolution["media"][number]) {
   return (
     item.mediaType === "video" &&
-    mediaRole(item) === "featured_video" &&
+    canonicalChamberplateRole(item) === "featured_animation" &&
     metadataString(item, "render_behavior") === "autoplay_after_passage"
   )
 }
@@ -89,22 +89,67 @@ function aspectBehavior(item: EncounterResolution["media"][number]) {
   )
 }
 
-const CHAMBERPLATE_ASPECT_ROLES = [
-  "epithet_description",
-  "original_artwork",
+const CHAMBERPLATE_ASPECT_SLOT_ORDER = [
+  {
+    role: "aspect_original_artwork",
+    label: "Original Artwork",
+  },
+  {
+    role: "aspect_historical_significance",
+    label: "Historical Significance",
+  },
+  {
+    role: "aspect_rule_of_measure",
+    label: "Rule Of Measure",
+  },
+] as const
+
+const CHAMBERPLATE_ASPECT_ROLES = CHAMBERPLATE_ASPECT_SLOT_ORDER.map((slot) => slot.role)
+const CHAMBERPLATE_LEGACY_SUPPORT_ROLES = [
   "full_song",
   "lapis_tone",
   "material_tone",
 ]
 
 const CHAMBERPLATE_RECOGNIZED_ROLES = [
+  "featured_animation",
   "featured_video",
+  "settled_still",
   "oracle_card",
   "audio",
   "image",
   "video",
   ...CHAMBERPLATE_ASPECT_ROLES,
 ]
+
+function chamberplateMetadataRole(item: EncounterResolution["media"][number]) {
+  return (
+    metadataString(item, "contract_role") ??
+    metadataString(item, "contractRole") ??
+    metadataString(item, "canonical_role") ??
+    metadataString(item, "canonicalRole") ??
+    metadataString(item, "aspect_slot") ??
+    metadataString(item, "aspectSlot")
+  )
+}
+
+function canonicalChamberplateRole(item: EncounterResolution["media"][number]) {
+  const metadataRole = chamberplateMetadataRole(item)
+  if (metadataRole) return metadataRole
+
+  const role = mediaRole(item)
+  if (role === "featured_video") return "featured_animation"
+  if (role === "oracle_card" || role === "image") return "settled_still"
+  if (role === "original_artwork") return "aspect_original_artwork"
+  return role
+}
+
+function chamberplateAspectSlot(
+  item: EncounterResolution["media"][number],
+): (typeof CHAMBERPLATE_ASPECT_SLOT_ORDER)[number]["role"] | null {
+  const role = canonicalChamberplateRole(item)
+  return CHAMBERPLATE_ASPECT_ROLES.includes(role) ? role : null
+}
 
 function isActionAvailable(action: ResolvedAction) {
   return action.blocked !== true && Boolean(action.targetRegistryKey)
@@ -366,46 +411,62 @@ function ChamberplateAbsence({
 
 function ChamberplateAspects({
   aspects,
+  showAbsentSlots = false,
 }: {
   aspects: EncounterResolution["media"]
+  showAbsentSlots?: boolean
 }) {
   const [openKey, setOpenKey] = useState<string | null>(null)
 
-  if (aspects.length === 0) return null
+  if (aspects.length === 0 && !showAbsentSlots) return null
+
+  const slotItems = CHAMBERPLATE_ASPECT_SLOT_ORDER.map((slot) => ({
+    ...slot,
+    item: aspects.find((candidate) => chamberplateAspectSlot(candidate) === slot.role) ?? null,
+  }))
 
   return (
     <section className="chamberplate-aspects" aria-label="Chamberplate aspects">
-      {aspects.map((item) => {
-        const key = item.mediaKey ?? `${item.bucketName}/${item.storagePath}/${item.renderOrder}`
+      {slotItems.map(({ role, label, item }) => {
+        if (!item && !showAbsentSlots) return null
+
+        const key = item?.mediaKey ?? role
         const isOpen = openKey === key
-        const behavior = aspectBehavior(item)
-        const title = item.title ?? item.label ?? mediaRole(item)
+        const behavior = item ? aspectBehavior(item) : "missing"
+        const title = label
         const body =
-          typeof item.mapMetadata?.text === "string"
+          typeof item?.mapMetadata?.text === "string"
             ? item.mapMetadata.text
-            : typeof item.assetMetadata?.text === "string"
+            : typeof item?.assetMetadata?.text === "string"
               ? item.assetMetadata.text
-              : typeof item.mapMetadata?.description === "string"
+              : typeof item?.mapMetadata?.description === "string"
                 ? item.mapMetadata.description
-                : typeof item.assetMetadata?.description === "string"
+                : typeof item?.assetMetadata?.description === "string"
                   ? item.assetMetadata.description
                   : null
 
         return (
-          <article key={key} className="chamberplate-aspect" data-role={mediaRole(item)} data-open={isOpen}>
-            <button type="button" onClick={() => setOpenKey(isOpen ? null : key)}>
+          <article
+            key={key}
+            className="chamberplate-aspect"
+            data-role={role}
+            data-open={isOpen}
+            data-absent={!item}
+          >
+            <button type="button" onClick={() => (item ? setOpenKey(isOpen ? null : key) : null)} disabled={!item}>
               <span className="chamberplate-aspect-title">{title}</span>
-              <small className="chamberplate-aspect-role">{mediaRole(item).replaceAll("_", " ")}</small>
+              <small className="chamberplate-aspect-role">{item ? role.replaceAll("_", " ") : "unseated"}</small>
             </button>
             {isOpen ? (
               <div className="chamberplate-aspect-body" data-behavior={behavior}>
-                {item.mediaType === "image" || item.mediaType === "audio" || item.mediaType === "video" ? (
+                {item && (item.mediaType === "image" || item.mediaType === "audio" || item.mediaType === "video") ? (
                   <EncounterStageMedia extraItem={item} />
                 ) : null}
                 {body ? <p>{body}</p> : null}
-                {!body && item.mediaType !== "image" && item.mediaType !== "audio" && item.mediaType !== "video" ? (
+                {!body && item && item.mediaType !== "image" && item.mediaType !== "audio" && item.mediaType !== "video" ? (
                   <p>aspect media registered</p>
                 ) : null}
+                {!item ? <p>aspect content not yet seated</p> : null}
               </div>
             ) : null}
           </article>
@@ -819,11 +880,16 @@ export default function GenericEncounter({
   )
 
   const primaryVideo = useMemo(
-    () => orderedMedia.find(isFeaturedAutoplayVideo) ?? orderedMedia.find(isVideo) ?? null,
+    () =>
+      orderedMedia.find(isFeaturedAutoplayVideo) ??
+      orderedMedia.find((item) => item.mediaType === "video" && canonicalChamberplateRole(item) === "featured_animation") ??
+      orderedMedia.find(isVideo) ??
+      null,
     [orderedMedia],
   )
   const primaryStill = useMemo(
     () =>
+      orderedMedia.find((item) => canonicalChamberplateRole(item) === "settled_still") ??
       orderedMedia.find((item) => isRole(item, ["oracle_card", "image", "original_artwork"])) ??
       orderedMedia.find(isImage) ??
       null,
@@ -841,12 +907,18 @@ export default function GenericEncounter({
     [orderedMedia],
   )
   const aspectMedia = useMemo(
-    () =>
-      orderedMedia.filter((item) =>
-        item !== primaryStill &&
-        (isRole(item, CHAMBERPLATE_ASPECT_ROLES) ||
-          Boolean(item.role && item.source === "registry_media" && !CHAMBERPLATE_RECOGNIZED_ROLES.includes(item.role))),
-      ),
+    () => {
+      const slotMap = new Map<string, EncounterResolution["media"][number]>()
+      for (const item of orderedMedia) {
+        const slot = chamberplateAspectSlot(item)
+        if (!slot || item === primaryStill || slotMap.has(slot)) continue
+        slotMap.set(slot, item)
+      }
+      return CHAMBERPLATE_ASPECT_SLOT_ORDER.flatMap((slot) => {
+        const item = slotMap.get(slot.role)
+        return item ? [item] : []
+      })
+    },
     [orderedMedia, primaryStill],
   )
   const extraMedia = useMemo(
@@ -856,6 +928,7 @@ export default function GenericEncounter({
           item !== primaryVideo &&
           item !== primaryStill &&
           item !== tonalAudio &&
+          !isRole(item, CHAMBERPLATE_LEGACY_SUPPORT_ROLES) &&
           !aspectMedia.includes(item),
       ),
     [aspectMedia, orderedMedia, primaryStill, primaryVideo, tonalAudio],
@@ -1217,7 +1290,7 @@ export default function GenericEncounter({
       ) : null}
 
       {chamberplate && revealChamberplateAspects ? (
-        <ChamberplateAspects aspects={aspectMedia} />
+        <ChamberplateAspects aspects={aspectMedia} showAbsentSlots />
       ) : null}
 
       {chamberplate ? (

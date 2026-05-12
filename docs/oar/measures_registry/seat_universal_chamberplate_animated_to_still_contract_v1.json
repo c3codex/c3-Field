@@ -1,0 +1,71 @@
+{
+  "source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+  "status": "completed_with_holds",
+  "frontend": {
+    "canonical_roles_supported": [
+      "featured_animation",
+      "settled_still",
+      "aspect_original_artwork",
+      "aspect_historical_significance",
+      "aspect_rule_of_measure"
+    ],
+    "fixed_three_slot_aspect_rail": true,
+    "legacy_audio_removed_from_primary_chamberplate_rendering": true,
+    "hardcoded_media_urls_added": false
+  },
+  "targets": [
+    "gate_1_crown_removed",
+    "gate_2_lapis_beads",
+    "gate_3_lapis_necklace",
+    "chamber_epithets_01_primus_artus",
+    "chamber_epithets_02_gemynd_corpus",
+    "chamber_epithets_03_percipari"
+  ],
+  "verified_media": {
+    "gate_1_crown_removed": {
+      "animation": {
+        "path": "obsidian_chamberplate_gate01.mov",
+        "status": 200
+      },
+      "still": {
+        "path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+        "status": 200
+      }
+    },
+    "gate_3_lapis_necklace": {
+      "still": {
+        "path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+        "status": 200
+      }
+    },
+    "chamber_epithets_01_primus_artus": {
+      "animation": {
+        "path": "primus_artus_obsidian_tone.MOV",
+        "status": 200
+      }
+    },
+    "chamber_epithets_02_gemynd_corpus": {
+      "animation": {
+        "path": "gemynd_corpus_lapis_tone .MOV",
+        "status": 200
+      }
+    },
+    "chamber_epithets_03_percipari": {
+      "animation": {
+        "path": "percipari_crystal_tone.MOV",
+        "status": 200
+      }
+    }
+  },
+  "holds": {
+    "gate_2_lapis_beads": {
+      "animation": "unverified from current known public paths",
+      "still": "unverified from current known public paths"
+    },
+    "gate_3_lapis_necklace": {
+      "animation": "unverified from current known public paths"
+    },
+    "aspect_historical_significance": "content not seated in targeted governed rows",
+    "aspect_rule_of_measure": "content not seated in targeted governed rows"
+  }
+}
