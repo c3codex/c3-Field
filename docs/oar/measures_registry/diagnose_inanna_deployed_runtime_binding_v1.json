@@ -1,0 +1,167 @@
+{
+  "oar2": "oar2_diagnose_inanna_deployed_runtime_binding_v1",
+  "generatedAt": "2026-05-12T08:18:45.659Z",
+  "mutationCount": 0,
+  "mutationPerformed": false,
+  "deployedHostsTested": [
+    {
+      "url": "https://www.measuresofinanna.com/",
+      "status": 200,
+      "assetPath": "assets/index-qPbY_Yxd.js",
+      "cssPath": "assets/index-Dd73tO-2.css"
+    },
+    {
+      "url": "https://measuresofinanna.com/",
+      "status": 200,
+      "assetPath": "assets/index-qPbY_Yxd.js",
+      "cssPath": "assets/index-Dd73tO-2.css"
+    }
+  ],
+  "deployedBundle": {
+    "assetPath": "assets/index-qPbY_Yxd.js",
+    "assetName": "index-qPbY_Yxd.js",
+    "cssPath": "assets/index-Dd73tO-2.css",
+    "resolver": {
+      "chamberplateOnly": true,
+      "setTriple": false,
+      "snippet": "\",{ascending:!0});c&&console.error(\"Transition lookup failed\",{registryKey:a,encounterKey:t.encounter_key,transitionError:c});let d=[];if(t.surface_type===\"chamberplate\"){const{data:w,error:E}=await Ke.from(\"measures_surface_media_map\").select(\"surface_key, sequence_index, role, status, metadata, codex_media_asset!inner(media_key, title, media_type, bucket, storage_path, storage_provider, public_url, poster_url,",
+      "mode": "governed_media_for_chamberplate_only"
+    },
+    "markers": {
+      "supabaseUrlPresent": true,
+      "publishableKeyPresent": true,
+      "r2PublicBasePresent": true
+    }
+  },
+  "localBundle": {
+    "assetPath": "assets/index-DNR-DxGl.js",
+    "assetName": "index-DNR-DxGl.js",
+    "cssPath": "assets/index-Dd73tO-2.css",
+    "resolver": {
+      "chamberplateOnly": false,
+      "setTriple": true,
+      "snippet": null,
+      "mode": "governed_media_for_chamberplate_aspect_threshold"
+    },
+    "markers": {
+      "supabaseUrlPresent": true,
+      "publishableKeyPresent": true,
+      "r2PublicBasePresent": true
+    }
+  },
+  "comparison": {
+    "assetHashMatches": false,
+    "resolverModeMatches": false,
+    "envMarkersMatch": true
+  },
+  "routeResults": [
+    {
+      "routeUrl": "https://www.measuresofinanna.com/?registry_key=epigraph",
+      "registryKey": "epigraph",
+      "resolvedRegistryKey": "epigraph",
+      "encounterKey": "epigraph_view",
+      "surfaceType": "aspect",
+      "deployedReadsGoverned": false,
+      "governedQueryError": null,
+      "fallbackQueryError": null,
+      "governedMediaRowsReturned": [],
+      "fallbackMediaRowsReturned": [
+        {
+          "source": "temp_exhibition_media",
+          "surfaceKey": "epigraph",
+          "mediaKey": null,
+          "role": "video",
+          "mediaType": "video",
+          "bucketName": "pre-codex-exhibition",
+          "storagePath": "inanna_encounter_intro.mp4",
+          "storageProvider": null,
+          "renderOrder": 10
+        }
+      ],
+      "finalSelectedMedia": {
+        "source": "temp_exhibition_media",
+        "surfaceKey": "epigraph",
+        "mediaKey": null,
+        "role": "video",
+        "mediaType": "video",
+        "bucketName": "pre-codex-exhibition",
+        "storagePath": "inanna_encounter_intro.mp4",
+        "storageProvider": null,
+        "renderOrder": 10
+      },
+      "finalResolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/inanna_encounter_intro.mp4",
+      "finalRetrieval": {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/inanna_encounter_intro.mp4",
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "69"
+      }
+    },
+    {
+      "routeUrl": "https://www.measuresofinanna.com/?registry_key=temple_antechamber",
+      "registryKey": "temple_antechamber",
+      "resolvedRegistryKey": "temple_antechamber",
+      "encounterKey": "temple_antechamber_view",
+      "surfaceType": "threshold",
+      "deployedReadsGoverned": false,
+      "governedQueryError": null,
+      "fallbackQueryError": null,
+      "governedMediaRowsReturned": [],
+      "fallbackMediaRowsReturned": [
+        {
+          "source": "temp_exhibition_media",
+          "surfaceKey": "temple_antechamber",
+          "mediaKey": null,
+          "role": "image",
+          "mediaType": "image",
+          "bucketName": "pre-codex-exhibition",
+          "storagePath": "antechamber.png",
+          "storageProvider": null,
+          "renderOrder": 10
+        }
+      ],
+      "finalSelectedMedia": {
+        "source": "temp_exhibition_media",
+        "surfaceKey": "temple_antechamber",
+        "mediaKey": null,
+        "role": "image",
+        "mediaType": "image",
+        "bucketName": "pre-codex-exhibition",
+        "storagePath": "antechamber.png",
+        "storageProvider": null,
+        "renderOrder": 10
+      },
+      "finalResolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/antechamber.png",
+      "finalRetrieval": {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/antechamber.png",
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "69"
+      }
+    },
+    {
+      "routeUrl": "https://www.measuresofinanna.com/?registry_key=chamber_epithets_01_primus_artus",
+      "registryKey": "chamber_epithets_01_primus_artus",
+      "error": "No encounter found for registry chamber_epithets_01_primus_artus"
+    }
+  ],
+  "localValidationComparison": {
+    "expectedFromOar1": {
+      "governedResolverSurfaceTypes": [
+        "chamberplate",
+        "aspect",
+        "threshold"
+      ],
+      "epigraphGovernedPrimary": "epigraph_governed_animated_media_v1",
+      "epigraphGovernedVideoUrl": "https://media.c3field.online/inanna_epigraph.MP4"
+    },
+    "observedDeployedDifference": {
+      "liveResolverMode": "governed_media_for_chamberplate_only",
+      "localResolverMode": "governed_media_for_chamberplate_aspect_threshold"
+    }
+  },
+  "exactFailureSeam": "stale deployment bundle",
+  "recommendedNextOar2": "Seat a deployment/runtime binding correction OAR that promotes the current Inanna build artifact and verifies the Pages project/output binding serves the latest bundle with governed media for aspect and threshold."
+}
