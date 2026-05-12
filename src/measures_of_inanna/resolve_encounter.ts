@@ -81,6 +81,8 @@ type RegistryMediaRow = {
       }>
 }
 
+const GOVERNED_MEDIA_SURFACE_TYPES = new Set(["chamberplate", "aspect", "threshold"])
+
 function asRecord(value: unknown): JsonRecord | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null
   return value as JsonRecord
@@ -343,6 +345,72 @@ function registryMediaToRuntime(row: RegistryMediaRow): RuntimeMediaItem | null 
   }
 }
 
+async function resolveRegistryMedia(
+  resolvedRegistryKey: string,
+  encounterKey: string,
+): Promise<RuntimeMediaItem[]> {
+  const { data: registryMediaData, error: registryMediaError } = await supabase
+    .from("measures_surface_media_map")
+    .select("surface_key, sequence_index, role, status, metadata, codex_media_asset!inner(media_key, title, media_type, bucket, storage_path, storage_provider, public_url, poster_url, status, metadata)")
+    .in("surface_key", [resolvedRegistryKey, encounterKey])
+    .eq("status", "active")
+    .order("sequence_index", { ascending: true })
+
+  if (registryMediaError) {
+    console.error("Registry media lookup failed", { registryKey: resolvedRegistryKey, registryMediaError })
+  }
+
+  return ((registryMediaData ?? []) as RegistryMediaRow[])
+    .map(registryMediaToRuntime)
+    .filter((item): item is RuntimeMediaItem => Boolean(item))
+    .filter((item) => item.isActive !== false)
+}
+
+async function resolveFallbackMedia(
+  resolvedRegistryKey: string,
+  encounterKey: string,
+): Promise<RuntimeMediaItem[]> {
+  const { data: mediaData, error: mediaError } = await supabase
+    .from("temp_exhibition_media")
+    .select("surface_key, label, media_type, bucket_name, storage_path, render_order, is_active")
+    .in("surface_key", [resolvedRegistryKey, encounterKey])
+    .order("render_order", { ascending: true })
+
+  if (mediaError) {
+    console.error("Media lookup failed", { registryKey: resolvedRegistryKey, mediaError })
+  }
+
+  return ((mediaData ?? []) as MediaBridgeRow[])
+    .filter((row) => row.is_active !== false)
+    .map((row) => ({
+      label: row.label ?? null,
+      mediaType: row.media_type,
+      bucketName: row.bucket_name,
+      storagePath: row.storage_path,
+      renderOrder: row.render_order ?? 999,
+      isActive: row.is_active ?? true,
+      source: "temp_exhibition_media",
+      surfaceKey: row.surface_key ?? null,
+      role: row.media_type,
+      mediaKey: null,
+      title: row.label ?? null,
+      publicUrl: null,
+      posterUrl: null,
+      status: row.is_active === false ? "inactive" : "active",
+      mapMetadata: null,
+      assetMetadata: null,
+    }))
+}
+
+function supplementMissingMediaTypes(
+  governedMedia: RuntimeMediaItem[],
+  fallbackMedia: RuntimeMediaItem[],
+) {
+  const governedTypes = new Set(governedMedia.map((item) => item.mediaType))
+  const supplementalFallback = fallbackMedia.filter((item) => !governedTypes.has(item.mediaType))
+  return [...governedMedia, ...supplementalFallback]
+}
+
 export async function resolveEncounter(registryKey: string): Promise<EncounterResolution> {
   const encounter = await resolveEncounterRow(registryKey)
   const metadata = encounter.metadata ?? {}
@@ -376,57 +444,17 @@ export async function resolveEncounter(registryKey: string): Promise<EncounterRe
   }
 
   let media: RuntimeMediaItem[] = []
-  const isChamberplate = encounter.surface_type === "chamberplate"
+  const readsGovernedMedia = GOVERNED_MEDIA_SURFACE_TYPES.has(encounter.surface_type)
 
-  if (isChamberplate) {
-    const { data: registryMediaData, error: registryMediaError } = await supabase
-      .from("measures_surface_media_map")
-      .select("surface_key, sequence_index, role, status, metadata, codex_media_asset!inner(media_key, title, media_type, bucket, storage_path, storage_provider, public_url, poster_url, status, metadata)")
-      .in("surface_key", [resolvedRegistryKey, encounter.encounter_key])
-      .eq("status", "active")
-      .order("sequence_index", { ascending: true })
-
-    if (registryMediaError) {
-      console.error("Registry media lookup failed", { registryKey: resolvedRegistryKey, registryMediaError })
-    }
-
-    media = ((registryMediaData ?? []) as RegistryMediaRow[])
-      .map(registryMediaToRuntime)
-      .filter((item): item is RuntimeMediaItem => Boolean(item))
-      .filter((item) => item.isActive !== false)
+  if (readsGovernedMedia) {
+    media = await resolveRegistryMedia(resolvedRegistryKey, encounter.encounter_key)
   }
 
   if (media.length === 0) {
-    const { data: mediaData, error: mediaError } = await supabase
-      .from("temp_exhibition_media")
-      .select("surface_key, label, media_type, bucket_name, storage_path, render_order, is_active")
-      .in("surface_key", [resolvedRegistryKey, encounter.encounter_key])
-      .order("render_order", { ascending: true })
-
-    if (mediaError) {
-      console.error("Media lookup failed", { registryKey: resolvedRegistryKey, mediaError })
-    }
-
-    media = ((mediaData ?? []) as MediaBridgeRow[])
-      .filter((row) => row.is_active !== false)
-      .map((row) => ({
-        label: row.label ?? null,
-        mediaType: row.media_type,
-        bucketName: row.bucket_name,
-        storagePath: row.storage_path,
-        renderOrder: row.render_order ?? 999,
-        isActive: row.is_active ?? true,
-        source: "temp_exhibition_media",
-        surfaceKey: row.surface_key ?? null,
-        role: row.media_type,
-        mediaKey: null,
-        title: row.label ?? null,
-        publicUrl: null,
-        posterUrl: null,
-        status: row.is_active === false ? "inactive" : "active",
-        mapMetadata: null,
-        assetMetadata: null,
-      }))
+    media = await resolveFallbackMedia(resolvedRegistryKey, encounter.encounter_key)
+  } else if (readsGovernedMedia && encounter.surface_type !== "chamberplate") {
+    const fallbackMedia = await resolveFallbackMedia(resolvedRegistryKey, encounter.encounter_key)
+    media = supplementMissingMediaTypes(media, fallbackMedia)
   }
   const metadataActions = resolveActions(metadata)
   const transitionActions = resolveTransitionActions(

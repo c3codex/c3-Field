@@ -1,0 +1,344 @@
+{
+  "oar2": "oar2_enable_non_chamberplate_governed_media_resolution_v1",
+  "generatedAt": "2026-05-12T06:58:44.448Z",
+  "mutationPerformed": false,
+  "changedFiles": [
+    "src/measures_of_inanna/resolve_encounter.ts"
+  ],
+  "governedSurfaceTypes": [
+    "chamberplate",
+    "aspect",
+    "threshold"
+  ],
+  "hardcodedMediaPathIntroduced": false,
+  "surfaces": [
+    {
+      "registryKey": "epigraph",
+      "encounterKey": "epigraph_view",
+      "surfaceType": "aspect",
+      "readsGoverned": true,
+      "governedMediaCount": 1,
+      "fallbackMediaCount": 1,
+      "resolvedMediaCount": 2,
+      "governedMedia": [
+        {
+          "source": "registry_media",
+          "surfaceKey": "epigraph",
+          "mediaKey": "epigraph_still_image_support_v1",
+          "role": "image",
+          "mediaType": "image",
+          "bucketName": "measures-registry",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+          "storageProvider": "supabase",
+          "publicUrl": null,
+          "renderOrder": 10,
+          "status": "active",
+          "assetStatus": "active"
+        }
+      ],
+      "fallbackMedia": [
+        {
+          "source": "temp_exhibition_media",
+          "surfaceKey": "epigraph",
+          "mediaKey": null,
+          "role": "video",
+          "mediaType": "video",
+          "bucketName": "pre-codex-exhibition",
+          "storagePath": "inanna_encounter_intro.mp4",
+          "storageProvider": null,
+          "publicUrl": null,
+          "renderOrder": 10,
+          "status": "active",
+          "assetStatus": null
+        }
+      ],
+      "resolvedMedia": [
+        {
+          "source": "registry_media",
+          "surfaceKey": "epigraph",
+          "mediaKey": "epigraph_still_image_support_v1",
+          "role": "image",
+          "mediaType": "image",
+          "bucketName": "measures-registry",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+          "storageProvider": "supabase",
+          "publicUrl": null,
+          "renderOrder": 10,
+          "status": "active",
+          "assetStatus": "active",
+          "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+          "retrieval": {
+            "tested": true,
+            "ok": true,
+            "status": 200,
+            "contentType": "image/webp",
+            "contentLength": "116152"
+          }
+        },
+        {
+          "source": "temp_exhibition_media",
+          "surfaceKey": "epigraph",
+          "mediaKey": null,
+          "role": "video",
+          "mediaType": "video",
+          "bucketName": "pre-codex-exhibition",
+          "storagePath": "inanna_encounter_intro.mp4",
+          "storageProvider": null,
+          "publicUrl": null,
+          "renderOrder": 10,
+          "status": "active",
+          "assetStatus": null,
+          "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/inanna_encounter_intro.mp4",
+          "retrieval": {
+            "tested": true,
+            "ok": false,
+            "status": 400,
+            "contentType": "application/json; charset=utf-8",
+            "contentLength": "69"
+          }
+        }
+      ],
+      "primaryVideo": {
+        "source": "temp_exhibition_media",
+        "surfaceKey": "epigraph",
+        "mediaKey": null,
+        "role": "video",
+        "mediaType": "video",
+        "bucketName": "pre-codex-exhibition",
+        "storagePath": "inanna_encounter_intro.mp4",
+        "storageProvider": null,
+        "publicUrl": null,
+        "renderOrder": 10,
+        "status": "active",
+        "assetStatus": null,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/inanna_encounter_intro.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        }
+      },
+      "primaryStill": {
+        "source": "registry_media",
+        "surfaceKey": "epigraph",
+        "mediaKey": "epigraph_still_image_support_v1",
+        "role": "image",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "renderOrder": 10,
+        "status": "active",
+        "assetStatus": "active",
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "116152"
+        }
+      },
+      "animatedGovernedMediaPresent": false,
+      "fallbackSupplementedMediaTypes": [
+        "video"
+      ]
+    },
+    {
+      "registryKey": "temple_antechamber",
+      "encounterKey": "temple_antechamber_view",
+      "surfaceType": "threshold",
+      "readsGoverned": true,
+      "governedMediaCount": 1,
+      "fallbackMediaCount": 1,
+      "resolvedMediaCount": 1,
+      "governedMedia": [
+        {
+          "source": "registry_media",
+          "surfaceKey": "temple_antechamber",
+          "mediaKey": "temple_antechamber_still_image_v1",
+          "role": "image",
+          "mediaType": "image",
+          "bucketName": "measures-registry",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+          "storageProvider": "supabase",
+          "publicUrl": null,
+          "renderOrder": 10,
+          "status": "active",
+          "assetStatus": "active"
+        }
+      ],
+      "fallbackMedia": [
+        {
+          "source": "temp_exhibition_media",
+          "surfaceKey": "temple_antechamber",
+          "mediaKey": null,
+          "role": "image",
+          "mediaType": "image",
+          "bucketName": "pre-codex-exhibition",
+          "storagePath": "antechamber.png",
+          "storageProvider": null,
+          "publicUrl": null,
+          "renderOrder": 10,
+          "status": "active",
+          "assetStatus": null
+        }
+      ],
+      "resolvedMedia": [
+        {
+          "source": "registry_media",
+          "surfaceKey": "temple_antechamber",
+          "mediaKey": "temple_antechamber_still_image_v1",
+          "role": "image",
+          "mediaType": "image",
+          "bucketName": "measures-registry",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+          "storageProvider": "supabase",
+          "publicUrl": null,
+          "renderOrder": 10,
+          "status": "active",
+          "assetStatus": "active",
+          "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/antechamber.webp",
+          "retrieval": {
+            "tested": true,
+            "ok": true,
+            "status": 200,
+            "contentType": "image/webp",
+            "contentLength": "138916"
+          }
+        }
+      ],
+      "primaryVideo": null,
+      "primaryStill": {
+        "source": "registry_media",
+        "surfaceKey": "temple_antechamber",
+        "mediaKey": "temple_antechamber_still_image_v1",
+        "role": "image",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "renderOrder": 10,
+        "status": "active",
+        "assetStatus": "active",
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "138916"
+        }
+      },
+      "animatedGovernedMediaPresent": false,
+      "fallbackSupplementedMediaTypes": []
+    },
+    {
+      "registryKey": "chamber_epithets_01_primus_artus",
+      "error": "encounter not resolved: chamber_epithets_01_primus_artus"
+    }
+  ],
+  "chamberplateDirectValidation": {
+    "surfaceKey": "chamber_epithets_01_primus_artus",
+    "activeGovernedRowCount": 3,
+    "allRetrieved": true,
+    "rows": [
+      {
+        "source": "registry_media",
+        "surfaceKey": "chamber_epithets_01_primus_artus",
+        "mediaKey": "chamber_epithets_01_primus_artus_oracle_card_v1",
+        "role": "oracle_card",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "renderOrder": 20,
+        "status": "active",
+        "assetStatus": "active",
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "371114"
+        }
+      },
+      {
+        "source": "registry_media",
+        "surfaceKey": "chamber_epithets_01_primus_artus",
+        "mediaKey": "chamber_epithets_01_primus_artus_original_artwork_v1",
+        "role": "original_artwork",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "renderOrder": 40,
+        "status": "active",
+        "assetStatus": "active",
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "563686"
+        }
+      },
+      {
+        "source": "registry_media",
+        "surfaceKey": "chamber_epithets_01_primus_artus",
+        "mediaKey": "chamber_epithets_01_primus_artus_full_song_v1",
+        "role": "full_song",
+        "mediaType": "audio",
+        "bucketName": "measures-media",
+        "storagePath": "primus_artus.mp3",
+        "storageProvider": "cloudflare_r2",
+        "publicUrl": null,
+        "renderOrder": 50,
+        "status": "active",
+        "assetStatus": "active",
+        "resolvedUrl": "https://media.c3field.online/primus_artus.mp3",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "audio/mpeg",
+          "contentLength": "4538573"
+        }
+      }
+    ]
+  },
+  "fallbackRowsStillPresent": [
+    {
+      "surface_key": "epigraph",
+      "media_type": "video",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "inanna_encounter_intro.mp4",
+      "is_active": true
+    },
+    {
+      "surface_key": "temple_antechamber",
+      "media_type": "image",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "antechamber.png",
+      "is_active": true
+    }
+  ],
+  "validationSummary": {
+    "aspectGovernedLookupWorks": true,
+    "thresholdGovernedLookupWorks": true,
+    "chamberplateStillUsesGovernedMedia": true,
+    "chamberplateSampleRetrieves": true,
+    "epigraphGovernedAnimatedMediaPresent": false,
+    "epigraphStillFallbackPresent": true,
+    "templeAntechamberStillPresent": true,
+    "fallbackRowsRemainUndeleted": true
+  }
+}
