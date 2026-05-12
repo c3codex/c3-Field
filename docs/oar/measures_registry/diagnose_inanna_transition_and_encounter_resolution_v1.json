@@ -1,0 +1,1336 @@
+{
+  "generatedAt": "2026-05-12T11:20:41.544Z",
+  "mutationCount": 0,
+  "mutationPerformed": false,
+  "liveAssetPath": "assets/index-D35Jhc3u.js",
+  "tracedExpectedPath": {
+    "epigraph": {
+      "requestedKey": "epigraph",
+      "resolvedRegistryRow": true,
+      "registryId": "5f92e6e0-c07d-4af6-8112-7a108ae63cbd",
+      "registryKey": "epigraph",
+      "parentRelation": null,
+      "family": null,
+      "surfaceType": "aspect",
+      "encounterKey": "epigraph_view",
+      "encounterDefRow": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "releaseAccessStanding": {
+        "measures_release_state": {
+          "rows": [
+            {
+              "id": "537407e4-caa7-46ed-9a6b-e0a59a2c524d",
+              "registry_id": "5f92e6e0-c07d-4af6-8112-7a108ae63cbd",
+              "release_state": "released",
+              "access_state": "encounterable",
+              "release_reason": "native temple entry seating",
+              "access_reason": "native temple entry seating",
+              "phase_label": "bounded registry seed",
+              "release_at": "2026-04-13T17:11:51.248739+00:00",
+              "sealed_at": null,
+              "effective_at": "2026-04-13T17:11:51.248739+00:00",
+              "metadata": {
+                "seeded_from": "session_15_temple_entry_fix",
+                "normalized_by": "session_15_temple_entry_fix"
+              },
+              "created_at": "2026-04-13T17:11:51.248739+00:00",
+              "updated_at": "2026-04-13T17:11:51.248739+00:00",
+              "release_cadence_order": null,
+              "ritual_release_label": null,
+              "ritual_release_at": null
+            }
+          ]
+        },
+        "measures_access_state": {
+          "error": "Could not find the table 'public.measures_access_state' in the schema cache"
+        }
+      },
+      "transitionSourceTargetRules": [
+        {
+          "id": "33041a21-791d-4ec8-9d20-2da421709ff8",
+          "transition_kind": "progression",
+          "sort_order": 1,
+          "to_registry_key": "crystal_temple_home",
+          "to_encounter_key": "crystal_temple_home_view",
+          "metadata": {
+            "action": {
+              "id": "auto_enter_crystal_temple_home",
+              "kind": "navigate",
+              "label": "Enter Crystal Temple Home",
+              "emphasis": "primary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "auto_enter_crystal_temple_home",
+          "label": "Enter Crystal Temple Home",
+          "kind": "navigate",
+          "targetRegistryKey": "crystal_temple_home",
+          "targetEncounterKey": "crystal_temple_home_view",
+          "targetAfterPassage": null,
+          "blocked": false,
+          "sortOrder": 1,
+          "metadata": {
+            "action": {
+              "id": "auto_enter_crystal_temple_home",
+              "kind": "navigate",
+              "label": "Enter Crystal Temple Home",
+              "emphasis": "primary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            }
+          }
+        }
+      ],
+      "phaseMapCenter": {
+        "centerNodeKey": null,
+        "cadenceTarget": null,
+        "routeMode": null
+      },
+      "finalRenderDecision": "encounter_focus",
+      "failureClass": null,
+      "error": null
+    },
+    "crystal_temple_home": {
+      "requestedKey": "crystal_temple_home",
+      "resolvedRegistryRow": true,
+      "registryId": "d8a186b3-3470-44b4-abae-d40d3e45a32d",
+      "registryKey": "crystal_temple_home",
+      "parentRelation": null,
+      "family": null,
+      "surfaceType": "chamberplate",
+      "encounterKey": "crystal_temple_home_view",
+      "encounterDefRow": true,
+      "renderer": {
+        "layout": "choice_surface",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "releaseAccessStanding": {
+        "measures_release_state": {
+          "rows": [
+            {
+              "id": "14fa93c0-94b0-4dfa-b81d-7d34e581d331",
+              "registry_id": "d8a186b3-3470-44b4-abae-d40d3e45a32d",
+              "release_state": "released",
+              "access_state": "callable",
+              "release_reason": "native temple home exhibition seating",
+              "access_reason": "native temple home exhibition seating",
+              "phase_label": null,
+              "release_at": null,
+              "sealed_at": null,
+              "effective_at": "2026-04-19T20:23:43.434088+00:00",
+              "metadata": {},
+              "created_at": "2026-04-19T20:23:43.434088+00:00",
+              "updated_at": "2026-04-19T20:23:43.434088+00:00",
+              "release_cadence_order": null,
+              "ritual_release_label": null,
+              "ritual_release_at": null
+            }
+          ]
+        },
+        "measures_access_state": {
+          "error": "Could not find the table 'public.measures_access_state' in the schema cache"
+        }
+      },
+      "transitionSourceTargetRules": [
+        {
+          "id": "c6062347-795b-4cfd-9dd1-797d48884d65",
+          "transition_kind": "progression",
+          "sort_order": 5,
+          "to_registry_key": "inanna_seat",
+          "to_encounter_key": "inanna_seat_view",
+          "metadata": {
+            "action": {
+              "id": "enter_inanna_seat",
+              "kind": "navigate",
+              "label": "Enter Inanna's Seat",
+              "emphasis": "secondary"
+            },
+            "source": "session_24_inanna_seat_wiring"
+          }
+        },
+        {
+          "id": "45f9d74b-6d17-449d-ad1f-cfa6c7e580a5",
+          "transition_kind": "progression",
+          "sort_order": 10,
+          "to_registry_key": "temple_antechamber",
+          "to_encounter_key": "temple_antechamber_view",
+          "metadata": {
+            "action": {
+              "id": "enter_antechamber",
+              "kind": "navigate",
+              "label": "Enter Antechamber",
+              "emphasis": "primary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            },
+            "interaction_mode": "single_surface",
+            "interaction_target": "temple_image"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "enter_antechamber",
+          "label": "Enter Antechamber",
+          "kind": "navigate",
+          "targetRegistryKey": "temple_antechamber",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "blocked": false,
+          "sortOrder": 10,
+          "metadata": {
+            "id": "enter_antechamber",
+            "kind": "navigate",
+            "label": "Enter Antechamber",
+            "behavior": {
+              "anchor": "antechamber_arch",
+              "position": "left"
+            },
+            "emphasis": "primary",
+            "sort_order": 10,
+            "target_registry_key": "temple_antechamber"
+          }
+        },
+        {
+          "id": "enter_inanna_seat",
+          "label": "Enter Inanna's Seat",
+          "kind": "navigate",
+          "targetRegistryKey": "inanna_seat",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "blocked": false,
+          "sortOrder": 20,
+          "metadata": {
+            "id": "enter_inanna_seat",
+            "kind": "navigate",
+            "label": "Enter Inanna's Seat",
+            "behavior": {
+              "anchor": "inanna_seat",
+              "position": "right"
+            },
+            "emphasis": "secondary",
+            "sort_order": 20,
+            "target_registry_key": "inanna_seat"
+          }
+        }
+      ],
+      "phaseMapCenter": {
+        "centerNodeKey": null,
+        "cadenceTarget": null,
+        "routeMode": null
+      },
+      "finalRenderDecision": "choice_surface",
+      "failureClass": null,
+      "error": null
+    },
+    "temple_antechamber": {
+      "requestedKey": "temple_antechamber",
+      "resolvedRegistryRow": true,
+      "registryId": "439295a8-c600-4a58-8991-8eae24d8a1df",
+      "registryKey": "temple_antechamber",
+      "parentRelation": null,
+      "family": null,
+      "surfaceType": "threshold",
+      "encounterKey": "temple_antechamber_view",
+      "encounterDefRow": true,
+      "renderer": {
+        "layout": "plaque_overlay",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "releaseAccessStanding": {
+        "measures_release_state": {
+          "rows": [
+            {
+              "id": "28e2a5f8-f6c5-4542-b73f-b3574c2212ab",
+              "registry_id": "439295a8-c600-4a58-8991-8eae24d8a1df",
+              "release_state": "released",
+              "access_state": "callable",
+              "release_reason": "native temple antechamber entry seating",
+              "access_reason": "native temple antechamber entry seating",
+              "phase_label": null,
+              "release_at": null,
+              "sealed_at": null,
+              "effective_at": "2026-04-19T18:49:10.838886+00:00",
+              "metadata": {},
+              "created_at": "2026-04-19T18:49:10.838886+00:00",
+              "updated_at": "2026-04-19T18:49:10.838886+00:00",
+              "release_cadence_order": null,
+              "ritual_release_label": null,
+              "ritual_release_at": null
+            }
+          ]
+        },
+        "measures_access_state": {
+          "error": "Could not find the table 'public.measures_access_state' in the schema cache"
+        }
+      },
+      "transitionSourceTargetRules": [
+        {
+          "id": "bc4da534-3444-4796-b95d-3b9f59eb4d73",
+          "transition_kind": "progression",
+          "sort_order": 10,
+          "to_registry_key": "temple_harrumuk_passage",
+          "to_encounter_key": "temple_harrumuk_passage_view",
+          "metadata": {
+            "action": {
+              "id": "continue_to_harrumuk",
+              "kind": "navigate",
+              "label": "Enter Exhibition",
+              "emphasis": "primary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "continue_to_harrumuk",
+          "label": "Enter Exhibition",
+          "kind": "navigate",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": "temple_harrumuk_passage_view",
+          "targetAfterPassage": null,
+          "blocked": false,
+          "sortOrder": 10,
+          "metadata": {
+            "action": {
+              "id": "continue_to_harrumuk",
+              "kind": "navigate",
+              "label": "Enter Exhibition",
+              "emphasis": "primary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            }
+          }
+        }
+      ],
+      "phaseMapCenter": {
+        "centerNodeKey": null,
+        "cadenceTarget": null,
+        "routeMode": null
+      },
+      "finalRenderDecision": "plaque_overlay",
+      "failureClass": null,
+      "error": null
+    },
+    "temple_harrumuk_passage": {
+      "requestedKey": "temple_harrumuk_passage",
+      "resolvedRegistryRow": true,
+      "registryId": "cb5a9672-c51a-44a7-85a0-56dd5e692bd3",
+      "registryKey": "temple_harrumuk_passage",
+      "parentRelation": null,
+      "family": null,
+      "surfaceType": "passage",
+      "encounterKey": "temple_harrumuk_passage_view",
+      "encounterDefRow": true,
+      "renderer": {
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "releaseAccessStanding": {
+        "measures_release_state": {
+          "rows": [
+            {
+              "id": "b0727216-d55c-4c96-91bf-01cc6461f296",
+              "registry_id": "cb5a9672-c51a-44a7-85a0-56dd5e692bd3",
+              "release_state": "released",
+              "access_state": "callable",
+              "release_reason": "native temple return passage seating",
+              "access_reason": "native temple return passage seating",
+              "phase_label": null,
+              "release_at": null,
+              "sealed_at": null,
+              "effective_at": "2026-04-19T18:40:27.256479+00:00",
+              "metadata": {},
+              "created_at": "2026-04-19T18:40:27.256479+00:00",
+              "updated_at": "2026-04-19T18:40:27.256479+00:00",
+              "release_cadence_order": null,
+              "ritual_release_label": null,
+              "ritual_release_at": null
+            }
+          ]
+        },
+        "measures_access_state": {
+          "error": "Could not find the table 'public.measures_access_state' in the schema cache"
+        }
+      },
+      "transitionSourceTargetRules": [
+        {
+          "id": "9a71b031-ec5e-4f6a-b2e5-70d804d4d687",
+          "transition_kind": "progression",
+          "sort_order": 20,
+          "to_registry_key": "phase_map",
+          "to_encounter_key": "phase_map",
+          "metadata": {
+            "action": {
+              "id": "enter_phase_map",
+              "kind": "navigate",
+              "label": "Enter Phase Map",
+              "emphasis": "primary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            }
+          }
+        },
+        {
+          "id": "4f0d2e27-bf07-4b63-bfd7-1c729b56f5b7",
+          "transition_kind": "return",
+          "sort_order": 30,
+          "to_registry_key": "temple_antechamber",
+          "to_encounter_key": "temple_antechamber_view",
+          "metadata": {
+            "action": {
+              "id": "return_to_antechamber",
+              "kind": "navigate",
+              "label": "Return to Antechamber",
+              "emphasis": "secondary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "enter_phase_map",
+          "label": "Enter Phase Map",
+          "kind": "navigate",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": "phase_map",
+          "targetAfterPassage": null,
+          "blocked": false,
+          "sortOrder": 20,
+          "metadata": {
+            "action": {
+              "id": "enter_phase_map",
+              "kind": "navigate",
+              "label": "Enter Phase Map",
+              "emphasis": "primary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            }
+          }
+        },
+        {
+          "id": "return_to_antechamber",
+          "label": "Return to Antechamber",
+          "kind": "navigate",
+          "targetRegistryKey": "temple_antechamber",
+          "targetEncounterKey": "temple_antechamber_view",
+          "targetAfterPassage": null,
+          "blocked": false,
+          "sortOrder": 30,
+          "metadata": {
+            "action": {
+              "id": "return_to_antechamber",
+              "kind": "navigate",
+              "label": "Return to Antechamber",
+              "emphasis": "secondary"
+            },
+            "prompt": {
+              "kind": "none",
+              "enabled": false
+            },
+            "blocked": {
+              "mode": "stay_current",
+              "reason_mode": "db_reason"
+            },
+            "resolution": {
+              "on_allowed": "go_target",
+              "on_blocked": "stay_current"
+            }
+          }
+        }
+      ],
+      "phaseMapCenter": {
+        "centerNodeKey": null,
+        "cadenceTarget": null,
+        "routeMode": null
+      },
+      "finalRenderDecision": "passage_only",
+      "failureClass": null,
+      "error": null
+    },
+    "phase_map": {
+      "requestedKey": "phase_map",
+      "resolvedRegistryRow": true,
+      "registryId": "a4f7cd49-d0bc-4d1b-9a60-7393b1dcb04c",
+      "registryKey": "phase_map",
+      "parentRelation": null,
+      "family": null,
+      "surfaceType": "phase_map",
+      "encounterKey": "phase_map",
+      "encounterDefRow": true,
+      "renderer": {
+        "layout": "phase_map",
+        "media_fit": null,
+        "show_action_rail": true
+      },
+      "releaseAccessStanding": {
+        "measures_release_state": {
+          "rows": []
+        },
+        "measures_access_state": {
+          "error": "Could not find the table 'public.measures_access_state' in the schema cache"
+        }
+      },
+      "transitionSourceTargetRules": [
+        {
+          "id": "47cdfdf0-bbb9-4fa9-82eb-ab056190bb74",
+          "transition_kind": "return",
+          "sort_order": 2,
+          "to_registry_key": "me_02",
+          "to_encounter_key": "me_02",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "a9280f65-3931-4c65-8c6c-490274408350",
+          "transition_kind": "return",
+          "sort_order": 3,
+          "to_registry_key": "me_03",
+          "to_encounter_key": "me_03",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "b229e5a3-d56a-4f2b-883d-a80b8f8eab53",
+          "transition_kind": "return",
+          "sort_order": 4,
+          "to_registry_key": "gate_4_breastplate",
+          "to_encounter_key": "gate_4_breastplate_encounter",
+          "metadata": {
+            "band": "gate",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "b11851a2-ee34-46f9-953f-8df8d66454c7",
+          "transition_kind": "return",
+          "sort_order": 4,
+          "to_registry_key": "chamber_epithets_04_lady_of_the_largest_heart",
+          "to_encounter_key": "chamber_epithets_04_lady_of_the_largest_heart_encounter",
+          "metadata": {
+            "band": "epithet",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "156e17b2-e10a-4bb4-b5bc-b127030d356b",
+          "transition_kind": "return",
+          "sort_order": 4,
+          "to_registry_key": "me_04",
+          "to_encounter_key": "me_04",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "b876986c-c0ab-43e7-9aa5-531b2a0821d6",
+          "transition_kind": "return",
+          "sort_order": 5,
+          "to_registry_key": "gate_5_measuring_rod",
+          "to_encounter_key": "gate_5_measuring_rod_encounter",
+          "metadata": {
+            "band": "gate",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "2a406060-9488-4516-bf36-e56e54895be9",
+          "transition_kind": "return",
+          "sort_order": 5,
+          "to_registry_key": "me_05",
+          "to_encounter_key": "me_05",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "d25745e7-9445-4ba0-b2b7-bf1f030b1165",
+          "transition_kind": "return",
+          "sort_order": 5,
+          "to_registry_key": "chamber_epithets_05_spiritus_stellaris",
+          "to_encounter_key": "chamber_epithets_05_spiritus_stellaris_encounter",
+          "metadata": {
+            "band": "epithet",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "8f7195c1-1784-46fd-a34a-29bdbb71f384",
+          "transition_kind": "return",
+          "sort_order": 6,
+          "to_registry_key": "chamber_epithets_06_concursus_cubicali",
+          "to_encounter_key": "chamber_epithets_06_concursus_cubicali_encounter",
+          "metadata": {
+            "band": "epithet",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "fc654fe2-ec23-426c-a980-e145072c4ef8",
+          "transition_kind": "return",
+          "sort_order": 6,
+          "to_registry_key": "me_06",
+          "to_encounter_key": "me_06",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "9fedd092-6430-454c-9d80-e75c4916d8ba",
+          "transition_kind": "return",
+          "sort_order": 6,
+          "to_registry_key": "gate_6_golden_bracelet",
+          "to_encounter_key": "gate_6_golden_bracelet_encounter",
+          "metadata": {
+            "band": "gate",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "41ab6e1b-bd42-45d9-af7a-538164a53f66",
+          "transition_kind": "return",
+          "sort_order": 7,
+          "to_registry_key": "chamber_epithets_07_aphrodite",
+          "to_encounter_key": "chamber_epithets_07_aphrodite_encounter",
+          "metadata": {
+            "band": "epithet",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "fdafc600-5b3f-4291-815f-a3f34f1caf69",
+          "transition_kind": "return",
+          "sort_order": 7,
+          "to_registry_key": "me_07",
+          "to_encounter_key": "me_07",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "03d66a63-9901-47bb-9431-06a555798263",
+          "transition_kind": "return",
+          "sort_order": 7,
+          "to_registry_key": "gate_7_robe",
+          "to_encounter_key": "gate_7_robe_encounter",
+          "metadata": {
+            "band": "gate",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "12d000d8-0b24-42dd-ad3f-7541c4c657d9",
+          "transition_kind": "return",
+          "sort_order": 8,
+          "to_registry_key": "chamber_epithets_08_the_last_oracle",
+          "to_encounter_key": "chamber_epithets_08_the_last_oracle_encounter",
+          "metadata": {
+            "band": "epithet",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "226f430d-a592-4fbb-b94f-1add79ca230b",
+          "transition_kind": "return",
+          "sort_order": 8,
+          "to_registry_key": "me_08",
+          "to_encounter_key": "me_08",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "f4cd33d5-1ad8-4aae-bf44-5bfcbd74346a",
+          "transition_kind": "return",
+          "sort_order": 9,
+          "to_registry_key": "me_09",
+          "to_encounter_key": "me_09",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "f0204741-e653-44d6-9887-b5f0ba571e75",
+          "transition_kind": "return",
+          "sort_order": 9,
+          "to_registry_key": "chamber_epithets_09_she_who_rises_with_the_dog_star",
+          "to_encounter_key": "chamber_epithets_09_she_who_rises_with_the_dog_star_encounter",
+          "metadata": {
+            "band": "epithet",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "1f105162-9f5a-46c2-9956-ff76a653d9ed",
+          "transition_kind": "return",
+          "sort_order": 10,
+          "to_registry_key": "me_10",
+          "to_encounter_key": "me_10",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "0d284260-59a2-457b-b16b-add3b7f14691",
+          "transition_kind": "return",
+          "sort_order": 10,
+          "to_registry_key": "chamber_epithets_01_primus_artus",
+          "to_encounter_key": "chamber_epithets_01_primus_artus_encounter",
+          "metadata": {
+            "source": "session_19_phase_map_outbound_seating",
+            "behavior": "phase_map_return_only"
+          }
+        },
+        {
+          "id": "d8fd5131-aa12-45e1-b84f-7256771f7284",
+          "transition_kind": "return",
+          "sort_order": 11,
+          "to_registry_key": "me_11",
+          "to_encounter_key": "me_11",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "fe8b79fa-3d16-46ea-a1ad-367d1ebaf2a5",
+          "transition_kind": "return",
+          "sort_order": 12,
+          "to_registry_key": "me_12",
+          "to_encounter_key": "me_12",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "d808cb33-b1dd-4d22-b179-c85f25ee2883",
+          "transition_kind": "return",
+          "sort_order": 13,
+          "to_registry_key": "me_13",
+          "to_encounter_key": "me_13",
+          "metadata": {
+            "band": "me",
+            "behavior": "phase_map_return_only",
+            "seed_source": "session_19_phase_map_outbound_transition_seating",
+            "routing_mode": "phase_map_outbound"
+          }
+        },
+        {
+          "id": "023c40c7-6f06-4101-ba64-16e0619354da",
+          "transition_kind": "return",
+          "sort_order": 20,
+          "to_registry_key": "gate_1_crown_removed",
+          "to_encounter_key": "gate_1_crown_removed_encounter",
+          "metadata": {
+            "source": "session_19_phase_map_outbound_seating",
+            "behavior": "phase_map_return_only"
+          }
+        },
+        {
+          "id": "078cd7a8-fb77-4057-a2f6-a6f208e3dfc5",
+          "transition_kind": "return",
+          "sort_order": 30,
+          "to_registry_key": "chamber_epithets_02_gemynd_corpus",
+          "to_encounter_key": "chamber_epithets_02_gemynd_corpus_encounter",
+          "metadata": {
+            "source": "session_19_phase_map_outbound_seating",
+            "behavior": "phase_map_return_only"
+          }
+        },
+        {
+          "id": "8b399e5d-58c0-494e-a3b1-ab0d76c24faf",
+          "transition_kind": "return",
+          "sort_order": 40,
+          "to_registry_key": "gate_2_lapis_beads",
+          "to_encounter_key": "gate_2_lapis_beads_encounter",
+          "metadata": {
+            "source": "session_19_phase_map_outbound_seating",
+            "behavior": "phase_map_return_only"
+          }
+        },
+        {
+          "id": "054d00f2-7d05-4514-8f94-77456e092e42",
+          "transition_kind": "return",
+          "sort_order": 50,
+          "to_registry_key": "chamber_epithets_03_percipari",
+          "to_encounter_key": "chamber_epithets_03_percipari_encounter",
+          "metadata": {
+            "source": "session_19_phase_map_outbound_seating",
+            "behavior": "phase_map_return_only"
+          }
+        },
+        {
+          "id": "769041e4-1bc9-4316-a66a-d43e0bea52f5",
+          "transition_kind": "return",
+          "sort_order": 60,
+          "to_registry_key": "me_01",
+          "to_encounter_key": "me_01",
+          "metadata": {
+            "source": "session_19_phase_map_outbound_patch",
+            "behavior": "phase_map_return_only",
+            "registry_key": "me_01"
+          }
+        },
+        {
+          "id": "61afc9d0-b101-4754-bcb4-548bcfc370d7",
+          "transition_kind": "return",
+          "sort_order": 70,
+          "to_registry_key": "gate_3_lapis_necklace",
+          "to_encounter_key": "gate_3_lapis_necklace_encounter",
+          "metadata": {
+            "source": "reconcile_due_releases",
+            "behavior": "phase_map_return_only",
+            "run_date": "2026-04-17",
+            "standing": "preseated_inactive",
+            "automated": true,
+            "registry_key": "gate_3_lapis_necklace"
+          }
+        },
+        {
+          "id": "4ee17afd-ca16-4fab-8c02-401a3ccdffd3",
+          "transition_kind": "return",
+          "sort_order": 900,
+          "to_registry_key": "temple_harrumuk_passage",
+          "to_encounter_key": "temple_harrumuk_passage_view",
+          "metadata": {
+            "action": {
+              "id": "return_via_harrumuk",
+              "kind": "navigate",
+              "label": "Return"
+            },
+            "source": "session_22_formal_return_wiring",
+            "behavior": "phase_map_formal_return"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "return_to_temple_via_harrumuk",
+          "label": "Return to Temple",
+          "kind": "return",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "crystal_temple_home",
+          "blocked": false,
+          "sortOrder": 90,
+          "metadata": {
+            "id": "return_to_temple_via_harrumuk",
+            "kind": "return",
+            "label": "Return to Temple",
+            "emphasis": "secondary",
+            "sort_order": 90,
+            "target_registry_key": "temple_harrumuk_passage",
+            "target_after_passage": "crystal_temple_home"
+          }
+        }
+      ],
+      "phaseMapCenter": {
+        "centerNodeKey": "gate_1_crown_removed",
+        "cadenceTarget": "gate_1_crown_removed",
+        "routeMode": "navigate"
+      },
+      "finalRenderDecision": "phase_map",
+      "failureClass": null,
+      "error": null
+    }
+  },
+  "actualFailingRequestedKeys": [
+    {
+      "source": "crystal_temple_home primary action",
+      "requestedKey": "temple_antechamber",
+      "trace": {
+        "requestedKey": "temple_antechamber",
+        "resolvedRegistryRow": true,
+        "registryId": "439295a8-c600-4a58-8991-8eae24d8a1df",
+        "registryKey": "temple_antechamber",
+        "parentRelation": null,
+        "family": null,
+        "surfaceType": "threshold",
+        "encounterKey": "temple_antechamber_view",
+        "encounterDefRow": true,
+        "renderer": {
+          "layout": "plaque_overlay",
+          "media_fit": "contain",
+          "show_action_rail": true
+        },
+        "releaseAccessStanding": {
+          "measures_release_state": {
+            "rows": [
+              {
+                "id": "28e2a5f8-f6c5-4542-b73f-b3574c2212ab",
+                "registry_id": "439295a8-c600-4a58-8991-8eae24d8a1df",
+                "release_state": "released",
+                "access_state": "callable",
+                "release_reason": "native temple antechamber entry seating",
+                "access_reason": "native temple antechamber entry seating",
+                "phase_label": null,
+                "release_at": null,
+                "sealed_at": null,
+                "effective_at": "2026-04-19T18:49:10.838886+00:00",
+                "metadata": {},
+                "created_at": "2026-04-19T18:49:10.838886+00:00",
+                "updated_at": "2026-04-19T18:49:10.838886+00:00",
+                "release_cadence_order": null,
+                "ritual_release_label": null,
+                "ritual_release_at": null
+              }
+            ]
+          },
+          "measures_access_state": {
+            "error": "Could not find the table 'public.measures_access_state' in the schema cache"
+          }
+        },
+        "transitionSourceTargetRules": [
+          {
+            "id": "bc4da534-3444-4796-b95d-3b9f59eb4d73",
+            "transition_kind": "progression",
+            "sort_order": 10,
+            "to_registry_key": "temple_harrumuk_passage",
+            "to_encounter_key": "temple_harrumuk_passage_view",
+            "metadata": {
+              "action": {
+                "id": "continue_to_harrumuk",
+                "kind": "navigate",
+                "label": "Enter Exhibition",
+                "emphasis": "primary"
+              },
+              "prompt": {
+                "kind": "none",
+                "enabled": false
+              },
+              "blocked": {
+                "mode": "stay_current",
+                "reason_mode": "db_reason"
+              },
+              "resolution": {
+                "on_allowed": "go_target",
+                "on_blocked": "stay_current"
+              }
+            }
+          }
+        ],
+        "actions": [
+          {
+            "id": "continue_to_harrumuk",
+            "label": "Enter Exhibition",
+            "kind": "navigate",
+            "targetRegistryKey": "temple_harrumuk_passage",
+            "targetEncounterKey": "temple_harrumuk_passage_view",
+            "targetAfterPassage": null,
+            "blocked": false,
+            "sortOrder": 10,
+            "metadata": {
+              "action": {
+                "id": "continue_to_harrumuk",
+                "kind": "navigate",
+                "label": "Enter Exhibition",
+                "emphasis": "primary"
+              },
+              "prompt": {
+                "kind": "none",
+                "enabled": false
+              },
+              "blocked": {
+                "mode": "stay_current",
+                "reason_mode": "db_reason"
+              },
+              "resolution": {
+                "on_allowed": "go_target",
+                "on_blocked": "stay_current"
+              }
+            }
+          }
+        ],
+        "phaseMapCenter": {
+          "centerNodeKey": null,
+          "cadenceTarget": null,
+          "routeMode": null
+        },
+        "finalRenderDecision": "plaque_overlay",
+        "failureClass": null,
+        "error": null
+      }
+    },
+    {
+      "source": "temple_antechamber primary action",
+      "requestedKey": "temple_harrumuk_passage",
+      "trace": {
+        "requestedKey": "temple_harrumuk_passage",
+        "resolvedRegistryRow": true,
+        "registryId": "cb5a9672-c51a-44a7-85a0-56dd5e692bd3",
+        "registryKey": "temple_harrumuk_passage",
+        "parentRelation": null,
+        "family": null,
+        "surfaceType": "passage",
+        "encounterKey": "temple_harrumuk_passage_view",
+        "encounterDefRow": true,
+        "renderer": {
+          "layout": "passage_only",
+          "media_fit": "contain",
+          "show_action_rail": false
+        },
+        "releaseAccessStanding": {
+          "measures_release_state": {
+            "rows": [
+              {
+                "id": "b0727216-d55c-4c96-91bf-01cc6461f296",
+                "registry_id": "cb5a9672-c51a-44a7-85a0-56dd5e692bd3",
+                "release_state": "released",
+                "access_state": "callable",
+                "release_reason": "native temple return passage seating",
+                "access_reason": "native temple return passage seating",
+                "phase_label": null,
+                "release_at": null,
+                "sealed_at": null,
+                "effective_at": "2026-04-19T18:40:27.256479+00:00",
+                "metadata": {},
+                "created_at": "2026-04-19T18:40:27.256479+00:00",
+                "updated_at": "2026-04-19T18:40:27.256479+00:00",
+                "release_cadence_order": null,
+                "ritual_release_label": null,
+                "ritual_release_at": null
+              }
+            ]
+          },
+          "measures_access_state": {
+            "error": "Could not find the table 'public.measures_access_state' in the schema cache"
+          }
+        },
+        "transitionSourceTargetRules": [
+          {
+            "id": "9a71b031-ec5e-4f6a-b2e5-70d804d4d687",
+            "transition_kind": "progression",
+            "sort_order": 20,
+            "to_registry_key": "phase_map",
+            "to_encounter_key": "phase_map",
+            "metadata": {
+              "action": {
+                "id": "enter_phase_map",
+                "kind": "navigate",
+                "label": "Enter Phase Map",
+                "emphasis": "primary"
+              },
+              "prompt": {
+                "kind": "none",
+                "enabled": false
+              },
+              "blocked": {
+                "mode": "stay_current",
+                "reason_mode": "db_reason"
+              },
+              "resolution": {
+                "on_allowed": "go_target",
+                "on_blocked": "stay_current"
+              }
+            }
+          },
+          {
+            "id": "4f0d2e27-bf07-4b63-bfd7-1c729b56f5b7",
+            "transition_kind": "return",
+            "sort_order": 30,
+            "to_registry_key": "temple_antechamber",
+            "to_encounter_key": "temple_antechamber_view",
+            "metadata": {
+              "action": {
+                "id": "return_to_antechamber",
+                "kind": "navigate",
+                "label": "Return to Antechamber",
+                "emphasis": "secondary"
+              },
+              "prompt": {
+                "kind": "none",
+                "enabled": false
+              },
+              "blocked": {
+                "mode": "stay_current",
+                "reason_mode": "db_reason"
+              },
+              "resolution": {
+                "on_allowed": "go_target",
+                "on_blocked": "stay_current"
+              }
+            }
+          }
+        ],
+        "actions": [
+          {
+            "id": "enter_phase_map",
+            "label": "Enter Phase Map",
+            "kind": "navigate",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": "phase_map",
+            "targetAfterPassage": null,
+            "blocked": false,
+            "sortOrder": 20,
+            "metadata": {
+              "action": {
+                "id": "enter_phase_map",
+                "kind": "navigate",
+                "label": "Enter Phase Map",
+                "emphasis": "primary"
+              },
+              "prompt": {
+                "kind": "none",
+                "enabled": false
+              },
+              "blocked": {
+                "mode": "stay_current",
+                "reason_mode": "db_reason"
+              },
+              "resolution": {
+                "on_allowed": "go_target",
+                "on_blocked": "stay_current"
+              }
+            }
+          },
+          {
+            "id": "return_to_antechamber",
+            "label": "Return to Antechamber",
+            "kind": "navigate",
+            "targetRegistryKey": "temple_antechamber",
+            "targetEncounterKey": "temple_antechamber_view",
+            "targetAfterPassage": null,
+            "blocked": false,
+            "sortOrder": 30,
+            "metadata": {
+              "action": {
+                "id": "return_to_antechamber",
+                "kind": "navigate",
+                "label": "Return to Antechamber",
+                "emphasis": "secondary"
+              },
+              "prompt": {
+                "kind": "none",
+                "enabled": false
+              },
+              "blocked": {
+                "mode": "stay_current",
+                "reason_mode": "db_reason"
+              },
+              "resolution": {
+                "on_allowed": "go_target",
+                "on_blocked": "stay_current"
+              }
+            }
+          }
+        ],
+        "phaseMapCenter": {
+          "centerNodeKey": null,
+          "cadenceTarget": null,
+          "routeMode": null
+        },
+        "finalRenderDecision": "passage_only",
+        "failureClass": null,
+        "error": null
+      }
+    },
+    {
+      "source": "phase_map center node target",
+      "requestedKey": "gate_1_crown_removed",
+      "trace": {
+        "requestedKey": "gate_1_crown_removed",
+        "resolvedRegistryRow": false,
+        "failureClass": "missing encounter_def",
+        "error": "No encounter_def for gate_1_crown_removed",
+        "finalRenderDecision": "unresolved"
+      }
+    }
+  ],
+  "phaseMapCenterNode": {
+    "nodeIdOrRole": "gate_1_crown_removed",
+    "intendedTargetKey": "gate_1_crown_removed",
+    "actualClickedTargetKey": "gate_1_crown_removed",
+    "targetTrace": {
+      "requestedKey": "gate_1_crown_removed",
+      "resolvedRegistryRow": false,
+      "failureClass": "missing encounter_def",
+      "error": "No encounter_def for gate_1_crown_removed",
+      "finalRenderDecision": "unresolved"
+    }
+  },
+  "failureClasses": [
+    {
+      "source": "crystal_temple_home primary action",
+      "requestedKey": "temple_antechamber",
+      "failureClass": "resolves",
+      "encounterDefRow": true,
+      "renderer": {
+        "layout": "plaque_overlay",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "finalRenderDecision": "plaque_overlay"
+    },
+    {
+      "source": "temple_antechamber primary action",
+      "requestedKey": "temple_harrumuk_passage",
+      "failureClass": "resolves",
+      "encounterDefRow": true,
+      "renderer": {
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "finalRenderDecision": "passage_only"
+    },
+    {
+      "source": "phase_map center node target",
+      "requestedKey": "gate_1_crown_removed",
+      "failureClass": "missing encounter_def",
+      "encounterDefRow": false,
+      "renderer": null,
+      "finalRenderDecision": "unresolved"
+    }
+  ],
+  "recommendedNextOar2": "Seat a bounded transition/encounter repair OAR for the specific missing or mismatched registry/encounter targets revealed here, without reopening media policy or deployment binding work."
+}
