@@ -831,8 +831,12 @@ export default function GenericEncounter({
   )
   const tonalAudio = useMemo(
     () =>
-      orderedMedia.find((item) => isRole(item, ["full_song", "lapis_tone", "material_tone", "audio"])) ??
-      orderedMedia.find(isAudio) ??
+      orderedMedia.find((item) => isRole(item, ["audio"])) ??
+      orderedMedia.find(
+        (item) =>
+          isAudio(item) &&
+          !isRole(item, CHAMBERPLATE_ASPECT_ROLES),
+      ) ??
       null,
     [orderedMedia],
   )
