@@ -44,7 +44,7 @@ const TARGET_KEYS = [
   "me_01",
 ]
 
-const GOVERNED_MEDIA_SURFACE_TYPES = new Set(["chamberplate", "aspect", "threshold"])
+const GOVERNED_MEDIA_SURFACE_TYPES = new Set(["chamberplate", "aspect", "threshold", "passage"])
 const SUPPORTED_RENDERERS = new Set([
   "encounter_focus",
   "choice_surface",

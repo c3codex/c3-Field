@@ -1,0 +1,348 @@
+{
+  "generatedAt": "2026-05-12T15:09:32.774Z",
+  "mutationPerformed": true,
+  "mutationCount": 14,
+  "changedFiles": [
+    "src/measures_of_inanna/resolve_encounter.ts",
+    "docs/oar/measures_registry/execute-diagnose-inanna-full-encounter-matrix.cjs"
+  ],
+  "changedRows": {
+    "codex_media_asset": 5,
+    "measures_surface_media_map": 6,
+    "measures_encounter_def": 2
+  },
+  "governedLookupRepair": {
+    "addedSurfaceType": "passage",
+    "frontendHardcodedMediaPathsIntroduced": false
+  },
+  "sourceValidations": [
+    {
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "surface_key": "crystal_temple_home",
+      "url": "https://zfihrspxvennjzazxcbj.supabase.co//storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "289656"
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+      "surface_key": "temple_harrumuk_passage",
+      "url": "https://media.c3field.online/harrumuk_passage.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "9234795"
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+      "surface_key": "kumurrah_passage",
+      "url": "https://media.c3field.online/kumurrah_passage.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "7016086"
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_gates_passage_01_video_v1",
+      "surface_key": "gates_passage_01",
+      "url": "https://media.c3field.online/gates_passage_01.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "4372033"
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+      "surface_key": "epithets_passage_01",
+      "url": "https://media.c3field.online/epithet_passage_01.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "1768976"
+      }
+    }
+  ],
+  "upsertedAssets": [
+    {
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "title": "Crystal Temple Home",
+      "media_type": "image",
+      "storage_provider": "supabase",
+      "bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "status": "active"
+    },
+    {
+      "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+      "title": "Harrumuk Passage",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "harrumuk_passage.mp4",
+      "status": "active"
+    },
+    {
+      "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+      "title": "Kumurrah Passage",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "kumurrah_passage.mp4",
+      "status": "active"
+    },
+    {
+      "media_key": "pre_codex_exhibition_gates_passage_01_video_v1",
+      "title": "Gates Passage 01",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "gates_passage_01.mp4",
+      "status": "active"
+    },
+    {
+      "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+      "title": "Epithets Passage 01",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "epithet_passage_01.mp4",
+      "status": "active"
+    }
+  ],
+  "upsertedMappings": [
+    {
+      "surface_key": "crystal_temple_home",
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "role": "image",
+      "sequence_index": 10,
+      "status": "active"
+    },
+    {
+      "surface_key": "temple_harrumuk_passage",
+      "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+      "role": "featured_video",
+      "sequence_index": 10,
+      "status": "active"
+    },
+    {
+      "surface_key": "kumurrah_passage",
+      "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+      "role": "featured_video",
+      "sequence_index": 10,
+      "status": "active"
+    },
+    {
+      "surface_key": "gates_passage_01",
+      "media_key": "pre_codex_exhibition_gates_passage_01_video_v1",
+      "role": "featured_video",
+      "sequence_index": 10,
+      "status": "active"
+    },
+    {
+      "surface_key": "epithets_passage_01",
+      "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+      "role": "featured_video",
+      "sequence_index": 10,
+      "status": "active"
+    },
+    {
+      "surface_key": "epithets_passage_02",
+      "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+      "role": "featured_video",
+      "sequence_index": 10,
+      "status": "active"
+    }
+  ],
+  "rendererRepairs": [
+    {
+      "registry_key": "gates_passage_02",
+      "encounter_key": "gates_passage_02_encounter",
+      "previous_layout": "single_surface",
+      "current_layout": "passage_only"
+    },
+    {
+      "registry_key": "gates_passage_03",
+      "encounter_key": "gates_passage_03_encounter",
+      "previous_layout": "single_surface",
+      "current_layout": "passage_only"
+    }
+  ],
+  "mappingValidation": [
+    {
+      "surface_key": "crystal_temple_home",
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "role": "image",
+      "media_type": "image",
+      "storage_provider": "supabase",
+      "bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "resolved_url": "https://zfihrspxvennjzazxcbj.supabase.co//storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "289656"
+      }
+    },
+    {
+      "surface_key": "epithets_passage_01",
+      "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+      "role": "featured_video",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "epithet_passage_01.mp4",
+      "resolved_url": "https://media.c3field.online/epithet_passage_01.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "1768976"
+      }
+    },
+    {
+      "surface_key": "epithets_passage_02",
+      "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+      "role": "featured_video",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "epithet_passage_01.mp4",
+      "resolved_url": "https://media.c3field.online/epithet_passage_01.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "1768976"
+      }
+    },
+    {
+      "surface_key": "gates_passage_01",
+      "media_key": "pre_codex_exhibition_gates_passage_01_video_v1",
+      "role": "featured_video",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "gates_passage_01.mp4",
+      "resolved_url": "https://media.c3field.online/gates_passage_01.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "4372033"
+      }
+    },
+    {
+      "surface_key": "kumurrah_passage",
+      "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+      "role": "featured_video",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "kumurrah_passage.mp4",
+      "resolved_url": "https://media.c3field.online/kumurrah_passage.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "7016086"
+      }
+    },
+    {
+      "surface_key": "temple_harrumuk_passage",
+      "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+      "role": "featured_video",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "harrumuk_passage.mp4",
+      "resolved_url": "https://media.c3field.online/harrumuk_passage.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "9234795"
+      }
+    }
+  ],
+  "heldItems": [
+    {
+      "surface_key": "inanna_seat",
+      "reason": "no verified governed source object was confirmed for the seated runtime still",
+      "fallback_rows": [
+        {
+          "surface_key": "inanna_seat_view",
+          "media_type": "image",
+          "bucket_name": "pre-codex-exhibition",
+          "storage_path": "rise_inanna_memory_myth.png",
+          "render_order": 20,
+          "is_active": true
+        }
+      ]
+    },
+    {
+      "surface_key": "gates_passage_02",
+      "reason": "single_surface renderer was repaired, but no uniquely verified governed source object was confirmed beyond ambiguous legacy fallback reuse",
+      "fallback_rows": [
+        {
+          "surface_key": "gates_passage_02",
+          "media_type": "video",
+          "bucket_name": "pre-codex-exhibition",
+          "storage_path": "gates_passage_01.mp4",
+          "render_order": 10,
+          "is_active": true
+        }
+      ]
+    },
+    {
+      "surface_key": "gates_passage_03",
+      "reason": "single_surface renderer was repaired, but no verified governed source object was available",
+      "fallback_rows": []
+    },
+    {
+      "surface_key": "me_01",
+      "reason": "no verified governed source image was confirmed for me_01 chamberplate runtime",
+      "fallback_rows": [
+        {
+          "surface_key": "me_01",
+          "media_type": "image",
+          "bucket_name": "pre-codex-exhibition",
+          "storage_path": "me01_memory.png",
+          "render_order": 10,
+          "is_active": true
+        },
+        {
+          "surface_key": "me_01",
+          "media_type": "audio",
+          "bucket_name": "pre-codex-exhibition",
+          "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "render_order": 30,
+          "is_active": true
+        }
+      ]
+    }
+  ],
+  "fallbackDeletionPerformed": false,
+  "supabaseLargeMediaDriftIntroduced": false
+}

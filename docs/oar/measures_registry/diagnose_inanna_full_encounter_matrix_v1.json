@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-12T14:38:31.636Z",
+  "generatedAt": "2026-05-12T15:10:33.085Z",
   "mutationCount": 0,
   "mutationPerformed": false,
   "liveBundle": {
@@ -171,9 +171,18 @@
         "show_action_rail": true
       },
       "renderer_supported": true,
-      "governed_media_row_count": 0,
+      "governed_media_row_count": 1,
       "fallback_media_row_count": 1,
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "crystal_temple_home",
+          "role": "image",
+          "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "image",
@@ -181,7 +190,7 @@
         }
       ],
       "primary_video_media_key": null,
-      "primary_still_media_key": "crystal_temple_home.png",
+      "primary_still_media_key": "pre_codex_exhibition_crystal_temple_image_v1",
       "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
@@ -192,11 +201,11 @@
           "status": null
         },
         "primary_still": {
-          "mediaKey": null,
-          "storagePath": "crystal_temple_home.png",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/crystal_temple_home.png",
-          "status": 400
+          "mediaKey": "pre_codex_exhibition_crystal_temple_image_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+          "status": 200
         },
         "primary_audio": {
           "mediaKey": null,
@@ -249,8 +258,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "inanna_seat",
@@ -525,9 +534,18 @@
         "show_action_rail": false
       },
       "renderer_supported": true,
-      "governed_media_row_count": 0,
+      "governed_media_row_count": 1,
       "fallback_media_row_count": 2,
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "temple_harrumuk_passage",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "harrumuk_passage.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
@@ -538,16 +556,16 @@
           "storage_path": "etonal_phi_companion.wav"
         }
       ],
-      "primary_video_media_key": "harrumuk_passage.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
       "primary_still_media_key": null,
       "primary_audio_media_key": "etonal_phi_companion.wav",
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_harrumuk_passage_video_v1",
           "storagePath": "harrumuk_passage.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/harrumuk_passage.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/harrumuk_passage.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -616,8 +634,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "phase_map",
@@ -776,9 +794,18 @@
         "show_action_rail": false
       },
       "renderer_supported": true,
-      "governed_media_row_count": 0,
+      "governed_media_row_count": 1,
       "fallback_media_row_count": 2,
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "kumurrah_passage",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "kumurrah_passage.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
@@ -789,16 +816,16 @@
           "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav"
         }
       ],
-      "primary_video_media_key": "kumurrah_passage.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
       "primary_still_media_key": null,
       "primary_audio_media_key": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_kumurrah_passage_video_v1",
           "storagePath": "kumurrah_passage.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/kumurrah_passage.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/kumurrah_passage.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -858,8 +885,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "gate_1_crown_removed",
@@ -1052,9 +1079,18 @@
         "show_action_rail": false
       },
       "renderer_supported": true,
-      "governed_media_row_count": 0,
+      "governed_media_row_count": 1,
       "fallback_media_row_count": 4,
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "gates_passage_01",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_gates_passage_01_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "gates_passage_01.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
@@ -1073,16 +1109,16 @@
           "storage_path": "etonal_phi_companion.wav"
         }
       ],
-      "primary_video_media_key": "gates_passage_01.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_gates_passage_01_video_v1",
       "primary_still_media_key": "gates_passage_01.png",
       "primary_audio_media_key": "etonal_phi_companion.wav",
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_gates_passage_01_video_v1",
           "storagePath": "gates_passage_01.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_01.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/gates_passage_01.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -1124,8 +1160,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "gate_2_lapis_beads",
@@ -1304,11 +1340,11 @@
       "resolved_encounter_key": "gates_passage_02_encounter",
       "encounter_def_exists": true,
       "renderer": {
-        "layout": "single_surface",
-        "media_fit": null,
-        "show_action_rail": null
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
       },
-      "renderer_supported": false,
+      "renderer_supported": true,
       "governed_media_row_count": 0,
       "fallback_media_row_count": 4,
       "governed_media_roles": [],
@@ -1381,8 +1417,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "renderer unsupported",
-      "failure_class": "unsupported renderer"
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
     },
     {
       "registry_key_requested": "gate_3_lapis_necklace",
@@ -1561,11 +1597,11 @@
       "resolved_encounter_key": "gates_passage_03_encounter",
       "encounter_def_exists": true,
       "renderer": {
-        "layout": "single_surface",
-        "media_fit": null,
-        "show_action_rail": null
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
       },
-      "renderer_supported": false,
+      "renderer_supported": true,
       "governed_media_row_count": 0,
       "fallback_media_row_count": 3,
       "governed_media_roles": [],
@@ -1634,8 +1670,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "renderer unsupported",
-      "failure_class": "unsupported renderer"
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
     },
     {
       "registry_key_requested": "chamber_epithets_01_primus_artus",
@@ -1836,25 +1872,34 @@
         "show_action_rail": false
       },
       "renderer_supported": true,
-      "governed_media_row_count": 0,
+      "governed_media_row_count": 1,
       "fallback_media_row_count": 1,
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "epithets_passage_01",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "epithet_passage_01.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
           "storage_path": "epithet_passage_01.mp4"
         }
       ],
-      "primary_video_media_key": "epithet_passage_01.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
       "primary_still_media_key": null,
       "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_epithets_passage_01_video_v1",
           "storagePath": "epithet_passage_01.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/epithet_passage_01.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/epithet_passage_01.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -1896,8 +1941,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "chamber_epithets_02_gemynd_corpus",
@@ -2016,7 +2061,7 @@
           "storagePath": "gemynd_corpus.mp3",
           "source": "registry_media",
           "url": "https://media.c3field.online/gemynd_corpus.mp3",
-          "status": 200
+          "status": "fetch_error:fetch failed"
         }
       },
       "transition_targets": {
@@ -2114,25 +2159,34 @@
         "show_action_rail": false
       },
       "renderer_supported": true,
-      "governed_media_row_count": 0,
+      "governed_media_row_count": 1,
       "fallback_media_row_count": 1,
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "epithets_passage_02",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "epithet_passage_01.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
           "storage_path": "epithet_passage_01.mp4"
         }
       ],
-      "primary_video_media_key": "epithet_passage_01.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
       "primary_still_media_key": null,
       "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_epithets_passage_01_video_v1",
           "storagePath": "epithet_passage_01.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/epithet_passage_01.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/epithet_passage_01.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -2174,8 +2228,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "chamber_epithets_03_percipari",
@@ -2624,32 +2678,12 @@
   ],
   "exactFailingSurfaces": [
     {
-      "registry_key_requested": "crystal_temple_home",
-      "failure_class": "media URL retrieval failure",
-      "live_deployed_route_result": "media selected but retrieval fails"
-    },
-    {
       "registry_key_requested": "inanna_seat",
       "failure_class": "media URL retrieval failure",
       "live_deployed_route_result": "media selected but retrieval fails"
     },
     {
-      "registry_key_requested": "temple_harrumuk_passage",
-      "failure_class": "media URL retrieval failure",
-      "live_deployed_route_result": "media selected but retrieval fails"
-    },
-    {
-      "registry_key_requested": "kumurrah_passage",
-      "failure_class": "media URL retrieval failure",
-      "live_deployed_route_result": "media selected but retrieval fails"
-    },
-    {
       "registry_key_requested": "gate_1_crown_removed",
-      "failure_class": "media URL retrieval failure",
-      "live_deployed_route_result": "media selected but retrieval fails"
-    },
-    {
-      "registry_key_requested": "gates_passage_01",
       "failure_class": "media URL retrieval failure",
       "live_deployed_route_result": "media selected but retrieval fails"
     },
@@ -2660,8 +2694,8 @@
     },
     {
       "registry_key_requested": "gates_passage_02",
-      "failure_class": "unsupported renderer",
-      "live_deployed_route_result": "renderer unsupported"
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
     },
     {
       "registry_key_requested": "gate_3_lapis_necklace",
@@ -2670,16 +2704,6 @@
     },
     {
       "registry_key_requested": "gates_passage_03",
-      "failure_class": "unsupported renderer",
-      "live_deployed_route_result": "renderer unsupported"
-    },
-    {
-      "registry_key_requested": "epithets_passage_01",
-      "failure_class": "media URL retrieval failure",
-      "live_deployed_route_result": "media selected but retrieval fails"
-    },
-    {
-      "registry_key_requested": "epithets_passage_02",
       "failure_class": "media URL retrieval failure",
       "live_deployed_route_result": "media selected but retrieval fails"
     },
@@ -3115,7 +3139,16 @@
     {
       "registry_key_requested": "crystal_temple_home",
       "surface_type": "chamberplate",
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "crystal_temple_home",
+          "role": "image",
+          "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "image",
@@ -3123,7 +3156,7 @@
         }
       ],
       "primary_video_media_key": null,
-      "primary_still_media_key": "crystal_temple_home.png",
+      "primary_still_media_key": "pre_codex_exhibition_crystal_temple_image_v1",
       "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
@@ -3134,11 +3167,11 @@
           "status": null
         },
         "primary_still": {
-          "mediaKey": null,
-          "storagePath": "crystal_temple_home.png",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/crystal_temple_home.png",
-          "status": 400
+          "mediaKey": "pre_codex_exhibition_crystal_temple_image_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+          "status": 200
         },
         "primary_audio": {
           "mediaKey": null,
@@ -3148,7 +3181,7 @@
           "status": null
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "inanna_seat",
@@ -3238,7 +3271,16 @@
     {
       "registry_key_requested": "temple_harrumuk_passage",
       "surface_type": "passage",
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "temple_harrumuk_passage",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "harrumuk_passage.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
@@ -3249,16 +3291,16 @@
           "storage_path": "etonal_phi_companion.wav"
         }
       ],
-      "primary_video_media_key": "harrumuk_passage.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_harrumuk_passage_video_v1",
       "primary_still_media_key": null,
       "primary_audio_media_key": "etonal_phi_companion.wav",
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_harrumuk_passage_video_v1",
           "storagePath": "harrumuk_passage.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/harrumuk_passage.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/harrumuk_passage.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -3275,7 +3317,7 @@
           "status": 400
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "phase_map",
@@ -3318,7 +3360,16 @@
     {
       "registry_key_requested": "kumurrah_passage",
       "surface_type": "passage",
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "kumurrah_passage",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "kumurrah_passage.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
@@ -3329,16 +3380,16 @@
           "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav"
         }
       ],
-      "primary_video_media_key": "kumurrah_passage.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_kumurrah_passage_video_v1",
       "primary_still_media_key": null,
       "primary_audio_media_key": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_kumurrah_passage_video_v1",
           "storagePath": "kumurrah_passage.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/kumurrah_passage.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/kumurrah_passage.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -3355,7 +3406,7 @@
           "status": 400
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "gate_1_crown_removed",
@@ -3410,7 +3461,16 @@
     {
       "registry_key_requested": "gates_passage_01",
       "surface_type": "passage",
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "gates_passage_01",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_gates_passage_01_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "gates_passage_01.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
@@ -3429,16 +3489,16 @@
           "storage_path": "etonal_phi_companion.wav"
         }
       ],
-      "primary_video_media_key": "gates_passage_01.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_gates_passage_01_video_v1",
       "primary_still_media_key": "gates_passage_01.png",
       "primary_audio_media_key": "etonal_phi_companion.wav",
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_gates_passage_01_video_v1",
           "storagePath": "gates_passage_01.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_01.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/gates_passage_01.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -3455,7 +3515,7 @@
           "status": 400
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "gate_2_lapis_beads",
@@ -3555,7 +3615,7 @@
           "status": 400
         }
       },
-      "failure_class": "unsupported renderer"
+      "failure_class": "media URL retrieval failure"
     },
     {
       "registry_key_requested": "gate_3_lapis_necklace",
@@ -3651,7 +3711,7 @@
           "status": 400
         }
       },
-      "failure_class": "unsupported renderer"
+      "failure_class": "media URL retrieval failure"
     },
     {
       "registry_key_requested": "chamber_epithets_01_primus_artus",
@@ -3723,23 +3783,32 @@
     {
       "registry_key_requested": "epithets_passage_01",
       "surface_type": "passage",
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "epithets_passage_01",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "epithet_passage_01.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
           "storage_path": "epithet_passage_01.mp4"
         }
       ],
-      "primary_video_media_key": "epithet_passage_01.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
       "primary_still_media_key": null,
       "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_epithets_passage_01_video_v1",
           "storagePath": "epithet_passage_01.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/epithet_passage_01.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/epithet_passage_01.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -3756,7 +3825,7 @@
           "status": null
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "chamber_epithets_02_gemynd_corpus",
@@ -3836,7 +3905,7 @@
           "storagePath": "gemynd_corpus.mp3",
           "source": "registry_media",
           "url": "https://media.c3field.online/gemynd_corpus.mp3",
-          "status": 200
+          "status": "fetch_error:fetch failed"
         }
       },
       "failure_class": "renderable"
@@ -3844,23 +3913,32 @@
     {
       "registry_key_requested": "epithets_passage_02",
       "surface_type": "passage",
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "epithets_passage_02",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "epithet_passage_01.mp4"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
           "storage_path": "epithet_passage_01.mp4"
         }
       ],
-      "primary_video_media_key": "epithet_passage_01.mp4",
+      "primary_video_media_key": "pre_codex_exhibition_epithets_passage_01_video_v1",
       "primary_still_media_key": null,
       "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_epithets_passage_01_video_v1",
           "storagePath": "epithet_passage_01.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/epithet_passage_01.mp4",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/epithet_passage_01.mp4",
+          "status": 200
         },
         "primary_still": {
           "mediaKey": null,
@@ -3877,7 +3955,7 @@
           "status": null
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "chamber_epithets_03_percipari",
@@ -4943,16 +5021,14 @@
       "phase_map": 1
     },
     "by_failure_class": {
-      "media URL retrieval failure": 12,
-      "unsupported renderer": 2
+      "media URL retrieval failure": 8
     },
     "by_renderer": {
       "encounter_focus": 8,
       "choice_surface": 1,
       "plaque_overlay": 3,
-      "passage_only": 5,
-      "phase_map": 1,
-      "single_surface": 2
+      "passage_only": 7,
+      "phase_map": 1
     },
     "bundle": {
       "assetPath": "assets/index-DGEAOe4x.js",
