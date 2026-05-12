@@ -1,0 +1,4973 @@
+{
+  "generatedAt": "2026-05-12T14:38:31.636Z",
+  "mutationCount": 0,
+  "mutationPerformed": false,
+  "liveBundle": {
+    "assetPath": "assets/index-DGEAOe4x.js",
+    "htmlTitle": "Measures of Inanna",
+    "publicUrl": "https://zfihrspxvennjzazxcbj.supabase.co",
+    "publicKey": "sb_publishable_e7pEH3NayEDRPiS2PWA7ng_LkV9vVbT",
+    "r2BaseUrl": "https://media.c3field.online",
+    "bundleEncounterFallbackInspection": "inconclusive_from_minified_bundle"
+  },
+  "fullEncounterMatrix": [
+    {
+      "registry_key_requested": "epigraph",
+      "registry_row_exists": true,
+      "registry_id": "5f92e6e0-c07d-4af6-8112-7a108ae63cbd",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "aspect",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "epigraph",
+        "epigraph_view",
+        "epigraph_encounter"
+      ],
+      "candidate_resolution_table": {
+        "epigraph": {
+          "service": false,
+          "public": false
+        },
+        "epigraph_view": {
+          "service": true,
+          "public": true
+        },
+        "epigraph_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "epigraph_view",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 2,
+      "fallback_media_row_count": 1,
+      "governed_media_roles": [
+        {
+          "surface_key": "epigraph",
+          "role": "featured_video",
+          "media_key": "epigraph_governed_animated_media_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "inanna_epigraph.MP4"
+        },
+        {
+          "surface_key": "epigraph",
+          "role": "image",
+          "media_key": "epigraph_still_image_support_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "inanna_encounter_intro.mp4"
+        }
+      ],
+      "primary_video_media_key": "epigraph_governed_animated_media_v1",
+      "primary_still_media_key": "epigraph_still_image_support_v1",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": "epigraph_governed_animated_media_v1",
+          "storagePath": "inanna_epigraph.MP4",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/inanna_epigraph.MP4",
+          "status": 200
+        },
+        "primary_still": {
+          "mediaKey": "epigraph_still_image_support_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "auto_enter_crystal_temple_home",
+          "label": "Enter Crystal Temple Home",
+          "kind": "navigate",
+          "emphasis": "primary",
+          "targetRegistryKey": "crystal_temple_home",
+          "targetEncounterKey": "crystal_temple_home_view",
+          "targetAfterPassage": null,
+          "sortOrder": 1
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "auto_enter_crystal_temple_home",
+            "label": "Enter Crystal Temple Home",
+            "kind": "navigate",
+            "targetRegistryKey": "crystal_temple_home",
+            "targetEncounterKey": "crystal_temple_home_view",
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "crystal_temple_home",
+      "registry_row_exists": true,
+      "registry_id": "d8a186b3-3470-44b4-abae-d40d3e45a32d",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "callable"
+      ],
+      "expected_encounter_key_candidates": [
+        "crystal_temple_home",
+        "crystal_temple_home_view",
+        "crystal_temple_home_encounter"
+      ],
+      "candidate_resolution_table": {
+        "crystal_temple_home": {
+          "service": false,
+          "public": false
+        },
+        "crystal_temple_home_view": {
+          "service": true,
+          "public": true
+        },
+        "crystal_temple_home_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "crystal_temple_home_view",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "choice_surface",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 1,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "crystal_temple_home.png"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "crystal_temple_home.png",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "crystal_temple_home.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/crystal_temple_home.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_antechamber",
+          "label": "Enter Antechamber",
+          "kind": "navigate",
+          "targetRegistryKey": "temple_antechamber",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": 10
+        },
+        "secondary": {
+          "id": "enter_inanna_seat",
+          "label": "Enter Inanna's Seat",
+          "kind": "navigate",
+          "targetRegistryKey": "inanna_seat",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 20
+        },
+        "return": null,
+        "all": [
+          {
+            "id": "enter_antechamber",
+            "label": "Enter Antechamber",
+            "kind": "navigate",
+            "targetRegistryKey": "temple_antechamber",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          },
+          {
+            "id": "enter_inanna_seat",
+            "label": "Enter Inanna's Seat",
+            "kind": "navigate",
+            "targetRegistryKey": "inanna_seat",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "inanna_seat",
+      "registry_row_exists": true,
+      "registry_id": "4ef56b92-f801-4a16-ad2b-7625290e3e86",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "callable"
+      ],
+      "expected_encounter_key_candidates": [
+        "inanna_seat",
+        "inanna_seat_view",
+        "inanna_seat_encounter"
+      ],
+      "candidate_resolution_table": {
+        "inanna_seat": {
+          "service": false,
+          "public": false
+        },
+        "inanna_seat_view": {
+          "service": true,
+          "public": true
+        },
+        "inanna_seat_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "inanna_seat_view",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 1,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "rise_inanna_memory_myth.png"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "rise_inanna_memory_myth.png",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "rise_inanna_memory_myth.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/rise_inanna_memory_myth.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "temple_antechamber",
+      "registry_row_exists": true,
+      "registry_id": "439295a8-c600-4a58-8991-8eae24d8a1df",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "threshold",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "callable"
+      ],
+      "expected_encounter_key_candidates": [
+        "temple_antechamber",
+        "temple_antechamber_view",
+        "temple_antechamber_encounter"
+      ],
+      "candidate_resolution_table": {
+        "temple_antechamber": {
+          "service": false,
+          "public": false
+        },
+        "temple_antechamber_view": {
+          "service": true,
+          "public": true
+        },
+        "temple_antechamber_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "temple_antechamber_view",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "plaque_overlay",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 1,
+      "fallback_media_row_count": 1,
+      "governed_media_roles": [
+        {
+          "surface_key": "temple_antechamber",
+          "role": "image",
+          "media_key": "temple_antechamber_still_image_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/antechamber.webp"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "antechamber.png"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "temple_antechamber_still_image_v1",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": "temple_antechamber_still_image_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/antechamber.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "continue_to_harrumuk",
+          "label": "Enter Exhibition",
+          "kind": "navigate",
+          "emphasis": "primary",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": "temple_harrumuk_passage_view",
+          "targetAfterPassage": null,
+          "sortOrder": 10
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "continue_to_harrumuk",
+            "label": "Enter Exhibition",
+            "kind": "navigate",
+            "targetRegistryKey": "temple_harrumuk_passage",
+            "targetEncounterKey": "temple_harrumuk_passage_view",
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "temple_harrumuk_passage",
+      "registry_row_exists": true,
+      "registry_id": "cb5a9672-c51a-44a7-85a0-56dd5e692bd3",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "passage",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "callable"
+      ],
+      "expected_encounter_key_candidates": [
+        "temple_harrumuk_passage",
+        "temple_harrumuk_passage_view",
+        "temple_harrumuk_passage_encounter"
+      ],
+      "candidate_resolution_table": {
+        "temple_harrumuk_passage": {
+          "service": false,
+          "public": false
+        },
+        "temple_harrumuk_passage_view": {
+          "service": true,
+          "public": true
+        },
+        "temple_harrumuk_passage_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "temple_harrumuk_passage_view",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 2,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "harrumuk_passage.mp4"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "harrumuk_passage.mp4",
+      "primary_still_media_key": null,
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "harrumuk_passage.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/harrumuk_passage.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_phase_map",
+          "label": "Enter Phase Map",
+          "kind": "navigate",
+          "emphasis": "primary",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": "phase_map",
+          "targetAfterPassage": null,
+          "sortOrder": 20
+        },
+        "secondary": {
+          "id": "return_to_antechamber",
+          "label": "Return to Antechamber",
+          "kind": "navigate",
+          "emphasis": "secondary",
+          "targetRegistryKey": "temple_antechamber",
+          "targetEncounterKey": "temple_antechamber_view",
+          "targetAfterPassage": null,
+          "sortOrder": 30
+        },
+        "return": {
+          "id": "return_to_antechamber",
+          "label": "Return to Antechamber",
+          "kind": "navigate",
+          "emphasis": "secondary",
+          "targetRegistryKey": "temple_antechamber",
+          "targetEncounterKey": "temple_antechamber_view",
+          "targetAfterPassage": null,
+          "sortOrder": 30
+        },
+        "all": [
+          {
+            "id": "enter_phase_map",
+            "label": "Enter Phase Map",
+            "kind": "navigate",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": "phase_map",
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          },
+          {
+            "id": "return_to_antechamber",
+            "label": "Return to Antechamber",
+            "kind": "navigate",
+            "targetRegistryKey": "temple_antechamber",
+            "targetEncounterKey": "temple_antechamber_view",
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "phase_map",
+      "registry_row_exists": true,
+      "registry_id": "a4f7cd49-d0bc-4d1b-9a60-7393b1dcb04c",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "phase_map",
+      "release_standing": [],
+      "access_standing": [],
+      "expected_encounter_key_candidates": [
+        "phase_map",
+        "phase_map_view",
+        "phase_map_encounter"
+      ],
+      "candidate_resolution_table": {
+        "phase_map": {
+          "service": true,
+          "public": true
+        },
+        "phase_map_view": {
+          "service": false,
+          "public": false
+        },
+        "phase_map_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "phase_map",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "phase_map",
+        "media_fit": null,
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 1,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "phase_map.png"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "phase_map.png",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "phase_map.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/phase_map.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "return_to_temple_via_harrumuk",
+          "label": "Return to Temple",
+          "kind": "return",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "crystal_temple_home",
+          "emphasis": "secondary",
+          "sortOrder": 90
+        },
+        "secondary": {
+          "id": "return_to_temple_via_harrumuk",
+          "label": "Return to Temple",
+          "kind": "return",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "crystal_temple_home",
+          "emphasis": "secondary",
+          "sortOrder": 90
+        },
+        "return": {
+          "id": "return_to_temple_via_harrumuk",
+          "label": "Return to Temple",
+          "kind": "return",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "crystal_temple_home",
+          "emphasis": "secondary",
+          "sortOrder": 90
+        },
+        "all": [
+          {
+            "id": "return_to_temple_via_harrumuk",
+            "label": "Return to Temple",
+            "kind": "return",
+            "targetRegistryKey": "temple_harrumuk_passage",
+            "targetEncounterKey": null,
+            "targetAfterPassage": "crystal_temple_home",
+            "emphasis": "secondary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "kumurrah_passage",
+      "registry_row_exists": true,
+      "registry_id": "1b90d716-335d-47ee-9fe1-68608ba7bc7c",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "passage",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "callable"
+      ],
+      "expected_encounter_key_candidates": [
+        "kumurrah_passage",
+        "kumurrah_passage_view",
+        "kumurrah_passage_encounter"
+      ],
+      "candidate_resolution_table": {
+        "kumurrah_passage": {
+          "service": true,
+          "public": true
+        },
+        "kumurrah_passage_view": {
+          "service": false,
+          "public": false
+        },
+        "kumurrah_passage_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "kumurrah_passage",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 2,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "kumurrah_passage.mp4"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav"
+        }
+      ],
+      "primary_video_media_key": "kumurrah_passage.mp4",
+      "primary_still_media_key": null,
+      "primary_audio_media_key": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "kumurrah_passage.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/kumurrah_passage.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_gates",
+          "label": "Enter Gates",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "gate_1_crown_removed",
+          "targetEncounterKey": "gate_1_crown_removed_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 5
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_gates",
+            "label": "Enter Gates",
+            "kind": "progression",
+            "targetRegistryKey": "gate_1_crown_removed",
+            "targetEncounterKey": "gate_1_crown_removed_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          },
+          {
+            "id": "enter_epithets",
+            "label": "Enter Epithets",
+            "kind": "progression",
+            "targetRegistryKey": "chamber_epithets_01_primus_artus",
+            "targetEncounterKey": "chamber_epithets_01_primus_artus_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          },
+          {
+            "id": "enter_codexstone",
+            "label": "Enter Codexstone",
+            "kind": "progression",
+            "targetRegistryKey": "codexstone",
+            "targetEncounterKey": "codexstone_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gate_1_crown_removed",
+      "registry_row_exists": true,
+      "registry_id": "ff08169d-056b-4a13-aec5-e3c14ab926fb",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "gate_1_crown_removed",
+        "gate_1_crown_removed_view",
+        "gate_1_crown_removed_encounter"
+      ],
+      "candidate_resolution_table": {
+        "gate_1_crown_removed": {
+          "service": false,
+          "public": false
+        },
+        "gate_1_crown_removed_view": {
+          "service": false,
+          "public": false
+        },
+        "gate_1_crown_removed_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gate_1_crown_removed_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "plaque_overlay",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 4,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "obsidian_chamberplate_gate01.jpeg"
+        },
+        {
+          "media_type": "video",
+          "storage_path": "obsidian_chamberplate_gate01.mov"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "obsidian_chamberplate_gate01.mov",
+      "primary_still_media_key": "obsidian_chamberplate_gate01.jpeg",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate01.mov",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate01.mov",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate01.jpeg",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate01.jpeg",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "continue_descent",
+          "label": "Continue Descent",
+          "kind": "progression",
+          "targetRegistryKey": "gates_passage_01",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "continue_descent",
+            "label": "Continue Descent",
+            "kind": "progression",
+            "targetRegistryKey": "gates_passage_01",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          },
+          {
+            "id": "continue",
+            "label": "Continue",
+            "kind": "progression",
+            "targetRegistryKey": "gate_2_lapis_beads",
+            "targetEncounterKey": "gate_2_lapis_beads_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gates_passage_01",
+      "registry_row_exists": true,
+      "registry_id": "a12b035a-9588-4736-8360-81ce4ecf2580",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "passage",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "gates_passage_01",
+        "gates_passage_01_view",
+        "gates_passage_01_encounter"
+      ],
+      "candidate_resolution_table": {
+        "gates_passage_01": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_01_view": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_01_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gates_passage_01_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 4,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "gates_passage_01.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "gates_passage_01.png"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "gates_passage_01.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "gates_passage_01.mp4",
+      "primary_still_media_key": "gates_passage_01.png",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_01.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_01.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_01.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_01.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_gate",
+          "label": "Enter Next Gate",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "gate_2_lapis_beads",
+          "targetEncounterKey": "gate_2_lapis_beads_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 10
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_gate",
+            "label": "Enter Next Gate",
+            "kind": "progression",
+            "targetRegistryKey": "gate_2_lapis_beads",
+            "targetEncounterKey": "gate_2_lapis_beads_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gate_2_lapis_beads",
+      "registry_row_exists": true,
+      "registry_id": "e769d51b-5fbf-459f-a55c-75d5dffd6600",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "gate_2_lapis_beads",
+        "gate_2_lapis_beads_view",
+        "gate_2_lapis_beads_encounter"
+      ],
+      "candidate_resolution_table": {
+        "gate_2_lapis_beads": {
+          "service": false,
+          "public": false
+        },
+        "gate_2_lapis_beads_view": {
+          "service": false,
+          "public": false
+        },
+        "gate_2_lapis_beads_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gate_2_lapis_beads_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 4,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "obsidian_chamberplate_gate02.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "obsidian_chamberplate_gate02.webp"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "obsidian_chamberplate_gate02.mp4",
+      "primary_still_media_key": "obsidian_chamberplate_gate02.webp",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate02.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate02.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate02.webp",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate02.webp",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "continue_descent_to_gate_03",
+          "label": "Continue Descent",
+          "kind": "progression",
+          "targetRegistryKey": "gates_passage_02",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": 10
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "continue_descent_to_gate_03",
+            "label": "Continue Descent",
+            "kind": "progression",
+            "targetRegistryKey": "gates_passage_02",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          },
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gates_passage_02",
+      "registry_row_exists": true,
+      "registry_id": "f8d39b0c-1110-469f-bfae-3ae4d8cb1891",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "passage",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "gates_passage_02",
+        "gates_passage_02_view",
+        "gates_passage_02_encounter"
+      ],
+      "candidate_resolution_table": {
+        "gates_passage_02": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_02_view": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_02_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gates_passage_02_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "single_surface",
+        "media_fit": null,
+        "show_action_rail": null
+      },
+      "renderer_supported": false,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 4,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "gates_passage_01.mp4"
+        },
+        {
+          "media_type": "video",
+          "storage_path": "gates_passage_02.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "gates_passage_02.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "gates_passage_01.mp4",
+      "primary_still_media_key": "gates_passage_02.png",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_01.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_01.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_02.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_02.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_gate",
+          "label": "Enter Next Gate",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "gate_3_lapis_necklace",
+          "targetEncounterKey": "gate_3_lapis_necklace_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 10
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_gate",
+            "label": "Enter Next Gate",
+            "kind": "progression",
+            "targetRegistryKey": "gate_3_lapis_necklace",
+            "targetEncounterKey": "gate_3_lapis_necklace_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      },
+      "live_deployed_route_result": "renderer unsupported",
+      "failure_class": "unsupported renderer"
+    },
+    {
+      "registry_key_requested": "gate_3_lapis_necklace",
+      "registry_row_exists": true,
+      "registry_id": "30e185be-3310-4833-9237-a93d4707cc9d",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "gate_3_lapis_necklace",
+        "gate_3_lapis_necklace_view",
+        "gate_3_lapis_necklace_encounter"
+      ],
+      "candidate_resolution_table": {
+        "gate_3_lapis_necklace": {
+          "service": false,
+          "public": false
+        },
+        "gate_3_lapis_necklace_view": {
+          "service": false,
+          "public": false
+        },
+        "gate_3_lapis_necklace_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gate_3_lapis_necklace_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 4,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "obsidian_chamberplate_gate03.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "obsidian_chamberplate_gate03.jpeg"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "obsidian_chamberplate_gate03.mp4",
+      "primary_still_media_key": "obsidian_chamberplate_gate03.jpeg",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate03.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate03.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate03.jpeg",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate03.jpeg",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "return_via_harrumuk",
+          "label": "Return Through Harrumuk",
+          "kind": "progression",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "return_antechamber",
+          "emphasis": "primary",
+          "sortOrder": 10
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_via_harrumuk",
+          "label": "Return Through Harrumuk",
+          "kind": "progression",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "return_antechamber",
+          "emphasis": "primary",
+          "sortOrder": 10
+        },
+        "all": [
+          {
+            "id": "return_via_harrumuk",
+            "label": "Return Through Harrumuk",
+            "kind": "progression",
+            "targetRegistryKey": "temple_harrumuk_passage",
+            "targetEncounterKey": null,
+            "targetAfterPassage": "return_antechamber",
+            "emphasis": "primary"
+          },
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gates_passage_03",
+      "registry_row_exists": true,
+      "registry_id": "31845f2c-5302-4434-9a42-bf97f711f05a",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "passage",
+      "release_standing": [
+        "held"
+      ],
+      "access_standing": [
+        "gated"
+      ],
+      "expected_encounter_key_candidates": [
+        "gates_passage_03",
+        "gates_passage_03_view",
+        "gates_passage_03_encounter"
+      ],
+      "candidate_resolution_table": {
+        "gates_passage_03": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_03_view": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_03_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gates_passage_03_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "single_surface",
+        "media_fit": null,
+        "show_action_rail": null
+      },
+      "renderer_supported": false,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 3,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "gates_passage_03.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "gates_passage_03.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "gates_passage_03.mp4",
+      "primary_still_media_key": "gates_passage_03.png",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_03.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_03.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_03.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_03.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_gate",
+          "label": "Enter Next Gate",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "gate_4_breastplate",
+          "targetEncounterKey": "gate_4_breastplate_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 10
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_gate",
+            "label": "Enter Next Gate",
+            "kind": "progression",
+            "targetRegistryKey": "gate_4_breastplate",
+            "targetEncounterKey": "gate_4_breastplate_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      },
+      "live_deployed_route_result": "renderer unsupported",
+      "failure_class": "unsupported renderer"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_01_primus_artus",
+      "registry_row_exists": true,
+      "registry_id": "6d79d2b4-312b-4c7e-aa80-6f1bfb6cff0a",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "chamber_epithets_01_primus_artus",
+        "chamber_epithets_01_primus_artus_view",
+        "chamber_epithets_01_primus_artus_encounter"
+      ],
+      "candidate_resolution_table": {
+        "chamber_epithets_01_primus_artus": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_01_primus_artus_view": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_01_primus_artus_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "chamber_epithets_01_primus_artus_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 3,
+      "fallback_media_row_count": 2,
+      "governed_media_roles": [
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "role": "oracle_card",
+          "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "role": "original_artwork",
+          "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "role": "full_song",
+          "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "primus_artus.mp3"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "primus_artus_epithet01_chamberplate.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "primus_artus.mp3"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "primary_audio_media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": "chamber_epithets_01_primus_artus_oracle_card_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": "chamber_epithets_01_primus_artus_full_song_v1",
+          "storagePath": "primus_artus.mp3",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/primus_artus.mp3",
+          "status": 200
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "continue",
+          "label": "Continue",
+          "kind": "progression",
+          "targetRegistryKey": "epithets_passage_01",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "continue",
+            "label": "Continue",
+            "kind": "progression",
+            "targetRegistryKey": "epithets_passage_01",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "epithets_passage_01",
+      "registry_row_exists": true,
+      "registry_id": "572ded70-6352-4191-9d6d-a5a408edbd41",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "passage",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "epithets_passage_01",
+        "epithets_passage_01_view",
+        "epithets_passage_01_encounter"
+      ],
+      "candidate_resolution_table": {
+        "epithets_passage_01": {
+          "service": false,
+          "public": false
+        },
+        "epithets_passage_01_view": {
+          "service": false,
+          "public": false
+        },
+        "epithets_passage_01_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "epithets_passage_01_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 1,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "epithet_passage_01.mp4"
+        }
+      ],
+      "primary_video_media_key": "epithet_passage_01.mp4",
+      "primary_still_media_key": null,
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "epithet_passage_01.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/epithet_passage_01.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_epithet",
+          "label": "Enter Next Epithet",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "chamber_epithets_02_gemynd_corpus",
+          "targetEncounterKey": "chamber_epithets_02_gemynd_corpus_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 20
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_epithet",
+            "label": "Enter Next Epithet",
+            "kind": "progression",
+            "targetRegistryKey": "chamber_epithets_02_gemynd_corpus",
+            "targetEncounterKey": "chamber_epithets_02_gemynd_corpus_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_02_gemynd_corpus",
+      "registry_row_exists": true,
+      "registry_id": "b8f4fbfe-6bf1-41e6-b184-2ae828a66378",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "chamber_epithets_02_gemynd_corpus",
+        "chamber_epithets_02_gemynd_corpus_view",
+        "chamber_epithets_02_gemynd_corpus_encounter"
+      ],
+      "candidate_resolution_table": {
+        "chamber_epithets_02_gemynd_corpus": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_02_gemynd_corpus_view": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_02_gemynd_corpus_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "chamber_epithets_02_gemynd_corpus_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 5,
+      "fallback_media_row_count": 2,
+      "governed_media_roles": [
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "featured_video",
+          "media_key": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "gemynd_corpus_lapis_tone .MOV"
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "oracle_card",
+          "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "original_artwork",
+          "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "full_song",
+          "media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "gemynd_corpus.mp3"
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "lapis_tone",
+          "media_key": "chamber_epithets_02_gemynd_corpus_lapis_tone_lapis_tone_rise_return_5min_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "lapis_tone_rise_return_5min.wav"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "gemynd_corpus.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "gemynd_corpus.mp3"
+        }
+      ],
+      "primary_video_media_key": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+      "primary_still_media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "primary_audio_media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+          "storagePath": "gemynd_corpus_lapis_tone .MOV",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/gemynd_corpus_lapis_tone%20.MOV",
+          "status": 200
+        },
+        "primary_still": {
+          "mediaKey": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+          "storagePath": "gemynd_corpus.mp3",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/gemynd_corpus.mp3",
+          "status": 200
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "continue",
+          "label": "Continue",
+          "kind": "progression",
+          "targetRegistryKey": "epithets_passage_02",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "continue",
+            "label": "Continue",
+            "kind": "progression",
+            "targetRegistryKey": "epithets_passage_02",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "epithets_passage_02",
+      "registry_row_exists": true,
+      "registry_id": "9d66b579-31bb-4ebe-9362-ff4eb4c55a58",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "passage",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "epithets_passage_02",
+        "epithets_passage_02_view",
+        "epithets_passage_02_encounter"
+      ],
+      "candidate_resolution_table": {
+        "epithets_passage_02": {
+          "service": false,
+          "public": false
+        },
+        "epithets_passage_02_view": {
+          "service": false,
+          "public": false
+        },
+        "epithets_passage_02_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "epithets_passage_02_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "passage_only",
+        "media_fit": "contain",
+        "show_action_rail": false
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 1,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "epithet_passage_01.mp4"
+        }
+      ],
+      "primary_video_media_key": "epithet_passage_01.mp4",
+      "primary_still_media_key": null,
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "epithet_passage_01.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/epithet_passage_01.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_epithet",
+          "label": "Enter Next Epithet",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "chamber_epithets_03_percipari",
+          "targetEncounterKey": "chamber_epithets_03_percipari_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 20
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_epithet",
+            "label": "Enter Next Epithet",
+            "kind": "progression",
+            "targetRegistryKey": "chamber_epithets_03_percipari",
+            "targetEncounterKey": "chamber_epithets_03_percipari_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_03_percipari",
+      "registry_row_exists": true,
+      "registry_id": "c97962a4-5467-47fb-b531-6f2d2d4c68ad",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "chamber_epithets_03_percipari",
+        "chamber_epithets_03_percipari_view",
+        "chamber_epithets_03_percipari_encounter"
+      ],
+      "candidate_resolution_table": {
+        "chamber_epithets_03_percipari": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_03_percipari_view": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_03_percipari_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "chamber_epithets_03_percipari_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 4,
+      "fallback_media_row_count": 2,
+      "governed_media_roles": [
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "role": "oracle_card",
+          "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+          "media_type": "image",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "percipari_epithet03_chamberplate.png"
+        },
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "role": "original_artwork",
+          "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "role": "full_song",
+          "media_key": "chamber_epithets_03_percipari_full_song_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "percipari.mp3"
+        },
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "role": "material_tone",
+          "media_key": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "crystal_tone_rise_return_5min.wav"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "percipari_epithet03_chamberplate.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "percipari.mp3"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "primary_audio_media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": "chamber_epithets_03_percipari_oracle_card_v1",
+          "storagePath": "percipari_epithet03_chamberplate.png",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/percipari_epithet03_chamberplate.png",
+          "status": 404
+        },
+        "primary_audio": {
+          "mediaKey": "chamber_epithets_03_percipari_full_song_v1",
+          "storagePath": "percipari.mp3",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/percipari.mp3",
+          "status": 200
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_kumurrah_to_codexstone",
+          "label": "Enter Kumurrah",
+          "kind": "progression",
+          "targetRegistryKey": "kumurrah_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "codexstone",
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "enter_kumurrah_to_codexstone",
+            "label": "Enter Kumurrah",
+            "kind": "progression",
+            "targetRegistryKey": "kumurrah_passage",
+            "targetEncounterKey": null,
+            "targetAfterPassage": "codexstone",
+            "emphasis": "primary"
+          },
+          {
+            "id": "continue",
+            "label": "Enter Marble Chamber",
+            "kind": "progression",
+            "targetRegistryKey": "me_01",
+            "targetEncounterKey": "me_01",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "codexstone",
+      "registry_row_exists": true,
+      "registry_id": "4d340a2d-4582-41f7-a8a1-7e1206997941",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "codexstone",
+        "codexstone_view",
+        "codexstone_encounter"
+      ],
+      "candidate_resolution_table": {
+        "codexstone": {
+          "service": false,
+          "public": false
+        },
+        "codexstone_view": {
+          "service": false,
+          "public": false
+        },
+        "codexstone_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "codexstone_encounter",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "plaque_overlay",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 2,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "marble_chamber_codexstone.webp"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "marble_chamber_codexstone.webp",
+      "primary_audio_media_key": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "marble_chamber_codexstone.webp",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/marble_chamber_codexstone.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "enter_marble_chamber",
+          "label": "Enter Marble Chamber",
+          "kind": "progression",
+          "targetRegistryKey": "me_01",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "enter_marble_chamber",
+            "label": "Enter Marble Chamber",
+            "kind": "progression",
+            "targetRegistryKey": "me_01",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "me_01",
+      "registry_row_exists": true,
+      "registry_id": "dfb762c5-cef0-4fee-8852-0f27ff33946c",
+      "parent_registry_id": null,
+      "family": null,
+      "surface_type": "chamberplate",
+      "release_standing": [
+        "released"
+      ],
+      "access_standing": [
+        "encounterable"
+      ],
+      "expected_encounter_key_candidates": [
+        "me_01",
+        "me_01_view",
+        "me_01_encounter"
+      ],
+      "candidate_resolution_table": {
+        "me_01": {
+          "service": true,
+          "public": true
+        },
+        "me_01_view": {
+          "service": false,
+          "public": false
+        },
+        "me_01_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "me_01",
+      "encounter_def_exists": true,
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_action_rail": true
+      },
+      "renderer_supported": true,
+      "governed_media_row_count": 0,
+      "fallback_media_row_count": 2,
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "me01_memory.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "me01_memory.png",
+      "primary_audio_media_key": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "me01_memory.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/me01_memory.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "status": 400
+        }
+      },
+      "transition_targets": {
+        "primary": {
+          "id": "continue_marble_sequence",
+          "label": "Continue",
+          "kind": "progression",
+          "targetRegistryKey": "me_passage_01",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "continue_marble_sequence",
+            "label": "Continue",
+            "kind": "progression",
+            "targetRegistryKey": "me_passage_01",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      },
+      "live_deployed_route_result": "media selected but retrieval fails",
+      "failure_class": "media URL retrieval failure"
+    }
+  ],
+  "exactFailingSurfaces": [
+    {
+      "registry_key_requested": "crystal_temple_home",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "inanna_seat",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "temple_harrumuk_passage",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "kumurrah_passage",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "gate_1_crown_removed",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "gates_passage_01",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "gate_2_lapis_beads",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "gates_passage_02",
+      "failure_class": "unsupported renderer",
+      "live_deployed_route_result": "renderer unsupported"
+    },
+    {
+      "registry_key_requested": "gate_3_lapis_necklace",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "gates_passage_03",
+      "failure_class": "unsupported renderer",
+      "live_deployed_route_result": "renderer unsupported"
+    },
+    {
+      "registry_key_requested": "epithets_passage_01",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "epithets_passage_02",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_03_percipari",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    },
+    {
+      "registry_key_requested": "me_01",
+      "failure_class": "media URL retrieval failure",
+      "live_deployed_route_result": "media selected but retrieval fails"
+    }
+  ],
+  "candidateResolutionTable": [
+    {
+      "registry_key_requested": "epigraph",
+      "candidates": {
+        "epigraph": {
+          "service": false,
+          "public": false
+        },
+        "epigraph_view": {
+          "service": true,
+          "public": true
+        },
+        "epigraph_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "epigraph_view"
+    },
+    {
+      "registry_key_requested": "crystal_temple_home",
+      "candidates": {
+        "crystal_temple_home": {
+          "service": false,
+          "public": false
+        },
+        "crystal_temple_home_view": {
+          "service": true,
+          "public": true
+        },
+        "crystal_temple_home_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "crystal_temple_home_view"
+    },
+    {
+      "registry_key_requested": "inanna_seat",
+      "candidates": {
+        "inanna_seat": {
+          "service": false,
+          "public": false
+        },
+        "inanna_seat_view": {
+          "service": true,
+          "public": true
+        },
+        "inanna_seat_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "inanna_seat_view"
+    },
+    {
+      "registry_key_requested": "temple_antechamber",
+      "candidates": {
+        "temple_antechamber": {
+          "service": false,
+          "public": false
+        },
+        "temple_antechamber_view": {
+          "service": true,
+          "public": true
+        },
+        "temple_antechamber_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "temple_antechamber_view"
+    },
+    {
+      "registry_key_requested": "temple_harrumuk_passage",
+      "candidates": {
+        "temple_harrumuk_passage": {
+          "service": false,
+          "public": false
+        },
+        "temple_harrumuk_passage_view": {
+          "service": true,
+          "public": true
+        },
+        "temple_harrumuk_passage_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "temple_harrumuk_passage_view"
+    },
+    {
+      "registry_key_requested": "phase_map",
+      "candidates": {
+        "phase_map": {
+          "service": true,
+          "public": true
+        },
+        "phase_map_view": {
+          "service": false,
+          "public": false
+        },
+        "phase_map_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "phase_map"
+    },
+    {
+      "registry_key_requested": "kumurrah_passage",
+      "candidates": {
+        "kumurrah_passage": {
+          "service": true,
+          "public": true
+        },
+        "kumurrah_passage_view": {
+          "service": false,
+          "public": false
+        },
+        "kumurrah_passage_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "kumurrah_passage"
+    },
+    {
+      "registry_key_requested": "gate_1_crown_removed",
+      "candidates": {
+        "gate_1_crown_removed": {
+          "service": false,
+          "public": false
+        },
+        "gate_1_crown_removed_view": {
+          "service": false,
+          "public": false
+        },
+        "gate_1_crown_removed_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gate_1_crown_removed_encounter"
+    },
+    {
+      "registry_key_requested": "gates_passage_01",
+      "candidates": {
+        "gates_passage_01": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_01_view": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_01_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gates_passage_01_encounter"
+    },
+    {
+      "registry_key_requested": "gate_2_lapis_beads",
+      "candidates": {
+        "gate_2_lapis_beads": {
+          "service": false,
+          "public": false
+        },
+        "gate_2_lapis_beads_view": {
+          "service": false,
+          "public": false
+        },
+        "gate_2_lapis_beads_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gate_2_lapis_beads_encounter"
+    },
+    {
+      "registry_key_requested": "gates_passage_02",
+      "candidates": {
+        "gates_passage_02": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_02_view": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_02_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gates_passage_02_encounter"
+    },
+    {
+      "registry_key_requested": "gate_3_lapis_necklace",
+      "candidates": {
+        "gate_3_lapis_necklace": {
+          "service": false,
+          "public": false
+        },
+        "gate_3_lapis_necklace_view": {
+          "service": false,
+          "public": false
+        },
+        "gate_3_lapis_necklace_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gate_3_lapis_necklace_encounter"
+    },
+    {
+      "registry_key_requested": "gates_passage_03",
+      "candidates": {
+        "gates_passage_03": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_03_view": {
+          "service": false,
+          "public": false
+        },
+        "gates_passage_03_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "gates_passage_03_encounter"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_01_primus_artus",
+      "candidates": {
+        "chamber_epithets_01_primus_artus": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_01_primus_artus_view": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_01_primus_artus_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "chamber_epithets_01_primus_artus_encounter"
+    },
+    {
+      "registry_key_requested": "epithets_passage_01",
+      "candidates": {
+        "epithets_passage_01": {
+          "service": false,
+          "public": false
+        },
+        "epithets_passage_01_view": {
+          "service": false,
+          "public": false
+        },
+        "epithets_passage_01_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "epithets_passage_01_encounter"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_02_gemynd_corpus",
+      "candidates": {
+        "chamber_epithets_02_gemynd_corpus": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_02_gemynd_corpus_view": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_02_gemynd_corpus_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "chamber_epithets_02_gemynd_corpus_encounter"
+    },
+    {
+      "registry_key_requested": "epithets_passage_02",
+      "candidates": {
+        "epithets_passage_02": {
+          "service": false,
+          "public": false
+        },
+        "epithets_passage_02_view": {
+          "service": false,
+          "public": false
+        },
+        "epithets_passage_02_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "epithets_passage_02_encounter"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_03_percipari",
+      "candidates": {
+        "chamber_epithets_03_percipari": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_03_percipari_view": {
+          "service": false,
+          "public": false
+        },
+        "chamber_epithets_03_percipari_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "chamber_epithets_03_percipari_encounter"
+    },
+    {
+      "registry_key_requested": "codexstone",
+      "candidates": {
+        "codexstone": {
+          "service": false,
+          "public": false
+        },
+        "codexstone_view": {
+          "service": false,
+          "public": false
+        },
+        "codexstone_encounter": {
+          "service": true,
+          "public": true
+        }
+      },
+      "resolved_encounter_key": "codexstone_encounter"
+    },
+    {
+      "registry_key_requested": "me_01",
+      "candidates": {
+        "me_01": {
+          "service": true,
+          "public": true
+        },
+        "me_01_view": {
+          "service": false,
+          "public": false
+        },
+        "me_01_encounter": {
+          "service": false,
+          "public": false
+        }
+      },
+      "resolved_encounter_key": "me_01"
+    }
+  ],
+  "mediaRolePrecedenceTable": [
+    {
+      "registry_key_requested": "epigraph",
+      "surface_type": "aspect",
+      "governed_media_roles": [
+        {
+          "surface_key": "epigraph",
+          "role": "featured_video",
+          "media_key": "epigraph_governed_animated_media_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "inanna_epigraph.MP4"
+        },
+        {
+          "surface_key": "epigraph",
+          "role": "image",
+          "media_key": "epigraph_still_image_support_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "inanna_encounter_intro.mp4"
+        }
+      ],
+      "primary_video_media_key": "epigraph_governed_animated_media_v1",
+      "primary_still_media_key": "epigraph_still_image_support_v1",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": "epigraph_governed_animated_media_v1",
+          "storagePath": "inanna_epigraph.MP4",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/inanna_epigraph.MP4",
+          "status": 200
+        },
+        "primary_still": {
+          "mediaKey": "epigraph_still_image_support_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "crystal_temple_home",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "crystal_temple_home.png"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "crystal_temple_home.png",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "crystal_temple_home.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/crystal_temple_home.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "inanna_seat",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "rise_inanna_memory_myth.png"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "rise_inanna_memory_myth.png",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "rise_inanna_memory_myth.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/rise_inanna_memory_myth.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "temple_antechamber",
+      "surface_type": "threshold",
+      "governed_media_roles": [
+        {
+          "surface_key": "temple_antechamber",
+          "role": "image",
+          "media_key": "temple_antechamber_still_image_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/antechamber.webp"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "antechamber.png"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "temple_antechamber_still_image_v1",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": "temple_antechamber_still_image_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/antechamber.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "temple_harrumuk_passage",
+      "surface_type": "passage",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "harrumuk_passage.mp4"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "harrumuk_passage.mp4",
+      "primary_still_media_key": null,
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "harrumuk_passage.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/harrumuk_passage.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "phase_map",
+      "surface_type": "phase_map",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "phase_map.png"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "phase_map.png",
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "phase_map.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/phase_map.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "kumurrah_passage",
+      "surface_type": "passage",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "kumurrah_passage.mp4"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav"
+        }
+      ],
+      "primary_video_media_key": "kumurrah_passage.mp4",
+      "primary_still_media_key": null,
+      "primary_audio_media_key": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "kumurrah_passage.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/kumurrah_passage.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gate_1_crown_removed",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "obsidian_chamberplate_gate01.jpeg"
+        },
+        {
+          "media_type": "video",
+          "storage_path": "obsidian_chamberplate_gate01.mov"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "obsidian_chamberplate_gate01.mov",
+      "primary_still_media_key": "obsidian_chamberplate_gate01.jpeg",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate01.mov",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate01.mov",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate01.jpeg",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate01.jpeg",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gates_passage_01",
+      "surface_type": "passage",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "gates_passage_01.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "gates_passage_01.png"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "gates_passage_01.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "gates_passage_01.mp4",
+      "primary_still_media_key": "gates_passage_01.png",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_01.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_01.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_01.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_01.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gate_2_lapis_beads",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "obsidian_chamberplate_gate02.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "obsidian_chamberplate_gate02.webp"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "obsidian_chamberplate_gate02.mp4",
+      "primary_still_media_key": "obsidian_chamberplate_gate02.webp",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate02.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate02.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate02.webp",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate02.webp",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gates_passage_02",
+      "surface_type": "passage",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "gates_passage_01.mp4"
+        },
+        {
+          "media_type": "video",
+          "storage_path": "gates_passage_02.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "gates_passage_02.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "gates_passage_01.mp4",
+      "primary_still_media_key": "gates_passage_02.png",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_01.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_01.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_02.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_02.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "unsupported renderer"
+    },
+    {
+      "registry_key_requested": "gate_3_lapis_necklace",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "obsidian_chamberplate_gate03.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "obsidian_chamberplate_gate03.jpeg"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "obsidian_chamberplate_gate03.mp4",
+      "primary_still_media_key": "obsidian_chamberplate_gate03.jpeg",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate03.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate03.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "obsidian_chamberplate_gate03.jpeg",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate03.jpeg",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "gates_passage_03",
+      "surface_type": "passage",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "gates_passage_03.mp4"
+        },
+        {
+          "media_type": "image",
+          "storage_path": "gates_passage_03.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "etonal_phi_companion.wav"
+        }
+      ],
+      "primary_video_media_key": "gates_passage_03.mp4",
+      "primary_still_media_key": "gates_passage_03.png",
+      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_03.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_03.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "gates_passage_03.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/gates_passage_03.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "etonal_phi_companion.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "unsupported renderer"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_01_primus_artus",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "role": "oracle_card",
+          "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "role": "original_artwork",
+          "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "role": "full_song",
+          "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "primus_artus.mp3"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "primus_artus_epithet01_chamberplate.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "primus_artus.mp3"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "primary_audio_media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": "chamber_epithets_01_primus_artus_oracle_card_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": "chamber_epithets_01_primus_artus_full_song_v1",
+          "storagePath": "primus_artus.mp3",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/primus_artus.mp3",
+          "status": 200
+        }
+      },
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "epithets_passage_01",
+      "surface_type": "passage",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "epithet_passage_01.mp4"
+        }
+      ],
+      "primary_video_media_key": "epithet_passage_01.mp4",
+      "primary_still_media_key": null,
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "epithet_passage_01.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/epithet_passage_01.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_02_gemynd_corpus",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "featured_video",
+          "media_key": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "gemynd_corpus_lapis_tone .MOV"
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "oracle_card",
+          "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "original_artwork",
+          "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "full_song",
+          "media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "gemynd_corpus.mp3"
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "role": "lapis_tone",
+          "media_key": "chamber_epithets_02_gemynd_corpus_lapis_tone_lapis_tone_rise_return_5min_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "lapis_tone_rise_return_5min.wav"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "gemynd_corpus.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "gemynd_corpus.mp3"
+        }
+      ],
+      "primary_video_media_key": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+      "primary_still_media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "primary_audio_media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+          "storagePath": "gemynd_corpus_lapis_tone .MOV",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/gemynd_corpus_lapis_tone%20.MOV",
+          "status": 200
+        },
+        "primary_still": {
+          "mediaKey": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+          "storagePath": "gemynd_corpus.mp3",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/gemynd_corpus.mp3",
+          "status": 200
+        }
+      },
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "epithets_passage_02",
+      "surface_type": "passage",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "video",
+          "storage_path": "epithet_passage_01.mp4"
+        }
+      ],
+      "primary_video_media_key": "epithet_passage_01.mp4",
+      "primary_still_media_key": null,
+      "primary_audio_media_key": null,
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": "epithet_passage_01.mp4",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/epithet_passage_01.mp4",
+          "status": 400
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "chamber_epithets_03_percipari",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "role": "oracle_card",
+          "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+          "media_type": "image",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "percipari_epithet03_chamberplate.png"
+        },
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "role": "original_artwork",
+          "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp"
+        },
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "role": "full_song",
+          "media_key": "chamber_epithets_03_percipari_full_song_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "percipari.mp3"
+        },
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "role": "material_tone",
+          "media_key": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+          "media_type": "audio",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "crystal_tone_rise_return_5min.wav"
+        }
+      ],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "percipari_epithet03_chamberplate.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "percipari.mp3"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "primary_audio_media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": "chamber_epithets_03_percipari_oracle_card_v1",
+          "storagePath": "percipari_epithet03_chamberplate.png",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/percipari_epithet03_chamberplate.png",
+          "status": 404
+        },
+        "primary_audio": {
+          "mediaKey": "chamber_epithets_03_percipari_full_song_v1",
+          "storagePath": "percipari.mp3",
+          "source": "registry_media",
+          "url": "https://media.c3field.online/percipari.mp3",
+          "status": 200
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    },
+    {
+      "registry_key_requested": "codexstone",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "marble_chamber_codexstone.webp"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "marble_chamber_codexstone.webp",
+      "primary_audio_media_key": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "marble_chamber_codexstone.webp",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/marble_chamber_codexstone.webp",
+          "status": 200
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "renderable"
+    },
+    {
+      "registry_key_requested": "me_01",
+      "surface_type": "chamberplate",
+      "governed_media_roles": [],
+      "fallback_media_roles": [
+        {
+          "media_type": "image",
+          "storage_path": "me01_memory.png"
+        },
+        {
+          "media_type": "audio",
+          "storage_path": "Concursus_Cubiculi_binaural_216_220_len129s.wav"
+        }
+      ],
+      "primary_video_media_key": null,
+      "primary_still_media_key": "me01_memory.png",
+      "primary_audio_media_key": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "media_retrieval_statuses": {
+        "primary_video": {
+          "mediaKey": null,
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
+        },
+        "primary_still": {
+          "mediaKey": null,
+          "storagePath": "me01_memory.png",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/me01_memory.png",
+          "status": 400
+        },
+        "primary_audio": {
+          "mediaKey": null,
+          "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "source": "temp_exhibition_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/Concursus_Cubiculi_binaural_216_220_len129s.wav",
+          "status": 400
+        }
+      },
+      "failure_class": "media URL retrieval failure"
+    }
+  ],
+  "transitionTargetTable": [
+    {
+      "registry_key_requested": "epigraph",
+      "transition_targets": {
+        "primary": {
+          "id": "auto_enter_crystal_temple_home",
+          "label": "Enter Crystal Temple Home",
+          "kind": "navigate",
+          "emphasis": "primary",
+          "targetRegistryKey": "crystal_temple_home",
+          "targetEncounterKey": "crystal_temple_home_view",
+          "targetAfterPassage": null,
+          "sortOrder": 1
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "auto_enter_crystal_temple_home",
+            "label": "Enter Crystal Temple Home",
+            "kind": "navigate",
+            "targetRegistryKey": "crystal_temple_home",
+            "targetEncounterKey": "crystal_temple_home_view",
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "crystal_temple_home",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_antechamber",
+          "label": "Enter Antechamber",
+          "kind": "navigate",
+          "targetRegistryKey": "temple_antechamber",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": 10
+        },
+        "secondary": {
+          "id": "enter_inanna_seat",
+          "label": "Enter Inanna's Seat",
+          "kind": "navigate",
+          "targetRegistryKey": "inanna_seat",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 20
+        },
+        "return": null,
+        "all": [
+          {
+            "id": "enter_antechamber",
+            "label": "Enter Antechamber",
+            "kind": "navigate",
+            "targetRegistryKey": "temple_antechamber",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          },
+          {
+            "id": "enter_inanna_seat",
+            "label": "Enter Inanna's Seat",
+            "kind": "navigate",
+            "targetRegistryKey": "inanna_seat",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "inanna_seat",
+      "transition_targets": {
+        "primary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "temple_antechamber",
+      "transition_targets": {
+        "primary": {
+          "id": "continue_to_harrumuk",
+          "label": "Enter Exhibition",
+          "kind": "navigate",
+          "emphasis": "primary",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": "temple_harrumuk_passage_view",
+          "targetAfterPassage": null,
+          "sortOrder": 10
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "continue_to_harrumuk",
+            "label": "Enter Exhibition",
+            "kind": "navigate",
+            "targetRegistryKey": "temple_harrumuk_passage",
+            "targetEncounterKey": "temple_harrumuk_passage_view",
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "temple_harrumuk_passage",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_phase_map",
+          "label": "Enter Phase Map",
+          "kind": "navigate",
+          "emphasis": "primary",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": "phase_map",
+          "targetAfterPassage": null,
+          "sortOrder": 20
+        },
+        "secondary": {
+          "id": "return_to_antechamber",
+          "label": "Return to Antechamber",
+          "kind": "navigate",
+          "emphasis": "secondary",
+          "targetRegistryKey": "temple_antechamber",
+          "targetEncounterKey": "temple_antechamber_view",
+          "targetAfterPassage": null,
+          "sortOrder": 30
+        },
+        "return": {
+          "id": "return_to_antechamber",
+          "label": "Return to Antechamber",
+          "kind": "navigate",
+          "emphasis": "secondary",
+          "targetRegistryKey": "temple_antechamber",
+          "targetEncounterKey": "temple_antechamber_view",
+          "targetAfterPassage": null,
+          "sortOrder": 30
+        },
+        "all": [
+          {
+            "id": "enter_phase_map",
+            "label": "Enter Phase Map",
+            "kind": "navigate",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": "phase_map",
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          },
+          {
+            "id": "return_to_antechamber",
+            "label": "Return to Antechamber",
+            "kind": "navigate",
+            "targetRegistryKey": "temple_antechamber",
+            "targetEncounterKey": "temple_antechamber_view",
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "phase_map",
+      "transition_targets": {
+        "primary": {
+          "id": "return_to_temple_via_harrumuk",
+          "label": "Return to Temple",
+          "kind": "return",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "crystal_temple_home",
+          "emphasis": "secondary",
+          "sortOrder": 90
+        },
+        "secondary": {
+          "id": "return_to_temple_via_harrumuk",
+          "label": "Return to Temple",
+          "kind": "return",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "crystal_temple_home",
+          "emphasis": "secondary",
+          "sortOrder": 90
+        },
+        "return": {
+          "id": "return_to_temple_via_harrumuk",
+          "label": "Return to Temple",
+          "kind": "return",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "crystal_temple_home",
+          "emphasis": "secondary",
+          "sortOrder": 90
+        },
+        "all": [
+          {
+            "id": "return_to_temple_via_harrumuk",
+            "label": "Return to Temple",
+            "kind": "return",
+            "targetRegistryKey": "temple_harrumuk_passage",
+            "targetEncounterKey": null,
+            "targetAfterPassage": "crystal_temple_home",
+            "emphasis": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "kumurrah_passage",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_gates",
+          "label": "Enter Gates",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "gate_1_crown_removed",
+          "targetEncounterKey": "gate_1_crown_removed_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 5
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_gates",
+            "label": "Enter Gates",
+            "kind": "progression",
+            "targetRegistryKey": "gate_1_crown_removed",
+            "targetEncounterKey": "gate_1_crown_removed_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          },
+          {
+            "id": "enter_epithets",
+            "label": "Enter Epithets",
+            "kind": "progression",
+            "targetRegistryKey": "chamber_epithets_01_primus_artus",
+            "targetEncounterKey": "chamber_epithets_01_primus_artus_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          },
+          {
+            "id": "enter_codexstone",
+            "label": "Enter Codexstone",
+            "kind": "progression",
+            "targetRegistryKey": "codexstone",
+            "targetEncounterKey": "codexstone_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "gate_1_crown_removed",
+      "transition_targets": {
+        "primary": {
+          "id": "continue_descent",
+          "label": "Continue Descent",
+          "kind": "progression",
+          "targetRegistryKey": "gates_passage_01",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "continue_descent",
+            "label": "Continue Descent",
+            "kind": "progression",
+            "targetRegistryKey": "gates_passage_01",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          },
+          {
+            "id": "continue",
+            "label": "Continue",
+            "kind": "progression",
+            "targetRegistryKey": "gate_2_lapis_beads",
+            "targetEncounterKey": "gate_2_lapis_beads_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "gates_passage_01",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_gate",
+          "label": "Enter Next Gate",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "gate_2_lapis_beads",
+          "targetEncounterKey": "gate_2_lapis_beads_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 10
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_gate",
+            "label": "Enter Next Gate",
+            "kind": "progression",
+            "targetRegistryKey": "gate_2_lapis_beads",
+            "targetEncounterKey": "gate_2_lapis_beads_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "gate_2_lapis_beads",
+      "transition_targets": {
+        "primary": {
+          "id": "continue_descent_to_gate_03",
+          "label": "Continue Descent",
+          "kind": "progression",
+          "targetRegistryKey": "gates_passage_02",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": 10
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "continue_descent_to_gate_03",
+            "label": "Continue Descent",
+            "kind": "progression",
+            "targetRegistryKey": "gates_passage_02",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          },
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "gates_passage_02",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_gate",
+          "label": "Enter Next Gate",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "gate_3_lapis_necklace",
+          "targetEncounterKey": "gate_3_lapis_necklace_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 10
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_gate",
+            "label": "Enter Next Gate",
+            "kind": "progression",
+            "targetRegistryKey": "gate_3_lapis_necklace",
+            "targetEncounterKey": "gate_3_lapis_necklace_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "gate_3_lapis_necklace",
+      "transition_targets": {
+        "primary": {
+          "id": "return_via_harrumuk",
+          "label": "Return Through Harrumuk",
+          "kind": "progression",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "return_antechamber",
+          "emphasis": "primary",
+          "sortOrder": 10
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_via_harrumuk",
+          "label": "Return Through Harrumuk",
+          "kind": "progression",
+          "targetRegistryKey": "temple_harrumuk_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "return_antechamber",
+          "emphasis": "primary",
+          "sortOrder": 10
+        },
+        "all": [
+          {
+            "id": "return_via_harrumuk",
+            "label": "Return Through Harrumuk",
+            "kind": "progression",
+            "targetRegistryKey": "temple_harrumuk_passage",
+            "targetEncounterKey": null,
+            "targetAfterPassage": "return_antechamber",
+            "emphasis": "primary"
+          },
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "gates_passage_03",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_gate",
+          "label": "Enter Next Gate",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "gate_4_breastplate",
+          "targetEncounterKey": "gate_4_breastplate_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 10
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_gate",
+            "label": "Enter Next Gate",
+            "kind": "progression",
+            "targetRegistryKey": "gate_4_breastplate",
+            "targetEncounterKey": "gate_4_breastplate_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "chamber_epithets_01_primus_artus",
+      "transition_targets": {
+        "primary": {
+          "id": "continue",
+          "label": "Continue",
+          "kind": "progression",
+          "targetRegistryKey": "epithets_passage_01",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "continue",
+            "label": "Continue",
+            "kind": "progression",
+            "targetRegistryKey": "epithets_passage_01",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "epithets_passage_01",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_epithet",
+          "label": "Enter Next Epithet",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "chamber_epithets_02_gemynd_corpus",
+          "targetEncounterKey": "chamber_epithets_02_gemynd_corpus_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 20
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_epithet",
+            "label": "Enter Next Epithet",
+            "kind": "progression",
+            "targetRegistryKey": "chamber_epithets_02_gemynd_corpus",
+            "targetEncounterKey": "chamber_epithets_02_gemynd_corpus_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "chamber_epithets_02_gemynd_corpus",
+      "transition_targets": {
+        "primary": {
+          "id": "continue",
+          "label": "Continue",
+          "kind": "progression",
+          "targetRegistryKey": "epithets_passage_02",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "continue",
+            "label": "Continue",
+            "kind": "progression",
+            "targetRegistryKey": "epithets_passage_02",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "epithets_passage_02",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_next_epithet",
+          "label": "Enter Next Epithet",
+          "kind": "progression",
+          "emphasis": null,
+          "targetRegistryKey": "chamber_epithets_03_percipari",
+          "targetEncounterKey": "chamber_epithets_03_percipari_encounter",
+          "targetAfterPassage": null,
+          "sortOrder": 20
+        },
+        "secondary": null,
+        "return": null,
+        "all": [
+          {
+            "id": "enter_next_epithet",
+            "label": "Enter Next Epithet",
+            "kind": "progression",
+            "targetRegistryKey": "chamber_epithets_03_percipari",
+            "targetEncounterKey": "chamber_epithets_03_percipari_encounter",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "chamber_epithets_03_percipari",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_kumurrah_to_codexstone",
+          "label": "Enter Kumurrah",
+          "kind": "progression",
+          "targetRegistryKey": "kumurrah_passage",
+          "targetEncounterKey": null,
+          "targetAfterPassage": "codexstone",
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "enter_kumurrah_to_codexstone",
+            "label": "Enter Kumurrah",
+            "kind": "progression",
+            "targetRegistryKey": "kumurrah_passage",
+            "targetEncounterKey": null,
+            "targetAfterPassage": "codexstone",
+            "emphasis": "primary"
+          },
+          {
+            "id": "continue",
+            "label": "Enter Marble Chamber",
+            "kind": "progression",
+            "targetRegistryKey": "me_01",
+            "targetEncounterKey": "me_01",
+            "targetAfterPassage": null,
+            "emphasis": null
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "codexstone",
+      "transition_targets": {
+        "primary": {
+          "id": "enter_marble_chamber",
+          "label": "Enter Marble Chamber",
+          "kind": "progression",
+          "targetRegistryKey": "me_01",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "enter_marble_chamber",
+            "label": "Enter Marble Chamber",
+            "kind": "progression",
+            "targetRegistryKey": "me_01",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "registry_key_requested": "me_01",
+      "transition_targets": {
+        "primary": {
+          "id": "continue_marble_sequence",
+          "label": "Continue",
+          "kind": "progression",
+          "targetRegistryKey": "me_passage_01",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "primary",
+          "sortOrder": null
+        },
+        "secondary": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "return": {
+          "id": "return_phase_map",
+          "label": "Return to Phase Map",
+          "kind": "return",
+          "targetRegistryKey": "phase_map",
+          "targetEncounterKey": null,
+          "targetAfterPassage": null,
+          "emphasis": "secondary",
+          "sortOrder": 900
+        },
+        "all": [
+          {
+            "id": "return_phase_map",
+            "label": "Return to Phase Map",
+            "kind": "return",
+            "targetRegistryKey": "phase_map",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "secondary"
+          },
+          {
+            "id": "continue_marble_sequence",
+            "label": "Continue",
+            "kind": "progression",
+            "targetRegistryKey": "me_passage_01",
+            "targetEncounterKey": null,
+            "targetAfterPassage": null,
+            "emphasis": "primary"
+          }
+        ]
+      }
+    }
+  ],
+  "patternSummary": {
+    "by_surface_type": {
+      "aspect": 1,
+      "chamberplate": 10,
+      "threshold": 1,
+      "passage": 7,
+      "phase_map": 1
+    },
+    "by_failure_class": {
+      "media URL retrieval failure": 12,
+      "unsupported renderer": 2
+    },
+    "by_renderer": {
+      "encounter_focus": 8,
+      "choice_surface": 1,
+      "plaque_overlay": 3,
+      "passage_only": 5,
+      "phase_map": 1,
+      "single_surface": 2
+    },
+    "bundle": {
+      "assetPath": "assets/index-DGEAOe4x.js",
+      "htmlTitle": "Measures of Inanna",
+      "r2BaseUrlPresent": true,
+      "bundleEncounterFallbackInspection": "inconclusive_from_minified_bundle"
+    },
+    "clustered_findings": [
+      "minified live bundle inspection is inconclusive for direct _encounter fallback verification",
+      "media retrieval failures cluster across passage and fallback-driven surfaces",
+      "passage surfaces are a concentrated failure family"
+    ]
+  },
+  "recommendedRepairOrder": [
+    "diagnose passage-family media retrieval and fallback selection for Harrumuk and gate/epithet passages",
+    "audit failing media object URLs and provider/bucket mappings for the unresolved families"
+  ]
+}
