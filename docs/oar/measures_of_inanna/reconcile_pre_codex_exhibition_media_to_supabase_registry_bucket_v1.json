@@ -1,0 +1,609 @@
+{
+  "sourceBucket": "pre-codex-exhibition",
+  "sourcePreCodexRowCount": 21,
+  "imageRowsCount": 16,
+  "heavyMediaRowsCount": 5,
+  "unknownRowsCount": 0,
+  "supabaseImageBucket": "measures-registry",
+  "supabaseObjectMatchesCount": 0,
+  "supabaseObjectMatches": [],
+  "r2HeavyBucket": "measures-media",
+  "r2ManifestFound": true,
+  "r2ManifestPath": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+  "r2ManifestObjectCount": 39,
+  "r2ObjectMatchesCount": 2,
+  "r2ObjectMatches": [
+    {
+      "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+      "storage_path": "primus_artus.mp3"
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "storage_path": "percipari.mp3"
+    }
+  ],
+  "repointedRows": [
+    {
+      "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+      "title": "Primus Artus Full Song",
+      "media_type": "audio",
+      "storage_classification": "heavy",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "new_bucket": "measures-media",
+      "new_storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus.mp3",
+      "status": "active"
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "title": "Percipari Full Song",
+      "media_type": "audio",
+      "storage_classification": "heavy",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "new_bucket": "measures-media",
+      "new_storage_provider": "cloudflare_r2",
+      "storage_path": "percipari.mp3",
+      "status": "active"
+    }
+  ],
+  "unmatchedRows": [
+    {
+      "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "title": "Primus Artus Oracle Card",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+      "title": "Primus Artus Original Artwork",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_original_artwork.webp",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "title": "Gemynd Corpus Oracle Card",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "gemynd_corpus.png",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+      "title": "Gemynd Corpus Original Artwork",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "gemynd_corpus_original_art.webp",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "title": "Percipari Oracle Card",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "title": "Percipari Original Artwork",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "percipari_original_artwork.webp",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_7a748aab_4339_44c2_8136_d45a541054e3_image_v1",
+      "title": "7A748AAB 4339 44C2 8136 D45A541054E3",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "7A748AAB-4339-44C2-8136-D45A541054E3.png",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "title": "Crystal Temple",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "crystal_temple.png",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_inanna_encounter_image_v1",
+      "title": "Inanna Encounter",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "inanna_encounter.webp",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_inanna_temple_encounter_intro_video_v1",
+      "title": "Inanna Temple Encounter Intro",
+      "media_type": "video",
+      "storage_classification": "heavy",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "inanna_temple_encounter_intro.mp4",
+      "status": "active",
+      "reason": "exact object not found in R2 bucket measures-media"
+    },
+    {
+      "media_key": "pre_codex_exhibition_kumurrah_image_v1",
+      "title": "Kumurrah",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "kumurrah.png",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_marble_chamber_codexstone_image_v1",
+      "title": "Marble Chamber Codexstone",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "marble_chamber_codexstone.webp",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "title": "Obsidian Chamberplate Gate01",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate01.jpeg",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+      "title": "Obsidian Chamberplate Gate02",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate02.webp",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1",
+      "title": "Obsidian Chamberplate Gate02",
+      "media_type": "video",
+      "storage_classification": "heavy",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate02.mp4",
+      "status": "active",
+      "reason": "exact object not found in R2 bucket measures-media"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate03.jpeg",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "video",
+      "storage_classification": "heavy",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate03.mp4",
+      "status": "active",
+      "reason": "exact object not found in R2 bucket measures-media"
+    },
+    {
+      "media_key": "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1",
+      "title": "Percipari Epithet03 Chamberplate",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    },
+    {
+      "media_key": "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1",
+      "title": "Primus Artus Epithet01 Chamberplate",
+      "media_type": "image",
+      "storage_classification": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "status": "active",
+      "reason": "exact object not found in Supabase bucket measures-registry"
+    }
+  ],
+  "bucketProviderCountAfterReconciliation": [
+    {
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "count": 9
+    },
+    {
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "count": 19
+    }
+  ],
+  "routedRowsAfter": [
+    {
+      "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+      "title": "Primus Artus Full Song",
+      "media_type": "audio",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus.mp3",
+      "status": "active",
+      "metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "migration_oar2": "oar2_reconcile_pre_codex_exhibition_media_to_supabase_registry_bucket_v1",
+        "preserved_from": "public.temp_exhibition_media",
+        "previous_bucket": "pre-codex-exhibition",
+        "migration_reason": "restore_heavy_runtime_delivery_for_inanna",
+        "reconciled_to_bucket": "measures-media",
+        "previous_storage_provider": "cloudflare_r2",
+        "reconciled_storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "title": "Primus Artus Oracle Card",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "status": "active",
+      "metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+      "title": "Primus Artus Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_original_artwork.webp",
+      "status": "active",
+      "metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "title": "Gemynd Corpus Oracle Card",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "gemynd_corpus.png",
+      "status": "active",
+      "metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+      "title": "Gemynd Corpus Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "gemynd_corpus_original_art.webp",
+      "status": "active",
+      "metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "title": "Percipari Full Song",
+      "media_type": "audio",
+      "bucket": "measures-media",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "percipari.mp3",
+      "status": "active",
+      "metadata": {
+        "role": "full_song",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "migration_oar2": "oar2_reconcile_pre_codex_exhibition_media_to_supabase_registry_bucket_v1",
+        "preserved_from": "public.temp_exhibition_media",
+        "previous_bucket": "pre-codex-exhibition",
+        "migration_reason": "restore_heavy_runtime_delivery_for_inanna",
+        "reconciled_to_bucket": "measures-media",
+        "previous_storage_provider": "cloudflare_r2",
+        "reconciled_storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "title": "Percipari Oracle Card",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "status": "active",
+      "metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "title": "Percipari Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "percipari_original_artwork.webp",
+      "status": "active",
+      "metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_7a748aab_4339_44c2_8136_d45a541054e3_image_v1",
+      "title": "7A748AAB 4339 44C2 8136 D45A541054E3",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "7A748AAB-4339-44C2-8136-D45A541054E3.png",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 3425869,
+        "manifest_mime_type": "image/png",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "title": "Crystal Temple",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "crystal_temple.png",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 2468227,
+        "manifest_mime_type": "image/png",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_inanna_encounter_image_v1",
+      "title": "Inanna Encounter",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "inanna_encounter.webp",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 116152,
+        "manifest_mime_type": "image/webp",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_inanna_temple_encounter_intro_video_v1",
+      "title": "Inanna Temple Encounter Intro",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "inanna_temple_encounter_intro.mp4",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 3062399,
+        "manifest_mime_type": "video/mp4",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_kumurrah_image_v1",
+      "title": "Kumurrah",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "kumurrah.png",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 3682250,
+        "manifest_mime_type": "image/png",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_marble_chamber_codexstone_image_v1",
+      "title": "Marble Chamber Codexstone",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "marble_chamber_codexstone.webp",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 162026,
+        "manifest_mime_type": "image/webp",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "title": "Obsidian Chamberplate Gate01",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate01.jpeg",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 1374620,
+        "manifest_mime_type": "image/jpeg",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+      "title": "Obsidian Chamberplate Gate02",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate02.webp",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 646272,
+        "manifest_mime_type": "image/webp",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1",
+      "title": "Obsidian Chamberplate Gate02",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate02.mp4",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 10042159,
+        "manifest_mime_type": "video/mp4",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate03.jpeg",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 1428318,
+        "manifest_mime_type": "image/jpeg",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "video",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate03.mp4",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 2940983,
+        "manifest_mime_type": "video/mp4",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1",
+      "title": "Percipari Epithet03 Chamberplate",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "percipari_epithet03_chamberplate.png",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 3758293,
+        "manifest_mime_type": "image/png",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1",
+      "title": "Primus Artus Epithet01 Chamberplate",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 3667202,
+        "manifest_mime_type": "image/png",
+        "r2_presence_is_not_codex_seating": true
+      }
+    }
+  ],
+  "surfaceMappingsMutated": false,
+  "frontendMutationPerformed": false,
+  "mediaResolverMutated": false,
+  "supersededL2OnlyMigrationRun": false
+}
