@@ -21,6 +21,12 @@ type EncounterRow = {
   measures_registry?: { registry_key?: string | null } | { registry_key?: string | null }[] | null
 }
 
+type RegistryRow = {
+  id: string
+  registry_key: string
+  metadata: JsonRecord | null
+}
+
 type TransitionRuntimeRow = {
   id: string
   transition_kind: string
@@ -98,6 +104,99 @@ function resolveRegistryKey(data: EncounterRow, fallback: string) {
     : data.measures_registry
 
   return registry?.registry_key ?? fallback
+}
+
+function uniqueStrings(values: Array<string | null | undefined>) {
+  return [...new Set(values.filter((value): value is string => Boolean(value)))]
+}
+
+function metadataEncounterKey(metadata: JsonRecord | null) {
+  if (!metadata) return null
+
+  return (
+    asString(metadata.encounter_key) ??
+    asString(metadata.encounterKey) ??
+    asString(metadata.encounter_def_key) ??
+    asString(metadata.encounterDefKey)
+  )
+}
+
+function orderEncounterRows(rows: EncounterRow[], encounterKeys: string[]) {
+  return [...rows].sort((left, right) => {
+    const leftIndex = encounterKeys.indexOf(left.encounter_key)
+    const rightIndex = encounterKeys.indexOf(right.encounter_key)
+    return (leftIndex === -1 ? 999 : leftIndex) - (rightIndex === -1 ? 999 : rightIndex)
+  })
+}
+
+async function resolveEncounterRow(inputKey: string) {
+  const { data: registryData, error: registryError } = await supabase
+    .from("measures_registry")
+    .select("id, registry_key, metadata")
+    .eq("registry_key", inputKey)
+    .maybeSingle()
+
+  if (registryError) {
+    console.error("Registry lookup failed", { inputKey, registryError })
+  }
+
+  if (registryData) {
+    const registry = registryData as RegistryRow
+    const encounterKeys = uniqueStrings([
+      registry.registry_key,
+      metadataEncounterKey(registry.metadata),
+      `${registry.registry_key}_view`,
+    ])
+
+    const { data: encounterData, error: encounterError } = await supabase
+      .from("measures_encounter_def")
+      .select(
+        `
+        id,
+        registry_id,
+        encounter_key,
+        surface_type,
+        metadata,
+        measures_registry (
+          registry_key
+        )
+      `
+      )
+      .eq("registry_id", registry.id)
+      .in("encounter_key", encounterKeys)
+
+    if (encounterError) {
+      throw encounterError
+    }
+
+    const ordered = orderEncounterRows((encounterData ?? []) as EncounterRow[], encounterKeys)
+    if (ordered[0]) return ordered[0]
+
+    throw new Error(`Failed to resolve encounter for registry key: ${inputKey}`)
+  }
+
+  const { data: legacyData, error: legacyError } = await supabase
+    .from("measures_encounter_def")
+    .select(
+      `
+      id,
+      registry_id,
+      encounter_key,
+      surface_type,
+      metadata,
+      measures_registry (
+        registry_key
+      )
+    `
+    )
+    .eq("encounter_key", inputKey)
+    .maybeSingle()
+
+  if (legacyError || !legacyData) {
+    throw legacyError ?? new Error(`Failed to resolve encounter: ${inputKey}`)
+  }
+
+  return legacyData as EncounterRow
 }
 
 function resolveActions(metadata: JsonRecord): ResolvedAction[] {
@@ -245,28 +344,7 @@ function registryMediaToRuntime(row: RegistryMediaRow): RuntimeMediaItem | null 
 }
 
 export async function resolveEncounter(registryKey: string): Promise<EncounterResolution> {
-  const { data, error } = await supabase
-    .from("measures_encounter_def")
-    .select(
-      `
-      id,
-      registry_id,
-      encounter_key,
-      surface_type,
-      metadata,
-      measures_registry!inner (
-        registry_key
-      )
-    `
-    )
-    .eq("measures_registry.registry_key", registryKey)
-    .single()
-
-  if (error || !data) {
-    throw new Error(`Failed to resolve encounter: ${registryKey}`)
-  }
-
-  const encounter = data as EncounterRow
+  const encounter = await resolveEncounterRow(registryKey)
   const metadata = encounter.metadata ?? {}
   const resolvedRegistryKey = resolveRegistryKey(encounter, registryKey)
 
