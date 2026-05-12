@@ -1,0 +1,436 @@
+{
+  "oar2": "oar2_copy_and_remap_pre_codex_webp_images_to_measures_registry_v1",
+  "sourceBucket": "pre-codex-exhibition",
+  "targetBucket": "measures-registry",
+  "targetPrefix": "measures_registry/pre_codex_exhibition/images",
+  "sourceObjectCount": 22,
+  "sourceWebpObjectCount": 13,
+  "sourceWebpObjects": [
+    {
+      "path": "antechamber.webp",
+      "name": "antechamber.webp",
+      "size": 138916,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-09T19:40:02.820Z"
+    },
+    {
+      "path": "crystal_temple_home.webp",
+      "name": "crystal_temple_home.webp",
+      "size": 289656,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-09T19:47:26.606Z"
+    },
+    {
+      "path": "gemynd_corpus.webp",
+      "name": "gemynd_corpus.webp",
+      "size": 286596,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-09T19:48:49.973Z"
+    },
+    {
+      "path": "gemynd_corpus_original_art.webp",
+      "name": "gemynd_corpus_original_art.webp",
+      "size": 789896,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-10T01:45:08.512Z"
+    },
+    {
+      "path": "inanna_encounter.webp",
+      "name": "inanna_encounter.webp",
+      "size": 116152,
+      "mimetype": "image/webp",
+      "updated_at": "2026-04-11T04:01:59.251Z"
+    },
+    {
+      "path": "marble_chamber_codexstone.webp",
+      "name": "marble_chamber_codexstone.webp",
+      "size": 162026,
+      "mimetype": "image/webp",
+      "updated_at": "2026-04-11T04:00:16.448Z"
+    },
+    {
+      "path": "obsidian_chamberplate_gate03.webp",
+      "name": "obsidian_chamberplate_gate03.webp",
+      "size": 589712,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-09T21:02:09.745Z"
+    },
+    {
+      "path": "percipari_original_artwork.webp",
+      "name": "percipari_original_artwork.webp",
+      "size": 1551774,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-10T01:45:08.803Z"
+    },
+    {
+      "path": "primus_artus_epithet01_chamberplate.webp",
+      "name": "primus_artus_epithet01_chamberplate.webp",
+      "size": 371114,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-09T21:04:22.647Z"
+    },
+    {
+      "path": "primus_artus_original_artwork.webp",
+      "name": "primus_artus_original_artwork.webp",
+      "size": 563686,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-10T01:45:08.069Z"
+    },
+    {
+      "path": "temple_home.webp",
+      "name": "temple_home.webp",
+      "size": 276038,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-09T21:13:56.607Z"
+    },
+    {
+      "path": "true_north.webp",
+      "name": "true_north.webp",
+      "size": 258314,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-09T21:08:27.794Z"
+    },
+    {
+      "path": "true_north_crystal.webp",
+      "name": "true_north_crystal.webp",
+      "size": 275646,
+      "mimetype": "image/webp",
+      "updated_at": "2026-05-09T21:14:55.770Z"
+    }
+  ],
+  "sourcePreCodexImageRowCount": 16,
+  "exactDbRowsEligibleAfterVerificationCount": 5,
+  "exactDbRowsEligibleAfterVerification": [
+    {
+      "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+      "title": "Primus Artus Original Artwork",
+      "storage_path": "primus_artus_original_artwork.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+      "mapping_confidence": "exact_existing_webp_storage_path"
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+      "title": "Gemynd Corpus Original Artwork",
+      "storage_path": "gemynd_corpus_original_art.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp",
+      "mapping_confidence": "exact_existing_webp_storage_path"
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "title": "Percipari Original Artwork",
+      "storage_path": "percipari_original_artwork.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+      "mapping_confidence": "exact_existing_webp_storage_path"
+    },
+    {
+      "media_key": "pre_codex_exhibition_inanna_encounter_image_v1",
+      "title": "Inanna Encounter",
+      "storage_path": "inanna_encounter.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/inanna_encounter.webp",
+      "mapping_confidence": "exact_existing_webp_storage_path"
+    },
+    {
+      "media_key": "pre_codex_exhibition_marble_chamber_codexstone_image_v1",
+      "title": "Marble Chamber Codexstone",
+      "storage_path": "marble_chamber_codexstone.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+      "mapping_confidence": "exact_existing_webp_storage_path"
+    }
+  ],
+  "dbRowsHeldCount": 11,
+  "dbRowsHeld": [
+    {
+      "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "title": "Primus Artus Oracle Card",
+      "current_storage_path": "primus_artus_epithet01_chamberplate.png",
+      "candidate_webp_path": "primus_artus_epithet01_chamberplate.webp",
+      "candidate_target_path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+      "hold_reason": "extension-normalized filename candidate requires operator confirmation; filename similarity not used as proof"
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "title": "Gemynd Corpus Oracle Card",
+      "current_storage_path": "gemynd_corpus.png",
+      "candidate_webp_path": "gemynd_corpus.webp",
+      "candidate_target_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+      "hold_reason": "extension-normalized filename candidate requires operator confirmation; filename similarity not used as proof"
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "title": "Percipari Oracle Card",
+      "current_storage_path": "percipari_epithet03_chamberplate.png",
+      "candidate_webp_path": null,
+      "candidate_target_path": null,
+      "hold_reason": "no exact webp object or extension-normalized candidate found"
+    },
+    {
+      "media_key": "pre_codex_exhibition_7a748aab_4339_44c2_8136_d45a541054e3_image_v1",
+      "title": "7A748AAB 4339 44C2 8136 D45A541054E3",
+      "current_storage_path": "7A748AAB-4339-44C2-8136-D45A541054E3.png",
+      "candidate_webp_path": null,
+      "candidate_target_path": null,
+      "hold_reason": "no exact webp object or extension-normalized candidate found"
+    },
+    {
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "title": "Crystal Temple",
+      "current_storage_path": "crystal_temple.png",
+      "candidate_webp_path": null,
+      "candidate_target_path": null,
+      "hold_reason": "no exact webp object or extension-normalized candidate found"
+    },
+    {
+      "media_key": "pre_codex_exhibition_kumurrah_image_v1",
+      "title": "Kumurrah",
+      "current_storage_path": "kumurrah.png",
+      "candidate_webp_path": null,
+      "candidate_target_path": null,
+      "hold_reason": "no exact webp object or extension-normalized candidate found"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "title": "Obsidian Chamberplate Gate01",
+      "current_storage_path": "obsidian_chamberplate_gate01.jpeg",
+      "candidate_webp_path": null,
+      "candidate_target_path": null,
+      "hold_reason": "no exact webp object or extension-normalized candidate found"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+      "title": "Obsidian Chamberplate Gate02",
+      "current_storage_path": "obsidian_chamberplate_gate02.webp",
+      "candidate_webp_path": null,
+      "candidate_target_path": null,
+      "hold_reason": "no exact webp object or extension-normalized candidate found"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "current_storage_path": "obsidian_chamberplate_gate03.jpeg",
+      "candidate_webp_path": "obsidian_chamberplate_gate03.webp",
+      "candidate_target_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "hold_reason": "extension-normalized filename candidate requires operator confirmation; filename similarity not used as proof"
+    },
+    {
+      "media_key": "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1",
+      "title": "Percipari Epithet03 Chamberplate",
+      "current_storage_path": "percipari_epithet03_chamberplate.png",
+      "candidate_webp_path": null,
+      "candidate_target_path": null,
+      "hold_reason": "no exact webp object or extension-normalized candidate found"
+    },
+    {
+      "media_key": "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1",
+      "title": "Primus Artus Epithet01 Chamberplate",
+      "current_storage_path": "primus_artus_epithet01_chamberplate.png",
+      "candidate_webp_path": "primus_artus_epithet01_chamberplate.webp",
+      "candidate_target_path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+      "hold_reason": "extension-normalized filename candidate requires operator confirmation; filename similarity not used as proof"
+    }
+  ],
+  "copiedObjectCount": 13,
+  "copiedObjects": [
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "antechamber.webp",
+      "source_size": 138916,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+      "action": "copied",
+      "target_size": 138916,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 138916
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "crystal_temple_home.webp",
+      "source_size": 289656,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "action": "copied",
+      "target_size": 289656,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 289656
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "gemynd_corpus.webp",
+      "source_size": 286596,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+      "action": "copied",
+      "target_size": 286596,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 286596
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "gemynd_corpus_original_art.webp",
+      "source_size": 789896,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp",
+      "action": "copied",
+      "target_size": 789896,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 789896
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "inanna_encounter.webp",
+      "source_size": 116152,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/inanna_encounter.webp",
+      "action": "copied",
+      "target_size": 116152,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 116152
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "marble_chamber_codexstone.webp",
+      "source_size": 162026,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+      "action": "copied",
+      "target_size": 162026,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 162026
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "obsidian_chamberplate_gate03.webp",
+      "source_size": 589712,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "action": "copied",
+      "target_size": 589712,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 589712
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "percipari_original_artwork.webp",
+      "source_size": 1551774,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+      "action": "copied",
+      "target_size": 1551774,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 1551774
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "primus_artus_epithet01_chamberplate.webp",
+      "source_size": 371114,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+      "action": "copied",
+      "target_size": 371114,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 371114
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "primus_artus_original_artwork.webp",
+      "source_size": 563686,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+      "action": "copied",
+      "target_size": 563686,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 563686
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "temple_home.webp",
+      "source_size": 276038,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/temple_home.webp",
+      "action": "copied",
+      "target_size": 276038,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 276038
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "true_north.webp",
+      "source_size": 258314,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/true_north.webp",
+      "action": "copied",
+      "target_size": 258314,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 258314
+      }
+    },
+    {
+      "source_bucket": "pre-codex-exhibition",
+      "source_path": "true_north_crystal.webp",
+      "source_size": 275646,
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/true_north_crystal.webp",
+      "action": "copied",
+      "target_size": 275646,
+      "target_mimetype": "image/webp",
+      "verification": {
+        "signedUrlGenerated": true,
+        "signedUrlFetchStatus": 200,
+        "retrievedBytes": 275646
+      }
+    }
+  ],
+  "copiedTargetObjectsVerifiedCount": 13,
+  "copiedCountMatchesIntendedRemapCount": true,
+  "dbMutationPerformed": false,
+  "dbMutationHoldReason": "ambiguous converted filename mappings present; OAR2 requires inventory table and stop before DB mutation",
+  "sourceObjectsDeleted": false,
+  "frontendMutationPerformed": false,
+  "mediaResolverMutationPerformed": false
+}
