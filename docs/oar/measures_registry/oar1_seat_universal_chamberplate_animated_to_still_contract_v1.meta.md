@@ -81,21 +81,50 @@ Gate 01 previously carried `still_first` presentation standing; that drift was n
 Verified `200`:
 
 - Gate 01 animation: `obsidian_chamberplate_gate01.mov`
-- Gate 01 still: `measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp`
-- Gate 03 still: `measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp`
+- Gate 01 still: `gate_01_chamberplate_rendered.webp`
+- Gate 02 animation: `gate_02_chamberplate.MP4`
+- Gate 02 still: `gate_02_chamberplate_rendered.webp`
+- Gate 03 animation: `gate_03_chamberplate.MP4`
+- Gate 03 still: `gate_03_chamberplate_rendered.webp`
 - Primus featured motion
 - Gemynd featured motion
 - Percipari featured motion
 
 Held due unverified or unseated authority:
 
-- Gate 02 motion: prior known paths still return `404`
-- Gate 02 still: prior known Supabase path still returns non-`200`
-- Gate 03 motion: prior known path still returns `404`
+- Gate 01 original artwork aspect: no verified Gate 01 original file supplied in current governed storage scan
+- Gate 02 original artwork aspect: no verified Gate 02 original file supplied in current governed storage scan
+- Gate 03 original artwork aspect: no verified Gate 03 original file supplied in current governed storage scan
 - `aspect_historical_significance` content: not seated for targeted chamberplates in current governed rows
 - `aspect_rule_of_measure` content: not seated for targeted chamberplates in current governed rows
 
 This OAR1 does not invent replacement filenames or aspect content.
+
+## Post-Closeout Amendment
+
+Operator later confirmed the live L2 motion filenames for Gate 02 and Gate 03:
+
+- `gate_02_chamberplate.MP4`
+- `gate_03_chamberplate.MP4`
+
+Those objects were verified `200` and then seated as governed `featured_video` rows with universal contract metadata:
+
+- `pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1`
+- `pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1`
+
+Operator later confirmed Gate 01–03 rendered stills in Supabase bucket root:
+
+- `gate_01_chamberplate_rendered.webp`
+- `gate_02_chamberplate_rendered.webp`
+- `gate_03_chamberplate_rendered.webp`
+
+Those objects were verified `200` and reseated as governed settled still authority:
+
+- `pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1`
+- `pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1`
+- `pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1`
+
+Gate 01–03 original-artwork aspect files remain unverified from the current governed storage scan.
 
 ## Passage Guard
 
