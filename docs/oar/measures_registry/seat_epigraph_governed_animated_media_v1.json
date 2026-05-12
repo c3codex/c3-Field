@@ -1,0 +1,201 @@
+{
+  "oar2": "oar2_seat_epigraph_governed_animated_media_v1",
+  "generatedAt": "2026-05-12T07:45:43.203Z",
+  "mutationPerformed": true,
+  "sourceObjectsDeleted": false,
+  "frontendMutationPerformed": false,
+  "resolverMutationPerformed": false,
+  "bucketCopyPerformed": false,
+  "animatedObject": {
+    "exactObjectKey": "inanna_epigraph.MP4",
+    "publicUrl": "https://media.c3field.online/inanna_epigraph.MP4",
+    "mediaType": "video/mp4",
+    "retrieval": {
+      "tested": true,
+      "ok": true,
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": "3062399"
+    },
+    "r2Listing": {
+      "available": true,
+      "ok": true,
+      "status": 200,
+      "bucket": "measures-media",
+      "prefix": "inanna",
+      "keys": [
+        "inanna_encounter_intro.mp4",
+        "inanna_epigraph.MP4"
+      ]
+    }
+  },
+  "staleNamingReference": {
+    "objectKey": "inanna_encounter_intro.mp4",
+    "publicUrl": "https://media.c3field.online/inanna_encounter_intro.mp4",
+    "retrieval": {
+      "tested": true,
+      "ok": true,
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": "3062399"
+    },
+    "standing": "legacy/stale naming; left untouched as fallback safety reference"
+  },
+  "upsertedRows": {
+    "codex_media_asset": [
+      {
+        "media_key": "epigraph_governed_animated_media_v1",
+        "media_type": "video",
+        "storage_provider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storage_path": "inanna_epigraph.MP4",
+        "status": "active"
+      }
+    ],
+    "measures_surface_media_map": [
+      {
+        "surface_key": "epigraph",
+        "media_key": "epigraph_governed_animated_media_v1",
+        "role": "featured_video",
+        "sequence_index": 5,
+        "status": "active"
+      }
+    ]
+  },
+  "runtimeValidation": {
+    "activeGovernedRowCount": 2,
+    "resolvedMedia": [
+      {
+        "source": "registry_media",
+        "surfaceKey": "epigraph",
+        "mediaKey": "epigraph_governed_animated_media_v1",
+        "role": "featured_video",
+        "mediaType": "video",
+        "bucketName": "measures-media",
+        "storagePath": "inanna_epigraph.MP4",
+        "storageProvider": "cloudflare_r2",
+        "publicUrl": null,
+        "renderOrder": 5,
+        "mapStatus": "active",
+        "assetStatus": "active",
+        "mapMetadata": {
+          "runtime_use": "epigraph governed animated/video primary",
+          "source_oar2": "oar2_seat_epigraph_governed_animated_media_v1",
+          "skip_enabled": true,
+          "audio_embedded": true,
+          "render_behavior": "autoplay_after_passage",
+          "frontend_hardcode_allowed": false,
+          "stale_replaced_key_reference": "inanna_encounter_intro.mp4"
+        },
+        "resolvedUrl": "https://media.c3field.online/inanna_epigraph.MP4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "3062399"
+        }
+      },
+      {
+        "source": "registry_media",
+        "surfaceKey": "epigraph",
+        "mediaKey": "epigraph_still_image_support_v1",
+        "role": "image",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "renderOrder": 10,
+        "mapStatus": "active",
+        "assetStatus": "active",
+        "mapMetadata": {
+          "runtime_use": "epigraph still/image support only",
+          "source_oar2": "oar2_correct_measures_registry_media_rows_and_migrate_inanna_fallbacks_v1",
+          "frontend_hardcode_allowed": false
+        },
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "116152"
+        }
+      }
+    ],
+    "primaryVideo": {
+      "source": "registry_media",
+      "surfaceKey": "epigraph",
+      "mediaKey": "epigraph_governed_animated_media_v1",
+      "role": "featured_video",
+      "mediaType": "video",
+      "bucketName": "measures-media",
+      "storagePath": "inanna_epigraph.MP4",
+      "storageProvider": "cloudflare_r2",
+      "publicUrl": null,
+      "renderOrder": 5,
+      "mapStatus": "active",
+      "assetStatus": "active",
+      "mapMetadata": {
+        "runtime_use": "epigraph governed animated/video primary",
+        "source_oar2": "oar2_seat_epigraph_governed_animated_media_v1",
+        "skip_enabled": true,
+        "audio_embedded": true,
+        "render_behavior": "autoplay_after_passage",
+        "frontend_hardcode_allowed": false,
+        "stale_replaced_key_reference": "inanna_encounter_intro.mp4"
+      },
+      "resolvedUrl": "https://media.c3field.online/inanna_epigraph.MP4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "3062399"
+      }
+    },
+    "primaryStill": {
+      "source": "registry_media",
+      "surfaceKey": "epigraph",
+      "mediaKey": "epigraph_still_image_support_v1",
+      "role": "image",
+      "mediaType": "image",
+      "bucketName": "measures-registry",
+      "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+      "storageProvider": "supabase",
+      "publicUrl": null,
+      "renderOrder": 10,
+      "mapStatus": "active",
+      "assetStatus": "active",
+      "mapMetadata": {
+        "runtime_use": "epigraph still/image support only",
+        "source_oar2": "oar2_correct_measures_registry_media_rows_and_migrate_inanna_fallbacks_v1",
+        "frontend_hardcode_allowed": false
+      },
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "116152"
+      }
+    },
+    "animatedBeforeStill": true
+  },
+  "fallbackRowsStillPresent": [
+    {
+      "surface_key": "epigraph",
+      "media_type": "video",
+      "bucket_name": "pre-codex-exhibition",
+      "storage_path": "inanna_encounter_intro.mp4",
+      "is_active": true
+    }
+  ],
+  "chamberplateValidation": {
+    "surfaceKey": "chamber_epithets_01_primus_artus",
+    "activeGovernedRowCount": 3
+  },
+  "hardcodedMediaPathIntroduced": false
+}
