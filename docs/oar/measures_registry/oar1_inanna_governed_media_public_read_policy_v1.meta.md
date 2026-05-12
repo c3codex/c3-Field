@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: execution_closeout
 document_scope: inanna_governed_media_public_read_policy
 title: OAR1 - Inanna Governed Media Public Read Policy
-status: completed
+status: completed_with_thread_followup_pending_next_oar2
 version: v1
 operator: op044
 executor: Cody
@@ -100,3 +100,77 @@ No resolver mutation.
 - `docs/oar/measures_registry/execute-inanna-governed-media-public-read-policy.cjs`
 - `docs/oar/measures_registry/inanna_governed_media_public_read_policy_v1.json`
 - `docs/oar/measures_registry/oar1_inanna_governed_media_public_read_policy_v1.meta.md`
+
+## Thread Continuation
+
+After this policy correction, the thread continued through deployment/runtime repair and epigraph playback behavior refinement.
+
+Additional thread resolutions confirmed:
+
+1. The wrong-site deployment seam was corrected.
+
+- `measuresofinanna.com` had been serving Registry HTML instead of Inanna HTML.
+- Cloudflare Pages output was corrected to serve `dist-inanna`.
+- Live Inanna HTML later resolved to:
+  - title: `Measures of Inanna`
+  - manifest: `/manifest.inanna.json`
+
+2. Live Inanna bundle identity was corrected.
+
+- stale asset standing earlier in thread: `index-qPbY_Yxd.js`
+- later valid Inanna assets included:
+  - `index-DNR-DxGl.js`
+  - `index-DZZGvnuY.js`
+  - `index-D35Jhc3u.js`
+
+3. Epigraph autoplay behavior was corrected in frontend runtime.
+
+- previous behavior forced featured epigraph video toward unmuted autoplay when `audio_embedded = true`
+- intro autoplay was revised so epigraph can autoplay muted under browser policy
+
+Commit:
+
+- `4cbfc21` - `Allow muted autoplay for Inanna epigraph`
+
+4. Epigraph completion routing was corrected in frontend runtime.
+
+- destination remained confirmed as `crystal_temple_home`
+- metadata was not lost
+- runtime bug found: featured-video end path revealed still support and returned before `triggerAutoAdvance()` executed
+- that branch was corrected so epigraph can advance to `crystal_temple_home`
+
+Commit:
+
+- `95e17f2` - `Advance Inanna epigraph to crystal temple home`
+
+5. Repository-level Pages output override was removed to reduce future project/output drift.
+
+Commit:
+
+- `de32926` - `Remove global Pages output override`
+
+## Current Standing
+
+This OAR1 remains accurate for the governed-media public-read seam it closed.
+
+However, thread continuation established that Inanna media/runtime issues were not exhausted by that policy correction alone.
+
+Resolved within thread:
+
+- governed media public visibility restored
+- Inanna domain/html binding corrected
+- muted epigraph autoplay corrected
+- epigraph handoff to `crystal_temple_home` corrected
+
+Not fully closed within this OAR1 scope:
+
+- additional media-load/runtime issues remain and should be routed through a new OAR2
+
+## Chazz Handoff Note
+
+For Chazz review, this OAR1 should be read as:
+
+1. the governed public-read seam was real and was corrected
+2. deployment binding drift was also real and was corrected later in thread
+3. epigraph playback/advance bugs were frontend runtime defects, not metadata loss
+4. the thread still requires a follow-up OAR2 for remaining media-load problems outside this OAR1's original bounded scope
