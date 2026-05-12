@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-12T15:10:33.085Z",
+  "generatedAt": "2026-05-12T15:50:13.963Z",
   "mutationCount": 0,
   "mutationPerformed": false,
   "liveBundle": {
@@ -928,9 +928,26 @@
         "show_action_rail": true
       },
       "renderer_supported": true,
-      "governed_media_row_count": 0,
+      "governed_media_row_count": 2,
       "fallback_media_row_count": 4,
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "gate_1_crown_removed",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "obsidian_chamberplate_gate01.mov"
+        },
+        {
+          "surface_key": "gate_1_crown_removed",
+          "role": "image",
+          "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "image",
@@ -949,30 +966,30 @@
           "storage_path": "etonal_phi_companion.wav"
         }
       ],
-      "primary_video_media_key": "obsidian_chamberplate_gate01.mov",
-      "primary_still_media_key": "obsidian_chamberplate_gate01.jpeg",
-      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "primary_video_media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "primary_still_media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
           "storagePath": "obsidian_chamberplate_gate01.mov",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate01.mov",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/obsidian_chamberplate_gate01.mov",
+          "status": 200
         },
         "primary_still": {
-          "mediaKey": null,
-          "storagePath": "obsidian_chamberplate_gate01.jpeg",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate01.jpeg",
-          "status": 400
+          "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+          "status": 200
         },
         "primary_audio": {
           "mediaKey": null,
-          "storagePath": "etonal_phi_companion.wav",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
-          "status": 400
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
         }
       },
       "transition_targets": {
@@ -1036,8 +1053,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "gates_passage_01",
@@ -1460,9 +1477,18 @@
         "show_action_rail": true
       },
       "renderer_supported": true,
-      "governed_media_row_count": 0,
+      "governed_media_row_count": 1,
       "fallback_media_row_count": 4,
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "gate_3_lapis_necklace",
+          "role": "image",
+          "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
@@ -1481,30 +1507,30 @@
           "storage_path": "etonal_phi_companion.wav"
         }
       ],
-      "primary_video_media_key": "obsidian_chamberplate_gate03.mp4",
-      "primary_still_media_key": "obsidian_chamberplate_gate03.jpeg",
-      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "primary_video_media_key": null,
+      "primary_still_media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
           "mediaKey": null,
-          "storagePath": "obsidian_chamberplate_gate03.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate03.mp4",
-          "status": 400
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
         },
         "primary_still": {
-          "mediaKey": null,
-          "storagePath": "obsidian_chamberplate_gate03.jpeg",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate03.jpeg",
-          "status": 400
+          "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+          "status": 200
         },
         "primary_audio": {
           "mediaKey": null,
-          "storagePath": "etonal_phi_companion.wav",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
-          "status": 400
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
         }
       },
       "transition_targets": {
@@ -1559,8 +1585,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "gates_passage_03",
@@ -2061,7 +2087,7 @@
           "storagePath": "gemynd_corpus.mp3",
           "source": "registry_media",
           "url": "https://media.c3field.online/gemynd_corpus.mp3",
-          "status": "fetch_error:fetch failed"
+          "status": 200
         }
       },
       "transition_targets": {
@@ -2271,17 +2297,9 @@
         "show_action_rail": true
       },
       "renderer_supported": true,
-      "governed_media_row_count": 4,
+      "governed_media_row_count": 3,
       "fallback_media_row_count": 2,
       "governed_media_roles": [
-        {
-          "surface_key": "chamber_epithets_03_percipari",
-          "role": "oracle_card",
-          "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
-          "media_type": "image",
-          "storage_provider": "cloudflare_r2",
-          "storage_path": "percipari_epithet03_chamberplate.png"
-        },
         {
           "surface_key": "chamber_epithets_03_percipari",
           "role": "original_artwork",
@@ -2318,7 +2336,7 @@
         }
       ],
       "primary_video_media_key": null,
-      "primary_still_media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "primary_still_media_key": "chamber_epithets_03_percipari_original_artwork_v1",
       "primary_audio_media_key": "chamber_epithets_03_percipari_full_song_v1",
       "media_retrieval_statuses": {
         "primary_video": {
@@ -2329,11 +2347,11 @@
           "status": null
         },
         "primary_still": {
-          "mediaKey": "chamber_epithets_03_percipari_oracle_card_v1",
-          "storagePath": "percipari_epithet03_chamberplate.png",
+          "mediaKey": "chamber_epithets_03_percipari_original_artwork_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
           "source": "registry_media",
-          "url": "https://media.c3field.online/percipari_epithet03_chamberplate.png",
-          "status": 404
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+          "status": 200
         },
         "primary_audio": {
           "mediaKey": "chamber_epithets_03_percipari_full_song_v1",
@@ -2404,8 +2422,8 @@
           }
         ]
       },
-      "live_deployed_route_result": "media selected but retrieval fails",
-      "failure_class": "media URL retrieval failure"
+      "live_deployed_route_result": "renderable",
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "codexstone",
@@ -2683,11 +2701,6 @@
       "live_deployed_route_result": "media selected but retrieval fails"
     },
     {
-      "registry_key_requested": "gate_1_crown_removed",
-      "failure_class": "media URL retrieval failure",
-      "live_deployed_route_result": "media selected but retrieval fails"
-    },
-    {
       "registry_key_requested": "gate_2_lapis_beads",
       "failure_class": "media URL retrieval failure",
       "live_deployed_route_result": "media selected but retrieval fails"
@@ -2698,17 +2711,7 @@
       "live_deployed_route_result": "media selected but retrieval fails"
     },
     {
-      "registry_key_requested": "gate_3_lapis_necklace",
-      "failure_class": "media URL retrieval failure",
-      "live_deployed_route_result": "media selected but retrieval fails"
-    },
-    {
       "registry_key_requested": "gates_passage_03",
-      "failure_class": "media URL retrieval failure",
-      "live_deployed_route_result": "media selected but retrieval fails"
-    },
-    {
-      "registry_key_requested": "chamber_epithets_03_percipari",
       "failure_class": "media URL retrieval failure",
       "live_deployed_route_result": "media selected but retrieval fails"
     },
@@ -3411,7 +3414,24 @@
     {
       "registry_key_requested": "gate_1_crown_removed",
       "surface_type": "chamberplate",
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "gate_1_crown_removed",
+          "role": "featured_video",
+          "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+          "media_type": "video",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "obsidian_chamberplate_gate01.mov"
+        },
+        {
+          "surface_key": "gate_1_crown_removed",
+          "role": "image",
+          "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "image",
@@ -3430,33 +3450,33 @@
           "storage_path": "etonal_phi_companion.wav"
         }
       ],
-      "primary_video_media_key": "obsidian_chamberplate_gate01.mov",
-      "primary_still_media_key": "obsidian_chamberplate_gate01.jpeg",
-      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "primary_video_media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "primary_still_media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
-          "mediaKey": null,
+          "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
           "storagePath": "obsidian_chamberplate_gate01.mov",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate01.mov",
-          "status": 400
+          "source": "registry_media",
+          "url": "https://media.c3field.online/obsidian_chamberplate_gate01.mov",
+          "status": 200
         },
         "primary_still": {
-          "mediaKey": null,
-          "storagePath": "obsidian_chamberplate_gate01.jpeg",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate01.jpeg",
-          "status": 400
+          "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+          "status": 200
         },
         "primary_audio": {
           "mediaKey": null,
-          "storagePath": "etonal_phi_companion.wav",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
-          "status": 400
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "gates_passage_01",
@@ -3620,7 +3640,16 @@
     {
       "registry_key_requested": "gate_3_lapis_necklace",
       "surface_type": "chamberplate",
-      "governed_media_roles": [],
+      "governed_media_roles": [
+        {
+          "surface_key": "gate_3_lapis_necklace",
+          "role": "image",
+          "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+          "media_type": "image",
+          "storage_provider": "supabase",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+        }
+      ],
       "fallback_media_roles": [
         {
           "media_type": "video",
@@ -3639,33 +3668,33 @@
           "storage_path": "etonal_phi_companion.wav"
         }
       ],
-      "primary_video_media_key": "obsidian_chamberplate_gate03.mp4",
-      "primary_still_media_key": "obsidian_chamberplate_gate03.jpeg",
-      "primary_audio_media_key": "etonal_phi_companion.wav",
+      "primary_video_media_key": null,
+      "primary_still_media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "primary_audio_media_key": null,
       "media_retrieval_statuses": {
         "primary_video": {
           "mediaKey": null,
-          "storagePath": "obsidian_chamberplate_gate03.mp4",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate03.mp4",
-          "status": 400
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
         },
         "primary_still": {
-          "mediaKey": null,
-          "storagePath": "obsidian_chamberplate_gate03.jpeg",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/obsidian_chamberplate_gate03.jpeg",
-          "status": 400
+          "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+          "source": "registry_media",
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+          "status": 200
         },
         "primary_audio": {
           "mediaKey": null,
-          "storagePath": "etonal_phi_companion.wav",
-          "source": "temp_exhibition_media",
-          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/etonal_phi_companion.wav",
-          "status": 400
+          "storagePath": null,
+          "source": null,
+          "url": null,
+          "status": null
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "gates_passage_03",
@@ -3905,7 +3934,7 @@
           "storagePath": "gemynd_corpus.mp3",
           "source": "registry_media",
           "url": "https://media.c3field.online/gemynd_corpus.mp3",
-          "status": "fetch_error:fetch failed"
+          "status": 200
         }
       },
       "failure_class": "renderable"
@@ -3963,14 +3992,6 @@
       "governed_media_roles": [
         {
           "surface_key": "chamber_epithets_03_percipari",
-          "role": "oracle_card",
-          "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
-          "media_type": "image",
-          "storage_provider": "cloudflare_r2",
-          "storage_path": "percipari_epithet03_chamberplate.png"
-        },
-        {
-          "surface_key": "chamber_epithets_03_percipari",
           "role": "original_artwork",
           "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
           "media_type": "image",
@@ -4005,7 +4026,7 @@
         }
       ],
       "primary_video_media_key": null,
-      "primary_still_media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "primary_still_media_key": "chamber_epithets_03_percipari_original_artwork_v1",
       "primary_audio_media_key": "chamber_epithets_03_percipari_full_song_v1",
       "media_retrieval_statuses": {
         "primary_video": {
@@ -4016,11 +4037,11 @@
           "status": null
         },
         "primary_still": {
-          "mediaKey": "chamber_epithets_03_percipari_oracle_card_v1",
-          "storagePath": "percipari_epithet03_chamberplate.png",
+          "mediaKey": "chamber_epithets_03_percipari_original_artwork_v1",
+          "storagePath": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
           "source": "registry_media",
-          "url": "https://media.c3field.online/percipari_epithet03_chamberplate.png",
-          "status": 404
+          "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+          "status": 200
         },
         "primary_audio": {
           "mediaKey": "chamber_epithets_03_percipari_full_song_v1",
@@ -4030,7 +4051,7 @@
           "status": 200
         }
       },
-      "failure_class": "media URL retrieval failure"
+      "failure_class": "renderable"
     },
     {
       "registry_key_requested": "codexstone",
@@ -5021,7 +5042,7 @@
       "phase_map": 1
     },
     "by_failure_class": {
-      "media URL retrieval failure": 8
+      "media URL retrieval failure": 5
     },
     "by_renderer": {
       "encounter_focus": 8,

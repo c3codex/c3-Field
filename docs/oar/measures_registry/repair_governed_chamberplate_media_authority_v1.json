@@ -1,0 +1,251 @@
+{
+  "generatedAt": "2026-05-12T15:49:38.196Z",
+  "mutationPerformed": true,
+  "mutationCount": 7,
+  "changedFiles": [],
+  "changedRows": {
+    "codex_media_asset": 3,
+    "measures_surface_media_map": 4
+  },
+  "governedSourceValidations": [
+    {
+      "surface_key": "gate_1_crown_removed",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "url": "https://media.c3field.online/obsidian_chamberplate_gate01.mov",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/quicktime",
+        "contentLength": "2690332"
+      }
+    },
+    {
+      "surface_key": "gate_1_crown_removed",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "url": "https://zfihrspxvennjzazxcbj.supabase.co//storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "462136"
+      }
+    },
+    {
+      "surface_key": "gate_3_lapis_necklace",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "url": "https://zfihrspxvennjzazxcbj.supabase.co//storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "589712"
+      }
+    }
+  ],
+  "heldGate2Checks": [
+    {
+      "surface_key": "gate_2_lapis_beads",
+      "label": "gate_2_lapis_beads image",
+      "url": "https://media.c3field.online/obsidian_chamberplate_gate02.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 404,
+        "contentType": "text/plain;charset=UTF-8",
+        "contentLength": null
+      }
+    },
+    {
+      "surface_key": "gate_2_lapis_beads",
+      "label": "gate_2_lapis_beads video",
+      "url": "https://media.c3field.online/obsidian_chamberplate_gate02.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 404,
+        "contentType": "text/plain;charset=UTF-8",
+        "contentLength": null
+      }
+    }
+  ],
+  "upsertedAssets": [
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "title": "Obsidian Chamberplate Gate01",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "obsidian_chamberplate_gate01.mov",
+      "status": "active"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "title": "Obsidian Chamberplate Gate01",
+      "media_type": "image",
+      "storage_provider": "supabase",
+      "bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+      "status": "active"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "image",
+      "storage_provider": "supabase",
+      "bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "status": "active"
+    }
+  ],
+  "upsertedMappings": [
+    {
+      "surface_key": "gate_1_crown_removed",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "role": "featured_video",
+      "sequence_index": 10,
+      "status": "active"
+    },
+    {
+      "surface_key": "gate_1_crown_removed",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "role": "image",
+      "sequence_index": 20,
+      "status": "active"
+    },
+    {
+      "surface_key": "gate_3_lapis_necklace",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "role": "image",
+      "sequence_index": 20,
+      "status": "active"
+    }
+  ],
+  "percipariOracleRepair": {
+    "changed": true,
+    "row": {
+      "surface_key": "chamber_epithets_03_percipari",
+      "media_key": "chamber_epithets_03_percipari_oracle_card_v1",
+      "role": "oracle_card",
+      "sequence_index": 20,
+      "status": "inactive"
+    },
+    "retrieval": {
+      "tested": true,
+      "ok": false,
+      "status": 404,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    "resolved_url": "https://media.c3field.online/percipari_epithet03_chamberplate.png"
+  },
+  "mappingValidation": [
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "role": "original_artwork",
+      "media_type": "image",
+      "storage_provider": "supabase",
+      "bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+      "resolved_url": "https://zfihrspxvennjzazxcbj.supabase.co//storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "1551774"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "media_key": "chamber_epithets_03_percipari_full_song_v1",
+      "role": "full_song",
+      "media_type": "audio",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "percipari.mp3",
+      "resolved_url": "https://media.c3field.online/percipari.mp3",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "audio/mpeg",
+        "contentLength": "5660104"
+      }
+    },
+    {
+      "surface_key": "chamber_epithets_03_percipari",
+      "media_key": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+      "role": "material_tone",
+      "media_type": "audio",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "crystal_tone_rise_return_5min.wav",
+      "resolved_url": "https://media.c3field.online/crystal_tone_rise_return_5min.wav",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "audio/x-wav",
+        "contentLength": "26460044"
+      }
+    },
+    {
+      "surface_key": "gate_1_crown_removed",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+      "role": "featured_video",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "obsidian_chamberplate_gate01.mov",
+      "resolved_url": "https://media.c3field.online/obsidian_chamberplate_gate01.mov",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/quicktime",
+        "contentLength": "2690332"
+      }
+    },
+    {
+      "surface_key": "gate_1_crown_removed",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+      "role": "image",
+      "media_type": "image",
+      "storage_provider": "supabase",
+      "bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+      "resolved_url": "https://zfihrspxvennjzazxcbj.supabase.co//storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "462136"
+      }
+    },
+    {
+      "surface_key": "gate_3_lapis_necklace",
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "role": "image",
+      "media_type": "image",
+      "storage_provider": "supabase",
+      "bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "resolved_url": "https://zfihrspxvennjzazxcbj.supabase.co//storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "589712"
+      }
+    }
+  ],
+  "heldSurfaceStanding": [],
+  "fallbackDeletionPerformed": false,
+  "frontendHardcodedMediaPathsIntroduced": false
+}
