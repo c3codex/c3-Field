@@ -156,6 +156,24 @@ Failure class after repair:
 
 This OAR removed the previously failing chamberplate cluster from the matrix and left only the held-source retrieval cluster.
 
+Important live-thread correction:
+
+- operator reports the passage family remains broken in live runtime even where the matrix rerun reduced failure count
+- this means the matrix currently understates the live passage-family break and should not be treated as proof that passages are healthy
+
+Named live passage concern to route forward:
+
+- `crystal_temple_home`
+- `temple_harrumuk_passage`
+- `kumurrah_passage`
+- `gates_passage_01`
+- `gates_passage_02`
+- `gates_passage_03`
+- `epithets_passage_01`
+- `epithets_passage_02`
+
+These require a live-runtime diagnostic OAR2 even where seated governed mappings exist.
+
 ## Runtime Standing
 
 Because this OAR changed governed media mappings only, no frontend rebuild or deploy is required for the repaired chamberplate authority to be available at runtime.
@@ -169,13 +187,35 @@ Validation rerun completed through:
 
 Recommended next repair focus:
 
-1. source-confirm held media for:
+1. diagnose live passage-family runtime failure for:
+   - `crystal_temple_home`
+   - `temple_harrumuk_passage`
+   - `kumurrah_passage`
+   - `gates_passage_01`
+   - `gates_passage_02`
+   - `gates_passage_03`
+   - `epithets_passage_01`
+   - `epithets_passage_02`
+2. source-confirm held media for:
    - `gate_2_lapis_beads`
    - `inanna_seat`
    - `gates_passage_02`
    - `gates_passage_03`
    - `me_01`
-2. once verified objects exist, seat governed authority for that remaining held cluster
+3. once verified objects exist, seat governed authority for that remaining held cluster
+
+## Epithet Chamberplate Runtime Contract
+
+Operator-confirmed chamberplate behavior contract for the epithet family should remain:
+
+- featured video plays on load
+- featured video settles to still oracle card
+- aspects remain click-to-open support surfaces
+
+Important live-thread note:
+
+- current epithet chamberplate behavior is not fully consistent with that contract
+- future repair work must preserve that sequencing model rather than flattening epithet chamberplates into still-only presentation
 
 ## Boundary
 
