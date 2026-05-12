@@ -1,0 +1,96 @@
+{
+  "oar2": "oar2_expand_codex_media_asset_storage_provider_contract_v1",
+  "migrationPath": "supabase/migrations/202605120001_expand_codex_media_asset_storage_provider.sql",
+  "contractBefore": {
+    "sourceDefinition": "codex_media_asset_storage_provider_check check (storage_provider in ('cloudflare_r2'))",
+    "supabaseProbe": {
+      "accepted": false,
+      "error_code": "23514",
+      "error_message": "new row for relation \"codex_media_asset\" violates check constraint \"codex_media_asset_storage_provider_check\""
+    },
+    "providerCounts": [
+      {
+        "bucket": "measures-media",
+        "storage_provider": "cloudflare_r2",
+        "count": 9
+      },
+      {
+        "bucket": "pre-codex-exhibition",
+        "storage_provider": "cloudflare_r2",
+        "count": 19
+      }
+    ],
+    "rowCount": 28
+  },
+  "appliedContractChange": {
+    "type": "CHECK constraint replacement",
+    "table": "public.codex_media_asset",
+    "constraint": "codex_media_asset_storage_provider_check",
+    "allowedValues": [
+      "cloudflare_r2",
+      "supabase"
+    ]
+  },
+  "contractAfter": {
+    "supabaseProbe": {
+      "accepted": true,
+      "inserted_then_deleted": true,
+      "row": {
+        "media_key": "__oar2_storage_provider_contract_probe_supabase__",
+        "storage_provider": "supabase",
+        "bucket": "measures-registry",
+        "storage_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+      }
+    },
+    "cloudflareR2Probe": {
+      "accepted": true,
+      "inserted_then_deleted": true,
+      "row": {
+        "media_key": "__oar2_storage_provider_contract_probe_cloudflare__",
+        "storage_provider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storage_path": "primus_artus.mp3"
+      }
+    },
+    "providerCounts": [
+      {
+        "bucket": "measures-media",
+        "storage_provider": "cloudflare_r2",
+        "count": 9
+      },
+      {
+        "bucket": "pre-codex-exhibition",
+        "storage_provider": "cloudflare_r2",
+        "count": 19
+      }
+    ],
+    "rowCount": 28,
+    "existingCloudflareRowsRemainValid": true
+  },
+  "resolverVerification": {
+    "cloudflare_r2": {
+      "input": {
+        "storageProvider": "cloudflare_r2",
+        "bucketName": "measures-media",
+        "storagePath": "primus_artus.mp3"
+      },
+      "resolvedUrl": "https://media.c3field.online/primus_artus.mp3",
+      "expectedAuthority": "VITE_R2_PUBLIC_BASE_URL plus encoded storage_path"
+    },
+    "supabase": {
+      "input": {
+        "storageProvider": "supabase",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+      },
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+      "expectedAuthority": "Supabase storage public URL from seated bucket and storage_path"
+    }
+  },
+  "mediaRowsRemapped": false,
+  "mediaRowsRemappedCount": 0,
+  "frontendHardcodedPathsIntroduced": false,
+  "frontendMutationPerformed": false,
+  "sourceObjectsDeleted": false,
+  "probeRowsRemaining": []
+}
