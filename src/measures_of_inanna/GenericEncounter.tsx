@@ -824,7 +824,7 @@ export default function GenericEncounter({
   )
   const primaryStill = useMemo(
     () =>
-      orderedMedia.find((item) => isRole(item, ["oracle_card", "image"])) ??
+      orderedMedia.find((item) => isRole(item, ["oracle_card", "image", "original_artwork"])) ??
       orderedMedia.find(isImage) ??
       null,
     [orderedMedia],
@@ -839,10 +839,11 @@ export default function GenericEncounter({
   const aspectMedia = useMemo(
     () =>
       orderedMedia.filter((item) =>
-        isRole(item, CHAMBERPLATE_ASPECT_ROLES) ||
-        Boolean(item.role && item.source === "registry_media" && !CHAMBERPLATE_RECOGNIZED_ROLES.includes(item.role)),
+        item !== primaryStill &&
+        (isRole(item, CHAMBERPLATE_ASPECT_ROLES) ||
+          Boolean(item.role && item.source === "registry_media" && !CHAMBERPLATE_RECOGNIZED_ROLES.includes(item.role))),
       ),
-    [orderedMedia],
+    [orderedMedia, primaryStill],
   )
   const extraMedia = useMemo(
     () =>
@@ -1134,7 +1135,7 @@ export default function GenericEncounter({
 
   return (
     <main
-      className={`encounter ${renderer.layout ?? ""}`}
+      className={`encounter ${renderer.layout ?? ""} ${resolution.surfaceType}`}
       data-registry-key={resolution.registryKey}
       data-surface-type={resolution.surfaceType}
       data-media-fit={renderer.media_fit ?? undefined}
