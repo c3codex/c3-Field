@@ -1,0 +1,532 @@
+{
+  "oar2": "oar2_diagnose_measures_media_runtime_resolution_v1",
+  "generatedAt": "2026-05-12T05:52:53.285Z",
+  "mutationPerformed": false,
+  "activeRuntimeSurface": {
+    "app": "Measures of Inanna",
+    "route": "Temple.tsx",
+    "entryRegistryKey": "epigraph",
+    "componentPath": "src/measures_of_inanna/Temple.tsx -> GenericEncounter.tsx -> EncounterStageMedia.tsx"
+  },
+  "resolverContract": {
+    "supabase": "storage_provider != cloudflare_r2 and bucket != measures-media resolves through Supabase Storage public URL",
+    "cloudflareR2": "storage_provider = cloudflare_r2 or bucket = measures-media resolves through VITE_R2_PUBLIC_BASE_URL plus encoded storage_path",
+    "componentHardcodedPaths": false
+  },
+  "buildMarkers": [
+    {
+      "artifact": "dist-inanna",
+      "exists": true,
+      "publishableKeyMarkerPresent": true,
+      "r2PublicBaseMarkerPresent": true,
+      "supabaseUrlMarkerPresent": true
+    },
+    {
+      "artifact": "dist-registry",
+      "exists": true,
+      "publishableKeyMarkerPresent": true,
+      "r2PublicBaseMarkerPresent": true,
+      "supabaseUrlMarkerPresent": true
+    }
+  ],
+  "measuresRegistryMedia": {
+    "route": "MeasuresRegistryRuntime.tsx",
+    "queryPath": "measures_media_map",
+    "queryFilters": {
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": [
+        "epigraph_video",
+        "hero_image",
+        "explainer_video",
+        "hero_video",
+        "hero_poster",
+        "path_choice_background",
+        "registry_mark",
+        "foundation_intro_video",
+        "systems_intro_video",
+        "c3_field_video",
+        "hero_measured_image",
+        "left_hero_fracture",
+        "left_hero_fracture_motion",
+        "right_measured_hero",
+        "measured_hero_motion_graphic",
+        "paragraph_agents_of_chaos"
+      ],
+      "order": "sort_order asc",
+      "client_filters": "is_active !== false"
+    },
+    "returnedRowCount": 14,
+    "missingRoles": [
+      "foundation_intro_video",
+      "systems_intro_video"
+    ],
+    "diagnostics": [
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "hero_video",
+        "mediaType": "video",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "integrity_governance_intro.mp4",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/integrity_governance_intro.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "renderDecision": "not rendered: retrieval 400",
+        "failureReason": "resolved URL retrieval returned 400"
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "hero_poster",
+        "mediaType": "image",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry_poster.webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry_poster.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "130454"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "path_choice_background",
+        "mediaType": "image",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "more_vs_coherence_path.webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/more_vs_coherence_path.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "renderDecision": "not rendered: retrieval 400",
+        "failureReason": "resolved URL retrieval returned 400"
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "registry_mark",
+        "mediaType": "image",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry_mark.webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry_mark.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "178128"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "c3_field_video",
+        "mediaType": "video",
+        "storageProvider": null,
+        "bucketName": "measures-media",
+        "storagePath": "c3_field.mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/c3_field.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "5241718"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "epigraph_video",
+        "mediaType": "video",
+        "storageProvider": null,
+        "bucketName": "measures-media",
+        "storagePath": "registry_epigraph_fracture_to_alignment_15s.mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/registry_epigraph_fracture_to_alignment_15s.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "24980322"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "hero_image",
+        "mediaType": "image",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "hero_fracture_measure.webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/hero_fracture_measure.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "renderDecision": "not rendered: retrieval 400",
+        "failureReason": "resolved URL retrieval returned 400"
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "explainer_video",
+        "mediaType": "video",
+        "storageProvider": null,
+        "bucketName": "measures-media",
+        "storagePath": "structural_coherence_explainer_45s.mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/structural_coherence_explainer_45s.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "47144235"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "hero_measured_image",
+        "mediaType": "image",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "measured_hero_right.webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measured_hero_right.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "renderDecision": "not rendered: retrieval 400",
+        "failureReason": "resolved URL retrieval returned 400"
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "left_hero_fracture",
+        "mediaType": "image",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "left_hero_fracture.webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/left_hero_fracture.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "48266"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "left_hero_fracture_motion",
+        "mediaType": "video",
+        "storageProvider": null,
+        "bucketName": "measures-media",
+        "storagePath": "left_hero_fracture_motion.mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/left_hero_fracture_motion.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "7537934"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "right_measured_hero",
+        "mediaType": "image",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "right_measured_hero.webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/right_measured_hero.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "55160"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "measured_hero_motion_graphic",
+        "mediaType": "video",
+        "storageProvider": null,
+        "bucketName": "measures-media",
+        "storagePath": "right_measured_hero_motion_graphic.mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/right_measured_hero_motion_graphic.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "2977050"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      },
+      {
+        "source": "measures_media_map",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "mediaRole": "paragraph_agents_of_chaos",
+        "mediaType": "image",
+        "storageProvider": null,
+        "bucketName": "measures-registry",
+        "storagePath": "paragraph_agents_of_chaos.png",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/paragraph_agents_of_chaos.png",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/png",
+          "contentLength": "1767404"
+        },
+        "renderDecision": "renderable by URL and media_type",
+        "failureReason": null
+      }
+    ]
+  },
+  "surfaces": [
+    {
+      "registryKey": "epigraph",
+      "resolved": true,
+      "encounterKey": "epigraph_view",
+      "surfaceType": "aspect",
+      "renderer": {
+        "layout": "encounter_focus",
+        "media_fit": "contain",
+        "show_header": false,
+        "media_max_width": "82vw",
+        "media_max_height": "72svh",
+        "show_action_rail": false
+      },
+      "playback": {
+        "mode": "encounter_media",
+        "advance_delay_ms": 0,
+        "auto_advance_on_video_end": true
+      },
+      "encounterCandidateKeys": [
+        "epigraph",
+        "epigraph_view"
+      ],
+      "queryPath": "temp_exhibition_media fallback",
+      "queryFilters": {
+        "surface_key": [
+          "epigraph",
+          "epigraph_view"
+        ],
+        "order": "render_order asc",
+        "client_filters": "is_active !== false"
+      },
+      "registryMediaReturnedRowCount": 0,
+      "tempMediaReturnedRowCount": 1,
+      "diagnosticRows": [
+        {
+          "source": "temp_exhibition_media",
+          "surfaceKey": "epigraph",
+          "requestedMediaKey": null,
+          "role": "video",
+          "mediaType": "video",
+          "storageProvider": null,
+          "bucketName": "pre-codex-exhibition",
+          "storagePath": "inanna_encounter_intro.mp4",
+          "publicUrlPresent": false,
+          "posterUrlPresent": false,
+          "status": "active",
+          "assetStatus": null,
+          "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/inanna_encounter_intro.mp4",
+          "retrieval": {
+            "tested": true,
+            "ok": false,
+            "status": 400,
+            "contentType": "application/json; charset=utf-8",
+            "contentLength": "69"
+          },
+          "renderDecision": "not rendered: retrieval 400",
+          "failureReason": "resolved URL retrieval returned 400"
+        }
+      ]
+    },
+    {
+      "registryKey": "temple_antechamber",
+      "resolved": true,
+      "encounterKey": "temple_antechamber_view",
+      "surfaceType": "threshold",
+      "renderer": {
+        "layout": "plaque_overlay",
+        "media_fit": "contain",
+        "plaque_mode": "overlay",
+        "show_header": false,
+        "mobile_stack": true,
+        "action_anchor": "lower_left",
+        "media_max_width": "92vw",
+        "media_max_height": "78svh",
+        "panel_max_height": "40vh",
+        "show_action_rail": true,
+        "plaque_max_height": "44vh",
+        "guest_registry_panel": true,
+        "background_media_role": "background"
+      },
+      "playback": {
+        "mode": "static",
+        "fade_ms": null,
+        "settle_ms": null,
+        "advance_delay_ms": null,
+        "auto_advance_on_video_end": false
+      },
+      "encounterCandidateKeys": [
+        "temple_antechamber",
+        "temple_antechamber_view"
+      ],
+      "queryPath": "temp_exhibition_media fallback",
+      "queryFilters": {
+        "surface_key": [
+          "temple_antechamber",
+          "temple_antechamber_view"
+        ],
+        "order": "render_order asc",
+        "client_filters": "is_active !== false"
+      },
+      "registryMediaReturnedRowCount": 0,
+      "tempMediaReturnedRowCount": 1,
+      "diagnosticRows": [
+        {
+          "source": "temp_exhibition_media",
+          "surfaceKey": "temple_antechamber",
+          "requestedMediaKey": null,
+          "role": "image",
+          "mediaType": "image",
+          "storageProvider": null,
+          "bucketName": "pre-codex-exhibition",
+          "storagePath": "antechamber.png",
+          "publicUrlPresent": false,
+          "posterUrlPresent": false,
+          "status": "active",
+          "assetStatus": null,
+          "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/antechamber.png",
+          "retrieval": {
+            "tested": true,
+            "ok": false,
+            "status": 400,
+            "contentType": "application/json; charset=utf-8",
+            "contentLength": "69"
+          },
+          "renderDecision": "not rendered: retrieval 400",
+          "failureReason": "resolved URL retrieval returned 400"
+        }
+      ]
+    },
+    {
+      "registryKey": "chamber_epithets_01_primus_artus",
+      "resolved": false,
+      "failureReason": "encounter could not be resolved"
+    },
+    {
+      "registryKey": "chamber_epithets_02_gemynd_corpus",
+      "resolved": false,
+      "failureReason": "encounter could not be resolved"
+    },
+    {
+      "registryKey": "chamber_epithets_03_percipari",
+      "resolved": false,
+      "failureReason": "encounter could not be resolved"
+    },
+    {
+      "registryKey": "gate_1_crown_removed",
+      "resolved": false,
+      "failureReason": "encounter could not be resolved"
+    },
+    {
+      "registryKey": "gate_3_lapis_necklace",
+      "resolved": false,
+      "failureReason": "encounter could not be resolved"
+    }
+  ],
+  "diagnosticRows": [
+    {
+      "surface": "epigraph",
+      "encounter": "epigraph_view",
+      "surfaceType": "aspect",
+      "requestedMediaKey": null,
+      "role": "video",
+      "dbRowFound": true,
+      "provider": null,
+      "bucketPath": "pre-codex-exhibition/inanna_encounter_intro.mp4",
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/inanna_encounter_intro.mp4",
+      "retrievalStatus": 400,
+      "rendered": false,
+      "failureReason": "resolved URL retrieval returned 400"
+    },
+    {
+      "surface": "temple_antechamber",
+      "encounter": "temple_antechamber_view",
+      "surfaceType": "threshold",
+      "requestedMediaKey": null,
+      "role": "image",
+      "dbRowFound": true,
+      "provider": null,
+      "bucketPath": "pre-codex-exhibition/antechamber.png",
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/pre-codex-exhibition/antechamber.png",
+      "retrievalStatus": 400,
+      "rendered": false,
+      "failureReason": "resolved URL retrieval returned 400"
+    }
+  ]
+}
