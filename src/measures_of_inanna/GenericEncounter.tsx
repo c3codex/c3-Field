@@ -1067,6 +1067,7 @@ export default function GenericEncounter({
 
     if (hasFeaturedAutoplayVideo) {
       revealAfterFeaturedVideo()
+      triggerAutoAdvance()
       return
     }
 
