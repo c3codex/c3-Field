@@ -1,0 +1,4089 @@
+{
+  "oar2": "oar2_reconcile_measures_registry_and_pre_codex_media_inventory_v1",
+  "generatedAt": "2026-05-12T06:21:42.535Z",
+  "mutationPerformed": false,
+  "storageInventory": {
+    "preCodexExhibition": {
+      "bucket": "pre-codex-exhibition",
+      "objectCount": 17,
+      "imageObjectCount": 14,
+      "imageObjects": [
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "antechamber.webp",
+          "name": "antechamber.webp",
+          "extension": ".webp",
+          "size": 138916,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-09T19:40:02.820Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "crystal_temple_home.webp",
+          "name": "crystal_temple_home.webp",
+          "extension": ".webp",
+          "size": 289656,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-09T19:47:26.606Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "gemynd_corpus.webp",
+          "name": "gemynd_corpus.webp",
+          "extension": ".webp",
+          "size": 286596,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-09T19:48:49.973Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "gemynd_corpus_original_art.webp",
+          "name": "gemynd_corpus_original_art.webp",
+          "extension": ".webp",
+          "size": 789896,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-10T01:45:08.512Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "inanna_epigraph.webp",
+          "name": "inanna_epigraph.webp",
+          "extension": ".webp",
+          "size": 116152,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:49:56.924Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "marble_chamber_codexstone.webp",
+          "name": "marble_chamber_codexstone.webp",
+          "extension": ".webp",
+          "size": 162026,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-04-11T04:00:16.448Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "obsidian_chamberplate_gate01 (1).jpeg",
+          "name": "obsidian_chamberplate_gate01 (1).jpeg",
+          "extension": ".jpeg",
+          "size": 1374620,
+          "mimetype": "image/jpeg",
+          "updatedAt": "2026-05-12T03:54:28.551Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "obsidian_chamberplate_gate01.webp",
+          "name": "obsidian_chamberplate_gate01.webp",
+          "extension": ".webp",
+          "size": 462136,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:56:17.985Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "obsidian_chamberplate_gate03.webp",
+          "name": "obsidian_chamberplate_gate03.webp",
+          "extension": ".webp",
+          "size": 589712,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-09T21:02:09.745Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "og.webp",
+          "name": "og.webp",
+          "extension": ".webp",
+          "size": 22896,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:48:39.563Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "percipari_original_artwork.webp",
+          "name": "percipari_original_artwork.webp",
+          "extension": ".webp",
+          "size": 1551774,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-10T01:45:08.803Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "primus_artus_epithet01_chamberplate.webp",
+          "name": "primus_artus_epithet01_chamberplate.webp",
+          "extension": ".webp",
+          "size": 371114,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-09T21:04:22.647Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "primus_artus_original_artwork.webp",
+          "name": "primus_artus_original_artwork.webp",
+          "extension": ".webp",
+          "size": 563686,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-10T01:45:08.069Z"
+        },
+        {
+          "bucket": "pre-codex-exhibition",
+          "path": "temple_antechamber_return.webp",
+          "name": "temple_antechamber_return.webp",
+          "extension": ".webp",
+          "size": 117876,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:46:21.617Z"
+        }
+      ]
+    },
+    "measuresRegistry": {
+      "bucket": "measures-registry",
+      "objectCount": 26,
+      "webpObjectCount": 25,
+      "webpObjects": [
+        {
+          "bucket": "measures-registry",
+          "path": "left_hero_fracture.webp",
+          "name": "left_hero_fracture.webp",
+          "extension": ".webp",
+          "size": 48266,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-06T14:53:25.618Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measured_hero_close.webp",
+          "name": "measured_hero_close.webp",
+          "extension": ".webp",
+          "size": 162582,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-06T05:04:19.004Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+          "name": "antechamber.webp",
+          "extension": ".webp",
+          "size": 138916,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:19.827Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+          "name": "crystal_temple_home.webp",
+          "extension": ".webp",
+          "size": 289656,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:22.947Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+          "name": "gemynd_corpus.webp",
+          "extension": ".webp",
+          "size": 286596,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:26.727Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp",
+          "name": "gemynd_corpus_original_art.webp",
+          "extension": ".webp",
+          "size": 789896,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:32.070Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/inanna_encounter.webp",
+          "name": "inanna_encounter.webp",
+          "extension": ".webp",
+          "size": 116152,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:35.012Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+          "name": "inanna_epigraph.webp",
+          "extension": ".webp",
+          "size": 116152,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T04:34:45.275Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+          "name": "marble_chamber_codexstone.webp",
+          "extension": ".webp",
+          "size": 162026,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:36.780Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+          "name": "obsidian_chamberplate_gate01.webp",
+          "extension": ".webp",
+          "size": 462136,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T04:19:00.058Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+          "name": "obsidian_chamberplate_gate03.webp",
+          "extension": ".webp",
+          "size": 589712,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:39.757Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/og.webp",
+          "name": "og.webp",
+          "extension": ".webp",
+          "size": 22896,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T04:19:02.184Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+          "name": "percipari_original_artwork.webp",
+          "extension": ".webp",
+          "size": 1551774,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:47.207Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+          "name": "primus_artus_epithet01_chamberplate.webp",
+          "extension": ".webp",
+          "size": 371114,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:51.465Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+          "name": "primus_artus_original_artwork.webp",
+          "extension": ".webp",
+          "size": 563686,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:30:59.452Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/temple_home.webp",
+          "name": "temple_home.webp",
+          "extension": ".webp",
+          "size": 276038,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:31:05.960Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/true_north.webp",
+          "name": "true_north.webp",
+          "extension": ".webp",
+          "size": 258314,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:31:10.051Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry/pre_codex_exhibition/images/true_north_crystal.webp",
+          "name": "true_north_crystal.webp",
+          "extension": ".webp",
+          "size": 275646,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-12T03:31:14.284Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry_banner.webp",
+          "name": "measures_registry_banner.webp",
+          "extension": ".webp",
+          "size": 105148,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-02T19:51:04.076Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry_logo.webp",
+          "name": "measures_registry_logo.webp",
+          "extension": ".webp",
+          "size": 131236,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-02T20:03:55.926Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry_mark.webp",
+          "name": "measures_registry_mark.webp",
+          "extension": ".webp",
+          "size": 178128,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-02T20:04:50.770Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry_poster.webp",
+          "name": "measures_registry_poster.webp",
+          "extension": ".webp",
+          "size": 130454,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-02T20:04:23.145Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "measures_registry_social_card.webp",
+          "name": "measures_registry_social_card.webp",
+          "extension": ".webp",
+          "size": 91314,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-02T20:05:54.251Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "right_measured_hero.webp",
+          "name": "right_measured_hero.webp",
+          "extension": ".webp",
+          "size": 55160,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-06T15:10:30.147Z"
+        },
+        {
+          "bucket": "measures-registry",
+          "path": "structural_drift.webp",
+          "name": "structural_drift.webp",
+          "extension": ".webp",
+          "size": 109632,
+          "mimetype": "image/webp",
+          "updatedAt": "2026-05-07T00:27:13.970Z"
+        }
+      ]
+    },
+    "r2ReferencedByDb": [
+      {
+        "source": "measures_media_map",
+        "key": "c3_field_video",
+        "bucket": "measures-media",
+        "storagePath": "c3_field.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "5241718"
+        }
+      },
+      {
+        "source": "measures_media_map",
+        "key": "epigraph_video",
+        "bucket": "measures-media",
+        "storagePath": "registry_epigraph_fracture_to_alignment_15s.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "24980322"
+        }
+      },
+      {
+        "source": "measures_media_map",
+        "key": "explainer_video",
+        "bucket": "measures-media",
+        "storagePath": "structural_coherence_explainer_45s.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "47144235"
+        }
+      },
+      {
+        "source": "measures_media_map",
+        "key": "left_hero_fracture_motion",
+        "bucket": "measures-media",
+        "storagePath": "left_hero_fracture_motion.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "7537934"
+        }
+      },
+      {
+        "source": "measures_media_map",
+        "key": "measured_hero_motion_graphic",
+        "bucket": "measures-media",
+        "storagePath": "right_measured_hero_motion_graphic.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "2977050"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "chamber_epithets_01_primus_artus_full_song_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "primus_artus.mp3",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "audio/mpeg",
+          "contentLength": "4538573"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "gemynd_corpus_lapis_tone .MOV",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/quicktime",
+          "contentLength": "113156298"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "gemynd_corpus.mp3",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "audio/mpeg",
+          "contentLength": "5673309"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "chamber_epithets_02_gemynd_corpus_lapis_tone_lapis_tone_rise_return_5min_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "lapis_tone_rise_return_5min.wav",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "audio/x-wav",
+          "contentLength": "26460044"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "chamber_epithets_03_percipari_full_song_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "percipari.mp3",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "audio/mpeg",
+          "contentLength": "5660104"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "crystal_tone_rise_return_5min.wav",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "audio/x-wav",
+          "contentLength": "26460044"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "chamber_epithets_03_percipari_oracle_card_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "percipari_epithet03_chamberplate.png",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_7a748aab_4339_44c2_8136_d45a541054e3_image_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "7A748AAB-4339-44C2-8136-D45A541054E3.png",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_crystal_temple_image_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "crystal_temple.png",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_harrumuk_passage_video_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "harrumuk_passage.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "9234795"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_inanna_encounter_image_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "inanna_encounter.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_inanna_temple_encounter_intro_video_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "inanna_temple_encounter_intro.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_kumurrah_image_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "kumurrah.png",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_kumurrah_passage_video_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "kumurrah_passage.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "7016086"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+        "bucket": "measures-media",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "obsidian_chamberplate_gate01.mov",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/quicktime",
+          "contentLength": "2690332"
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "obsidian_chamberplate_gate02.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "obsidian_chamberplate_gate02.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "obsidian_chamberplate_gate03.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      },
+      {
+        "source": "codex_media_asset",
+        "key": "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1",
+        "bucket": "pre-codex-exhibition",
+        "storageProvider": "cloudflare_r2",
+        "storagePath": "percipari_epithet03_chamberplate.png",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 404,
+          "contentType": "text/html",
+          "contentLength": null
+        }
+      }
+    ]
+  },
+  "dbInventory": {
+    "codexMediaAssetCount": 28,
+    "measuresMediaMapCount": 18,
+    "tempExhibitionMediaCount": 73,
+    "measuresSurfaceMediaMapCount": 28
+  },
+  "classifications": {
+    "codex_media_asset": [
+      {
+        "mediaKey": "chamber_epithets_01_primus_artus_full_song_v1",
+        "title": "Primus Artus Full Song",
+        "mediaType": "audio",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "primus_artus.mp3",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "chamber_epithets_01_primus_artus_oracle_card_v1",
+        "title": "Primus Artus Oracle Card",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+        ]
+      },
+      {
+        "mediaKey": "chamber_epithets_01_primus_artus_original_artwork_v1",
+        "title": "Primus Artus Original Artwork",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp"
+        ]
+      },
+      {
+        "mediaKey": "chamber_epithets_02_gemynd_corpus_featured_video_gemynd_corpus_lapis_tone_v1",
+        "title": "Gemynd Corpus Featured Video",
+        "mediaType": "video",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "gemynd_corpus_lapis_tone .MOV",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+        "title": "Gemynd Corpus Full Song",
+        "mediaType": "audio",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "gemynd_corpus.mp3",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+        ]
+      },
+      {
+        "mediaKey": "chamber_epithets_02_gemynd_corpus_lapis_tone_lapis_tone_rise_return_5min_v1",
+        "title": "Gemynd Corpus Lapis Tone",
+        "mediaType": "audio",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "lapis_tone_rise_return_5min.wav",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+        "title": "Gemynd Corpus Oracle Card",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+        ]
+      },
+      {
+        "mediaKey": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+        "title": "Gemynd Corpus Original Artwork",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp"
+        ]
+      },
+      {
+        "mediaKey": "chamber_epithets_03_percipari_full_song_v1",
+        "title": "Percipari Full Song",
+        "mediaType": "audio",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "percipari.mp3",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+        "title": "Percipari Material Tone",
+        "mediaType": "audio",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "crystal_tone_rise_return_5min.wav",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "chamber_epithets_03_percipari_oracle_card_v1",
+        "title": "Percipari Oracle Card",
+        "mediaType": "image",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "percipari_epithet03_chamberplate.png",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "chamber_epithets_03_percipari_original_artwork_v1",
+        "title": "Percipari Original Artwork",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp"
+        ]
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_7a748aab_4339_44c2_8136_d45a541054e3_image_v1",
+        "title": "7A748AAB 4339 44C2 8136 D45A541054E3",
+        "mediaType": "image",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "7A748AAB-4339-44C2-8136-D45A541054E3.png",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_crystal_temple_image_v1",
+        "title": "Crystal Temple",
+        "mediaType": "image",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "crystal_temple.png",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_harrumuk_passage_video_v1",
+        "title": "Harrumuk Passage",
+        "mediaType": "video",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "harrumuk_passage.mp4",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_inanna_encounter_image_v1",
+        "title": "Inanna Encounter",
+        "mediaType": "image",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "inanna_encounter.webp",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/inanna_encounter.webp"
+        ]
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_inanna_temple_encounter_intro_video_v1",
+        "title": "Inanna Temple Encounter Intro",
+        "mediaType": "video",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "inanna_temple_encounter_intro.mp4",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_kumurrah_image_v1",
+        "title": "Kumurrah",
+        "mediaType": "image",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "kumurrah.png",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_kumurrah_passage_video_v1",
+        "title": "Kumurrah Passage",
+        "mediaType": "video",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "kumurrah_passage.mp4",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_marble_chamber_codexstone_image_v1",
+        "title": "Marble Chamber Codexstone",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp"
+        ]
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+        "title": "Obsidian Chamberplate Gate01",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+        ]
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1",
+        "title": "Obsidian Chamberplate Gate01",
+        "mediaType": "video",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "measures-media",
+        "storagePath": "obsidian_chamberplate_gate01.mov",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+        ]
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+        "title": "Obsidian Chamberplate Gate02",
+        "mediaType": "image",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate02.webp",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1",
+        "title": "Obsidian Chamberplate Gate02",
+        "mediaType": "video",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate02.mp4",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+        "title": "Obsidian Chamberplate Gate03",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+        ]
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1",
+        "title": "Obsidian Chamberplate Gate03",
+        "mediaType": "video",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate03.mp4",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+        ]
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1",
+        "title": "Percipari Epithet03 Chamberplate",
+        "mediaType": "image",
+        "storageProvider": "cloudflare_r2",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "percipari_epithet03_chamberplate.png",
+        "status": "active",
+        "classification": "valid R2 row",
+        "targetStemMatches": []
+      },
+      {
+        "mediaKey": "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1",
+        "title": "Primus Artus Epithet01 Chamberplate",
+        "mediaType": "image",
+        "storageProvider": "supabase",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+        "status": "active",
+        "classification": "already copied and remapped",
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+        ]
+      }
+    ],
+    "measures_media_map": [
+      {
+        "mediaRole": "c3_field_video",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-media",
+        "storagePath": "c3_field.mp4",
+        "mimeType": "video/mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/c3_field.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "5241718"
+        },
+        "classification": "valid R2 row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "epigraph_video",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-media",
+        "storagePath": "registry_epigraph_fracture_to_alignment_15s.mp4",
+        "mimeType": "video/mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/registry_epigraph_fracture_to_alignment_15s.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "24980322"
+        },
+        "classification": "valid R2 row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "explainer_video",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-media",
+        "storagePath": "structural_coherence_explainer_45s.mp4",
+        "mimeType": "video/mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/structural_coherence_explainer_45s.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "47144235"
+        },
+        "classification": "valid R2 row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "hero_image",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "hero_fracture_measure.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/hero_fracture_measure.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "classification": "stale DB row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "hero_measured_image",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "measured_hero_right.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measured_hero_right.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "classification": "stale DB row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "hero_poster",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry_poster.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry_poster.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "130454"
+        },
+        "classification": "already copied and mapped",
+        "targetObjectExactMatch": true,
+        "targetObjectBasenameMatches": [
+          "measures_registry_poster.webp"
+        ],
+        "targetObjectStemMatches": [
+          "measures_registry_poster.webp"
+        ],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "hero_video",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "integrity_governance_intro.mp4",
+        "mimeType": "video/mp4",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/integrity_governance_intro.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "classification": "valid R2 row misclassified as Supabase",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": {
+          "storage_provider": "cloudflare_r2",
+          "bucket": "measures-media",
+          "storage_path": "integrity_governance_intro.mp4"
+        }
+      },
+      {
+        "mediaRole": "left_hero_fracture",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "left_hero_fracture.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/left_hero_fracture.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "48266"
+        },
+        "classification": "already copied and mapped",
+        "targetObjectExactMatch": true,
+        "targetObjectBasenameMatches": [
+          "left_hero_fracture.webp"
+        ],
+        "targetObjectStemMatches": [
+          "left_hero_fracture.webp"
+        ],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "left_hero_fracture_motion",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-media",
+        "storagePath": "left_hero_fracture_motion.mp4",
+        "mimeType": "video/mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/left_hero_fracture_motion.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "7537934"
+        },
+        "classification": "valid R2 row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "measured_hero_motion_graphic",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-media",
+        "storagePath": "right_measured_hero_motion_graphic.mp4",
+        "mimeType": "video/mp4",
+        "isActive": true,
+        "resolvedUrl": "https://media.c3field.online/right_measured_hero_motion_graphic.mp4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "2977050"
+        },
+        "classification": "valid R2 row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "paragraph_agents_of_chaos",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "paragraph_agents_of_chaos.png",
+        "mimeType": "image/png",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/paragraph_agents_of_chaos.png",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/png",
+          "contentLength": "1767404"
+        },
+        "classification": "active db row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "paragraph_cover",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry-public",
+        "storagePath": "measures_registry/images/paragraph_cover_agents_of_chaos.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/images/paragraph_cover_agents_of_chaos.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "76"
+        },
+        "classification": "stale DB row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "path_choice_background",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "more_vs_coherence_path.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/more_vs_coherence_path.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "69"
+        },
+        "classification": "stale DB row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [],
+        "targetObjectStemMatches": [],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "registry_banner",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry-public",
+        "storagePath": "measures_registry/brand/measures_registry_banner.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/brand/measures_registry_banner.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "76"
+        },
+        "classification": "stale DB row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [
+          "measures_registry_banner.webp"
+        ],
+        "targetObjectStemMatches": [
+          "measures_registry_banner.webp"
+        ],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "registry_mark",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "measures_registry_mark.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry_mark.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "178128"
+        },
+        "classification": "already copied and mapped",
+        "targetObjectExactMatch": true,
+        "targetObjectBasenameMatches": [
+          "measures_registry_mark.webp"
+        ],
+        "targetObjectStemMatches": [
+          "measures_registry_mark.webp"
+        ],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "right_measured_hero",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "right_measured_hero.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/right_measured_hero.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "55160"
+        },
+        "classification": "already copied and mapped",
+        "targetObjectExactMatch": true,
+        "targetObjectBasenameMatches": [
+          "right_measured_hero.webp"
+        ],
+        "targetObjectStemMatches": [
+          "right_measured_hero.webp"
+        ],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "social_card",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry-public",
+        "storagePath": "measures_registry/brand/measures_registry_social_card.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/brand/measures_registry_social_card.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": false,
+          "status": 400,
+          "contentType": "application/json; charset=utf-8",
+          "contentLength": "76"
+        },
+        "classification": "stale DB row",
+        "targetObjectExactMatch": false,
+        "targetObjectBasenameMatches": [
+          "measures_registry_social_card.webp"
+        ],
+        "targetObjectStemMatches": [
+          "measures_registry_social_card.webp"
+        ],
+        "recommendedStanding": null
+      },
+      {
+        "mediaRole": "structural_drift_featured_image",
+        "campaignKey": "agents_of_chaos_integrity_governance",
+        "bucket": "measures-registry",
+        "storagePath": "structural_drift.webp",
+        "mimeType": "image/webp",
+        "isActive": true,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/structural_drift.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "109632"
+        },
+        "classification": "already copied and mapped",
+        "targetObjectExactMatch": true,
+        "targetObjectBasenameMatches": [
+          "structural_drift.webp"
+        ],
+        "targetObjectStemMatches": [
+          "structural_drift.webp"
+        ],
+        "recommendedStanding": null
+      }
+    ],
+    "pre_codex_images": [
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "antechamber.webp",
+        "size": 138916,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/antechamber.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/antechamber.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "crystal_temple_home.webp",
+        "size": 289656,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "gemynd_corpus.webp",
+        "size": 286596,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "gemynd_corpus_original_art.webp",
+        "size": 789896,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "inanna_epigraph.webp",
+        "size": 116152,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "marble_chamber_codexstone.webp",
+        "size": 162026,
+        "mimetype": "image/webp",
+        "classification": "already copied; DB reference exists",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [
+            "codexstone_encounter"
+          ],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": false
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "obsidian_chamberplate_gate01 (1).jpeg",
+        "size": 1374620,
+        "mimetype": "image/jpeg",
+        "classification": "still in pre-codex-exhibition; requires copy decision and new seating OAR",
+        "targetBasenameMatches": [],
+        "targetStemMatches": [],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01 (1).webp",
+        "requiresCopy": true,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "obsidian_chamberplate_gate01.webp",
+        "size": 462136,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "obsidian_chamberplate_gate03.webp",
+        "size": 589712,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "og.webp",
+        "size": 22896,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/og.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/og.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/og.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "percipari_original_artwork.webp",
+        "size": 1551774,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "primus_artus_epithet01_chamberplate.webp",
+        "size": 371114,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "primus_artus_original_artwork.webp",
+        "size": 563686,
+        "mimetype": "image/webp",
+        "classification": "copied but no seated DB row",
+        "targetBasenameMatches": [
+          "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp"
+        ],
+        "targetStemMatches": [
+          "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp"
+        ],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+        "requiresCopy": false,
+        "requiresNewSeatingOar": true
+      },
+      {
+        "sourceBucket": "pre-codex-exhibition",
+        "sourcePath": "temple_antechamber_return.webp",
+        "size": 117876,
+        "mimetype": "image/webp",
+        "classification": "still in pre-codex-exhibition; requires copy decision and new seating OAR",
+        "targetBasenameMatches": [],
+        "targetStemMatches": [],
+        "dbReferences": {
+          "codex_media_asset": [],
+          "temp_exhibition_media": [],
+          "measures_media_map": []
+        },
+        "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/temple_antechamber_return.webp",
+        "requiresCopy": true,
+        "requiresNewSeatingOar": true
+      }
+    ],
+    "legacy_temp_exhibition_media": [
+      {
+        "surfaceKey": "chamber_epithets_01_primus_artus",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "primus_artus_epithet01_chamberplate.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+        ],
+        "matchingCodexMediaKeys": [
+          "chamber_epithets_01_primus_artus_oracle_card_v1",
+          "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "chamber_epithets_01_primus_artus",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "primus_artus.mp3",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [
+          "chamber_epithets_01_primus_artus_full_song_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "chamber_epithets_02_gemynd_corpus",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gemynd_corpus.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+        ],
+        "matchingCodexMediaKeys": [
+          "chamber_epithets_02_gemynd_corpus_full_song_v1",
+          "chamber_epithets_02_gemynd_corpus_oracle_card_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "chamber_epithets_02_gemynd_corpus",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gemynd_corpus.mp3",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+        ],
+        "matchingCodexMediaKeys": [
+          "chamber_epithets_02_gemynd_corpus_full_song_v1",
+          "chamber_epithets_02_gemynd_corpus_oracle_card_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "chamber_epithets_03_percipari",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "percipari.mp3",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [
+          "chamber_epithets_03_percipari_full_song_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "chamber_epithets_03_percipari",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "percipari_epithet03_chamberplate.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [
+          "chamber_epithets_03_percipari_oracle_card_v1",
+          "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "codexstone",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "codexstone_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "marble_chamber_codexstone.webp",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp"
+        ],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_marble_chamber_codexstone_image_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "crystal_temple_home",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "crystal_temple_home.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp"
+        ],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "epigraph",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "inanna_encounter_intro.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "epithets_passage_01",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "epithet_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "epithets_passage_02",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "epithet_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_1_crown_removed",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_1_crown_removed_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate01.mov",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+        ],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+          "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "gate_1_crown_removed_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_1_crown_removed_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate01.jpeg",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+        ],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+          "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "gate_2_lapis_beads",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_2_lapis_beads_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate02.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+          "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "gate_2_lapis_beads_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate02.webp",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+          "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "gate_2_lapis_beads_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_3_lapis_necklace",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_3_lapis_necklace_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_3_lapis_necklace_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate03.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+        ],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+          "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "gate_3_lapis_necklace_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "obsidian_chamberplate_gate03.jpeg",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+        ],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+          "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "gate_4_breastplate",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_5_measuring_rod",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_6_golden_bracelet",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gate_7_robe",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_01",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_01.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_01_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_01_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_01_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_01.png",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_02",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_02_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_02_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_02.png",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_02_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_02.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_03_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_03.png",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_03_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_03.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_03_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_04_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_04.png",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_04_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "gates_passage_04_encounter",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "gates_passage_04.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "inanna_seat_view",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "rise_inanna_memory_myth.png",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "kumurrah_passage",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "kumurrah_passage.mp4",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_kumurrah_passage_video_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "kumurrah_passage",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 40,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_01",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "me01_memory.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_01",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_02",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_03",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_04",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_05",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_06",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_07",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_08",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_09",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_10",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_11",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_12",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_13",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+        "renderOrder": 30,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_passage_01",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "me_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_passage_02",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "me_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_passage_03",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "me_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_passage_04",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "me_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_passage_05",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "me_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_passage_06",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "me_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "me_passage_07",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "me_passage_01.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "phase_map",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "phase_map.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "return_antechamber",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "return_antechamber.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "temple_antechamber",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "image",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "antechamber.png",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [
+          "measures_registry/pre_codex_exhibition/images/antechamber.webp"
+        ],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      },
+      {
+        "surfaceKey": "temple_harrumuk_passage",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "audio",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "etonal_phi_companion.wav",
+        "renderOrder": 20,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [],
+        "recommendation": "hold for new asset upload or copy under follow-up OAR"
+      },
+      {
+        "surfaceKey": "temple_harrumuk_passage",
+        "displayContext": "measures_of_inanna",
+        "mediaType": "video",
+        "bucket": "pre-codex-exhibition",
+        "storagePath": "harrumuk_passage.mp4",
+        "renderOrder": 10,
+        "classification": "legacy fallback row requiring migration",
+        "matchingTargetObjects": [],
+        "matchingCodexMediaKeys": [
+          "pre_codex_exhibition_harrumuk_passage_video_v1"
+        ],
+        "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+      }
+    ]
+  },
+  "correctionCandidates": [
+    {
+      "asset": "integrity_governance_intro.mp4",
+      "currentRows": [
+        {
+          "mediaRole": "hero_video",
+          "bucket": "measures-registry",
+          "storagePath": "integrity_governance_intro.mp4",
+          "isActive": true
+        }
+      ],
+      "expectedStanding": "cloudflare_r2 / measures-media / integrity_governance_intro.mp4",
+      "expectedR2Retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "33589912"
+      },
+      "recommendation": "correct DB reference to R2 under follow-up mutation OAR"
+    },
+    {
+      "asset": "more_vs_coherence_path.webp",
+      "currentRows": [
+        {
+          "mediaRole": "path_choice_background",
+          "bucket": "measures-registry",
+          "storagePath": "more_vs_coherence_path.webp",
+          "isActive": true
+        }
+      ],
+      "expectedStanding": "invalid/stale unless matching target object exists",
+      "expectedR2Retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 404,
+        "contentType": "text/html",
+        "contentLength": null
+      },
+      "recommendation": "hold/remove-or-replace candidate under follow-up mutation OAR"
+    },
+    {
+      "asset": "hero_fracture_measure.webp",
+      "currentRows": [
+        {
+          "mediaRole": "hero_image",
+          "bucket": "measures-registry",
+          "storagePath": "hero_fracture_measure.webp",
+          "isActive": true
+        }
+      ],
+      "expectedStanding": "invalid/stale unless matching target object exists",
+      "expectedR2Retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 404,
+        "contentType": "text/html",
+        "contentLength": null
+      },
+      "recommendation": "hold/remove-or-replace candidate under follow-up mutation OAR"
+    },
+    {
+      "asset": "measured_hero_right.webp",
+      "currentRows": [
+        {
+          "mediaRole": "hero_measured_image",
+          "bucket": "measures-registry",
+          "storagePath": "measured_hero_right.webp",
+          "isActive": true
+        }
+      ],
+      "expectedStanding": "invalid/stale unless matching target object exists",
+      "expectedR2Retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 404,
+        "contentType": "text/html",
+        "contentLength": null
+      },
+      "recommendation": "hold/remove-or-replace candidate under follow-up mutation OAR"
+    }
+  ],
+  "copiedButNoSeatedDbRow": [
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "antechamber.webp",
+      "size": 138916,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/antechamber.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/antechamber.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "crystal_temple_home.webp",
+      "size": 289656,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "gemynd_corpus.webp",
+      "size": 286596,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "gemynd_corpus_original_art.webp",
+      "size": 789896,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "inanna_epigraph.webp",
+      "size": 116152,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "obsidian_chamberplate_gate01.webp",
+      "size": 462136,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "obsidian_chamberplate_gate03.webp",
+      "size": 589712,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "og.webp",
+      "size": 22896,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/og.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/og.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/og.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "percipari_original_artwork.webp",
+      "size": 1551774,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "primus_artus_epithet01_chamberplate.webp",
+      "size": 371114,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "primus_artus_original_artwork.webp",
+      "size": 563686,
+      "mimetype": "image/webp",
+      "classification": "copied but no seated DB row",
+      "targetBasenameMatches": [
+        "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp"
+      ],
+      "targetStemMatches": [
+        "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp"
+      ],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+      "requiresCopy": false,
+      "requiresNewSeatingOar": true
+    }
+  ],
+  "remainingPreCodexCopyCandidates": [
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "obsidian_chamberplate_gate01 (1).jpeg",
+      "size": 1374620,
+      "mimetype": "image/jpeg",
+      "classification": "still in pre-codex-exhibition; requires copy decision and new seating OAR",
+      "targetBasenameMatches": [],
+      "targetStemMatches": [],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01 (1).webp",
+      "requiresCopy": true,
+      "requiresNewSeatingOar": true
+    },
+    {
+      "sourceBucket": "pre-codex-exhibition",
+      "sourcePath": "temple_antechamber_return.webp",
+      "size": 117876,
+      "mimetype": "image/webp",
+      "classification": "still in pre-codex-exhibition; requires copy decision and new seating OAR",
+      "targetBasenameMatches": [],
+      "targetStemMatches": [],
+      "dbReferences": {
+        "codex_media_asset": [],
+        "temp_exhibition_media": [],
+        "measures_media_map": []
+      },
+      "recommendedTargetPath": "measures_registry/pre_codex_exhibition/images/temple_antechamber_return.webp",
+      "requiresCopy": true,
+      "requiresNewSeatingOar": true
+    }
+  ],
+  "staleDbRows": [
+    {
+      "mediaRole": "hero_image",
+      "campaignKey": "agents_of_chaos_integrity_governance",
+      "bucket": "measures-registry",
+      "storagePath": "hero_fracture_measure.webp",
+      "mimeType": "image/webp",
+      "isActive": true,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/hero_fracture_measure.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "69"
+      },
+      "classification": "stale DB row",
+      "targetObjectExactMatch": false,
+      "targetObjectBasenameMatches": [],
+      "targetObjectStemMatches": [],
+      "recommendedStanding": null
+    },
+    {
+      "mediaRole": "hero_measured_image",
+      "campaignKey": "agents_of_chaos_integrity_governance",
+      "bucket": "measures-registry",
+      "storagePath": "measured_hero_right.webp",
+      "mimeType": "image/webp",
+      "isActive": true,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measured_hero_right.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "69"
+      },
+      "classification": "stale DB row",
+      "targetObjectExactMatch": false,
+      "targetObjectBasenameMatches": [],
+      "targetObjectStemMatches": [],
+      "recommendedStanding": null
+    },
+    {
+      "mediaRole": "paragraph_cover",
+      "campaignKey": "agents_of_chaos_integrity_governance",
+      "bucket": "measures-registry-public",
+      "storagePath": "measures_registry/images/paragraph_cover_agents_of_chaos.webp",
+      "mimeType": "image/webp",
+      "isActive": true,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/images/paragraph_cover_agents_of_chaos.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "76"
+      },
+      "classification": "stale DB row",
+      "targetObjectExactMatch": false,
+      "targetObjectBasenameMatches": [],
+      "targetObjectStemMatches": [],
+      "recommendedStanding": null
+    },
+    {
+      "mediaRole": "path_choice_background",
+      "campaignKey": "agents_of_chaos_integrity_governance",
+      "bucket": "measures-registry",
+      "storagePath": "more_vs_coherence_path.webp",
+      "mimeType": "image/webp",
+      "isActive": true,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/more_vs_coherence_path.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "69"
+      },
+      "classification": "stale DB row",
+      "targetObjectExactMatch": false,
+      "targetObjectBasenameMatches": [],
+      "targetObjectStemMatches": [],
+      "recommendedStanding": null
+    },
+    {
+      "mediaRole": "registry_banner",
+      "campaignKey": "agents_of_chaos_integrity_governance",
+      "bucket": "measures-registry-public",
+      "storagePath": "measures_registry/brand/measures_registry_banner.webp",
+      "mimeType": "image/webp",
+      "isActive": true,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/brand/measures_registry_banner.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "76"
+      },
+      "classification": "stale DB row",
+      "targetObjectExactMatch": false,
+      "targetObjectBasenameMatches": [
+        "measures_registry_banner.webp"
+      ],
+      "targetObjectStemMatches": [
+        "measures_registry_banner.webp"
+      ],
+      "recommendedStanding": null
+    },
+    {
+      "mediaRole": "social_card",
+      "campaignKey": "agents_of_chaos_integrity_governance",
+      "bucket": "measures-registry-public",
+      "storagePath": "measures_registry/brand/measures_registry_social_card.webp",
+      "mimeType": "image/webp",
+      "isActive": true,
+      "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry-public/measures_registry/brand/measures_registry_social_card.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": false,
+        "status": 400,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": "76"
+      },
+      "classification": "stale DB row",
+      "targetObjectExactMatch": false,
+      "targetObjectBasenameMatches": [
+        "measures_registry_social_card.webp"
+      ],
+      "targetObjectStemMatches": [
+        "measures_registry_social_card.webp"
+      ],
+      "recommendedStanding": null
+    }
+  ],
+  "validR2CorrectionList": [
+    {
+      "asset": "integrity_governance_intro.mp4",
+      "currentRows": [
+        {
+          "mediaRole": "hero_video",
+          "bucket": "measures-registry",
+          "storagePath": "integrity_governance_intro.mp4",
+          "isActive": true
+        }
+      ],
+      "expectedStanding": "cloudflare_r2 / measures-media / integrity_governance_intro.mp4",
+      "expectedR2Retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "33589912"
+      },
+      "recommendation": "correct DB reference to R2 under follow-up mutation OAR"
+    }
+  ],
+  "legacyFallbackMigrationCandidates": [
+    {
+      "surfaceKey": "chamber_epithets_01_primus_artus",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "primus_artus_epithet01_chamberplate.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp"
+      ],
+      "matchingCodexMediaKeys": [
+        "chamber_epithets_01_primus_artus_oracle_card_v1",
+        "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "chamber_epithets_01_primus_artus",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "primus_artus.mp3",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [
+        "chamber_epithets_01_primus_artus_full_song_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "chamber_epithets_02_gemynd_corpus",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gemynd_corpus.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+      ],
+      "matchingCodexMediaKeys": [
+        "chamber_epithets_02_gemynd_corpus_full_song_v1",
+        "chamber_epithets_02_gemynd_corpus_oracle_card_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "chamber_epithets_02_gemynd_corpus",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gemynd_corpus.mp3",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp"
+      ],
+      "matchingCodexMediaKeys": [
+        "chamber_epithets_02_gemynd_corpus_full_song_v1",
+        "chamber_epithets_02_gemynd_corpus_oracle_card_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "chamber_epithets_03_percipari",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "percipari.mp3",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [
+        "chamber_epithets_03_percipari_full_song_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "chamber_epithets_03_percipari",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "percipari_epithet03_chamberplate.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [
+        "chamber_epithets_03_percipari_oracle_card_v1",
+        "pre_codex_exhibition_percipari_epithet03_chamberplate_image_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "codexstone",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "codexstone_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "marble_chamber_codexstone.webp",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp"
+      ],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_marble_chamber_codexstone_image_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "crystal_temple_home",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "crystal_temple_home.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp"
+      ],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "epigraph",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "inanna_encounter_intro.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "epithets_passage_01",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "epithet_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "epithets_passage_02",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "epithet_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_1_crown_removed",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_1_crown_removed_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "obsidian_chamberplate_gate01.mov",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+      ],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+        "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "gate_1_crown_removed_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_1_crown_removed_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "obsidian_chamberplate_gate01.jpeg",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp"
+      ],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+        "pre_codex_exhibition_obsidian_chamberplate_gate01_video_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "gate_2_lapis_beads",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_2_lapis_beads_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "obsidian_chamberplate_gate02.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+        "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "gate_2_lapis_beads_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "obsidian_chamberplate_gate02.webp",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1",
+        "pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "gate_2_lapis_beads_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_3_lapis_necklace",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_3_lapis_necklace_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_3_lapis_necklace_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "obsidian_chamberplate_gate03.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+      ],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+        "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "gate_3_lapis_necklace_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "obsidian_chamberplate_gate03.jpeg",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp"
+      ],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+        "pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "gate_4_breastplate",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_5_measuring_rod",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_6_golden_bracelet",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gate_7_robe",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_01",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_01.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_01_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_01_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_01_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_01.png",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_02",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_02_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_02_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_02.png",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_02_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_02.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_03_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_03.png",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_03_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_03.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_03_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_04_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_04.png",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_04_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "gates_passage_04_encounter",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "gates_passage_04.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "inanna_seat_view",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "rise_inanna_memory_myth.png",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "kumurrah_passage",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "kumurrah_passage.mp4",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_kumurrah_passage_video_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "kumurrah_passage",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 40,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_01",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "me01_memory.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_01",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_02",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_03",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_04",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_05",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_06",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_07",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_08",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_09",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_10",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_11",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_12",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_13",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "Concursus_Cubiculi_binaural_216_220_len129s.wav",
+      "renderOrder": 30,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_passage_01",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "me_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_passage_02",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "me_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_passage_03",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "me_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_passage_04",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "me_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_passage_05",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "me_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_passage_06",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "me_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "me_passage_07",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "me_passage_01.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "phase_map",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "phase_map.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "return_antechamber",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "return_antechamber.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "temple_antechamber",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "image",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "antechamber.png",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [
+        "measures_registry/pre_codex_exhibition/images/antechamber.webp"
+      ],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    },
+    {
+      "surfaceKey": "temple_harrumuk_passage",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "audio",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "etonal_phi_companion.wav",
+      "renderOrder": 20,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [],
+      "recommendation": "hold for new asset upload or copy under follow-up OAR"
+    },
+    {
+      "surfaceKey": "temple_harrumuk_passage",
+      "displayContext": "measures_of_inanna",
+      "mediaType": "video",
+      "bucket": "pre-codex-exhibition",
+      "storagePath": "harrumuk_passage.mp4",
+      "renderOrder": 10,
+      "classification": "legacy fallback row requiring migration",
+      "matchingTargetObjects": [],
+      "matchingCodexMediaKeys": [
+        "pre_codex_exhibition_harrumuk_passage_video_v1"
+      ],
+      "recommendation": "remap to existing measures-registry/codex media row then deprecate fallback"
+    }
+  ],
+  "recommendedNextOar2": "OAR2 to correct Measures Registry stale media rows and migrate legacy Inanna fallback rows with an operator-confirmed object list; include DB mutation authority and any required copy authority explicitly."
+}
