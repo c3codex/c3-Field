@@ -148,6 +148,7 @@ async function resolveEncounterRow(inputKey: string) {
       registry.registry_key,
       metadataEncounterKey(registry.metadata),
       `${registry.registry_key}_view`,
+      `${registry.registry_key}_encounter`,
     ])
 
     const { data: encounterData, error: encounterError } = await supabase

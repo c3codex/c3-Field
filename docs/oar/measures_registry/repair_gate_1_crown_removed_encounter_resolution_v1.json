@@ -1,0 +1,244 @@
+{
+  "generatedAt": "2026-05-12T11:42:25.848Z",
+  "mutationPerformed": true,
+  "mutationCount": 1,
+  "mutationScope": "frontend_resolver_only",
+  "selectedRepairPath": "frontend_resolver_accepts_existing_encounter_suffix",
+  "authoritativeFinding": "Gate 1 already has a governed encounter_def under gate_1_crown_removed_encounter; no duplicate encounter authority was created.",
+  "candidateInspection": {
+    "gate_1_crown_removed": {
+      "registryKey": "gate_1_crown_removed",
+      "registryRow": true,
+      "registryId": "ff08169d-056b-4a13-aec5-e3c14ab926fb",
+      "registryMetadataEncounterKey": null,
+      "encounterCandidates": [
+        "gate_1_crown_removed",
+        "gate_1_crown_removed_view",
+        "gate_1_crown_removed_encounter"
+      ],
+      "resolvedEncounterKey": "gate_1_crown_removed_encounter",
+      "encounterDefRow": true,
+      "surfaceType": "chamberplate",
+      "rendererLayout": "plaque_overlay",
+      "releaseRows": [
+        {
+          "id": "38196def-e802-4ed8-b900-e4fdb0fa857a",
+          "release_state": "released",
+          "access_state": "encounterable",
+          "metadata": {
+            "scope": "exhibition",
+            "state_surface": "initial_gate_seating",
+            "dependency_surface": "phase_map"
+          }
+        }
+      ],
+      "transitionRows": [
+        {
+          "id": "dc3b7b75-e850-4ab8-a98d-37088669a966",
+          "from_registry_key": "kumurrah_passage",
+          "from_encounter_key": "kumurrah_passage",
+          "to_registry_key": "gate_1_crown_removed",
+          "to_encounter_key": "gate_1_crown_removed_encounter",
+          "transition_kind": "progression",
+          "rule_state": "active",
+          "sort_order": 5,
+          "metadata": {
+            "action": {
+              "id": "enter_gates",
+              "label": "Enter Gates"
+            },
+            "source": "session_24_kumurrah_expansion"
+          }
+        },
+        {
+          "id": "c9ecc0e9-1f74-487b-bfcf-86fdb30c56f5",
+          "from_registry_key": "gate_1_crown_removed",
+          "from_encounter_key": "gate_1_crown_removed_encounter",
+          "to_registry_key": "gates_passage_01",
+          "to_encounter_key": "gates_passage_01_encounter",
+          "transition_kind": "progression",
+          "rule_state": "active",
+          "sort_order": 10,
+          "metadata": {
+            "action": {
+              "id": "continue_descent",
+              "kind": "progression",
+              "label": "Continue Descent",
+              "emphasis": "primary"
+            },
+            "source": "session_21_gates_passage_seating"
+          }
+        },
+        {
+          "id": "023c40c7-6f06-4101-ba64-16e0619354da",
+          "from_registry_key": "phase_map",
+          "from_encounter_key": "phase_map",
+          "to_registry_key": "gate_1_crown_removed",
+          "to_encounter_key": "gate_1_crown_removed_encounter",
+          "transition_kind": "return",
+          "rule_state": "active",
+          "sort_order": 20,
+          "metadata": {
+            "source": "session_19_phase_map_outbound_seating",
+            "behavior": "phase_map_return_only"
+          }
+        },
+        {
+          "id": "0d6a4a10-1541-42de-842f-2cdac0dec09e",
+          "from_registry_key": "gate_1_crown_removed",
+          "from_encounter_key": null,
+          "to_registry_key": "phase_map",
+          "to_encounter_key": null,
+          "transition_kind": "return",
+          "rule_state": "active",
+          "sort_order": 900,
+          "metadata": {
+            "action": {
+              "id": "return_phase_map",
+              "kind": "return",
+              "label": "Return to Phase Map"
+            },
+            "source": "session_22_chamberplate_return_wiring",
+            "behavior": "viewed_chamberplate_return_to_phase_map"
+          }
+        }
+      ],
+      "mediaRows": []
+    },
+    "gate_2_lapis_beads": {
+      "registryKey": "gate_2_lapis_beads",
+      "registryRow": true,
+      "registryId": "e769d51b-5fbf-459f-a55c-75d5dffd6600",
+      "registryMetadataEncounterKey": null,
+      "encounterCandidates": [
+        "gate_2_lapis_beads",
+        "gate_2_lapis_beads_view",
+        "gate_2_lapis_beads_encounter"
+      ],
+      "resolvedEncounterKey": "gate_2_lapis_beads_encounter",
+      "encounterDefRow": true,
+      "surfaceType": "chamberplate",
+      "rendererLayout": "encounter_focus",
+      "releaseRows": [
+        {
+          "id": "331be4a5-db77-4c52-ae92-25b84efcbfbd",
+          "release_state": "released",
+          "access_state": "encounterable",
+          "metadata": {
+            "scope": "exhibition",
+            "state_surface": "initial_gate_seating",
+            "dependency_surface": "phase_map"
+          }
+        }
+      ],
+      "transitionRows": [
+        {
+          "id": "c7960f6e-3b09-4f64-a1ca-2277d2570202",
+          "from_registry_key": "gates_passage_01",
+          "from_encounter_key": "gates_passage_01_encounter",
+          "to_registry_key": "gate_2_lapis_beads",
+          "to_encounter_key": "gate_2_lapis_beads_encounter",
+          "transition_kind": "progression",
+          "rule_state": "active",
+          "sort_order": 10,
+          "metadata": {
+            "action": {
+              "id": "enter_next_gate",
+              "label": "Enter Next Gate"
+            },
+            "source": "session_21_gates_passage_seating"
+          }
+        },
+        {
+          "id": "e94536bc-3f24-4cf4-881c-a5323b8315fb",
+          "from_registry_key": "gate_2_lapis_beads",
+          "from_encounter_key": "gate_2_lapis_beads_encounter",
+          "to_registry_key": "kumurrah_passage",
+          "to_encounter_key": "kumurrah_passage",
+          "transition_kind": "progression",
+          "rule_state": "active",
+          "sort_order": 10,
+          "metadata": {
+            "action": {
+              "id": "enter_kumurrah_to_epithets",
+              "kind": "progression",
+              "label": "Enter Chamber of Epithets",
+              "emphasis": "primary"
+            },
+            "source": "session_21_gates_passage_seating",
+            "passage": "kumurrah",
+            "target_after_passage": "chamber_epithets_01_primus_artus"
+          }
+        },
+        {
+          "id": "8b399e5d-58c0-494e-a3b1-ab0d76c24faf",
+          "from_registry_key": "phase_map",
+          "from_encounter_key": "phase_map",
+          "to_registry_key": "gate_2_lapis_beads",
+          "to_encounter_key": "gate_2_lapis_beads_encounter",
+          "transition_kind": "return",
+          "rule_state": "active",
+          "sort_order": 40,
+          "metadata": {
+            "source": "session_19_phase_map_outbound_seating",
+            "behavior": "phase_map_return_only"
+          }
+        },
+        {
+          "id": "3838b3c3-0126-4a5e-b4fa-55852b762722",
+          "from_registry_key": "gate_2_lapis_beads",
+          "from_encounter_key": null,
+          "to_registry_key": "phase_map",
+          "to_encounter_key": null,
+          "transition_kind": "return",
+          "rule_state": "active",
+          "sort_order": 900,
+          "metadata": {
+            "action": {
+              "id": "return_phase_map",
+              "kind": "return",
+              "label": "Return to Phase Map"
+            },
+            "source": "session_22_chamberplate_return_wiring",
+            "behavior": "viewed_chamberplate_return_to_phase_map"
+          }
+        }
+      ],
+      "mediaRows": []
+    },
+    "phase_map": {
+      "centerNodeRegistryKey": "gate_1_crown_removed",
+      "routingTarget": {
+        "id": "023c40c7-6f06-4101-ba64-16e0619354da",
+        "from_registry_key": "phase_map",
+        "from_encounter_key": "phase_map",
+        "to_registry_key": "gate_1_crown_removed",
+        "to_encounter_key": "gate_1_crown_removed_encounter",
+        "transition_kind": "return",
+        "rule_state": "active",
+        "sort_order": 20,
+        "metadata": {
+          "source": "session_19_phase_map_outbound_seating",
+          "behavior": "phase_map_return_only"
+        }
+      }
+    }
+  },
+  "validation": {
+    "resolverSourceHasEncounterFallback": true,
+    "gate1ResolvesToEncounterKey": "gate_1_crown_removed_encounter",
+    "gate1EncounterDefPresent": true,
+    "gate1ReleaseStanding": [
+      {
+        "release_state": "released",
+        "access_state": "encounterable"
+      }
+    ],
+    "gate1HasTransitionFromPhaseMap": true,
+    "gate1HasProgressionOut": true,
+    "neighboringGate2AlsoResolvesToEncounterKey": "gate_2_lapis_beads_encounter"
+  },
+  "heldItems": [
+    "Live production validation still requires the user's normal deploy path after this commit."
+  ]
+}
