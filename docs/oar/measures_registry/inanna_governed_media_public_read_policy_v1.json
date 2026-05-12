@@ -1,0 +1,166 @@
+{
+  "generatedAt": "2026-05-12T09:21:20.326Z",
+  "mutationPerformed": true,
+  "dbMutationOnly": true,
+  "sourceObjectsDeleted": false,
+  "mediaRowsChanged": false,
+  "resolverMutationPerformed": false,
+  "frontendMutationPerformed": false,
+  "policiesApplied": [
+    "codex_media_asset_public_active_read",
+    "measures_surface_media_map_public_active_read"
+  ],
+  "serviceBaseline": {
+    "serviceCount": 3,
+    "serviceRows": [
+      {
+        "surface_key": "epigraph",
+        "role": "featured_video",
+        "media_key": "epigraph_governed_animated_media_v1",
+        "storage_path": "inanna_epigraph.MP4",
+        "storage_provider": "cloudflare_r2"
+      },
+      {
+        "surface_key": "epigraph",
+        "role": "image",
+        "media_key": "epigraph_still_image_support_v1",
+        "storage_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "storage_provider": "supabase"
+      },
+      {
+        "surface_key": "temple_antechamber",
+        "role": "image",
+        "media_key": "temple_antechamber_still_image_v1",
+        "storage_path": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "storage_provider": "supabase"
+      }
+    ]
+  },
+  "liveBundle": {
+    "assetPath": "assets/index-DNR-DxGl.js",
+    "r2BasePresent": true
+  },
+  "publicValidation": {
+    "publicCount": 3,
+    "resolvedRows": [
+      {
+        "surfaceKey": "epigraph",
+        "role": "featured_video",
+        "sequenceIndex": 5,
+        "mediaKey": "epigraph_governed_animated_media_v1",
+        "mediaType": "video",
+        "bucketName": "measures-media",
+        "storagePath": "inanna_epigraph.MP4",
+        "storageProvider": "cloudflare_r2",
+        "publicUrl": null,
+        "resolvedUrl": "https://media.c3field.online/inanna_epigraph.MP4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "3062399"
+        }
+      },
+      {
+        "surfaceKey": "epigraph",
+        "role": "image",
+        "sequenceIndex": 10,
+        "mediaKey": "epigraph_still_image_support_v1",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "116152"
+        }
+      },
+      {
+        "surfaceKey": "temple_antechamber",
+        "role": "image",
+        "sequenceIndex": 10,
+        "mediaKey": "temple_antechamber_still_image_v1",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "138916"
+        }
+      }
+    ],
+    "epigraphRows": [
+      {
+        "surfaceKey": "epigraph",
+        "role": "featured_video",
+        "sequenceIndex": 5,
+        "mediaKey": "epigraph_governed_animated_media_v1",
+        "mediaType": "video",
+        "bucketName": "measures-media",
+        "storagePath": "inanna_epigraph.MP4",
+        "storageProvider": "cloudflare_r2",
+        "publicUrl": null,
+        "resolvedUrl": "https://media.c3field.online/inanna_epigraph.MP4",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "video/mp4",
+          "contentLength": "3062399"
+        }
+      },
+      {
+        "surfaceKey": "epigraph",
+        "role": "image",
+        "sequenceIndex": 10,
+        "mediaKey": "epigraph_still_image_support_v1",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "116152"
+        }
+      }
+    ],
+    "templeAntechamberRows": [
+      {
+        "surfaceKey": "temple_antechamber",
+        "role": "image",
+        "sequenceIndex": 10,
+        "mediaKey": "temple_antechamber_still_image_v1",
+        "mediaType": "image",
+        "bucketName": "measures-registry",
+        "storagePath": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "storageProvider": "supabase",
+        "publicUrl": null,
+        "resolvedUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/antechamber.webp",
+        "retrieval": {
+          "tested": true,
+          "ok": true,
+          "status": 200,
+          "contentType": "image/webp",
+          "contentLength": "138916"
+        }
+      }
+    ]
+  }
+}
