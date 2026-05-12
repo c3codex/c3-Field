@@ -1,0 +1,424 @@
+{
+  "oar2": "oar2_confirm_transfer_and_remap_operator_verified_pre_codex_assets_v1",
+  "targetBucket": "measures-registry",
+  "targetPrefix": "measures_registry/pre_codex_exhibition/images",
+  "confirmedAssets": [
+    "antechamber.webp",
+    "gemynd_corpus.webp",
+    "gemynd_corpus_original_art.webp",
+    "inanna_epigraph.webp",
+    "marble_chamber_codexstone.webp",
+    "obsidian_chamberplate_gate01.webp",
+    "obsidian_chamberplate_gate03.webp",
+    "og.webp",
+    "percipari_original_artwork.webp",
+    "primus_artus_epithet01_chamberplate.webp",
+    "primus_artus_original_artwork.webp"
+  ],
+  "verifiedObjectCount": 8,
+  "verifiedObjects": [
+    {
+      "file": "antechamber.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+      "exists": true,
+      "nonzero_size": true,
+      "target_size": 138916,
+      "target_mimetype": "image/webp",
+      "signed_url_generated": true,
+      "retrievable": true,
+      "retrieval_status": 200
+    },
+    {
+      "file": "gemynd_corpus.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+      "exists": true,
+      "nonzero_size": true,
+      "target_size": 286596,
+      "target_mimetype": "image/webp",
+      "signed_url_generated": true,
+      "retrievable": true,
+      "retrieval_status": 200
+    },
+    {
+      "file": "gemynd_corpus_original_art.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp",
+      "exists": true,
+      "nonzero_size": true,
+      "target_size": 789896,
+      "target_mimetype": "image/webp",
+      "signed_url_generated": true,
+      "retrievable": true,
+      "retrieval_status": 200
+    },
+    {
+      "file": "inanna_epigraph.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+      "exists": false,
+      "nonzero_size": false,
+      "retrievable": false,
+      "reason": "target object missing"
+    },
+    {
+      "file": "marble_chamber_codexstone.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+      "exists": true,
+      "nonzero_size": true,
+      "target_size": 162026,
+      "target_mimetype": "image/webp",
+      "signed_url_generated": true,
+      "retrievable": true,
+      "retrieval_status": 200
+    },
+    {
+      "file": "obsidian_chamberplate_gate01.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+      "exists": false,
+      "nonzero_size": false,
+      "retrievable": false,
+      "reason": "target object missing"
+    },
+    {
+      "file": "obsidian_chamberplate_gate03.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "exists": true,
+      "nonzero_size": true,
+      "target_size": 589712,
+      "target_mimetype": "image/webp",
+      "signed_url_generated": true,
+      "retrievable": true,
+      "retrieval_status": 200
+    },
+    {
+      "file": "og.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/og.webp",
+      "exists": false,
+      "nonzero_size": false,
+      "retrievable": false,
+      "reason": "target object missing"
+    },
+    {
+      "file": "percipari_original_artwork.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+      "exists": true,
+      "nonzero_size": true,
+      "target_size": 1551774,
+      "target_mimetype": "image/webp",
+      "signed_url_generated": true,
+      "retrievable": true,
+      "retrieval_status": 200
+    },
+    {
+      "file": "primus_artus_epithet01_chamberplate.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+      "exists": true,
+      "nonzero_size": true,
+      "target_size": 371114,
+      "target_mimetype": "image/webp",
+      "signed_url_generated": true,
+      "retrievable": true,
+      "retrieval_status": 200
+    },
+    {
+      "file": "primus_artus_original_artwork.webp",
+      "target_bucket": "measures-registry",
+      "target_path": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+      "exists": true,
+      "nonzero_size": true,
+      "target_size": 563686,
+      "target_mimetype": "image/webp",
+      "signed_url_generated": true,
+      "retrievable": true,
+      "retrieval_status": 200
+    }
+  ],
+  "remappedDbRowCount": 0,
+  "remappedRows": [],
+  "proposedRemapRowsHeldCount": 8,
+  "proposedRemapRowsHeld": [
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "title": "Gemynd Corpus Oracle Card",
+      "media_type": "image",
+      "confirmed_asset": "gemynd_corpus.webp",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "previous_storage_path": "gemynd_corpus.png",
+      "new_bucket": "measures-registry",
+      "intended_new_storage_provider": "supabase",
+      "new_storage_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus.webp",
+      "chamberplate_scoped_artwork": false,
+      "hold_reason": "codex_media_asset storage_provider constraint currently rejects Supabase provider values; preserving cloudflare_r2 with a Supabase bucket/path would create runtime resolver ambiguity"
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+      "title": "Gemynd Corpus Original Artwork",
+      "media_type": "image",
+      "confirmed_asset": "gemynd_corpus_original_art.webp",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "previous_storage_path": "gemynd_corpus_original_art.webp",
+      "new_bucket": "measures-registry",
+      "intended_new_storage_provider": "supabase",
+      "new_storage_path": "measures_registry/pre_codex_exhibition/images/gemynd_corpus_original_art.webp",
+      "chamberplate_scoped_artwork": true,
+      "hold_reason": "codex_media_asset storage_provider constraint currently rejects Supabase provider values; preserving cloudflare_r2 with a Supabase bucket/path would create runtime resolver ambiguity"
+    },
+    {
+      "media_key": "pre_codex_exhibition_marble_chamber_codexstone_image_v1",
+      "title": "Marble Chamber Codexstone",
+      "media_type": "image",
+      "confirmed_asset": "marble_chamber_codexstone.webp",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "previous_storage_path": "marble_chamber_codexstone.webp",
+      "new_bucket": "measures-registry",
+      "intended_new_storage_provider": "supabase",
+      "new_storage_path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+      "chamberplate_scoped_artwork": false,
+      "hold_reason": "codex_media_asset storage_provider constraint currently rejects Supabase provider values; preserving cloudflare_r2 with a Supabase bucket/path would create runtime resolver ambiguity"
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "image",
+      "confirmed_asset": "obsidian_chamberplate_gate03.webp",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "previous_storage_path": "obsidian_chamberplate_gate03.jpeg",
+      "new_bucket": "measures-registry",
+      "intended_new_storage_provider": "supabase",
+      "new_storage_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+      "chamberplate_scoped_artwork": false,
+      "hold_reason": "codex_media_asset storage_provider constraint currently rejects Supabase provider values; preserving cloudflare_r2 with a Supabase bucket/path would create runtime resolver ambiguity"
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "title": "Percipari Original Artwork",
+      "media_type": "image",
+      "confirmed_asset": "percipari_original_artwork.webp",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "previous_storage_path": "percipari_original_artwork.webp",
+      "new_bucket": "measures-registry",
+      "intended_new_storage_provider": "supabase",
+      "new_storage_path": "measures_registry/pre_codex_exhibition/images/percipari_original_artwork.webp",
+      "chamberplate_scoped_artwork": true,
+      "hold_reason": "codex_media_asset storage_provider constraint currently rejects Supabase provider values; preserving cloudflare_r2 with a Supabase bucket/path would create runtime resolver ambiguity"
+    },
+    {
+      "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "title": "Primus Artus Oracle Card",
+      "media_type": "image",
+      "confirmed_asset": "primus_artus_epithet01_chamberplate.webp",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "previous_storage_path": "primus_artus_epithet01_chamberplate.png",
+      "new_bucket": "measures-registry",
+      "intended_new_storage_provider": "supabase",
+      "new_storage_path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+      "chamberplate_scoped_artwork": false,
+      "hold_reason": "codex_media_asset storage_provider constraint currently rejects Supabase provider values; preserving cloudflare_r2 with a Supabase bucket/path would create runtime resolver ambiguity"
+    },
+    {
+      "media_key": "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1",
+      "title": "Primus Artus Epithet01 Chamberplate",
+      "media_type": "image",
+      "confirmed_asset": "primus_artus_epithet01_chamberplate.webp",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "previous_storage_path": "primus_artus_epithet01_chamberplate.png",
+      "new_bucket": "measures-registry",
+      "intended_new_storage_provider": "supabase",
+      "new_storage_path": "measures_registry/pre_codex_exhibition/images/primus_artus_epithet01_chamberplate.webp",
+      "chamberplate_scoped_artwork": false,
+      "hold_reason": "codex_media_asset storage_provider constraint currently rejects Supabase provider values; preserving cloudflare_r2 with a Supabase bucket/path would create runtime resolver ambiguity"
+    },
+    {
+      "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+      "title": "Primus Artus Original Artwork",
+      "media_type": "image",
+      "confirmed_asset": "primus_artus_original_artwork.webp",
+      "previous_bucket": "pre-codex-exhibition",
+      "previous_storage_provider": "cloudflare_r2",
+      "previous_storage_path": "primus_artus_original_artwork.webp",
+      "new_bucket": "measures-registry",
+      "intended_new_storage_provider": "supabase",
+      "new_storage_path": "measures_registry/pre_codex_exhibition/images/primus_artus_original_artwork.webp",
+      "chamberplate_scoped_artwork": true,
+      "hold_reason": "codex_media_asset storage_provider constraint currently rejects Supabase provider values; preserving cloudflare_r2 with a Supabase bucket/path would create runtime resolver ambiguity"
+    }
+  ],
+  "heldRowCount": 4,
+  "heldRows": [
+    {
+      "confirmed_asset": "antechamber.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/antechamber.webp",
+      "matching_db_rows": [],
+      "hold_reason": "no matching seated DB media row exists"
+    },
+    {
+      "confirmed_asset": "inanna_epigraph.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/inanna_epigraph.webp",
+      "matching_db_rows": [],
+      "hold_reason": "target object missing"
+    },
+    {
+      "confirmed_asset": "obsidian_chamberplate_gate01.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+      "matching_db_rows": [
+        {
+          "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate01_image_v1",
+          "title": "Obsidian Chamberplate Gate01",
+          "bucket": "pre-codex-exhibition",
+          "storage_provider": "cloudflare_r2",
+          "storage_path": "obsidian_chamberplate_gate01.jpeg"
+        }
+      ],
+      "hold_reason": "target object missing"
+    },
+    {
+      "confirmed_asset": "og.webp",
+      "target_path": "measures_registry/pre_codex_exhibition/images/og.webp",
+      "matching_db_rows": [],
+      "hold_reason": "target object missing"
+    }
+  ],
+  "unmatchedConfirmedAssets": [
+    "antechamber.webp",
+    "inanna_epigraph.webp",
+    "og.webp"
+  ],
+  "validationQueryOutput": [
+    {
+      "media_key": "chamber_epithets_01_primus_artus_oracle_card_v1",
+      "title": "Primus Artus Oracle Card",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "status": "active",
+      "metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+      "title": "Primus Artus Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_original_artwork.webp",
+      "status": "active",
+      "metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_oracle_card_v1",
+      "title": "Gemynd Corpus Oracle Card",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "gemynd_corpus.png",
+      "status": "active",
+      "metadata": {
+        "role": "oracle_card",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+        "preserved_from": "public.temp_exhibition_media"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+      "title": "Gemynd Corpus Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "gemynd_corpus_original_art.webp",
+      "status": "active",
+      "metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+      "title": "Percipari Original Artwork",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "percipari_original_artwork.webp",
+      "status": "active",
+      "metadata": {
+        "role": "original_artwork",
+        "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1"
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_marble_chamber_codexstone_image_v1",
+      "title": "Marble Chamber Codexstone",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "marble_chamber_codexstone.webp",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 162026,
+        "manifest_mime_type": "image/webp",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1",
+      "title": "Obsidian Chamberplate Gate03",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "obsidian_chamberplate_gate03.jpeg",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 1428318,
+        "manifest_mime_type": "image/jpeg",
+        "r2_presence_is_not_codex_seating": true
+      }
+    },
+    {
+      "media_key": "pre_codex_exhibition_primus_artus_epithet01_chamberplate_image_v1",
+      "title": "Primus Artus Epithet01 Chamberplate",
+      "media_type": "image",
+      "bucket": "pre-codex-exhibition",
+      "storage_provider": "cloudflare_r2",
+      "storage_path": "primus_artus_epithet01_chamberplate.png",
+      "status": "active",
+      "metadata": {
+        "source": "register_r2_bucket_media_pre_codex_exhibition_v1",
+        "manifest_path": "docs/_source/working/exhibition_bridge/pre_codex_exhibition_bucket_object_manifest.txt",
+        "manifest_size": 3667202,
+        "manifest_mime_type": "image/png",
+        "r2_presence_is_not_codex_seating": true
+      }
+    }
+  ],
+  "dbMutationPerformed": false,
+  "dbMutationHoldReason": "Supabase target bucket/path requires a Supabase-compatible storage_provider contract, but codex_media_asset currently constrains storage_provider to cloudflare_r2 only.",
+  "frontendMutationPerformed": false,
+  "mediaResolverMutationPerformed": false,
+  "sourceObjectsDeleted": false,
+  "inventedRowsCreated": false
+}
