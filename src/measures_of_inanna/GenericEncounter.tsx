@@ -1156,7 +1156,8 @@ export default function GenericEncounter({
           primaryVideoMuted={
             primaryVideo &&
             hasFeaturedAutoplayVideo &&
-            metadataBoolean(primaryVideo, "audio_embedded") === true
+            metadataBoolean(primaryVideo, "audio_embedded") === true &&
+            !isIntroEncounter
               ? false
               : undefined
           }
