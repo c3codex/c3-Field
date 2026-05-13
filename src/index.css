@@ -3317,13 +3317,20 @@ body {
   right: clamp(1rem, 4vw, 3rem);
   top: 50%;
   transform: translateY(-50%);
-  z-index: 17;
+  z-index: 72;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.65rem;
   width: min(18rem, 24vw);
   max-height: min(60svh, 34rem);
   overflow-y: auto;
+}
+
+.encounter[data-surface-type="chamberplate"] .chamberplate-aspects {
+  top: auto;
+  bottom: clamp(5.25rem, 12vh, 7rem);
+  transform: none;
+  max-height: min(52svh, 30rem);
 }
 
 .chamberplate-aspect {
@@ -4142,11 +4149,12 @@ body,
     left: 1rem;
     right: 1rem;
     top: auto;
-    bottom: 1rem;
+    bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
     transform: none;
     width: auto;
-    max-height: 42svh;
+    max-height: min(42svh, calc(100svh - 9rem));
     grid-template-columns: 1fr;
+    z-index: 82;
   }
 
   .chamberplate-absence {

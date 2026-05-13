@@ -1,0 +1,1763 @@
+{
+  "source_oar": "repair_temple_epithet_phase_return_v1",
+  "executed_at": "2026-05-13T21:33:35.768Z",
+  "media_checks": {
+    "crystalTempleVideo": {
+      "tested": true,
+      "ok": true,
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": "1911703",
+      "lastModified": "Wed, 13 May 2026 21:05:07 GMT"
+    },
+    "inannaEncounterVideo": {
+      "tested": true,
+      "ok": false,
+      "status": 404,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null,
+      "lastModified": null
+    }
+  },
+  "r2_listings": {
+    "inanna": {
+      "available": true,
+      "ok": true,
+      "status": 200,
+      "bucket": "measures-media",
+      "prefix": "inanna",
+      "objects": [
+        {
+          "key": "inanna_encounter .MP4",
+          "lastModified": "2026-05-13T21:17:03.785Z",
+          "size": 3062399
+        }
+      ]
+    },
+    "inannaEncounter": {
+      "available": true,
+      "ok": true,
+      "status": 200,
+      "bucket": "measures-media",
+      "prefix": "inanna_encounter",
+      "objects": []
+    }
+  },
+  "epithets": [
+    {
+      "encounter": {
+        "encounter_key": "chamber_epithets_01_primus_artus_encounter",
+        "metadata": {
+          "source": "session_19_surface_alignment",
+          "actions": [
+            {
+              "id": "return_phase_map",
+              "kind": "return",
+              "label": "Return to Phase Map",
+              "emphasis": "secondary",
+              "sort_order": 900,
+              "target_registry_key": "phase_map"
+            },
+            {
+              "id": "continue",
+              "kind": "progression",
+              "label": "Continue",
+              "emphasis": "primary",
+              "target_registry_key": "epithets_passage_01"
+            }
+          ],
+          "playback": {
+            "mode": "motion_then_still",
+            "fade_ms": 900,
+            "settle_ms": 700,
+            "video_mode": "motion_then_still",
+            "settle_to_still": true,
+            "advance_delay_ms": null,
+            "auto_advance_on_video_end": false
+          },
+          "renderer": {
+            "layout": "encounter_focus",
+            "media_fit": "contain",
+            "show_header": false,
+            "media_max_width": "86vw",
+            "media_max_height": "74svh",
+            "show_action_rail": true
+          },
+          "resolution": {
+            "actions": [
+              {
+                "id": "continue",
+                "kind": "progression",
+                "label": "Continue",
+                "passage": "same_chamber",
+                "target_registry_key": "chamber_epithets_02_gemynd_corpus",
+                "target_encounter_key": "chamber_epithets_02_gemynd_corpus_encounter"
+              },
+              {
+                "id": "return_phase_map",
+                "kind": "return",
+                "label": "Return to Phase Map",
+                "passage": "harrumuk",
+                "target_registry_key": "phase_map"
+              }
+            ]
+          },
+          "source_oar2": "repair_temple_epithet_phase_return_v1",
+          "chamberplate": {
+            "mode": "media_primary",
+            "audio_role": "tonal_companion",
+            "media_role": "primary",
+            "panel_mode": "none",
+            "text_bodies": [],
+            "aspect_slots": [
+              {
+                "role": "aspect_original_artwork",
+                "label": "Original Artwork",
+                "show_when_unseated": false
+              },
+              {
+                "role": "aspect_knew_album",
+                "label": "Primus Artus-Knew Album",
+                "show_when_unseated": false
+              },
+              {
+                "role": "aspect_material_tone",
+                "label": "Material Tone",
+                "show_when_unseated": false
+              }
+            ],
+            "render_order": [
+              "video",
+              "image",
+              "audio"
+            ],
+            "route_targets": [
+              "epithets_passage_01",
+              "phase_map"
+            ],
+            "capture_enabled": false,
+            "return_behavior": "phase_map",
+            "interaction_mode": "guided",
+            "material_binding": "registry",
+            "universal_contract": "animated_to_still_three_aspects",
+            "aspect_absence_mode": "hide_absence"
+          },
+          "presentation": {
+            "chamberplate": {
+              "stillFirst": false,
+              "aspect_slots": [
+                {
+                  "role": "aspect_original_artwork",
+                  "label": "Original Artwork",
+                  "show_when_unseated": false
+                },
+                {
+                  "role": "aspect_knew_album",
+                  "label": "Primus Artus-Knew Album",
+                  "show_when_unseated": false
+                },
+                {
+                  "role": "aspect_material_tone",
+                  "label": "Material Tone",
+                  "show_when_unseated": false
+                }
+              ],
+              "motionAfterAction": false,
+              "aspect_absence_mode": "hide_absence"
+            }
+          },
+          "last_repaired_by": "repair_temple_epithet_phase_return_v1",
+          "activation_source": "session_13_epithet_encounter_activation",
+          "holder_registry_key": "chamber_epithets",
+          "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+          "previous_surface_type": "aspect"
+        }
+      },
+      "mediaMaps": [
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
+          "role": "full_song",
+          "metadata": {
+            "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+            "audio_role": "full_song",
+            "aspect_slot": "aspect_knew_album",
+            "aspect_type": "audio",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "aspect_label": "Primus Artus-Knew Album",
+            "contract_role": "aspect_knew_album",
+            "available_after": "featured_video_complete_or_skip",
+            "render_behavior": "audio_play",
+            "show_over_video": false,
+            "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+            "frontend_hardcode_allowed": false,
+            "contract_excluded_from_universal_slots": true
+          }
+        },
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "media_key": "chamber_epithets_01_primus_artus_original_artwork_v1",
+          "role": "original_artwork",
+          "metadata": {
+            "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+            "aspect_slot": "aspect_original_artwork",
+            "aspect_type": "image",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "aspect_label": "Original Artwork",
+            "contract_role": "aspect_original_artwork",
+            "available_after": "featured_video_complete_or_skip",
+            "render_behavior": "image_expand",
+            "show_over_video": false,
+            "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+            "frontend_hardcode_allowed": false
+          }
+        }
+      ]
+    },
+    {
+      "encounter": {
+        "encounter_key": "chamber_epithets_02_gemynd_corpus_encounter",
+        "metadata": {
+          "source": "session_19_surface_alignment",
+          "actions": [
+            {
+              "id": "return_phase_map",
+              "kind": "return",
+              "label": "Return to Phase Map",
+              "emphasis": "secondary",
+              "sort_order": 900,
+              "target_registry_key": "phase_map"
+            },
+            {
+              "id": "continue",
+              "kind": "progression",
+              "label": "Continue",
+              "emphasis": "primary",
+              "target_registry_key": "epithets_passage_02"
+            }
+          ],
+          "playback": {
+            "mode": "motion_then_still",
+            "fade_ms": 900,
+            "settle_ms": 700,
+            "video_mode": "motion_then_still",
+            "settle_to_still": true,
+            "advance_delay_ms": null,
+            "auto_advance_on_video_end": false
+          },
+          "renderer": {
+            "layout": "encounter_focus",
+            "media_fit": "contain",
+            "show_header": false,
+            "media_max_width": "86vw",
+            "media_max_height": "74svh",
+            "show_action_rail": true
+          },
+          "resolution": {
+            "actions": [
+              {
+                "id": "continue",
+                "kind": "progression",
+                "label": "Continue",
+                "passage": "same_chamber",
+                "target_registry_key": "chamber_epithets_03_percipari",
+                "target_encounter_key": "chamber_epithets_03_percipari_encounter"
+              },
+              {
+                "id": "return_phase_map",
+                "kind": "return",
+                "label": "Return to Phase Map",
+                "passage": "harrumuk",
+                "target_registry_key": "phase_map"
+              }
+            ]
+          },
+          "source_oar2": "repair_temple_epithet_phase_return_v1",
+          "chamberplate": {
+            "mode": "media_primary",
+            "audio_role": "tonal_companion",
+            "media_role": "primary",
+            "panel_mode": "none",
+            "text_bodies": [],
+            "aspect_slots": [
+              {
+                "role": "aspect_original_artwork",
+                "label": "Original Artwork",
+                "show_when_unseated": false
+              },
+              {
+                "role": "aspect_knew_album",
+                "label": "Gemynd Corpus-Knew Album",
+                "show_when_unseated": false
+              },
+              {
+                "role": "aspect_material_tone",
+                "label": "Material Tone",
+                "show_when_unseated": false
+              }
+            ],
+            "render_order": [
+              "video",
+              "image",
+              "audio"
+            ],
+            "route_targets": [
+              "epithets_passage_02",
+              "phase_map"
+            ],
+            "capture_enabled": false,
+            "return_behavior": "phase_map",
+            "interaction_mode": "guided",
+            "material_binding": "registry",
+            "universal_contract": "animated_to_still_three_aspects",
+            "aspect_absence_mode": "hide_absence"
+          },
+          "presentation": {
+            "chamberplate": {
+              "stillFirst": false,
+              "aspect_slots": [
+                {
+                  "role": "aspect_original_artwork",
+                  "label": "Original Artwork",
+                  "show_when_unseated": false
+                },
+                {
+                  "role": "aspect_knew_album",
+                  "label": "Gemynd Corpus-Knew Album",
+                  "show_when_unseated": false
+                },
+                {
+                  "role": "aspect_material_tone",
+                  "label": "Material Tone",
+                  "show_when_unseated": false
+                }
+              ],
+              "motionAfterAction": false,
+              "aspect_absence_mode": "hide_absence"
+            }
+          },
+          "last_repaired_by": "repair_temple_epithet_phase_return_v1",
+          "activation_source": "session_13_epithet_encounter_activation",
+          "holder_registry_key": "chamber_epithets",
+          "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+          "previous_surface_type": "aspect"
+        }
+      },
+      "mediaMaps": [
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "media_key": "chamber_epithets_02_gemynd_corpus_full_song_v1",
+          "role": "full_song",
+          "metadata": {
+            "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+            "audio_role": "full_song",
+            "aspect_slot": "aspect_knew_album",
+            "aspect_type": "audio",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "aspect_label": "Gemynd Corpus-Knew Album",
+            "contract_role": "aspect_knew_album",
+            "available_after": "featured_video_complete_or_skip",
+            "render_behavior": "audio_play",
+            "show_over_video": false,
+            "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+            "frontend_hardcode_allowed": false,
+            "contract_excluded_from_universal_slots": true
+          }
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "media_key": "chamber_epithets_02_gemynd_corpus_lapis_tone_lapis_tone_rise_return_5min_v1",
+          "role": "lapis_tone",
+          "metadata": {
+            "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+            "audio_role": "lapis_tone",
+            "aspect_slot": "aspect_material_tone",
+            "aspect_type": "audio",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "aspect_label": "Material Tone",
+            "mix_behavior": "underlay",
+            "contract_role": "aspect_material_tone",
+            "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+            "aspect_support": true,
+            "default_volume": 0.22,
+            "available_after": "featured_video_complete_or_skip",
+            "material_family": "lapis",
+            "render_behavior": "audio_play",
+            "show_over_video": false,
+            "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+            "frontend_hardcode_allowed": false,
+            "contract_excluded_from_universal_slots": true
+          }
+        },
+        {
+          "surface_key": "chamber_epithets_02_gemynd_corpus",
+          "media_key": "chamber_epithets_02_gemynd_corpus_original_artwork_v1",
+          "role": "original_artwork",
+          "metadata": {
+            "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+            "aspect_slot": "aspect_original_artwork",
+            "aspect_type": "image",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "aspect_label": "Original Artwork",
+            "contract_role": "aspect_original_artwork",
+            "available_after": "featured_video_complete_or_skip",
+            "render_behavior": "image_expand",
+            "show_over_video": false,
+            "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+            "frontend_hardcode_allowed": false
+          }
+        }
+      ]
+    },
+    {
+      "encounter": {
+        "encounter_key": "chamber_epithets_03_percipari_encounter",
+        "metadata": {
+          "source": "session_19_surface_alignment",
+          "actions": [
+            {
+              "id": "return_phase_map",
+              "kind": "return",
+              "label": "Return to Phase Map",
+              "emphasis": "secondary",
+              "sort_order": 900,
+              "target_registry_key": "phase_map"
+            },
+            {
+              "id": "enter_kumurrah_to_codexstone",
+              "kind": "progression",
+              "label": "Enter Kumurrah",
+              "emphasis": "primary",
+              "target_registry_key": "kumurrah_passage",
+              "target_after_passage": "codexstone"
+            }
+          ],
+          "playback": {
+            "mode": "motion_then_still",
+            "fade_ms": 900,
+            "settle_ms": 700,
+            "video_mode": "motion_then_still",
+            "settle_to_still": true,
+            "advance_delay_ms": null,
+            "auto_advance_on_video_end": false
+          },
+          "renderer": {
+            "layout": "encounter_focus",
+            "media_fit": "contain",
+            "show_header": false,
+            "media_max_width": "86vw",
+            "media_max_height": "74svh",
+            "show_action_rail": true
+          },
+          "resolution": {
+            "actions": [
+              {
+                "id": "continue",
+                "kind": "progression",
+                "label": "Enter Marble Chamber",
+                "passage": "kumurrah",
+                "target_registry_key": "me_01",
+                "target_encounter_key": "me_01"
+              },
+              {
+                "id": "return_phase_map",
+                "kind": "return",
+                "label": "Return to Phase Map",
+                "passage": "harrumuk",
+                "target_registry_key": "phase_map"
+              }
+            ]
+          },
+          "source_oar2": "repair_temple_epithet_phase_return_v1",
+          "chamberplate": {
+            "mode": "media_primary",
+            "audio_role": "tonal_companion",
+            "media_role": "primary",
+            "panel_mode": "none",
+            "text_bodies": [],
+            "aspect_slots": [
+              {
+                "role": "aspect_original_artwork",
+                "label": "Original Artwork",
+                "show_when_unseated": false
+              },
+              {
+                "role": "aspect_knew_album",
+                "label": "Percipari-Knew Album",
+                "show_when_unseated": false
+              },
+              {
+                "role": "aspect_material_tone",
+                "label": "Material Tone",
+                "show_when_unseated": false
+              }
+            ],
+            "render_order": [
+              "video",
+              "image",
+              "audio"
+            ],
+            "route_targets": [
+              "kumurrah_passage",
+              "phase_map"
+            ],
+            "capture_enabled": false,
+            "return_behavior": "phase_map",
+            "interaction_mode": "guided",
+            "material_binding": "registry",
+            "universal_contract": "animated_to_still_three_aspects",
+            "aspect_absence_mode": "hide_absence"
+          },
+          "presentation": {
+            "chamberplate": {
+              "stillFirst": false,
+              "aspect_slots": [
+                {
+                  "role": "aspect_original_artwork",
+                  "label": "Original Artwork",
+                  "show_when_unseated": false
+                },
+                {
+                  "role": "aspect_knew_album",
+                  "label": "Percipari-Knew Album",
+                  "show_when_unseated": false
+                },
+                {
+                  "role": "aspect_material_tone",
+                  "label": "Material Tone",
+                  "show_when_unseated": false
+                }
+              ],
+              "motionAfterAction": false,
+              "aspect_absence_mode": "hide_absence"
+            }
+          },
+          "last_repaired_by": "repair_temple_epithet_phase_return_v1",
+          "activation_source": "session_13_epithet_encounter_activation",
+          "holder_registry_key": "chamber_epithets",
+          "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+          "previous_surface_type": "aspect"
+        }
+      },
+      "mediaMaps": [
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "media_key": "chamber_epithets_03_percipari_full_song_v1",
+          "role": "full_song",
+          "metadata": {
+            "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+            "audio_role": "full_song",
+            "aspect_slot": "aspect_knew_album",
+            "aspect_type": "audio",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "aspect_label": "Percipari-Knew Album",
+            "contract_role": "aspect_knew_album",
+            "available_after": "featured_video_complete_or_skip",
+            "render_behavior": "audio_play",
+            "show_over_video": false,
+            "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+            "frontend_hardcode_allowed": false,
+            "contract_excluded_from_universal_slots": true
+          }
+        },
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "media_key": "chamber_epithets_03_percipari_material_tone_crystal_tone_rise_return_5min_v1",
+          "role": "material_tone",
+          "metadata": {
+            "source": "reconcile_chamberplate_missing_media_payloads_from_l2_manifest_v1",
+            "audio_role": "material_tone",
+            "aspect_slot": "aspect_material_tone",
+            "aspect_type": "audio",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "aspect_label": "Material Tone",
+            "mix_behavior": "underlay",
+            "contract_role": "aspect_material_tone",
+            "manifest_path": "docs/_source/working/exhibition_bridge/l2_chamberplate_media_manifest.txt",
+            "aspect_support": true,
+            "default_volume": 0.22,
+            "available_after": "featured_video_complete_or_skip",
+            "material_family": "crystal",
+            "render_behavior": "audio_play",
+            "show_over_video": false,
+            "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+            "frontend_hardcode_allowed": false,
+            "contract_excluded_from_universal_slots": true
+          }
+        },
+        {
+          "surface_key": "chamber_epithets_03_percipari",
+          "media_key": "chamber_epithets_03_percipari_original_artwork_v1",
+          "role": "original_artwork",
+          "metadata": {
+            "source": "seat_chamber_of_epithets_chamberplate_aspect_media_v1",
+            "aspect_slot": "aspect_original_artwork",
+            "aspect_type": "image",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "aspect_label": "Original Artwork",
+            "contract_role": "aspect_original_artwork",
+            "available_after": "featured_video_complete_or_skip",
+            "render_behavior": "image_expand",
+            "show_over_video": false,
+            "contract_source_oar2": "oar2_seat_universal_chamberplate_animated_to_still_contract_v1",
+            "frontend_hardcode_allowed": false
+          }
+        }
+      ]
+    }
+  ],
+  "phase_map": {
+    "encounter_key": "phase_map",
+    "metadata": {
+      "actions": [
+        {
+          "id": "return_to_antechamber_via_kumurrah",
+          "kind": "return",
+          "label": "Return to Antechamber",
+          "metadata": {
+            "passage_key": "kumurrah_passage",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "target_after_passage": "return_antechamber"
+          },
+          "sort_order": 90,
+          "target_registry_key": "kumurrah_passage",
+          "target_after_passage": "return_antechamber"
+        }
+      ],
+      "routing": {
+        "return_target": "kumurrah_passage",
+        "return_target_after_passage": "return_antechamber"
+      },
+      "renderer": {
+        "layout": "phase_map",
+        "show_header": false,
+        "show_action_rail": true
+      },
+      "phase_map": {
+        "edges": [
+          {
+            "to": "gate_2_lapis_beads",
+            "from": "gate_1_crown_removed",
+            "kind": "progression"
+          },
+          {
+            "to": "gate_3_lapis_necklace",
+            "from": "gate_2_lapis_beads",
+            "kind": "progression"
+          },
+          {
+            "to": "chamber_epithets_01_primus_artus",
+            "from": "gate_3_lapis_necklace",
+            "kind": "threshold"
+          },
+          {
+            "to": "chamber_epithets_02_gemynd_corpus",
+            "from": "chamber_epithets_01_primus_artus",
+            "kind": "progression"
+          },
+          {
+            "to": "chamber_epithets_03_percipari",
+            "from": "chamber_epithets_02_gemynd_corpus",
+            "kind": "progression"
+          },
+          {
+            "to": "me_01",
+            "from": "chamber_epithets_03_percipari",
+            "kind": "threshold"
+          },
+          {
+            "to": "codexstone",
+            "from": "me_01",
+            "kind": "axis"
+          }
+        ],
+        "nodes": [
+          {
+            "label": "Inanna's Crown Removed",
+            "family": "gate",
+            "material": "obsidian",
+            "position": {
+              "x": 50,
+              "y": 26
+            },
+            "phase_key": null,
+            "node_state": "open",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "encounterable",
+            "registry_key": "gate_1_crown_removed",
+            "release_state": "released",
+            "standing_type": null,
+            "is_interactive": true,
+            "sequence_order": 1,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Lapis Beads of Beauty",
+            "family": "gate",
+            "material": "obsidian",
+            "position": {
+              "x": 68.76,
+              "y": 35.04
+            },
+            "phase_key": null,
+            "node_state": "open",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "encounterable",
+            "registry_key": "gate_2_lapis_beads",
+            "release_state": "released",
+            "standing_type": null,
+            "is_interactive": true,
+            "sequence_order": 2,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Lapis Necklace of Wealth",
+            "family": "gate",
+            "material": "obsidian",
+            "position": {
+              "x": 73.4,
+              "y": 55.34
+            },
+            "phase_key": "gate_3_anchor",
+            "node_state": "open",
+            "anchor_date": "2026-04-17",
+            "anchor_name": "new_moon",
+            "phase_label": "gate_3_anchor",
+            "access_state": "encounterable",
+            "registry_key": "gate_3_lapis_necklace",
+            "release_state": "released",
+            "standing_type": "scheduled",
+            "is_interactive": true,
+            "sequence_order": 3,
+            "phase_sequence_order": 110
+          },
+          {
+            "label": "Breastplate of Divine Protection",
+            "family": "gate",
+            "material": "obsidian",
+            "position": {
+              "x": 60.41,
+              "y": 71.62
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "gate_4_breastplate",
+            "release_state": "released",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 4,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Measuring Rod of Divine Order",
+            "family": "gate",
+            "material": "obsidian",
+            "position": {
+              "x": 39.59,
+              "y": 71.62
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "gate_5_measuring_rod",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 5,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Golden Bracelet of Reverence",
+            "family": "gate",
+            "material": "obsidian",
+            "position": {
+              "x": 26.6,
+              "y": 55.34
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "gate_6_golden_bracelet",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 6,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Robe of Divine Purpose",
+            "family": "gate",
+            "material": "obsidian",
+            "position": {
+              "x": 31.24,
+              "y": 35.04
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "gate_7_robe",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 7,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Primus Artus",
+            "family": "epithet",
+            "material": "obsidian",
+            "position": {
+              "x": 50,
+              "y": 14
+            },
+            "phase_key": null,
+            "node_state": "open",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "Spring Equinox",
+            "access_state": "encounterable",
+            "registry_key": "chamber_epithets_01_primus_artus",
+            "release_state": "released",
+            "standing_type": null,
+            "is_interactive": true,
+            "sequence_order": 1,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Gemynd Corpus",
+            "family": "epithet",
+            "material": "lapis",
+            "position": {
+              "x": 73.14,
+              "y": 22.42
+            },
+            "phase_key": null,
+            "node_state": "open",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "Spring Equinox",
+            "access_state": "encounterable",
+            "registry_key": "chamber_epithets_02_gemynd_corpus",
+            "release_state": "released",
+            "standing_type": null,
+            "is_interactive": true,
+            "sequence_order": 2,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Percipari",
+            "family": "epithet",
+            "material": "crystal",
+            "position": {
+              "x": 85.45,
+              "y": 43.75
+            },
+            "phase_key": null,
+            "node_state": "open",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "Spring Equinox",
+            "access_state": "encounterable",
+            "registry_key": "chamber_epithets_03_percipari",
+            "release_state": "released",
+            "standing_type": null,
+            "is_interactive": true,
+            "sequence_order": 3,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Lady of the Largest Heart",
+            "family": "epithet",
+            "material": "crystal",
+            "position": {
+              "x": 81.18,
+              "y": 68
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "June Solstice",
+            "access_state": "gated",
+            "registry_key": "chamber_epithets_04_lady_of_the_largest_heart",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 4,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Spiritus Stellaris",
+            "family": "epithet",
+            "material": "crystal",
+            "position": {
+              "x": 62.31,
+              "y": 83.83
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "June Solstice",
+            "access_state": "gated",
+            "registry_key": "chamber_epithets_05_spiritus_stellaris",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 5,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Concursus Cubicali",
+            "family": "epithet",
+            "material": "marble",
+            "position": {
+              "x": 37.69,
+              "y": 83.83
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "June Solstice",
+            "access_state": "gated",
+            "registry_key": "chamber_epithets_06_concursus_cubicali",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 6,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Aphrodite",
+            "family": "epithet",
+            "material": "lapis",
+            "position": {
+              "x": 18.82,
+              "y": 68
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "Lions Gate",
+            "access_state": "gated",
+            "registry_key": "chamber_epithets_07_aphrodite",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 7,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "The Last Oracle",
+            "family": "epithet",
+            "material": "marble",
+            "position": {
+              "x": 14.55,
+              "y": 43.75
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "Lions Gate",
+            "access_state": "gated",
+            "registry_key": "chamber_epithets_08_the_last_oracle",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 8,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "She Who Rises with the Dog Star",
+            "family": "epithet",
+            "material": "obsidian",
+            "position": {
+              "x": 26.86,
+              "y": 22.42
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": "Lions Gate",
+            "access_state": "gated",
+            "registry_key": "chamber_epithets_09_she_who_rises_with_the_dog_star",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 9,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Memory",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 50,
+              "y": 2
+            },
+            "phase_key": null,
+            "node_state": "open",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "encounterable",
+            "registry_key": "me_01",
+            "release_state": "released",
+            "standing_type": null,
+            "is_interactive": true,
+            "sequence_order": 1,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "The Measuring Cord",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 72.31,
+              "y": 7.5
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_02",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 2,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Truth",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 89.5,
+              "y": 22.73
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_03",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 3,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Expression",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 97.65,
+              "y": 44.21
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_04",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 4,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Divine Ordinance",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 94.88,
+              "y": 67.02
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_05",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 5,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Temple",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 81.83,
+              "y": 85.93
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_06",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 6,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Exaltation",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 61.49,
+              "y": 96.61
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_07",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 7,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Descent",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 38.51,
+              "y": 96.61
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_08",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 8,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Counsel",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 18.17,
+              "y": 85.93
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_09",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 9,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Assembly",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 5.12,
+              "y": 67.02
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_10",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 10,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Judgment",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 2.35,
+              "y": 44.21
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_11",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 11,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Kingship",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 10.5,
+              "y": 22.73
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_12",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 12,
+            "phase_sequence_order": null
+          },
+          {
+            "label": "Craft",
+            "family": "me",
+            "material": "marble",
+            "position": {
+              "x": 27.69,
+              "y": 7.5
+            },
+            "phase_key": null,
+            "node_state": "sealed",
+            "anchor_date": null,
+            "anchor_name": null,
+            "phase_label": null,
+            "access_state": "gated",
+            "registry_key": "me_13",
+            "release_state": "held",
+            "standing_type": null,
+            "is_interactive": false,
+            "sequence_order": 13,
+            "phase_sequence_order": null
+          }
+        ],
+        "rings": [
+          {
+            "label": "Gates",
+            "family": "gate",
+            "radius": 22
+          },
+          {
+            "label": "Epithets",
+            "family": "epithet",
+            "radius": 36
+          },
+          {
+            "label": "MEs",
+            "family": "me",
+            "radius": 48
+          }
+        ],
+        "labels": {
+          "title": "Phase Map",
+          "open_label": "Open",
+          "sealed_label": "Sealed",
+          "connect_prompt_label": "Connect to request access"
+        },
+        "layout": {
+          "mode": "concentric",
+          "rings": [
+            {
+              "label": "Gates",
+              "family": "gate",
+              "radius": 24
+            },
+            {
+              "label": "Epithets",
+              "family": "epithet",
+              "radius": 36
+            },
+            {
+              "label": "ME",
+              "family": "me",
+              "radius": 48
+            }
+          ],
+          "class_name": "phase-map-concentric-field"
+        },
+        "legend": [
+          {
+            "label": "Gate",
+            "material": "obsidian"
+          },
+          {
+            "label": "Relational threshold",
+            "material": "lapis"
+          },
+          {
+            "label": "Recognition",
+            "material": "crystal"
+          },
+          {
+            "label": "Embodiment",
+            "material": "marble"
+          }
+        ],
+        "cadence": {
+          "sequence": [
+            "gate_1_crown_removed",
+            "gate_2_lapis_beads",
+            "gate_3_lapis_necklace",
+            "chamber_epithets_01_primus_artus",
+            "chamber_epithets_02_gemynd_corpus",
+            "chamber_epithets_03_percipari",
+            "codexstone",
+            "me_01",
+            "me_02",
+            "me_03",
+            "me_04",
+            "me_05",
+            "me_06",
+            "me_07",
+            "me_08"
+          ],
+          "center_label": null,
+          "return_nodes": [
+            "gate_1_crown_removed"
+          ],
+          "complete_target_registry_key": "temple_harrumuk_passage"
+        },
+        "routing": {
+          "nodes": {
+            "me_01": {
+              "target_registry_key": "me_01"
+            },
+            "codexstone": {
+              "target_registry_key": "codexstone"
+            },
+            "gate_2_lapis_beads": {
+              "target_registry_key": "gate_2_lapis_beads"
+            },
+            "gate_1_crown_removed": {
+              "target_registry_key": "gate_1_crown_removed"
+            },
+            "gate_3_lapis_necklace": {
+              "target_registry_key": "gate_3_lapis_necklace"
+            },
+            "chamber_epithets_03_percipari": {
+              "target_registry_key": "chamber_epithets_03_percipari"
+            },
+            "chamber_epithets_01_primus_artus": {
+              "target_registry_key": "chamber_epithets_01_primus_artus"
+            },
+            "chamber_epithets_02_gemynd_corpus": {
+              "target_registry_key": "chamber_epithets_02_gemynd_corpus"
+            }
+          },
+          "on_open_node": "navigate",
+          "return_target": "kumurrah_passage",
+          "on_sealed_node": "connect_prompt",
+          "return_target_after_passage": "return_antechamber"
+        },
+        "group_by": "registry_family",
+        "order_by": "phase_sequence_order",
+        "positions": {
+          "me_01": {
+            "x": 50,
+            "y": 2
+          },
+          "me_02": {
+            "x": 72.31,
+            "y": 7.5
+          },
+          "me_03": {
+            "x": 89.5,
+            "y": 22.73
+          },
+          "me_04": {
+            "x": 97.65,
+            "y": 44.21
+          },
+          "me_05": {
+            "x": 94.88,
+            "y": 67.02
+          },
+          "me_06": {
+            "x": 81.83,
+            "y": 85.93
+          },
+          "me_07": {
+            "x": 61.49,
+            "y": 96.61
+          },
+          "me_08": {
+            "x": 38.51,
+            "y": 96.61
+          },
+          "me_09": {
+            "x": 18.17,
+            "y": 85.93
+          },
+          "me_10": {
+            "x": 5.12,
+            "y": 67.02
+          },
+          "me_11": {
+            "x": 2.35,
+            "y": 44.21
+          },
+          "me_12": {
+            "x": 10.5,
+            "y": 22.73
+          },
+          "me_13": {
+            "x": 27.69,
+            "y": 7.5
+          },
+          "gate_7_robe": {
+            "x": 31.24,
+            "y": 35.04
+          },
+          "gate_2_lapis_beads": {
+            "x": 68.76,
+            "y": 35.04
+          },
+          "gate_4_breastplate": {
+            "x": 60.41,
+            "y": 71.62
+          },
+          "gate_1_crown_removed": {
+            "x": 50,
+            "y": 26
+          },
+          "gate_5_measuring_rod": {
+            "x": 39.59,
+            "y": 71.62
+          },
+          "gate_3_lapis_necklace": {
+            "x": 73.4,
+            "y": 55.34
+          },
+          "gate_6_golden_bracelet": {
+            "x": 26.6,
+            "y": 55.34
+          },
+          "chamber_epithets_03_percipari": {
+            "x": 85.45,
+            "y": 43.75
+          },
+          "chamber_epithets_07_aphrodite": {
+            "x": 18.82,
+            "y": 68
+          },
+          "chamber_epithets_01_primus_artus": {
+            "x": 50,
+            "y": 14
+          },
+          "chamber_epithets_02_gemynd_corpus": {
+            "x": 73.14,
+            "y": 22.42
+          },
+          "chamber_epithets_08_the_last_oracle": {
+            "x": 14.55,
+            "y": 43.75
+          },
+          "chamber_epithets_05_spiritus_stellaris": {
+            "x": 62.31,
+            "y": 83.83
+          },
+          "chamber_epithets_06_concursus_cubicali": {
+            "x": 37.69,
+            "y": 83.83
+          },
+          "chamber_epithets_04_lady_of_the_largest_heart": {
+            "x": 81.18,
+            "y": 68
+          },
+          "chamber_epithets_09_she_who_rises_with_the_dog_star": {
+            "x": 26.86,
+            "y": 22.42
+          }
+        },
+        "center_node": {
+          "label": null,
+          "registry_key": "gate_1_crown_removed"
+        },
+        "explanation": {
+          "body": [
+            "The Phase Map shows released and sealed encounter units in relation.",
+            "Open nodes may be entered directly.",
+            "Sealed nodes remain visible as part of the installation but require Connect before access.",
+            "Edges show progression, threshold, and axis relation."
+          ],
+          "title": "How to read the Phase Map"
+        },
+        "node_source": "registry_dependency",
+        "node_states": {
+          "me_01": {
+            "label": "open",
+            "access_state": "encounterable",
+            "release_state": "released",
+            "is_interactive": true
+          },
+          "me_02": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_03": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_04": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_05": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_06": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_07": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_08": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_09": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_10": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_11": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_12": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "me_13": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "codexstone": {
+            "label": "open",
+            "access_state": "visible",
+            "release_state": "released",
+            "is_interactive": true
+          },
+          "gate_7_robe": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "gate_2_lapis_beads": {
+            "label": "open",
+            "access_state": "encounterable",
+            "release_state": "released",
+            "is_interactive": true
+          },
+          "gate_4_breastplate": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "released",
+            "is_interactive": false
+          },
+          "gate_1_crown_removed": {
+            "label": "open",
+            "access_state": "encounterable",
+            "release_state": "released",
+            "is_interactive": true
+          },
+          "gate_5_measuring_rod": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "gate_3_lapis_necklace": {
+            "label": "open",
+            "access_state": "encounterable",
+            "release_state": "released",
+            "is_interactive": true
+          },
+          "gate_6_golden_bracelet": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "chamber_epithets_03_percipari": {
+            "label": "open",
+            "access_state": "encounterable",
+            "release_state": "released",
+            "is_interactive": true
+          },
+          "chamber_epithets_07_aphrodite": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "chamber_epithets_01_primus_artus": {
+            "label": "open",
+            "access_state": "encounterable",
+            "release_state": "released",
+            "is_interactive": true
+          },
+          "chamber_epithets_02_gemynd_corpus": {
+            "label": "open",
+            "access_state": "encounterable",
+            "release_state": "released",
+            "is_interactive": true
+          },
+          "chamber_epithets_08_the_last_oracle": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "chamber_epithets_05_spiritus_stellaris": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "chamber_epithets_06_concursus_cubicali": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "chamber_epithets_04_lady_of_the_largest_heart": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          },
+          "chamber_epithets_09_she_who_rises_with_the_dog_star": {
+            "label": "sealed",
+            "access_state": "gated",
+            "release_state": "held",
+            "is_interactive": false
+          }
+        },
+        "render_mode": "concentric_nodes",
+        "next_release": {
+          "body": "Held chamberplates remain sealed until the next seated release window.",
+          "label": "Next release",
+          "title": "June Solstice"
+        },
+        "state_source": "release_state",
+        "cadence_source": "phase_calendar",
+        "active_registry_key": "gate_3_lapis_necklace",
+        "node_state_overrides": {
+          "codexstone": "sealed"
+        }
+      },
+      "presentation": {
+        "description": [
+          "The exhibition is complete, but released by ritual and presented in order of release.",
+          "This map shows what is currently viewable.",
+          "Your progress is saved as you move.",
+          "You may return to gates, epithets, and MEs you have already encountered."
+        ],
+        "show_next_release_counter": true
+      },
+      "phase_map_state": "incomplete",
+      "last_repaired_by": "repair_temple_epithet_phase_return_v1",
+      "codex_source_record": [
+        "seed_concordance",
+        "system_concordance",
+        "twenty_one_of_coherence",
+        "coherence_matrix_v1"
+      ],
+      "integrity_governance": {
+        "agreements": [],
+        "matrix_ref": "codex_source_record.coherence_matrix_v1",
+        "actor_scope": [
+          "IIS",
+          "Contributor",
+          "c3 Field"
+        ],
+        "constraints": [],
+        "alignment_status": "pending",
+        "expected_resolutions": []
+      }
+    }
+  }
+}

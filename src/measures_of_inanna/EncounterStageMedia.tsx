@@ -75,18 +75,19 @@ function RenderMediaItem({
   }
 
   if (item.mediaType === "video") {
-    const videoMuted = muted ?? autoPlayMuted
     const shouldLoop = mediaBoolean(item, "loop") === true
+    const shouldAutoplay = Boolean(autoPlayMuted || shouldLoop)
+    const videoMuted = muted ?? shouldAutoplay
 
     return (
       <video
         src={src}
-        autoPlay={autoPlayMuted}
+        autoPlay={shouldAutoplay}
         loop={shouldLoop}
         muted={videoMuted}
         playsInline
         preload="auto"
-        controls={!autoPlayMuted || !videoMuted}
+        controls={!shouldAutoplay || !videoMuted}
         onEnded={onEnded}
         onError={onEnded}
         style={commonStyle}
@@ -94,6 +95,12 @@ function RenderMediaItem({
           if (node) {
             node.muted = Boolean(videoMuted)
             node.defaultMuted = Boolean(videoMuted)
+            if (shouldAutoplay) {
+              const playPromise = node.play()
+              if (playPromise && typeof playPromise.catch === "function") {
+                playPromise.catch(() => undefined)
+              }
+            }
           }
         }}
       />

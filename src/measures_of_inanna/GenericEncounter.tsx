@@ -108,6 +108,14 @@ const CHAMBERPLATE_ASPECT_SLOT_ORDER = [
     role: "aspect_rule_of_measure",
     label: "Rule Of Measure",
   },
+  {
+    role: "aspect_knew_album",
+    label: "Knew Album",
+  },
+  {
+    role: "aspect_material_tone",
+    label: "Material Tone",
+  },
 ] as const
 
 type ChamberplateAspectSlotRole = (typeof CHAMBERPLATE_ASPECT_SLOT_ORDER)[number]["role"]
@@ -156,6 +164,8 @@ function canonicalChamberplateRole(item: EncounterResolution["media"][number]) {
   if (role === "featured_video") return "featured_animation"
   if (role === "oracle_card" || role === "image") return "settled_still"
   if (role === "original_artwork") return "aspect_original_artwork"
+  if (role === "full_song") return "aspect_knew_album"
+  if (role === "lapis_tone" || role === "material_tone") return "aspect_material_tone"
   return role
 }
 
@@ -1001,7 +1011,7 @@ export default function GenericEncounter({
       const slotMap = new Map<string, EncounterResolution["media"][number]>()
       for (const item of orderedMedia) {
         const slot = chamberplateAspectSlot(item)
-        if (!slot || item === primaryStill || slotMap.has(slot)) continue
+        if (!slot || slotMap.has(slot)) continue
         slotMap.set(slot, item)
       }
       return CHAMBERPLATE_ASPECT_SLOT_ORDER.flatMap((slot) => {
