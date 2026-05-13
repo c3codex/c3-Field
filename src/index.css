@@ -3266,14 +3266,15 @@ body {
 
 .chamberplate-aspects {
   position: absolute;
-  left: clamp(1rem, 5vw, 4rem);
-  bottom: clamp(1rem, 6vh, 4rem);
+  right: clamp(1rem, 4vw, 3rem);
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 17;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.65rem;
-  width: min(44rem, 68vw);
-  max-height: 52svh;
+  width: min(18rem, 24vw);
+  max-height: min(60svh, 34rem);
   overflow-y: auto;
 }
 
@@ -4092,7 +4093,9 @@ body,
   .chamberplate-aspects {
     left: 1rem;
     right: 1rem;
+    top: auto;
     bottom: 1rem;
+    transform: none;
     width: auto;
     max-height: 42svh;
     grid-template-columns: 1fr;

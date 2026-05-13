@@ -104,6 +104,15 @@ const CHAMBERPLATE_ASPECT_SLOT_ORDER = [
   },
 ] as const
 
+type ChamberplateAspectSlotRole = (typeof CHAMBERPLATE_ASPECT_SLOT_ORDER)[number]["role"]
+
+type ChamberplateAspectSlotDefinition = {
+  role: ChamberplateAspectSlotRole
+  label: string
+  body: string[]
+  showWhenUnseated: boolean
+}
+
 const CHAMBERPLATE_ASPECT_ROLES = CHAMBERPLATE_ASPECT_SLOT_ORDER.map((slot) => slot.role)
 const CHAMBERPLATE_LEGACY_SUPPORT_ROLES = [
   "full_song",
@@ -146,9 +155,68 @@ function canonicalChamberplateRole(item: EncounterResolution["media"][number]) {
 
 function chamberplateAspectSlot(
   item: EncounterResolution["media"][number],
-): (typeof CHAMBERPLATE_ASPECT_SLOT_ORDER)[number]["role"] | null {
+): ChamberplateAspectSlotRole | null {
   const role = canonicalChamberplateRole(item)
   return CHAMBERPLATE_ASPECT_ROLES.includes(role) ? role : null
+}
+
+function normalizeAspectSlotDefinitions(
+  chamberplate?: ChamberplateContract | null,
+): ChamberplateAspectSlotDefinition[] {
+  const configured = Array.isArray(chamberplate?.aspect_slots) ? chamberplate.aspect_slots : null
+  const fallback = CHAMBERPLATE_ASPECT_SLOT_ORDER.map((slot) => ({
+    role: slot.role,
+    label: slot.label,
+    body: [],
+    showWhenUnseated: false,
+  }))
+
+  if (!configured || configured.length === 0) return fallback
+
+  const normalized = configured.flatMap((slot) => {
+    if (typeof slot === "string" && CHAMBERPLATE_ASPECT_ROLES.includes(slot)) {
+      const fallbackSlot = fallback.find((entry) => entry.role === slot)
+      return fallbackSlot ? [fallbackSlot] : []
+    }
+
+    if (!slot || typeof slot !== "object" || Array.isArray(slot)) return []
+
+    const record = slot as Record<string, unknown>
+    const role =
+      (typeof record.role === "string" && CHAMBERPLATE_ASPECT_ROLES.includes(record.role)
+        ? record.role
+        : null) as ChamberplateAspectSlotRole | null
+
+    if (!role) return []
+
+    const fallbackSlot = fallback.find((entry) => entry.role === role)
+    const body = Array.isArray(record.body)
+      ? record.body.filter((line): line is string => typeof line === "string" && line.trim().length > 0)
+      : typeof record.text === "string"
+        ? [record.text]
+        : typeof record.description === "string"
+          ? [record.description]
+          : []
+
+    return [
+      {
+        role,
+        label:
+          typeof record.label === "string" && record.label.trim().length > 0
+            ? record.label
+            : fallbackSlot?.label ?? role,
+        body,
+        showWhenUnseated:
+          typeof record.show_when_unseated === "boolean"
+            ? record.show_when_unseated
+            : typeof record.showWhenUnseated === "boolean"
+              ? record.showWhenUnseated
+              : body.length > 0,
+      },
+    ]
+  })
+
+  return normalized.length > 0 ? normalized : fallback
 }
 
 function isActionAvailable(action: ResolvedAction) {
@@ -411,16 +479,18 @@ function ChamberplateAbsence({
 
 function ChamberplateAspects({
   aspects,
+  slots,
   showAbsentSlots = false,
 }: {
   aspects: EncounterResolution["media"]
+  slots: ChamberplateAspectSlotDefinition[]
   showAbsentSlots?: boolean
 }) {
   const [openKey, setOpenKey] = useState<string | null>(null)
 
   if (aspects.length === 0 && !showAbsentSlots) return null
 
-  const slotItems = CHAMBERPLATE_ASPECT_SLOT_ORDER.map((slot) => ({
+  const slotItems = slots.map((slot) => ({
     ...slot,
     item: aspects.find((candidate) => chamberplateAspectSlot(candidate) === slot.role) ?? null,
   }))
@@ -428,13 +498,16 @@ function ChamberplateAspects({
   return (
     <section className="chamberplate-aspects" aria-label="Chamberplate aspects">
       {slotItems.map(({ role, label, item }) => {
-        if (!item && !showAbsentSlots) return null
+        const configuredSlot = slots.find((slot) => slot.role === role)
+        const slotBody = configuredSlot?.body ?? []
+        const canRenderWithoutMedia = slotBody.length > 0 || configuredSlot?.showWhenUnseated === true
+        if (!item && !showAbsentSlots && !canRenderWithoutMedia) return null
 
         const key = item?.mediaKey ?? role
         const isOpen = openKey === key
         const behavior = item ? aspectBehavior(item) : "missing"
         const title = label
-        const body =
+        const mediaBody =
           typeof item?.mapMetadata?.text === "string"
             ? item.mapMetadata.text
             : typeof item?.assetMetadata?.text === "string"
@@ -444,6 +517,7 @@ function ChamberplateAspects({
                 : typeof item?.assetMetadata?.description === "string"
                   ? item.assetMetadata.description
                   : null
+        const body = mediaBody ? [mediaBody] : slotBody
 
         return (
           <article
@@ -453,7 +527,11 @@ function ChamberplateAspects({
             data-open={isOpen}
             data-absent={!item}
           >
-            <button type="button" onClick={() => (item ? setOpenKey(isOpen ? null : key) : null)} disabled={!item}>
+            <button
+              type="button"
+              onClick={() => ((item || body.length > 0) ? setOpenKey(isOpen ? null : key) : null)}
+              disabled={!item && body.length === 0}
+            >
               <span className="chamberplate-aspect-title">{title}</span>
               <small className="chamberplate-aspect-role">{item ? role.replaceAll("_", " ") : "unseated"}</small>
             </button>
@@ -462,11 +540,13 @@ function ChamberplateAspects({
                 {item && (item.mediaType === "image" || item.mediaType === "audio" || item.mediaType === "video") ? (
                   <EncounterStageMedia extraItem={item} />
                 ) : null}
-                {body ? <p>{body}</p> : null}
-                {!body && item && item.mediaType !== "image" && item.mediaType !== "audio" && item.mediaType !== "video" ? (
+                {body.map((paragraph, index) => (
+                  <p key={`${role}-${index}`}>{paragraph}</p>
+                ))}
+                {body.length === 0 && item && item.mediaType !== "image" && item.mediaType !== "audio" && item.mediaType !== "video" ? (
                   <p>aspect media registered</p>
                 ) : null}
-                {!item ? <p>aspect content not yet seated</p> : null}
+                {!item && body.length === 0 ? <p>aspect content not yet seated</p> : null}
               </div>
             ) : null}
           </article>
@@ -1281,7 +1361,8 @@ export default function GenericEncounter({
       !collapseTextForMotion &&
       !suppressVideoTextOverlay &&
       plaque &&
-      chamberplateAllowsText(chamberplate, "plaque") ? (
+      chamberplateAllowsText(chamberplate, "plaque") &&
+      !usesUniversalGateAspectContract ? (
         <Plaque plaque={plaque} />
       ) : null}
 
@@ -1290,7 +1371,11 @@ export default function GenericEncounter({
       ) : null}
 
       {chamberplate && revealChamberplateAspects ? (
-        <ChamberplateAspects aspects={aspectMedia} showAbsentSlots />
+        <ChamberplateAspects
+          aspects={aspectMedia}
+          slots={chamberplateAspectSlots}
+          showAbsentSlots={chamberplateAbsenceMode === "show_absence"}
+        />
       ) : null}
 
       {chamberplate ? (
@@ -1332,3 +1417,12 @@ export default function GenericEncounter({
     </main>
   )
 }
+  const chamberplateAspectSlots = useMemo(
+    () => normalizeAspectSlotDefinitions(chamberplate),
+    [chamberplate],
+  )
+  const chamberplateAbsenceMode =
+    (typeof chamberplate?.aspect_absence_mode === "string" ? chamberplate.aspect_absence_mode : null) ??
+    "omit"
+  const usesUniversalGateAspectContract =
+    chamberplate?.universal_contract === "animated_to_still_three_aspects"

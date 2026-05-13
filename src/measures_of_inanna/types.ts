@@ -157,6 +157,20 @@ export type ChamberplateContract = {
   render_order?: string[]
   audio_role?: string
   text_bodies?: string[]
+  universal_contract?: string
+  aspect_absence_mode?: string
+  aspect_slots?: Array<
+    | string
+    | {
+        role?: string
+        label?: string
+        body?: string[]
+        text?: string
+        description?: string
+        show_when_unseated?: boolean
+        showWhenUnseated?: boolean
+      }
+  >
   text_delay_ms?: number
   plaque_delay_ms?: number
   interaction_mode?: "none" | "guided" | "choice" | "capture" | "gated" | string

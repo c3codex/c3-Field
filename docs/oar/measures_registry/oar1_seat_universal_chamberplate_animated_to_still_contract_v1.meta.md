@@ -34,11 +34,23 @@ Universal runtime standing now reads:
 4. absent aspect content remains visibly unseated rather than invented
 5. legacy chamberplate audio support rows are excluded from primary chamberplate rendering and no longer flatten into chamberplate media
 
+Refinement standing from thread follow-up:
+
+- Crystal Temple Home remains outside the gate chamberplate slot contract
+- gate chamberplates use named aspect slots:
+  - `Original Artwork`
+  - `Historical Significance`
+  - `Rule Of Measure`
+- gate plaque overlay is removed
+- Gate 01 plaque text is reseated into the `Historical Significance` aspect slot body
+- chamberplate aspect controls are moved off the bottom and into a side rail
+
 ## Frontend Repair
 
 Updated:
 
 - `src/measures_of_inanna/GenericEncounter.tsx`
+- `src/measures_of_inanna/types.ts`
 - `src/index.css`
 
 Implemented:
@@ -50,7 +62,8 @@ Implemented:
   - `aspect_historical_significance`
   - `aspect_rule_of_measure`
 - metadata-driven alias support through map metadata keys such as `contract_role` / `aspect_slot`
-- fixed three-slot chamberplate aspect rail with absence standing
+- fixed chamberplate aspect rail with metadata-driven slot naming
+- gate side-rail positioning instead of bottom-edge controls
 - removal of legacy chamberplate support audio from extra primary chamberplate rendering
 - no hardcoded media URLs introduced
 
@@ -72,9 +85,17 @@ Updated targeted chamberplate encounter metadata with:
 - `playback.settle_to_still: true`
 - `chamberplate.universal_contract: animated_to_still_three_aspects`
 - `chamberplate.aspect_slots`
-- `chamberplate.aspect_absence_mode: show_absence`
+- `chamberplate.aspect_absence_mode`
 
 Gate 01 previously carried `still_first` presentation standing; that drift was normalized into the universal motion-first contract.
+
+Additional thread refinement:
+
+- Gate 01–03 now carry gate-specific named slot definitions in `metadata.chamberplate.aspect_slots`
+- Gate 01 no longer renders plaque text as plaque overlay
+- Gate 01 text body now lives under `aspect_historical_significance`
+- Gate 01–03 now use `aspect_absence_mode: omit`
+- Crystal Temple Home was intentionally left on its existing `choice_surface` standing
 
 ## Verified Media Standing
 
