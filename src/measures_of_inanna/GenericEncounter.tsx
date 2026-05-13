@@ -1066,6 +1066,16 @@ export default function GenericEncounter({
     resolution.registryKey === "temple_harrumuk_passage" ||
     resolution.encounterKey === "temple_harrumuk_passage_view"
 
+  const chamberplateAspectSlots = useMemo(
+    () => normalizeAspectSlotDefinitions(chamberplate),
+    [chamberplate],
+  )
+  const chamberplateAbsenceMode =
+    (typeof chamberplate?.aspect_absence_mode === "string" ? chamberplate.aspect_absence_mode : null) ??
+    "omit"
+  const usesUniversalGateAspectContract =
+    chamberplate?.universal_contract === "animated_to_still_three_aspects"
+
   const primaryImageAction = useMemo(
     () =>
       actions.find(
@@ -1417,12 +1427,3 @@ export default function GenericEncounter({
     </main>
   )
 }
-  const chamberplateAspectSlots = useMemo(
-    () => normalizeAspectSlotDefinitions(chamberplate),
-    [chamberplate],
-  )
-  const chamberplateAbsenceMode =
-    (typeof chamberplate?.aspect_absence_mode === "string" ? chamberplate.aspect_absence_mode : null) ??
-    "omit"
-  const usesUniversalGateAspectContract =
-    chamberplate?.universal_contract === "animated_to_still_three_aspects"
