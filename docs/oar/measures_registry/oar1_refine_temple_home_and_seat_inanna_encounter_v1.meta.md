@@ -74,8 +74,10 @@ Runtime standing:
 
 Deployment standing:
 
-- local frontend and DB standing are repaired
-- deployed standing requires artifact promotion after this build
+- deployed to `measures` branch in commit `c752980`
+- live hosts serve `assets/index-Co9otL_s.js`
+- `https://www.measuresofinanna.com/` returns the promoted Inanna bundle
+- `https://measuresofinanna.com/` returns the promoted Inanna bundle
 
 ## CLOSE
 

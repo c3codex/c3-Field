@@ -440,6 +440,6 @@
     "inannaChamberplateAspectsDisabled": true,
     "hardcodedMediaUrlsIntroduced": false,
     "localStanding": "frontend patched and build-validated separately",
-    "deployedStanding": "requires deployment after local build artifact promotion"
+    "deployedStanding": "deployed to measuresofinanna.com and www.measuresofinanna.com with live asset assets/index-Co9otL_s.js"
   }
 }
