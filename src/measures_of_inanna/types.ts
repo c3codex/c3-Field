@@ -65,6 +65,7 @@ export type PhaseMapRoutingContract = {
 export type PhaseMapLegendItem = {
   material?: string
   family?: string
+  state?: string
   label: string
 }
 

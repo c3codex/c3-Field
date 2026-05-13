@@ -863,7 +863,6 @@ function PhaseMap({
             node.isInteractive === false ||
             state?.is_interactive === false ||
             stateOverride === "sealed" ||
-            !isViewed ||
             !targetRegistryKey
           const isSealed =
             stateOverride === "sealed" ||
@@ -929,8 +928,8 @@ function PhaseMap({
       {legend.length > 0 && (
         <aside className="phase-map-legend">
           {legend.map((item) => (
-            <div key={`${item.material ?? item.family}-${item.label}`} className="phase-map-legend-item">
-              <span data-material={item.material} data-family={item.family} />
+            <div key={`${item.state ?? item.material ?? item.family}-${item.label}`} className="phase-map-legend-item">
+              <span data-material={item.material} data-family={item.family} data-state={item.state} />
               <span>{item.label}</span>
             </div>
           ))}

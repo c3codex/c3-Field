@@ -3926,6 +3926,25 @@ body {
   background: #efece4;
 }
 
+.phase-map-legend-item span[data-state="released"] {
+  background: rgba(245, 248, 255, 0.84);
+  box-shadow: 0 0 14px rgba(230, 238, 255, 0.34);
+}
+
+.phase-map-legend-item span[data-state="current"] {
+  border: 1px solid rgba(255, 255, 255, 0.86);
+  background: rgba(175, 205, 255, 0.92);
+  box-shadow: 0 0 20px rgba(215, 232, 255, 0.58);
+}
+
+.phase-map-legend-item span[data-state="held"] {
+  background: rgba(125, 134, 154, 0.46);
+}
+
+.phase-map-legend-item span[data-state="sealed"] {
+  background: rgba(34, 39, 50, 0.58);
+}
+
 .phase-map-explanation {
   position: absolute;
   right: clamp(1rem, 3vw, 2rem);

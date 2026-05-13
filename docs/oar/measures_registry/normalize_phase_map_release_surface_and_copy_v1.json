@@ -1,0 +1,278 @@
+{
+  "source_oar2": "oar2_normalize_phase_map_release_surface_and_copy_v1",
+  "executed_at": "2026-05-13T22:32:39.231Z",
+  "mutation_count": 1,
+  "preserved_return": {
+    "target_registry_key": "kumurrah_passage",
+    "target_after_passage": "return_antechamber"
+  },
+  "labels": {
+    "title": "PHASE MAP",
+    "open_label": "Released",
+    "sealed_label": "Held",
+    "connect_prompt_label": "Held until exact release"
+  },
+  "explanation": {
+    "body": [
+      "The Phase Map reveals released encounter units in ceremonial relation.",
+      "Held units remain visible until seated by exact release."
+    ],
+    "title": null
+  },
+  "legend": [
+    {
+      "label": "Released",
+      "state": "released"
+    },
+    {
+      "label": "Current Cadence",
+      "state": "current"
+    },
+    {
+      "label": "Held",
+      "state": "held"
+    },
+    {
+      "label": "Sealed",
+      "state": "sealed"
+    }
+  ],
+  "cadence_sequence": [
+    "gate_1_crown_removed",
+    "chamber_epithets_01_primus_artus",
+    "chamber_epithets_02_gemynd_corpus",
+    "gate_2_lapis_beads",
+    "chamber_epithets_03_percipari",
+    "me_01",
+    "gate_3_lapis_necklace",
+    "codexstone",
+    "gate_4_breastplate",
+    "chamber_epithets_04_lady_of_the_largest_heart",
+    "chamber_epithets_05_spiritus_stellaris",
+    "chamber_epithets_06_concursus_cubicali",
+    "gate_5_measuring_rod",
+    "gate_6_golden_bracelet",
+    "gate_7_robe",
+    "chamber_epithets_07_aphrodite",
+    "chamber_epithets_08_the_last_oracle",
+    "chamber_epithets_09_she_who_rises_with_the_dog_star",
+    "me_02",
+    "me_03",
+    "me_04",
+    "me_05",
+    "me_06",
+    "me_07",
+    "me_08",
+    "me_09",
+    "me_10",
+    "me_11",
+    "me_12",
+    "me_13"
+  ],
+  "node_summary": [
+    {
+      "registry_key": "gate_1_crown_removed",
+      "label": "Inanna's Crown Removed",
+      "standing": "released",
+      "route_target": "gate_1_crown_removed",
+      "runtime_expected_interactable": true
+    },
+    {
+      "registry_key": "gate_2_lapis_beads",
+      "label": "Lapis Beads of Beauty",
+      "standing": "released",
+      "route_target": "gate_2_lapis_beads",
+      "runtime_expected_interactable": true
+    },
+    {
+      "registry_key": "gate_3_lapis_necklace",
+      "label": "Lapis Necklace of Wealth",
+      "standing": "released",
+      "route_target": "gate_3_lapis_necklace",
+      "runtime_expected_interactable": true
+    },
+    {
+      "registry_key": "gate_4_breastplate",
+      "label": "Breastplate of Divine Protection",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "gate_5_measuring_rod",
+      "label": "Measuring Rod of Divine Order",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "gate_6_golden_bracelet",
+      "label": "Golden Bracelet of Reverence",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "gate_7_robe",
+      "label": "Robe of Divine Purpose",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "chamber_epithets_01_primus_artus",
+      "label": "Primus Artus",
+      "standing": "released",
+      "route_target": "chamber_epithets_01_primus_artus",
+      "runtime_expected_interactable": true
+    },
+    {
+      "registry_key": "chamber_epithets_02_gemynd_corpus",
+      "label": "Gemynd Corpus",
+      "standing": "released",
+      "route_target": "chamber_epithets_02_gemynd_corpus",
+      "runtime_expected_interactable": true
+    },
+    {
+      "registry_key": "chamber_epithets_03_percipari",
+      "label": "Percipari",
+      "standing": "released",
+      "route_target": "chamber_epithets_03_percipari",
+      "runtime_expected_interactable": true
+    },
+    {
+      "registry_key": "chamber_epithets_04_lady_of_the_largest_heart",
+      "label": "Lady of the Largest Heart",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "chamber_epithets_05_spiritus_stellaris",
+      "label": "Spiritus Stellaris",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "chamber_epithets_06_concursus_cubicali",
+      "label": "Concursus Cubicali",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "chamber_epithets_07_aphrodite",
+      "label": "Aphrodite",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "chamber_epithets_08_the_last_oracle",
+      "label": "The Last Oracle",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "chamber_epithets_09_she_who_rises_with_the_dog_star",
+      "label": "She Who Rises with the Dog Star",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_01",
+      "label": "Memory",
+      "standing": "released",
+      "route_target": "me_01",
+      "runtime_expected_interactable": true
+    },
+    {
+      "registry_key": "me_02",
+      "label": "The Measuring Cord",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_03",
+      "label": "Truth",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_04",
+      "label": "Expression",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_05",
+      "label": "Divine Ordinance",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_06",
+      "label": "Temple",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_07",
+      "label": "Exaltation",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_08",
+      "label": "Descent",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_09",
+      "label": "Counsel",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_10",
+      "label": "Assembly",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_11",
+      "label": "Judgment",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_12",
+      "label": "Kingship",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    },
+    {
+      "registry_key": "me_13",
+      "label": "Craft",
+      "standing": "held",
+      "route_target": null,
+      "runtime_expected_interactable": false
+    }
+  ],
+  "shadowed_routing_note": "metadata.actions remain primary in current runtime; transition-view Phase Map rows are not surfaced while metadata actions exist."
+}
