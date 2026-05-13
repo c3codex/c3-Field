@@ -1,6 +1,6 @@
 {
   "source_oar": "repair_temple_epithet_phase_return_v1",
-  "executed_at": "2026-05-13T21:33:35.768Z",
+  "executed_at": "2026-05-13T21:36:08.437Z",
   "media_checks": {
     "crystalTempleVideo": {
       "tested": true,
@@ -10,13 +10,21 @@
       "contentLength": "1911703",
       "lastModified": "Wed, 13 May 2026 21:05:07 GMT"
     },
-    "inannaEncounterVideo": {
+    "inannaEncounterOldVideo": {
       "tested": true,
       "ok": false,
       "status": 404,
       "contentType": "text/plain;charset=UTF-8",
       "contentLength": null,
       "lastModified": null
+    },
+    "inannaEncounterCorrectedVideo": {
+      "tested": true,
+      "ok": true,
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": "3600774",
+      "lastModified": "Wed, 13 May 2026 21:17:03 GMT"
     }
   },
   "r2_listings": {
@@ -174,6 +182,25 @@
         }
       },
       "mediaMaps": [
+        {
+          "surface_key": "chamber_epithets_01_primus_artus",
+          "media_key": "installation_tone_obsidian_rise_return_v1",
+          "role": "material_tone",
+          "metadata": {
+            "audio_role": "material_tone",
+            "aspect_slot": "aspect_material_tone",
+            "aspect_type": "audio",
+            "source_oar2": "repair_temple_epithet_phase_return_v1",
+            "tone_family": "obsidian",
+            "aspect_label": "Material Tone",
+            "contract_role": "aspect_material_tone",
+            "default_volume": 0.16,
+            "available_after": "featured_video_complete_or_skip",
+            "render_behavior": "audio_play",
+            "show_over_video": false,
+            "frontend_hardcode_allowed": false
+          }
+        },
         {
           "surface_key": "chamber_epithets_01_primus_artus",
           "media_key": "chamber_epithets_01_primus_artus_full_song_v1",
@@ -1759,5 +1786,45 @@
         "expected_resolutions": []
       }
     }
+  },
+  "inanna_video": {
+    "updated": true,
+    "url": "https://media.c3field.online/inanna_encounter%20.MP4",
+    "retrieval": {
+      "tested": true,
+      "ok": true,
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": "3600774",
+      "lastModified": "Wed, 13 May 2026 21:17:03 GMT"
+    },
+    "asset": {
+      "media_key": "measures_of_inanna_inanna_encounter_video_v1",
+      "title": "A Letter to My Divine Feminine Energy",
+      "storage_path": "inanna_encounter .MP4",
+      "metadata": {
+        "runtime_use": "Inanna encounter corrected governed video",
+        "source_oar2": "repair_temple_epithet_phase_return_v1",
+        "audio_embedded": true,
+        "embedded_audio_policy": "muted",
+        "frontend_hardcode_allowed": false,
+        "corrected_from_storage_path": "inanna_encounter_intro.mp4"
+      }
+    },
+    "maps": [
+      {
+        "surface_key": "inanna_encounter",
+        "media_key": "measures_of_inanna_inanna_encounter_video_v1",
+        "role": "featured_video",
+        "metadata": {
+          "runtime_use": "Inanna encounter corrected governed video",
+          "source_oar2": "repair_temple_epithet_phase_return_v1",
+          "audio_embedded": true,
+          "render_behavior": "muted_autoplay",
+          "embedded_audio_policy": "muted",
+          "frontend_hardcode_allowed": false
+        }
+      }
+    ]
   }
 }
