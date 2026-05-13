@@ -15,7 +15,11 @@ type Props = {
     registry_key: string
     label: string
   }
-  onNavigate: (registryKey: string) => void
+  routeViaRegistryKey?: string | null
+  onNavigate: (
+    registryKey: string,
+    options?: { targetAfterPassage?: string | null },
+  ) => void
 }
 
 const RING_RADIUS: Record<string, number> = {
@@ -33,7 +37,7 @@ function positionOnRing(index: number, total: number, radius: number) {
   }
 }
 
-export default function PhaseMap({ nodes, centerNode, onNavigate }: Props) {
+export default function PhaseMap({ nodes, centerNode, routeViaRegistryKey, onNavigate }: Props) {
   if (!nodes || nodes.length === 0) {
     return <div className="phase-map-empty">Phase Map unavailable</div>
   }
@@ -50,12 +54,27 @@ export default function PhaseMap({ nodes, centerNode, onNavigate }: Props) {
       label: "Universal First Encounter",
     }
 
+  function navigateNode(node: PhaseMapNode) {
+    if (routeViaRegistryKey && node.family === "gate") {
+      onNavigate(routeViaRegistryKey, { targetAfterPassage: node.registry_key })
+      return
+    }
+
+    onNavigate(node.registry_key)
+  }
+
   return (
     <main className="phase-map-root">
       <button
         type="button"
         className="phase-map-center-node"
-        onClick={() => onNavigate(resolvedCenterNode.registry_key)}
+        onClick={() =>
+          routeViaRegistryKey
+            ? onNavigate(routeViaRegistryKey, {
+                targetAfterPassage: resolvedCenterNode.registry_key,
+              })
+            : onNavigate(resolvedCenterNode.registry_key)
+        }
       >
         {resolvedCenterNode.label}
       </button>
@@ -82,7 +101,7 @@ export default function PhaseMap({ nodes, centerNode, onNavigate }: Props) {
               data-state={node.node_state}
               disabled={!node.is_interactive}
               onClick={() => {
-                if (node.is_interactive) onNavigate(node.registry_key)
+                if (node.is_interactive) navigateNode(node)
               }}
             >
               <span className="node-label">{node.label}</span>

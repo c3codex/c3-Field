@@ -1,0 +1,293 @@
+{
+  "generatedAt": "2026-05-13T18:30:39.258Z",
+  "mutationPerformed": true,
+  "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+  "toneChecks": [
+    {
+      "media_key": "installation_tone_crystal_rise_return_v1",
+      "storage_path": "crystal_tone_rise_return_5min.wav",
+      "retrieval": {
+        "url": "https://media.c3field.online/crystal_tone_rise_return_5min.wav",
+        "ok": true,
+        "status": 200,
+        "contentType": "audio/x-wav",
+        "contentLength": "26460044"
+      }
+    },
+    {
+      "media_key": "installation_tone_lapis_rise_return_v1",
+      "storage_path": "lapis_tone_rise_return_5min.wav",
+      "retrieval": {
+        "url": "https://media.c3field.online/lapis_tone_rise_return_5min.wav",
+        "ok": true,
+        "status": 200,
+        "contentType": "audio/x-wav",
+        "contentLength": "26460044"
+      }
+    },
+    {
+      "media_key": "installation_tone_obsidian_rise_return_v1",
+      "storage_path": "obsidian_tone_rise_return_5min.wav",
+      "retrieval": {
+        "url": "https://media.c3field.online/obsidian_tone_rise_return_5min.wav",
+        "ok": true,
+        "status": 200,
+        "contentType": "audio/wav",
+        "contentLength": "26460044"
+      }
+    },
+    {
+      "media_key": "installation_tone_marble_rise_return_v1",
+      "storage_path": "marble_tone_rise_return_5min.wav",
+      "retrieval": {
+        "url": "https://media.c3field.online/marble_tone_rise_return_5min.wav",
+        "ok": true,
+        "status": 200,
+        "contentType": "audio/x-wav",
+        "contentLength": "26460044"
+      }
+    }
+  ],
+  "upsertedToneAssets": [
+    {
+      "media_key": "installation_tone_crystal_rise_return_v1",
+      "title": "Installation Crystal Tone",
+      "storage_path": "crystal_tone_rise_return_5min.wav",
+      "status": "active"
+    },
+    {
+      "media_key": "installation_tone_lapis_rise_return_v1",
+      "title": "Installation Lapis Tone",
+      "storage_path": "lapis_tone_rise_return_5min.wav",
+      "status": "active"
+    },
+    {
+      "media_key": "installation_tone_obsidian_rise_return_v1",
+      "title": "Installation Obsidian Tone",
+      "storage_path": "obsidian_tone_rise_return_5min.wav",
+      "status": "active"
+    },
+    {
+      "media_key": "installation_tone_marble_rise_return_v1",
+      "title": "Installation Marble Tone",
+      "storage_path": "marble_tone_rise_return_5min.wav",
+      "status": "active"
+    }
+  ],
+  "upsertedToneMaps": [
+    {
+      "surface_key": "epigraph",
+      "media_key": "installation_tone_crystal_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active"
+    },
+    {
+      "surface_key": "crystal_temple_home",
+      "media_key": "installation_tone_crystal_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active"
+    },
+    {
+      "surface_key": "kumurrah_passage",
+      "media_key": "installation_tone_lapis_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active"
+    },
+    {
+      "surface_key": "temple_antechamber",
+      "media_key": "installation_tone_lapis_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active"
+    },
+    {
+      "surface_key": "temple_harrumuk_passage",
+      "media_key": "installation_tone_obsidian_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active"
+    },
+    {
+      "surface_key": "gates_passage_01",
+      "media_key": "installation_tone_obsidian_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active"
+    },
+    {
+      "surface_key": "me_01",
+      "media_key": "installation_tone_marble_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active"
+    }
+  ],
+  "updatedEncounterKeys": [
+    "crystal_temple_home_view",
+    "kumurrah_passage",
+    "temple_harrumuk_passage_view",
+    "gates_passage_01_encounter",
+    "gates_passage_02_encounter",
+    "gates_passage_03_encounter",
+    "epithets_passage_01_encounter",
+    "epithets_passage_02_encounter",
+    "gate_2_lapis_beads_encounter"
+  ],
+  "validationRows": [
+    {
+      "surface_key": "crystal_temple_home",
+      "role": "audio",
+      "sequence_index": 90,
+      "metadata": {
+        "audio_role": "installation_tone",
+        "runtime_use": "crystal_temple_home installation tone",
+        "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+        "tone_family": "crystal",
+        "default_volume": 0.12,
+        "render_behavior": "audio_play",
+        "frontend_hardcode_allowed": false,
+        "contract_excluded_from_universal_slots": true
+      },
+      "codex_media_asset": {
+        "status": "active",
+        "media_key": "installation_tone_crystal_rise_return_v1",
+        "storage_path": "crystal_tone_rise_return_5min.wav",
+        "storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "surface_key": "epigraph",
+      "role": "audio",
+      "sequence_index": 90,
+      "metadata": {
+        "audio_role": "installation_tone",
+        "runtime_use": "epigraph installation tone",
+        "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+        "tone_family": "crystal",
+        "default_volume": 0.12,
+        "render_behavior": "audio_play",
+        "frontend_hardcode_allowed": false,
+        "contract_excluded_from_universal_slots": true
+      },
+      "codex_media_asset": {
+        "status": "active",
+        "media_key": "installation_tone_crystal_rise_return_v1",
+        "storage_path": "crystal_tone_rise_return_5min.wav",
+        "storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "surface_key": "gates_passage_01",
+      "role": "audio",
+      "sequence_index": 90,
+      "metadata": {
+        "audio_role": "installation_tone",
+        "runtime_use": "gates_passage_01 installation tone",
+        "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+        "tone_family": "obsidian",
+        "default_volume": 0.16,
+        "render_behavior": "audio_play",
+        "frontend_hardcode_allowed": false,
+        "contract_excluded_from_universal_slots": true
+      },
+      "codex_media_asset": {
+        "status": "active",
+        "media_key": "installation_tone_obsidian_rise_return_v1",
+        "storage_path": "obsidian_tone_rise_return_5min.wav",
+        "storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "surface_key": "kumurrah_passage",
+      "role": "audio",
+      "sequence_index": 90,
+      "metadata": {
+        "audio_role": "installation_tone",
+        "runtime_use": "kumurrah_passage installation tone",
+        "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+        "tone_family": "lapis",
+        "default_volume": 0.16,
+        "render_behavior": "audio_play",
+        "frontend_hardcode_allowed": false,
+        "contract_excluded_from_universal_slots": true
+      },
+      "codex_media_asset": {
+        "status": "active",
+        "media_key": "installation_tone_lapis_rise_return_v1",
+        "storage_path": "lapis_tone_rise_return_5min.wav",
+        "storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "surface_key": "me_01",
+      "role": "audio",
+      "sequence_index": 90,
+      "metadata": {
+        "audio_role": "installation_tone",
+        "runtime_use": "me_01 installation tone",
+        "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+        "tone_family": "marble",
+        "default_volume": 0.12,
+        "render_behavior": "audio_play",
+        "frontend_hardcode_allowed": false,
+        "contract_excluded_from_universal_slots": true
+      },
+      "codex_media_asset": {
+        "status": "active",
+        "media_key": "installation_tone_marble_rise_return_v1",
+        "storage_path": "marble_tone_rise_return_5min.wav",
+        "storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "surface_key": "temple_antechamber",
+      "role": "audio",
+      "sequence_index": 90,
+      "metadata": {
+        "audio_role": "installation_tone",
+        "runtime_use": "temple_antechamber installation tone",
+        "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+        "tone_family": "lapis",
+        "default_volume": 0.12,
+        "render_behavior": "audio_play",
+        "frontend_hardcode_allowed": false,
+        "contract_excluded_from_universal_slots": true
+      },
+      "codex_media_asset": {
+        "status": "active",
+        "media_key": "installation_tone_lapis_rise_return_v1",
+        "storage_path": "lapis_tone_rise_return_5min.wav",
+        "storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "surface_key": "temple_harrumuk_passage",
+      "role": "audio",
+      "sequence_index": 90,
+      "metadata": {
+        "audio_role": "installation_tone",
+        "runtime_use": "temple_harrumuk_passage installation tone",
+        "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+        "tone_family": "obsidian",
+        "default_volume": 0.16,
+        "render_behavior": "audio_play",
+        "frontend_hardcode_allowed": false,
+        "contract_excluded_from_universal_slots": true
+      },
+      "codex_media_asset": {
+        "status": "active",
+        "media_key": "installation_tone_obsidian_rise_return_v1",
+        "storage_path": "obsidian_tone_rise_return_5min.wav",
+        "storage_provider": "cloudflare_r2"
+      }
+    }
+  ],
+  "notes": [
+    "Phase Map gate-family traversal now routes through existing return_target in frontend runtime.",
+    "Epithet full-song and material-tone roles were not collapsed or reseated.",
+    "Passage auto-advance timing is governed through playback.advance_delay_ms plus frontend fade sequencing."
+  ]
+}

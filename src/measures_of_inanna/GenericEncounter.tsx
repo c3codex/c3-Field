@@ -945,10 +945,12 @@ export default function GenericEncounter({
   )
   const playback = useMemo(() => normalizePlayback(resolution), [resolution])
   const autoAdvanceTimeoutRef = useRef<number | null>(null)
+  const fadeTimeoutRef = useRef<number | null>(null)
   const [showStill, setShowStill] = useState(false)
   const [videoVisible, setVideoVisible] = useState(true)
   const [textReady, setTextReady] = useState(false)
   const [videoAdvanceTarget, setVideoAdvanceTarget] = useState<string | null>(null)
+  const [isTransitionFading, setIsTransitionFading] = useState(false)
 
   const orderedMedia = useMemo(
     () =>
@@ -975,17 +977,19 @@ export default function GenericEncounter({
       null,
     [orderedMedia],
   )
-  const tonalAudio = useMemo(
-    () =>
+  const tonalAudio = useMemo(() => {
+    if (primaryVideo && metadataBoolean(primaryVideo, "audio_embedded") === true) return null
+
+    return (
       orderedMedia.find((item) => isRole(item, ["audio"])) ??
       orderedMedia.find(
         (item) =>
           isAudio(item) &&
           !isRole(item, CHAMBERPLATE_ASPECT_ROLES),
       ) ??
-      null,
-    [orderedMedia],
-  )
+      null
+    )
+  }, [orderedMedia, primaryVideo])
   const aspectMedia = useMemo(
     () => {
       const slotMap = new Map<string, EncounterResolution["media"][number]>()
@@ -1065,6 +1069,7 @@ export default function GenericEncounter({
   const isTempleHarrumukPassage =
     resolution.registryKey === "temple_harrumuk_passage" ||
     resolution.encounterKey === "temple_harrumuk_passage_view"
+  const isPassageSurface = resolution.surfaceType === "passage"
 
   const chamberplateAspectSlots = useMemo(
     () => normalizeAspectSlotDefinitions(chamberplate),
@@ -1125,10 +1130,7 @@ export default function GenericEncounter({
   )
 
   useEffect(() => {
-    if (autoAdvanceTimeoutRef.current) {
-      window.clearTimeout(autoAdvanceTimeoutRef.current)
-      autoAdvanceTimeoutRef.current = null
-    }
+    clearAdvanceTimers()
 
     const startsWithMotionThenStill =
       Boolean(primaryVideo) &&
@@ -1147,11 +1149,10 @@ export default function GenericEncounter({
     setShowStill(startsWithStill)
     setVideoVisible(!startsWithStill)
     setVideoAdvanceTarget(null)
+    setIsTransitionFading(false)
 
     return () => {
-      if (autoAdvanceTimeoutRef.current) {
-        window.clearTimeout(autoAdvanceTimeoutRef.current)
-      }
+      clearAdvanceTimers()
     }
   }, [hasFeaturedAutoplayVideo, playback.stillFirst, playback.videoMode, primaryStill, primaryVideo, resolution.registryKey])
 
@@ -1182,15 +1183,39 @@ export default function GenericEncounter({
     triggerAutoAdvance()
 
     return () => {
-      if (autoAdvanceTimeoutRef.current) {
-        window.clearTimeout(autoAdvanceTimeoutRef.current)
-        autoAdvanceTimeoutRef.current = null
-      }
+      clearAdvanceTimers()
     }
   }, [
     hasAutoAdvanceAction,
     isIntroEncounter,
     playback.autoAdvanceOnVideoEnd,
+    primaryVideo,
+    resolution.registryKey,
+  ])
+
+  useEffect(() => {
+    if (!isPassageSurface || !primaryVideo || !hasAutoAdvanceAction) return
+    if (autoAdvanceTimeoutRef.current) return
+
+    const delayMs = Math.max(0, playback.advanceDelayMs ?? 0)
+    const fadeMs = Math.max(0, playback.fade_ms ?? 0)
+
+    if (delayMs > 0 && fadeMs > 0 && delayMs > fadeMs) {
+      fadeTimeoutRef.current = window.setTimeout(() => {
+        setIsTransitionFading(true)
+      }, delayMs - fadeMs)
+    }
+
+    triggerAutoAdvance()
+
+    return () => {
+      clearAdvanceTimers()
+    }
+  }, [
+    hasAutoAdvanceAction,
+    isPassageSurface,
+    playback.advanceDelayMs,
+    playback.fade_ms,
     primaryVideo,
     resolution.registryKey,
   ])
@@ -1210,23 +1235,19 @@ export default function GenericEncounter({
   }
 
   function triggerAutoAdvance(overrideTarget?: string | null) {
-    const targetRegistryKey =
-      overrideTarget ??
-      resolution.autoAdvanceTo ??
-      actions.find((action) => isActionAvailable(action) && isAutoAction(action))
-        ?.targetRegistryKey ??
-      (playback.autoAdvanceOnVideoEnd || isIntroEncounter
-        ? actions.find(isActionAvailable)?.targetRegistryKey
-        : null)
-
-    if (!targetRegistryKey) return
+    const resolvedTarget = resolveAutoAdvanceTarget(overrideTarget)
+    if (!resolvedTarget || autoAdvanceTimeoutRef.current) return
 
     autoAdvanceTimeoutRef.current = window.setTimeout(() => {
-      onNavigate(targetRegistryKey)
+      onNavigate(resolvedTarget.targetRegistryKey, {
+        targetAfterPassage: resolvedTarget.targetAfterPassage,
+      })
     }, playback.advanceDelayMs)
   }
 
   function handlePrimaryVideoEnded() {
+    if (isPassageSurface && autoAdvanceTimeoutRef.current) return
+
     if (videoAdvanceTarget) {
       triggerAutoAdvance(videoAdvanceTarget)
       setVideoAdvanceTarget(null)
@@ -1274,6 +1295,7 @@ export default function GenericEncounter({
         <PhaseMap
           phaseMap={resolution.phase_map}
           nodes={resolution.phase_map?.nodes ?? []}
+          routeViaRegistryKey={resolution.phase_map?.routing?.return_target ?? null}
           onNavigate={onNavigate}
           activeRegistryKey={activeRegistryKey}
           viewedRegistryKeys={viewedRegistryKeys}
@@ -1300,13 +1322,62 @@ export default function GenericEncounter({
     hasAutoAdvanceAction ||
     isIntroEncounter
 
+  function clearAdvanceTimers() {
+    if (autoAdvanceTimeoutRef.current) {
+      window.clearTimeout(autoAdvanceTimeoutRef.current)
+      autoAdvanceTimeoutRef.current = null
+    }
+
+    if (fadeTimeoutRef.current) {
+      window.clearTimeout(fadeTimeoutRef.current)
+      fadeTimeoutRef.current = null
+    }
+  }
+
+  function resolveAutoAdvanceTarget(overrideTarget?: string | null) {
+    const fallbackAction = actions.find(isActionAvailable) ?? null
+    const autoAction =
+      actions.find((action) => isActionAvailable(action) && isAutoAction(action)) ?? null
+    const overrideAction =
+      overrideTarget
+        ? actions.find(
+            (action) =>
+              isActionAvailable(action) &&
+              action.targetRegistryKey === overrideTarget,
+          ) ?? null
+        : null
+
+    const targetRegistryKey =
+      overrideTarget ??
+      resolution.autoAdvanceTo ??
+      autoAction?.targetRegistryKey ??
+      (playback.autoAdvanceOnVideoEnd || isIntroEncounter
+        ? fallbackAction?.targetRegistryKey ?? null
+        : null)
+
+    if (!targetRegistryKey) return null
+
+    return {
+      targetRegistryKey,
+      targetAfterPassage:
+        actionTargetAfterPassage(overrideAction ?? autoAction ?? fallbackAction ?? undefined),
+    }
+  }
+
   return (
     <main
       className={`encounter ${renderer.layout ?? ""} ${resolution.surfaceType}`}
       data-registry-key={resolution.registryKey}
       data-surface-type={resolution.surfaceType}
+      data-transition-state={isTransitionFading ? "fading" : undefined}
       data-media-fit={renderer.media_fit ?? undefined}
-      style={mediaStyle}
+      style={{
+        ...mediaStyle,
+        opacity: isTransitionFading ? 0 : 1,
+        transition: isPassageSurface
+          ? `opacity ${Math.max(playback.fade_ms ?? 0, 240)}ms ease`
+          : undefined,
+      }}
     >
       <div className="encounter-media-layer">
         <EncounterStageMedia
