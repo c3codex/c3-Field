@@ -30,6 +30,10 @@
       "still": {
         "path": "gate_01_chamberplate_rendered.webp",
         "status": 200
+      },
+      "original_artwork": {
+        "path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp",
+        "status": 200
       }
     },
     "gate_2_lapis_beads": {
@@ -48,6 +52,10 @@
         "status": 200
       },
       "still": {
+        "path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
+        "status": 200
+      },
+      "original_artwork": {
         "path": "measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp",
         "status": 200
       }
@@ -72,9 +80,7 @@
     }
   },
   "holds": {
-    "gate_1_crown_removed.aspect_original_artwork": "no verified Gate 01 original-artwork file in current governed storage scan",
-    "gate_2_lapis_beads.aspect_original_artwork": "no verified Gate 02 original-artwork file in current governed storage scan",
-    "gate_3_lapis_necklace.aspect_original_artwork": "no verified Gate 03 original-artwork file in current governed storage scan",
+    "gate_2_lapis_beads.aspect_original_artwork": "Gate 02 original-artwork authority is still not publicly retrievable from current known R2 or Supabase paths",
     "aspect_historical_significance": "content not seated in targeted governed rows",
     "aspect_rule_of_measure": "content not seated in targeted governed rows"
   }

@@ -2,7 +2,7 @@
 document_type: oar1
 authority_level: working
 document_scope: universal_chamberplate_contract
-title: OAR1 — Seat Universal Chamberplate Animated-to-Still Contract
+title: OAR1 - Seat Universal Chamberplate Animated-to-Still Contract
 status: completed_with_holds
 version: v1
 operator: op044
@@ -10,7 +10,7 @@ system: measures_registry
 source_oar2: oar2_seat_universal_chamberplate_animated_to_still_contract_v1
 ---
 
-# OAR1 — Seat Universal Chamberplate Animated-to-Still Contract
+# OAR1 - Seat Universal Chamberplate Animated-to-Still Contract
 
 ## Outcome
 
@@ -91,10 +91,10 @@ Gate 01 previously carried `still_first` presentation standing; that drift was n
 
 Additional thread refinement:
 
-- Gate 01–03 now carry gate-specific named slot definitions in `metadata.chamberplate.aspect_slots`
+- Gate 01-03 now carry gate-specific named slot definitions in `metadata.chamberplate.aspect_slots`
 - Gate 01 no longer renders plaque text as plaque overlay
 - Gate 01 text body now lives under `aspect_historical_significance`
-- Gate 01–03 now use `aspect_absence_mode: omit`
+- Gate 01-03 now use `aspect_absence_mode: omit`
 - Crystal Temple Home was intentionally left on its existing `choice_surface` standing
 
 ## Verified Media Standing
@@ -103,19 +103,19 @@ Verified `200`:
 
 - Gate 01 animation: `obsidian_chamberplate_gate01.mov`
 - Gate 01 still: `gate_01_chamberplate_rendered.webp`
+- Gate 01 original artwork: `measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp`
 - Gate 02 animation: `gate_02_chamberplate.MP4`
 - Gate 02 still: `gate_02_chamberplate_rendered.webp`
 - Gate 03 animation: `gate_03_chamberplate.MP4`
 - Gate 03 still: `gate_03_chamberplate_rendered.webp`
+- Gate 03 original artwork: `measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp`
 - Primus featured motion
 - Gemynd featured motion
 - Percipari featured motion
 
 Held due unverified or unseated authority:
 
-- Gate 01 original artwork aspect: no verified Gate 01 original file supplied in current governed storage scan
-- Gate 02 original artwork aspect: no verified Gate 02 original file supplied in current governed storage scan
-- Gate 03 original artwork aspect: no verified Gate 03 original file supplied in current governed storage scan
+- Gate 02 original artwork aspect: current known public R2 and Supabase paths still do not retrieve the source object
 - `aspect_historical_significance` content: not seated for targeted chamberplates in current governed rows
 - `aspect_rule_of_measure` content: not seated for targeted chamberplates in current governed rows
 
@@ -133,7 +133,7 @@ Those objects were verified `200` and then seated as governed `featured_video` r
 - `pre_codex_exhibition_obsidian_chamberplate_gate02_video_v1`
 - `pre_codex_exhibition_obsidian_chamberplate_gate03_video_v1`
 
-Operator later confirmed Gate 01–03 rendered stills in Supabase bucket root:
+Operator later confirmed Gate 01-03 rendered stills in Supabase bucket root:
 
 - `gate_01_chamberplate_rendered.webp`
 - `gate_02_chamberplate_rendered.webp`
@@ -145,7 +145,20 @@ Those objects were verified `200` and reseated as governed settled still authori
 - `pre_codex_exhibition_obsidian_chamberplate_gate02_image_v1`
 - `pre_codex_exhibition_obsidian_chamberplate_gate03_image_v1`
 
-Gate 01–03 original-artwork aspect files remain unverified from the current governed storage scan.
+Operator later clarified the gate original-artwork naming family as `obsidian_chamberplate_gate0x`.
+
+Follow-up seating completed for the verified public copies:
+
+- `pre_codex_exhibition_obsidian_chamberplate_gate01_original_artwork_v1`
+  - `measures-registry / measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate01.webp`
+- `pre_codex_exhibition_obsidian_chamberplate_gate03_original_artwork_v1`
+  - `measures-registry / measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate03.webp`
+
+Gate 02 original-artwork authority remains held because the current known public paths still do not retrieve `200`:
+
+- `https://media.c3field.online/obsidian_chamberplate_gate02.webp`
+- `supabase / pre-codex-exhibition / obsidian_chamberplate_gate02.webp`
+- `supabase / measures-registry / measures_registry/pre_codex_exhibition/images/obsidian_chamberplate_gate02.webp`
 
 ## Passage Guard
 
