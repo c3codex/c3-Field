@@ -1,0 +1,152 @@
+{
+  "generatedAt": "2026-05-13T21:08:48.090Z",
+  "mutationPerformed": true,
+  "source_oar2": "operator_request_loop_crystal_temple_home_video_2026_05_13",
+  "retrieval": {
+    "url": "https://media.c3field.online/crystal_temple_home.mp4",
+    "ok": true,
+    "status": 200,
+    "contentType": "video/mp4",
+    "contentLength": "1911703"
+  },
+  "asset": {
+    "media_key": "measures_registry_crystal_temple_home_loop_video_v1",
+    "title": "Crystal Temple Home Loop Video",
+    "media_type": "video",
+    "storage_provider": "cloudflare_r2",
+    "bucket": "measures-media",
+    "storage_path": "crystal_temple_home.mp4",
+    "status": "active",
+    "metadata": {
+      "loop": true,
+      "runtime_use": "Temple Home governed looping video",
+      "source_oar2": "operator_request_loop_crystal_temple_home_video_2026_05_13",
+      "audio_embedded": true,
+      "embedded_audio_policy": "muted",
+      "frontend_hardcode_allowed": false
+    }
+  },
+  "mapping": {
+    "surface_key": "crystal_temple_home",
+    "media_key": "measures_registry_crystal_temple_home_loop_video_v1",
+    "role": "featured_video",
+    "sequence_index": 5,
+    "status": "active",
+    "metadata": {
+      "loop": true,
+      "runtime_use": "Temple Home governed looping video",
+      "source_oar2": "operator_request_loop_crystal_temple_home_video_2026_05_13",
+      "audio_embedded": true,
+      "render_behavior": "muted_loop",
+      "frontend_hardcode_allowed": false
+    }
+  },
+  "encounter": {
+    "encounter_key": "crystal_temple_home_view",
+    "playback": {
+      "mode": "still_choice",
+      "fade_ms": 900,
+      "settle_ms": 1800,
+      "audio_mode": "separate_tonal_audio",
+      "video_mode": "loop_muted",
+      "settle_to_still": false,
+      "advance_delay_ms": null,
+      "auto_advance_on_video_end": false
+    },
+    "render_order": [
+      "video",
+      "image",
+      "audio"
+    ]
+  },
+  "validationRows": [
+    {
+      "surface_key": "crystal_temple_home",
+      "media_key": "measures_registry_crystal_temple_home_loop_video_v1",
+      "role": "featured_video",
+      "sequence_index": 5,
+      "status": "active",
+      "metadata": {
+        "loop": true,
+        "runtime_use": "Temple Home governed looping video",
+        "source_oar2": "operator_request_loop_crystal_temple_home_video_2026_05_13",
+        "audio_embedded": true,
+        "render_behavior": "muted_loop",
+        "frontend_hardcode_allowed": false
+      },
+      "codex_media_asset": {
+        "bucket": "measures-media",
+        "status": "active",
+        "metadata": {
+          "loop": true,
+          "runtime_use": "Temple Home governed looping video",
+          "source_oar2": "operator_request_loop_crystal_temple_home_video_2026_05_13",
+          "audio_embedded": true,
+          "embedded_audio_policy": "muted",
+          "frontend_hardcode_allowed": false
+        },
+        "media_key": "measures_registry_crystal_temple_home_loop_video_v1",
+        "media_type": "video",
+        "storage_path": "crystal_temple_home.mp4",
+        "storage_provider": "cloudflare_r2"
+      }
+    },
+    {
+      "surface_key": "crystal_temple_home",
+      "media_key": "measures_registry_crystal_temple_home_image_v2",
+      "role": "image",
+      "sequence_index": 10,
+      "status": "active",
+      "metadata": {
+        "runtime_use": "Temple Home governed still",
+        "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+        "frontend_hardcode_allowed": false
+      },
+      "codex_media_asset": {
+        "bucket": "measures-registry",
+        "status": "active",
+        "metadata": {
+          "runtime_use": "Temple Home governed still",
+          "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+          "frontend_hardcode_allowed": false
+        },
+        "media_key": "measures_registry_crystal_temple_home_image_v2",
+        "media_type": "image",
+        "storage_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+        "storage_provider": "supabase"
+      }
+    },
+    {
+      "surface_key": "crystal_temple_home",
+      "media_key": "installation_tone_crystal_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active",
+      "metadata": {
+        "audio_role": "installation_tone",
+        "runtime_use": "crystal_temple_home installation tone",
+        "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+        "tone_family": "crystal",
+        "default_volume": 0.12,
+        "render_behavior": "audio_play",
+        "frontend_hardcode_allowed": false,
+        "contract_excluded_from_universal_slots": true
+      },
+      "codex_media_asset": {
+        "bucket": "measures-media",
+        "status": "active",
+        "metadata": {
+          "audio_role": "installation_tone",
+          "runtime_use": "crystal installation tone",
+          "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+          "tone_family": "crystal",
+          "frontend_hardcode_allowed": false
+        },
+        "media_key": "installation_tone_crystal_rise_return_v1",
+        "media_type": "audio",
+        "storage_path": "crystal_tone_rise_return_5min.wav",
+        "storage_provider": "cloudflare_r2"
+      }
+    }
+  ]
+}

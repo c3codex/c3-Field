@@ -1177,6 +1177,7 @@ export default function GenericEncounter({
       !playback.stillFirst &&
       (hasFeaturedAutoplayVideo ||
         playback.videoMode === "motion_then_still" ||
+        playback.videoMode === "loop_muted" ||
         playback.videoMode === "muted_autoplay")
 
     const startsWithStill =
@@ -1305,6 +1306,7 @@ export default function GenericEncounter({
         (playback.settleToStill ||
         playback.videoMode === "settle_to_still" ||
         playback.videoMode === "motion_then_still" ||
+        playback.videoMode === "loop_muted" ||
         playback.videoMode === "muted_autoplay")
 
     if (shouldSettleToStill) {
@@ -1355,6 +1357,7 @@ export default function GenericEncounter({
 
   const showMutedAutoplayVideo =
     playback.videoMode === "muted_autoplay" ||
+    playback.videoMode === "loop_muted" ||
     playback.videoMode === "motion_then_still" ||
     playback.videoMode === "settle_to_still" ||
     playback.autoAdvanceOnVideoEnd ||

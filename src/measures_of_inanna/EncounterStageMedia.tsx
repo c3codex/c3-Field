@@ -39,6 +39,14 @@ function mediaDefaultVolume(item?: RuntimeMediaItem | null, fallback = 0.07) {
   return Math.min(1, Math.max(0, value))
 }
 
+function mediaBoolean(item: RuntimeMediaItem, key: string) {
+  const mapValue = item.mapMetadata?.[key]
+  const assetValue = item.assetMetadata?.[key]
+  if (typeof mapValue === "boolean") return mapValue
+  if (typeof assetValue === "boolean") return assetValue
+  return null
+}
+
 function RenderMediaItem({
   item,
   autoPlayMuted,
@@ -68,11 +76,13 @@ function RenderMediaItem({
 
   if (item.mediaType === "video") {
     const videoMuted = muted ?? autoPlayMuted
+    const shouldLoop = mediaBoolean(item, "loop") === true
 
     return (
       <video
         src={src}
         autoPlay={autoPlayMuted}
+        loop={shouldLoop}
         muted={videoMuted}
         playsInline
         preload="auto"
