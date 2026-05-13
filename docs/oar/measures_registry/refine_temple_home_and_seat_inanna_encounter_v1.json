@@ -1,0 +1,445 @@
+{
+  "generatedAt": "2026-05-13T19:22:39.118Z",
+  "mutationPerformed": true,
+  "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+  "changedFiles": [
+    "src/measures_of_inanna/GenericEncounter.tsx",
+    "src/measures_of_inanna/resolve_encounter.ts",
+    "src/index.css",
+    "docs/oar/measures_registry/execute-refine-temple-home-and-seat-inanna-encounter.cjs"
+  ],
+  "mediaChecks": [
+    {
+      "media_key": "measures_registry_crystal_temple_home_image_v2",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp",
+        "contentLength": "289656"
+      }
+    },
+    {
+      "media_key": "measures_of_inanna_inanna_encounter_video_v1",
+      "storage_path": "inanna_encounter_intro.mp4",
+      "url": "https://media.c3field.online/inanna_encounter_intro.mp4",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4",
+        "contentLength": "3062399"
+      }
+    },
+    {
+      "media_key": "installation_tone_all_four_standing_wave_rise_return_v1",
+      "storage_path": "all_four_tones_standing_wave_rise_return_5min.wav",
+      "url": "https://media.c3field.online/all_four_tones_standing_wave_rise_return_5min.wav",
+      "retrieval": {
+        "tested": true,
+        "ok": true,
+        "status": 200,
+        "contentType": "audio/x-wav",
+        "contentLength": "26460044"
+      }
+    }
+  ],
+  "upsertedAssets": [
+    {
+      "media_key": "measures_registry_crystal_temple_home_image_v2",
+      "title": "Crystal Temple Home",
+      "media_type": "image",
+      "storage_provider": "supabase",
+      "bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+      "status": "active"
+    },
+    {
+      "media_key": "measures_of_inanna_inanna_encounter_video_v1",
+      "title": "A Letter to My Divine Feminine Energy",
+      "media_type": "video",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "inanna_encounter_intro.mp4",
+      "status": "active"
+    },
+    {
+      "media_key": "installation_tone_all_four_standing_wave_rise_return_v1",
+      "title": "All Four Tones Standing Wave",
+      "media_type": "audio",
+      "storage_provider": "cloudflare_r2",
+      "bucket": "measures-media",
+      "storage_path": "all_four_tones_standing_wave_rise_return_5min.wav",
+      "status": "active"
+    }
+  ],
+  "upsertedMappings": [
+    {
+      "surface_key": "crystal_temple_home",
+      "media_key": "measures_registry_crystal_temple_home_image_v2",
+      "role": "image",
+      "sequence_index": 10,
+      "status": "active"
+    },
+    {
+      "surface_key": "inanna_encounter",
+      "media_key": "measures_of_inanna_inanna_encounter_video_v1",
+      "role": "featured_video",
+      "sequence_index": 10,
+      "status": "active"
+    },
+    {
+      "surface_key": "inanna_encounter",
+      "media_key": "installation_tone_all_four_standing_wave_rise_return_v1",
+      "role": "audio",
+      "sequence_index": 90,
+      "status": "active"
+    }
+  ],
+  "deactivatedTempleDuplicates": [
+    {
+      "surface_key": "crystal_temple_home",
+      "media_key": "pre_codex_exhibition_crystal_temple_image_v1",
+      "role": "image",
+      "status": "inactive"
+    }
+  ],
+  "updatedTempleHomeEncounter": {
+    "encounter_key": "crystal_temple_home_view",
+    "action_targets": [
+      {
+        "id": "enter_antechamber",
+        "target_registry_key": "kumurrah_passage",
+        "target_after_passage": "temple_antechamber",
+        "spatial_zone": "left"
+      },
+      {
+        "id": "enter_inanna_encounter",
+        "target_registry_key": "inanna_encounter",
+        "spatial_zone": "right"
+      }
+    ],
+    "renderer": {
+      "layout": "temple_home",
+      "media_fit": "contain",
+      "show_header": false,
+      "media_max_width": "96vw",
+      "media_max_height": "84svh",
+      "show_action_rail": false,
+      "choice_surface_mode": "still_choice"
+    }
+  },
+  "upsertedInannaEncounter": {
+    "encounter_key": "inanna_encounter",
+    "title": "A Letter to My Divine Feminine Energy",
+    "only_exit_target": "crystal_temple_home",
+    "contributor_provenance": {
+      "schema_note": "Formal contributor relation fields were not used by this OAR; provenance is seated in encounter/media metadata.",
+      "encounter_seat": "Measures of Inanna governed encounter",
+      "mixed_feminine_artwork": "Ariyah",
+      "text_letter_contribution": "Pezvak"
+    },
+    "chamberplate_aspects_allowed": false
+  },
+  "combinedTone": {
+    "status": "active",
+    "media_key": "installation_tone_all_four_standing_wave_rise_return_v1",
+    "storage_path": "all_four_tones_standing_wave_rise_return_5min.wav"
+  },
+  "standing": {
+    "mediaRows": [
+      {
+        "surface_key": "crystal_temple_home",
+        "media_key": "measures_registry_crystal_temple_home_image_v2",
+        "role": "image",
+        "sequence_index": 10,
+        "status": "active",
+        "metadata": {
+          "runtime_use": "Temple Home governed still",
+          "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+          "frontend_hardcode_allowed": false
+        },
+        "codex_media_asset": {
+          "title": "Crystal Temple Home",
+          "bucket": "measures-registry",
+          "status": "active",
+          "metadata": {
+            "runtime_use": "Temple Home governed still",
+            "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+            "frontend_hardcode_allowed": false
+          },
+          "media_key": "measures_registry_crystal_temple_home_image_v2",
+          "media_type": "image",
+          "storage_path": "measures_registry/pre_codex_exhibition/images/crystal_temple_home.webp",
+          "storage_provider": "supabase"
+        }
+      },
+      {
+        "surface_key": "crystal_temple_home",
+        "media_key": "installation_tone_crystal_rise_return_v1",
+        "role": "audio",
+        "sequence_index": 90,
+        "status": "active",
+        "metadata": {
+          "audio_role": "installation_tone",
+          "runtime_use": "crystal_temple_home installation tone",
+          "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+          "tone_family": "crystal",
+          "default_volume": 0.12,
+          "render_behavior": "audio_play",
+          "frontend_hardcode_allowed": false,
+          "contract_excluded_from_universal_slots": true
+        },
+        "codex_media_asset": {
+          "title": "Installation Crystal Tone",
+          "bucket": "measures-media",
+          "status": "active",
+          "metadata": {
+            "audio_role": "installation_tone",
+            "runtime_use": "crystal installation tone",
+            "source_oar2": "oar2_refine_ceremonial_traversal_and_installation_tones_v1",
+            "tone_family": "crystal",
+            "frontend_hardcode_allowed": false
+          },
+          "media_key": "installation_tone_crystal_rise_return_v1",
+          "media_type": "audio",
+          "storage_path": "crystal_tone_rise_return_5min.wav",
+          "storage_provider": "cloudflare_r2"
+        }
+      },
+      {
+        "surface_key": "inanna_encounter",
+        "media_key": "measures_of_inanna_inanna_encounter_video_v1",
+        "role": "featured_video",
+        "sequence_index": 10,
+        "status": "active",
+        "metadata": {
+          "runtime_use": "Inanna encounter embedded video",
+          "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+          "audio_embedded": true,
+          "render_behavior": "muted_autoplay",
+          "frontend_hardcode_allowed": false
+        },
+        "codex_media_asset": {
+          "title": "A Letter to My Divine Feminine Energy",
+          "bucket": "measures-media",
+          "status": "active",
+          "metadata": {
+            "runtime_use": "Inanna encounter governed embedded video",
+            "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+            "contributors": {
+              "mixed_feminine_artwork": "Ariyah",
+              "text_letter_contribution": "Pezvak"
+            },
+            "audio_embedded": true,
+            "embedded_audio_policy": "muted",
+            "frontend_hardcode_allowed": false
+          },
+          "media_key": "measures_of_inanna_inanna_encounter_video_v1",
+          "media_type": "video",
+          "storage_path": "inanna_encounter_intro.mp4",
+          "storage_provider": "cloudflare_r2"
+        }
+      },
+      {
+        "surface_key": "inanna_encounter",
+        "media_key": "installation_tone_all_four_standing_wave_rise_return_v1",
+        "role": "audio",
+        "sequence_index": 90,
+        "status": "active",
+        "metadata": {
+          "audio_role": "combined_tone",
+          "runtime_use": "Inanna encounter combined tone",
+          "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+          "tone_family": "combined",
+          "default_volume": 0.12,
+          "render_behavior": "audio_play",
+          "frontend_hardcode_allowed": false
+        },
+        "codex_media_asset": {
+          "title": "All Four Tones Standing Wave",
+          "bucket": "measures-media",
+          "status": "active",
+          "metadata": {
+            "audio_role": "combined_tone",
+            "runtime_use": "Inanna encounter combined tone",
+            "source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1",
+            "tone_family": "combined",
+            "frontend_hardcode_allowed": false
+          },
+          "media_key": "installation_tone_all_four_standing_wave_rise_return_v1",
+          "media_type": "audio",
+          "storage_path": "all_four_tones_standing_wave_rise_return_5min.wav",
+          "storage_provider": "cloudflare_r2"
+        }
+      }
+    ],
+    "encounters": [
+      {
+        "encounter_key": "crystal_temple_home_view",
+        "surface_type": "chamberplate",
+        "metadata": {
+          "actions": [
+            {
+              "id": "enter_antechamber",
+              "kind": "navigate",
+              "label": "Antechamber",
+              "spatial_zone": "left",
+              "interaction_mode": "spatial_zone",
+              "target_registry_key": "kumurrah_passage",
+              "target_after_passage": "temple_antechamber"
+            },
+            {
+              "id": "enter_inanna_encounter",
+              "kind": "navigate",
+              "label": "Inanna",
+              "spatial_zone": "right",
+              "interaction_mode": "spatial_zone",
+              "target_registry_key": "inanna_encounter"
+            }
+          ],
+          "behavior": {
+            "show_header": false,
+            "show_subheader": false,
+            "show_action_rail": true,
+            "show_release_state": false
+          },
+          "playback": {
+            "mode": "still_choice",
+            "fade_ms": 900,
+            "settle_ms": 1800,
+            "audio_mode": "separate_tonal_audio",
+            "video_mode": "still_choice",
+            "settle_to_still": false,
+            "advance_delay_ms": null,
+            "auto_advance_on_video_end": false
+          },
+          "renderer": {
+            "layout": "temple_home",
+            "media_fit": "contain",
+            "show_header": false,
+            "media_max_width": "96vw",
+            "media_max_height": "84svh",
+            "show_action_rail": false,
+            "choice_surface_mode": "still_choice"
+          },
+          "temple_role": "crystal_temple_home",
+          "chamberplate": {
+            "mode": "choice_surface",
+            "audio_role": "tonal_companion",
+            "media_role": "background_or_still",
+            "panel_mode": "none",
+            "text_bodies": [],
+            "render_order": [
+              "image",
+              "audio"
+            ],
+            "route_targets": [
+              "kumurrah_passage",
+              "temple_antechamber",
+              "inanna_encounter"
+            ],
+            "capture_enabled": false,
+            "return_behavior": "none",
+            "interaction_mode": "choice",
+            "material_binding": "registry"
+          },
+          "presentation": {
+            "role": "orientation / architectural choice",
+            "playback": {
+              "audio_mode": "separate_tonal_audio",
+              "video_mode": "still_choice",
+              "settle_to_still": false,
+              "advance_delay_ms": null,
+              "auto_advance_on_video_end": false
+            },
+            "action_mode": "left_right_choice",
+            "navigation_mode": "embedded_spatial_zones",
+            "refraction_mode": "crystal_soft",
+            "choice_behaviors": {
+              "left": {
+                "label": "Enter Antechamber",
+                "anchor": "antechamber_arch",
+                "target_registry_key": "kumurrah_passage",
+                "target_after_passage": "temple_antechamber"
+              },
+              "right": {
+                "label": "Enter Inanna",
+                "anchor": "inanna_seat",
+                "target_registry_key": "inanna_encounter"
+              }
+            }
+          },
+          "display_order": 0,
+          "sequence_alignment": "session_24_temple_root_view_order_fix",
+          "contract_source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1"
+        },
+        "measures_registry": {
+          "registry_key": "crystal_temple_home"
+        }
+      },
+      {
+        "encounter_key": "inanna_encounter",
+        "surface_type": "threshold",
+        "metadata": {
+          "actions": [
+            {
+              "id": "return_to_temple_home",
+              "kind": "return",
+              "label": "Return",
+              "target_registry_key": "crystal_temple_home"
+            }
+          ],
+          "playback": {
+            "audio_mode": "separate_tonal_audio",
+            "video_mode": "muted_autoplay",
+            "auto_advance_on_video_end": false
+          },
+          "renderer": {
+            "layout": "inanna_encounter",
+            "media_fit": "contain",
+            "show_action_rail": true
+          },
+          "provenance": {
+            "schema_note": "Formal contributor relation fields were not used by this OAR; provenance is seated in encounter/media metadata.",
+            "encounter_seat": "Measures of Inanna governed encounter",
+            "mixed_feminine_artwork": "Ariyah",
+            "text_letter_contribution": "Pezvak"
+          },
+          "aspect_slots": [],
+          "chamberplate": null,
+          "presentation": {
+            "role": "ceremonial witness / invocation surface",
+            "title": "A Letter to My Divine Feminine Energy"
+          },
+          "route_policy": {
+            "only_exit_target": "crystal_temple_home",
+            "phase_map_allowed": false,
+            "chamberplate_aspects_allowed": false
+          },
+          "combined_tone": {
+            "status": "active"
+          },
+          "contract_source_oar2": "oar2_refine_temple_home_and_seat_inanna_encounter_v1"
+        },
+        "measures_registry": {
+          "registry_key": "inanna_encounter"
+        }
+      }
+    ]
+  },
+  "validation": {
+    "templeHomeImageGoverned": true,
+    "templeHomeVisibleButtonUiRemovedInFrontend": true,
+    "templeHomeLeftRoute": "crystal_temple_home -> kumurrah_passage -> temple_antechamber",
+    "templeHomeRightRoute": "crystal_temple_home -> inanna_encounter",
+    "inannaVideoMutedByRenderer": true,
+    "inannaReturnOnly": true,
+    "inannaChamberplateAspectsDisabled": true,
+    "hardcodedMediaUrlsIntroduced": false,
+    "localStanding": "frontend patched and build-validated separately",
+    "deployedStanding": "requires deployment after local build artifact promotion"
+  }
+}

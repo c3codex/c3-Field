@@ -3099,6 +3099,54 @@ body {
   --encounter-stage-max-height: min(84svh, calc(100svh - 5rem));
 }
 
+.encounter[data-registry-key="crystal_temple_home"] .media-still {
+  cursor: default;
+}
+
+.temple-home-spatial-nav {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.temple-home-spatial-zone {
+  appearance: none;
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  width: 42%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.temple-home-spatial-zone[data-side="left"] {
+  left: 4%;
+}
+
+.temple-home-spatial-zone[data-side="right"] {
+  right: 4%;
+}
+
+.temple-home-spatial-zone:hover,
+.temple-home-spatial-zone:focus-visible {
+  outline: none;
+  background: radial-gradient(
+    circle at 50% 54%,
+    rgba(245, 250, 255, 0.12),
+    rgba(245, 250, 255, 0.035) 32%,
+    transparent 66%
+  );
+}
+
+.temple-home-spatial-zone:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(245, 250, 255, 0.42);
+}
+
 .encounter[data-registry-key="temple_harrumuk_passage"] {
   --encounter-stage-max-width: min(82vw, 92rem);
   --encounter-stage-max-height: min(68svh, calc(100svh - 9rem));

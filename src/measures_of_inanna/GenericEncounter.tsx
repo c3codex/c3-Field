@@ -45,6 +45,12 @@ function isAudio(item: EncounterResolution["media"][number]) {
   return item.mediaType === "audio"
 }
 
+type SpatialTempleAction = {
+  action: ResolvedAction
+  side: "left" | "right"
+  ariaLabel: string
+}
+
 function mediaRole(item: EncounterResolution["media"][number]) {
   return item.role ?? item.mediaType
 }
@@ -1046,12 +1052,14 @@ export default function GenericEncounter({
   const suppressVideoTextOverlay =
     Boolean(primaryVideo && metadataBoolean(primaryVideo, "show_text_overlay") === false && videoVisible)
 
-  const isIntroEncounter =
+  const isInannaEncounter =
     resolution.encounterKey === "inanna_encounter" ||
+    resolution.registryKey === "inanna_encounter"
+
+  const isIntroEncounter =
     resolution.encounterKey === "temple_inanna_view" ||
     resolution.encounterKey === "epigraph_view" ||
-    resolution.registryKey === "epigraph" ||
-    resolution.registryKey === "inanna_encounter"
+    resolution.registryKey === "epigraph"
 
   const isPhaseMapEncounter =
     renderer?.layout === "phase_map" ||
@@ -1115,6 +1123,38 @@ export default function GenericEncounter({
             chamberplate.route_targets.includes(action.targetRegistryKey ?? "")),
       ),
     [actions, chamberplate?.route_targets],
+  )
+
+  const templeHomeSpatialActions = useMemo<SpatialTempleAction[]>(
+    () => {
+      if (!isCrystalTempleHome) return []
+
+      const left =
+        choiceActions.find((action) => actionTargets(action, "kumurrah_passage")) ??
+        choiceActions.find((action) => actionTargets(action, "temple_antechamber")) ??
+        null
+      const right =
+        choiceActions.find((action) => actionTargets(action, "inanna_encounter")) ??
+        null
+
+      return [
+        left
+          ? {
+              action: left,
+              side: "left" as const,
+              ariaLabel: "Enter the antechamber passage",
+            }
+          : null,
+        right
+          ? {
+              action: right,
+              side: "right" as const,
+              ariaLabel: "Enter the Inanna encounter",
+            }
+          : null,
+      ].filter((item): item is SpatialTempleAction => Boolean(item))
+    },
+    [choiceActions, isCrystalTempleHome],
   )
 
   const railActions = useMemo(
@@ -1320,7 +1360,8 @@ export default function GenericEncounter({
     playback.autoAdvanceOnVideoEnd ||
     hasFeaturedAutoplayVideo ||
     hasAutoAdvanceAction ||
-    isIntroEncounter
+    isIntroEncounter ||
+    isInannaEncounter
 
   function clearAdvanceTimers() {
     if (autoAdvanceTimeoutRef.current) {
@@ -1397,7 +1438,8 @@ export default function GenericEncounter({
             primaryVideo &&
             hasFeaturedAutoplayVideo &&
             metadataBoolean(primaryVideo, "audio_embedded") === true &&
-            !isIntroEncounter
+            !isIntroEncounter &&
+            !isInannaEncounter
               ? false
               : undefined
           }
@@ -1415,6 +1457,13 @@ export default function GenericEncounter({
             extraItem={item}
           />
         ))}
+
+        {isCrystalTempleHome ? (
+          <TempleHomeSpatialNavigation
+            actions={templeHomeSpatialActions}
+            onAction={handleAction}
+          />
+        ) : null}
       </div>
 
       {primaryVideo &&
@@ -1482,19 +1531,48 @@ export default function GenericEncounter({
         />
       ) : null}
 
-      {isCrystalTempleHome && showStill && choiceActions.length > 0 ? (
-        <ActionRail
-          actions={choiceActions}
-          onAction={handleAction}
-          className="choice-actions"
-        />
-      ) : null}
-
       {!isIntroEncounter &&
       !isCrystalTempleHome &&
       showActionRail ? (
         <ActionRail actions={railActions} onAction={handleAction} />
       ) : null}
     </main>
+  )
+}
+
+function TempleHomeSpatialNavigation({
+  actions,
+  onAction,
+}: {
+  actions: SpatialTempleAction[]
+  onAction: (action: ResolvedAction) => void
+}) {
+  if (actions.length === 0) return null
+
+  return (
+    <div className="temple-home-spatial-nav" aria-label="Temple Home encounter routes">
+      {actions.map(({ action, side, ariaLabel }) => (
+        <button
+          key={`${side}-${action.id}`}
+          type="button"
+          className="temple-home-spatial-zone"
+          data-side={side}
+          aria-label={ariaLabel}
+          onClick={() => onAction(action)}
+          disabled={action.blocked === true || !action.targetRegistryKey}
+        />
+      ))}
+    </div>
+  )
+}
+
+function actionTargets(action: ResolvedAction, registryKey: string) {
+  return (
+    action.targetRegistryKey === registryKey ||
+    action.targetAfterPassage === registryKey ||
+    action.metadata?.target_registry_key === registryKey ||
+    action.metadata?.targetRegistryKey === registryKey ||
+    action.metadata?.target_after_passage === registryKey ||
+    action.metadata?.targetAfterPassage === registryKey
   )
 }

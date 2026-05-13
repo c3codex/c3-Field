@@ -81,7 +81,14 @@ type RegistryMediaRow = {
       }>
 }
 
-const GOVERNED_MEDIA_SURFACE_TYPES = new Set(["chamberplate", "aspect", "threshold", "passage"])
+const GOVERNED_MEDIA_SURFACE_TYPES = new Set([
+  "aspect",
+  "chamberplate",
+  "encounter",
+  "passage",
+  "temple",
+  "threshold",
+])
 
 function asRecord(value: unknown): JsonRecord | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null
