@@ -5,6 +5,8 @@ const requiredVars = [
   "VITE_SUPABASE_ANON_KEY",
   "SUPABASE_URL",
   "SUPABASE_ANON_KEY",
+  "VITE_C3FIELD_R2_PUBLIC_BASE_URL",
+  "VITE_R2_PUBLIC_BASE_URL",
 ]
 
 console.log("[pages-env] CF_PAGES:", process.env.CF_PAGES ? "present" : "missing")

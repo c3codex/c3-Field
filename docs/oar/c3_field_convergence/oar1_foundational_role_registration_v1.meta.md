@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: working
 document_scope: initiative_role_registration
 title: OAR1 — Foundational Role Registration
-status: proposed
+status: seeded
 version: v1
 operator: op044
 initiative: c3_field_convergence
@@ -318,4 +318,37 @@ This acknowledgment does not alter authority structure.
 Authority remains:
 
 Codex → Field → Measures → Chazz → Cody → src
+
+
+
+---
+
+## SEEDED STANDING
+
+Seeded Standing:
+active_process_reference
+
+Seeded Reason:
+
+This OAR1 records the foundational role registration and first bounded operational acknowledgment for the c3 Field Convergence Initiative.
+
+It is now treated as an upstream reference for:
+
+- role distinction
+- Cody operational standing
+- Chazz/Cody execution boundary
+- 21 of Coherence acknowledgment
+- future c3 Field Convergence OAR sequencing
+
+Seeded Boundary:
+
+This seeded standing does not authorize:
+
+- runtime automation
+- deployment
+- DB mutation
+- production routing
+- independent AI authority
+
+It authorizes reference use only.
 
