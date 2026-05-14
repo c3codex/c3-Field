@@ -112,6 +112,17 @@ Runtime retrieval authority resolves from:
 - release/access state
 - encounter/media relation
 
+Canonical runtime authority chain:
+
+    measures_registry / measures_encounter_def
+    → measures_surface_media_map
+    → codex_media_asset
+    → bucket object delivery
+
+The surface mapping seats relation, role, render order, and surface authority.
+
+The media asset seats provider, bucket, path, media type, and object authority.
+
 Frontend may not:
 
 - guess bucket paths
@@ -125,6 +136,18 @@ Frontend may not:
 Temporary tables, fallback stores, or staging media may not function as runtime authority.
 
 Temporary or fallback media may exist operationally but may not supersede governed runtime authority.
+
+Fallback supplement is permitted only when explicitly governed as temporary support.
+
+Released public surfaces should resolve from governed media mappings only unless an OAR2 explicitly authorizes temporary fallback behavior.
+
+Any fallback usage during validation must be reported as drift with:
+
+- source table
+- surface key
+- media type
+- reason fallback was invoked
+- removal or conversion target
 
 ### 6. Define transfer discipline
 
@@ -153,7 +176,72 @@ Video/audio:
 - normalized naming discipline
 - no duplicate competing authority assets
 
-### 8. Define runtime verification standards
+Object key standards:
+
+- object key in DB must match bucket key exactly
+- no leading or trailing whitespace
+- lowercase extensions preferred
+- spaces in object keys require explicit confirmation and encoded retrieval proof
+- replacement objects must update governed DB authority, not only bucket contents
+- stale object keys must be recorded as stale, removed, or held for cleanup
+
+Governed media rows should include or preserve:
+
+- stable media key
+- media type
+- provider
+- bucket
+- storage path
+- status
+- runtime role
+- map sequence index
+- render behavior metadata when needed
+- `frontend_hardcode_allowed: false`
+
+### 8. Define role and render contract validation
+
+Media migration must validate the role/render contract, not only object retrieval.
+
+Validation should include surface-specific roles such as:
+
+- `featured_video`
+- `featured_animation`
+- `image`
+- `oracle_card`
+- `original_artwork`
+- `audio`
+- `full_song`
+- `material_tone`
+- `lapis_tone`
+
+Validation should include render behaviors such as:
+
+- `muted_autoplay`
+- `loop_muted`
+- `autoplay_after_passage`
+- `audio_play`
+- `image_expand`
+
+Chamberplate validation must confirm video/still/aspect sequencing.
+
+Passage validation must confirm video preference, tone behavior, and registry-driven transition.
+
+### 9. Define source standing states
+
+Unresolved or ambiguous media must be classified before mutation.
+
+Allowed source standing states:
+
+- `verified`
+- `missing_source`
+- `retrieval_failed`
+- `ambiguous_duplicate`
+- `operator_confirmed_replacement`
+- `held_pending_source`
+
+No media surface should be marked runtime-valid from bucket presence alone.
+
+### 10. Define runtime verification standards
 
 Runtime verification must distinguish:
 
@@ -166,6 +254,77 @@ Runtime verification must distinguish:
 
 Successful upload alone does not confirm runtime coherence.
 
+Retrieval proof should include:
+
+- resolved public URL
+- HTTP status
+- content type
+- content length
+- last modified timestamp when available
+- provider
+- bucket
+- storage path
+- media key
+- surface key
+- map role
+
+Deploy proof should include:
+
+- local build result
+- pushed commit
+- deployed bundle identity
+- live media retrieval
+- live user-facing runtime standing
+
+### 11. Define bucket inventory boundary
+
+Bucket inventory may inform diagnosis.
+
+Bucket inventory does not create runtime standing.
+
+An object being present in Supabase or R2 is not authority until governed DB mapping and runtime validation are complete.
+
+### 12. Seed institutional media bucket governance process
+
+Create institutional process seed:
+
+    docs/process/media/institutional_media_bucket_governance_process.meta.md
+
+This process seed must preserve:
+
+- infrastructure/authority distinction
+- Supabase and R2 role boundaries
+- governed mapping authority
+- fallback prohibition and sunset discipline
+- object key normalization
+- retrieval proof standards
+- deployed runtime proof standards
+- OAR2/OAR1 requirements for mutation
+
+### 13. Seed conversion engine media authority process
+
+Create conversion engine seed:
+
+    docs/process/media/conversion_engine_media_authority_seed.meta.md
+
+This conversion seed must define a reusable intake-to-runtime flow:
+
+1. intake manifest
+2. source standing classification
+3. provider/bucket target selection
+4. object key normalization
+5. source retrieval proof
+6. governed asset row seating
+7. surface mapping seating
+8. role/render contract validation
+9. runtime selection validation
+10. deployed standing validation where applicable
+11. held-state routing for unresolved or ambiguous media
+
+The conversion engine may recommend mutations only through OAR2.
+
+The conversion engine may not promote bucket inventory into authority.
+
 ## CODY ROLE
 
 Cody may:
@@ -174,6 +333,8 @@ Cody may:
 - validate runtime retrieval
 - report missing governed mappings
 - preserve infrastructure/authority distinction
+- seed institutional process documents
+- seed conversion engine process documents
 - write OAR1 closeout
 
 Cody may not:
@@ -195,8 +356,13 @@ This OAR2 resolves successfully when:
 5. fallback authority prohibition is explicit
 6. transfer discipline is defined
 7. normalization standards are defined
-8. runtime verification standards are defined
-9. infrastructure/authority distinction is preserved
+8. role/render contract validation is defined
+9. source standing states are defined
+10. runtime verification standards are defined
+11. bucket inventory boundary is defined
+12. institutional media bucket governance process seed is created
+13. conversion engine media authority seed is created
+14. infrastructure/authority distinction is preserved
 
 ## EXPECTED OAR1
 
