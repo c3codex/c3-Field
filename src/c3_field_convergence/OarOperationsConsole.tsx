@@ -4,6 +4,9 @@ import {
   oarProcessInstances,
   oarTransitionLog,
   queueBlockReason,
+  seededReferenceReview,
+  validateImmutableTransitionLog,
+  validateQueueIntegrity,
   validationStates,
 } from "./operationsSpine"
 
@@ -19,6 +22,8 @@ function StatusPill({ value }: { value: string | null }) {
 export default function OarOperationsConsole() {
   const executableCount = oarProcessInstances.filter(canEnterOarQueue).length
   const blockedCount = oarProcessInstances.length - executableCount
+  const queueChecks = validateQueueIntegrity(oarProcessInstances)
+  const logChecks = validateImmutableTransitionLog(oarTransitionLog)
 
   return (
     <main className="c3-ops-shell">
@@ -59,7 +64,10 @@ export default function OarOperationsConsole() {
             return (
               <article className="c3-process-card" key={instance.process_instance_key}>
                 <div className="c3-process-card-header">
-                  <h3>{instance.process_instance_key}</h3>
+                  <div>
+                    <h3>{instance.process_instance_key}</h3>
+                    <span className="c3-cycle-type">{statusLabel(instance.lifecycle_type)} lifecycle</span>
+                  </div>
                   <StatusPill value={instance.source_oar2_standing} />
                 </div>
                 <dl className="c3-process-details">
@@ -86,10 +94,35 @@ export default function OarOperationsConsole() {
                   <p><span>Actual OAR1</span>{instance.actual_oar1_path ?? "required before validation"}</p>
                   <p><span>Evidence</span>{instance.evidence_path ?? "not recorded"}</p>
                 </div>
+                {(instance.correction_source_oar2_path || instance.correction_oar2_path || instance.validation_finding) && (
+                  <div className="c3-lineage-panel">
+                    <p><span>Finding</span>{instance.validation_finding ?? "not recorded"}</p>
+                    <p><span>Source OAR2</span>{instance.correction_source_oar2_path ?? "not correction lineage"}</p>
+                    <p><span>Correction OAR2</span>{instance.correction_oar2_path ?? "not routed"}</p>
+                  </div>
+                )}
                 <p className="c3-process-result">{blockReason ?? instance.execution_result}</p>
               </article>
             )
           })}
+        </div>
+      </section>
+
+      <section className="c3-ops-section" aria-labelledby="validation-checks">
+        <div className="c3-section-heading">
+          <p className="c3-ops-kicker">Refinement</p>
+          <h2 id="validation-checks">Validation Checks</h2>
+        </div>
+        <div className="c3-check-grid">
+          {[...queueChecks, ...logChecks, ...seededReferenceReview].map((check) => (
+            <article className="c3-check-card" key={check.check_key}>
+              <div>
+                <h3>{statusLabel(check.check_key)}</h3>
+                <StatusPill value={check.standing} />
+              </div>
+              <p>{check.evidence}</p>
+            </article>
+          ))}
         </div>
       </section>
 

@@ -160,6 +160,15 @@ body,
   overflow-wrap: anywhere;
 }
 
+.c3-cycle-type {
+  color: #746956;
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
 .c3-status-pill {
   align-items: center;
   background: #ece6d8;
@@ -244,11 +253,62 @@ body,
   overflow-wrap: anywhere;
 }
 
+.c3-lineage-panel {
+  background: #f9f4eb;
+  border: 1px solid #e2d8c9;
+  border-radius: 6px;
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px;
+}
+
+.c3-lineage-panel p {
+  font-size: 0.84rem;
+  line-height: 1.4;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
 .c3-process-result {
   background: #f6f0e7;
   border-left: 3px solid #77624a;
   margin-top: 16px;
   padding: 10px 12px;
+}
+
+.c3-check-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.c3-check-card {
+  background: #fffdf8;
+  border: 1px solid #d8d1c4;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.c3-check-card div {
+  align-items: flex-start;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.c3-check-card h3 {
+  font-size: 0.92rem;
+  line-height: 1.25;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.c3-check-card p {
+  color: #4b4338;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  margin: 12px 0 0;
 }
 
 .c3-ops-two-column {
@@ -313,6 +373,7 @@ body,
 @media (max-width: 980px) {
   .c3-ops-hero,
   .c3-process-grid,
+  .c3-check-grid,
   .c3-ops-two-column {
     grid-template-columns: 1fr;
   }
