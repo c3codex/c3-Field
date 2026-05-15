@@ -33,8 +33,9 @@ function r2PublicBaseUrl(bucketName: string) {
 
 export function isR2Media(input: RuntimeMediaUrlInput) {
   const provider = input.storageProvider?.toLowerCase() ?? null
+  if (provider) return provider === "cloudflare_r2"
+
   return (
-    provider === "cloudflare_r2" ||
     Boolean(input.bucketName && input.bucketName in R2_PUBLIC_BASE_URL_ENV_BY_BUCKET)
   )
 }
