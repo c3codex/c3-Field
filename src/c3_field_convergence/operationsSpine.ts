@@ -35,17 +35,22 @@ export type OarProcessInstance = {
   validation_standing: ValidationStanding
   deploy_standing: DeployStanding
   held_standing: HeldStanding | null
+  seeded_reference_standing: "seeded" | "unseeded_blocked" | "pending"
   correction_source_oar2_path: string | null
   correction_oar2_path: string | null
+  partial_oar1_reference: string | null
   validation_finding: string | null
+  correction_scope: string | null
   execution_result: string
 }
 
 export type OarTransitionLogEntry = {
+  transition_event_key: string
   process_instance_key: string
   actor: Actor
   from_status: string
   to_status: string
+  transition_type: "queue" | "execution" | "validation" | "held" | "correction" | "seeded_reference" | "deployment"
   timestamp: string
   notes: string
   evidence_reference: string | null
@@ -80,9 +85,12 @@ export const oarProcessInstances: OarProcessInstance[] = [
     validation_standing: "pending_validation",
     deploy_standing: "configured",
     held_standing: null,
+    seeded_reference_standing: "seeded",
     correction_source_oar2_path: null,
     correction_oar2_path: null,
+    partial_oar1_reference: null,
     validation_finding: null,
+    correction_scope: null,
     execution_result: "Minimum viable OAR operations spine implemented as bounded runtime console.",
   },
   {
@@ -97,9 +105,12 @@ export const oarProcessInstances: OarProcessInstance[] = [
     validation_standing: "chazz_review_required",
     deploy_standing: "not_applicable",
     held_standing: null,
+    seeded_reference_standing: "seeded",
     correction_source_oar2_path: null,
     correction_oar2_path: null,
+    partial_oar1_reference: null,
     validation_finding: "Controlled valid lifecycle preserves OAR2 -> execution -> OAR1 -> validation continuity.",
+    correction_scope: null,
     execution_result: "Valid controlled lifecycle completed and routed to Chazz review.",
   },
   {
@@ -114,9 +125,12 @@ export const oarProcessInstances: OarProcessInstance[] = [
     validation_standing: "operator_required",
     deploy_standing: "held",
     held_standing: "held_pending_operator",
+    seeded_reference_standing: "seeded",
     correction_source_oar2_path: null,
     correction_oar2_path: null,
+    partial_oar1_reference: null,
     validation_finding: "Held standing remains visible and does not silently execute.",
+    correction_scope: "operator condition required before OAR1 proof",
     execution_result: "Held lifecycle stopped before OAR1 proof until operator condition is resolved.",
   },
   {
@@ -131,9 +145,12 @@ export const oarProcessInstances: OarProcessInstance[] = [
     validation_standing: "correction_required",
     deploy_standing: "not_authorized",
     held_standing: "held_pending_correction_oar2",
+    seeded_reference_standing: "seeded",
     correction_source_oar2_path: "docs/oar/c3_field_convergence/oar2_controlled_correction_cycle_v1.meta.md",
     correction_oar2_path: "docs/oar/c3_field_convergence/oar2_controlled_correction_followup_v1.meta.md",
+    partial_oar1_reference: "docs/oar/c3_field_convergence/oar1_controlled_partial_cycle_v1.meta.md",
     validation_finding: "Correction lineage retains source OAR2, partial OAR1, validation finding, and follow-up scope.",
+    correction_scope: "bounded correction follow-up only",
     execution_result: "Correction lifecycle retained lineage and blocked deployment.",
   },
   {
@@ -148,9 +165,12 @@ export const oarProcessInstances: OarProcessInstance[] = [
     validation_standing: "not_ready",
     deploy_standing: "not_authorized",
     held_standing: "held_pending_source",
+    seeded_reference_standing: "unseeded_blocked",
     correction_source_oar2_path: null,
     correction_oar2_path: null,
+    partial_oar1_reference: null,
     validation_finding: "Queue rule demonstration: proposed-only standing is not executable.",
+    correction_scope: null,
     execution_result: "Blocked before Cody execution.",
   },
   {
@@ -165,64 +185,79 @@ export const oarProcessInstances: OarProcessInstance[] = [
     validation_standing: "not_ready",
     deploy_standing: "not_authorized",
     held_standing: "held_pending_operator",
+    seeded_reference_standing: "unseeded_blocked",
     correction_source_oar2_path: null,
     correction_oar2_path: null,
+    partial_oar1_reference: null,
     validation_finding: "Queue rule demonstration: review-only surfaces cannot execute.",
+    correction_scope: null,
     execution_result: "Blocked before Cody execution.",
   },
 ]
 
 export const oarTransitionLog: OarTransitionLogEntry[] = [
   {
+    transition_event_key: "c3fc_phase_1_oar_operations_spine_v1_operator_confirmed",
     process_instance_key: "c3fc_phase_1_oar_operations_spine_v1",
     actor: "operator",
     from_status: "not_queued",
     to_status: "confirmed",
+    transition_type: "queue",
     timestamp: "2026-05-14T00:00:00-05:00",
     notes: "OAR2 routed as Phase 1 operational spine implementation surface.",
     evidence_reference: "docs/oar/c3_field_convergence/oar2_phase_1_oar_operations_spine_v1.meta.md",
   },
   {
+    transition_event_key: "c3fc_phase_1_oar_operations_spine_v1_cody_executing",
     process_instance_key: "c3fc_phase_1_oar_operations_spine_v1",
     actor: "cody",
     from_status: "confirmed",
     to_status: "executing",
+    transition_type: "execution",
     timestamp: "2026-05-14T00:10:00-05:00",
     notes: "Cody execution began from seated OAR2 authority.",
     evidence_reference: "src/c3_field_convergence/operationsSpine.ts",
   },
   {
+    transition_event_key: "c3fc_phase_1_oar_operations_spine_v1_pending_validation",
     process_instance_key: "c3fc_phase_1_oar_operations_spine_v1",
     actor: "cody",
     from_status: "executing",
     to_status: "pending_validation",
+    transition_type: "validation",
     timestamp: "2026-05-14T00:20:00-05:00",
     notes: "OAR operations console implemented; OAR1 proof required for closeout.",
     evidence_reference: "docs/oar/c3_field_convergence/oar1_phase_1_oar_operations_spine_v1.meta.md",
   },
   {
+    transition_event_key: "controlled_valid_oar2_cycle_v1_completed",
     process_instance_key: "controlled_valid_oar2_cycle_v1",
     actor: "cody",
     from_status: "queued",
     to_status: "completed",
+    transition_type: "execution",
     timestamp: "2026-05-14T00:30:00-05:00",
     notes: "Controlled valid lifecycle reached OAR1 proof and external validation queue.",
     evidence_reference: "src/c3_field_convergence/operationsSpine.ts",
   },
   {
+    transition_event_key: "controlled_held_oar2_cycle_v1_held",
     process_instance_key: "controlled_held_oar2_cycle_v1",
     actor: "notchazz",
     from_status: "queued",
     to_status: "held_pending_operator",
+    transition_type: "held",
     timestamp: "2026-05-14T00:40:00-05:00",
     notes: "Held lifecycle preserved visible stop condition before execution completion.",
     evidence_reference: "src/c3_field_convergence/operationsSpine.ts",
   },
   {
+    transition_event_key: "controlled_correction_lineage_oar2_cycle_v1_correction_required",
     process_instance_key: "controlled_correction_lineage_oar2_cycle_v1",
     actor: "chazz",
     from_status: "pending_validation",
     to_status: "correction_required",
+    transition_type: "correction",
     timestamp: "2026-05-14T00:50:00-05:00",
     notes: "Correction lineage preserved source OAR2, partial OAR1, finding, and correction OAR2 route.",
     evidence_reference: "docs/oar/c3_field_convergence/oar2_controlled_correction_followup_v1.meta.md",

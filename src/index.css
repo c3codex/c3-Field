@@ -91,6 +91,38 @@ body,
   max-width: 760px;
 }
 
+.c3-persistence-banner {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.c3-persistence-banner span:not(.c3-status-pill) {
+  color: #5b5144;
+  font-size: 0.92rem;
+}
+
+.c3-persistence-held {
+  background: #fff8e8;
+  border: 1px solid #dfcb8a;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.c3-persistence-held h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-weight: 500;
+  margin: 0;
+}
+
+.c3-persistence-held p:not(.c3-ops-kicker) {
+  line-height: 1.55;
+  margin: 10px 0 0;
+}
+
 .c3-ops-summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -188,7 +220,9 @@ body,
 .c3-status-confirmed,
 .c3-status-completed,
 .c3-status-configured,
-.c3-status-automatic_pass {
+.c3-status-automatic_pass,
+.c3-status-seeded,
+.c3-status-registry_backed {
   background: #dceadd;
   border-color: #9dc79f;
   color: #244f2a;
@@ -198,7 +232,8 @@ body,
 .c3-status-correction_required,
 .c3-status-not_authorized,
 .c3-status-review_only,
-.c3-status-proposed {
+.c3-status-proposed,
+.c3-status-unseeded_blocked {
   background: #f3dfd9;
   border-color: #dda999;
   color: #7b3326;
@@ -207,7 +242,8 @@ body,
 .c3-status-pending_validation,
 .c3-status-chazz_review_required,
 .c3-status-operator_required,
-.c3-status-held {
+.c3-status-held,
+.c3-status-held_pending_persistence {
   background: #f3edcf;
   border-color: #dbc978;
   color: #5d5018;

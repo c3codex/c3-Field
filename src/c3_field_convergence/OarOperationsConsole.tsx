@@ -1,14 +1,16 @@
+import { useEffect, useState } from "react"
 import {
   canEnterOarQueue,
   heldStates,
-  oarProcessInstances,
-  oarTransitionLog,
   queueBlockReason,
-  seededReferenceReview,
   validateImmutableTransitionLog,
   validateQueueIntegrity,
   validationStates,
+  type OarProcessInstance,
+  type OarTransitionLogEntry,
+  type SpineValidationCheck,
 } from "./operationsSpine"
+import { loadOarSpineRegistry, type OarSpineRegistryState } from "./oarSpineRegistry"
 
 function statusLabel(value: string | null) {
   return value ? value.replaceAll("_", " ") : "not recorded"
@@ -20,10 +22,41 @@ function StatusPill({ value }: { value: string | null }) {
 }
 
 export default function OarOperationsConsole() {
-  const executableCount = oarProcessInstances.filter(canEnterOarQueue).length
-  const blockedCount = oarProcessInstances.length - executableCount
-  const queueChecks = validateQueueIntegrity(oarProcessInstances)
-  const logChecks = validateImmutableTransitionLog(oarTransitionLog)
+  const [registryState, setRegistryState] = useState<OarSpineRegistryState | null>(null)
+  const [registryError, setRegistryError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+
+    loadOarSpineRegistry()
+      .then((state) => {
+        if (!active) return
+        setRegistryState(state)
+        setRegistryError(null)
+      })
+      .catch((error: unknown) => {
+        if (!active) return
+        const message = error instanceof Error ? error.message : "Persistent registry standing unavailable"
+        setRegistryError(message)
+        setRegistryState(null)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const processInstances: OarProcessInstance[] = registryState?.processInstances ?? []
+  const transitionLog: OarTransitionLogEntry[] = registryState?.transitionLog ?? []
+  const executableCount = processInstances.filter(canEnterOarQueue).length
+  const blockedCount = processInstances.length - executableCount
+  const queueChecks: SpineValidationCheck[] = registryState ? validateQueueIntegrity(processInstances) : []
+  const logChecks: SpineValidationCheck[] = registryState ? validateImmutableTransitionLog(transitionLog) : []
+  const seededChecks = registryState?.seededReferenceChecks ?? []
+  const persistenceStanding = registryState?.persistenceStanding ?? "held_pending_persistence"
+  const persistenceMessage =
+    registryState?.persistenceMessage ??
+    `Persistent registry state is not available: ${registryError ?? "loading registry standing"}`
 
   return (
     <main className="c3-ops-shell">
@@ -35,6 +68,10 @@ export default function OarOperationsConsole() {
             Phase 1 process continuity surface for OAR2 queueing, Cody execution proof,
             Chazz validation routing, held-state governance, and immutable transition trace.
           </p>
+          <div className="c3-persistence-banner">
+            <StatusPill value={persistenceStanding} />
+            <span>{persistenceMessage}</span>
+          </div>
         </div>
         <dl className="c3-ops-summary">
           <div>
@@ -52,13 +89,26 @@ export default function OarOperationsConsole() {
         </dl>
       </section>
 
+      {!registryState && (
+        <section className="c3-ops-section" aria-labelledby="persistence-held">
+          <div className="c3-persistence-held">
+            <p className="c3-ops-kicker">Persistence</p>
+            <h2 id="persistence-held">Registry Standing Held</h2>
+            <p>
+              The console is waiting for Supabase persistence tables to be available. It will not
+              substitute modeled runtime state for missing registry-backed standing.
+            </p>
+          </div>
+        </section>
+      )}
+
       <section className="c3-ops-section" aria-labelledby="process-instances">
         <div className="c3-section-heading">
           <p className="c3-ops-kicker">Queue</p>
           <h2 id="process-instances">Process Instances</h2>
         </div>
         <div className="c3-process-grid">
-          {oarProcessInstances.map((instance) => {
+          {processInstances.map((instance) => {
             const blockReason = queueBlockReason(instance)
 
             return (
@@ -87,6 +137,10 @@ export default function OarOperationsConsole() {
                     <dt>Held</dt>
                     <dd><StatusPill value={instance.held_standing} /></dd>
                   </div>
+                  <div>
+                    <dt>Seeded</dt>
+                    <dd><StatusPill value={instance.seeded_reference_standing} /></dd>
+                  </div>
                 </dl>
                 <div className="c3-path-list">
                   <p><span>OAR2</span>{instance.source_oar2_path}</p>
@@ -99,6 +153,8 @@ export default function OarOperationsConsole() {
                     <p><span>Finding</span>{instance.validation_finding ?? "not recorded"}</p>
                     <p><span>Source OAR2</span>{instance.correction_source_oar2_path ?? "not correction lineage"}</p>
                     <p><span>Correction OAR2</span>{instance.correction_oar2_path ?? "not routed"}</p>
+                    <p><span>Partial OAR1</span>{instance.partial_oar1_reference ?? "not recorded"}</p>
+                    <p><span>Correction Scope</span>{instance.correction_scope ?? "not recorded"}</p>
                   </div>
                 )}
                 <p className="c3-process-result">{blockReason ?? instance.execution_result}</p>
@@ -114,7 +170,7 @@ export default function OarOperationsConsole() {
           <h2 id="validation-checks">Validation Checks</h2>
         </div>
         <div className="c3-check-grid">
-          {[...queueChecks, ...logChecks, ...seededReferenceReview].map((check) => (
+          {[...queueChecks, ...logChecks, ...seededChecks].map((check) => (
             <article className="c3-check-card" key={check.check_key}>
               <div>
                 <h3>{statusLabel(check.check_key)}</h3>
@@ -157,14 +213,15 @@ export default function OarOperationsConsole() {
           <h2 id="transition-log">Immutable Transition Log</h2>
         </div>
         <div className="c3-transition-log">
-          {oarTransitionLog.map((entry) => (
+          {transitionLog.map((entry) => (
             <article className="c3-log-entry" key={`${entry.process_instance_key}-${entry.timestamp}`}>
               <div>
                 <strong>{entry.actor}</strong>
-                <span>{entry.timestamp}</span>
+                <span>{entry.transition_type} · {entry.timestamp}</span>
               </div>
               <p>{statusLabel(entry.from_status)} {"->"} {statusLabel(entry.to_status)}</p>
               <small>{entry.notes}</small>
+              <code>{entry.transition_event_key}</code>
               <code>{entry.evidence_reference ?? "no evidence reference"}</code>
             </article>
           ))}
