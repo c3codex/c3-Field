@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: working
 document_scope: phase_2_1_production_persistence_seating
 title: OAR1 — Phase 2.1 Production Persistence Seating
-status: held
+status: seeded
 version: v1
 operator: op044
 initiative: c3_field_convergence
@@ -33,17 +33,17 @@ source_alignment:
 
 ## OBJECTIVE
 
-Record Cody execution evidence for the production persistence seating attempt.
+Record Cody execution evidence for production persistence seating.
 
-This OAR1 records held standing because the production Supabase database password was not accepted by the remote database.
+This OAR1 records that held persistence standing resolved through actual registry-backed persistence.
 
-Held standing is valid operational standing.
+No public completeness claim is made.
 
 ---
 
 ## ACTION
 
-Cody attempted to seat production persistence for:
+Cody seated production persistence for:
 
 ```txt
 supabase/migrations/202605140001_c3_field_oar_spine_persistence.sql
@@ -75,77 +75,95 @@ Correct pooler standing after relink:
 aws-1-us-east-1.pooler.supabase.com
 ```
 
+Supabase CLI dry-run succeeded through the session pooler and reported pending migrations:
+
+```txt
+202605120001_expand_codex_media_asset_storage_provider.sql
+202605140001_c3_field_oar_spine_persistence.sql
+```
+
+Both migrations were applied successfully.
+
 ---
 
-## VERIFICATION ATTEMPT
+## VERIFICATION
 
-Runtime table verification was attempted through Supabase service-role client.
+Runtime table verification was completed through Supabase service-role and anon clients.
 
-Required tables were not visible to PostgREST schema cache:
+Required tables are visible through PostgREST:
 
 - `public.c3_oar_process_instance`
 - `public.c3_oar_transition_event`
 - `public.c3_oar_seeded_reference`
 
-Observed runtime retrieval error:
+Verified row standing:
 
 ```txt
-Could not find the table in the schema cache
+c3_oar_process_instance: 6 rows
+c3_oar_transition_event: 6 rows
+c3_oar_seeded_reference: 4 rows
 ```
 
-This confirms the live console's `HELD PENDING PERSISTENCE` standing is coherent.
+Anon runtime read access was verified for all three tables.
 
-The frontend did not invent registry state.
+Anon runtime write attempt was rejected by RLS.
 
 ---
 
-## MIGRATION APPLY ATTEMPT
+## APPEND-ONLY VERIFICATION
 
-Cody attempted Supabase CLI dry-run before applying migration.
+Append-only transition protection was verified.
 
-Dry-run failed because the provided database password did not authenticate against the remote Postgres role.
-
-Observed standing:
+Service-role update attempt against `c3_oar_transition_event` was rejected:
 
 ```txt
-password authentication failed for user "postgres"
+c3_oar_transition_event is append-only
 ```
 
-Because authentication failed, Cody did not apply the migration.
+Service-role delete attempt against `c3_oar_transition_event` was rejected:
 
-No production persistence mutation was completed.
+```txt
+c3_oar_transition_event is append-only
+```
+
+Transition records remain append-only.
 
 ---
 
-## HELD STANDING
+## RUNTIME RESOLUTION
+
+Live runtime verification was completed at:
+
+```txt
+https://c3field.online/
+```
+
+Observed live standing:
+
+```txt
+registry backed
+Rendering persistent Supabase registry standing.
+```
+
+The live console no longer reports:
+
+```txt
+Registry Standing Held
+```
+
+Held persistence resolved only after registry standing existed.
+
+---
+
+## COMPLETED STANDING
 
 Current standing:
 
 ```txt
-held_pending_operator
+registry_backed
 ```
 
-Held reason:
-
-The production Supabase database password is required before Cody can apply:
-
-```txt
-supabase db push --password <database-password>
-```
-
-or the operator may manually run the SQL migration in the Supabase SQL editor.
-
-Required SQL file:
-
-```txt
-supabase/migrations/202605140001_c3_field_oar_spine_persistence.sql
-```
-
----
-
-## NOT COMPLETED
-
-The following OAR2 validation items remain held:
+Completed OAR2 validation items:
 
 - migration applied
 - required tables exist
@@ -169,30 +187,13 @@ Cody did not:
 
 ---
 
-## NEXT UNLOCK
-
-To complete this OAR2, provide the actual Supabase database password or manually apply the migration SQL in the Supabase dashboard.
-
-After migration application, Cody must verify:
-
-- table existence
-- seeded process rows
-- seeded transition rows
-- seeded reference rows
-- append-only update/delete rejection
-- anon/runtime read access
-- anon/runtime write rejection
-- c3field.online resolves from persistent registry state
-
----
-
 ## CLOSE
 
-Production persistence seating remains held.
+Production persistence seating is complete.
 
-The hold is coherent.
+The prior hold was coherent and resolved through actual persistence.
 
-Registry standing must exist before held persistence resolves.
+Registry standing now exists before runtime recognition.
 
 Codex holds.
 Field structures.
