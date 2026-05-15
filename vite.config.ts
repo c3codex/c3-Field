@@ -32,6 +32,11 @@ export default defineConfig(({ mode }) => {
     env.VITE_R2_PUBLIC_BASE_URL ||
     cloudflareEnv.VITE_R2_PUBLIC_BASE_URL ||
     ""
+  const c3FieldR2PublicBaseUrl =
+    process.env.VITE_C3FIELD_R2_PUBLIC_BASE_URL ||
+    env.VITE_C3FIELD_R2_PUBLIC_BASE_URL ||
+    cloudflareEnv.VITE_C3FIELD_R2_PUBLIC_BASE_URL ||
+    ""
 
   return {
     plugins: [react()],
@@ -39,6 +44,7 @@ export default defineConfig(({ mode }) => {
       "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(supabaseUrl),
       "import.meta.env.VITE_SUPABASE_ANON_KEY": JSON.stringify(supabaseAnonKey),
       "import.meta.env.VITE_R2_PUBLIC_BASE_URL": JSON.stringify(r2PublicBaseUrl),
+      "import.meta.env.VITE_C3FIELD_R2_PUBLIC_BASE_URL": JSON.stringify(c3FieldR2PublicBaseUrl),
     },
     resolve: {
       alias: {
