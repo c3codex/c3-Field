@@ -30,6 +30,7 @@ corrections_applied:
   - removed unseated SRC3 from current seed scope
   - replaced duplicate Isomorphism seating with Quantum Entanglement
   - documented Geometric Logic at seed level as protected pattern reference
+  - incorporated TREE and c3 Boundary distinction without altering native order
 ---
 
 # Seed Concordance
@@ -791,12 +792,77 @@ The current seed scope seats:
 - Chazz_roles
 - Protected Systems Intelligence
 - Quantum Entanglement
+- TREE
+- c3 Boundary
 
 The current seed scope does **not** seat:
 
 - **SRC3**
 
 SRC3 is DAO and web3 specific and remains outside current seed concordance seating.
+
+---
+
+## TREE and c3 Boundary
+
+### TREE
+
+Traced Rooted Encounter Environment.
+
+TREE is the coherent living environment through which rooted systems become encounterable without losing trace, relation, or authority continuity.
+
+TREE makes the Field visible without exposing the Roots.
+
+TREE does not replace Codex, Field, Measures, OAR, Chazz, Cody, src, or the rooted execution spine.
+
+- **Axis:** Field
+- **Circuit:** c1 c2 c3
+- **Role:** traced rooted encounter environment
+- **Resolves to:** visible coherent relation across rooted branches
+
+### c3 Boundary
+
+The c3 Model functions as the Boundary circuit of TREE.
+
+- **Connect** establishes relational eligibility
+- **Contribute** establishes participatory standing
+- **Create** establishes formed operational outcome
+
+Boundary determines which rooted system operates an encounter.
+
+- **Axis:** Coherence
+- **Circuit:** c1 c2 c3
+- **Role:** boundary circuit
+- **Resolves to:** valid branch relation and operational eligibility
+
+### TREE Layer Terms
+
+- **Roots:** Codex continuity
+- **Field:** relational structure
+- **Boundary:** c3 circuit
+- **Measures:** registry trunk / reveal order
+- **Branches:** rooted operational encounter expressions
+- **Canopy:** traced communication layer
+- **Environment:** coherent living relation
+
+### Conversion Engine Distinction
+
+The conversion engine is a rooted operational system within c3 Field.
+It is not c3 Field itself.
+
+Not every branch requires Measures Conversion.
+Every valid branch must remain in c3 relation.
+
+Native order remains:
+
+`Codex -> Field -> Measures -> Chazz`
+
+Where conversion-engine routing applies, the rooted operational spine remains:
+
+`Codex -> Field -> Measures -> OAR2 -> Chazz -> Cody -> src`
+
+TREE conditions the environment.
+TREE does not replace the spine.
 
 ---
 
