@@ -2,7 +2,7 @@
 document_type: oar1
 title: OAR1 Concordance Authority Migration Execution Authorization
 version: v1
-status: blocked_partial
+status: recorded
 system: c3_field
 operator: op044
 source_oar2: docs/oar/c3_field/oar2_concordance_authority_migration_execution_authorization_v1.meta.md
@@ -42,16 +42,27 @@ Missing expected package files:
 - none observed
 
 ### Git Commit Requirement
-Execution package standing was already committed at:
+Execution package standing was committed before live execution.
 
-`525c5e9 concordance authority`
+Relevant commits:
 
-A local execution helper was added and committed before live execution:
-
-`c62a8af Add concordance authority execution helper`
+- `525c5e9 concordance authority`
+- `c62a8af Add concordance authority execution helper`
+- `377c9a9 Seat concordance authority execution package v1`
 
 ### Seeded-State Confirmation
-The execution package was treated as seeded-reference standing for this execution attempt. No SQL package logic was revised during execution.
+The execution package was treated as seeded-reference standing. No SQL package logic was revised during execution.
+
+## Prior Stopped Attempt
+The first execution attempt passed preflight but stopped at Phase 2 because the Supabase `exec_sql` RPC path rejected transaction control commands:
+
+`EXECUTE of transaction commands is not implemented`
+
+Stop-on-failure held. No seating occurred during that attempt.
+
+Correction route:
+
+`docs/oar/c3_field/oar2_concordance_authority_rpc_compatible_migration_packaging_v1.meta.md`
 
 ## Executed Phases
 ### Phase 1 - Preflight Validation
@@ -61,6 +72,7 @@ Command:
 
 Result:
 
+- RPC package validation: ok
 - DB connection: ok
 - Preflight SQL: ok
 - Preflight return: `{"ok":true}`
@@ -76,45 +88,63 @@ Command:
 
 Result:
 
+- RPC package validation: ok
 - DB connection: ok
 - Preflight SQL: ok
-- Migration SQL: failed
-
-Failure:
-
-`EXECUTE of transaction commands is not implemented`
-
-Interpretation:
-
-The reviewed migration package contains transaction control commands. The available Supabase `exec_sql` RPC path rejected transaction control inside dynamic execution. Cody did not alter the migration SQL to remove `begin` / `commit`, because this OAR2 forbids altering migration logic during execution.
+- Migration SQL: ok
+- Migration return: `{"ok":true}`
 
 Standing:
 
-`blocked`
+`passed`
 
 ### Phase 3 - Seed Concordance Seating
-Not executed.
+Result:
 
-Reason:
+- Seed Concordance seating SQL: ok
+- Seating return: `{"ok":true}`
 
-Phase 2 failed. Stop-on-failure rule engaged.
+Standing:
+
+`passed`
 
 ### Phase 4 - Post-Validation
-Not executed.
+Result:
 
-Reason:
+- Post-validation SQL: ok
+- Post-validation return: `{"ok":true}`
 
-Migration did not complete and Seed Concordance seating did not run.
+Follow-up read-only count validation after schema visibility settled:
+
+- `concordance_document`: 1
+- `concordance_version`: 1
+- `concordance_term` for `seed_concordance_v1`: 9
+- `concordance_relation` for `seed_concordance_v1`: 9
+- `seeded_source_snapshot` for `seed_concordance_v1`: 1
+
+Standing:
+
+`passed`
 
 ### Phase 5 - OAR1 Closeout
-This OAR1 records the stopped execution attempt.
+This OAR1 records the successful execution after RPC-compatible packaging correction.
+
+## Validation Results
+- Migration executed.
+- Seed Concordance seated.
+- Validation SQL passed.
+- Append-protection SQL was included in the migration execution package.
+- RLS enablement SQL was included in the migration execution package.
+- Active-version uniqueness index was included in the migration execution package.
+- Relation references remain scope-neutral through `source_ref` and `target_ref`.
+- Read-only row counts confirmed seated authority rows.
 
 ## Rollback Usage
 Rollback package was not executed.
 
 Reason:
 
-The migration failed at the RPC transaction-command boundary before seating began. No partial seating was continued.
+Migration, seating, and validation completed after RPC-compatible packaging correction.
 
 ## Authority Boundary Preserved
 `Codex seating = authority`
@@ -129,17 +159,17 @@ No runtime/frontend mutation was performed.
 
 ## Constraints Held
 - Preflight ran before migration.
-- Execution stopped after Phase 2 failure.
-- Seed Concordance seating did not run.
-- Post-validation did not run.
-- No migration SQL was edited during execution.
-- No improvised schema recovery was attempted.
+- Migration ran before Seed Concordance seating.
+- Seating ran before post-validation.
+- Stop-on-failure remained active.
+- No migration SQL was altered during execution.
+- No improvised recovery logic was used.
 - No runtime/frontend work was performed.
 
 ## Final Standing
-`blocked_partial`
+`recorded`
 
-Preflight passed. Migration execution is blocked by the current Supabase RPC execution path because transaction commands are present in the reviewed SQL package.
+Concordance Authority migration executed and Seed Concordance v1 seated through the reviewed RPC-compatible package.
 
 ## Files
 - docs/oar/c3_field/oar2_concordance_authority_migration_execution_authorization_v1.meta.md
@@ -153,5 +183,6 @@ Preflight passed. Migration execution is blocked by the current Supabase RPC exe
 
 ## Close
 Validate first: passed.
-Execute second: blocked.
-Stop-on-failure held.
+Execute second: passed.
+Verify third: passed.
+Log fourth: recorded.
