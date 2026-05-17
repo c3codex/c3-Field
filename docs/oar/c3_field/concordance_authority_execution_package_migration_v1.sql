@@ -66,8 +66,8 @@ create table if not exists public.concordance_term (
 create table if not exists public.concordance_relation (
   relation_key text primary key,
   version_key text not null references public.concordance_version(version_key),
-  source_term_key text references public.concordance_term(term_key),
-  target_term_key text references public.concordance_term(term_key),
+  source_ref text,
+  target_ref text,
   relation_scope text not null default 'term' check (
     relation_scope in ('term', 'document', 'version', 'cross_version', 'branch', 'system')
   ),
@@ -96,8 +96,8 @@ create table if not exists public.concordance_relation (
   created_at timestamptz not null default now(),
   constraint concordance_relation_unique unique (
     version_key,
-    source_term_key,
-    target_term_key,
+    source_ref,
+    target_ref,
     relation_type
   )
 );
@@ -157,11 +157,11 @@ on public.concordance_relation(version_key);
 create index if not exists concordance_relation_scope_idx
 on public.concordance_relation(version_key, relation_scope);
 
-create index if not exists concordance_relation_source_term_idx
-on public.concordance_relation(source_term_key);
+create index if not exists concordance_relation_source_ref_idx
+on public.concordance_relation(source_ref);
 
-create index if not exists concordance_relation_target_term_idx
-on public.concordance_relation(target_term_key);
+create index if not exists concordance_relation_target_ref_idx
+on public.concordance_relation(target_ref);
 
 create index if not exists seeded_source_snapshot_version_key_idx
 on public.seeded_source_snapshot(version_key);

@@ -118,6 +118,29 @@ from public.concordance_relation
 group by relation_scope
 order by relation_scope;
 
+-- Scope-neutral relation references.
+select column_name, data_type, column_default, is_nullable
+from information_schema.columns
+where table_schema = 'public'
+  and table_name = 'concordance_relation'
+  and column_name in ('source_ref', 'target_ref')
+order by column_name;
+
+select relation_scope, count(*) as scoped_relation_count
+from public.concordance_relation
+where source_ref is not null
+   or target_ref is not null
+group by relation_scope
+order by relation_scope;
+
+select relation_key, relation_scope, source_ref, target_ref
+from public.concordance_relation
+where relation_scope <> 'term'
+  and (
+    source_ref ilike 'seed_concordance_v1_%'
+    or target_ref ilike 'seed_concordance_v1_%'
+  );
+
 -- Visibility/access standing support.
 select table_name, column_name, data_type, column_default, is_nullable
 from information_schema.columns

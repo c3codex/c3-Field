@@ -38,6 +38,11 @@ where version_key = 'seed_concordance_v1'
 group by relation_type, relation_scope
 order by relation_type, relation_scope;
 
+select relation_key, relation_scope, source_ref, target_ref, relation_type
+from public.concordance_relation
+where version_key = 'seed_concordance_v1'
+order by relation_scope, relation_type, relation_key;
+
 select *
 from public.seeded_source_snapshot
 where version_key = 'seed_concordance_v1';

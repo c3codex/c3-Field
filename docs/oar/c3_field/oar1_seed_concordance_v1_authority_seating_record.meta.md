@@ -60,7 +60,7 @@ Define the compact pre-execution Seed Concordance v1 authority seating payload f
 
 ## Initial Relation Seating Set
 ### Native Order
-| relation_key | relation_scope | relation_type | source | target | relation_label | relation_standing | visibility_standing |
+| relation_key | relation_scope | relation_type | source_ref | target_ref | relation_label | relation_standing | visibility_standing |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `seed_concordance_v1_native_order_codex_field` | system | native_order | Codex | Field | Codex precedes Field | active | internal |
 | `seed_concordance_v1_native_order_field_measures` | system | native_order | Field | Measures | Field precedes Measures | active | internal |
@@ -70,7 +70,7 @@ Define the compact pre-execution Seed Concordance v1 authority seating payload f
 | `seed_concordance_v1_execution_spine_cody_src` | system | native_order | Cody | src | Cody implements src | active | internal |
 
 ### Axis
-| relation_key | relation_scope | relation_type | source | target | relation_label | relation_standing | visibility_standing |
+| relation_key | relation_scope | relation_type | source_ref | target_ref | relation_label | relation_standing | visibility_standing |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `seed_concordance_v1_axis_codex_authority` | term | axis | Codex | authority | Codex resolves to authority axis | active | internal |
 | `seed_concordance_v1_axis_field_structure` | term | axis | Field | structure | Field resolves to structure axis | active | internal |
@@ -81,7 +81,7 @@ Define the compact pre-execution Seed Concordance v1 authority seating payload f
 | `seed_concordance_v1_axis_oar2_coherence` | term | axis | OAR2 | Coherence | OAR2 resolves to Coherence axis | active | internal |
 
 ### Circuit
-| relation_key | relation_scope | relation_type | source | target | relation_label | relation_standing | visibility_standing |
+| relation_key | relation_scope | relation_type | source_ref | target_ref | relation_label | relation_standing | visibility_standing |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `seed_concordance_v1_circuit_tree_c1_c2_c3` | term | circuit | TREE | c1 c2 c3 | TREE operates through c1 c2 c3 circuit | active | internal |
 | `seed_concordance_v1_circuit_c3_boundary_c1_c2_c3` | term | circuit | c3 Boundary | c1 c2 c3 | Boundary is c1 c2 c3 circuit | active | internal |
@@ -90,7 +90,7 @@ Define the compact pre-execution Seed Concordance v1 authority seating payload f
 | `seed_concordance_v1_circuit_src_spine` | term | circuit | src | rooted execution spine | src renders seated state from route | active | internal |
 
 ### Role
-| relation_key | relation_scope | relation_type | source | target | relation_label | relation_standing | visibility_standing |
+| relation_key | relation_scope | relation_type | source_ref | target_ref | relation_label | relation_standing | visibility_standing |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `seed_concordance_v1_role_codex_authority_holder` | term | role | Codex | authority holder | Codex holds authority | active | internal |
 | `seed_concordance_v1_role_field_structural_organizer` | term | role | Field | structural organizer | Field structures relation | active | internal |
@@ -103,7 +103,7 @@ Define the compact pre-execution Seed Concordance v1 authority seating payload f
 | `seed_concordance_v1_role_oar2_verifier` | term | role | OAR2 | return trace verifier | OAR2 verifies routed execution continuity | active | internal |
 
 ### Resolves To
-| relation_key | relation_scope | relation_type | source | target | relation_label | relation_standing | visibility_standing |
+| relation_key | relation_scope | relation_type | source_ref | target_ref | relation_label | relation_standing | visibility_standing |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `seed_concordance_v1_resolves_codex_append_record` | term | resolves_to | Codex | append-only record | Codex resolves to append-only record | active | internal |
 | `seed_concordance_v1_resolves_field_relation` | term | resolves_to | Field | coherent relation | Field resolves to coherent relation | active | internal |
@@ -114,7 +114,7 @@ Define the compact pre-execution Seed Concordance v1 authority seating payload f
 | `seed_concordance_v1_resolves_oar2_continuity` | term | resolves_to | OAR2 | routed execution continuity | OAR2 resolves to routed execution continuity | active | internal |
 
 ### Source Alignment
-| relation_key | relation_scope | relation_type | source | target | relation_label | relation_standing | visibility_standing |
+| relation_key | relation_scope | relation_type | source_ref | target_ref | relation_label | relation_standing | visibility_standing |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `seed_concordance_v1_source_seed_concordance` | document | source_alignment | Seed Concordance v1 | docs/_source/seed/seed_concordance.meta.md | Local Seed Concordance source | active | internal |
 | `seed_concordance_v1_source_tree_c3_oar2` | document | source_alignment | Seed Concordance v1 | docs/oar/c3_field/oar2_incorporate_tree_c3_boundary_into_seed_concordance_v1.meta.md | TREE + c3 Boundary incorporation route | active | internal |

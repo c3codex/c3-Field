@@ -195,8 +195,8 @@ on conflict (term_key) do nothing;
 insert into public.concordance_relation (
   relation_key,
   version_key,
-  source_term_key,
-  target_term_key,
+  source_ref,
+  target_ref,
   relation_scope,
   relation_type,
   relation_label,
@@ -211,9 +211,9 @@ insert into public.concordance_relation (
 ('seed_concordance_v1_execution_spine_oar2_chazz','seed_concordance_v1','seed_concordance_v1_oar2','seed_concordance_v1_chazz','system','native_order','OAR2 routes before Chazz execution','active','internal','docs/oar/c3_field/oar2_seed_concordance_v1_authority_seating_record.meta.md','{}'::jsonb),
 ('seed_concordance_v1_execution_spine_chazz_cody','seed_concordance_v1','seed_concordance_v1_chazz','seed_concordance_v1_cody','system','native_order','Chazz validates and routes before Cody implementation','active','internal','docs/oar/c3_field/oar2_seed_concordance_v1_authority_seating_record.meta.md','{}'::jsonb),
 ('seed_concordance_v1_execution_spine_cody_src','seed_concordance_v1','seed_concordance_v1_cody','seed_concordance_v1_src','system','native_order','Cody implements src','active','internal','docs/oar/c3_field/oar2_seed_concordance_v1_authority_seating_record.meta.md','{}'::jsonb),
-('seed_concordance_v1_source_tree_c3_oar2','seed_concordance_v1',null,null,'document','source_alignment','TREE + c3 Boundary incorporation route','active','internal','docs/oar/c3_field/oar2_incorporate_tree_c3_boundary_into_seed_concordance_v1.meta.md','{"target": "docs/oar/c3_field/oar2_incorporate_tree_c3_boundary_into_seed_concordance_v1.meta.md"}'::jsonb),
-('seed_concordance_v1_source_authority_model','seed_concordance_v1',null,null,'document','source_alignment','Concordance authority model','active','internal','docs/oar/c3_field/oar2_concordance_authority_model_definition_v1.meta.md','{"target": "docs/oar/c3_field/oar1_concordance_authority_model_definition_v1.meta.md"}'::jsonb),
-('seed_concordance_v1_source_sql_hardening','seed_concordance_v1',null,null,'document','source_alignment','SQL draft hardening record','active','internal','docs/oar/c3_field/oar2_concordance_authority_sql_draft_hardening_v1.meta.md','{"target": "docs/oar/c3_field/oar1_concordance_authority_sql_draft_hardening_v1.meta.md"}'::jsonb)
+('seed_concordance_v1_source_tree_c3_oar2','seed_concordance_v1','seed_concordance_v1','docs/oar/c3_field/oar2_incorporate_tree_c3_boundary_into_seed_concordance_v1.meta.md','document','source_alignment','TREE + c3 Boundary incorporation route','active','internal','docs/oar/c3_field/oar2_incorporate_tree_c3_boundary_into_seed_concordance_v1.meta.md','{"target": "docs/oar/c3_field/oar2_incorporate_tree_c3_boundary_into_seed_concordance_v1.meta.md"}'::jsonb),
+('seed_concordance_v1_source_authority_model','seed_concordance_v1','seed_concordance_v1','docs/oar/c3_field/oar1_concordance_authority_model_definition_v1.meta.md','document','source_alignment','Concordance authority model','active','internal','docs/oar/c3_field/oar2_concordance_authority_model_definition_v1.meta.md','{"target": "docs/oar/c3_field/oar1_concordance_authority_model_definition_v1.meta.md"}'::jsonb),
+('seed_concordance_v1_source_sql_hardening','seed_concordance_v1','seed_concordance_v1','docs/oar/c3_field/oar1_concordance_authority_sql_draft_hardening_v1.meta.md','document','source_alignment','SQL draft hardening record','active','internal','docs/oar/c3_field/oar2_concordance_authority_sql_draft_hardening_v1.meta.md','{"target": "docs/oar/c3_field/oar1_concordance_authority_sql_draft_hardening_v1.meta.md"}'::jsonb)
 on conflict (relation_key) do nothing;
 
 insert into public.seeded_source_snapshot (
