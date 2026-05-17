@@ -1,8 +1,7 @@
 -- Seed Concordance v1 Authority Seating SQL
 -- Source OAR2: docs/oar/c3_field/oar2_concordance_authority_migration_execution_package_v1.meta.md
 -- REVIEW ARTIFACT ONLY. Do not execute without a separate confirmed execution OAR2.
-
-begin;
+-- RPC-compatible package: stop-on-failure is enforced by the execution helper.
 
 insert into public.concordance_document (
   document_key,
@@ -248,5 +247,3 @@ insert into public.seeded_source_snapshot (
   '{"standing_note": "Bucket metadata indicated refreshed byte size, but final hash readback remained unresolved in prior preflight.", "authority_boundary": "snapshot != authority"}'::jsonb
 )
 on conflict (snapshot_key) do nothing;
-
-commit;

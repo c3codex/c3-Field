@@ -25,6 +25,13 @@ const files = {
     "docs/oar/c3_field/concordance_authority_execution_package_post_validation_v1.sql",
 }
 
+const rpcExecutedFiles = [
+  files.preflight,
+  files.migration,
+  files.seating,
+  files.postValidation,
+]
+
 async function assertOk(result, label) {
   if (result.error) throw new Error(`${label}: ${result.error.message}`)
   return result.data
@@ -32,12 +39,33 @@ async function assertOk(result, label) {
 
 async function execSqlFile(path, label) {
   const sql = fs.readFileSync(path, "utf8")
+  assertRpcCompatibleSql(sql, label)
   const { data, error } = await supabase.rpc("exec_sql", { sql })
   if (error) throw new Error(`${label}: ${error.message}`)
   console.log(`${label}: ok`)
   if (data !== null && data !== undefined) {
     console.log(`${label}: ${JSON.stringify(data)}`)
   }
+}
+
+function assertRpcCompatibleSql(sql, label) {
+  const transactionCommand = /^\s*(begin|commit|rollback)\s*;/gim
+  const match = sql.match(transactionCommand)
+
+  if (match) {
+    throw new Error(
+      `${label}: RPC package contains transaction control: ${match.join(", ")}`,
+    )
+  }
+}
+
+function validateRpcPackage() {
+  for (const path of rpcExecutedFiles) {
+    const sql = fs.readFileSync(path, "utf8")
+    assertRpcCompatibleSql(sql, path)
+  }
+
+  console.log("rpc_package_validation: ok")
 }
 
 async function readCount(table, filter = {}) {
@@ -93,6 +121,9 @@ async function validateExpectedState() {
 
 async function main() {
   const phase = process.argv[2] || "all"
+
+  validateRpcPackage()
+  if (phase === "validate-package") return
 
   await assertOk(
     await supabase.from("measures_registry").select("id").limit(1),

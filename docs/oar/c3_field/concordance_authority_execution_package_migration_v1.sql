@@ -2,8 +2,7 @@
 -- Source OAR2: docs/oar/c3_field/oar2_concordance_authority_migration_execution_package_v1.meta.md
 -- REVIEW ARTIFACT ONLY. Do not execute without a separate confirmed execution OAR2.
 -- Authority rule: Codex seating = authority; bucket snapshot and markdown file are evidence only.
-
-begin;
+-- RPC-compatible package: transaction control is enforced by the execution helper.
 
 create table if not exists public.concordance_document (
   document_key text primary key,
@@ -318,5 +317,3 @@ using (
 );
 
 notify pgrst, 'reload schema';
-
-commit;
