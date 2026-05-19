@@ -435,15 +435,17 @@ export function LapisRelationMappingSurface({
           <div className="c3-lapis-lens-action c3-lapis-lens-action-orient">Orient</div>
           <div className="c3-lapis-lens-action c3-lapis-lens-action-respond">Respond</div>
           <div className="c3-lapis-lens-action c3-lapis-lens-action-reflect">Reflect</div>
-          <div className={`c3-lapis-authority-core ${surfaceClasses(["center_authority_core"])}`}>
+          <div
+            aria-label="Crystal center held authority"
+            className={`c3-lapis-authority-core ${surfaceClasses(["center_authority_core"])}`}
+            role="img"
+          >
             <i
               aria-hidden="true"
               className={`c3-glyph c3-glyph-core ${glyphForMaterial("crystal")?.rendererClass ?? ""}`}
               title={glyphForMaterial("crystal")?.meaningContract}
             />
-            <span>Codex</span>
-            <strong>Field</strong>
-            <small>{crystalGrammar?.geometryRole ?? "crystal held within"}</small>
+            <span className="c3-visually-hidden">{crystalGrammar?.geometryRole ?? "crystal held within"}</span>
           </div>
           {fieldVectors.slice(0, 18).map((vector) => {
             const point = midpoint(vector)

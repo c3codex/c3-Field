@@ -196,7 +196,7 @@ export default function OarOperationsConsole() {
                 onClick={() => setSelectedProcessKey(null)}
                 type="button"
               >
-                Close
+                X
               </button>
             </div>
             <dl className="c3-lens-inspection-standing">

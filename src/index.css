@@ -7,6 +7,18 @@ body,
   width: 100%;
 }
 
+.c3-visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 .measures-registry-runtime {
   min-height: 100svh;
   width: 100%;
@@ -209,6 +221,10 @@ body,
     inset 0 0 120px rgba(0, 0, 0, 0.26);
   overflow: hidden;
   position: relative;
+}
+
+.c3-optics-speak-refinement .c3-runtime-lens-instrument {
+  display: none;
 }
 
 .c3-runtime-lens-instrument .c3-section-heading {
@@ -755,16 +771,12 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-authority-core {
-  background:
-    radial-gradient(circle, rgba(255, 244, 209, 0.74) 0 6%, rgba(255, 176, 56, 0.26) 7% 28%, transparent 58%),
-    conic-gradient(from 45deg, transparent 0 10%, rgba(255, 211, 130, 0.2) 10% 12%, transparent 12% 35%, rgba(103, 184, 255, 0.12) 35% 37%, transparent 37% 62%, rgba(255, 211, 130, 0.18) 62% 64%, transparent 64%);
+  background: none;
   border: 0;
-  box-shadow:
-    0 0 54px rgba(255, 176, 56, 0.26),
-    0 0 96px rgba(103, 184, 255, 0.08);
-  height: clamp(10rem, 24vw, 15rem);
+  box-shadow: none;
+  height: 0;
   pointer-events: none;
-  width: clamp(10rem, 24vw, 15rem);
+  width: 0;
 }
 
 .c3-optics-speak-refinement .c3-lapis-authority-core::before,
@@ -777,19 +789,25 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-authority-core::before {
-  border: 1px solid rgba(245, 212, 154, 0.28);
+  background:
+    radial-gradient(circle, rgba(255, 248, 222, 0.95) 0 3%, rgba(255, 190, 79, 0.5) 4% 12%, transparent 26%),
+    conic-gradient(from 45deg, transparent 0 10%, rgba(255, 211, 130, 0.26) 10% 12%, transparent 12% 35%, rgba(103, 184, 255, 0.16) 35% 37%, transparent 37% 62%, rgba(255, 211, 130, 0.22) 62% 64%, transparent 64%);
+  border: 1px solid rgba(245, 212, 154, 0.22);
   border-radius: 50%;
-  height: 58%;
-  width: 58%;
+  box-shadow:
+    0 0 54px rgba(255, 176, 56, 0.26),
+    0 0 112px rgba(103, 184, 255, 0.1);
+  height: clamp(11rem, 25vw, 16rem);
+  width: clamp(11rem, 25vw, 16rem);
 }
 
 .c3-optics-speak-refinement .c3-lapis-authority-core::after {
   background:
     linear-gradient(90deg, transparent, rgba(245, 212, 154, 0.64), transparent),
     linear-gradient(0deg, transparent, rgba(245, 212, 154, 0.64), transparent);
-  height: 54%;
+  height: clamp(7.5rem, 18vw, 11rem);
   opacity: 0.68;
-  width: 54%;
+  width: clamp(7.5rem, 18vw, 11rem);
 }
 
 .c3-lapis-authority-core span,
@@ -821,9 +839,14 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-authority-core .c3-glyph-core {
-  height: 4.4rem;
-  opacity: 0.42;
-  width: 4.4rem;
+  height: clamp(5.6rem, 10vw, 7.5rem);
+  left: 50%;
+  opacity: 0.54;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(5.6rem, 10vw, 7.5rem);
+  z-index: 2;
 }
 
 .c3-lapis-node {
