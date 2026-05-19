@@ -14,6 +14,10 @@ import { loadOarSpineRegistry, type OarSpineRegistryState } from "./oarSpineRegi
 import { opticsSurfaceRegistry, surfaceClasses } from "./opticsSurfaceRegistry"
 import { RuntimeCoherenceOptics } from "./RuntimeCoherenceOptics"
 
+type EmphasisMode = "all" | "blocked" | "correction" | "evidence" | "closed"
+
+const emphasisModes: EmphasisMode[] = ["all", "blocked", "correction", "evidence", "closed"]
+
 function statusLabel(value: string | null) {
   return value ? value.replaceAll("_", " ") : "not recorded"
 }
@@ -23,9 +27,41 @@ function StatusPill({ value }: { value: string | null }) {
   return <span className={`c3-status-pill c3-status-${normalized}`}>{statusLabel(value)}</span>
 }
 
+function processMatchesEmphasis(instance: OarProcessInstance, emphasisMode: EmphasisMode) {
+  if (emphasisMode === "all") return true
+
+  if (emphasisMode === "blocked") {
+    return (
+      instance.execution_standing === "blocked" ||
+      instance.validation_standing === "correction_required" ||
+      instance.seeded_reference_standing === "unseeded_blocked"
+    )
+  }
+
+  if (emphasisMode === "correction") {
+    return (
+      instance.lifecycle_type === "correction" ||
+      Boolean(instance.correction_oar2_path) ||
+      instance.validation_standing === "correction_required"
+    )
+  }
+
+  if (emphasisMode === "evidence") {
+    return Boolean(instance.evidence_path) || Boolean(instance.actual_oar1_path)
+  }
+
+  return instance.execution_standing === "completed" && Boolean(instance.actual_oar1_path) && Boolean(instance.evidence_path)
+}
+
+function transitionTouchesProcess(entry: OarTransitionLogEntry, selectedProcessKey: string | null) {
+  return selectedProcessKey ? entry.process_instance_key === selectedProcessKey : true
+}
+
 export default function OarOperationsConsole() {
   const [registryState, setRegistryState] = useState<OarSpineRegistryState | null>(null)
   const [registryError, setRegistryError] = useState<string | null>(null)
+  const [selectedProcessKey, setSelectedProcessKey] = useState<string | null>(null)
+  const [emphasisMode, setEmphasisMode] = useState<EmphasisMode>("all")
 
   useEffect(() => {
     let active = true
@@ -59,6 +95,17 @@ export default function OarOperationsConsole() {
   const persistenceMessage =
     registryState?.persistenceMessage ??
     `Persistent registry state is not available: ${registryError ?? "loading registry standing"}`
+  const selectedProcess =
+    processInstances.find((instance) => instance.process_instance_key === selectedProcessKey) ?? processInstances[0] ?? null
+  const selectedTransitions = selectedProcess
+    ? transitionLog.filter((entry) => transitionTouchesProcess(entry, selectedProcess.process_instance_key))
+    : []
+  const selectedChecks = selectedProcess
+    ? [...queueChecks, ...logChecks, ...seededChecks].filter((check) => {
+        const evidence = check.evidence.toLowerCase()
+        return evidence.includes(selectedProcess.process_instance_key.toLowerCase()) || check.standing !== "passed"
+      })
+    : []
 
   return (
     <main
@@ -121,16 +168,63 @@ export default function OarOperationsConsole() {
           <p className="c3-ops-kicker">Queue</p>
           <h2 id="process-instances">Process Instances</h2>
         </div>
+        <div className="c3-lens-emphasis-controls" aria-label="Runtime lens emphasis modes">
+          {emphasisModes.map((mode) => (
+            <button
+              aria-pressed={emphasisMode === mode}
+              className="c3-lens-emphasis-button"
+              key={mode}
+              onClick={() => setEmphasisMode(mode)}
+              type="button"
+            >
+              {statusLabel(mode)}
+            </button>
+          ))}
+        </div>
+        {selectedProcess ? (
+          <aside className="c3-lens-inspection-overlay" aria-label="Selected runtime relation inspection">
+            <div>
+              <p className="c3-ops-kicker">Inspection</p>
+              <h3>{selectedProcess.process_instance_key}</h3>
+            </div>
+            <dl className="c3-lens-inspection-standing">
+              <div><dt>Execution</dt><dd><StatusPill value={selectedProcess.execution_standing} /></dd></div>
+              <div><dt>Validation</dt><dd><StatusPill value={selectedProcess.validation_standing} /></dd></div>
+              <div><dt>Deploy</dt><dd><StatusPill value={selectedProcess.deploy_standing} /></dd></div>
+              <div><dt>Held</dt><dd><StatusPill value={selectedProcess.held_standing} /></dd></div>
+            </dl>
+            <ol className="c3-lens-lineage-trace" aria-label="Selected OAR lineage trace">
+              <li><span>Process</span>{selectedProcess.process_instance_key}</li>
+              <li><span>Source OAR2</span>{selectedProcess.source_oar2_path}</li>
+              <li><span>Expected OAR1</span>{selectedProcess.expected_oar1_path}</li>
+              <li><span>Actual OAR1</span>{selectedProcess.actual_oar1_path ?? "required before validation"}</li>
+              <li><span>Evidence</span>{selectedProcess.evidence_path ?? "not recorded"}</li>
+              <li><span>Transitions</span>{selectedTransitions.length} recorded</li>
+            </ol>
+            {(selectedProcess.correction_oar2_path || selectedProcess.validation_finding) ? (
+              <div className="c3-lens-correction-trace">
+                <span>Correction</span>
+                <p>{selectedProcess.correction_oar2_path ?? selectedProcess.validation_finding}</p>
+              </div>
+            ) : null}
+          </aside>
+        ) : null}
         <div className="c3-process-grid">
           {processInstances.map((instance) => {
             const blockReason = queueBlockReason(instance)
+            const matchesEmphasis = processMatchesEmphasis(instance, emphasisMode)
+            const isSelected = selectedProcess?.process_instance_key === instance.process_instance_key
 
             return (
               <article
                 className={`c3-process-card c3-process-node ${surfaceClasses([blockReason ? "fracture_field" : "relation_orbit", "glyph_cluster"])}`}
                 data-execution-standing={instance.execution_standing}
+                data-emphasis-match={matchesEmphasis}
+                data-selected={isSelected}
                 data-validation-standing={instance.validation_standing}
                 key={instance.process_instance_key}
+                onClick={() => setSelectedProcessKey(instance.process_instance_key)}
+                onFocus={() => setSelectedProcessKey(instance.process_instance_key)}
                 tabIndex={0}
               >
                 <div className="c3-process-card-header">
@@ -191,7 +285,12 @@ export default function OarOperationsConsole() {
         </div>
         <div className="c3-check-grid">
           {[...queueChecks, ...logChecks, ...seededChecks].map((check) => (
-            <article className="c3-check-card" key={check.check_key}>
+            <article
+              className="c3-check-card"
+              data-check-standing={check.standing}
+              data-selected-relevant={selectedChecks.some((selectedCheck) => selectedCheck.check_key === check.check_key)}
+              key={check.check_key}
+            >
               <div>
                 <h3>{statusLabel(check.check_key)}</h3>
                 <StatusPill value={check.standing} />
