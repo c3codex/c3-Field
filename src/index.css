@@ -306,33 +306,127 @@ body,
 
 .c3-lapis-topology {
   display: grid;
-  gap: 18px;
-  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: clamp(18px, 3vw, 30px);
+  grid-template-columns: minmax(320px, 1.2fr) minmax(280px, 0.8fr);
+  align-items: center;
 }
 
-.c3-lapis-node-field {
-  align-content: start;
+.c3-lapis-field {
+  aspect-ratio: 1;
+  min-height: 34rem;
+  position: relative;
+  isolation: isolate;
+}
+
+.c3-lapis-geometry {
+  inset: 0;
+  overflow: visible;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.c3-lapis-field-orbit,
+.c3-lapis-field-axis,
+.c3-lapis-arc {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.c3-lapis-field-orbit {
+  stroke: rgba(159, 199, 220, 0.22);
+  stroke-width: 0.35;
+}
+
+.c3-lapis-field-orbit-inner {
+  stroke-dasharray: 1.5 2.4;
+}
+
+.c3-lapis-field-axis {
+  stroke: rgba(159, 199, 220, 0.16);
+  stroke-width: 0.28;
+}
+
+.c3-lapis-arc {
+  stroke: rgba(159, 199, 220, 0.72);
+  stroke-linecap: round;
+  stroke-width: 0.72;
+}
+
+.c3-lapis-arc[data-interrupted="true"] {
+  stroke: rgba(221, 169, 153, 0.86);
+  stroke-dasharray: 4 3;
+}
+
+.c3-lapis-arc-corrective {
+  stroke: rgba(241, 236, 226, 0.86);
+  stroke-width: 0.92;
+}
+
+.c3-lapis-arc-divergent {
+  stroke: rgba(221, 169, 153, 0.7);
+}
+
+.c3-lapis-arc-blocked-return {
+  stroke: rgba(137, 68, 56, 0.92);
+  stroke-dasharray: 2 2.8;
+}
+
+.c3-lapis-authority-core {
+  background:
+    radial-gradient(circle, rgba(159, 199, 220, 0.22), transparent 68%),
+    rgba(17, 19, 23, 0.92);
+  border: 1px solid rgba(159, 199, 220, 0.4);
+  color: #fff9ed;
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  height: clamp(7rem, 18vw, 10rem);
+  left: 50%;
+  place-items: center;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(7rem, 18vw, 10rem);
+  z-index: 2;
+}
+
+.c3-lapis-authority-core span,
+.c3-lapis-authority-core small {
+  color: #9fc7dc;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.c3-lapis-authority-core strong {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 500;
+  line-height: 0.9;
 }
 
 .c3-lapis-node {
-  border: 1px solid rgba(159, 199, 220, 0.2);
+  background: rgba(17, 19, 23, 0.86);
+  border: 1px solid rgba(159, 199, 220, 0.28);
   display: grid;
-  gap: 7px;
-  min-height: 150px;
-  padding: 12px;
-  position: relative;
+  gap: 4px;
+  left: var(--c3-node-x);
+  min-height: 0;
+  padding: 9px;
+  position: absolute;
+  top: var(--c3-node-y);
+  transform: translate(-50%, -50%);
+  width: clamp(7rem, 13vw, 10rem);
+  z-index: 3;
 }
 
 .c3-lapis-node::before {
   background: #9fc7dc;
   content: "";
-  height: 2px;
-  left: 12px;
+  height: 1px;
+  left: 9px;
   position: absolute;
-  right: 12px;
+  right: 9px;
   top: 0;
 }
 
@@ -359,23 +453,16 @@ body,
 
 .c3-lapis-node strong {
   color: #fff9ed;
-  font-size: 0.9rem;
+  font-size: clamp(0.72rem, 1.1vw, 0.86rem);
   line-height: 1.25;
   overflow-wrap: anywhere;
 }
 
 .c3-lapis-node small {
   color: #f0e4d0;
+  font-size: 0.72rem;
   font-weight: 700;
   line-height: 1.3;
-}
-
-.c3-lapis-node p {
-  color: #b9c1c4;
-  font-size: 0.78rem;
-  line-height: 1.38;
-  margin: 0;
-  overflow-wrap: anywhere;
 }
 
 .c3-lapis-node-blocked,
@@ -391,7 +478,7 @@ body,
 .c3-lapis-vector-panel {
   align-content: start;
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .c3-lapis-counts {
@@ -425,10 +512,10 @@ body,
 }
 
 .c3-lapis-vector {
-  border-left: 3px solid #9fc7dc;
+  border-left: 2px solid #9fc7dc;
   display: grid;
   gap: 4px;
-  padding: 10px 12px;
+  padding: 9px 0 9px 12px;
   background: rgba(159, 199, 220, 0.08);
 }
 
@@ -750,6 +837,10 @@ body,
   .c3-ops-summary {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .c3-lapis-field {
+    min-height: min(88vw, 34rem);
+  }
 }
 
 @media (max-width: 620px) {
@@ -759,7 +850,6 @@ body,
 
   .c3-ops-summary,
   .c3-process-details,
-  .c3-lapis-node-field,
   .c3-lapis-counts {
     grid-template-columns: 1fr;
   }
@@ -773,6 +863,14 @@ body,
 
   .c3-optics-readout dl {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .c3-lapis-field {
+    min-height: 34rem;
+  }
+
+  .c3-lapis-node {
+    width: clamp(5.6rem, 26vw, 7rem);
   }
 }
 

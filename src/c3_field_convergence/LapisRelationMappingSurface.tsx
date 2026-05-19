@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react"
 import type { OarProcessInstance, OarTransitionLogEntry, SpineValidationCheck } from "./operationsSpine"
 
 type LapisRelationMappingSurfaceProps = {
@@ -26,6 +27,20 @@ type RelationVector = {
   to: string
   evidence: string
   interrupted: boolean
+}
+
+type FieldPoint = {
+  x: number
+  y: number
+}
+
+type FieldNode = RelationNode & {
+  point: FieldPoint
+}
+
+type FieldVector = RelationVector & {
+  start: FieldPoint
+  end: FieldPoint
 }
 
 function readable(value: string | null) {
@@ -161,6 +176,70 @@ function deriveRelationVectors(processInstances: OarProcessInstance[], transitio
   return [...transitionVectors, ...evidenceVectors]
 }
 
+function fieldPoint(index: number, total: number, node: RelationNode): FieldPoint {
+  if (total <= 0) return { x: 50, y: 50 }
+
+  const angle = -90 + (index / total) * 360
+  const radius =
+    node.kind === "transition"
+      ? 27
+      : node.kind === "blocked" || node.kind === "correction"
+        ? 43
+        : node.kind === "closure" || node.kind === "evidence"
+          ? 35
+          : 39
+  const radians = (angle * Math.PI) / 180
+
+  return {
+    x: 50 + Math.cos(radians) * radius,
+    y: 50 + Math.sin(radians) * radius,
+  }
+}
+
+function distance(pointA: FieldPoint, pointB: FieldPoint) {
+  return Math.hypot(pointB.x - pointA.x, pointB.y - pointA.y)
+}
+
+function fieldPath(vector: FieldVector) {
+  const center = { x: 50, y: 50 }
+  const pull = vector.kind === "corrective" ? 0.42 : vector.kind === "blocked-return" ? -0.22 : 0.2
+  const controlX = center.x + (vector.start.x + vector.end.x - 100) * pull
+  const controlY = center.y + (vector.start.y + vector.end.y - 100) * pull
+
+  return `M ${vector.start.x.toFixed(2)} ${vector.start.y.toFixed(2)} Q ${controlX.toFixed(2)} ${controlY.toFixed(2)} ${vector.end.x.toFixed(2)} ${vector.end.y.toFixed(2)}`
+}
+
+function placeFieldNodes(nodes: RelationNode[]): FieldNode[] {
+  return nodes.map((node, index) => ({
+    ...node,
+    point: fieldPoint(index, nodes.length, node),
+  }))
+}
+
+function placeFieldVectors(vectors: RelationVector[], nodes: FieldNode[]): FieldVector[] {
+  const processNodes = nodes.filter((node) => node.key.startsWith("process:"))
+  const transitionNodes = nodes.filter((node) => node.key.startsWith("transition:"))
+  const byLabel = new Map(processNodes.map((node) => [node.label, node]))
+
+  return vectors.map((vector, index) => {
+    const endNode = byLabel.get(vector.to) ?? processNodes[index % Math.max(processNodes.length, 1)] ?? nodes[0]
+    const startNode =
+      vector.kind === "dependency"
+        ? { point: { x: 50, y: 8 } }
+        : vector.kind === "convergent"
+          ? endNode
+          : vector.kind === "corrective"
+            ? processNodes.find((node) => node.kind === "correction") ?? endNode
+            : transitionNodes[index % Math.max(transitionNodes.length, 1)] ?? endNode
+
+    return {
+      ...vector,
+      start: startNode.point,
+      end: endNode.point,
+    }
+  })
+}
+
 export function LapisRelationMappingSurface({
   processInstances,
   transitionLog,
@@ -169,6 +248,8 @@ export function LapisRelationMappingSurface({
 }: LapisRelationMappingSurfaceProps) {
   const nodes = deriveRelationNodes(processInstances, transitionLog)
   const vectors = deriveRelationVectors(processInstances, transitionLog)
+  const fieldNodes = placeFieldNodes(nodes)
+  const fieldVectors = placeFieldVectors(vectors, fieldNodes)
   const fracturedNodes = nodes.filter((node) => node.fractured)
   const interruptedVectors = vectors.filter((vector) => vector.interrupted)
   const correctionVectors = vectors.filter((vector) => vector.kind === "corrective")
@@ -191,17 +272,42 @@ export function LapisRelationMappingSurface({
       </div>
 
       <div className="c3-lapis-topology">
-        <div className="c3-lapis-node-field" aria-label="Runtime relation nodes">
-          {nodes.map((node) => (
+        <div className="c3-lapis-field" aria-label="Runtime relation field geometry">
+          <svg className="c3-lapis-geometry" viewBox="0 0 100 100" role="img" aria-label="Runtime vectors and continuity arcs">
+            <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-outer" cx="50" cy="50" r="43" />
+            <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-inner" cx="50" cy="50" r="27" />
+            <line className="c3-lapis-field-axis" x1="50" y1="4" x2="50" y2="96" />
+            <line className="c3-lapis-field-axis" x1="4" y1="50" x2="96" y2="50" />
+            {fieldVectors.map((vector) => (
+              <path
+                className={`c3-lapis-arc c3-lapis-arc-${vector.kind}`}
+                d={fieldPath(vector)}
+                data-interrupted={vector.interrupted}
+                key={vector.key}
+                pathLength={Math.max(16, distance(vector.start, vector.end))}
+              />
+            ))}
+          </svg>
+          <div className="c3-lapis-authority-core">
+            <span>Codex</span>
+            <strong>Field</strong>
+            <small>{relationStanding}</small>
+          </div>
+          {fieldNodes.map((node) => (
             <article
               className={`c3-lapis-node c3-lapis-node-${node.kind}`}
               data-fractured={node.fractured}
               key={node.key}
+              style={
+                {
+                  "--c3-node-x": `${node.point.x}%`,
+                  "--c3-node-y": `${node.point.y}%`,
+                } as CSSProperties
+              }
             >
               <span>{readable(node.kind)}</span>
               <strong>{node.label}</strong>
               <small>{node.standing}</small>
-              <p>{node.detail}</p>
             </article>
           ))}
         </div>
