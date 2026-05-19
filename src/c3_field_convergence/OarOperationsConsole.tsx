@@ -109,8 +109,9 @@ export default function OarOperationsConsole() {
 
   return (
     <main
-      className="c3-ops-shell c3-runtime-lens-convergence"
+      className="c3-ops-shell c3-runtime-lens-convergence c3-optics-speak-refinement"
       data-runtime-lens="runtime_lens_convergence_v1"
+      data-optics-refinement="let_optics_speak_v1"
       data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
     >
       <section className={`c3-ops-hero ${surfaceClasses(["center_authority_core", "continuity_stream"])}`}>
