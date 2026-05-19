@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: implementation_evidence
 document_scope: geometric_rooting_preservation
 title: OAR1 - Geometric Rooting Preservation Surface v1
-status: implementation_validated_pending_live_encounter
+status: live_geometric_rooting_verified
 version: v1
 operator: op044
 system: c3field
@@ -137,13 +137,79 @@ dist/assets/index-Dv1QKpYW.js
 
 Local metadata warnings remain dashboard-managed and did not block the c3field build.
 
-## LIVE ENCOUNTER
+## DEPLOYMENT EXECUTION
 
-Live deployment verification is pending until the implementation commit is pushed and Cloudflare Pages serves the updated runtime bundle.
+Implementation commit:
+
+```text
+52e1fa4 OAR1 log: geometric rooting preservation surface
+```
+
+Deployment trigger:
+
+```text
+git push origin initiative/c3-field-convergence-infra
+```
+
+Result:
+
+```text
+remote branch advanced from 50a4424 to 52e1fa4
+```
+
+GitHub returned a repository move notice but accepted the push.
+
+## LIVE ENCOUNTER VERIFICATION
+
+Live route:
+
+```text
+https://c3field.online/
+```
+
+Result:
+
+```json
+{
+  "routeStatus": 200,
+  "js": "assets/index-Dfo5GWgh.js",
+  "css": "assets/index-LwKZoY51.css",
+  "jsLength": 461526,
+  "cssLength": 101116,
+  "hasFieldLensReadout": true,
+  "hasDistributedMarbleRail": true,
+  "hasInscriptionRailCss": true,
+  "hasBottomReadoutCss": true,
+  "hasStateLegend": true,
+  "componentSectionLocated": true,
+  "componentProhibitedTerms": 0
+}
+```
+
+The deployed JavaScript hash differs from the local JavaScript hash because Cloudflare Pages builds with dashboard-managed environment values. The deployed CSS hash matches the local c3field build.
+
+## LIVE BOUNDARY CONFIRMATION
+
+The deployed lens optics component section contained zero matches for:
+
+```text
+insert(
+update(
+delete(
+upsert(
+SUPABASE_SERVICE_ROLE
+setInterval
+setTimeout
+poll
+retry
+scheduler
+autonomous
+createClient(
+```
 
 ## CURRENT STANDING
 
-implementation_validated_pending_live_encounter
+live_geometric_rooting_verified
 
 ## CLOSE
 

@@ -1,9 +1,9 @@
 ---
 document_type: oar2
-authority_level: implementation_validated
+authority_level: live_verified
 document_scope: geometric_rooting_preservation
 title: OAR2 - Geometric Rooting Preservation Surface v1
-status: implementation_validated_pending_live_encounter
+status: live_geometric_rooting_verified
 version: v1
 operator: op044
 system: c3field
@@ -258,7 +258,7 @@ docs/oar/process/oar1_geometric_rooting_preservation_surface_v1.meta.md
 
 ## CURRENT STANDING
 
-implementation_validated_pending_live_encounter
+live_geometric_rooting_verified
 
 ## EXECUTION RESULT
 
@@ -281,12 +281,12 @@ Validation completed:
 - prohibited mutation/runtime scan returned no matches
 - `npm.cmd run build:c3field` passed
 - OAR1 evidence was written
-
-Pending:
-
-- deployment branch push
-- Cloudflare Pages propagation
-- live c3field.online bundle verification
+- implementation commit `52e1fa4` was pushed to the deployment branch
+- Cloudflare Pages propagation completed
+- live route `https://c3field.online/` returned HTTP 200
+- live JavaScript asset `assets/index-Dfo5GWgh.js` contains the field readout and distributed Marble inscription rail
+- live CSS asset `assets/index-LwKZoY51.css` contains the rooting preservation styling
+- isolated deployed component scan returned zero prohibited mutation/runtime terms
 
 Boundary held:
 
