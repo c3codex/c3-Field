@@ -1,9 +1,9 @@
 ---
 document_type: oar2
-authority_level: local_build_verified
+authority_level: live_verified
 document_scope: runtime_lens_interaction
 title: OAR2 - Runtime Lens Interaction + Selective Emphasis v1
-status: local_runtime_lens_interaction_verified
+status: live_runtime_lens_interaction_verified
 version: v1
 operator: op044
 system: c3field
