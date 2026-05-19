@@ -2,6 +2,7 @@ import type { CSSProperties } from "react"
 import { coherenceOpticsGrammarRegistry } from "./coherenceOpticsGrammarRegistry"
 import { LapisRelationMappingSurface } from "./LapisRelationMappingSurface"
 import type { OarProcessInstance, OarTransitionLogEntry, SpineValidationCheck } from "./operationsSpine"
+import { opticsSurfaceRegistry, surfaceClasses } from "./opticsSurfaceRegistry"
 
 type RuntimeCoherenceOpticsProps = {
   processInstances: OarProcessInstance[]
@@ -91,8 +92,9 @@ export function RuntimeCoherenceOptics({
 
   return (
     <section
-      className="c3-ops-section c3-runtime-optics"
+      className={`c3-ops-section c3-runtime-optics ${surfaceClasses(["center_authority_core", "runtime_relation_ring"])}`}
       data-coherence-score={coherenceScore}
+      data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
       aria-labelledby="runtime-coherence-optics"
       style={opticsStyle}
     >
@@ -101,7 +103,7 @@ export function RuntimeCoherenceOptics({
         <h2 id="runtime-coherence-optics">Runtime Coherence Optics</h2>
       </div>
       <div className="c3-optics-chamber" aria-label="Obsidian Runtime Chamber coherence optics">
-        <div className="c3-optics-mandala" aria-hidden="true">
+        <div className={`c3-optics-mandala ${surfaceClasses(["relation_orbit", "threshold_boundary"])}`} aria-hidden="true">
           <span className={`c3-optics-ring c3-optics-obsidian ${obsidianGrammar?.rendererClass ?? ""}`} />
           <span className={`c3-optics-ring c3-optics-lapis ${lapisGrammar?.rendererClass ?? ""}`} />
           <span className={`c3-optics-ring c3-optics-marble ${marbleGrammar?.rendererClass ?? ""}`} />

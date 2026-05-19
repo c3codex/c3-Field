@@ -7,6 +7,7 @@ import {
 } from "./coherenceOpticsGrammarRegistry"
 import { glyphByKey, glyphForMaterial, glyphForRelation, glyphOperatorRegistry } from "./glyphOperatorRegistry"
 import type { OarProcessInstance, OarTransitionLogEntry, SpineValidationCheck } from "./operationsSpine"
+import { opticsSurfaceRegistry, surfaceClasses } from "./opticsSurfaceRegistry"
 
 type LapisRelationMappingSurfaceProps = {
   processInstances: OarProcessInstance[]
@@ -338,6 +339,7 @@ export function LapisRelationMappingSurface({
       aria-labelledby="lapis-relation-mapping"
       data-optics-grammar={coherenceOpticsGrammarRegistry.grammarKey}
       data-glyph-registry={glyphOperatorRegistry.registryKey}
+      data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
     >
       <div className="c3-lapis-heading">
         <div>
@@ -348,7 +350,7 @@ export function LapisRelationMappingSurface({
         <span>{relationStanding}</span>
       </div>
 
-      <div className="c3-lapis-lens-shell">
+      <div className={`c3-lapis-lens-shell ${surfaceClasses(["runtime_relation_ring", "relation_orbit"])}`}>
         <aside className="c3-lapis-callouts" aria-label="Lens material callouts">
           {materialCallouts.map((material) => (
             <section className={material.rendererClass} key={material.key}>
@@ -381,7 +383,10 @@ export function LapisRelationMappingSurface({
           </section>
         </aside>
 
-        <div className="c3-lapis-field" aria-label="Runtime relation field geometry">
+        <div
+          className={`c3-lapis-field ${surfaceClasses(["center_authority_core", "runtime_relation_ring", "fracture_field", "threshold_boundary"])}`}
+          aria-label="Runtime relation field geometry"
+        >
           <svg className="c3-lapis-geometry" viewBox="0 0 100 100" role="img" aria-label="Runtime vectors and continuity arcs">
             <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-boundary" cx="50" cy="50" r="48" />
             <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-outer" cx="50" cy="50" r="43" />
@@ -430,7 +435,7 @@ export function LapisRelationMappingSurface({
           <div className="c3-lapis-lens-action c3-lapis-lens-action-orient">Orient</div>
           <div className="c3-lapis-lens-action c3-lapis-lens-action-respond">Respond</div>
           <div className="c3-lapis-lens-action c3-lapis-lens-action-reflect">Reflect</div>
-          <div className="c3-lapis-authority-core">
+          <div className={`c3-lapis-authority-core ${surfaceClasses(["center_authority_core"])}`}>
             <i
               aria-hidden="true"
               className={`c3-glyph c3-glyph-core ${glyphForMaterial("crystal")?.rendererClass ?? ""}`}
@@ -449,7 +454,7 @@ export function LapisRelationMappingSurface({
             return (
               <i
                 aria-label={glyph.meaningContract}
-                className={`c3-glyph c3-lapis-vector-glyph ${glyph.rendererClass}`}
+                className={`c3-glyph c3-lapis-vector-glyph ${surfaceClasses(["glyph_cluster"])} ${glyph.rendererClass}`}
                 key={`glyph:${vector.key}`}
                 role="img"
                 style={
@@ -467,7 +472,7 @@ export function LapisRelationMappingSurface({
 
             return (
               <article
-                className={`c3-lapis-node c3-lapis-node-${node.kind}`}
+                className={`c3-lapis-node c3-lapis-node-${node.kind} ${surfaceClasses([node.fractured ? "fracture_field" : "relation_orbit", "glyph_cluster"])}`}
                 data-fractured={node.fractured}
                 key={node.key}
                 style={
@@ -491,7 +496,10 @@ export function LapisRelationMappingSurface({
               </article>
             )
           })}
-          <div className="c3-lapis-inscription-rail" aria-label="Distributed Marble inscription continuity">
+          <div
+            className={`c3-lapis-inscription-rail ${surfaceClasses(["inscription_band", "memory_sediment"])}`}
+            aria-label="Distributed Marble inscription continuity"
+          >
             {(marbleGrammar?.statements ?? ["Evidence continuity", "Closure sediment", "Preserved lineage"]).map((statement) => (
               <span key={statement}>{statement}</span>
             ))}
@@ -499,7 +507,7 @@ export function LapisRelationMappingSurface({
           </div>
         </div>
 
-        <aside className="c3-lapis-readout" aria-label="State legend">
+        <aside className={`c3-lapis-readout ${surfaceClasses(["validation_wave"])}`} aria-label="State legend">
           <h4>State Legend</h4>
           <dl className="c3-lapis-state-readout">
             <div><dt>Open</dt><dd>{openCount}</dd></div>
@@ -514,7 +522,7 @@ export function LapisRelationMappingSurface({
       </div>
 
       <div className="c3-lapis-bottom-row">
-        <div className="c3-lapis-field-readout" aria-label="Field lens readout">
+        <div className={`c3-lapis-field-readout ${surfaceClasses(["continuity_stream", "memory_sediment"])}`} aria-label="Field lens readout">
           <div>
             <span>Field Lens Readout</span>
             <strong>{coherencePercent}%</strong>
