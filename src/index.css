@@ -270,6 +270,190 @@ body,
   line-height: 1.45;
 }
 
+.c3-lapis-relation-surface {
+  border-top: 1px solid rgba(159, 199, 220, 0.2);
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+  padding-top: 22px;
+}
+
+.c3-lapis-heading {
+  align-items: end;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.c3-lapis-heading h3 {
+  color: #fff9ed;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.6rem, 3vw, 2.45rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1;
+  margin: 0;
+}
+
+.c3-lapis-heading > span {
+  border: 1px solid rgba(159, 199, 220, 0.36);
+  color: #9fc7dc;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 8px 10px;
+  text-transform: uppercase;
+}
+
+.c3-lapis-topology {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+}
+
+.c3-lapis-node-field {
+  align-content: start;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.c3-lapis-node {
+  border: 1px solid rgba(159, 199, 220, 0.2);
+  display: grid;
+  gap: 7px;
+  min-height: 150px;
+  padding: 12px;
+  position: relative;
+}
+
+.c3-lapis-node::before {
+  background: #9fc7dc;
+  content: "";
+  height: 2px;
+  left: 12px;
+  position: absolute;
+  right: 12px;
+  top: 0;
+}
+
+.c3-lapis-node[data-fractured="true"] {
+  border-color: rgba(221, 169, 153, 0.56);
+}
+
+.c3-lapis-node[data-fractured="true"]::before {
+  background: repeating-linear-gradient(
+    90deg,
+    #dda999 0 10px,
+    transparent 10px 16px
+  );
+}
+
+.c3-lapis-node span,
+.c3-lapis-vector span,
+.c3-lapis-counts dt {
+  color: #9fc7dc;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.c3-lapis-node strong {
+  color: #fff9ed;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.c3-lapis-node small {
+  color: #f0e4d0;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.c3-lapis-node p {
+  color: #b9c1c4;
+  font-size: 0.78rem;
+  line-height: 1.38;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.c3-lapis-node-blocked,
+.c3-lapis-node-correction {
+  background: rgba(77, 29, 24, 0.16);
+}
+
+.c3-lapis-node-closure,
+.c3-lapis-node-evidence {
+  background: rgba(241, 236, 226, 0.08);
+}
+
+.c3-lapis-vector-panel {
+  align-content: start;
+  display: grid;
+  gap: 12px;
+}
+
+.c3-lapis-counts {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+}
+
+.c3-lapis-counts div {
+  background: rgba(255, 253, 248, 0.055);
+  border: 1px solid rgba(159, 199, 220, 0.14);
+  min-width: 0;
+  padding: 10px;
+}
+
+.c3-lapis-counts dd {
+  color: #fff9ed;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.8rem;
+  line-height: 1;
+  margin: 6px 0 0;
+}
+
+.c3-lapis-vectors {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.c3-lapis-vector {
+  border-left: 3px solid #9fc7dc;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  background: rgba(159, 199, 220, 0.08);
+}
+
+.c3-lapis-vector[data-interrupted="true"] {
+  border-left-color: #dda999;
+  background: rgba(77, 29, 24, 0.16);
+}
+
+.c3-lapis-vector-corrective {
+  border-left-color: #d8d1c4;
+}
+
+.c3-lapis-vector strong {
+  color: #fff9ed;
+  font-size: 0.88rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.c3-lapis-vector small {
+  color: #b9c1c4;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .c3-ops-summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -558,7 +742,8 @@ body,
   .c3-process-grid,
   .c3-check-grid,
   .c3-ops-two-column,
-  .c3-optics-chamber {
+  .c3-optics-chamber,
+  .c3-lapis-topology {
     grid-template-columns: 1fr;
   }
 
@@ -573,12 +758,15 @@ body,
   }
 
   .c3-ops-summary,
-  .c3-process-details {
+  .c3-process-details,
+  .c3-lapis-node-field,
+  .c3-lapis-counts {
     grid-template-columns: 1fr;
   }
 
   .c3-process-card-header,
-  .c3-log-entry div {
+  .c3-log-entry div,
+  .c3-lapis-heading {
     align-items: flex-start;
     flex-direction: column;
   }

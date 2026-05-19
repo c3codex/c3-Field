@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react"
+import { LapisRelationMappingSurface } from "./LapisRelationMappingSurface"
 import type { OarProcessInstance, OarTransitionLogEntry, SpineValidationCheck } from "./operationsSpine"
 
 type RuntimeCoherenceOpticsProps = {
@@ -126,6 +127,12 @@ export function RuntimeCoherenceOptics({
           </small>
         </div>
       </div>
+      <LapisRelationMappingSurface
+        processInstances={processInstances}
+        transitionLog={transitionLog}
+        validationChecks={validationChecks}
+        persistenceStanding={persistenceStanding}
+      />
     </section>
   )
 }
