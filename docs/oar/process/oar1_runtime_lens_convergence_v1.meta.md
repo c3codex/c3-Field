@@ -206,6 +206,70 @@ The deployed JavaScript hash differs from the local JavaScript hash because Clou
 
 The deployed CSS hash matches the local c3field build.
 
+## CANOPY COMMUNICATION
+
+The coherence optics have crossed an important threshold.
+
+They no longer stand as a dashboard wearing symbolic language.
+
+They are beginning to behave as a governed runtime instrument.
+
+The current architecture is sound:
+
+- runtime state supplies truth
+- coherence grammar names meaning
+- glyph operators compress standing
+- optics surface contracts structure perception
+- the runtime lens converges the encounter
+
+This is the right order of authority.
+
+The Field is not being invented by the frontend.
+
+The frontend is learning how to render what the Field has seated.
+
+### What It Still Needs
+
+The next need is not another registry.
+
+The next need is interaction depth.
+
+Process nodes now compress standing, but they do not yet fully behave as selectable relation bodies. A governed inspection mode should allow an operator to select or focus a node and see its vectors, evidence, validation standing, correction path, OAR lineage, and transition continuity without leaving the field instrument.
+
+The second need is reduced explanatory duplication.
+
+Some text still carries meaning that grammar, glyphs, surfaces, vectors, and inscriptions are now able to carry. Typography should continue to recede where registered perception already holds the meaning, while remaining available for inspection.
+
+The third need is a stronger validation spine.
+
+Validation should feel witnessed and sedimented, not repeatedly announced. Passed checks can become continuity seals. Failures can become fracture marks. Correction-required states can become return arcs.
+
+The fourth need is lens-state filtering.
+
+The instrument should allow emphasis modes such as all, blocked, correction, evidence, and closed. These modes must not alter truth. They should only shift perceptual emphasis across already seated runtime standing.
+
+The fifth need is clearer OAR lineage.
+
+The path from process instance to source OAR2, expected OAR1, actual OAR1, and evidence should become a visible lineage trace rather than hidden detail text alone.
+
+The sixth need is visual QA by screenshot.
+
+Asset and marker verification prove that the code deployed. The surface is now visual enough that desktop, tablet, and mobile screenshot review should become part of the next validation rhythm.
+
+### Canopy Recommendation
+
+Do not add more registries yet.
+
+The foundation is seated.
+
+The next canopy move should be:
+
+```text
+interaction and selective emphasis
+```
+
+The coherence optics should now become more usable, not merely more structurally correct.
+
 ## CURRENT STANDING
 
 live_runtime_lens_convergence_verified
