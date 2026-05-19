@@ -1,9 +1,9 @@
 ---
 document_type: oar2
-authority_level: local_build_verified
+authority_level: live_verified
 document_scope: glyph_operator_registry
 title: OAR2 - Glyph Operator Registry v1
-status: local_glyph_operator_registry_verified
+status: live_glyph_operator_registry_verified
 version: v1
 operator: op044
 system: c3field
