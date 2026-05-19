@@ -175,13 +175,15 @@ failed to inspect service: error during connect: in the default daemon configura
 Docker Desktop is a prerequisite for local development. Follow the official docs to install: https://docs.docker.com/desktop
 ```
 
-Local migration lint, local migration apply, and local validation SQL remain blocked until Docker Desktop/local Supabase runtime is available to this shell.
+At that time, local migration lint, local migration apply, and local validation SQL remained blocked until Docker Desktop/local Supabase runtime became available to this shell.
 
 Superseding local validation evidence was later provided in:
 
 docs/oar/process/oar1_process_registry_and_oar_queue_foundation_v1.meta.md
 
 ## LOCAL VALIDATION UPDATE - 2026-05-19
+
+Docker Desktop/local Supabase runtime was successfully incorporated after the earlier blocker.
 
 Local validation completed successfully.
 
@@ -213,19 +215,21 @@ local_validated_remote_execution_pending
 
 ## LOCAL RUNTIME REQUIREMENT
 
-Docker has not yet been incorporated into the local execution surface available to this Codex shell.
+Docker has now been incorporated into the local execution surface sufficiently for Supabase local validation.
 
-Docker Desktop or another reachable Docker engine is required for Supabase local runtime commands, including:
+Docker Desktop or another reachable Docker engine remains the required runtime for Supabase local commands, including:
 
 - `supabase start`
 - `supabase db reset`
 - `supabase db lint --local`
 
+Docker was required for the successful local validation proof recorded above.
+
 Docker is not required to author the migration artifact.
 
 Docker is not required for authenticated remote Supabase migration execution, but remote execution would make the governed remote database the first live execution surface unless local validation is completed elsewhere first.
 
-Recommended governance path remains:
+Governance path completed locally:
 
 1. enable local Docker/Supabase runtime
 2. run local lint, apply, and validation queries

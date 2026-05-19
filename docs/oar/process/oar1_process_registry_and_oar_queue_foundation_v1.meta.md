@@ -1,6 +1,8 @@
 ﻿
 ## LOCAL VALIDATION RESULT
 
+Docker Desktop/local Supabase runtime was successfully incorporated before this validation pass.
+
 Local validation completed successfully.
 
 Proof returned:
