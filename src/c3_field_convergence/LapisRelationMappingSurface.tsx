@@ -43,6 +43,13 @@ type FieldVector = RelationVector & {
   end: FieldPoint
 }
 
+const fieldRayIndexes = [
+  0, 1, 2, 3, 4, 5, 6, 7,
+  8, 9, 10, 11, 12, 13, 14, 15,
+  16, 17, 18, 19, 20, 21, 22, 23,
+  24, 25, 26, 27, 28, 29, 30, 31,
+]
+
 function readable(value: string | null) {
   return value ? value.replaceAll("_", " ") : "not recorded"
 }
@@ -240,6 +247,10 @@ function placeFieldVectors(vectors: RelationVector[], nodes: FieldNode[]): Field
   })
 }
 
+function countWhere<T>(items: T[], predicate: (item: T) => boolean) {
+  return items.filter(predicate).length
+}
+
 export function LapisRelationMappingSurface({
   processInstances,
   transitionLog,
@@ -254,6 +265,26 @@ export function LapisRelationMappingSurface({
   const interruptedVectors = vectors.filter((vector) => vector.interrupted)
   const correctionVectors = vectors.filter((vector) => vector.kind === "corrective")
   const failedChecks = validationChecks.filter((check) => check.standing !== "passed")
+  const openCount = countWhere(processInstances, (instance) =>
+    ["queued", "executing", "held"].includes(instance.execution_standing),
+  )
+  const blockedCount = countWhere(
+    processInstances,
+    (instance) =>
+      instance.execution_standing === "blocked" ||
+      instance.validation_standing === "correction_required" ||
+      instance.seeded_reference_standing === "unseeded_blocked",
+  )
+  const correctionCount = countWhere(
+    processInstances,
+    (instance) => instance.lifecycle_type === "correction" || Boolean(instance.correction_oar2_path),
+  )
+  const completedCount = countWhere(processInstances, (instance) => instance.execution_standing === "completed")
+  const unverifiedCount = failedChecks.length
+  const orphanedCount = countWhere(processInstances, (instance) => !instance.evidence_path)
+  const evidenceTotal =
+    transitionLog.filter((entry) => entry.evidence_reference).length +
+    processInstances.filter((instance) => instance.evidence_path).length
   const relationStanding =
     persistenceStanding !== "registry_backed"
       ? "held pending registry relation"
@@ -266,18 +297,51 @@ export function LapisRelationMappingSurface({
       <div className="c3-lapis-heading">
         <div>
           <p className="c3-ops-kicker">Lapis</p>
-          <h3 id="lapis-relation-mapping">Relation Mapping Surface</h3>
+          <h3 id="lapis-relation-mapping">c3 Field Lens Optics</h3>
+          <p>Relation, motion, thresholds, and coherence across the seated runtime field.</p>
         </div>
         <span>{relationStanding}</span>
       </div>
 
-      <div className="c3-lapis-topology">
+      <div className="c3-lapis-lens-shell">
+        <aside className="c3-lapis-callouts" aria-label="Lens material callouts">
+          <section>
+            <h4>Crystal Core</h4>
+            <p>Authority source</p>
+            <p>Codex-held truth</p>
+            <p>Immutable center</p>
+          </section>
+          <section>
+            <h4>Obsidian Gate</h4>
+            <p>Constraint and threshold</p>
+            <p>Refusal and correction</p>
+            <p>Passage control</p>
+          </section>
+          <section>
+            <h4>Lapis Relation Ring</h4>
+            <p>Mapping and lineage</p>
+            <p>Dependencies and adjacency</p>
+            <p>Standing continuity</p>
+          </section>
+          <section>
+            <h4>Coherence Wave</h4>
+            <p>Field integrity</p>
+            <p>Balance and alignment</p>
+            <p>Bounded resonance</p>
+          </section>
+        </aside>
+
         <div className="c3-lapis-field" aria-label="Runtime relation field geometry">
           <svg className="c3-lapis-geometry" viewBox="0 0 100 100" role="img" aria-label="Runtime vectors and continuity arcs">
+            <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-boundary" cx="50" cy="50" r="48" />
             <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-outer" cx="50" cy="50" r="43" />
+            <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-middle" cx="50" cy="50" r="35" />
             <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-inner" cx="50" cy="50" r="27" />
+            <circle className="c3-lapis-field-orbit c3-lapis-field-orbit-core" cx="50" cy="50" r="18" />
             <line className="c3-lapis-field-axis" x1="50" y1="4" x2="50" y2="96" />
             <line className="c3-lapis-field-axis" x1="4" y1="50" x2="96" y2="50" />
+            <line className="c3-lapis-field-axis c3-lapis-field-axis-diagonal" x1="18" y1="18" x2="82" y2="82" />
+            <line className="c3-lapis-field-axis c3-lapis-field-axis-diagonal" x1="82" y1="18" x2="18" y2="82" />
             {fieldVectors.map((vector) => (
               <path
                 className={`c3-lapis-arc c3-lapis-arc-${vector.kind}`}
@@ -287,7 +351,35 @@ export function LapisRelationMappingSurface({
                 pathLength={Math.max(16, distance(vector.start, vector.end))}
               />
             ))}
+            {fieldRayIndexes.map((index) => {
+              const angle = (index / 32) * 360
+              const radians = (angle * Math.PI) / 180
+              const inner = 20
+              const outer = index % 2 === 0 ? 24 : 22
+              return (
+                <line
+                  className="c3-lapis-field-ray"
+                  key={`ray:${index}`}
+                  x1={(50 + Math.cos(radians) * inner).toFixed(2)}
+                  y1={(50 + Math.sin(radians) * inner).toFixed(2)}
+                  x2={(50 + Math.cos(radians) * outer).toFixed(2)}
+                  y2={(50 + Math.sin(radians) * outer).toFixed(2)}
+                />
+              )
+            })}
           </svg>
+          <div className="c3-lapis-cardinal c3-lapis-cardinal-up">
+            <span>Upstream</span>
+            <small>received</small>
+          </div>
+          <div className="c3-lapis-cardinal c3-lapis-cardinal-down">
+            <span>Downstream</span>
+            <small>delivered</small>
+          </div>
+          <div className="c3-lapis-lens-action c3-lapis-lens-action-observe">Observe</div>
+          <div className="c3-lapis-lens-action c3-lapis-lens-action-orient">Orient</div>
+          <div className="c3-lapis-lens-action c3-lapis-lens-action-respond">Respond</div>
+          <div className="c3-lapis-lens-action c3-lapis-lens-action-reflect">Reflect</div>
           <div className="c3-lapis-authority-core">
             <span>Codex</span>
             <strong>Field</strong>
@@ -312,7 +404,8 @@ export function LapisRelationMappingSurface({
           ))}
         </div>
 
-        <div className="c3-lapis-vector-panel">
+        <aside className="c3-lapis-readout" aria-label="Lens readout">
+          <h4>Lens Readout</h4>
           <dl className="c3-lapis-counts">
             <div>
               <dt>Nodes</dt>
@@ -331,19 +424,48 @@ export function LapisRelationMappingSurface({
               <dd>{correctionVectors.length}</dd>
             </div>
           </dl>
+          <dl className="c3-lapis-state-readout">
+            <div><dt>Open</dt><dd>{openCount}</dd></div>
+            <div><dt>Blocked</dt><dd>{blockedCount}</dd></div>
+            <div><dt>In Correction</dt><dd>{correctionCount}</dd></div>
+            <div><dt>Completed</dt><dd>{completedCount}</dd></div>
+            <div><dt>Orphaned</dt><dd>{orphanedCount}</dd></div>
+            <div><dt>Unverified</dt><dd>{unverifiedCount}</dd></div>
+            <div><dt>Evidence Total</dt><dd>{evidenceTotal}</dd></div>
+          </dl>
+        </aside>
+      </div>
 
+      <div className="c3-lapis-bottom-row">
+        <aside className="c3-lapis-key" aria-label="Lens key">
+          <h4>Lens Key</h4>
+          <p><span data-key="authority" />Center held authority</p>
+          <p><span data-key="correction" />Correction path</p>
+          <p><span data-key="active" />Active passage</p>
+          <p><span data-key="fracture" />Blocked / fracture</p>
+          <p><span data-key="coherence" />Coherence achieved</p>
+        </aside>
+
+        <div className="c3-lapis-vector-panel">
           <ol className="c3-lapis-vectors" aria-label="Runtime relation vectors">
-            {vectors.map((vector) => (
+            {vectors.slice(0, 8).map((vector) => (
               <li className={`c3-lapis-vector c3-lapis-vector-${vector.kind}`} data-interrupted={vector.interrupted} key={vector.key}>
                 <span>{readable(vector.kind)}</span>
-                <strong>
-                  {`${vector.from} -> ${vector.to}`}
-                </strong>
+                <strong>{`${vector.from} -> ${vector.to}`}</strong>
                 <small>{vector.evidence}</small>
               </li>
             ))}
           </ol>
         </div>
+
+        <aside className="c3-lapis-principles" aria-label="Lens principles">
+          <h4>Lens Principles</h4>
+          <p>Codex is the source</p>
+          <p>Relation creates meaning</p>
+          <p>Motion reveals standing</p>
+          <p>Correction restores continuity</p>
+          <p>Center holds all</p>
+        </aside>
       </div>
     </div>
   )
