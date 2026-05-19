@@ -282,9 +282,18 @@ export function LapisRelationMappingSurface({
   const completedCount = countWhere(processInstances, (instance) => instance.execution_standing === "completed")
   const unverifiedCount = failedChecks.length
   const orphanedCount = countWhere(processInstances, (instance) => !instance.evidence_path)
+  const marbleCount = countWhere(processInstances, (instance) => Boolean(instance.actual_oar1_path) && Boolean(instance.evidence_path))
   const evidenceTotal =
     transitionLog.filter((entry) => entry.evidence_reference).length +
     processInstances.filter((instance) => instance.evidence_path).length
+  const coherencePercent =
+    processInstances.length === 0
+      ? 0
+      : Math.round(
+          ((completedCount / processInstances.length) * 42) +
+            ((marbleCount / processInstances.length) * 28) +
+            ((1 - blockedCount / processInstances.length) * 30),
+        )
   const relationStanding =
     persistenceStanding !== "registry_backed"
       ? "held pending registry relation"
@@ -402,28 +411,16 @@ export function LapisRelationMappingSurface({
               <small>{node.standing}</small>
             </article>
           ))}
+          <div className="c3-lapis-inscription-rail" aria-label="Distributed Marble inscription continuity">
+            <span>Inscription Closure</span>
+            <span>Evidence Trace</span>
+            <span>Preserved Lineage</span>
+            <span>Passage Witnessed</span>
+          </div>
         </div>
 
-        <aside className="c3-lapis-readout" aria-label="Lens readout">
-          <h4>Lens Readout</h4>
-          <dl className="c3-lapis-counts">
-            <div>
-              <dt>Nodes</dt>
-              <dd>{nodes.length}</dd>
-            </div>
-            <div>
-              <dt>Vectors</dt>
-              <dd>{vectors.length}</dd>
-            </div>
-            <div>
-              <dt>Fractures</dt>
-              <dd>{fracturedNodes.length + interruptedVectors.length + failedChecks.length}</dd>
-            </div>
-            <div>
-              <dt>Corrections</dt>
-              <dd>{correctionVectors.length}</dd>
-            </div>
-          </dl>
+        <aside className="c3-lapis-readout" aria-label="State legend">
+          <h4>State Legend</h4>
           <dl className="c3-lapis-state-readout">
             <div><dt>Open</dt><dd>{openCount}</dd></div>
             <div><dt>Blocked</dt><dd>{blockedCount}</dd></div>
@@ -437,25 +434,31 @@ export function LapisRelationMappingSurface({
       </div>
 
       <div className="c3-lapis-bottom-row">
-        <aside className="c3-lapis-key" aria-label="Lens key">
-          <h4>Lens Key</h4>
-          <p><span data-key="authority" />Center held authority</p>
-          <p><span data-key="correction" />Correction path</p>
-          <p><span data-key="active" />Active passage</p>
-          <p><span data-key="fracture" />Blocked / fracture</p>
-          <p><span data-key="coherence" />Coherence achieved</p>
-        </aside>
-
-        <div className="c3-lapis-vector-panel">
-          <ol className="c3-lapis-vectors" aria-label="Runtime relation vectors">
-            {vectors.slice(0, 8).map((vector) => (
-              <li className={`c3-lapis-vector c3-lapis-vector-${vector.kind}`} data-interrupted={vector.interrupted} key={vector.key}>
-                <span>{readable(vector.kind)}</span>
-                <strong>{`${vector.from} -> ${vector.to}`}</strong>
-                <small>{vector.evidence}</small>
-              </li>
-            ))}
-          </ol>
+        <div className="c3-lapis-field-readout" aria-label="Field lens readout">
+          <div>
+            <span>Field Lens Readout</span>
+            <strong>{coherencePercent}%</strong>
+            <small>coherence</small>
+          </div>
+          <div className="c3-lapis-readout-dial" aria-hidden="true">
+            <span />
+          </div>
+          <div>
+            <strong>{blockedCount}</strong>
+            <small>blocked standing</small>
+          </div>
+          <div>
+            <strong>{transitionLog.length}</strong>
+            <small>live relations</small>
+          </div>
+          <div>
+            <strong>{marbleCount}</strong>
+            <small>marble inscriptions</small>
+          </div>
+          <div className="c3-lapis-continuity-wave">
+            <span>Continuity</span>
+            <small>{correctionVectors.length > 0 ? "stable with correction" : "stable"}</small>
+          </div>
         </div>
 
         <aside className="c3-lapis-principles" aria-label="Lens principles">
