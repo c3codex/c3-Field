@@ -11,6 +11,7 @@ import {
   type SpineValidationCheck,
 } from "./operationsSpine"
 import { loadOarSpineRegistry, type OarSpineRegistryState } from "./oarSpineRegistry"
+import { RuntimeCoherenceOptics } from "./RuntimeCoherenceOptics"
 
 function statusLabel(value: string | null) {
   return value ? value.replaceAll("_", " ") : "not recorded"
@@ -101,6 +102,13 @@ export default function OarOperationsConsole() {
           </div>
         </section>
       )}
+
+      <RuntimeCoherenceOptics
+        processInstances={processInstances}
+        transitionLog={transitionLog}
+        validationChecks={[...queueChecks, ...logChecks, ...seededChecks]}
+        persistenceStanding={persistenceStanding}
+      />
 
       <section className="c3-ops-section" aria-labelledby="process-instances">
         <div className="c3-section-heading">

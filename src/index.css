@@ -123,6 +123,153 @@ body,
   margin: 10px 0 0;
 }
 
+.c3-runtime-optics {
+  background: #111317;
+  border: 1px solid #2b3138;
+  color: #f6f1e7;
+  padding: clamp(18px, 3vw, 30px);
+}
+
+.c3-runtime-optics .c3-section-heading {
+  margin-bottom: 18px;
+}
+
+.c3-runtime-optics .c3-ops-kicker {
+  color: #9fc7dc;
+}
+
+.c3-runtime-optics h2 {
+  color: #fff9ed;
+}
+
+.c3-optics-chamber {
+  display: grid;
+  gap: clamp(18px, 3vw, 32px);
+  grid-template-columns: minmax(260px, 420px) minmax(0, 1fr);
+  align-items: center;
+}
+
+.c3-optics-mandala {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 25rem);
+  aspect-ratio: 1;
+  isolation: isolate;
+}
+
+.c3-optics-ring,
+.c3-optics-axis {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.c3-optics-ring {
+  border-radius: 50%;
+}
+
+.c3-optics-obsidian {
+  inset: 4%;
+  border: 2px solid rgba(22, 24, 29, 0.94);
+  box-shadow:
+    inset 0 0 0 var(--c3-obsidian-signal) rgba(77, 29, 24, 0.28),
+    0 0 24px rgba(0, 0, 0, 0.42);
+}
+
+.c3-optics-lapis {
+  inset: 16%;
+  border: 1px solid rgba(73, 140, 181, 0.8);
+  background:
+    conic-gradient(
+      from 24deg,
+      rgba(40, 103, 147, 0.1),
+      rgba(84, 164, 204, 0.36) var(--c3-lapis-signal),
+      transparent var(--c3-lapis-signal),
+      transparent
+    );
+}
+
+.c3-optics-marble {
+  inset: 28%;
+  border: 1px solid rgba(234, 228, 215, 0.76);
+  background:
+    repeating-conic-gradient(
+      from 8deg,
+      rgba(241, 236, 226, 0.18) 0deg 8deg,
+      rgba(210, 204, 193, 0.06) 8deg 16deg
+    );
+  opacity: 0.82;
+}
+
+.c3-optics-crystal {
+  inset: 40%;
+  border: 1px solid rgba(188, 238, 255, 0.88);
+  background:
+    radial-gradient(circle, rgba(230, 252, 255, 0.86), rgba(126, 211, 230, 0.22) 58%, transparent 70%);
+  box-shadow:
+    0 0 34px rgba(150, 224, 242, 0.52),
+    inset 0 0 18px rgba(255, 255, 255, 0.44);
+  animation: c3-crystal-coherence-pulse 5.6s ease-in-out infinite;
+}
+
+.c3-optics-axis {
+  background: linear-gradient(90deg, transparent, rgba(159, 199, 220, 0.5), transparent);
+  height: 1px;
+  width: 86%;
+}
+
+.c3-optics-axis-vertical {
+  transform: rotate(90deg);
+}
+
+.c3-optics-readout {
+  display: grid;
+  gap: 14px;
+}
+
+.c3-optics-readout dl {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  background: rgba(210, 198, 178, 0.16);
+  border: 1px solid rgba(210, 198, 178, 0.18);
+}
+
+.c3-optics-readout div {
+  min-width: 0;
+  background: rgba(255, 253, 248, 0.055);
+  padding: 14px;
+}
+
+.c3-optics-readout dt {
+  color: #9fc7dc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.c3-optics-readout dd {
+  color: #fff9ed;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  line-height: 1;
+  margin: 8px 0 0;
+}
+
+.c3-optics-readout p {
+  color: #f0e4d0;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-weight: 700;
+  margin: 0;
+}
+
+.c3-optics-readout small {
+  color: #b9c1c4;
+  line-height: 1.45;
+}
+
 .c3-ops-summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -410,7 +557,8 @@ body,
   .c3-ops-hero,
   .c3-process-grid,
   .c3-check-grid,
-  .c3-ops-two-column {
+  .c3-ops-two-column,
+  .c3-optics-chamber {
     grid-template-columns: 1fr;
   }
 
@@ -433,6 +581,23 @@ body,
   .c3-log-entry div {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .c3-optics-readout dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@keyframes c3-crystal-coherence-pulse {
+  0%,
+  100% {
+    transform: scale(0.96);
+    opacity: 0.74;
+  }
+
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
   }
 }
 
