@@ -92,9 +92,10 @@ export function RuntimeCoherenceOptics({
 
   return (
     <section
-      className={`c3-ops-section c3-runtime-optics ${surfaceClasses(["center_authority_core", "runtime_relation_ring"])}`}
+      className={`c3-ops-section c3-runtime-optics c3-runtime-lens-instrument ${surfaceClasses(["center_authority_core", "runtime_relation_ring", "relation_orbit"])}`}
       data-coherence-score={coherenceScore}
       data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
+      data-runtime-lens="runtime_lens_convergence_v1"
       aria-labelledby="runtime-coherence-optics"
       style={opticsStyle}
     >

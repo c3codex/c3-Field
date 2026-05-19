@@ -11,6 +11,7 @@ import {
   type SpineValidationCheck,
 } from "./operationsSpine"
 import { loadOarSpineRegistry, type OarSpineRegistryState } from "./oarSpineRegistry"
+import { opticsSurfaceRegistry, surfaceClasses } from "./opticsSurfaceRegistry"
 import { RuntimeCoherenceOptics } from "./RuntimeCoherenceOptics"
 
 function statusLabel(value: string | null) {
@@ -60,8 +61,12 @@ export default function OarOperationsConsole() {
     `Persistent registry state is not available: ${registryError ?? "loading registry standing"}`
 
   return (
-    <main className="c3-ops-shell">
-      <section className="c3-ops-hero">
+    <main
+      className="c3-ops-shell c3-runtime-lens-convergence"
+      data-runtime-lens="runtime_lens_convergence_v1"
+      data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
+    >
+      <section className={`c3-ops-hero ${surfaceClasses(["center_authority_core", "continuity_stream"])}`}>
         <div>
           <p className="c3-ops-kicker">c3 Field Convergence</p>
           <h1>OAR Operations Spine</h1>
@@ -74,7 +79,7 @@ export default function OarOperationsConsole() {
             <span>{persistenceMessage}</span>
           </div>
         </div>
-        <dl className="c3-ops-summary">
+        <dl className={`c3-ops-summary ${surfaceClasses(["memory_sediment", "validation_wave"])}`}>
           <div>
             <dt>Executable</dt>
             <dd>{executableCount}</dd>
@@ -110,8 +115,8 @@ export default function OarOperationsConsole() {
         persistenceStanding={persistenceStanding}
       />
 
-      <section className="c3-unified-runtime-console" aria-label="Unified runtime data console">
-      <section className="c3-ops-section" aria-labelledby="process-instances">
+      <section className="c3-unified-runtime-console c3-runtime-field-overlays" aria-label="Unified runtime data console">
+      <section className={`c3-ops-section ${surfaceClasses(["relation_orbit", "glyph_cluster"])}`} aria-labelledby="process-instances">
         <div className="c3-section-heading">
           <p className="c3-ops-kicker">Queue</p>
           <h2 id="process-instances">Process Instances</h2>
@@ -121,7 +126,13 @@ export default function OarOperationsConsole() {
             const blockReason = queueBlockReason(instance)
 
             return (
-              <article className="c3-process-card" key={instance.process_instance_key}>
+              <article
+                className={`c3-process-card c3-process-node ${surfaceClasses([blockReason ? "fracture_field" : "relation_orbit", "glyph_cluster"])}`}
+                data-execution-standing={instance.execution_standing}
+                data-validation-standing={instance.validation_standing}
+                key={instance.process_instance_key}
+                tabIndex={0}
+              >
                 <div className="c3-process-card-header">
                   <div>
                     <h3>{instance.process_instance_key}</h3>
@@ -173,7 +184,7 @@ export default function OarOperationsConsole() {
         </div>
       </section>
 
-      <section className="c3-ops-section" aria-labelledby="validation-checks">
+      <section className={`c3-ops-section c3-validation-spine-section ${surfaceClasses(["validation_wave", "continuity_stream"])}`} aria-labelledby="validation-checks">
         <div className="c3-section-heading">
           <p className="c3-ops-kicker">Refinement</p>
           <h2 id="validation-checks">Validation Checks</h2>
@@ -191,7 +202,7 @@ export default function OarOperationsConsole() {
         </div>
       </section>
 
-      <section className="c3-ops-section c3-ops-two-column" aria-labelledby="governance">
+      <section className={`c3-ops-section c3-ops-two-column c3-governance-spine ${surfaceClasses(["threshold_boundary", "validation_wave"])}`} aria-labelledby="governance">
         <div>
           <div className="c3-section-heading">
             <p className="c3-ops-kicker">Validation</p>
@@ -216,7 +227,7 @@ export default function OarOperationsConsole() {
         </div>
       </section>
 
-      <section className="c3-ops-section" aria-labelledby="transition-log">
+      <section className={`c3-ops-section c3-inscription-log-section ${surfaceClasses(["inscription_band", "memory_sediment"])}`} aria-labelledby="transition-log">
         <div className="c3-section-heading">
           <p className="c3-ops-kicker">Append Only</p>
           <h2 id="transition-log">Immutable Transition Log</h2>
