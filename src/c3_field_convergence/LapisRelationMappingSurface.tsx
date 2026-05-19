@@ -1,4 +1,10 @@
 import type { CSSProperties } from "react"
+import {
+  coherenceOpticsGrammarRegistry,
+  compositionPresetGrammar,
+  relationGrammar,
+  type OpticsRelationKey,
+} from "./coherenceOpticsGrammarRegistry"
 import type { OarProcessInstance, OarTransitionLogEntry, SpineValidationCheck } from "./operationsSpine"
 
 type LapisRelationMappingSurfaceProps = {
@@ -9,7 +15,7 @@ type LapisRelationMappingSurfaceProps = {
 }
 
 type RelationNodeKind = "process" | "queue" | "transition" | "correction" | "closure" | "blocked" | "evidence"
-type RelationVectorKind = "upstream" | "downstream" | "corrective" | "convergent" | "divergent" | "dependency" | "blocked-return"
+type RelationVectorKind = OpticsRelationKey
 
 type RelationNode = {
   key: string
@@ -49,6 +55,13 @@ const fieldRayIndexes = [
   16, 17, 18, 19, 20, 21, 22, 23,
   24, 25, 26, 27, 28, 29, 30, 31,
 ]
+
+const fieldLensPreset = compositionPresetGrammar("field_lens")
+const materialCallouts = coherenceOpticsGrammarRegistry.materials
+  .filter((material) => material.key !== "crystal")
+  .sort((a, b) => a.revealPriority - b.revealPriority)
+const crystalGrammar = coherenceOpticsGrammarRegistry.materials.find((material) => material.key === "crystal")
+const marbleGrammar = coherenceOpticsGrammarRegistry.materials.find((material) => material.key === "marble")
 
 function readable(value: string | null) {
   return value ? value.replaceAll("_", " ") : "not recorded"
@@ -302,7 +315,11 @@ export function LapisRelationMappingSurface({
         : "relation continuous"
 
   return (
-    <div className="c3-lapis-relation-surface" aria-labelledby="lapis-relation-mapping">
+    <div
+      className={`c3-lapis-relation-surface ${fieldLensPreset?.rendererClass ?? ""}`}
+      aria-labelledby="lapis-relation-mapping"
+      data-optics-grammar={coherenceOpticsGrammarRegistry.grammarKey}
+    >
       <div className="c3-lapis-heading">
         <div>
           <p className="c3-ops-kicker">Lapis</p>
@@ -314,29 +331,20 @@ export function LapisRelationMappingSurface({
 
       <div className="c3-lapis-lens-shell">
         <aside className="c3-lapis-callouts" aria-label="Lens material callouts">
-          <section>
-            <h4>Obsidian Gate</h4>
-            <p>Constraint and threshold</p>
-            <p>Refusal and correction</p>
-            <p>Passage control</p>
-          </section>
-          <section>
-            <h4>Lapis Relation Ring</h4>
-            <p>Mapping and lineage</p>
-            <p>Dependencies and adjacency</p>
-            <p>Standing continuity</p>
-          </section>
-          <section>
-            <h4>Marble Inscription</h4>
-            <p>Evidence continuity</p>
-            <p>Closure sediment</p>
-            <p>Preserved lineage</p>
-          </section>
+          {materialCallouts.map((material) => (
+            <section className={material.rendererClass} key={material.key}>
+              <h4>{material.label}</h4>
+              {material.statements.map((statement) => (
+                <p key={statement}>{statement}</p>
+              ))}
+            </section>
+          ))}
           <section>
             <h4>Coherence Wave</h4>
-            <p>Crystal merged with field</p>
-            <p>Authority held as stillness</p>
-            <p>Breath around relation</p>
+            <p>{crystalGrammar?.spatialRule ?? "Crystal merged with field"}</p>
+            {(crystalGrammar?.statements ?? []).slice(0, 2).map((statement) => (
+              <p key={statement}>{statement}</p>
+            ))}
           </section>
         </aside>
 
@@ -353,7 +361,7 @@ export function LapisRelationMappingSurface({
             <line className="c3-lapis-field-axis c3-lapis-field-axis-diagonal" x1="82" y1="18" x2="18" y2="82" />
             {fieldVectors.map((vector) => (
               <path
-                className={`c3-lapis-arc c3-lapis-arc-${vector.kind}`}
+                className={`c3-lapis-arc ${relationGrammar(vector.kind)?.rendererClass ?? `c3-lapis-arc-${vector.kind}`}`}
                 d={fieldPath(vector)}
                 data-interrupted={vector.interrupted}
                 key={vector.key}
@@ -392,7 +400,7 @@ export function LapisRelationMappingSurface({
           <div className="c3-lapis-authority-core">
             <span>Codex</span>
             <strong>Field</strong>
-            <small>crystal held within</small>
+            <small>{crystalGrammar?.geometryRole ?? "crystal held within"}</small>
           </div>
           {fieldNodes.map((node) => (
             <article
@@ -412,9 +420,9 @@ export function LapisRelationMappingSurface({
             </article>
           ))}
           <div className="c3-lapis-inscription-rail" aria-label="Distributed Marble inscription continuity">
-            <span>Inscription Closure</span>
-            <span>Evidence Trace</span>
-            <span>Preserved Lineage</span>
+            {(marbleGrammar?.statements ?? ["Evidence continuity", "Closure sediment", "Preserved lineage"]).map((statement) => (
+              <span key={statement}>{statement}</span>
+            ))}
             <span>Passage Witnessed</span>
           </div>
         </div>
@@ -463,12 +471,9 @@ export function LapisRelationMappingSurface({
 
         <aside className="c3-lapis-principles" aria-label="Lens principles">
           <h4>Lens Principles</h4>
-          <p>Codex is the source</p>
-          <p>Relation creates meaning</p>
-          <p>Motion reveals standing</p>
-          <p>Correction restores continuity</p>
-          <p>Crystal merges into field</p>
-          <p>Center holds all</p>
+          {coherenceOpticsGrammarRegistry.spatialHierarchy.map((rule) => (
+            <p key={rule}>{rule}</p>
+          ))}
         </aside>
       </div>
     </div>

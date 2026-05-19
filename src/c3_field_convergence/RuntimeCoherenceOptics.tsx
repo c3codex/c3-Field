@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react"
+import { coherenceOpticsGrammarRegistry } from "./coherenceOpticsGrammarRegistry"
 import { LapisRelationMappingSurface } from "./LapisRelationMappingSurface"
 import type { OarProcessInstance, OarTransitionLogEntry, SpineValidationCheck } from "./operationsSpine"
 
@@ -81,6 +82,12 @@ export function RuntimeCoherenceOptics({
       : correction > 0
         ? "correction lineage visible"
         : "closure coherence visible"
+  const [crystalGrammar, lapisGrammar, obsidianGrammar, marbleGrammar] = [
+    coherenceOpticsGrammarRegistry.materials.find((material) => material.key === "crystal"),
+    coherenceOpticsGrammarRegistry.materials.find((material) => material.key === "lapis"),
+    coherenceOpticsGrammarRegistry.materials.find((material) => material.key === "obsidian"),
+    coherenceOpticsGrammarRegistry.materials.find((material) => material.key === "marble"),
+  ]
 
   return (
     <section
@@ -95,36 +102,34 @@ export function RuntimeCoherenceOptics({
       </div>
       <div className="c3-optics-chamber" aria-label="Obsidian Runtime Chamber coherence optics">
         <div className="c3-optics-mandala" aria-hidden="true">
-          <span className="c3-optics-ring c3-optics-obsidian" />
-          <span className="c3-optics-ring c3-optics-lapis" />
-          <span className="c3-optics-ring c3-optics-marble" />
-          <span className="c3-optics-ring c3-optics-crystal" />
+          <span className={`c3-optics-ring c3-optics-obsidian ${obsidianGrammar?.rendererClass ?? ""}`} />
+          <span className={`c3-optics-ring c3-optics-lapis ${lapisGrammar?.rendererClass ?? ""}`} />
+          <span className={`c3-optics-ring c3-optics-marble ${marbleGrammar?.rendererClass ?? ""}`} />
+          <span className={`c3-optics-ring c3-optics-crystal ${crystalGrammar?.rendererClass ?? ""}`} />
           <span className="c3-optics-axis c3-optics-axis-vertical" />
           <span className="c3-optics-axis c3-optics-axis-horizontal" />
         </div>
         <div className="c3-optics-readout">
           <dl>
             <div>
-              <dt>Obsidian</dt>
+              <dt>{obsidianGrammar?.label ?? "Obsidian"}</dt>
               <dd>{blocked} blocked</dd>
             </div>
             <div>
-              <dt>Lapis</dt>
+              <dt>{lapisGrammar?.label ?? "Lapis"}</dt>
               <dd>{transitionLog.length} relations</dd>
             </div>
             <div>
-              <dt>Marble</dt>
+              <dt>{marbleGrammar?.label ?? "Marble"}</dt>
               <dd>{evidenceComplete} traces</dd>
             </div>
             <div>
-              <dt>Crystal</dt>
+              <dt>{crystalGrammar?.label ?? "Crystal"}</dt>
               <dd>{coherenceScore}% coherence</dd>
             </div>
           </dl>
           <p>{standing}</p>
-          <small>
-            Read-only optics generated from registry standing, validation checks, evidence trace, and transition continuity.
-          </small>
+          <small>{coherenceOpticsGrammarRegistry.rendererContract.truthSource}.</small>
         </div>
       </div>
       <LapisRelationMappingSurface

@@ -418,11 +418,23 @@ body,
   stroke-width: 0.92;
 }
 
+.c3-lapis-arc-upstream,
+.c3-lapis-arc-downstream,
+.c3-lapis-arc-dependency {
+  stroke: rgba(103, 184, 255, 0.76);
+}
+
+.c3-lapis-arc-convergent,
+.c3-lapis-arc-sealed {
+  stroke: rgba(245, 212, 154, 0.86);
+}
+
 .c3-lapis-arc-divergent {
   stroke: rgba(221, 169, 153, 0.7);
 }
 
-.c3-lapis-arc-blocked-return {
+.c3-lapis-arc-blocked-return,
+.c3-lapis-arc-unresolved {
   stroke: rgba(137, 68, 56, 0.92);
   stroke-dasharray: 2 2.8;
 }
@@ -674,21 +686,21 @@ body,
   margin: 3px 0;
 }
 
-.c3-lapis-callouts section:nth-child(2) h4,
-.c3-lapis-callouts section:nth-child(2) p {
+.c3-lapis-callouts .c3-optics-material-lapis h4,
+.c3-lapis-callouts .c3-optics-material-lapis p {
   color: #67b8ff;
 }
 
-.c3-lapis-callouts section:nth-child(3) h4,
-.c3-lapis-callouts section:nth-child(3) p {
+.c3-lapis-callouts .c3-optics-material-marble h4,
+.c3-lapis-callouts .c3-optics-material-marble p {
   color: #e9ded0;
 }
 
-.c3-lapis-callouts section:nth-child(4) h4 {
+.c3-lapis-callouts .c3-optics-material-crystal h4 {
   color: #f5d49a;
 }
 
-.c3-lapis-callouts section:nth-child(4) p {
+.c3-lapis-callouts .c3-optics-material-crystal p {
   color: #d2b88f;
 }
 
