@@ -5,6 +5,7 @@ import {
   relationGrammar,
   type OpticsRelationKey,
 } from "./coherenceOpticsGrammarRegistry"
+import { glyphByKey, glyphForMaterial, glyphForRelation, glyphOperatorRegistry } from "./glyphOperatorRegistry"
 import type { OarProcessInstance, OarTransitionLogEntry, SpineValidationCheck } from "./operationsSpine"
 
 type LapisRelationMappingSurfaceProps = {
@@ -62,6 +63,7 @@ const materialCallouts = coherenceOpticsGrammarRegistry.materials
   .sort((a, b) => a.revealPriority - b.revealPriority)
 const crystalGrammar = coherenceOpticsGrammarRegistry.materials.find((material) => material.key === "crystal")
 const marbleGrammar = coherenceOpticsGrammarRegistry.materials.find((material) => material.key === "marble")
+const fallbackRelationGlyph = glyphByKey("lapis_relation_vector")
 
 function readable(value: string | null) {
   return value ? value.replaceAll("_", " ") : "not recorded"
@@ -229,6 +231,22 @@ function fieldPath(vector: FieldVector) {
   return `M ${vector.start.x.toFixed(2)} ${vector.start.y.toFixed(2)} Q ${controlX.toFixed(2)} ${controlY.toFixed(2)} ${vector.end.x.toFixed(2)} ${vector.end.y.toFixed(2)}`
 }
 
+function midpoint(vector: FieldVector): FieldPoint {
+  return {
+    x: (vector.start.x + vector.end.x) / 2,
+    y: (vector.start.y + vector.end.y) / 2,
+  }
+}
+
+function glyphForFieldNode(node: FieldNode) {
+  if (node.kind === "blocked") return glyphByKey("obsidian_blocked_passage")
+  if (node.kind === "correction") return glyphByKey("obsidian_correction_required")
+  if (node.kind === "closure") return glyphByKey("marble_closure_seal")
+  if (node.kind === "evidence") return glyphByKey("marble_evidence_memory")
+  if (node.fractured) return glyphByKey("obsidian_threshold")
+  return fallbackRelationGlyph
+}
+
 function placeFieldNodes(nodes: RelationNode[]): FieldNode[] {
   return nodes.map((node, index) => ({
     ...node,
@@ -319,6 +337,7 @@ export function LapisRelationMappingSurface({
       className={`c3-lapis-relation-surface ${fieldLensPreset?.rendererClass ?? ""}`}
       aria-labelledby="lapis-relation-mapping"
       data-optics-grammar={coherenceOpticsGrammarRegistry.grammarKey}
+      data-glyph-registry={glyphOperatorRegistry.registryKey}
     >
       <div className="c3-lapis-heading">
         <div>
@@ -333,14 +352,28 @@ export function LapisRelationMappingSurface({
         <aside className="c3-lapis-callouts" aria-label="Lens material callouts">
           {materialCallouts.map((material) => (
             <section className={material.rendererClass} key={material.key}>
-              <h4>{material.label}</h4>
+              <h4>
+                <i
+                  aria-hidden="true"
+                  className={`c3-glyph c3-glyph-callout ${glyphForMaterial(material.key)?.rendererClass ?? ""}`}
+                  title={glyphForMaterial(material.key)?.meaningContract}
+                />
+                {material.label}
+              </h4>
               {material.statements.map((statement) => (
                 <p key={statement}>{statement}</p>
               ))}
             </section>
           ))}
           <section>
-            <h4>Coherence Wave</h4>
+            <h4>
+              <i
+                aria-hidden="true"
+                className={`c3-glyph c3-glyph-callout ${glyphForMaterial("crystal")?.rendererClass ?? ""}`}
+                title={glyphForMaterial("crystal")?.meaningContract}
+              />
+              Coherence Wave
+            </h4>
             <p>{crystalGrammar?.spatialRule ?? "Crystal merged with field"}</p>
             {(crystalGrammar?.statements ?? []).slice(0, 2).map((statement) => (
               <p key={statement}>{statement}</p>
@@ -398,27 +431,66 @@ export function LapisRelationMappingSurface({
           <div className="c3-lapis-lens-action c3-lapis-lens-action-respond">Respond</div>
           <div className="c3-lapis-lens-action c3-lapis-lens-action-reflect">Reflect</div>
           <div className="c3-lapis-authority-core">
+            <i
+              aria-hidden="true"
+              className={`c3-glyph c3-glyph-core ${glyphForMaterial("crystal")?.rendererClass ?? ""}`}
+              title={glyphForMaterial("crystal")?.meaningContract}
+            />
             <span>Codex</span>
             <strong>Field</strong>
             <small>{crystalGrammar?.geometryRole ?? "crystal held within"}</small>
           </div>
-          {fieldNodes.map((node) => (
-            <article
-              className={`c3-lapis-node c3-lapis-node-${node.kind}`}
-              data-fractured={node.fractured}
-              key={node.key}
-              style={
-                {
-                  "--c3-node-x": `${node.point.x}%`,
-                  "--c3-node-y": `${node.point.y}%`,
-                } as CSSProperties
-              }
-            >
-              <span>{readable(node.kind)}</span>
-              <strong>{node.label}</strong>
-              <small>{node.standing}</small>
-            </article>
-          ))}
+          {fieldVectors.slice(0, 18).map((vector) => {
+            const point = midpoint(vector)
+            const glyph = glyphForRelation(vector.kind) ?? fallbackRelationGlyph
+
+            if (!glyph) return null
+
+            return (
+              <i
+                aria-label={glyph.meaningContract}
+                className={`c3-glyph c3-lapis-vector-glyph ${glyph.rendererClass}`}
+                key={`glyph:${vector.key}`}
+                role="img"
+                style={
+                  {
+                    "--c3-glyph-x": `${point.x}%`,
+                    "--c3-glyph-y": `${point.y}%`,
+                  } as CSSProperties
+                }
+                title={glyph.meaningContract}
+              />
+            )
+          })}
+          {fieldNodes.map((node) => {
+            const glyph = glyphForFieldNode(node)
+
+            return (
+              <article
+                className={`c3-lapis-node c3-lapis-node-${node.kind}`}
+                data-fractured={node.fractured}
+                key={node.key}
+                style={
+                  {
+                    "--c3-node-x": `${node.point.x}%`,
+                    "--c3-node-y": `${node.point.y}%`,
+                  } as CSSProperties
+                }
+              >
+                {glyph ? (
+                  <i
+                    aria-label={glyph.meaningContract}
+                    className={`c3-glyph c3-lapis-node-glyph ${glyph.rendererClass}`}
+                    role="img"
+                    title={glyph.meaningContract}
+                  />
+                ) : null}
+                <span>{readable(node.kind)}</span>
+                <strong>{node.label}</strong>
+                <small>{node.standing}</small>
+              </article>
+            )
+          })}
           <div className="c3-lapis-inscription-rail" aria-label="Distributed Marble inscription continuity">
             {(marbleGrammar?.statements ?? ["Evidence continuity", "Closure sediment", "Preserved lineage"]).map((statement) => (
               <span key={statement}>{statement}</span>

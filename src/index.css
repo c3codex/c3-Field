@@ -446,6 +446,140 @@ body,
   vector-effect: non-scaling-stroke;
 }
 
+.c3-glyph {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+}
+
+.c3-glyph::before,
+.c3-glyph::after {
+  content: "";
+  position: absolute;
+}
+
+.c3-glyph-callout {
+  height: 1.05rem;
+  margin-right: 0.45rem;
+  width: 1.05rem;
+}
+
+.c3-glyph-core {
+  height: 2.6rem;
+  left: 50%;
+  opacity: 0.78;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2.6rem;
+}
+
+.c3-lapis-vector-glyph {
+  height: clamp(0.72rem, 1.4vw, 1rem);
+  left: var(--c3-glyph-x);
+  pointer-events: none;
+  position: absolute;
+  top: var(--c3-glyph-y);
+  transform: translate(-50%, -50%);
+  width: clamp(0.72rem, 1.4vw, 1rem);
+  z-index: 4;
+}
+
+.c3-lapis-node-glyph {
+  height: 1.05rem;
+  justify-self: start;
+  width: 1.05rem;
+}
+
+.c3-glyph-crystal-pulse {
+  background:
+    radial-gradient(circle, rgba(255, 244, 209, 0.95) 0 15%, transparent 16%),
+    conic-gradient(from 45deg, transparent 0 12%, rgba(255, 213, 138, 0.9) 12% 14%, transparent 14% 37%, rgba(255, 213, 138, 0.9) 37% 39%, transparent 39% 62%, rgba(255, 213, 138, 0.9) 62% 64%, transparent 64% 87%, rgba(255, 213, 138, 0.9) 87% 89%, transparent 89%),
+    radial-gradient(circle, rgba(255, 176, 56, 0.26), transparent 67%);
+  border: 1px solid rgba(255, 211, 130, 0.76);
+}
+
+.c3-glyph-lapis-vector,
+.c3-glyph-lapis-dependency {
+  background: radial-gradient(circle, rgba(117, 200, 255, 0.95) 0 22%, rgba(26, 83, 138, 0.34) 23% 64%, transparent 65%);
+  border: 1px solid rgba(103, 184, 255, 0.75);
+  box-shadow: 0 0 14px rgba(71, 168, 239, 0.34);
+}
+
+.c3-glyph-lapis-vector::after,
+.c3-glyph-lapis-dependency::after {
+  background: rgba(103, 184, 255, 0.72);
+  height: 1px;
+  left: 15%;
+  right: 15%;
+  top: 50%;
+}
+
+.c3-glyph-lapis-dependency::before {
+  border: 1px solid rgba(245, 212, 154, 0.7);
+  border-radius: 50%;
+  inset: 24%;
+}
+
+.c3-glyph-obsidian-threshold,
+.c3-glyph-obsidian-blocked,
+.c3-glyph-obsidian-correction {
+  background: radial-gradient(circle, rgba(11, 10, 12, 0.96), rgba(54, 21, 17, 0.7));
+  border: 1px solid rgba(255, 95, 61, 0.72);
+  box-shadow: 0 0 16px rgba(255, 81, 48, 0.24);
+}
+
+.c3-glyph-obsidian-threshold::after {
+  background: rgba(255, 140, 54, 0.9);
+  bottom: 16%;
+  left: 48%;
+  top: 16%;
+  transform: rotate(28deg);
+  width: 1px;
+}
+
+.c3-glyph-obsidian-blocked::after {
+  background: rgba(255, 95, 61, 0.95);
+  height: 1px;
+  left: 18%;
+  right: 18%;
+  top: 50%;
+  transform: rotate(-34deg);
+}
+
+.c3-glyph-obsidian-correction::before {
+  border: 1px solid rgba(255, 174, 89, 0.82);
+  border-left-color: transparent;
+  border-radius: 50%;
+  inset: 22%;
+  transform: rotate(-30deg);
+}
+
+.c3-glyph-marble-evidence,
+.c3-glyph-marble-closure {
+  background:
+    linear-gradient(135deg, transparent 0 43%, rgba(233, 222, 208, 0.68) 44% 48%, transparent 49%),
+    radial-gradient(circle, rgba(233, 222, 208, 0.68), rgba(125, 118, 109, 0.2));
+  border: 1px solid rgba(233, 222, 208, 0.68);
+}
+
+.c3-glyph-marble-evidence::after {
+  border: 1px solid rgba(233, 222, 208, 0.72);
+  inset: 28%;
+}
+
+.c3-glyph-marble-closure {
+  border-radius: 18%;
+}
+
+.c3-glyph-marble-closure::after {
+  border: 1px solid rgba(233, 222, 208, 0.72);
+  inset: 24%;
+  transform: rotate(45deg);
+}
+
 .c3-lapis-authority-core {
   background:
     radial-gradient(circle, rgba(255, 231, 176, 0.88), rgba(255, 150, 34, 0.28) 52%, transparent 70%),
@@ -668,7 +802,9 @@ body,
 .c3-lapis-readout h4,
 .c3-lapis-key h4,
 .c3-lapis-principles h4 {
+  align-items: center;
   color: #f5d49a;
+  display: flex;
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 1.1rem;
   font-weight: 700;
