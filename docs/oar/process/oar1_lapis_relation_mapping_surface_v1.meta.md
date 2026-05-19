@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: implementation_evidence
 document_scope: lapis_relation_mapping_surface
 title: OAR1 - Lapis Relation Mapping Surface v1
-status: implementation_validated_pending_live_encounter
+status: live_relation_mapping_verified
 version: v1
 operator: op044
 system: c3field
@@ -150,16 +150,82 @@ dist/assets/index-uvjIm3HM.js
 
 Local metadata warnings remain dashboard-managed and did not block the c3field build.
 
-## LIVE ENCOUNTER
+## DEPLOYMENT EXECUTION
 
-Live deployment verification is pending until the implementation commit is pushed and Cloudflare Pages serves the updated runtime bundle.
+Implementation commit:
+
+```text
+4d94968 OAR1 log: lapis relation mapping surface
+```
+
+Deployment trigger:
+
+```text
+git push origin initiative/c3-field-convergence-infra
+```
+
+Result:
+
+```text
+remote branch advanced from aea3852 to 4d94968
+```
+
+GitHub returned a repository move notice but accepted the push.
+
+## LIVE ENCOUNTER VERIFICATION
+
+Live route:
+
+```text
+https://c3field.online/
+```
+
+Result:
+
+```json
+{
+  "routeStatus": 200,
+  "js": "assets/index-BZhZSCuh.js",
+  "css": "assets/index-DPNCtFmt.css",
+  "jsLength": 454745,
+  "cssLength": 93448,
+  "hasRelationHeading": true,
+  "hasLapisSurfaceClassInJs": true,
+  "hasLapisSurfaceClassInCss": true,
+  "hasNodeFieldClass": true,
+  "hasVectorClass": true,
+  "componentSectionLocated": true,
+  "componentProhibitedTerms": 0
+}
+```
+
+The deployed JavaScript hash differs from the local JavaScript hash because Cloudflare Pages builds with dashboard-managed environment values. The deployed CSS hash matches the local c3field build.
+
+## LIVE BOUNDARY CONFIRMATION
+
+The deployed Lapis component section contained zero matches for:
+
+```text
+insert(
+update(
+delete(
+upsert(
+SUPABASE_SERVICE_ROLE
+setInterval
+setTimeout
+poll
+retry
+scheduler
+autonomous
+createClient(
+```
 
 ## CURRENT STANDING
 
-implementation_validated_pending_live_encounter
+live_relation_mapping_verified
 
 ## CLOSE
 
-Lapis relation mapping is implemented locally as a bounded read-only runtime optics layer.
+Lapis relation mapping is implemented and verified on the live c3field.online runtime optics surface.
 
-Live encounter must confirm the deployed surface before final deployment standing is closed.
+The chamber now exposes relation, vector, fracture, and correction continuity without gaining execution authority.
