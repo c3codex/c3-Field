@@ -110,6 +110,7 @@ export default function OarOperationsConsole() {
         persistenceStanding={persistenceStanding}
       />
 
+      <section className="c3-unified-runtime-console" aria-label="Unified runtime data console">
       <section className="c3-ops-section" aria-labelledby="process-instances">
         <div className="c3-section-heading">
           <p className="c3-ops-kicker">Queue</p>
@@ -225,7 +226,7 @@ export default function OarOperationsConsole() {
             <article className="c3-log-entry" key={`${entry.process_instance_key}-${entry.timestamp}`}>
               <div>
                 <strong>{entry.actor}</strong>
-                <span>{entry.transition_type} · {entry.timestamp}</span>
+                <span>{entry.transition_type} / {entry.timestamp}</span>
               </div>
               <p>{statusLabel(entry.from_status)} {"->"} {statusLabel(entry.to_status)}</p>
               <small>{entry.notes}</small>
@@ -234,6 +235,7 @@ export default function OarOperationsConsole() {
             </article>
           ))}
         </div>
+      </section>
       </section>
     </main>
   )

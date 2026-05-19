@@ -917,6 +917,84 @@ body,
   margin-top: 34px;
 }
 
+.c3-unified-runtime-console {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(82, 185, 225, 0.16), transparent 34rem),
+    linear-gradient(180deg, rgba(6, 8, 12, 0.98), rgba(10, 9, 13, 0.98));
+  border: 1px solid rgba(190, 131, 62, 0.36);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 198, 111, 0.07),
+    inset 0 0 70px rgba(0, 0, 0, 0.32);
+  color: #f5d49a;
+  display: grid;
+  gap: 18px;
+  margin-top: 14px;
+  padding: clamp(16px, 2.5vw, 26px);
+}
+
+.c3-unified-runtime-console .c3-ops-section {
+  margin-top: 0;
+}
+
+.c3-unified-runtime-console .c3-section-heading {
+  border-bottom: 1px solid rgba(190, 131, 62, 0.24);
+  margin-bottom: 12px;
+  padding-bottom: 9px;
+}
+
+.c3-unified-runtime-console .c3-ops-kicker,
+.c3-unified-runtime-console .c3-section-heading h2 {
+  color: #8bbcff;
+}
+
+.c3-unified-runtime-console .c3-process-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.c3-unified-runtime-console .c3-process-card,
+.c3-unified-runtime-console .c3-check-card,
+.c3-unified-runtime-console .c3-log-entry,
+.c3-unified-runtime-console .c3-state-list {
+  background: rgba(3, 5, 9, 0.48);
+  border: 1px solid rgba(190, 131, 62, 0.28);
+  color: #e9ded0;
+}
+
+.c3-unified-runtime-console .c3-process-card h3,
+.c3-unified-runtime-console .c3-check-card h3,
+.c3-unified-runtime-console .c3-log-entry strong {
+  color: #fff3cf;
+}
+
+.c3-unified-runtime-console .c3-cycle-type,
+.c3-unified-runtime-console .c3-process-details dt,
+.c3-unified-runtime-console .c3-path-list span,
+.c3-unified-runtime-console .c3-check-card p,
+.c3-unified-runtime-console .c3-log-entry span,
+.c3-unified-runtime-console .c3-log-entry small,
+.c3-unified-runtime-console .c3-log-entry code {
+  color: #d2a96a;
+}
+
+.c3-unified-runtime-console .c3-path-list {
+  border-top-color: rgba(190, 131, 62, 0.24);
+}
+
+.c3-unified-runtime-console .c3-lineage-panel,
+.c3-unified-runtime-console .c3-process-result {
+  background: rgba(245, 212, 154, 0.08);
+  border-color: rgba(190, 131, 62, 0.34);
+  color: #e9ded0;
+}
+
+.c3-unified-runtime-console .c3-ops-two-column {
+  gap: 18px;
+}
+
+.c3-unified-runtime-console .c3-transition-log {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .c3-section-heading {
   margin-bottom: 14px;
 }
@@ -1177,7 +1255,9 @@ body,
   .c3-lapis-lens-shell,
   .c3-lapis-bottom-row,
   .c3-lapis-vectors,
-  .c3-lapis-field-readout {
+  .c3-lapis-field-readout,
+  .c3-unified-runtime-console .c3-process-grid,
+  .c3-unified-runtime-console .c3-transition-log {
     grid-template-columns: 1fr;
   }
 
