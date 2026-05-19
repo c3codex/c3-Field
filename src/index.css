@@ -118,6 +118,11 @@ body,
   color: #f5d49a;
 }
 
+.c3-optics-speak-refinement .c3-lapis-heading p:not(.c3-ops-kicker),
+.c3-optics-speak-refinement .c3-lapis-heading > span {
+  display: none;
+}
+
 .c3-ops-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
@@ -749,6 +754,44 @@ body,
   z-index: 2;
 }
 
+.c3-optics-speak-refinement .c3-lapis-authority-core {
+  background:
+    radial-gradient(circle, rgba(255, 244, 209, 0.74) 0 6%, rgba(255, 176, 56, 0.26) 7% 28%, transparent 58%),
+    conic-gradient(from 45deg, transparent 0 10%, rgba(255, 211, 130, 0.2) 10% 12%, transparent 12% 35%, rgba(103, 184, 255, 0.12) 35% 37%, transparent 37% 62%, rgba(255, 211, 130, 0.18) 62% 64%, transparent 64%);
+  border: 0;
+  box-shadow:
+    0 0 54px rgba(255, 176, 56, 0.26),
+    0 0 96px rgba(103, 184, 255, 0.08);
+  height: clamp(10rem, 24vw, 15rem);
+  pointer-events: none;
+  width: clamp(10rem, 24vw, 15rem);
+}
+
+.c3-optics-speak-refinement .c3-lapis-authority-core::before,
+.c3-optics-speak-refinement .c3-lapis-authority-core::after {
+  content: "";
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.c3-optics-speak-refinement .c3-lapis-authority-core::before {
+  border: 1px solid rgba(245, 212, 154, 0.28);
+  border-radius: 50%;
+  height: 58%;
+  width: 58%;
+}
+
+.c3-optics-speak-refinement .c3-lapis-authority-core::after {
+  background:
+    linear-gradient(90deg, transparent, rgba(245, 212, 154, 0.64), transparent),
+    linear-gradient(0deg, transparent, rgba(245, 212, 154, 0.64), transparent);
+  height: 54%;
+  opacity: 0.68;
+  width: 54%;
+}
+
 .c3-lapis-authority-core span,
 .c3-lapis-authority-core small {
   color: #2f1b0d;
@@ -762,6 +805,25 @@ body,
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 500;
   line-height: 0.9;
+}
+
+.c3-optics-speak-refinement .c3-lapis-authority-core span,
+.c3-optics-speak-refinement .c3-lapis-authority-core small {
+  display: none;
+}
+
+.c3-optics-speak-refinement .c3-lapis-authority-core strong {
+  color: rgba(255, 249, 237, 0.88);
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  mix-blend-mode: screen;
+  text-shadow: 0 0 22px rgba(245, 212, 154, 0.42);
+  z-index: 2;
+}
+
+.c3-optics-speak-refinement .c3-lapis-authority-core .c3-glyph-core {
+  height: 4.4rem;
+  opacity: 0.42;
+  width: 4.4rem;
 }
 
 .c3-lapis-node {
@@ -966,6 +1028,20 @@ body,
   padding-left: 10px;
 }
 
+.c3-optics-speak-refinement .c3-lapis-callouts h4 {
+  border-left: 0;
+  font-size: 0;
+  margin-bottom: 18px;
+  min-height: 1.4rem;
+  padding-left: 0;
+}
+
+.c3-optics-speak-refinement .c3-lapis-callouts .c3-glyph-callout {
+  height: 1.35rem;
+  margin-right: 0;
+  width: 1.35rem;
+}
+
 .c3-lapis-callouts h4,
 .c3-lapis-readout h4,
 .c3-lapis-key h4,
@@ -999,6 +1075,32 @@ body,
 .c3-optics-speak-refinement .c3-lapis-principles h4 {
   border-left: 1px solid rgba(190, 131, 62, 0.28);
   padding-left: 10px;
+}
+
+.c3-optics-speak-refinement .c3-lapis-readout h4,
+.c3-optics-speak-refinement .c3-lapis-principles h4 {
+  font-size: 0;
+  min-height: 1px;
+  opacity: 0.42;
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout {
+  gap: 3px;
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout div {
+  border-bottom: 1px solid rgba(190, 131, 62, 0.12);
+  padding-block: 4px;
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout dt {
+  font-size: 0;
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout dd {
+  color: #f5d49a;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.1rem, 2.2vw, 1.7rem);
 }
 
 .c3-lapis-callouts .c3-optics-material-lapis h4,
@@ -1419,6 +1521,34 @@ body,
   overflow-wrap: anywhere;
 }
 
+.c3-lens-inspection-overlay > div:first-child {
+  align-items: start;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.c3-lens-inspection-close {
+  background: transparent;
+  border: 1px solid rgba(245, 212, 154, 0.28);
+  color: #d2a96a;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  min-height: 2rem;
+  padding: 0 9px;
+  text-transform: uppercase;
+}
+
+.c3-lens-inspection-close:hover,
+.c3-lens-inspection-close:focus-visible {
+  border-color: rgba(245, 212, 154, 0.68);
+  color: #fff3cf;
+  outline: none;
+}
+
 .c3-lens-inspection-standing {
   display: grid;
   gap: 8px;
@@ -1566,9 +1696,7 @@ body,
   transition: max-height 180ms ease, opacity 160ms ease, margin 160ms ease;
 }
 
-.c3-optics-speak-refinement .c3-runtime-field-overlays .c3-process-node:focus-within .c3-process-details,
-.c3-optics-speak-refinement .c3-runtime-field-overlays .c3-process-node:focus .c3-process-details,
-.c3-optics-speak-refinement .c3-runtime-field-overlays .c3-process-node:hover .c3-process-details {
+.c3-optics-speak-refinement .c3-runtime-field-overlays .c3-process-node[data-selected="true"] .c3-process-details {
   max-height: 24rem;
   opacity: 1;
 }
@@ -1593,33 +1721,21 @@ body,
   transition: max-height 180ms ease, opacity 160ms ease, padding 160ms ease, margin 160ms ease;
 }
 
-.c3-runtime-field-overlays .c3-process-node:focus-within .c3-path-list,
-.c3-runtime-field-overlays .c3-process-node:focus-within .c3-lineage-panel,
-.c3-runtime-field-overlays .c3-process-node:focus-within .c3-process-result,
-.c3-runtime-field-overlays .c3-process-node:focus .c3-path-list,
-.c3-runtime-field-overlays .c3-process-node:focus .c3-lineage-panel,
-.c3-runtime-field-overlays .c3-process-node:focus .c3-process-result,
-.c3-runtime-field-overlays .c3-process-node:hover .c3-path-list,
-.c3-runtime-field-overlays .c3-process-node:hover .c3-lineage-panel,
-.c3-runtime-field-overlays .c3-process-node:hover .c3-process-result {
+.c3-runtime-field-overlays .c3-process-node[data-selected="true"] .c3-path-list,
+.c3-runtime-field-overlays .c3-process-node[data-selected="true"] .c3-lineage-panel,
+.c3-runtime-field-overlays .c3-process-node[data-selected="true"] .c3-process-result {
   max-height: 52rem;
   opacity: 1;
 }
 
-.c3-runtime-field-overlays .c3-process-node:focus-within .c3-path-list,
-.c3-runtime-field-overlays .c3-process-node:focus .c3-path-list,
-.c3-runtime-field-overlays .c3-process-node:hover .c3-path-list {
+.c3-runtime-field-overlays .c3-process-node[data-selected="true"] .c3-path-list {
   border-top: 1px solid rgba(190, 131, 62, 0.24);
   margin-top: 14px;
   padding-top: 14px;
 }
 
-.c3-runtime-field-overlays .c3-process-node:focus-within .c3-lineage-panel,
-.c3-runtime-field-overlays .c3-process-node:focus .c3-lineage-panel,
-.c3-runtime-field-overlays .c3-process-node:hover .c3-lineage-panel,
-.c3-runtime-field-overlays .c3-process-node:focus-within .c3-process-result,
-.c3-runtime-field-overlays .c3-process-node:focus .c3-process-result,
-.c3-runtime-field-overlays .c3-process-node:hover .c3-process-result {
+.c3-runtime-field-overlays .c3-process-node[data-selected="true"] .c3-lineage-panel,
+.c3-runtime-field-overlays .c3-process-node[data-selected="true"] .c3-process-result {
   margin-top: 14px;
   padding: 10px 12px;
 }

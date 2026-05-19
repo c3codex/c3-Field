@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, type KeyboardEvent } from "react"
 import {
   canEnterOarQueue,
   heldStates,
@@ -57,6 +57,10 @@ function transitionTouchesProcess(entry: OarTransitionLogEntry, selectedProcessK
   return selectedProcessKey ? entry.process_instance_key === selectedProcessKey : true
 }
 
+function toggleKey(event: KeyboardEvent<HTMLElement>) {
+  return event.key === "Enter" || event.key === " "
+}
+
 export default function OarOperationsConsole() {
   const [registryState, setRegistryState] = useState<OarSpineRegistryState | null>(null)
   const [registryError, setRegistryError] = useState<string | null>(null)
@@ -95,8 +99,7 @@ export default function OarOperationsConsole() {
   const persistenceMessage =
     registryState?.persistenceMessage ??
     `Persistent registry state is not available: ${registryError ?? "loading registry standing"}`
-  const selectedProcess =
-    processInstances.find((instance) => instance.process_instance_key === selectedProcessKey) ?? processInstances[0] ?? null
+  const selectedProcess = processInstances.find((instance) => instance.process_instance_key === selectedProcessKey) ?? null
   const selectedTransitions = selectedProcess
     ? transitionLog.filter((entry) => transitionTouchesProcess(entry, selectedProcess.process_instance_key))
     : []
@@ -187,6 +190,14 @@ export default function OarOperationsConsole() {
             <div>
               <p className="c3-ops-kicker">Inspection</p>
               <h3>{selectedProcess.process_instance_key}</h3>
+              <button
+                aria-label="Close selected runtime relation inspection"
+                className="c3-lens-inspection-close"
+                onClick={() => setSelectedProcessKey(null)}
+                type="button"
+              >
+                Close
+              </button>
             </div>
             <dl className="c3-lens-inspection-standing">
               <div><dt>Execution</dt><dd><StatusPill value={selectedProcess.execution_standing} /></dd></div>
@@ -224,8 +235,18 @@ export default function OarOperationsConsole() {
                 data-selected={isSelected}
                 data-validation-standing={instance.validation_standing}
                 key={instance.process_instance_key}
-                onClick={() => setSelectedProcessKey(instance.process_instance_key)}
-                onFocus={() => setSelectedProcessKey(instance.process_instance_key)}
+                onClick={() =>
+                  setSelectedProcessKey((currentKey) =>
+                    currentKey === instance.process_instance_key ? null : instance.process_instance_key,
+                  )
+                }
+                onKeyDown={(event) => {
+                  if (!toggleKey(event)) return
+                  event.preventDefault()
+                  setSelectedProcessKey((currentKey) =>
+                    currentKey === instance.process_instance_key ? null : instance.process_instance_key,
+                  )
+                }}
                 tabIndex={0}
               >
                 <div className="c3-process-card-header">
