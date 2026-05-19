@@ -1,9 +1,9 @@
 ---
 document_type: oar2
-authority_level: local_build_verified
+authority_level: live_verified
 document_scope: optics_surface_registry
 title: OAR2 - Optics Surface Registry v1
-status: local_optics_surface_registry_verified
+status: live_optics_surface_registry_verified
 version: v1
 operator: op044
 system: c3field
