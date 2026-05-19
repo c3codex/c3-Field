@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: implementation_evidence
 document_scope: perceptual_hierarchy_material_spaciousness
 title: OAR1 - Perceptual Hierarchy + Material Spaciousness Addendum v1
-status: implementation_validated_pending_live_encounter
+status: live_spaciousness_verified
 version: v1
 operator: op044
 system: c3field
@@ -153,13 +153,79 @@ dist/assets/index-BwKONF7Y.js
 
 Local metadata warnings remain dashboard-managed and did not block the c3field build.
 
-## LIVE ENCOUNTER
+## DEPLOYMENT EXECUTION
 
-Live deployment verification is pending until the implementation commit is pushed and Cloudflare Pages serves the updated runtime bundle.
+Implementation commit:
+
+```text
+51d5213 OAR1 log: perceptual hierarchy material spaciousness
+```
+
+Deployment trigger:
+
+```text
+git push origin initiative/c3-field-convergence-infra
+```
+
+Result:
+
+```text
+remote branch advanced from 9cdad21 to 51d5213
+```
+
+GitHub returned a repository move notice but accepted the push.
+
+## LIVE ENCOUNTER VERIFICATION
+
+Live route:
+
+```text
+https://c3field.online/
+```
+
+Result:
+
+```json
+{
+  "routeStatus": 200,
+  "js": "assets/index-DjrWUp_m.js",
+  "css": "assets/index-BBJg6fXR.css",
+  "jsLength": 461650,
+  "cssLength": 98807,
+  "hasCrystalHeldWithin": true,
+  "hasMarbleInscription": true,
+  "hasCrystalMergedWithField": true,
+  "hasNoCrystalCoreCallout": true,
+  "hasCalloutCss": true,
+  "componentSectionLocated": true,
+  "componentProhibitedTerms": 0
+}
+```
+
+The deployed JavaScript hash differs from the local JavaScript hash because Cloudflare Pages builds with dashboard-managed environment values. The deployed CSS hash matches the local c3field build.
+
+## LIVE BOUNDARY CONFIRMATION
+
+The deployed lens optics component section contained zero matches for:
+
+```text
+insert(
+update(
+delete(
+upsert(
+SUPABASE_SERVICE_ROLE
+setInterval
+setTimeout
+poll
+retry
+scheduler
+autonomous
+createClient(
+```
 
 ## CURRENT STANDING
 
-implementation_validated_pending_live_encounter
+live_spaciousness_verified
 
 ## CLOSE
 

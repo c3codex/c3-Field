@@ -1,9 +1,9 @@
 ---
 document_type: oar2
-authority_level: implementation_validated
+authority_level: live_verified
 document_scope: perceptual_hierarchy_material_spaciousness
 title: OAR2 - Perceptual Hierarchy + Material Spaciousness Addendum v1
-status: implementation_validated_pending_live_encounter
+status: live_spaciousness_verified
 version: v1
 operator: op044
 system: c3field
@@ -227,7 +227,7 @@ docs/oar/process/oar1_perceptual_hierarchy_material_spaciousness_addendum_v1.met
 
 ## CURRENT STANDING
 
-implementation_validated_pending_live_encounter
+live_spaciousness_verified
 
 ## EXECUTION RESULT
 
@@ -249,12 +249,13 @@ Validation completed:
 - prohibited mutation/runtime scan returned no matches
 - `npm.cmd run build:c3field` passed
 - OAR1 evidence was written
-
-Pending:
-
-- deployment branch push
-- Cloudflare Pages propagation
-- live c3field.online bundle verification
+- implementation commit `51d5213` was pushed to the deployment branch
+- Cloudflare Pages propagation completed
+- live route `https://c3field.online/` returned HTTP 200
+- live JavaScript asset `assets/index-DjrWUp_m.js` contains the Crystal-merged field language
+- live CSS asset `assets/index-BBJg6fXR.css` contains the addendum styling
+- live bundle confirms `Crystal Core` is no longer a separate callout
+- isolated deployed component scan returned zero prohibited mutation/runtime terms
 
 Boundary held:
 
