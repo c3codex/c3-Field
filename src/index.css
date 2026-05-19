@@ -641,14 +641,22 @@ body,
   margin: 3px 0;
 }
 
-.c3-lapis-callouts section:nth-child(3) h4,
-.c3-lapis-callouts section:nth-child(3) p {
+.c3-lapis-callouts section:nth-child(2) h4,
+.c3-lapis-callouts section:nth-child(2) p {
   color: #67b8ff;
 }
 
-.c3-lapis-callouts section:nth-child(4) h4,
+.c3-lapis-callouts section:nth-child(3) h4,
+.c3-lapis-callouts section:nth-child(3) p {
+  color: #e9ded0;
+}
+
+.c3-lapis-callouts section:nth-child(4) h4 {
+  color: #f5d49a;
+}
+
 .c3-lapis-callouts section:nth-child(4) p {
-  color: #d474ff;
+  color: #d2b88f;
 }
 
 .c3-lapis-vector-panel {

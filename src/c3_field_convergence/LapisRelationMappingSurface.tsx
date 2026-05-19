@@ -306,12 +306,6 @@ export function LapisRelationMappingSurface({
       <div className="c3-lapis-lens-shell">
         <aside className="c3-lapis-callouts" aria-label="Lens material callouts">
           <section>
-            <h4>Crystal Core</h4>
-            <p>Authority source</p>
-            <p>Codex-held truth</p>
-            <p>Immutable center</p>
-          </section>
-          <section>
             <h4>Obsidian Gate</h4>
             <p>Constraint and threshold</p>
             <p>Refusal and correction</p>
@@ -324,10 +318,16 @@ export function LapisRelationMappingSurface({
             <p>Standing continuity</p>
           </section>
           <section>
+            <h4>Marble Inscription</h4>
+            <p>Evidence continuity</p>
+            <p>Closure sediment</p>
+            <p>Preserved lineage</p>
+          </section>
+          <section>
             <h4>Coherence Wave</h4>
-            <p>Field integrity</p>
-            <p>Balance and alignment</p>
-            <p>Bounded resonance</p>
+            <p>Crystal merged with field</p>
+            <p>Authority held as stillness</p>
+            <p>Breath around relation</p>
           </section>
         </aside>
 
@@ -383,7 +383,7 @@ export function LapisRelationMappingSurface({
           <div className="c3-lapis-authority-core">
             <span>Codex</span>
             <strong>Field</strong>
-            <small>{relationStanding}</small>
+            <small>crystal held within</small>
           </div>
           {fieldNodes.map((node) => (
             <article
@@ -464,6 +464,7 @@ export function LapisRelationMappingSurface({
           <p>Relation creates meaning</p>
           <p>Motion reveals standing</p>
           <p>Correction restores continuity</p>
+          <p>Crystal merges into field</p>
           <p>Center holds all</p>
         </aside>
       </div>
