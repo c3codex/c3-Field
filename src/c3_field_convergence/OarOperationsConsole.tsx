@@ -13,6 +13,10 @@ import {
 import { loadOarSpineRegistry, type OarSpineRegistryState } from "./oarSpineRegistry"
 import { opticsSurfaceRegistry, surfaceClasses } from "./opticsSurfaceRegistry"
 import { RuntimeCoherenceOptics } from "./RuntimeCoherenceOptics"
+import {
+  deriveRuntimeTransitionGovernance,
+  validateRuntimeTransitionGovernance,
+} from "./transitionGovernanceEngine"
 
 type EmphasisMode = "all" | "blocked" | "correction" | "evidence" | "closed"
 
@@ -95,6 +99,10 @@ export default function OarOperationsConsole() {
   const queueChecks: SpineValidationCheck[] = registryState ? validateQueueIntegrity(processInstances) : []
   const logChecks: SpineValidationCheck[] = registryState ? validateImmutableTransitionLog(transitionLog) : []
   const seededChecks = registryState?.seededReferenceChecks ?? []
+  const transitionGovernance = deriveRuntimeTransitionGovernance(processInstances, transitionLog)
+  const governanceChecks: SpineValidationCheck[] = registryState
+    ? validateRuntimeTransitionGovernance(transitionGovernance)
+    : []
   const persistenceStanding = registryState?.persistenceStanding ?? "held_pending_persistence"
   const persistenceMessage =
     registryState?.persistenceMessage ??
@@ -104,7 +112,7 @@ export default function OarOperationsConsole() {
     ? transitionLog.filter((entry) => transitionTouchesProcess(entry, selectedProcess.process_instance_key))
     : []
   const selectedChecks = selectedProcess
-    ? [...queueChecks, ...logChecks, ...seededChecks].filter((check) => {
+    ? [...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks].filter((check) => {
         const evidence = check.evidence.toLowerCase()
         return evidence.includes(selectedProcess.process_instance_key.toLowerCase()) || check.standing !== "passed"
       })
@@ -116,6 +124,8 @@ export default function OarOperationsConsole() {
       data-runtime-lens="runtime_lens_convergence_v1"
       data-optics-refinement="let_optics_speak_v1"
       data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
+      data-transition-governance={transitionGovernance.engine_key}
+      data-transition-governance-read-only={transitionGovernance.read_only}
     >
       <section className={`c3-ops-hero ${surfaceClasses(["center_authority_core", "continuity_stream"])}`}>
         <div>
@@ -162,11 +172,66 @@ export default function OarOperationsConsole() {
       <RuntimeCoherenceOptics
         processInstances={processInstances}
         transitionLog={transitionLog}
-        validationChecks={[...queueChecks, ...logChecks, ...seededChecks]}
+        validationChecks={[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks]}
         persistenceStanding={persistenceStanding}
       />
 
       <section className="c3-unified-runtime-console c3-runtime-field-overlays" aria-label="Unified runtime data console">
+      <section
+        className={`c3-ops-section c3-transition-governance-engine ${surfaceClasses(["threshold_boundary", "relation_orbit", "validation_wave"])}`}
+        aria-labelledby="transition-governance-engine"
+      >
+        <div className="c3-section-heading">
+          <p className="c3-ops-kicker">Passage Engine</p>
+          <h2 id="transition-governance-engine">Runtime Transition Governance</h2>
+        </div>
+        <dl className="c3-transition-governance-summary">
+          <div>
+            <dt>Encounterable</dt>
+            <dd>{transitionGovernance.summary.encounterable}</dd>
+          </div>
+          <div>
+            <dt>Held</dt>
+            <dd>{transitionGovernance.summary.held}</dd>
+          </div>
+          <div>
+            <dt>Blocked</dt>
+            <dd>{transitionGovernance.summary.blocked}</dd>
+          </div>
+          <div>
+            <dt>Pressure</dt>
+            <dd>{transitionGovernance.summary.pressure}</dd>
+          </div>
+          <div>
+            <dt>Correction</dt>
+            <dd>{transitionGovernance.summary.correction}</dd>
+          </div>
+        </dl>
+        <div className="c3-transition-branch-grid">
+          {transitionGovernance.branches.map((branch) => (
+            <article
+              className="c3-transition-branch"
+              data-passage-standing={branch.passage_engine}
+              data-transition-authority={branch.transition_authority}
+              key={branch.branch_key}
+            >
+              <div>
+                <h3>{branch.branch_key}</h3>
+                <StatusPill value={branch.passage_engine} />
+              </div>
+              <dl>
+                <div><dt>Authority</dt><dd>{statusLabel(branch.transition_authority)}</dd></div>
+                <div><dt>Continuity</dt><dd>{statusLabel(branch.continuity_pressure)}</dd></div>
+                <div><dt>Correction</dt><dd>{statusLabel(branch.correction_propagation)}</dd></div>
+                <div><dt>Release</dt><dd>{statusLabel(branch.release_cadence)}</dd></div>
+              </dl>
+              <small>{branch.evidence_references.length} evidence references</small>
+              <p>{branch.reasons[0]}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className={`c3-ops-section ${surfaceClasses(["relation_orbit", "glyph_cluster"])}`} aria-labelledby="process-instances">
         <div className="c3-section-heading">
           <p className="c3-ops-kicker">Queue</p>
@@ -306,7 +371,7 @@ export default function OarOperationsConsole() {
           <h2 id="validation-checks">Validation Checks</h2>
         </div>
         <div className="c3-check-grid">
-          {[...queueChecks, ...logChecks, ...seededChecks].map((check) => (
+          {[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks].map((check) => (
             <article
               className="c3-check-card"
               data-check-standing={check.standing}

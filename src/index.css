@@ -1749,7 +1749,8 @@ body,
 .c3-unified-runtime-console .c3-process-card,
 .c3-unified-runtime-console .c3-check-card,
 .c3-unified-runtime-console .c3-log-entry,
-.c3-unified-runtime-console .c3-state-list {
+.c3-unified-runtime-console .c3-state-list,
+.c3-unified-runtime-console .c3-transition-branch {
   background: rgba(3, 5, 9, 0.48);
   border: 1px solid rgba(190, 131, 62, 0.28);
   color: #e9ded0;
@@ -1757,7 +1758,8 @@ body,
 
 .c3-unified-runtime-console .c3-process-card h3,
 .c3-unified-runtime-console .c3-check-card h3,
-.c3-unified-runtime-console .c3-log-entry strong {
+.c3-unified-runtime-console .c3-log-entry strong,
+.c3-unified-runtime-console .c3-transition-branch h3 {
   color: #fff3cf;
 }
 
@@ -1767,7 +1769,10 @@ body,
 .c3-unified-runtime-console .c3-check-card p,
 .c3-unified-runtime-console .c3-log-entry span,
 .c3-unified-runtime-console .c3-log-entry small,
-.c3-unified-runtime-console .c3-log-entry code {
+.c3-unified-runtime-console .c3-log-entry code,
+.c3-unified-runtime-console .c3-transition-branch dt,
+.c3-unified-runtime-console .c3-transition-branch small,
+.c3-unified-runtime-console .c3-transition-branch p {
   color: #d2a96a;
 }
 
@@ -1838,6 +1843,127 @@ body,
   border-color: rgba(245, 212, 154, 0.68);
   color: #fff3cf;
   box-shadow: 0 0 18px rgba(245, 212, 154, 0.12);
+}
+
+.c3-transition-governance-engine {
+  position: relative;
+}
+
+.c3-transition-governance-summary {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0 0 14px;
+  background: rgba(190, 131, 62, 0.18);
+  border: 1px solid rgba(190, 131, 62, 0.2);
+}
+
+.c3-transition-governance-summary div {
+  background: rgba(3, 5, 9, 0.42);
+  min-width: 0;
+  padding: 12px;
+}
+
+.c3-transition-governance-summary dt {
+  color: #8bbcff;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.c3-transition-governance-summary dd {
+  color: #f5d49a;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.45rem);
+  line-height: 1;
+  margin: 7px 0 0;
+}
+
+.c3-transition-branch-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.c3-transition-branch {
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  position: relative;
+}
+
+.c3-transition-branch::before {
+  background: #d2a96a;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(245, 212, 154, 0.18);
+  content: "";
+  height: 0.55rem;
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 0.55rem;
+}
+
+.c3-transition-branch[data-passage-standing="encounterable"]::before {
+  background: #39d8cc;
+  box-shadow: 0 0 14px rgba(57, 216, 204, 0.2);
+}
+
+.c3-transition-branch[data-passage-standing="blocked"]::before {
+  background: #ff6042;
+  box-shadow: 0 0 14px rgba(255, 96, 66, 0.22);
+}
+
+.c3-transition-branch > div:first-child {
+  display: grid;
+  gap: 8px;
+  padding-right: 1.2rem;
+}
+
+.c3-transition-branch h3 {
+  font-size: 0.92rem;
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.c3-transition-branch dl {
+  display: grid;
+  gap: 7px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.c3-transition-branch dt {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.c3-transition-branch dd {
+  color: #e9ded0;
+  font-size: 0.82rem;
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.c3-transition-branch small {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.c3-transition-branch p {
+  border-top: 1px solid rgba(190, 131, 62, 0.16);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+  padding-top: 10px;
 }
 
 .c3-lens-inspection-overlay {
@@ -2250,7 +2376,10 @@ body,
 .c3-status-configured,
 .c3-status-automatic_pass,
 .c3-status-seeded,
-.c3-status-registry_backed {
+.c3-status-registry_backed,
+.c3-status-encounterable,
+.c3-status-permitted,
+.c3-status-ready {
   background: #dceadd;
   border-color: #9dc79f;
   color: #244f2a;
@@ -2271,7 +2400,8 @@ body,
 .c3-status-chazz_review_required,
 .c3-status-operator_required,
 .c3-status-held,
-.c3-status-held_pending_persistence {
+.c3-status-held_pending_persistence,
+.c3-status-conditioned {
   background: #f3edcf;
   border-color: #dbc978;
   color: #5d5018;
@@ -2445,12 +2575,17 @@ body,
   .c3-lapis-vectors,
   .c3-lapis-field-readout,
   .c3-unified-runtime-console .c3-process-grid,
-  .c3-unified-runtime-console .c3-transition-log {
+  .c3-unified-runtime-console .c3-transition-log,
+  .c3-transition-branch-grid {
     grid-template-columns: 1fr;
   }
 
   .c3-ops-summary {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .c3-transition-governance-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .c3-lapis-field {
