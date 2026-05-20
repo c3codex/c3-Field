@@ -220,6 +220,34 @@ Standing:
 
 The visibility-boundary correction now applies to a rendered optics surface instead of a hidden parent.
 
+## CORRECTION NOTE - RESPONSIVE OPTICS BOUNDS
+
+Follow-up operator observation:
+
+```text
+it back but now its a sizing issue its too big for both mobile and laptop, on mobile i need better page scrollability too
+```
+
+Cody confirmed the cause:
+
+- the lens center grid reserved a large fixed minimum track
+- the field used oversized minimum heights
+- mobile retained a fixed `35rem` field height
+- the runtime shell used broad overflow suppression
+
+Correction applied:
+
+- capped the field lens surface to `76rem`
+- capped the central field to `38rem` on laptop/desktop
+- removed oversized minimum field heights
+- bounded mobile field width to the viewport
+- reduced mobile relation-node and glyph sizing
+- changed the runtime lens shell to preserve vertical page flow
+
+Standing:
+
+The optics now remain visible while fitting laptop and mobile viewports with improved mobile scrollability.
+
 ## CLOSE
 
 The Field remains nonverbal without becoming absent.

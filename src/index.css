@@ -72,7 +72,8 @@ body,
     radial-gradient(circle at 50% 42rem, rgba(43, 112, 191, 0.24), transparent 46rem),
     linear-gradient(180deg, #030509 0%, #070910 42%, #09070b 100%);
   color: #f5d49a;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
   position: relative;
 }
 
@@ -406,10 +407,13 @@ body,
   color: #f5d49a;
   display: grid;
   gap: 22px;
+  justify-self: center;
   margin-top: 24px;
+  max-width: min(100%, 76rem);
   overflow: hidden;
   padding: clamp(18px, 3vw, 28px);
   position: relative;
+  width: 100%;
 }
 
 .c3-lapis-relation-surface::before {
@@ -513,18 +517,22 @@ body,
 .c3-lapis-lens-shell {
   display: grid;
   gap: clamp(18px, 2.6vw, 30px);
-  grid-template-columns: minmax(14rem, 0.75fr) minmax(34rem, 1.9fr) minmax(13rem, 0.75fr);
+  grid-template-columns: minmax(10rem, 0.58fr) minmax(0, min(52vw, 38rem)) minmax(9rem, 0.58fr);
   align-items: center;
+  justify-content: center;
   position: relative;
   z-index: 1;
 }
 
 .c3-lapis-field {
   aspect-ratio: 1;
-  min-height: min(68vw, 50rem);
+  justify-self: center;
+  max-width: 38rem;
+  min-height: 0;
   position: relative;
   isolation: isolate;
-  margin-inline: min(2vw, 1.5rem);
+  margin-inline: auto;
+  width: min(100%, 38rem);
 }
 
 .c3-lapis-geometry {
@@ -2423,8 +2431,10 @@ body,
   }
 
   .c3-lapis-field {
-    min-height: min(92vw, 42rem);
+    max-width: min(100%, 36rem);
+    min-height: 0;
     margin-inline: 0;
+    width: min(100%, 36rem);
   }
 
   .c3-lapis-inscription-rail {
@@ -2474,11 +2484,24 @@ body,
   }
 
   .c3-lapis-field {
-    min-height: 35rem;
+    max-width: calc(100vw - 28px);
+    min-height: 0;
+    width: calc(100vw - 28px);
   }
 
   .c3-lapis-node {
-    width: clamp(5.2rem, 24vw, 6.6rem);
+    width: clamp(4.7rem, 20vw, 5.8rem);
+  }
+
+  .c3-optics-speak-refinement .c3-lapis-node {
+    height: clamp(2.35rem, 10vw, 3.25rem);
+    padding: 0.32rem;
+    width: clamp(2.35rem, 10vw, 3.25rem);
+  }
+
+  .c3-optics-speak-refinement .c3-lapis-node .c3-lapis-node-glyph {
+    height: clamp(1.35rem, 5.8vw, 1.95rem);
+    width: clamp(1.35rem, 5.8vw, 1.95rem);
   }
 
   .c3-lapis-lens-action {
