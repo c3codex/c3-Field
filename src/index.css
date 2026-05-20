@@ -618,6 +618,35 @@ body,
   vector-effect: non-scaling-stroke;
 }
 
+.c3-optics-speak-refinement .c3-lapis-field-orbit {
+  opacity: 0.95;
+  stroke-width: 0.44;
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-orbit-boundary {
+  filter: drop-shadow(0 0 8px rgba(245, 212, 154, 0.18));
+  stroke-width: 0.62;
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-orbit-core {
+  stroke-width: 0.88;
+}
+
+.c3-optics-speak-refinement .c3-lapis-arc {
+  opacity: 0.92;
+  stroke-width: 0.96;
+}
+
+.c3-optics-speak-refinement .c3-lapis-arc[data-interrupted="true"] {
+  opacity: 1;
+  stroke-width: 1.12;
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-ray {
+  opacity: 0.86;
+  stroke-width: 0.44;
+}
+
 .c3-glyph {
   aspect-ratio: 1;
   border-radius: 50%;
@@ -920,45 +949,63 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-node {
-  background: none;
-  border: 0;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(103, 184, 255, 0.34), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(3, 5, 9, 0.86), rgba(3, 5, 9, 0.16) 72%, transparent 74%);
+  border: 1px solid rgba(103, 184, 255, 0.42);
   border-radius: 50%;
-  box-shadow: none;
-  height: clamp(1.5rem, 3vw, 2.25rem);
-  padding: 0;
+  box-shadow:
+    inset 0 0 24px rgba(103, 184, 255, 0.08),
+    0 0 22px rgba(103, 184, 255, 0.12);
+  height: clamp(3.4rem, 6vw, 5.2rem);
+  padding: clamp(0.42rem, 0.9vw, 0.72rem);
   place-items: center;
-  width: clamp(1.5rem, 3vw, 2.25rem);
+  width: clamp(3.4rem, 6vw, 5.2rem);
 }
 
 .c3-optics-speak-refinement .c3-lapis-node::before {
   background: currentColor;
   border-radius: 50%;
   box-shadow: 0 0 18px currentColor;
-  height: 0.28rem;
+  height: 0.42rem;
   inset: 50% auto auto 50%;
   opacity: 0.68;
   right: auto;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 0.28rem;
+  width: 0.42rem;
 }
 
 .c3-optics-speak-refinement .c3-lapis-node::after {
   border: 1px solid currentColor;
   border-radius: 50%;
   content: "";
-  inset: -0.42rem;
-  opacity: 0.28;
+  inset: -0.56rem;
+  opacity: 0.38;
   position: absolute;
 }
 
 .c3-optics-speak-refinement .c3-lapis-node[data-node-kind="blocked"],
 .c3-optics-speak-refinement .c3-lapis-node[data-node-kind="correction"] {
+  background:
+    radial-gradient(circle at 50% 44%, rgba(255, 96, 66, 0.34), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(77, 29, 24, 0.86), rgba(77, 29, 24, 0.18) 72%, transparent 74%);
+  border-color: rgba(255, 96, 66, 0.52);
+  box-shadow:
+    inset 0 0 24px rgba(255, 96, 66, 0.1),
+    0 0 24px rgba(255, 96, 66, 0.14);
   color: #ff6042;
 }
 
 .c3-optics-speak-refinement .c3-lapis-node[data-node-kind="closure"],
 .c3-optics-speak-refinement .c3-lapis-node[data-node-kind="evidence"] {
+  background:
+    radial-gradient(circle at 50% 44%, rgba(233, 222, 208, 0.38), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(241, 236, 226, 0.2), rgba(3, 5, 9, 0.16) 72%, transparent 74%);
+  border-color: rgba(233, 222, 208, 0.5);
+  box-shadow:
+    inset 0 0 22px rgba(233, 222, 208, 0.08),
+    0 0 20px rgba(233, 222, 208, 0.12);
   color: #e9ded0;
 }
 
@@ -968,6 +1015,10 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-node[data-node-kind="transition"] {
+  background:
+    radial-gradient(circle at 50% 44%, rgba(245, 212, 154, 0.32), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(95, 57, 20, 0.42), rgba(3, 5, 9, 0.16) 72%, transparent 74%);
+  border-color: rgba(245, 212, 154, 0.42);
   color: #d2a96a;
 }
 
@@ -983,9 +1034,9 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-node .c3-lapis-node-glyph {
-  height: 100%;
-  opacity: 0.92;
-  width: 100%;
+  height: clamp(1.8rem, 3vw, 2.7rem);
+  opacity: 0.96;
+  width: clamp(1.8rem, 3vw, 2.7rem);
   z-index: 2;
 }
 
@@ -1241,13 +1292,13 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-state-readout {
-  gap: 8px;
+  gap: 10px;
 }
 
 .c3-optics-speak-refinement .c3-lapis-state-readout div {
   border: 0;
   display: block;
-  height: 0.72rem;
+  height: 2.15rem;
   overflow: hidden;
   padding: 0;
   position: relative;
@@ -1258,8 +1309,10 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-state-readout dd {
-  background: rgba(245, 212, 154, 0.1);
-  border: 1px solid rgba(190, 131, 62, 0.18);
+  background:
+    radial-gradient(circle at 0.9rem 50%, rgba(103, 184, 255, 0.22), transparent 0.72rem),
+    linear-gradient(90deg, rgba(3, 5, 9, 0.58), rgba(3, 5, 9, 0.12));
+  border: 1px solid rgba(190, 131, 62, 0.22);
   border-radius: 999px;
   color: transparent;
   font-size: 0;
@@ -1272,10 +1325,24 @@ body,
   background: #67b8ff;
   border-radius: inherit;
   content: "";
-  inset: 0 auto 0 0;
+  inset: 0.32rem auto 0.32rem 0.32rem;
+  opacity: 0.82;
+  position: absolute;
+  width: max(var(--c3-state-strength), 1.2rem);
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout dd::after {
+  background: currentColor;
+  border-radius: 50%;
+  box-shadow: 0 0 14px currentColor;
+  content: "";
+  height: 0.56rem;
+  left: 0.72rem;
   opacity: 0.76;
   position: absolute;
-  width: max(var(--c3-state-strength), 0.32rem);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.56rem;
 }
 
 .c3-optics-speak-refinement .c3-lapis-state-readout [data-state="blocked"] dd::before,
@@ -1285,9 +1352,21 @@ body,
   background: #ff6042;
 }
 
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="blocked"] dd,
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="correction"] dd,
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="orphaned"] dd,
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="unverified"] dd {
+  color: #ff6042;
+}
+
 .c3-optics-speak-refinement .c3-lapis-state-readout [data-state="completed"] dd::before,
 .c3-optics-speak-refinement .c3-lapis-state-readout [data-state="evidence"] dd::before {
   background: #e9ded0;
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="completed"] dd,
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="evidence"] dd {
+  color: #e9ded0;
 }
 
 .c3-lapis-callouts .c3-optics-material-lapis h4,
@@ -1374,9 +1453,12 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-field-readout {
-  background: linear-gradient(90deg, rgba(3, 5, 9, 0.24), rgba(3, 5, 9, 0.08));
-  border-color: rgba(190, 131, 62, 0.16);
-  padding: 10px 0;
+  background:
+    radial-gradient(circle at 8% 50%, rgba(245, 212, 154, 0.14), transparent 18%),
+    radial-gradient(circle at 82% 50%, rgba(103, 184, 255, 0.12), transparent 24%),
+    linear-gradient(90deg, rgba(3, 5, 9, 0.42), rgba(3, 5, 9, 0.12));
+  border-color: rgba(190, 131, 62, 0.24);
+  padding: 12px 0;
 }
 
 .c3-lapis-field-readout > div {
@@ -1388,8 +1470,10 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-field-readout > div {
-  background: transparent;
-  border-left-color: rgba(190, 131, 62, 0.12);
+  background: radial-gradient(circle at 50% 50%, rgba(245, 212, 154, 0.08), transparent 62%);
+  border-left-color: rgba(190, 131, 62, 0.18);
+  min-height: 4.6rem;
+  place-content: center;
 }
 
 .c3-optics-speak-refinement .c3-lapis-field-readout span,
@@ -1400,7 +1484,7 @@ body,
 .c3-optics-speak-refinement .c3-lapis-field-readout strong {
   color: transparent;
   font-size: 0;
-  min-height: 1rem;
+  min-height: 1.4rem;
   position: relative;
 }
 
@@ -1409,9 +1493,21 @@ body,
   border-radius: 999px;
   content: "";
   display: block;
-  height: 0.68rem;
+  height: 1rem;
   opacity: 0.82;
   width: clamp(1.8rem, 42%, 4.5rem);
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-readout strong::after {
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  content: "";
+  height: 1rem;
+  left: 0;
+  opacity: 0.28;
+  position: absolute;
+  top: 0;
+  width: clamp(4rem, 76%, 8rem);
 }
 
 .c3-optics-speak-refinement .c3-lapis-field-readout > div:nth-child(1) strong::before {

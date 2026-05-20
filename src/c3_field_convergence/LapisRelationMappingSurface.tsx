@@ -350,6 +350,7 @@ export function LapisRelationMappingSurface({
       data-optics-grammar={coherenceOpticsGrammarRegistry.grammarKey}
       data-glyph-registry={glyphOperatorRegistry.registryKey}
       data-nonverbal-state="field_optics_nonverbal_state_expression_v1"
+      data-visibility-boundary="restore_field_optics_visibility_boundary_v1"
       data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
     >
       <div className="c3-lapis-heading">
