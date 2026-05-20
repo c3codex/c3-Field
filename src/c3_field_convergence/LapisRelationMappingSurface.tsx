@@ -349,6 +349,7 @@ export function LapisRelationMappingSurface({
       aria-labelledby="lapis-relation-mapping"
       data-optics-grammar={coherenceOpticsGrammarRegistry.grammarKey}
       data-glyph-registry={glyphOperatorRegistry.registryKey}
+      data-hierarchical-restraint="runtime_optics_hierarchical_restraint_v1"
       data-nonverbal-state="field_optics_nonverbal_state_expression_v1"
       data-visibility-boundary="restore_field_optics_visibility_boundary_v1"
       data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
