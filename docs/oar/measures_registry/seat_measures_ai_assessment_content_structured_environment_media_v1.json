@@ -1,0 +1,235 @@
+{
+  "generatedAt": "2026-05-20T20:30:35.646Z",
+  "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+  "mutationPerformed": true,
+  "assessmentContent": {
+    "chamber": {
+      "title": "MEASURES AI ASSESSMENT",
+      "body": "This chamber evaluates the structure surrounding your AI use.\n\nAuthority.\nValidation.\nOversight.\nImplementation.\nBehavioral registration.\n\nThe system is structured.\nThe assessment identifies whether your AI environment is.",
+      "primary_action": "Begin Assessment",
+      "soft_src_intro": "Before the diagnostic begins,\nidentify the environment being assessed.",
+      "soft_src_continuation": "Continue to Diagnostic"
+    },
+    "completion": {
+      "title": "MEASURES AI ASSESSMENT COMPLETE",
+      "body": "Structural conditions have been recorded.\n\nContinue into the Structured Environment.",
+      "primary_action": "Enter Structured Environment"
+    }
+  },
+  "assessmentEncounter": {
+    "encounter_key": "iis_eval_gate1",
+    "display_title": "MEASURES AI ASSESSMENT",
+    "title": "MEASURES AI ASSESSMENT",
+    "completionTitle": "MEASURES AI ASSESSMENT COMPLETE",
+    "dbBeforeSiteEditRuleActive": true
+  },
+  "structuredVideoChecks": [
+    {
+      "storagePath": "measures_structured_enviroments",
+      "url": "https://media.c3field.online/measures_structured_enviroments",
+      "ok": false,
+      "status": 404,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "storagePath": "measures_structured_enviroments.mp4",
+      "url": "https://media.c3field.online/measures_structured_enviroments.mp4",
+      "ok": true,
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": "7176219"
+    }
+  ],
+  "selectedStructuredVideo": {
+    "storagePath": "measures_structured_enviroments.mp4",
+    "url": "https://media.c3field.online/measures_structured_enviroments.mp4",
+    "ok": true,
+    "status": 200,
+    "contentType": "video/mp4",
+    "contentLength": "7176219"
+  },
+  "marbleToneChecks": [
+    {
+      "storagePath": "marble_tone_rise_return_5min.wav",
+      "url": "https://media.c3field.online/marble_tone_rise_return_5min.wav",
+      "ok": true,
+      "status": 200,
+      "contentType": "audio/x-wav",
+      "contentLength": "26460044"
+    }
+  ],
+  "selectedMarbleTone": {
+    "storagePath": "marble_tone_rise_return_5min.wav",
+    "url": "https://media.c3field.online/marble_tone_rise_return_5min.wav",
+    "ok": true,
+    "status": 200,
+    "contentType": "audio/x-wav",
+    "contentLength": "26460044"
+  },
+  "mediaRows": [
+    {
+      "media_role": "structured_environment_passage_video",
+      "storage_bucket": "measures-media",
+      "storage_path": "measures_structured_enviroments.mp4",
+      "mime_type": "video/mp4",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Structured Environment passage after Measures AI Assessment completion",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    },
+    {
+      "media_role": "measures_structured_enviroments",
+      "storage_bucket": "measures-media",
+      "storage_path": "measures_structured_enviroments.mp4",
+      "mime_type": "video/mp4",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Runtime alias for uploaded Structured Environment talking-head passage",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    },
+    {
+      "media_role": "marble_tone",
+      "storage_bucket": "measures-media",
+      "storage_path": "marble_tone_rise_return_5min.wav",
+      "mime_type": "audio/x-wav",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Marble tone continuity for Measures Registry launch flow when Audio is enabled",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    },
+    {
+      "media_role": "installation_tone_marble",
+      "storage_bucket": "measures-media",
+      "storage_path": "marble_tone_rise_return_5min.wav",
+      "mime_type": "audio/x-wav",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Marble tone continuity for Measures Registry launch flow when Audio is enabled",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    },
+    {
+      "media_role": "installation_tone_marble_rise_return_v1",
+      "storage_bucket": "measures-media",
+      "storage_path": "marble_tone_rise_return_5min.wav",
+      "mime_type": "audio/x-wav",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Marble tone continuity for Measures Registry launch flow when Audio is enabled",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    }
+  ],
+  "releaseRows": [
+    {
+      "registry_key": "iis_eval_gate1",
+      "release_state": "released",
+      "access_state": "callable",
+      "is_active": true
+    },
+    {
+      "registry_key": "systems_offering",
+      "release_state": "released",
+      "access_state": "callable",
+      "is_active": true
+    }
+  ],
+  "validationRows": [
+    {
+      "media_role": "installation_tone_marble",
+      "storage_bucket": "measures-media",
+      "storage_path": "marble_tone_rise_return_5min.wav",
+      "mime_type": "audio/x-wav",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Marble tone continuity for Measures Registry launch flow when Audio is enabled",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    },
+    {
+      "media_role": "installation_tone_marble_rise_return_v1",
+      "storage_bucket": "measures-media",
+      "storage_path": "marble_tone_rise_return_5min.wav",
+      "mime_type": "audio/x-wav",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Marble tone continuity for Measures Registry launch flow when Audio is enabled",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    },
+    {
+      "media_role": "marble_tone",
+      "storage_bucket": "measures-media",
+      "storage_path": "marble_tone_rise_return_5min.wav",
+      "mime_type": "audio/x-wav",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Marble tone continuity for Measures Registry launch flow when Audio is enabled",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    },
+    {
+      "media_role": "measures_structured_enviroments",
+      "storage_bucket": "measures-media",
+      "storage_path": "measures_structured_enviroments.mp4",
+      "mime_type": "video/mp4",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Runtime alias for uploaded Structured Environment talking-head passage",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    },
+    {
+      "media_role": "structured_environment_passage_video",
+      "storage_bucket": "measures-media",
+      "storage_path": "measures_structured_enviroments.mp4",
+      "mime_type": "video/mp4",
+      "is_active": true,
+      "metadata": {
+        "runtime_use": "Structured Environment passage after Measures AI Assessment completion",
+        "source_oar2": "oar2_seat_measures_ai_assessment_content_structured_environment_media_v1",
+        "storage_provider": "cloudflare_r2",
+        "frontend_hardcode_allowed": false,
+        "bucket_presence_only_authority": false
+      }
+    }
+  ],
+  "processRule": "DB seating verification must complete before any OAR2 site edits are made for text, media, route, CTA, or encounter content.",
+  "boundariesHeld": [
+    "No frontend URL hardcode.",
+    "No bucket-presence-only authority.",
+    "No parallel content authority.",
+    "No parallel assessment intake."
+  ]
+}
