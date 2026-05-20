@@ -4055,24 +4055,27 @@ body,
   min-height: 100svh;
   width: min(100%, calc(100% - 2 * var(--registry-page-padding-active)));
   margin: 0 auto;
-  padding: clamp(0.8rem, 2.2vw, 1.35rem) 0;
+  padding: clamp(0.8rem, 2.2vw, 1.35rem) 0 clamp(1rem, 3vw, 2rem);
   display: grid;
-  grid-template-rows: minmax(0, auto) auto auto auto;
-  gap: clamp(0.75rem, 1.6vw, 1.05rem);
-  align-items: end;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  gap: clamp(0.85rem, 1.8vw, 1.25rem);
+  align-items: center;
 }
 
 .registry-diagnostic-passage video {
   width: 100%;
-  height: min(58svh, 38rem);
+  height: min(66svh, 44rem);
   object-fit: contain;
   background: #000;
+  border: 1px solid rgba(246, 248, 251, 0.16);
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.36);
 }
 
 .registry-diagnostic-passage-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
+  justify-content: flex-end;
 }
 
 .registry-diagnostic-passage > div {
@@ -4103,9 +4106,9 @@ body,
 }
 
 .registry-diagnostic-passage button {
-  justify-self: start;
+  justify-self: end;
   border: 1px solid rgba(246, 248, 251, 0.54);
-  border-radius: 0;
+  border-radius: 8px;
   background: transparent;
   color: var(--registry-text-primary);
   padding: 0.84rem 1rem;
@@ -4115,6 +4118,14 @@ body,
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.registry-marble-tone {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .registry-diagnostic-encounter {
@@ -4883,6 +4894,96 @@ body,
 .registry-iis-eval-form {
   display: grid;
   gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.registry-assessment-chamber {
+  max-width: min(68rem, calc(100% - 2 * var(--registry-page-padding-active)));
+  align-content: center;
+}
+
+.registry-assessment-chamber::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(216, 203, 176, 0.1), transparent 28rem),
+    linear-gradient(135deg, rgba(9, 17, 23, 0.94), rgba(8, 11, 15, 0.98) 58%, rgba(22, 24, 26, 0.96));
+}
+
+.registry-chamber-heading,
+.registry-chamber-copy {
+  display: grid;
+  gap: 0.65rem;
+  max-width: min(54rem, 100%);
+}
+
+.registry-chamber-heading h1,
+.registry-chamber-copy h2,
+.registry-assessment-complete h2 {
+  margin: 0;
+  color: var(--registry-text-primary);
+  line-height: 1.05;
+}
+
+.registry-chamber-heading h1 {
+  font-size: var(--registry-entry-headline-active);
+}
+
+.registry-chamber-copy h2,
+.registry-assessment-complete h2 {
+  font-size: var(--registry-section-headline);
+}
+
+.registry-chamber-heading span,
+.registry-chamber-copy span,
+.registry-assessment-complete span {
+  color: var(--registry-text-muted);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.registry-assessment-chamber .registry-iis-eval-form {
+  border: 1px solid rgba(218, 204, 174, 0.24);
+  background:
+    linear-gradient(180deg, rgba(246, 248, 251, 0.075), rgba(246, 248, 251, 0.035)),
+    rgba(5, 7, 10, 0.72);
+  padding: clamp(1rem, 2.6vw, 2rem);
+}
+
+.registry-src-capture fieldset,
+.registry-assessment-chamber .registry-iis-eval-form fieldset {
+  max-width: none;
+}
+
+.registry-assessment-chamber .registry-iis-eval-form input,
+.registry-assessment-chamber .registry-iis-eval-form textarea {
+  border-radius: 8px;
+  border-color: rgba(218, 204, 174, 0.28);
+  background: rgba(2, 4, 7, 0.58);
+}
+
+.registry-assessment-chamber .registry-iis-eval-form textarea {
+  min-height: 9rem;
+}
+
+.registry-assessment-complete {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.registry-assessment-complete video {
+  width: 100%;
+  max-height: min(58svh, 34rem);
+  object-fit: contain;
+  background: #000;
+  border: 1px solid rgba(218, 204, 174, 0.22);
+}
+
+.registry-media-absence {
+  border-left: 1px solid rgba(218, 204, 174, 0.4);
+  padding-left: 0.85rem;
 }
 
 .registry-iis-eval-form fieldset {

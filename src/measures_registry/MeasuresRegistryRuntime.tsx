@@ -44,6 +44,11 @@ const OPTIONAL_MEDIA_ROLES = [
   "right_measured_hero",
   "measured_hero_motion_graphic",
   "paragraph_agents_of_chaos",
+  "structured_environment_passage_video",
+  "measures_structured_enviroments",
+  "marble_tone",
+  "installation_tone_marble",
+  "installation_tone_marble_rise_return_v1",
 ] as const
 const QUERY_MEDIA_ROLES = [...REQUIRED_MEDIA_ROLES, ...OPTIONAL_MEDIA_ROLES] as const
 const REQUIRED_DESIGN_TOKEN_KEYS = [
@@ -381,6 +386,8 @@ export default function MeasuresRegistryRuntime() {
   })
   const [evalFields, setEvalFields] = useState<Record<string, string>>({})
   const [evalAnswers, setEvalAnswers] = useState<Record<string, string>>({})
+  const [evalStep, setEvalStep] = useState<"src_capture" | "diagnostic">("src_capture")
+  const [evalSectionIndex, setEvalSectionIndex] = useState(0)
   const [evalSubmitting, setEvalSubmitting] = useState(false)
   const [evalSubmitted, setEvalSubmitted] = useState(false)
   const [evalError, setEvalError] = useState<string | null>(null)
@@ -631,6 +638,13 @@ export default function MeasuresRegistryRuntime() {
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
+  const structuredEnvironmentPassageVideoUrl =
+    mediaUrl(mediaMap.get("structured_environment_passage_video")) ??
+    mediaUrl(mediaMap.get("measures_structured_enviroments"))
+  const marbleToneUrl =
+    mediaUrl(mediaMap.get("marble_tone")) ??
+    mediaUrl(mediaMap.get("installation_tone_marble")) ??
+    mediaUrl(mediaMap.get("installation_tone_marble_rise_return_v1"))
 
   function actionLabel(actionKey: string, actions = pathChoiceCopy.actions) {
     const plaque = pathChoiceCopy.plaques.find(
@@ -1039,6 +1053,24 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
+  function renderMarbleToneContinuity() {
+    if (passageMuted || !marbleToneUrl) return null
+
+    return (
+      <audio
+        className="registry-marble-tone"
+        src={marbleToneUrl}
+        autoPlay
+        loop
+        preload="auto"
+        aria-hidden="true"
+        ref={(node) => {
+          if (node) node.volume = 0.08
+        }}
+      />
+    )
+  }
+
   function publicationAssetUrl(path: string | null) {
     if (!path) return null
     const normalized = path.startsWith("measures-registry/")
@@ -1118,6 +1150,25 @@ export default function MeasuresRegistryRuntime() {
     setEvalAnswers((current) => ({ ...current, [key]: value }))
   }
 
+  function continueToDiagnostic() {
+    const requiredFields = [
+      "institution_name",
+      "organization_type",
+      "contact_name",
+      "contact_email",
+    ]
+    const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
+
+    if (missing.length > 0) {
+      setEvalError(`Missing required fields: ${missing.join(", ")}`)
+      return
+    }
+
+    setEvalError(null)
+    setEvalStep("diagnostic")
+    setEvalSectionIndex(0)
+  }
+
   async function submitIisEvaluation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setEvalSubmitting(true)
@@ -1125,10 +1176,7 @@ export default function MeasuresRegistryRuntime() {
 
     const requiredFields = [
       "institution_name",
-      "institution_address",
-      "institution_phone",
       "contact_name",
-      "contact_position",
       "contact_email",
     ]
     const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
@@ -1141,10 +1189,10 @@ export default function MeasuresRegistryRuntime() {
 
     const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
       institution_name: evalFields.institution_name.trim(),
-      institution_address: evalFields.institution_address.trim(),
-      institution_phone: evalFields.institution_phone.trim(),
+      institution_address: evalFields.institution_address?.trim() ?? "",
+      institution_phone: evalFields.institution_phone?.trim() ?? "",
       contact_name: evalFields.contact_name.trim(),
-      contact_position: evalFields.contact_position.trim(),
+      contact_position: evalFields.contact_position?.trim() || evalFields.organization_type?.trim() || "",
       contact_email: evalFields.contact_email.trim(),
       evaluation_answers: evalAnswers,
       capture_context: "iis_eval_gate1",
@@ -1285,16 +1333,16 @@ export default function MeasuresRegistryRuntime() {
                   className="registry-epigraph-mute"
                   aria-label={epigraphMuted ? "Enable sound" : "Mute"}
                   onClick={() => setEpigraphMuted((current) => !current)}
-                >
-                  {epigraphMuted ? "Sound" : "Mute"}
-                </button>
-                <button
-                  type="button"
-                  className="registry-epigraph-skip"
-                  onClick={() => setLandingHeroReady(true)}
-                >
-                  Skip
-                </button>
+              >
+                {epigraphMuted ? "Audio" : "Mute"}
+              </button>
+              <button
+                type="button"
+                className="registry-epigraph-skip"
+                onClick={() => setLandingHeroReady(true)}
+              >
+                Continue
+              </button>
               </div>
             ) : null}
           </section>
@@ -1385,10 +1433,6 @@ export default function MeasuresRegistryRuntime() {
   function renderEducationalDiagnosticPassageSurface() {
     if (reportMissingClassification("educational_diagnostic_passage", educationalDiagnosticPassageCopy)) return null
 
-    const continueAction =
-      educationalDiagnosticPassageCopy.actions.find((action) => asString(action.action_key) === "continue_to_evaluation") ??
-      educationalDiagnosticPassageCopy.actions.find((action) => asString(action.target_encounter_key) === "educate_eval_encounter")
-
     return (
       <main
         className="measures-registry-runtime"
@@ -1404,31 +1448,35 @@ export default function MeasuresRegistryRuntime() {
               controls
               playsInline
               preload="auto"
-              onEnded={() => navigateSurface("educate_eval")}
+              onEnded={() => navigateSurface("iis_eval_gate1")}
               aria-label="Measures Registry diagnostic passage"
             />
           ) : null}
           <div className="registry-diagnostic-passage-controls" aria-label="Passage controls">
             <button
               type="button"
-              onClick={() => handleAction(asString(continueAction?.action_key) ?? "continue_to_evaluation", educationalDiagnosticPassageCopy.actions)}
+              onClick={() => navigateSurface("iis_eval_gate1")}
             >
-              Skip
+              Continue
             </button>
             <button type="button" onClick={() => setPassageMuted((current) => !current)}>
-              {passageMuted ? "Sound" : "Mute"}
+              {passageMuted ? "Audio" : "Mute"}
             </button>
           </div>
           <div>
             {educationalDiagnosticPassageCopy.eyebrow ? <span>{educationalDiagnosticPassageCopy.eyebrow}</span> : null}
-            {educationalDiagnosticPassageCopy.title ? <h1>{educationalDiagnosticPassageCopy.title}</h1> : null}
-            {educationalDiagnosticPassageCopy.subtitle ? <p>{educationalDiagnosticPassageCopy.subtitle}</p> : null}
+            <h1>{educationalDiagnosticPassageCopy.title ?? "Before evaluation, recognize the environment."}</h1>
+            <p>
+              {educationalDiagnosticPassageCopy.subtitle ??
+                "Most AI instability is not model failure alone. It emerges where authority, validation, oversight, implementation structure, and behavioral registration are unclear or absent."}
+            </p>
+            <p>This passage prepares the assessment chamber.</p>
           </div>
           <button
             type="button"
-            onClick={() => handleAction(asString(continueAction?.action_key) ?? "continue_to_evaluation", educationalDiagnosticPassageCopy.actions)}
+            onClick={() => navigateSurface("iis_eval_gate1")}
           >
-            {asString(continueAction?.label) ?? "Continue to Evaluation"}
+            Continue to Assessment
           </button>
         </section>
       </main>
@@ -1729,84 +1777,145 @@ export default function MeasuresRegistryRuntime() {
 
   function renderIisEvalGateSurface() {
     if (reportMissingClassification("iis_eval_gate1", iisEvalCopy)) return null
+    const evaluationSections = iisEvalCopy.evaluationSections
+    const currentSection = evaluationSections[evalSectionIndex] ?? null
+    const currentSectionTitle = asString(currentSection?.title)
+    const currentQuestions = Array.isArray(currentSection?.questions)
+      ? currentSection.questions.filter((item): item is string => typeof item === "string")
+      : []
+    const finalDiagnosticSection = evalSectionIndex >= Math.max(evaluationSections.length - 1, 0)
 
     return (
-      <main className="measures-registry-runtime" data-surface="iis_eval_gate1" style={registryTokenStyle}>
-        {renderHeader(null, iisEvalCopy.actions)}
-        <section className="registry-iis-eval" aria-label={iisEvalCopy.title ?? undefined}>
-          {iisEvalCopy.eyebrow ? <span>{iisEvalCopy.eyebrow}</span> : null}
-          {iisEvalCopy.title ? <h1>{iisEvalCopy.title}</h1> : null}
-          {iisEvalCopy.subtitle ? <p>{iisEvalCopy.subtitle}</p> : null}
+      <main className="measures-registry-runtime" data-surface="iis_eval_gate1" data-chamber-state={evalStep} style={registryTokenStyle}>
+        <section className="registry-iis-eval registry-assessment-chamber" aria-label={iisEvalCopy.title ?? "MEASURES AI ASSESSMENT"}>
+          <div className="registry-chamber-heading">
+            <span>{iisEvalCopy.eyebrow ?? "Governed Diagnostic Chamber"}</span>
+            <h1>{iisEvalCopy.title ?? "MEASURES AI ASSESSMENT"}</h1>
+            <p>
+              {iisEvalCopy.subtitle ??
+                "This chamber evaluates the structure surrounding your AI use. Authority. Validation. Oversight. Implementation. Behavioral registration."}
+            </p>
+          </div>
 
           {evalSubmitted ? (
-            <div className="registry-eval-resolution">
-              <p>{iisEvalCopy.resolutionText}</p>
+            <div className="registry-eval-resolution registry-assessment-complete">
+              <span>Assessment Complete</span>
+              <h2>MEASURES AI ASSESSMENT COMPLETE</h2>
+              <p>{iisEvalCopy.resolutionText ?? "Structural conditions have been recorded."}</p>
+              <p>Continue into the Structured Environment.</p>
+              {structuredEnvironmentPassageVideoUrl ? (
+                <video
+                  src={structuredEnvironmentPassageVideoUrl}
+                  autoPlay
+                  muted={passageMuted}
+                  controls
+                  playsInline
+                  preload="auto"
+                  onEnded={() => navigateSurface("systems_offering")}
+                  aria-label="Structured Environment passage"
+                />
+              ) : (
+                <p className="registry-media-absence">Structured Environment passage media is not seated in the runtime registry.</p>
+              )}
+              <div className="registry-diagnostic-passage-controls" aria-label="Structured Environment passage controls">
+                <button type="button" onClick={() => navigateSurface("systems_offering")}>
+                  Enter Structured Environment
+                </button>
+                <button type="button" onClick={() => setPassageMuted((current) => !current)}>
+                  {passageMuted ? "Audio" : "Mute"}
+                </button>
+              </div>
             </div>
+          ) : evalStep === "src_capture" ? (
+            <form
+              className="registry-iis-eval-form registry-src-capture"
+              onSubmit={(event) => {
+                event.preventDefault()
+                continueToDiagnostic()
+              }}
+            >
+              <div className="registry-chamber-copy">
+                <span>Environment Identity</span>
+                <h2>Before the diagnostic begins, identify the environment being assessed.</h2>
+              </div>
+              <fieldset>
+                <legend>Soft SRC Intake</legend>
+                {[
+                  ["institution_name", "Company / Organization Name", "text"],
+                  ["organization_type", "Type of Business / Organization", "text"],
+                  ["contact_name", "Contact Name", "text"],
+                  ["contact_email", "Email", "email"],
+                ].map(([key, label, type]) => (
+                  <label key={key}>
+                    <span>{label}</span>
+                    <input
+                      type={type}
+                      value={evalFields[key] ?? ""}
+                      onChange={(event) => setEvalField(key, event.target.value)}
+                      required
+                    />
+                  </label>
+                ))}
+              </fieldset>
+              {evalError ? <p className="registry-form-error">{evalError}</p> : null}
+              <div className="registry-diagnostic-passage-controls">
+                <button type="submit">Continue to Diagnostic</button>
+                <button type="button" onClick={() => setPassageMuted((current) => !current)}>
+                  {passageMuted ? "Audio" : "Mute"}
+                </button>
+              </div>
+            </form>
           ) : (
             <form className="registry-iis-eval-form" onSubmit={submitIisEvaluation}>
-              <fieldset>
-                <legend>Institution</legend>
-                {[
-                  ["institution_name", "Institution Name"],
-                  ["institution_address", "Institution Address"],
-                  ["institution_phone", "Institution Phone"],
-                ].map(([key, label]) => (
-                  <label key={key}>
-                    <span>{label}</span>
-                    <input
-                      value={evalFields[key] ?? ""}
-                      onChange={(event) => setEvalField(key, event.target.value)}
-                      required
-                    />
-                  </label>
-                ))}
-              </fieldset>
+              <div className="registry-chamber-copy">
+                <span>Diagnostic Progression</span>
+                <h2>The system is structured. The assessment identifies whether your AI environment is.</h2>
+                <p>{evaluationSections.length > 0 ? `${evalSectionIndex + 1} of ${evaluationSections.length}` : "Diagnostic standing not seated"}</p>
+              </div>
 
               <fieldset>
-                <legend>Contact</legend>
-                {[
-                  ["contact_name", "Contact Name"],
-                  ["contact_position", "Contact Position"],
-                  ["contact_email", "Contact Email"],
-                ].map(([key, label]) => (
-                  <label key={key}>
-                    <span>{label}</span>
-                    <input
-                      type={key === "contact_email" ? "email" : "text"}
-                      value={evalFields[key] ?? ""}
-                      onChange={(event) => setEvalField(key, event.target.value)}
-                      required
-                    />
-                  </label>
-                ))}
+                {currentSectionTitle ? <legend>{currentSectionTitle}</legend> : <legend>Diagnostic</legend>}
+                {currentQuestions.length > 0 ? (
+                  currentQuestions.map((question) => (
+                    <label key={question}>
+                      <span>{question}</span>
+                      <textarea
+                        value={evalAnswers[question] ?? ""}
+                        onChange={(event) => setEvalAnswer(question, event.target.value)}
+                      />
+                    </label>
+                  ))
+                ) : (
+                  <p className="registry-media-absence">Diagnostic questions are not seated in the runtime registry.</p>
+                )}
               </fieldset>
-
-              {iisEvalCopy.evaluationSections.map((section) => {
-                const title = asString(section.title)
-                const questions = Array.isArray(section.questions)
-                  ? section.questions.filter((item): item is string => typeof item === "string")
-                  : []
-
-                return (
-                  <fieldset key={title}>
-                    {title ? <legend>{title}</legend> : null}
-                    {questions.map((question) => (
-                      <label key={question}>
-                        <span>{question}</span>
-                        <textarea
-                          value={evalAnswers[question] ?? ""}
-                          onChange={(event) => setEvalAnswer(question, event.target.value)}
-                        />
-                      </label>
-                    ))}
-                  </fieldset>
-                )
-              })}
 
               {evalError ? <p className="registry-form-error">{evalError}</p> : null}
-              <button type="submit" disabled={evalSubmitting}>
-                {evalSubmitting ? "Seating Evaluation" : "Submit Evaluation"}
-              </button>
+              <div className="registry-diagnostic-passage-controls">
+                {evalSectionIndex > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => setEvalSectionIndex((current) => Math.max(0, current - 1))}
+                  >
+                    Continue Back
+                  </button>
+                ) : null}
+                {!finalDiagnosticSection && evaluationSections.length > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => setEvalSectionIndex((current) => Math.min(evaluationSections.length - 1, current + 1))}
+                  >
+                    Continue
+                  </button>
+                ) : (
+                  <button type="submit" disabled={evalSubmitting}>
+                    {evalSubmitting ? "Seating Evaluation" : "Complete Assessment"}
+                  </button>
+                )}
+                <button type="button" onClick={() => setPassageMuted((current) => !current)}>
+                  {passageMuted ? "Audio" : "Mute"}
+                </button>
+              </div>
             </form>
           )}
         </section>
@@ -2709,36 +2818,33 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
-  if (activeSurface === "path_choice") return renderPathChoiceSurface()
-  if (activeSurface === "educational_diagnostic_passage") return renderEducationalDiagnosticPassageSurface()
-  if (activeSurface === "educate_eval") return renderEducateEvalSurface()
-  if (activeSurface === "structural_drift_dispatches") return renderStructuralDriftDispatchesSurface()
-  if (activeSurface === "cohort_conversion") return renderCohortConversionSurface()
-  if (activeSurface === "iis_eval_gate1") return renderIisEvalGateSurface()
-  if (activeSurface === "understand_failure") return renderUnderstandFailureSurface()
-  if (activeSurface === "c3_field") return renderC3FieldSurface()
-  if (activeSurface === "reserve_seat") return renderReserveSeatSurface()
-  if (activeSurface === "foundation_offering") {
-    return renderOfferingSurface("foundation_offering", foundationOfferingCopy, "foundation_intro_video")
-  }
-  if (activeSurface === "systems_offering") {
-    return renderOfferingSurface("systems_offering", systemsOfferingCopy, "systems_intro_video")
-  }
-  if (activeSurface === "foundation_seat_hold") {
-    return renderHoldSurface("foundation_seat_hold", foundationSeatHoldCopy)
-  }
-  if (activeSurface === "systems_seat_hold") {
-    return renderHoldSurface("systems_seat_hold", systemsSeatHoldCopy)
-  }
-  if (activeSurface === "registered_process_log") {
-    return renderRegisteredProcessLogSurface()
-  }
-  if (activeSurface === "seat_hold_notification_review") {
-    return renderNotificationReviewSurface()
-  }
-  if (activeSurface === "publication_dispatch") {
-    return renderPublicationDispatchSurface()
-  }
+  const activeSurfaceElement =
+    activeSurface === "path_choice" ? renderPathChoiceSurface()
+    : activeSurface === "educational_diagnostic_passage" ? renderEducationalDiagnosticPassageSurface()
+    : activeSurface === "educate_eval" ? renderEducateEvalSurface()
+    : activeSurface === "structural_drift_dispatches" ? renderStructuralDriftDispatchesSurface()
+    : activeSurface === "cohort_conversion" ? renderCohortConversionSurface()
+    : activeSurface === "iis_eval_gate1" ? renderIisEvalGateSurface()
+    : activeSurface === "understand_failure" ? renderUnderstandFailureSurface()
+    : activeSurface === "c3_field" ? renderC3FieldSurface()
+    : activeSurface === "reserve_seat" ? renderReserveSeatSurface()
+    : activeSurface === "foundation_offering"
+      ? renderOfferingSurface("foundation_offering", foundationOfferingCopy, "foundation_intro_video")
+    : activeSurface === "systems_offering"
+      ? renderOfferingSurface("systems_offering", systemsOfferingCopy, "systems_intro_video")
+    : activeSurface === "foundation_seat_hold"
+      ? renderHoldSurface("foundation_seat_hold", foundationSeatHoldCopy)
+    : activeSurface === "systems_seat_hold"
+      ? renderHoldSurface("systems_seat_hold", systemsSeatHoldCopy)
+    : activeSurface === "registered_process_log" ? renderRegisteredProcessLogSurface()
+    : activeSurface === "seat_hold_notification_review" ? renderNotificationReviewSurface()
+    : activeSurface === "publication_dispatch" ? renderPublicationDispatchSurface()
+    : renderIntroSurface()
 
-  return renderIntroSurface()
+  return (
+    <>
+      {renderMarbleToneContinuity()}
+      {activeSurfaceElement}
+    </>
+  )
 }
