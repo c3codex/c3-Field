@@ -223,15 +223,16 @@ body,
   position: relative;
 }
 
-.c3-optics-speak-refinement .c3-runtime-lens-instrument {
-  display: none;
-}
-
 .c3-runtime-lens-instrument .c3-section-heading {
   margin-bottom: 0;
   max-width: 28rem;
   position: relative;
   z-index: 5;
+}
+
+.c3-optics-speak-refinement .c3-runtime-lens-instrument > .c3-section-heading,
+.c3-optics-speak-refinement .c3-runtime-lens-instrument > .c3-optics-chamber {
+  display: none;
 }
 
 .c3-runtime-lens-instrument .c3-optics-chamber {

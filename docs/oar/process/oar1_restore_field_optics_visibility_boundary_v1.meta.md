@@ -181,6 +181,45 @@ Next maturation direction:
 
 Move more optics grammar thresholds into governed registry/config tables so the frontend becomes more renderer than interpreter.
 
+## CORRECTION NOTE - PARENT VISIBILITY FAILURE
+
+Follow-up operator observation:
+
+```text
+there is still no visible optics
+```
+
+Cody confirmed the cause:
+
+The previous duplicate-optic suppression rule hid the parent runtime lens instrument:
+
+```css
+.c3-optics-speak-refinement .c3-runtime-lens-instrument {
+  display: none;
+}
+```
+
+That parent contains the actual `LapisRelationMappingSurface`, so the optics restoration was implemented inside a hidden ancestor.
+
+Correction applied:
+
+- removed parent-level `display: none`
+- suppressed only the direct duplicate heading and mini chamber
+- preserved the nested field lens surface as visible
+
+Corrected rule:
+
+```css
+.c3-optics-speak-refinement .c3-runtime-lens-instrument > .c3-section-heading,
+.c3-optics-speak-refinement .c3-runtime-lens-instrument > .c3-optics-chamber {
+  display: none;
+}
+```
+
+Standing:
+
+The visibility-boundary correction now applies to a rendered optics surface instead of a hidden parent.
+
 ## CLOSE
 
 The Field remains nonverbal without becoming absent.
