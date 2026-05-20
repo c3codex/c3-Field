@@ -18,6 +18,10 @@ import {
   validateOperatorGatedAutomationBridge,
 } from "./operatorGatedAutomationBridge"
 import {
+  deriveRuntimeBranchEncounterReadiness,
+  validateRuntimeBranchEncounterReadiness,
+} from "./branchEncounterReadiness"
+import {
   deriveRuntimeTransitionGovernance,
   validateRuntimeTransitionGovernance,
 } from "./transitionGovernanceEngine"
@@ -105,11 +109,15 @@ export default function OarOperationsConsole() {
   const seededChecks = registryState?.seededReferenceChecks ?? []
   const transitionGovernance = deriveRuntimeTransitionGovernance(processInstances, transitionLog)
   const automationBridge = deriveOperatorGatedAutomationBridge(processInstances, transitionGovernance)
+  const branchReadiness = deriveRuntimeBranchEncounterReadiness(processInstances, transitionGovernance, automationBridge)
   const governanceChecks: SpineValidationCheck[] = registryState
     ? validateRuntimeTransitionGovernance(transitionGovernance)
     : []
   const automationBridgeChecks: SpineValidationCheck[] = registryState
     ? validateOperatorGatedAutomationBridge(automationBridge)
+    : []
+  const branchReadinessChecks: SpineValidationCheck[] = registryState
+    ? validateRuntimeBranchEncounterReadiness(branchReadiness)
     : []
   const persistenceStanding = registryState?.persistenceStanding ?? "held_pending_persistence"
   const persistenceMessage =
@@ -120,7 +128,7 @@ export default function OarOperationsConsole() {
     ? transitionLog.filter((entry) => transitionTouchesProcess(entry, selectedProcess.process_instance_key))
     : []
   const selectedChecks = selectedProcess
-    ? [...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks].filter((check) => {
+    ? [...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...branchReadinessChecks].filter((check) => {
         const evidence = check.evidence.toLowerCase()
         return evidence.includes(selectedProcess.process_instance_key.toLowerCase()) || check.standing !== "passed"
       })
@@ -136,6 +144,8 @@ export default function OarOperationsConsole() {
       data-transition-governance-read-only={transitionGovernance.read_only}
       data-automation-bridge={automationBridge.bridge_key}
       data-automation-bridge-boundary={automationBridge.authority_boundary}
+      data-branch-readiness={branchReadiness.readiness_key}
+      data-branch-readiness-boundary={branchReadiness.permission_boundary}
     >
       <section className={`c3-ops-hero ${surfaceClasses(["center_authority_core", "continuity_stream"])}`}>
         <div>
@@ -182,8 +192,9 @@ export default function OarOperationsConsole() {
       <RuntimeCoherenceOptics
         processInstances={processInstances}
         transitionLog={transitionLog}
-        validationChecks={[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks]}
+        validationChecks={[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...branchReadinessChecks]}
         persistenceStanding={persistenceStanding}
+        branchReadiness={branchReadiness}
       />
 
       <section className="c3-unified-runtime-console c3-runtime-field-overlays" aria-label="Unified runtime data console">
@@ -237,6 +248,61 @@ export default function OarOperationsConsole() {
               </dl>
               <small>{branch.evidence_references.length} evidence references</small>
               <p>{branch.reasons[0]}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section
+        className={`c3-ops-section c3-branch-readiness ${surfaceClasses(["threshold_boundary", "relation_orbit", "validation_wave"])}`}
+        aria-labelledby="branch-readiness"
+      >
+        <div className="c3-section-heading">
+          <p className="c3-ops-kicker">Encounter Readiness</p>
+          <h2 id="branch-readiness">Runtime Branch Readiness</h2>
+        </div>
+        <dl className="c3-transition-governance-summary">
+          <div>
+            <dt>Encounterable</dt>
+            <dd>{branchReadiness.summary.encounterable}</dd>
+          </div>
+          <div>
+            <dt>Released</dt>
+            <dd>{branchReadiness.summary.released}</dd>
+          </div>
+          <div>
+            <dt>Held</dt>
+            <dd>{branchReadiness.summary.held}</dd>
+          </div>
+          <div>
+            <dt>Blocked</dt>
+            <dd>{branchReadiness.summary.blocked}</dd>
+          </div>
+          <div>
+            <dt>Permission</dt>
+            <dd>Derived</dd>
+          </div>
+        </dl>
+        <div className="c3-transition-branch-grid">
+          {branchReadiness.branches.map((branch) => (
+            <article
+              className="c3-transition-branch"
+              data-readiness-state={branch.readiness_state}
+              data-route-permission={branch.route_visibility_permission}
+              key={branch.branch_key}
+            >
+              <div>
+                <h3>{branch.branch_key}</h3>
+                <StatusPill value={branch.readiness_state} />
+              </div>
+              <dl>
+                <div><dt>Gate</dt><dd>{statusLabel(branch.automation_gate)}</dd></div>
+                <div><dt>Passage</dt><dd>{statusLabel(branch.transition_standing.passage_engine)}</dd></div>
+                <div><dt>Release</dt><dd>{statusLabel(branch.transition_standing.release_cadence)}</dd></div>
+                <div><dt>Route</dt><dd>{branch.route_visibility_permission ? "permission" : "not permission"}</dd></div>
+              </dl>
+              <small>{branch.permission_source.replaceAll("_", " ")}</small>
+              <p>{branch.reason_details[0] ?? "Readiness derived from seated runtime standing."}</p>
             </article>
           ))}
         </div>
@@ -436,7 +502,7 @@ export default function OarOperationsConsole() {
           <h2 id="validation-checks">Validation Checks</h2>
         </div>
         <div className="c3-check-grid">
-          {[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks].map((check) => (
+          {[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...branchReadinessChecks].map((check) => (
             <article
               className="c3-check-card"
               data-check-standing={check.standing}

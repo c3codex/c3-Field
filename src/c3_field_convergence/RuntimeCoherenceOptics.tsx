@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react"
 import { coherenceOpticsGrammarRegistry } from "./coherenceOpticsGrammarRegistry"
 import { LapisRelationMappingSurface } from "./LapisRelationMappingSurface"
+import type { RuntimeBranchEncounterReadiness } from "./branchEncounterReadiness"
 import type { OarProcessInstance, OarTransitionLogEntry, SpineValidationCheck } from "./operationsSpine"
 import { opticsSurfaceRegistry, surfaceClasses } from "./opticsSurfaceRegistry"
 
@@ -9,6 +10,7 @@ type RuntimeCoherenceOpticsProps = {
   transitionLog: OarTransitionLogEntry[]
   validationChecks: SpineValidationCheck[]
   persistenceStanding: "registry_backed" | "held_pending_persistence"
+  branchReadiness?: RuntimeBranchEncounterReadiness
 }
 
 function countWhere<T>(items: T[], predicate: (item: T) => boolean) {
@@ -29,6 +31,7 @@ export function RuntimeCoherenceOptics({
   transitionLog,
   validationChecks,
   persistenceStanding,
+  branchReadiness,
 }: RuntimeCoherenceOpticsProps) {
   const total = processInstances.length
   const blocked = countWhere(
@@ -59,6 +62,8 @@ export function RuntimeCoherenceOptics({
   const failedChecks = countWhere(validationChecks, (check) => check.standing !== "passed")
   const traceContinuity = transitionLog.length > 0 && transitionLog.every((entry) => Boolean(entry.evidence_reference))
   const registryBacked = persistenceStanding === "registry_backed"
+  const encounterableBranches = branchReadiness?.summary.encounterable ?? 0
+  const sealedBranches = branchReadiness?.summary.sealed ?? 0
 
   const closurePct = percent(closed, total)
   const evidencePct = percent(evidenceComplete, total)
@@ -75,6 +80,7 @@ export function RuntimeCoherenceOptics({
     "--c3-lapis-signal": `${Math.max(22, percent(transitionLog.length, Math.max(total * 2, 1)))}%`,
     "--c3-marble-signal": `${Math.max(20, evidencePct)}%`,
     "--c3-crystal-signal": `${Math.max(24, coherenceScore)}%`,
+    "--c3-readiness-signal": `${Math.max(16, percent(encounterableBranches, total))}%`,
   } as CSSProperties
 
   const standing =
@@ -133,6 +139,9 @@ export function RuntimeCoherenceOptics({
           </dl>
           <p>{standing}</p>
           <small>{coherenceOpticsGrammarRegistry.rendererContract.truthSource}.</small>
+          <small>
+            Encounter readiness: {encounterableBranches} encounterable / {sealedBranches} sealed.
+          </small>
         </div>
       </div>
       <LapisRelationMappingSurface
