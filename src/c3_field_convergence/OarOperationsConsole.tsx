@@ -14,6 +14,10 @@ import { loadOarSpineRegistry, type OarSpineRegistryState } from "./oarSpineRegi
 import { opticsSurfaceRegistry, surfaceClasses } from "./opticsSurfaceRegistry"
 import { RuntimeCoherenceOptics } from "./RuntimeCoherenceOptics"
 import {
+  deriveOperatorGatedAutomationBridge,
+  validateOperatorGatedAutomationBridge,
+} from "./operatorGatedAutomationBridge"
+import {
   deriveRuntimeTransitionGovernance,
   validateRuntimeTransitionGovernance,
 } from "./transitionGovernanceEngine"
@@ -100,8 +104,12 @@ export default function OarOperationsConsole() {
   const logChecks: SpineValidationCheck[] = registryState ? validateImmutableTransitionLog(transitionLog) : []
   const seededChecks = registryState?.seededReferenceChecks ?? []
   const transitionGovernance = deriveRuntimeTransitionGovernance(processInstances, transitionLog)
+  const automationBridge = deriveOperatorGatedAutomationBridge(processInstances, transitionGovernance)
   const governanceChecks: SpineValidationCheck[] = registryState
     ? validateRuntimeTransitionGovernance(transitionGovernance)
+    : []
+  const automationBridgeChecks: SpineValidationCheck[] = registryState
+    ? validateOperatorGatedAutomationBridge(automationBridge)
     : []
   const persistenceStanding = registryState?.persistenceStanding ?? "held_pending_persistence"
   const persistenceMessage =
@@ -112,7 +120,7 @@ export default function OarOperationsConsole() {
     ? transitionLog.filter((entry) => transitionTouchesProcess(entry, selectedProcess.process_instance_key))
     : []
   const selectedChecks = selectedProcess
-    ? [...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks].filter((check) => {
+    ? [...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks].filter((check) => {
         const evidence = check.evidence.toLowerCase()
         return evidence.includes(selectedProcess.process_instance_key.toLowerCase()) || check.standing !== "passed"
       })
@@ -126,6 +134,8 @@ export default function OarOperationsConsole() {
       data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
       data-transition-governance={transitionGovernance.engine_key}
       data-transition-governance-read-only={transitionGovernance.read_only}
+      data-automation-bridge={automationBridge.bridge_key}
+      data-automation-bridge-boundary={automationBridge.authority_boundary}
     >
       <section className={`c3-ops-hero ${surfaceClasses(["center_authority_core", "continuity_stream"])}`}>
         <div>
@@ -227,6 +237,61 @@ export default function OarOperationsConsole() {
               </dl>
               <small>{branch.evidence_references.length} evidence references</small>
               <p>{branch.reasons[0]}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section
+        className={`c3-ops-section c3-automation-bridge ${surfaceClasses(["threshold_boundary", "continuity_stream", "validation_wave"])}`}
+        aria-labelledby="automation-bridge"
+      >
+        <div className="c3-section-heading">
+          <p className="c3-ops-kicker">Operator Gate</p>
+          <h2 id="automation-bridge">Runtime Automation Bridge</h2>
+        </div>
+        <dl className="c3-transition-governance-summary">
+          <div>
+            <dt>Awaiting Operator</dt>
+            <dd>{automationBridge.summary.awaiting_operator}</dd>
+          </div>
+          <div>
+            <dt>Held</dt>
+            <dd>{automationBridge.summary.held}</dd>
+          </div>
+          <div>
+            <dt>Blocked</dt>
+            <dd>{automationBridge.summary.blocked}</dd>
+          </div>
+          <div>
+            <dt>Closed</dt>
+            <dd>{automationBridge.summary.closed}</dd>
+          </div>
+          <div>
+            <dt>Terms</dt>
+            <dd>0</dd>
+          </div>
+        </dl>
+        <div className="c3-transition-branch-grid">
+          {automationBridge.branches.map((branch) => (
+            <article
+              className="c3-transition-branch"
+              data-automation-state={branch.automation_state}
+              data-operator-gate={branch.operator_gate}
+              key={branch.branch_key}
+            >
+              <div>
+                <h3>{branch.branch_key}</h3>
+                <StatusPill value={branch.automation_state} />
+              </div>
+              <dl>
+                <div><dt>Gate</dt><dd>{statusLabel(branch.operator_gate)}</dd></div>
+                <div><dt>Boundary</dt><dd>{statusLabel(branch.bridge_boundary)}</dd></div>
+                <div><dt>Mutation</dt><dd>{branch.mutation_allowed ? "allowed" : "not allowed"}</dd></div>
+                <div><dt>Surfaces</dt><dd>{branch.handoff_surfaces.length}</dd></div>
+              </dl>
+              <small>{branch.lifecycle_required}</small>
+              <p>{branch.continuity_prompts[0] ?? branch.blocked_reasons[0] ?? "Operator gate visible"}</p>
             </article>
           ))}
         </div>
@@ -371,7 +436,7 @@ export default function OarOperationsConsole() {
           <h2 id="validation-checks">Validation Checks</h2>
         </div>
         <div className="c3-check-grid">
-          {[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks].map((check) => (
+          {[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks].map((check) => (
             <article
               className="c3-check-card"
               data-check-standing={check.standing}
