@@ -145,6 +145,42 @@ This OAR1 therefore records:
 - source branch readiness: ready for push/deploy
 - live encounter proof: pending until Cloudflare Pages serves the newest assets
 
+## CANOPY COMMUNICATION - RUNTIME TRUTH POSTURE
+
+The current optics posture is:
+
+```text
+Registry truth governs the facts.
+Frontend code governs the optics translation.
+```
+
+Approximate standing:
+
+- runtime truth content: 85-90% registry-backed
+- frontend-derived interpretation: 10-15%
+- rendered optics / pixels: 45% runtime truth, 55% frontend expression
+
+Meaning:
+
+The process instances, standing, OAR paths, evidence paths, transition log, and seeded references are governed by Supabase-backed registry state.
+
+The frontend does not substitute fake runtime state when persistence is unavailable; it holds the surface pending registry standing.
+
+The optics layer currently translates registry truth through code-authored grammar:
+
+- glyph selection
+- relation geometry
+- node position
+- color/material behavior
+- density bars
+- rings, arcs, and field topology
+
+These visual expressions are truth-derived, but they are still frontend-authored render rules.
+
+Next maturation direction:
+
+Move more optics grammar thresholds into governed registry/config tables so the frontend becomes more renderer than interpreter.
+
 ## CLOSE
 
 The Field remains nonverbal without becoming absent.
