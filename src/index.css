@@ -919,6 +919,76 @@ body,
   background: rgba(241, 236, 226, 0.1);
 }
 
+.c3-optics-speak-refinement .c3-lapis-node {
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: none;
+  height: clamp(1.5rem, 3vw, 2.25rem);
+  padding: 0;
+  place-items: center;
+  width: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.c3-optics-speak-refinement .c3-lapis-node::before {
+  background: currentColor;
+  border-radius: 50%;
+  box-shadow: 0 0 18px currentColor;
+  height: 0.28rem;
+  inset: 50% auto auto 50%;
+  opacity: 0.68;
+  right: auto;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.28rem;
+}
+
+.c3-optics-speak-refinement .c3-lapis-node::after {
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  content: "";
+  inset: -0.42rem;
+  opacity: 0.28;
+  position: absolute;
+}
+
+.c3-optics-speak-refinement .c3-lapis-node[data-node-kind="blocked"],
+.c3-optics-speak-refinement .c3-lapis-node[data-node-kind="correction"] {
+  color: #ff6042;
+}
+
+.c3-optics-speak-refinement .c3-lapis-node[data-node-kind="closure"],
+.c3-optics-speak-refinement .c3-lapis-node[data-node-kind="evidence"] {
+  color: #e9ded0;
+}
+
+.c3-optics-speak-refinement .c3-lapis-node[data-node-kind="queue"],
+.c3-optics-speak-refinement .c3-lapis-node[data-node-kind="process"] {
+  color: #67b8ff;
+}
+
+.c3-optics-speak-refinement .c3-lapis-node[data-node-kind="transition"] {
+  color: #d2a96a;
+}
+
+.c3-optics-speak-refinement .c3-lapis-node[data-fractured="true"]::after {
+  border-style: dashed;
+  opacity: 0.62;
+}
+
+.c3-optics-speak-refinement .c3-lapis-node span,
+.c3-optics-speak-refinement .c3-lapis-node strong,
+.c3-optics-speak-refinement .c3-lapis-node small {
+  display: none;
+}
+
+.c3-optics-speak-refinement .c3-lapis-node .c3-lapis-node-glyph {
+  height: 100%;
+  opacity: 0.92;
+  width: 100%;
+  z-index: 2;
+}
+
 .c3-lapis-cardinal,
 .c3-lapis-lens-action {
   position: absolute;
@@ -984,6 +1054,54 @@ body,
   bottom: 24%;
 }
 
+.c3-optics-speak-refinement .c3-lapis-cardinal {
+  color: rgba(245, 212, 154, 0.54);
+  font-size: 0;
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+.c3-optics-speak-refinement .c3-lapis-cardinal::before,
+.c3-optics-speak-refinement .c3-lapis-cardinal::after {
+  background: currentColor;
+  content: "";
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.c3-optics-speak-refinement .c3-lapis-cardinal::before {
+  height: 1.8rem;
+  width: 1px;
+}
+
+.c3-optics-speak-refinement .c3-lapis-cardinal::after {
+  height: 1px;
+  width: 1.8rem;
+}
+
+.c3-optics-speak-refinement .c3-lapis-cardinal small {
+  display: none;
+}
+
+.c3-optics-speak-refinement .c3-lapis-lens-action {
+  background: radial-gradient(circle, rgba(245, 212, 154, 0.2), transparent 62%);
+  color: rgba(245, 212, 154, 0.62);
+  font-size: 0;
+  height: 2.9rem;
+  width: 2.9rem;
+}
+
+.c3-optics-speak-refinement .c3-lapis-lens-action::before {
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  content: "";
+  height: 0.82rem;
+  opacity: 0.8;
+  width: 0.82rem;
+}
+
 .c3-lapis-inscription-rail {
   display: grid;
   gap: clamp(18px, 4vw, 46px);
@@ -1014,6 +1132,21 @@ body,
   content: "";
   height: 3.2rem;
   width: 3.2rem;
+}
+
+.c3-optics-speak-refinement .c3-lapis-inscription-rail {
+  right: 0;
+  width: auto;
+}
+
+.c3-optics-speak-refinement .c3-lapis-inscription-rail span {
+  font-size: 0;
+  gap: 0;
+}
+
+.c3-optics-speak-refinement .c3-lapis-inscription-rail span::before {
+  height: clamp(2rem, 4vw, 3rem);
+  width: clamp(2rem, 4vw, 3rem);
 }
 
 .c3-lapis-callouts,
@@ -1108,22 +1241,53 @@ body,
 }
 
 .c3-optics-speak-refinement .c3-lapis-state-readout {
-  gap: 3px;
+  gap: 8px;
 }
 
 .c3-optics-speak-refinement .c3-lapis-state-readout div {
-  border-bottom: 1px solid rgba(190, 131, 62, 0.12);
-  padding-block: 4px;
+  border: 0;
+  display: block;
+  height: 0.72rem;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
 }
 
 .c3-optics-speak-refinement .c3-lapis-state-readout dt {
-  font-size: 0;
+  display: none;
 }
 
 .c3-optics-speak-refinement .c3-lapis-state-readout dd {
-  color: #f5d49a;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(1.1rem, 2.2vw, 1.7rem);
+  background: rgba(245, 212, 154, 0.1);
+  border: 1px solid rgba(190, 131, 62, 0.18);
+  border-radius: 999px;
+  color: transparent;
+  font-size: 0;
+  height: 100%;
+  margin: 0;
+  position: relative;
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout dd::before {
+  background: #67b8ff;
+  border-radius: inherit;
+  content: "";
+  inset: 0 auto 0 0;
+  opacity: 0.76;
+  position: absolute;
+  width: max(var(--c3-state-strength), 0.32rem);
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="blocked"] dd::before,
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="correction"] dd::before,
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="orphaned"] dd::before,
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="unverified"] dd::before {
+  background: #ff6042;
+}
+
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="completed"] dd::before,
+.c3-optics-speak-refinement .c3-lapis-state-readout [data-state="evidence"] dd::before {
+  background: #e9ded0;
 }
 
 .c3-lapis-callouts .c3-optics-material-lapis h4,
@@ -1230,7 +1394,42 @@ body,
 
 .c3-optics-speak-refinement .c3-lapis-field-readout span,
 .c3-optics-speak-refinement .c3-lapis-field-readout small {
-  opacity: 0.74;
+  display: none;
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-readout strong {
+  color: transparent;
+  font-size: 0;
+  min-height: 1rem;
+  position: relative;
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-readout strong::before {
+  background: currentColor;
+  border-radius: 999px;
+  content: "";
+  display: block;
+  height: 0.68rem;
+  opacity: 0.82;
+  width: clamp(1.8rem, 42%, 4.5rem);
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-readout > div:nth-child(1) strong::before {
+  background: #f5d49a;
+  box-shadow: 0 0 18px rgba(245, 212, 154, 0.16);
+  width: clamp(2.5rem, 67%, 7rem);
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-readout > div:nth-child(3) strong::before {
+  background: #ff6042;
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-readout > div:nth-child(4) strong::before {
+  background: #67b8ff;
+}
+
+.c3-optics-speak-refinement .c3-lapis-field-readout > div:nth-child(5) strong::before {
+  background: #e9ded0;
 }
 
 .c3-lapis-field-readout > div:first-child {

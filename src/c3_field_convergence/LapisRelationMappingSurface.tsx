@@ -318,6 +318,16 @@ export function LapisRelationMappingSurface({
   const evidenceTotal =
     transitionLog.filter((entry) => entry.evidence_reference).length +
     processInstances.filter((instance) => instance.evidence_path).length
+  const maxStateCount = Math.max(
+    openCount,
+    blockedCount,
+    correctionCount,
+    completedCount,
+    orphanedCount,
+    unverifiedCount,
+    evidenceTotal,
+    1,
+  )
   const coherencePercent =
     processInstances.length === 0
       ? 0
@@ -339,6 +349,7 @@ export function LapisRelationMappingSurface({
       aria-labelledby="lapis-relation-mapping"
       data-optics-grammar={coherenceOpticsGrammarRegistry.grammarKey}
       data-glyph-registry={glyphOperatorRegistry.registryKey}
+      data-nonverbal-state="field_optics_nonverbal_state_expression_v1"
       data-optics-surface-registry={opticsSurfaceRegistry.registryKey}
     >
       <div className="c3-lapis-heading">
@@ -476,7 +487,10 @@ export function LapisRelationMappingSurface({
               <article
                 className={`c3-lapis-node c3-lapis-node-${node.kind} ${surfaceClasses([node.fractured ? "fracture_field" : "relation_orbit", "glyph_cluster"])}`}
                 data-fractured={node.fractured}
+                data-node-kind={node.kind}
+                data-standing={node.standing}
                 key={node.key}
+                aria-label={`${node.label}: ${node.standing}. ${node.detail}`}
                 style={
                   {
                     "--c3-node-x": `${node.point.x}%`,
@@ -512,13 +526,24 @@ export function LapisRelationMappingSurface({
         <aside className={`c3-lapis-readout ${surfaceClasses(["validation_wave"])}`} aria-label="State legend">
           <h4>State Legend</h4>
           <dl className="c3-lapis-state-readout">
-            <div><dt>Open</dt><dd>{openCount}</dd></div>
-            <div><dt>Blocked</dt><dd>{blockedCount}</dd></div>
-            <div><dt>In Correction</dt><dd>{correctionCount}</dd></div>
-            <div><dt>Completed</dt><dd>{completedCount}</dd></div>
-            <div><dt>Orphaned</dt><dd>{orphanedCount}</dd></div>
-            <div><dt>Unverified</dt><dd>{unverifiedCount}</dd></div>
-            <div><dt>Evidence Total</dt><dd>{evidenceTotal}</dd></div>
+            {[
+              ["open", "Open", openCount],
+              ["blocked", "Blocked", blockedCount],
+              ["correction", "In Correction", correctionCount],
+              ["completed", "Completed", completedCount],
+              ["orphaned", "Orphaned", orphanedCount],
+              ["unverified", "Unverified", unverifiedCount],
+              ["evidence", "Evidence Total", evidenceTotal],
+            ].map(([stateKey, label, count]) => (
+              <div
+                data-state={stateKey}
+                key={stateKey}
+                style={{ "--c3-state-strength": `${(Number(count) / maxStateCount) * 100}%` } as CSSProperties}
+              >
+                <dt>{label}</dt>
+                <dd>{count}</dd>
+              </div>
+            ))}
           </dl>
         </aside>
       </div>
