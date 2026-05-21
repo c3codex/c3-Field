@@ -2,6 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties, FormEvent } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
+import { MeasuresAssessmentChamber } from "./MeasuresAssessmentChamber"
+import type {
+  AssessmentConditionTrace,
+  AssessmentMechanicOption,
+  AssessmentMechanicQuestion,
+  AssessmentEmailArtifact,
+  EnvironmentalStandingReport,
+  EvalStep,
+  StructuredEvalAnswer,
+} from "./measuresAssessmentTypes"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
@@ -265,57 +275,6 @@ function asRecordArray(value: unknown) {
   return Array.isArray(value)
     ? value.filter((item): item is Record<string, unknown> => Boolean(asRecord(item)))
     : []
-}
-
-type AssessmentMechanicOption = {
-  value: string
-  label: string
-  conditionTags: string[]
-}
-
-type AssessmentMechanicQuestion = {
-  questionKey: string
-  question: string
-  contextLabel: string
-  options: AssessmentMechanicOption[]
-}
-
-type StructuredEvalAnswer = {
-  selected: string
-  label: string
-  institutional_context: string
-}
-
-type AssessmentConditionTrace = {
-  question_key: string
-  selected: string
-  label: string
-  condition_tags: string[]
-}
-
-type EnvironmentalStandingReport = {
-  environmental_standing: string
-  standing_key: string
-  assessment_title: string
-  assessment_result: string
-  detected_conditions: string[]
-  findings: string[]
-  operational_exposure_summary: string
-  recommended_structured_action: string
-  recommended_response_label: string
-  continuation_pathway: string
-  explainability: {
-    question_keys: string[]
-    condition_tags: string[]
-    standing_rule: string
-  }
-}
-
-type AssessmentEmailArtifact = {
-  subject: string
-  preview: string
-  body: string[]
-  source: string
 }
 
 function asStringArray(value: unknown) {
@@ -630,7 +589,7 @@ export default function MeasuresRegistryRuntime() {
   })
   const [evalFields, setEvalFields] = useState<Record<string, string>>({})
   const [evalAnswers, setEvalAnswers] = useState<Record<string, StructuredEvalAnswer>>({})
-  const [evalStep, setEvalStep] = useState<"src_capture" | "diagnostic" | "resolving">("src_capture")
+  const [evalStep, setEvalStep] = useState<EvalStep>("src_capture")
   const [evalSectionIndex, setEvalSectionIndex] = useState(0)
   const [evalSubmitting, setEvalSubmitting] = useState(false)
   const [evalSubmitted, setEvalSubmitted] = useState(false)
@@ -2098,240 +2057,46 @@ export default function MeasuresRegistryRuntime() {
 
   function renderIisEvalGateSurface() {
     if (reportMissingClassification("iis_eval_gate1", iisEvalCopy)) return null
-    const structuredQuestions = allAssessmentMechanics(iisEvalCopy.assessmentMechanics)
-    const currentQuestion = structuredQuestions[evalSectionIndex] ?? null
-    const finalDiagnosticQuestion = evalSectionIndex >= Math.max(structuredQuestions.length - 1, 0)
-    const progressLabel = structuredQuestions.length > 0 ? `${evalSectionIndex + 1} of ${structuredQuestions.length}` : null
-    const progressValue = structuredQuestions.length > 0 ? ((evalSectionIndex + 1) / structuredQuestions.length) * 100 : 0
-    const assessmentProcessTitle = "MEASURES AI OPERATIONAL EVALUATION"
-    const assessmentSupportLine = "AI reflects the structure of the environment it operates within."
 
-    function renderAssessmentBrandLayer() {
-      return (
-        <div className="registry-assessment-brand-layer" aria-hidden="true">
-          {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
-          <span>MEASURES REGISTRY</span>
-          <small>Integrity Governance for AI Accelerated Systems</small>
-        </div>
-      )
-    }
+    const structuredQuestions = allAssessmentMechanics(iisEvalCopy.assessmentMechanics)
 
     return (
-      <main className="measures-registry-runtime" data-surface="iis_eval_gate1" data-chamber-state={evalStep} style={registryTokenStyle}>
-        <section className="registry-iis-eval registry-assessment-chamber" aria-label={assessmentProcessTitle}>
-          {renderAssessmentBrandLayer()}
-          <div className="registry-chamber-heading">
-            <span>Measures Registry</span>
-            <h1>{assessmentProcessTitle}</h1>
-            <p>
-              {iisEvalCopy.subtitle ??
-                `${assessmentSupportLine} Structure enables acceleration. Ambiguity creates drift.`}
-            </p>
-          </div>
-
-          {evalSubmitted ? (
-            <div className="registry-eval-resolution registry-assessment-complete">
-              <span>Assessment Complete</span>
-              <h2>{evalReport?.assessment_title ?? "MEASURES AI ENVIRONMENT ASSESSMENT"}</h2>
-              <p className="registry-assessment-support">Structure enables acceleration. Ambiguity creates drift.</p>
-              {evalReport ? (
-                <section className="registry-standing-report" aria-label="Environmental standing report">
-                  <span>Assessment</span>
-                  <h3>{evalReport.assessment_result}</h3>
-                  <p>{evalReport.operational_exposure_summary}</p>
-                  {evalReport.findings.length > 0 ? (
-                    <div>
-                      <strong>Findings</strong>
-                      <ul>
-                        {evalReport.findings.map((finding) => (
-                          <li key={finding}>{finding}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : null}
-                  <div>
-                    <strong>{evalReport.recommended_response_label}</strong>
-                    <p>{evalReport.recommended_structured_action}</p>
-                  </div>
-                  <small>
-                    Assessment basis: {evalReport.explainability.question_keys.length} response keys / {evalReport.explainability.condition_tags.length} condition signals
-                  </small>
-                </section>
-              ) : (
-                <p>{iisEvalCopy.resolutionText ?? "Structural conditions have been recorded."}</p>
-              )}
-              {evalEmailArtifact ? (
-                <section className="registry-email-artifact" aria-label="Structured email artifact">
-                  <span>Assessment Delivery</span>
-                  <strong>{evalEmailArtifact.subject}</strong>
-                  <p>{evalEmailArtifact.preview}</p>
-                </section>
-              ) : null}
-              <p>Continue into the Structured Environment.</p>
-              {structuredEnvironmentPassageVideoUrl ? (
-                <video
-                  src={structuredEnvironmentPassageVideoUrl}
-                  autoPlay
-                  muted={passageMuted}
-                  controls
-                  playsInline
-                  preload="auto"
-                  onEnded={() => navigateSurface("systems_offering")}
-                  aria-label="Structured Environment passage"
-                />
-              ) : (
-                <p className="registry-media-absence">Structured Environment passage media is not seated in the runtime registry.</p>
-              )}
-              <div className="registry-diagnostic-passage-controls" aria-label="Structured Environment passage controls">
-                <button type="button" onClick={() => navigateSurface("systems_offering")}>
-                  Enter Structured Environment
-                </button>
-                <button type="button" onClick={() => setPassageMuted((current) => !current)}>
-                  {passageMuted ? "Audio" : "Mute"}
-                </button>
-              </div>
-            </div>
-          ) : evalStep === "resolving" ? (
-            <div className="registry-eval-resolution registry-assessment-resolving">
-              <span>Resolving environmental standing</span>
-              <h2>Reviewing operating conditions.</h2>
-              <p className="registry-assessment-support">{assessmentSupportLine}</p>
-              <ol>
-                <li>Resolving environmental standing...</li>
-                <li>Reviewing operating conditions...</li>
-                <li>Assessing implementation structure...</li>
-              </ol>
-            </div>
-          ) : evalStep === "src_capture" ? (
-            <form
-              className="registry-iis-eval-form registry-src-capture"
-              onSubmit={(event) => {
-                event.preventDefault()
-                continueToDiagnostic()
-              }}
-            >
-              <div className="registry-chamber-copy">
-                <span>Environment Identity</span>
-                <h2>Before the evaluation begins, identify the environment being assessed.</h2>
-                <p className="registry-assessment-support">Structure enables acceleration. Ambiguity creates drift.</p>
-              </div>
-              <fieldset>
-                <legend>Institutional Contact</legend>
-                {[
-                  ["institution_name", "Company / Organization Name", "text"],
-                  ["organization_type", "Type of Business / Organization", "text"],
-                  ["contact_name", "Contact Name", "text"],
-                  ["contact_email", "Email", "email"],
-                ].map(([key, label, type]) => (
-                  <label key={key}>
-                    <span>{label}</span>
-                    <input
-                      type={type}
-                      value={evalFields[key] ?? ""}
-                      onChange={(event) => setEvalField(key, event.target.value)}
-                      required
-                    />
-                  </label>
-                ))}
-              </fieldset>
-              {evalError ? <p className="registry-form-error">{evalError}</p> : null}
-              <div className="registry-diagnostic-passage-controls">
-                <button type="submit">Begin Evaluation</button>
-                <button type="button" onClick={() => setPassageMuted((current) => !current)}>
-                  {passageMuted ? "Audio" : "Mute"}
-                </button>
-              </div>
-            </form>
-          ) : (
-            <form className="registry-iis-eval-form" onSubmit={submitIisEvaluation}>
-              <div className="registry-chamber-copy">
-                <h2>AI reflects the structure of the environment it operates within.</h2>
-                <p className="registry-assessment-support">Structure enables acceleration. Ambiguity creates drift.</p>
-                {progressLabel ? (
-                  <div className="registry-question-progress" aria-label={`Evaluation progress ${progressLabel}`}>
-                    <span>{progressLabel}</span>
-                    <div aria-hidden="true">
-                      <i style={{ width: `${progressValue}%` }} />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-
-              {currentQuestion ? (
-                <fieldset className="registry-single-question-fieldset">
-                  <legend className="registry-question-legend">Operational Evaluation</legend>
-                  <div className="registry-structured-question" key={currentQuestion.questionKey}>
-                    <span className="registry-structured-question-text">{currentQuestion.question}</span>
-                    <div className="registry-structured-options" role="radiogroup" aria-label={currentQuestion.question}>
-                      {currentQuestion.options.map((option) => (
-                        <label key={option.value} className="registry-structured-option">
-                          <input
-                            type="radio"
-                            name={currentQuestion.questionKey}
-                            value={option.value}
-                            checked={evalAnswers[currentQuestion.questionKey]?.selected === option.value}
-                            onChange={() => setEvalAnswerSelection(currentQuestion, option)}
-                          />
-                          <span>{option.label}</span>
-                        </label>
-                      ))}
-                    </div>
-                    <label className="registry-structured-context">
-                      <span>{currentQuestion.contextLabel}</span>
-                      <textarea
-                        value={evalAnswers[currentQuestion.questionKey]?.institutional_context ?? ""}
-                        onChange={(event) => setEvalAnswerContext(currentQuestion, event.target.value)}
-                      />
-                    </label>
-                  </div>
-                </fieldset>
-              ) : (
-                <p className="registry-media-absence">Evaluation questions are not seated in the runtime registry.</p>
-              )}
-
-              {evalError ? <p className="registry-form-error">{evalError}</p> : null}
-              <div className="registry-diagnostic-passage-controls">
-                {evalSectionIndex > 0 ? (
-                  <button
-                    type="button"
-                    onClick={() => setEvalSectionIndex((current) => Math.max(0, current - 1))}
-                  >
-                    Back
-                  </button>
-                ) : null}
-                {!finalDiagnosticQuestion && currentQuestion ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!validateDiagnosticSection([currentQuestion])) return
-                      setEvalSectionIndex((current) => Math.min(structuredQuestions.length - 1, current + 1))
-                    }}
-                  >
-                    Continue
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    disabled={evalSubmitting}
-                    onClick={(event) => {
-                      if (currentQuestion && validateDiagnosticSection([currentQuestion])) return
-                      event.preventDefault()
-                    }}
-                  >
-                    {evalSubmitting ? "Resolving Assessment" : "Complete Evaluation"}
-                  </button>
-                )}
-                <button type="button" onClick={() => setPassageMuted((current) => !current)}>
-                  {passageMuted ? "Audio" : "Mute"}
-                </button>
-              </div>
-            </form>
-          )}
-        </section>
-      </main>
+      <MeasuresAssessmentChamber
+        evalAnswers={evalAnswers}
+        evalEmailArtifact={evalEmailArtifact}
+        evalError={evalError}
+        evalFields={evalFields}
+        evalReport={evalReport}
+        evalSectionIndex={evalSectionIndex}
+        evalStep={evalStep}
+        evalSubmitted={evalSubmitted}
+        evalSubmitting={evalSubmitting}
+        passageMuted={passageMuted}
+        registryMarkUrl={registryMarkUrl}
+        registryTokenStyle={registryTokenStyle}
+        resolutionText={iisEvalCopy.resolutionText ?? undefined}
+        structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}
+        structuredQuestions={structuredQuestions}
+        onBackQuestion={() => setEvalSectionIndex((current) => Math.max(0, current - 1))}
+        onCompleteQuestionClick={(event, currentQuestion) => {
+          if (currentQuestion && validateDiagnosticSection([currentQuestion])) return
+          event.preventDefault()
+        }}
+        onContinueQuestion={(currentQuestion) => {
+          if (!validateDiagnosticSection([currentQuestion])) return
+          setEvalSectionIndex((current) => Math.min(structuredQuestions.length - 1, current + 1))
+        }}
+        onContinueToDiagnostic={continueToDiagnostic}
+        onEnterStructuredEnvironment={() => navigateSurface("systems_offering")}
+        onSetEvalAnswerContext={setEvalAnswerContext}
+        onSetEvalAnswerSelection={setEvalAnswerSelection}
+        onSetEvalField={setEvalField}
+        onSubmitEvaluation={submitIisEvaluation}
+        onStructuredEnvironmentVideoEnded={() => navigateSurface("systems_offering")}
+        onTogglePassageMuted={() => setPassageMuted((current) => !current)}
+      />
     )
   }
-
   function renderUnderstandFailureSurface() {
     if (reportMissingClassification("understand_failure", understandFailureCopy)) return null
 
