@@ -1,0 +1,324 @@
+{
+  "generatedAt": "2026-05-20T22:15:34.977Z",
+  "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+  "mutationPerformed": true,
+  "registryKey": "measures_registry",
+  "tokenScope": "brand",
+  "before": [],
+  "mutations": [
+    {
+      "token_key": "brand_obsidian",
+      "previous_value": null,
+      "seated_value": "#0E0E17",
+      "operation": "inserted_brand_token"
+    },
+    {
+      "token_key": "brand_deep_lapis",
+      "previous_value": null,
+      "seated_value": "#1F2F8D",
+      "operation": "inserted_brand_token"
+    },
+    {
+      "token_key": "brand_lapis_night",
+      "previous_value": null,
+      "seated_value": "#101A4D",
+      "operation": "inserted_brand_token"
+    },
+    {
+      "token_key": "brand_silver_frame",
+      "previous_value": null,
+      "seated_value": "#D7DBE3",
+      "operation": "inserted_brand_token"
+    },
+    {
+      "token_key": "brand_crystal_star",
+      "previous_value": null,
+      "seated_value": "#F2F4F8",
+      "operation": "inserted_brand_token"
+    },
+    {
+      "token_key": "brand_marble_accent",
+      "previous_value": null,
+      "seated_value": "#C7CBD2",
+      "operation": "inserted_brand_token"
+    }
+  ],
+  "writerRead": [
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_crystal_star",
+      "token_value": "#F2F4F8",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "crystal star, high-value text, and restrained highlights",
+        "visual_authority_role": "crystal star",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_deep_lapis",
+      "token_value": "#1F2F8D",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "primary lapis field behind the mark and governed public surfaces",
+        "visual_authority_role": "primary lapis authority",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_lapis_night",
+      "token_value": "#101A4D",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "secondary lapis night depth and formal surface support",
+        "visual_authority_role": "supporting lapis depth",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_marble_accent",
+      "token_value": "#C7CBD2",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "supporting text, document surfaces, and marble accenting",
+        "visual_authority_role": "marble accent",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_obsidian",
+      "token_value": "#0E0E17",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "primary obsidian field and institutional dark surface",
+        "visual_authority_role": "threshold field",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_silver_frame",
+      "token_value": "#D7DBE3",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "stable outer frame, borders, and formal authority lines",
+        "visual_authority_role": "silver frame",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    }
+  ],
+  "runtimeRead": [
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_crystal_star",
+      "token_value": "#F2F4F8",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "crystal star, high-value text, and restrained highlights",
+        "visual_authority_role": "crystal star",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_deep_lapis",
+      "token_value": "#1F2F8D",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "primary lapis field behind the mark and governed public surfaces",
+        "visual_authority_role": "primary lapis authority",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_lapis_night",
+      "token_value": "#101A4D",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "secondary lapis night depth and formal surface support",
+        "visual_authority_role": "supporting lapis depth",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_marble_accent",
+      "token_value": "#C7CBD2",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "supporting text, document surfaces, and marble accenting",
+        "visual_authority_role": "marble accent",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_obsidian",
+      "token_value": "#0E0E17",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "primary obsidian field and institutional dark surface",
+        "visual_authority_role": "threshold field",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    },
+    {
+      "registry_key": "measures_registry",
+      "token_scope": "brand",
+      "token_key": "brand_silver_frame",
+      "token_value": "#D7DBE3",
+      "token_type": "color",
+      "media_query": null,
+      "is_active": true,
+      "metadata": {
+        "brand_scope": "measures_registry_public_runtime",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md",
+        "token_family": "measures_registry_lapis_v2",
+        "launch_status": "approved_for_alignment",
+        "intended_usage": "stable outer frame, borders, and formal authority lines",
+        "visual_authority_role": "silver frame",
+        "frontend_replacement_authorized": false,
+        "preserves_inanna_material_systems": true
+      }
+    }
+  ],
+  "runtimeReadConfirmation": {
+    "expectedCount": 6,
+    "actualCount": 6,
+    "missing": [],
+    "allExpectedTokensReadable": true
+  },
+  "boundariesHeld": [
+    "No CSS rewrite performed.",
+    "No existing historical, Inanna, phase-map, or material tokens removed.",
+    "No frontend hardcoded colors introduced.",
+    "No route, media, content, or storage mutation performed."
+  ],
+  "replacementAlignmentMap": [
+    [
+      "background_obsidian",
+      "brand_obsidian"
+    ],
+    [
+      "panel_obsidian",
+      "brand_lapis_night"
+    ],
+    [
+      "accent_cool",
+      "brand_deep_lapis"
+    ],
+    [
+      "text_primary",
+      "brand_silver_frame"
+    ],
+    [
+      "text_secondary",
+      "brand_marble_accent"
+    ],
+    [
+      "text_muted",
+      "brand_marble_accent"
+    ],
+    [
+      "border_subtle",
+      "brand_silver_frame"
+    ],
+    [
+      "approved star/highlight surfaces",
+      "brand_crystal_star"
+    ]
+  ]
+}

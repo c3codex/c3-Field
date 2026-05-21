@@ -267,6 +267,289 @@ function asRecordArray(value: unknown) {
     : []
 }
 
+type AssessmentMechanicOption = {
+  value: string
+  label: string
+  conditionTags: string[]
+}
+
+type AssessmentMechanicQuestion = {
+  questionKey: string
+  question: string
+  contextLabel: string
+  options: AssessmentMechanicOption[]
+}
+
+type StructuredEvalAnswer = {
+  selected: string
+  label: string
+  institutional_context: string
+}
+
+type AssessmentConditionTrace = {
+  question_key: string
+  selected: string
+  label: string
+  condition_tags: string[]
+}
+
+type EnvironmentalStandingReport = {
+  environmental_standing: string
+  standing_key: string
+  assessment_title: string
+  assessment_result: string
+  detected_conditions: string[]
+  findings: string[]
+  operational_exposure_summary: string
+  recommended_structured_action: string
+  recommended_response_label: string
+  continuation_pathway: string
+  explainability: {
+    question_keys: string[]
+    condition_tags: string[]
+    standing_rule: string
+  }
+}
+
+type AssessmentEmailArtifact = {
+  subject: string
+  preview: string
+  body: string[]
+  source: string
+}
+
+function asStringArray(value: unknown) {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
+}
+
+function assessmentMechanicsByQuestion(metadataValue: unknown) {
+  const metadata = asRecord(metadataValue)
+  const questions = asRecordArray(metadata?.questions)
+
+  return new Map(
+    questions
+      .map((question) => {
+        const questionKey = asString(question.question_key)
+        const questionText = asString(question.question)
+        const options = asRecordArray(question.options)
+          .map((option) => {
+            const value = asString(option.value)
+            const label = asString(option.label)
+            if (!value || !label) return null
+
+            return {
+              value,
+              label,
+              conditionTags: asStringArray(option.condition_tags),
+            }
+          })
+          .filter((option): option is AssessmentMechanicOption => Boolean(option))
+
+        if (!questionKey || !questionText || options.length === 0) return null
+
+        return [
+          questionText,
+          {
+            questionKey,
+            question: questionText,
+            contextLabel:
+              asString(question.context_label) ??
+              "Additional institutional context (optional)",
+            options,
+          },
+        ] as const
+      })
+      .filter((entry): entry is readonly [string, AssessmentMechanicQuestion] => Boolean(entry)),
+  )
+}
+
+function allAssessmentMechanics(metadataValue: unknown) {
+  const metadata = asRecord(metadataValue)
+  const questions = asRecordArray(metadata?.questions)
+
+  return questions
+    .map((question) => {
+      const questionKey = asString(question.question_key)
+      const questionText = asString(question.question)
+      const options = asRecordArray(question.options)
+        .map((option) => {
+          const value = asString(option.value)
+          const label = asString(option.label)
+          if (!value || !label) return null
+
+          return {
+            value,
+            label,
+            conditionTags: asStringArray(option.condition_tags),
+          }
+        })
+        .filter((option): option is AssessmentMechanicOption => Boolean(option))
+
+      if (!questionKey || !questionText || options.length === 0) return null
+
+      return {
+        questionKey,
+        question: questionText,
+        contextLabel:
+          asString(question.context_label) ??
+          "Additional institutional context (optional)",
+        options,
+      }
+    })
+    .filter((question): question is AssessmentMechanicQuestion => Boolean(question))
+}
+
+function selectedConditionTraces(
+  mechanics: AssessmentMechanicQuestion[],
+  answers: Record<string, StructuredEvalAnswer>,
+) {
+  return mechanics.flatMap((question) => {
+    const answer = answers[question.questionKey]
+    if (!answer?.selected) return []
+    const option = question.options.find((candidate) => candidate.value === answer.selected)
+
+    return [{
+      question_key: question.questionKey,
+      selected: answer.selected,
+      label: answer.label,
+      condition_tags: option?.conditionTags ?? [],
+    }]
+  })
+}
+
+function replaceTemplateTokens(value: string, replacements: Record<string, string>) {
+  return Object.entries(replacements).reduce(
+    (current, [key, replacement]) => current.replaceAll(`{${key}}`, replacement),
+    value,
+  )
+}
+
+function resolveEnvironmentalReport(
+  interpretationValue: unknown,
+  traces: AssessmentConditionTrace[],
+): { report: EnvironmentalStandingReport; emailArtifact: AssessmentEmailArtifact } | null {
+  const interpretation = asRecord(interpretationValue)
+  const standingRules = asRecordArray(interpretation?.standing_rules)
+  const reportTemplates = asRecord(interpretation?.report_templates)
+  const emailTemplate = asRecord(interpretation?.email_artifact_template)
+  const reportLabels = asRecord(interpretation?.report_labels)
+  if (standingRules.length === 0 || !reportTemplates || !emailTemplate) return null
+
+  const tagCounts = traces.reduce<Record<string, number>>((counts, trace) => {
+    for (const tag of trace.condition_tags) counts[tag] = (counts[tag] ?? 0) + 1
+    return counts
+  }, {})
+  const submittedTags = Object.keys(tagCounts)
+
+  const scoredRules = standingRules.map((rule, index) => {
+    const standingKey = asString(rule.standing_key)
+    const standing = asString(rule.standing)
+    const priority = typeof rule.priority === "number" ? rule.priority : 0
+    const anyTags = asStringArray(rule.any_tags)
+    const allTags = asStringArray(rule.all_tags)
+    const matchedAny = anyTags.filter((tag) => submittedTags.includes(tag))
+    const matchedAll = allTags.filter((tag) => submittedTags.includes(tag))
+    const allSatisfied = allTags.length === matchedAll.length
+    const score = (allSatisfied ? allTags.length * 3 : 0) + matchedAny.length
+
+    return {
+      index,
+      standingKey,
+      standing,
+      priority,
+      ruleKey: asString(rule.rule_key) ?? standingKey ?? `rule_${index}`,
+      score,
+      matchedTags: [...new Set([...matchedAll, ...matchedAny])],
+      eligible: Boolean(standingKey && standing && score > 0 && allSatisfied),
+    }
+  })
+
+  const selected =
+    scoredRules
+      .filter((rule) => rule.eligible)
+      .sort((a, b) => b.score - a.score || b.priority - a.priority || a.index - b.index)[0] ??
+    scoredRules.find((rule) => rule.standingKey === "structured_governance_candidate") ??
+    null
+
+  if (!selected?.standingKey || !selected.standing) return null
+
+  const template = asRecord(reportTemplates[selected.standingKey])
+  if (!template) return null
+
+  const findingMap = asRecord(interpretation?.finding_map)
+  const findings = [
+    ...new Set(
+      submittedTags.flatMap((tag) => {
+        const mapped = findingMap?.[tag]
+        return typeof mapped === "string" ? [mapped] : []
+      }),
+    ),
+  ]
+
+  const detectedConditions = submittedTags
+    .map((tag) => asString(asRecord(interpretation?.condition_labels)?.[tag]) ?? tag.replaceAll("_", " "))
+    .slice(0, 8)
+
+  const report: EnvironmentalStandingReport = {
+    environmental_standing: selected.standing,
+    standing_key: selected.standingKey,
+    assessment_title:
+      asString(reportLabels?.assessment_title) ??
+      "MEASURES AI ENVIRONMENT ASSESSMENT",
+    assessment_result:
+      asString(template.assessment_result) ??
+      asString(reportLabels?.assessment_result) ??
+      "Structural Drift Detected",
+    detected_conditions: detectedConditions,
+    findings,
+    operational_exposure_summary:
+      asString(template.operational_exposure_summary) ??
+      "Submitted conditions were resolved through seated deterministic standing rules.",
+    recommended_structured_action:
+      asString(template.recommended_structured_action) ??
+      "Continue through the Measures Structured Environment pathway.",
+    recommended_response_label:
+      asString(reportLabels?.recommended_response_label) ??
+      "Recommended Operational Response",
+    continuation_pathway:
+      asString(template.continuation_pathway) ??
+      "Structured Environment continuation",
+    explainability: {
+      question_keys: traces.map((trace) => trace.question_key),
+      condition_tags: submittedTags,
+      standing_rule: selected.ruleKey,
+    },
+  }
+
+  const replacements = {
+    assessment_title: report.assessment_title,
+    assessment_result: report.assessment_result,
+    environmental_standing: report.environmental_standing,
+    operational_exposure_summary: report.operational_exposure_summary,
+    recommended_structured_action: report.recommended_structured_action,
+    recommended_response_label: report.recommended_response_label,
+    continuation_pathway: report.continuation_pathway,
+    findings: report.findings.join(", "),
+    detected_conditions: report.detected_conditions.join(", "),
+  }
+
+  return {
+    report,
+    emailArtifact: {
+      subject: replaceTemplateTokens(
+        asString(emailTemplate.subject) ?? "Measures AI Environment Assessment",
+        replacements,
+      ),
+      preview: replaceTemplateTokens(
+        asString(emailTemplate.preview) ?? report.operational_exposure_summary,
+        replacements,
+      ),
+      body: asStringArray(emailTemplate.body).map((line) => replaceTemplateTokens(line, replacements)),
+      source: "assessment_interpretation_metadata",
+    },
+  }
+}
+
 function mediaUrl(row?: MediaRow) {
   return resolveRuntimeMediaUrl({
     bucketName: row?.storage_bucket,
@@ -306,6 +589,8 @@ function sectionCopy(row?: LandingSectionRow) {
     diagnosticText: asString(metadata.diagnostic_text),
     educationalResources: asRecordArray(metadata.educational_resources),
     evaluationEntry: asRecord(metadata.evaluation_entry),
+    assessmentMechanics: asRecord(metadata.assessment_mechanics),
+    assessmentInterpretation: asRecord(metadata.assessment_interpretation),
     featuredPublication: asRecord(metadata.featured_publication),
     subscriptionEntry: asRecord(metadata.subscription_entry),
     heroPaths: asRecordArray(metadata.hero_paths),
@@ -385,11 +670,13 @@ export default function MeasuresRegistryRuntime() {
     right: false,
   })
   const [evalFields, setEvalFields] = useState<Record<string, string>>({})
-  const [evalAnswers, setEvalAnswers] = useState<Record<string, string>>({})
-  const [evalStep, setEvalStep] = useState<"src_capture" | "diagnostic">("src_capture")
+  const [evalAnswers, setEvalAnswers] = useState<Record<string, StructuredEvalAnswer>>({})
+  const [evalStep, setEvalStep] = useState<"src_capture" | "diagnostic" | "resolving">("src_capture")
   const [evalSectionIndex, setEvalSectionIndex] = useState(0)
   const [evalSubmitting, setEvalSubmitting] = useState(false)
   const [evalSubmitted, setEvalSubmitted] = useState(false)
+  const [evalReport, setEvalReport] = useState<EnvironmentalStandingReport | null>(null)
+  const [evalEmailArtifact, setEvalEmailArtifact] = useState<AssessmentEmailArtifact | null>(null)
   const [evalError, setEvalError] = useState<string | null>(null)
   const [publicationEmail, setPublicationEmail] = useState("")
   const [publicationOrganization, setPublicationOrganization] = useState("")
@@ -1146,8 +1433,42 @@ export default function MeasuresRegistryRuntime() {
     setEvalFields((current) => ({ ...current, [key]: value }))
   }
 
-  function setEvalAnswer(key: string, value: string) {
-    setEvalAnswers((current) => ({ ...current, [key]: value }))
+  function setEvalAnswerSelection(mechanic: AssessmentMechanicQuestion, option: AssessmentMechanicOption) {
+    setEvalAnswers((current) => ({
+      ...current,
+      [mechanic.questionKey]: {
+        selected: option.value,
+        label: option.label,
+        institutional_context: current[mechanic.questionKey]?.institutional_context ?? "",
+      },
+    }))
+  }
+
+  function setEvalAnswerContext(mechanic: AssessmentMechanicQuestion, value: string) {
+    setEvalAnswers((current) => {
+      const existing = current[mechanic.questionKey]
+
+      return {
+        ...current,
+        [mechanic.questionKey]: {
+          selected: existing?.selected ?? "",
+          label: existing?.label ?? "",
+          institutional_context: value,
+        },
+      }
+    })
+  }
+
+  function validateDiagnosticSection(questions: AssessmentMechanicQuestion[]) {
+    const missing = questions.filter((question) => !evalAnswers[question.questionKey]?.selected)
+
+    if (missing.length > 0) {
+      setEvalError(`Missing structured selections: ${missing.map((question) => question.questionKey).join(", ")}`)
+      return false
+    }
+
+    setEvalError(null)
+    return true
   }
 
   function continueToDiagnostic() {
@@ -1187,6 +1508,31 @@ export default function MeasuresRegistryRuntime() {
       return
     }
 
+    const populatedEvalAnswers = Object.fromEntries(
+      Object.entries(evalAnswers).filter(([, answer]) => answer.selected),
+    )
+
+    if (Object.keys(populatedEvalAnswers).length === 0) {
+      setEvalSubmitting(false)
+      setEvalError("Structured diagnostic selections are required before seating evaluation.")
+      return
+    }
+
+    const traces = selectedConditionTraces(
+      allAssessmentMechanics(iisEvalCopy.assessmentMechanics),
+      evalAnswers,
+    )
+    const interpretation = resolveEnvironmentalReport(iisEvalCopy.assessmentInterpretation, traces)
+
+    if (!interpretation) {
+      setEvalSubmitting(false)
+      setEvalError("Deterministic interpretation routing is not seated for this assessment.")
+      return
+    }
+
+    setEvalStep("resolving")
+    await new Promise((resolve) => window.setTimeout(resolve, 1200))
+
     const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
       institution_name: evalFields.institution_name.trim(),
       institution_address: evalFields.institution_address?.trim() ?? "",
@@ -1194,7 +1540,7 @@ export default function MeasuresRegistryRuntime() {
       contact_name: evalFields.contact_name.trim(),
       contact_position: evalFields.contact_position?.trim() || evalFields.organization_type?.trim() || "",
       contact_email: evalFields.contact_email.trim(),
-      evaluation_answers: evalAnswers,
+      evaluation_answers: populatedEvalAnswers,
       capture_context: "iis_eval_gate1",
       intent: "system_evaluation_request",
       eligibility: {
@@ -1204,15 +1550,26 @@ export default function MeasuresRegistryRuntime() {
       campaign_tag: "iis_eval_gate1",
       notification_state: "queued",
       confirmation_email_state: "queued",
+      metadata: {
+        source_oar2: "docs/oar/measures_registry/oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md",
+        semantic_source_oar2: "docs/oar/measures_registry/oar2_refine_measures_ai_operational_evaluation_semantics_v1.meta.md",
+        interpretation_source_oar2: "docs/oar/measures_registry/oar2_deterministic_environmental_standing_report_routing_v1.meta.md",
+        environmental_standing_report: interpretation.report,
+        structured_email_artifact: interpretation.emailArtifact,
+        condition_traces: traces,
+      },
     })
 
     setEvalSubmitting(false)
 
     if (error) {
+      setEvalStep("diagnostic")
       setEvalError("Evaluation could not be seated. Please try again.")
       return
     }
 
+    setEvalReport(interpretation.report)
+    setEvalEmailArtifact(interpretation.emailArtifact)
     setEvalSubmitted(true)
   }
 
@@ -1783,25 +2140,76 @@ export default function MeasuresRegistryRuntime() {
     const currentQuestions = Array.isArray(currentSection?.questions)
       ? currentSection.questions.filter((item): item is string => typeof item === "string")
       : []
+    const assessmentMechanics = assessmentMechanicsByQuestion(iisEvalCopy.assessmentMechanics)
+    const structuredQuestions = currentQuestions
+      .map((question) => assessmentMechanics.get(question) ?? null)
+      .filter((question): question is AssessmentMechanicQuestion => Boolean(question))
+    const missingStructuredQuestions = currentQuestions.filter((question) => !assessmentMechanics.has(question))
     const finalDiagnosticSection = evalSectionIndex >= Math.max(evaluationSections.length - 1, 0)
+    const assessmentProcessTitle = "MEASURES AI OPERATIONAL EVALUATION"
+    const assessmentSupportLine = "AI reflects the structure of the environment it operates within."
+
+    function renderAssessmentBrandLayer() {
+      return (
+        <div className="registry-assessment-brand-layer" aria-hidden="true">
+          {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
+          <span>MEASURES REGISTRY</span>
+          <small>Integrity Governance for AI Accelerated Systems</small>
+        </div>
+      )
+    }
 
     return (
       <main className="measures-registry-runtime" data-surface="iis_eval_gate1" data-chamber-state={evalStep} style={registryTokenStyle}>
-        <section className="registry-iis-eval registry-assessment-chamber" aria-label={iisEvalCopy.title ?? "MEASURES AI ASSESSMENT"}>
+        <section className="registry-iis-eval registry-assessment-chamber" aria-label={iisEvalCopy.title ?? "MEASURES AI OPERATIONAL EVALUATION"}>
+          {renderAssessmentBrandLayer()}
           <div className="registry-chamber-heading">
-            <span>{iisEvalCopy.eyebrow ?? "Governed Diagnostic Chamber"}</span>
-            <h1>{iisEvalCopy.title ?? "MEASURES AI ASSESSMENT"}</h1>
+            <span>{iisEvalCopy.eyebrow ?? "Measures Registry"}</span>
+            <h1>{iisEvalCopy.title ?? assessmentProcessTitle}</h1>
             <p>
               {iisEvalCopy.subtitle ??
-                "This chamber evaluates the structure surrounding your AI use. Authority. Validation. Oversight. Implementation. Behavioral registration."}
+                `${assessmentSupportLine} Structure enables acceleration. Ambiguity creates drift.`}
             </p>
           </div>
 
           {evalSubmitted ? (
             <div className="registry-eval-resolution registry-assessment-complete">
               <span>Assessment Complete</span>
-              <h2>MEASURES AI ASSESSMENT COMPLETE</h2>
-              <p>{iisEvalCopy.resolutionText ?? "Structural conditions have been recorded."}</p>
+              <h2>{evalReport?.assessment_title ?? "MEASURES AI ENVIRONMENT ASSESSMENT"}</h2>
+              <p className="registry-assessment-support">Structure enables acceleration. Ambiguity creates drift.</p>
+              {evalReport ? (
+                <section className="registry-standing-report" aria-label="Environmental standing report">
+                  <span>Assessment</span>
+                  <h3>{evalReport.assessment_result}</h3>
+                  <p>{evalReport.operational_exposure_summary}</p>
+                  {evalReport.findings.length > 0 ? (
+                    <div>
+                      <strong>Findings</strong>
+                      <ul>
+                        {evalReport.findings.map((finding) => (
+                          <li key={finding}>{finding}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  <div>
+                    <strong>{evalReport.recommended_response_label}</strong>
+                    <p>{evalReport.recommended_structured_action}</p>
+                  </div>
+                  <small>
+                    Trace: {evalReport.explainability.question_keys.length} answer keys / {evalReport.explainability.condition_tags.length} condition tags / {evalReport.explainability.standing_rule}
+                  </small>
+                </section>
+              ) : (
+                <p>{iisEvalCopy.resolutionText ?? "Structural conditions have been recorded."}</p>
+              )}
+              {evalEmailArtifact ? (
+                <section className="registry-email-artifact" aria-label="Structured email artifact">
+                  <span>Structured Email Artifact</span>
+                  <strong>{evalEmailArtifact.subject}</strong>
+                  <p>{evalEmailArtifact.preview}</p>
+                </section>
+              ) : null}
               <p>Continue into the Structured Environment.</p>
               {structuredEnvironmentPassageVideoUrl ? (
                 <video
@@ -1826,6 +2234,17 @@ export default function MeasuresRegistryRuntime() {
                 </button>
               </div>
             </div>
+          ) : evalStep === "resolving" ? (
+            <div className="registry-eval-resolution registry-assessment-resolving">
+              <span>Resolving environmental standing</span>
+              <h2>Reviewing operating conditions.</h2>
+              <p className="registry-assessment-support">{assessmentSupportLine}</p>
+              <ol>
+                <li>Resolving environmental standing...</li>
+                <li>Reviewing operating conditions...</li>
+                <li>Assessing implementation structure...</li>
+              </ol>
+            </div>
           ) : evalStep === "src_capture" ? (
             <form
               className="registry-iis-eval-form registry-src-capture"
@@ -1836,7 +2255,8 @@ export default function MeasuresRegistryRuntime() {
             >
               <div className="registry-chamber-copy">
                 <span>Environment Identity</span>
-                <h2>Before the diagnostic begins, identify the environment being assessed.</h2>
+                <h2>Before the evaluation begins, identify the environment being assessed.</h2>
+                <p className="registry-assessment-support">Structure enables acceleration. Ambiguity creates drift.</p>
               </div>
               <fieldset>
                 <legend>Soft SRC Intake</legend>
@@ -1869,22 +2289,48 @@ export default function MeasuresRegistryRuntime() {
             <form className="registry-iis-eval-form" onSubmit={submitIisEvaluation}>
               <div className="registry-chamber-copy">
                 <span>Diagnostic Progression</span>
-                <h2>The system is structured. The assessment identifies whether your AI environment is.</h2>
+                <h2>AI reflects the structure of the environment it operates within.</h2>
+                <p className="registry-assessment-support">Structure enables acceleration. Ambiguity creates drift.</p>
                 <p>{evaluationSections.length > 0 ? `${evalSectionIndex + 1} of ${evaluationSections.length}` : "Diagnostic standing not seated"}</p>
               </div>
 
               <fieldset>
                 {currentSectionTitle ? <legend>{currentSectionTitle}</legend> : <legend>Diagnostic</legend>}
-                {currentQuestions.length > 0 ? (
-                  currentQuestions.map((question) => (
-                    <label key={question}>
-                      <span>{question}</span>
-                      <textarea
-                        value={evalAnswers[question] ?? ""}
-                        onChange={(event) => setEvalAnswer(question, event.target.value)}
-                      />
-                    </label>
-                  ))
+                {structuredQuestions.length > 0 ? (
+                  structuredQuestions.map((question) => {
+                    const currentAnswer = evalAnswers[question.questionKey]
+
+                    return (
+                      <div className="registry-structured-question" key={question.questionKey}>
+                        <span className="registry-structured-question-text">{question.question}</span>
+                        <div className="registry-structured-options" role="radiogroup" aria-label={question.question}>
+                          {question.options.map((option) => (
+                            <label key={option.value} className="registry-structured-option">
+                              <input
+                                type="radio"
+                                name={question.questionKey}
+                                value={option.value}
+                                checked={currentAnswer?.selected === option.value}
+                                onChange={() => setEvalAnswerSelection(question, option)}
+                              />
+                              <span>{option.label}</span>
+                            </label>
+                          ))}
+                        </div>
+                        <label className="registry-structured-context">
+                          <span>{question.contextLabel}</span>
+                          <textarea
+                            value={currentAnswer?.institutional_context ?? ""}
+                            onChange={(event) => setEvalAnswerContext(question, event.target.value)}
+                          />
+                        </label>
+                      </div>
+                    )
+                  })
+                ) : missingStructuredQuestions.length > 0 ? (
+                  <p className="registry-media-absence">
+                    Structured answer mechanics are not seated for this diagnostic section.
+                  </p>
                 ) : (
                   <p className="registry-media-absence">Diagnostic questions are not seated in the runtime registry.</p>
                 )}
@@ -1903,12 +2349,22 @@ export default function MeasuresRegistryRuntime() {
                 {!finalDiagnosticSection && evaluationSections.length > 0 ? (
                   <button
                     type="button"
-                    onClick={() => setEvalSectionIndex((current) => Math.min(evaluationSections.length - 1, current + 1))}
+                    onClick={() => {
+                      if (!validateDiagnosticSection(structuredQuestions)) return
+                      setEvalSectionIndex((current) => Math.min(evaluationSections.length - 1, current + 1))
+                    }}
                   >
                     Continue
                   </button>
                 ) : (
-                  <button type="submit" disabled={evalSubmitting}>
+                  <button
+                    type="submit"
+                    disabled={evalSubmitting}
+                    onClick={(event) => {
+                      if (validateDiagnosticSection(structuredQuestions)) return
+                      event.preventDefault()
+                    }}
+                  >
                     {evalSubmitting ? "Seating Evaluation" : "Complete Assessment"}
                   </button>
                 )}

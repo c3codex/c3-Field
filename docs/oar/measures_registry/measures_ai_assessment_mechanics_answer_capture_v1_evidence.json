@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-05-21T01:27:27.402Z",
+  "source_oar2": "docs/oar/measures_registry/oar2_measures_ai_assessment_mechanics_answer_capture_v1.meta.md",
+  "mutationPerformed": true,
+  "encounterKey": "iis_eval_gate1",
+  "mechanicsVersion": "v1",
+  "questionCount": 10,
+  "questionKeys": [
+    "ai_usage_scope_internal",
+    "ai_usage_scope_public_surfaces",
+    "deployment_maturity_standing",
+    "approval_before_release",
+    "public_system_authority_origin",
+    "registered_truth_controls",
+    "witnessed_ai_variance",
+    "incident_review_practice",
+    "governance_validation_role",
+    "post_release_traceability"
+  ],
+  "captureTable": "measures_iis_eval_gate1_capture",
+  "answerColumn": "evaluation_answers",
+  "sampleRedactedPayloadShape": {
+    "governance_validation_role": {
+      "selected": "partial_department_specific",
+      "label": "Partial or department-specific oversight",
+      "institutional_context": "[redacted optional institutional detail]"
+    },
+    "post_release_traceability": {
+      "selected": "manual_or_informal_trace",
+      "label": "Manual or informal trace only",
+      "institutional_context": ""
+    }
+  },
+  "recentCaptureReadback": [
+    {
+      "id": "bf33bfd9-803c-4144-bd49-54ad1879b313",
+      "institution_name": "[redacted]",
+      "contact_email": "[redacted]",
+      "evaluation_answer_keys": [
+        "witnessed_ai_variance",
+        "ai_usage_scope_internal",
+        "approval_before_release",
+        "incident_review_practice",
+        "post_release_traceability",
+        "registered_truth_controls",
+        "governance_validation_role",
+        "deployment_maturity_standing",
+        "ai_usage_scope_public_surfaces",
+        "public_system_authority_origin"
+      ],
+      "eligibility": {
+        "foundational_courses": true,
+        "conversion_assessment": "pending_review"
+      },
+      "capture_context": "iis_eval_gate1",
+      "created_at": "2026-05-21T01:27:13.93857+00:00"
+    },
+    {
+      "id": "3f70ea25-8672-4a61-8abc-4c3a7eec8612",
+      "institution_name": "[redacted]",
+      "contact_email": "[redacted]",
+      "evaluation_answer_keys": [],
+      "eligibility": {
+        "foundational_courses": true,
+        "conversion_assessment": "pending_review"
+      },
+      "capture_context": "iis_eval_gate1",
+      "created_at": "2026-05-20T21:19:47.956048+00:00"
+    }
+  ]
+}

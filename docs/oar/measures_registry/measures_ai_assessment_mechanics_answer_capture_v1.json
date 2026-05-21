@@ -1,0 +1,133 @@
+{
+  "source_oar2": "docs/oar/measures_registry/oar2_measures_ai_assessment_mechanics_answer_capture_v1.meta.md",
+  "encounter_key": "iis_eval_gate1",
+  "capture_table": "measures_iis_eval_gate1_capture",
+  "answer_column": "evaluation_answers",
+  "assessment_mechanics": {
+    "version": "v1",
+    "answer_shape": "question_key.selected_label_context",
+    "interpretation_boundary": "deterministic_conditions_only_no_scores_no_legal_claims",
+    "questions": [
+      {
+        "question_key": "ai_usage_scope_internal",
+        "question": "Where is AI currently being used inside the institution?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "organization_wide_registered", "label": "Organization-wide uses are formally registered", "condition_tags": ["registered_usage_scope"] },
+          { "value": "department_specific_known", "label": "Department or team-specific uses are known", "condition_tags": ["partial_usage_scope"] },
+          { "value": "informal_distributed", "label": "Informal distributed use is present", "condition_tags": ["operational_drift_exposure"] },
+          { "value": "no_defined_inventory", "label": "No defined AI-use inventory exists", "condition_tags": ["authority_ambiguity"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "ai_usage_scope_public_surfaces",
+        "question": "Which teams or public surfaces rely on AI-assisted output?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "public_surfaces_registered", "label": "Public surfaces and teams are registered", "condition_tags": ["registered_public_surface"] },
+          { "value": "some_surfaces_known", "label": "Some teams or public surfaces are known", "condition_tags": ["partial_public_surface_standing"] },
+          { "value": "public_dependency_informal", "label": "Public reliance exists without formal registry", "condition_tags": ["public_output_drift_exposure"] },
+          { "value": "no_public_reliance_identified", "label": "No public-surface reliance identified", "condition_tags": ["limited_public_exposure"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "deployment_maturity_standing",
+        "question": "Which AI workflows are experimental, live, or operationally relied upon?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "registered_by_maturity", "label": "Workflows are registered by maturity state", "condition_tags": ["registered_deployment_maturity"] },
+          { "value": "mixed_known_maturity", "label": "Mixed maturity states are known but partially governed", "condition_tags": ["fragmented_deployment_maturity"] },
+          { "value": "live_without_formal_maturity", "label": "Live workflows exist without formal maturity standing", "condition_tags": ["operational_reliance_exposure"] },
+          { "value": "experimental_only", "label": "Experimental use only", "condition_tags": ["limited_operational_reliance"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "approval_before_release",
+        "question": "What approval process exists before AI behavior reaches users or stakeholders?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "formal_pre_release_review", "label": "Formal pre-release review is required", "condition_tags": ["validation_structure_present"] },
+          { "value": "department_specific_review", "label": "Department-specific review is used", "condition_tags": ["fragmented_validation_structure"] },
+          { "value": "informal_case_by_case", "label": "Informal case-by-case review", "condition_tags": ["validation_inconsistency"] },
+          { "value": "no_defined_review", "label": "No defined review before release", "condition_tags": ["escalation_without_review_structure"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "public_system_authority_origin",
+        "question": "Where does public-facing system behavior originate and who can change it?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "authority_registry_defined", "label": "Origin and change authority are registry-defined", "condition_tags": ["authority_structure_present"] },
+          { "value": "owner_defined_not_registry", "label": "Owners are known but not registry-governed", "condition_tags": ["partial_authority_structure"] },
+          { "value": "frontend_or_vendor_controlled", "label": "Frontend, vendor, or tool operators can change behavior directly", "condition_tags": ["frontend_truth_exposure"] },
+          { "value": "no_clear_change_authority", "label": "No clear change authority exists", "condition_tags": ["authority_ambiguity"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "registered_truth_controls",
+        "question": "What prevents frontend copy, routing, or media from becoming unregistered truth?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "registry_controls_required", "label": "Registry controls are required before runtime rendering", "condition_tags": ["registry_control_present"] },
+          { "value": "review_controls_partial", "label": "Review controls exist but are partial", "condition_tags": ["partial_registry_control"] },
+          { "value": "developer_process_only", "label": "Developer process or convention is the main control", "condition_tags": ["process_only_control"] },
+          { "value": "no_defined_control", "label": "No defined control prevents unregistered truth", "condition_tags": ["unregistered_truth_exposure"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "witnessed_ai_variance",
+        "question": "What drift, contradiction, hallucination, or unexplained variance has been witnessed?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "logged_and_classified", "label": "Incidents are logged and classified", "condition_tags": ["variance_record_present"] },
+          { "value": "known_not_systematically_logged", "label": "Incidents are known but not systematically logged", "condition_tags": ["incomplete_variance_record"] },
+          { "value": "anecdotal_only", "label": "Anecdotal reports only", "condition_tags": ["weak_incident_trace"] },
+          { "value": "none_identified", "label": "No incidents identified", "condition_tags": ["no_witnessed_variance"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "incident_review_practice",
+        "question": "How are those incidents recorded and reviewed?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "formal_record_review_loop", "label": "Formal record and review loop exists", "condition_tags": ["closed_review_loop_present"] },
+          { "value": "partial_review_loop", "label": "Partial review loop exists", "condition_tags": ["partial_review_loop"] },
+          { "value": "informal_escalation", "label": "Informal escalation or discussion only", "condition_tags": ["informal_incident_review"] },
+          { "value": "no_review_loop", "label": "No defined incident review loop", "condition_tags": ["open_loop_exposure"] },
+          { "value": "not_applicable_or_unknown", "label": "Not applicable or unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "governance_validation_role",
+        "question": "What governance body or role validates AI behavior before deployment?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "formal_org_wide_oversight", "label": "Formal organization-wide oversight", "condition_tags": ["governance_oversight_present"] },
+          { "value": "partial_department_specific", "label": "Partial or department-specific oversight", "condition_tags": ["fragmented_oversight"] },
+          { "value": "informal_oversight_only", "label": "Informal oversight only", "condition_tags": ["informal_oversight"] },
+          { "value": "no_defined_oversight", "label": "No defined oversight", "condition_tags": ["governance_absence"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      },
+      {
+        "question_key": "post_release_traceability",
+        "question": "How are decisions, outputs, and changes traced after release?",
+        "context_label": "Additional institutional context (optional)",
+        "options": [
+          { "value": "traceable_release_record", "label": "Traceable release record is maintained", "condition_tags": ["traceability_present"] },
+          { "value": "partial_traceability", "label": "Partial traceability exists", "condition_tags": ["partial_traceability"] },
+          { "value": "manual_or_informal_trace", "label": "Manual or informal trace only", "condition_tags": ["weak_traceability"] },
+          { "value": "no_defined_trace", "label": "No defined post-release trace", "condition_tags": ["release_trace_absence"] },
+          { "value": "unknown", "label": "Unknown", "condition_tags": ["unknown_standing"] }
+        ]
+      }
+    ]
+  }
+}

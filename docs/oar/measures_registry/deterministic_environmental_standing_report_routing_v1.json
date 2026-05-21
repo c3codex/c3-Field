@@ -1,0 +1,192 @@
+{
+  "source_oar2": "docs/oar/measures_registry/oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md",
+  "semantic_alignment_source": "docs/oar/measures_registry/oar2_refine_measures_ai_operational_evaluation_semantics_v1.meta.md",
+  "encounter_key": "iis_eval_gate1",
+  "assessment_interpretation": {
+    "version": "v1",
+    "interpretation_boundary": "deterministic_condition_tags_only_no_scores_no_legal_claims",
+    "standing_rules": [
+      {
+        "rule_key": "foundational_governance_absent_from_absence",
+        "standing_key": "foundational_governance_absent",
+        "standing": "Foundational Governance Absent",
+        "priority": 100,
+        "all_tags": ["governance_absence"],
+        "any_tags": ["no_defined_review", "authority_ambiguity", "unregistered_truth_exposure", "release_trace_absence"]
+      },
+      {
+        "rule_key": "operational_drift_from_public_unregistered_conditions",
+        "standing_key": "operational_drift_exposure",
+        "standing": "Operational Drift Exposure",
+        "priority": 90,
+        "all_tags": ["operational_drift_exposure"],
+        "any_tags": ["public_output_drift_exposure", "operational_reliance_exposure", "unregistered_truth_exposure", "open_loop_exposure"]
+      },
+      {
+        "rule_key": "unbounded_automation_from_release_review_absence",
+        "standing_key": "unbounded_automation_exposure",
+        "standing": "Unbounded Automation Exposure",
+        "priority": 85,
+        "all_tags": ["escalation_without_review_structure"],
+        "any_tags": ["process_only_control", "frontend_truth_exposure", "release_trace_absence"]
+      },
+      {
+        "rule_key": "fragmented_oversight_from_partial_structures",
+        "standing_key": "fragmented_oversight_environment",
+        "standing": "Fragmented Oversight Environment",
+        "priority": 80,
+        "all_tags": ["fragmented_oversight"],
+        "any_tags": ["fragmented_validation_structure", "partial_authority_structure", "partial_traceability", "partial_review_loop"]
+      },
+      {
+        "rule_key": "partial_alignment_from_partial_controls",
+        "standing_key": "partial_governance_alignment",
+        "standing": "Partial Governance Alignment",
+        "priority": 70,
+        "all_tags": ["partial_registry_control"],
+        "any_tags": ["partial_usage_scope", "partial_public_surface_standing", "mixed_known_maturity", "partial_traceability"]
+      },
+      {
+        "rule_key": "structured_candidate_from_registered_controls",
+        "standing_key": "structured_governance_candidate",
+        "standing": "Structured Governance Candidate",
+        "priority": 60,
+        "all_tags": ["registry_control_present"],
+        "any_tags": ["registered_usage_scope", "registered_public_surface", "registered_deployment_maturity", "validation_structure_present", "traceability_present"]
+      }
+    ],
+    "condition_labels": {
+      "registered_usage_scope": "registered AI use scope",
+      "partial_usage_scope": "fragmented operational procedure inventory",
+      "operational_drift_exposure": "operational drift exposure",
+      "authority_ambiguity": "undefined role assignment",
+      "registered_public_surface": "registered public surface reliance",
+      "partial_public_surface_standing": "system environment inconsistency",
+      "public_output_drift_exposure": "system environment inconsistency",
+      "limited_public_exposure": "limited public exposure",
+      "registered_deployment_maturity": "registered deployment maturity",
+      "fragmented_deployment_maturity": "fragmented operational procedure maturity",
+      "operational_reliance_exposure": "unbounded AI process reliance",
+      "limited_operational_reliance": "limited operational reliance",
+      "validation_structure_present": "validation structure present",
+      "fragmented_validation_structure": "fragmented operational procedures",
+      "validation_inconsistency": "system environment inconsistency",
+      "escalation_without_review_structure": "unbounded AI processes",
+      "authority_structure_present": "role authority structure present",
+      "partial_authority_structure": "undefined role assignment",
+      "frontend_truth_exposure": "system environment inconsistency",
+      "registry_control_present": "registry control present",
+      "partial_registry_control": "fragmented operational procedures",
+      "process_only_control": "fragmented operational procedures",
+      "unregistered_truth_exposure": "system environment inconsistency",
+      "variance_record_present": "variance record present",
+      "incomplete_variance_record": "system environment inconsistency",
+      "weak_incident_trace": "system environment inconsistency",
+      "no_witnessed_variance": "no witnessed variance",
+      "closed_review_loop_present": "closed review loop present",
+      "partial_review_loop": "fragmented operational procedures",
+      "informal_incident_review": "fragmented operational procedures",
+      "open_loop_exposure": "unbounded AI processes",
+      "governance_oversight_present": "operational oversight present",
+      "fragmented_oversight": "fragmented operational procedures",
+      "informal_oversight": "undefined role assignments",
+      "governance_absence": "undefined role assignments",
+      "traceability_present": "traceability present",
+      "partial_traceability": "system environment inconsistency",
+      "weak_traceability": "system environment inconsistency",
+      "release_trace_absence": "unbounded AI processes",
+      "unknown_standing": "unknown standing"
+    },
+    "finding_map": {
+      "partial_usage_scope": "Fragmented Operational Procedures",
+      "fragmented_deployment_maturity": "Fragmented Operational Procedures",
+      "fragmented_validation_structure": "Fragmented Operational Procedures",
+      "partial_registry_control": "Fragmented Operational Procedures",
+      "process_only_control": "Fragmented Operational Procedures",
+      "partial_review_loop": "Fragmented Operational Procedures",
+      "informal_incident_review": "Fragmented Operational Procedures",
+      "fragmented_oversight": "Fragmented Operational Procedures",
+      "operational_reliance_exposure": "Unbounded AI Processes",
+      "escalation_without_review_structure": "Unbounded AI Processes",
+      "open_loop_exposure": "Unbounded AI Processes",
+      "release_trace_absence": "Unbounded AI Processes",
+      "operational_drift_exposure": "Unbounded Automation Exposure",
+      "unregistered_truth_exposure": "Unbounded Automation Exposure",
+      "public_output_drift_exposure": "System Environment Inconsistency",
+      "partial_public_surface_standing": "System Environment Inconsistency",
+      "validation_inconsistency": "System Environment Inconsistency",
+      "frontend_truth_exposure": "System Environment Inconsistency",
+      "incomplete_variance_record": "System Environment Inconsistency",
+      "weak_incident_trace": "System Environment Inconsistency",
+      "partial_traceability": "System Environment Inconsistency",
+      "weak_traceability": "System Environment Inconsistency",
+      "authority_ambiguity": "Undefined Role Assignments",
+      "partial_authority_structure": "Undefined Role Assignments",
+      "informal_oversight": "Undefined Role Assignments",
+      "governance_absence": "Undefined Role Assignments"
+    },
+    "report_labels": {
+      "process_title": "MEASURES AI OPERATIONAL EVALUATION",
+      "assessment_title": "MEASURES AI ENVIRONMENT ASSESSMENT",
+      "assessment_result": "Structural Drift Detected",
+      "findings_label": "Findings",
+      "recommended_response_label": "Recommended Operational Response"
+    },
+    "report_templates": {
+      "foundational_governance_absent": {
+        "assessment_result": "Structural Drift Detected",
+        "operational_exposure_summary": "Submitted conditions indicate that role authority, review structure, or release traceability is not yet reliably defined for AI-supported work.",
+        "recommended_structured_action": "Environmental Alignment for Reliable AI Performance",
+        "continuation_pathway": "Structured Environment foundation pathway"
+      },
+      "fragmented_oversight_environment": {
+        "assessment_result": "Structural Drift Detected",
+        "operational_exposure_summary": "Submitted conditions indicate operational procedures exist in fragments, but role authority and review are not yet consistently connected across the environment.",
+        "recommended_structured_action": "Environmental Alignment for Reliable AI Performance",
+        "continuation_pathway": "Structured Environment oversight pathway"
+      },
+      "operational_drift_exposure": {
+        "assessment_result": "Structural Drift Detected",
+        "operational_exposure_summary": "Submitted conditions indicate AI-supported work is operationally present while registration, review, or incident loops remain inconsistent.",
+        "recommended_structured_action": "Environmental Alignment for Reliable AI Performance",
+        "continuation_pathway": "Structured Environment drift correction pathway"
+      },
+      "unbounded_automation_exposure": {
+        "assessment_result": "Structural Drift Detected",
+        "operational_exposure_summary": "Submitted conditions indicate AI processes or public-facing behavior may advance without a defined operating review structure.",
+        "recommended_structured_action": "Environmental Alignment for Reliable AI Performance",
+        "continuation_pathway": "Structured Environment release-control pathway"
+      },
+      "partial_governance_alignment": {
+        "assessment_result": "Structural Drift Detected",
+        "operational_exposure_summary": "Submitted conditions indicate partial environmental alignment, with some controls present and some still dependent on informal procedures.",
+        "recommended_structured_action": "Environmental Alignment for Reliable AI Performance",
+        "continuation_pathway": "Structured Environment alignment pathway"
+      },
+      "structured_governance_candidate": {
+        "assessment_result": "Structural Drift Detected",
+        "operational_exposure_summary": "Submitted conditions indicate several structured controls are present and can be refined into repeatable AI operating conditions.",
+        "recommended_structured_action": "Environmental Alignment for Reliable AI Performance",
+        "continuation_pathway": "Structured Environment candidate pathway"
+      }
+    },
+    "email_artifact_template": {
+      "subject": "Measures AI Environment Assessment - {assessment_result}",
+      "preview": "{operational_exposure_summary}",
+      "body": [
+        "Process: MEASURES AI OPERATIONAL EVALUATION",
+        "Returned Assessment: {assessment_title}",
+        "Assessment: {assessment_result}",
+        "Findings: {findings}",
+        "Operational Exposure Summary: {operational_exposure_summary}",
+        "{recommended_response_label}: {recommended_structured_action}",
+        "Continuation Pathway: {continuation_pathway}"
+      ]
+    },
+    "pause_states": [
+      "Resolving environmental standing...",
+      "Reviewing operating conditions...",
+      "Assessing implementation structure..."
+    ]
+  }
+}

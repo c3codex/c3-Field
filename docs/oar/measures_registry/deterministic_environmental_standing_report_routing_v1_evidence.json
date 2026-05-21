@@ -1,0 +1,106 @@
+{
+  "generatedAt": "2026-05-21T03:50:43.615Z",
+  "source_oar2": "docs/oar/measures_registry/oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md",
+  "mutationPerformed": true,
+  "encounterKey": "iis_eval_gate1",
+  "interpretationVersion": "v1",
+  "standingRuleCount": 6,
+  "standingKeys": [
+    "foundational_governance_absent",
+    "operational_drift_exposure",
+    "unbounded_automation_exposure",
+    "fragmented_oversight_environment",
+    "partial_governance_alignment",
+    "structured_governance_candidate"
+  ],
+  "emailArtifactTemplatePresent": true,
+  "recentCaptureReadback": [
+    {
+      "id": "a68df9c5-cbe6-46b9-a545-872b1084ba98",
+      "evaluation_answer_keys": [
+        "witnessed_ai_variance",
+        "ai_usage_scope_internal",
+        "approval_before_release",
+        "incident_review_practice",
+        "post_release_traceability",
+        "registered_truth_controls",
+        "governance_validation_role",
+        "deployment_maturity_standing",
+        "ai_usage_scope_public_surfaces",
+        "public_system_authority_origin"
+      ],
+      "environmental_standing": "Unbounded Automation Exposure",
+      "assessment_result": "Structural Drift Detected",
+      "findings": [
+        "Unbounded AI Processes",
+        "Unbounded Automation Exposure"
+      ],
+      "standing_rule": "unbounded_automation_from_release_review_absence",
+      "email_artifact_subject": "Measures AI Environment Assessment - Structural Drift Detected",
+      "eligibility": {
+        "foundational_courses": true,
+        "conversion_assessment": "pending_review"
+      },
+      "capture_context": "iis_eval_gate1",
+      "created_at": "2026-05-21T03:49:52.127229+00:00"
+    },
+    {
+      "id": "2753007d-69c1-44e5-8331-771156eae21b",
+      "evaluation_answer_keys": [
+        "witnessed_ai_variance",
+        "ai_usage_scope_internal",
+        "approval_before_release",
+        "incident_review_practice",
+        "post_release_traceability",
+        "registered_truth_controls",
+        "governance_validation_role",
+        "deployment_maturity_standing",
+        "ai_usage_scope_public_surfaces",
+        "public_system_authority_origin"
+      ],
+      "environmental_standing": "Unbounded Automation Exposure",
+      "assessment_result": "Structural Drift Detected",
+      "findings": [
+        "Unbounded AI Processes",
+        "Unbounded Automation Exposure"
+      ],
+      "standing_rule": "unbounded_automation_from_release_review_absence",
+      "email_artifact_subject": "Measures AI Environment Assessment - Structural Drift Detected",
+      "eligibility": {
+        "foundational_courses": true,
+        "conversion_assessment": "pending_review"
+      },
+      "capture_context": "iis_eval_gate1",
+      "created_at": "2026-05-21T03:48:45.827198+00:00"
+    },
+    {
+      "id": "612d1f24-cdf8-48b1-ba5a-78c99e0a322e",
+      "evaluation_answer_keys": [
+        "witnessed_ai_variance",
+        "ai_usage_scope_internal",
+        "approval_before_release",
+        "incident_review_practice",
+        "post_release_traceability",
+        "registered_truth_controls",
+        "governance_validation_role",
+        "deployment_maturity_standing",
+        "ai_usage_scope_public_surfaces",
+        "public_system_authority_origin"
+      ],
+      "environmental_standing": "Unbounded Automation Exposure",
+      "assessment_result": "Structural Drift Detected",
+      "findings": [
+        "Unbounded AI Processes",
+        "System Environment Inconsistency"
+      ],
+      "standing_rule": "unbounded_automation_from_release_review_absence",
+      "email_artifact_subject": "Measures AI Environment Assessment - Structural Drift Detected",
+      "eligibility": {
+        "foundational_courses": true,
+        "conversion_assessment": "pending_review"
+      },
+      "capture_context": "iis_eval_gate1",
+      "created_at": "2026-05-21T03:47:54.328483+00:00"
+    }
+  ]
+}
