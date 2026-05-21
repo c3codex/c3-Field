@@ -322,47 +322,6 @@ function asStringArray(value: unknown) {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
 }
 
-function assessmentMechanicsByQuestion(metadataValue: unknown) {
-  const metadata = asRecord(metadataValue)
-  const questions = asRecordArray(metadata?.questions)
-
-  return new Map(
-    questions
-      .map((question) => {
-        const questionKey = asString(question.question_key)
-        const questionText = asString(question.question)
-        const options = asRecordArray(question.options)
-          .map((option) => {
-            const value = asString(option.value)
-            const label = asString(option.label)
-            if (!value || !label) return null
-
-            return {
-              value,
-              label,
-              conditionTags: asStringArray(option.condition_tags),
-            }
-          })
-          .filter((option): option is AssessmentMechanicOption => Boolean(option))
-
-        if (!questionKey || !questionText || options.length === 0) return null
-
-        return [
-          questionText,
-          {
-            questionKey,
-            question: questionText,
-            contextLabel:
-              asString(question.context_label) ??
-              "Additional institutional context (optional)",
-            options,
-          },
-        ] as const
-      })
-      .filter((entry): entry is readonly [string, AssessmentMechanicQuestion] => Boolean(entry)),
-  )
-}
-
 function allAssessmentMechanics(metadataValue: unknown) {
   const metadata = asRecord(metadataValue)
   const questions = asRecordArray(metadata?.questions)
@@ -1463,7 +1422,7 @@ export default function MeasuresRegistryRuntime() {
     const missing = questions.filter((question) => !evalAnswers[question.questionKey]?.selected)
 
     if (missing.length > 0) {
-      setEvalError(`Missing structured selections: ${missing.map((question) => question.questionKey).join(", ")}`)
+      setEvalError("Please select an answer before continuing.")
       return false
     }
 
@@ -1512,9 +1471,13 @@ export default function MeasuresRegistryRuntime() {
       Object.entries(evalAnswers).filter(([, answer]) => answer.selected),
     )
 
-    if (Object.keys(populatedEvalAnswers).length === 0) {
+    const missingEvaluationAnswers = allAssessmentMechanics(iisEvalCopy.assessmentMechanics).filter(
+      (question) => !populatedEvalAnswers[question.questionKey],
+    )
+
+    if (missingEvaluationAnswers.length > 0) {
       setEvalSubmitting(false)
-      setEvalError("Structured diagnostic selections are required before seating evaluation.")
+      setEvalError("Please complete each evaluation question before assessment.")
       return
     }
 
@@ -1551,7 +1514,8 @@ export default function MeasuresRegistryRuntime() {
       notification_state: "queued",
       confirmation_email_state: "queued",
       metadata: {
-        source_oar2: "docs/oar/measures_registry/oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md",
+        source_oar2: "docs/oar/measures_registry/oar2_operational_evaluation_single_question_chamber_public_label_cleanup_v1.meta.md",
+        branding_source_oar2: "docs/oar/measures_registry/oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md",
         semantic_source_oar2: "docs/oar/measures_registry/oar2_refine_measures_ai_operational_evaluation_semantics_v1.meta.md",
         interpretation_source_oar2: "docs/oar/measures_registry/oar2_deterministic_environmental_standing_report_routing_v1.meta.md",
         environmental_standing_report: interpretation.report,
@@ -2134,18 +2098,11 @@ export default function MeasuresRegistryRuntime() {
 
   function renderIisEvalGateSurface() {
     if (reportMissingClassification("iis_eval_gate1", iisEvalCopy)) return null
-    const evaluationSections = iisEvalCopy.evaluationSections
-    const currentSection = evaluationSections[evalSectionIndex] ?? null
-    const currentSectionTitle = asString(currentSection?.title)
-    const currentQuestions = Array.isArray(currentSection?.questions)
-      ? currentSection.questions.filter((item): item is string => typeof item === "string")
-      : []
-    const assessmentMechanics = assessmentMechanicsByQuestion(iisEvalCopy.assessmentMechanics)
-    const structuredQuestions = currentQuestions
-      .map((question) => assessmentMechanics.get(question) ?? null)
-      .filter((question): question is AssessmentMechanicQuestion => Boolean(question))
-    const missingStructuredQuestions = currentQuestions.filter((question) => !assessmentMechanics.has(question))
-    const finalDiagnosticSection = evalSectionIndex >= Math.max(evaluationSections.length - 1, 0)
+    const structuredQuestions = allAssessmentMechanics(iisEvalCopy.assessmentMechanics)
+    const currentQuestion = structuredQuestions[evalSectionIndex] ?? null
+    const finalDiagnosticQuestion = evalSectionIndex >= Math.max(structuredQuestions.length - 1, 0)
+    const progressLabel = structuredQuestions.length > 0 ? `${evalSectionIndex + 1} of ${structuredQuestions.length}` : null
+    const progressValue = structuredQuestions.length > 0 ? ((evalSectionIndex + 1) / structuredQuestions.length) * 100 : 0
     const assessmentProcessTitle = "MEASURES AI OPERATIONAL EVALUATION"
     const assessmentSupportLine = "AI reflects the structure of the environment it operates within."
 
@@ -2161,11 +2118,11 @@ export default function MeasuresRegistryRuntime() {
 
     return (
       <main className="measures-registry-runtime" data-surface="iis_eval_gate1" data-chamber-state={evalStep} style={registryTokenStyle}>
-        <section className="registry-iis-eval registry-assessment-chamber" aria-label={iisEvalCopy.title ?? "MEASURES AI OPERATIONAL EVALUATION"}>
+        <section className="registry-iis-eval registry-assessment-chamber" aria-label={assessmentProcessTitle}>
           {renderAssessmentBrandLayer()}
           <div className="registry-chamber-heading">
-            <span>{iisEvalCopy.eyebrow ?? "Measures Registry"}</span>
-            <h1>{iisEvalCopy.title ?? assessmentProcessTitle}</h1>
+            <span>Measures Registry</span>
+            <h1>{assessmentProcessTitle}</h1>
             <p>
               {iisEvalCopy.subtitle ??
                 `${assessmentSupportLine} Structure enables acceleration. Ambiguity creates drift.`}
@@ -2197,7 +2154,7 @@ export default function MeasuresRegistryRuntime() {
                     <p>{evalReport.recommended_structured_action}</p>
                   </div>
                   <small>
-                    Trace: {evalReport.explainability.question_keys.length} answer keys / {evalReport.explainability.condition_tags.length} condition tags / {evalReport.explainability.standing_rule}
+                    Assessment basis: {evalReport.explainability.question_keys.length} response keys / {evalReport.explainability.condition_tags.length} condition signals
                   </small>
                 </section>
               ) : (
@@ -2205,7 +2162,7 @@ export default function MeasuresRegistryRuntime() {
               )}
               {evalEmailArtifact ? (
                 <section className="registry-email-artifact" aria-label="Structured email artifact">
-                  <span>Structured Email Artifact</span>
+                  <span>Assessment Delivery</span>
                   <strong>{evalEmailArtifact.subject}</strong>
                   <p>{evalEmailArtifact.preview}</p>
                 </section>
@@ -2259,7 +2216,7 @@ export default function MeasuresRegistryRuntime() {
                 <p className="registry-assessment-support">Structure enables acceleration. Ambiguity creates drift.</p>
               </div>
               <fieldset>
-                <legend>Soft SRC Intake</legend>
+                <legend>Institutional Contact</legend>
                 {[
                   ["institution_name", "Company / Organization Name", "text"],
                   ["organization_type", "Type of Business / Organization", "text"],
@@ -2279,7 +2236,7 @@ export default function MeasuresRegistryRuntime() {
               </fieldset>
               {evalError ? <p className="registry-form-error">{evalError}</p> : null}
               <div className="registry-diagnostic-passage-controls">
-                <button type="submit">Continue to Diagnostic</button>
+                <button type="submit">Begin Evaluation</button>
                 <button type="button" onClick={() => setPassageMuted((current) => !current)}>
                   {passageMuted ? "Audio" : "Mute"}
                 </button>
@@ -2288,53 +2245,49 @@ export default function MeasuresRegistryRuntime() {
           ) : (
             <form className="registry-iis-eval-form" onSubmit={submitIisEvaluation}>
               <div className="registry-chamber-copy">
-                <span>Diagnostic Progression</span>
                 <h2>AI reflects the structure of the environment it operates within.</h2>
                 <p className="registry-assessment-support">Structure enables acceleration. Ambiguity creates drift.</p>
-                <p>{evaluationSections.length > 0 ? `${evalSectionIndex + 1} of ${evaluationSections.length}` : "Diagnostic standing not seated"}</p>
+                {progressLabel ? (
+                  <div className="registry-question-progress" aria-label={`Evaluation progress ${progressLabel}`}>
+                    <span>{progressLabel}</span>
+                    <div aria-hidden="true">
+                      <i style={{ width: `${progressValue}%` }} />
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
-              <fieldset>
-                {currentSectionTitle ? <legend>{currentSectionTitle}</legend> : <legend>Diagnostic</legend>}
-                {structuredQuestions.length > 0 ? (
-                  structuredQuestions.map((question) => {
-                    const currentAnswer = evalAnswers[question.questionKey]
-
-                    return (
-                      <div className="registry-structured-question" key={question.questionKey}>
-                        <span className="registry-structured-question-text">{question.question}</span>
-                        <div className="registry-structured-options" role="radiogroup" aria-label={question.question}>
-                          {question.options.map((option) => (
-                            <label key={option.value} className="registry-structured-option">
-                              <input
-                                type="radio"
-                                name={question.questionKey}
-                                value={option.value}
-                                checked={currentAnswer?.selected === option.value}
-                                onChange={() => setEvalAnswerSelection(question, option)}
-                              />
-                              <span>{option.label}</span>
-                            </label>
-                          ))}
-                        </div>
-                        <label className="registry-structured-context">
-                          <span>{question.contextLabel}</span>
-                          <textarea
-                            value={currentAnswer?.institutional_context ?? ""}
-                            onChange={(event) => setEvalAnswerContext(question, event.target.value)}
+              {currentQuestion ? (
+                <fieldset className="registry-single-question-fieldset">
+                  <legend className="registry-question-legend">Operational Evaluation</legend>
+                  <div className="registry-structured-question" key={currentQuestion.questionKey}>
+                    <span className="registry-structured-question-text">{currentQuestion.question}</span>
+                    <div className="registry-structured-options" role="radiogroup" aria-label={currentQuestion.question}>
+                      {currentQuestion.options.map((option) => (
+                        <label key={option.value} className="registry-structured-option">
+                          <input
+                            type="radio"
+                            name={currentQuestion.questionKey}
+                            value={option.value}
+                            checked={evalAnswers[currentQuestion.questionKey]?.selected === option.value}
+                            onChange={() => setEvalAnswerSelection(currentQuestion, option)}
                           />
+                          <span>{option.label}</span>
                         </label>
-                      </div>
-                    )
-                  })
-                ) : missingStructuredQuestions.length > 0 ? (
-                  <p className="registry-media-absence">
-                    Structured answer mechanics are not seated for this diagnostic section.
-                  </p>
-                ) : (
-                  <p className="registry-media-absence">Diagnostic questions are not seated in the runtime registry.</p>
-                )}
-              </fieldset>
+                      ))}
+                    </div>
+                    <label className="registry-structured-context">
+                      <span>{currentQuestion.contextLabel}</span>
+                      <textarea
+                        value={evalAnswers[currentQuestion.questionKey]?.institutional_context ?? ""}
+                        onChange={(event) => setEvalAnswerContext(currentQuestion, event.target.value)}
+                      />
+                    </label>
+                  </div>
+                </fieldset>
+              ) : (
+                <p className="registry-media-absence">Evaluation questions are not seated in the runtime registry.</p>
+              )}
 
               {evalError ? <p className="registry-form-error">{evalError}</p> : null}
               <div className="registry-diagnostic-passage-controls">
@@ -2343,15 +2296,15 @@ export default function MeasuresRegistryRuntime() {
                     type="button"
                     onClick={() => setEvalSectionIndex((current) => Math.max(0, current - 1))}
                   >
-                    Continue Back
+                    Back
                   </button>
                 ) : null}
-                {!finalDiagnosticSection && evaluationSections.length > 0 ? (
+                {!finalDiagnosticQuestion && currentQuestion ? (
                   <button
                     type="button"
                     onClick={() => {
-                      if (!validateDiagnosticSection(structuredQuestions)) return
-                      setEvalSectionIndex((current) => Math.min(evaluationSections.length - 1, current + 1))
+                      if (!validateDiagnosticSection([currentQuestion])) return
+                      setEvalSectionIndex((current) => Math.min(structuredQuestions.length - 1, current + 1))
                     }}
                   >
                     Continue
@@ -2361,11 +2314,11 @@ export default function MeasuresRegistryRuntime() {
                     type="submit"
                     disabled={evalSubmitting}
                     onClick={(event) => {
-                      if (validateDiagnosticSection(structuredQuestions)) return
+                      if (currentQuestion && validateDiagnosticSection([currentQuestion])) return
                       event.preventDefault()
                     }}
                   >
-                    {evalSubmitting ? "Seating Evaluation" : "Complete Assessment"}
+                    {evalSubmitting ? "Resolving Assessment" : "Complete Evaluation"}
                   </button>
                 )}
                 <button type="button" onClick={() => setPassageMuted((current) => !current)}>
