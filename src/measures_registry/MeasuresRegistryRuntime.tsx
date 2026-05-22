@@ -1787,6 +1787,9 @@ export default function MeasuresRegistryRuntime() {
       typeof educationalDiagnosticPassageCopy.stylingContract?.material_family === "string"
         ? educationalDiagnosticPassageCopy.stylingContract.material_family
         : "standard"
+    const continueAction = educationalDiagnosticPassageCopy.actions.find(
+      (action) => asString(action.action_key) === "continue_to_evaluation",
+    )
 
     return (
       <main
@@ -1831,7 +1834,7 @@ export default function MeasuresRegistryRuntime() {
             type="button"
             onClick={() => navigateSurface("iis_eval_gate1")}
           >
-            Continue to Assessment
+            {asString(continueAction?.label) ?? "Continue to Evaluation"}
           </button>
         </section>
       </main>
