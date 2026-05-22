@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-22T01:00:47.627Z",
+  "generatedAt": "2026-05-22T03:22:36.161Z",
   "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md",
   "mutationPerformed": true,
   "registry": {
@@ -70,6 +70,26 @@
       ],
       "foundation_material": "obsidian",
       "atmospheric_material": "lapis"
+    },
+    "layout_contract": {
+      "copy_density": "compact",
+      "form_density": "compact_institutional",
+      "viewport_fit": "single_screen_initial_view",
+      "heading_scale": "restrained_evaluation_heading",
+      "mobile_layout": "single_column_compact_scroll_allowed",
+      "scroll_policy": "avoid_initial_copy_scroll_desktop",
+      "initial_copy_rule": "all introductory copy remains visible with SRC capture controls on desktop viewport",
+      "src_capture_layout": "compact_two_column_field_grid"
+    },
+    "iis_eval_gate1_layout_contract": {
+      "copy_density": "compact",
+      "form_density": "compact_institutional",
+      "viewport_fit": "single_screen_initial_view",
+      "heading_scale": "restrained_evaluation_heading",
+      "mobile_layout": "single_column_compact_scroll_allowed",
+      "scroll_policy": "avoid_initial_copy_scroll_desktop",
+      "initial_copy_rule": "all introductory copy remains visible with SRC capture controls on desktop viewport",
+      "src_capture_layout": "compact_two_column_field_grid"
     },
     "icon_contract": {
       "warning_icon": "triangle_alert",

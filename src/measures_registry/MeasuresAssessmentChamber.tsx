@@ -34,6 +34,7 @@ type MeasuresAssessmentChamberProps = {
   registryMarkUrl: string | null
   registryWatermarkUrl: string | null
   registryTokenStyle: CSSProperties
+  layoutContract?: Record<string, unknown>
   resolutionText?: string
   showQuestionContext?: boolean
   structuredEnvironmentPassageVideoUrl: string | null
@@ -70,6 +71,7 @@ export function MeasuresAssessmentChamber({
   registryMarkUrl,
   registryWatermarkUrl,
   registryTokenStyle,
+  layoutContract,
   resolutionText,
   showQuestionContext = true,
   structuredEnvironmentPassageVideoUrl,
@@ -91,13 +93,24 @@ export function MeasuresAssessmentChamber({
   const currentQuestionAnswered = Boolean(currentQuestion && evalAnswers[currentQuestion.questionKey]?.selected)
   const progressLabel = structuredQuestions.length > 0 ? `${evalSectionIndex + 1} of ${structuredQuestions.length}` : null
   const progressValue = structuredQuestions.length > 0 ? ((evalSectionIndex + 1) / structuredQuestions.length) * 100 : 0
+  const layoutViewportFit =
+    typeof layoutContract?.viewport_fit === "string" ? layoutContract.viewport_fit : "standard"
+  const layoutCopyDensity =
+    typeof layoutContract?.copy_density === "string" ? layoutContract.copy_density : "standard"
   const chamberStyle = {
     ...registryTokenStyle,
     ...(registryBackgroundUrl ? { "--registry-assessment-background-image": `url("${registryBackgroundUrl}")` } : {}),
   } as CSSProperties
 
   return (
-    <main className="measures-registry-runtime" data-surface={encounterKey} data-chamber-state={evalStep} style={chamberStyle}>
+    <main
+      className="measures-registry-runtime"
+      data-surface={encounterKey}
+      data-chamber-state={evalStep}
+      data-copy-density={layoutCopyDensity}
+      data-layout-fit={layoutViewportFit}
+      style={chamberStyle}
+    >
       <section className="registry-iis-eval registry-assessment-chamber" aria-label={assessmentProcessTitle}>
         <MeasuresAssessmentBrandLayer registryMarkUrl={registryMarkUrl} registryWatermarkUrl={registryWatermarkUrl} />
         {!registryBackgroundUrl || !registryWatermarkUrl || !registryMarkUrl ? (

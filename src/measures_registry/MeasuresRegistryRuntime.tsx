@@ -523,6 +523,7 @@ function sectionCopy(row?: LandingSectionRow) {
     assessmentChamber: asRecord(metadata.assessment_chamber),
     assessmentCompletion: asRecord(metadata.assessment_completion),
     encounterContract: asRecord(metadata.encounter_contract),
+    layoutContract: asRecord(metadata.layout_contract),
     featuredPublication: asRecord(metadata.featured_publication),
     subscriptionEntry: asRecord(metadata.subscription_entry),
     heroPaths: asRecordArray(metadata.hero_paths),
@@ -876,8 +877,8 @@ export default function MeasuresRegistryRuntime() {
       ? evaluationChamberCopy
       : iisEvalCopy
   const activeEvaluationMedia = {
-    backgroundUrl: activeEvaluationEncounterKey === "measures_ai_operational_evaluation" ? lapisBackgroundUrl : null,
-    watermarkUrl: activeEvaluationEncounterKey === "measures_ai_operational_evaluation" ? registryWatermarkUrl : null,
+    backgroundUrl: lapisBackgroundUrl,
+    watermarkUrl: registryWatermarkUrl,
     markUrl: registryMarkUrl,
   }
 
@@ -2135,10 +2136,11 @@ export default function MeasuresRegistryRuntime() {
         evalSubmitted={evalSubmitted}
         evalSubmitting={evalSubmitting}
         passageMuted={passageMuted}
-        registryBackgroundUrl={encounterKey === "measures_ai_operational_evaluation" ? activeEvaluationMedia.backgroundUrl : null}
+        registryBackgroundUrl={activeEvaluationMedia.backgroundUrl}
         registryMarkUrl={activeEvaluationMedia.markUrl}
-        registryWatermarkUrl={encounterKey === "measures_ai_operational_evaluation" ? activeEvaluationMedia.watermarkUrl : null}
+        registryWatermarkUrl={activeEvaluationMedia.watermarkUrl}
         registryTokenStyle={registryTokenStyle}
+        layoutContract={copy.layoutContract}
         resolutionText={copy.resolutionText ?? undefined}
         showQuestionContext={encounterKey !== "measures_ai_operational_evaluation"}
         structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}

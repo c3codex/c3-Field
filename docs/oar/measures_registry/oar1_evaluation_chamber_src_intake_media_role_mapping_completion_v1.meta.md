@@ -137,11 +137,16 @@ Updated renderer behavior:
 - `capture_context` remains optional/contextual
 - eligibility marks Gate 1 complete only after SRC requirements and assessment return
 - media background/watermark resolution now prefers seated generic OAR2 roles
+- live `iis_eval_gate1` now receives seated generic background and watermark roles instead of null media props
+- evaluation chamber now carries a compact `layout_contract` for single-screen initial copy fit
+- same compact evaluation styling/layout contract is seated onto live `iis_eval_gate1`
+- SRC capture renders from the compact evaluation-style layout contract rather than a standalone long-form page
 
 Updated files:
 
 - `src/measures_registry/MeasuresRegistryRuntime.tsx`
 - `src/measures_registry/MeasuresAssessmentChamber.tsx`
+- `src/index.css`
 
 ## VALIDATION
 

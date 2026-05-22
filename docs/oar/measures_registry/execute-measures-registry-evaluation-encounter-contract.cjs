@@ -362,6 +362,16 @@ const encounterContract = {
       "floating_widget_ui",
     ],
   },
+  layout_contract: {
+    viewport_fit: "single_screen_initial_view",
+    copy_density: "compact",
+    initial_copy_rule: "all introductory copy remains visible with SRC capture controls on desktop viewport",
+    src_capture_layout: "compact_two_column_field_grid",
+    mobile_layout: "single_column_compact_scroll_allowed",
+    heading_scale: "restrained_evaluation_heading",
+    form_density: "compact_institutional",
+    scroll_policy: "avoid_initial_copy_scroll_desktop",
+  },
   icon_contract: {
     assessment_icon: "clipboard_check",
     warning_icon: "triangle_alert",
@@ -541,6 +551,7 @@ async function ensureEncounterRow(registryRow) {
       frontend_hardcode_allowed: false,
     },
     styling_contract: encounterContract.styling_contract,
+    layout_contract: encounterContract.layout_contract,
     icon_contract: encounterContract.icon_contract,
     media_roles: encounterContract.media_roles,
     missing_media_roles: encounterContract.missing_media_roles,
@@ -560,6 +571,31 @@ async function ensureEncounterRow(registryRow) {
     is_entry_surface: false,
     is_active: true,
     metadata: nextMetadata,
+  }
+
+  if (iisEncounter) {
+    const iisMetadata = clone(iisEncounter.metadata)
+    const nextIisMetadata = {
+      ...iisMetadata,
+      source_oar2: sourceOar2,
+      styling_contract: encounterContract.styling_contract,
+      layout_contract: encounterContract.layout_contract,
+      icon_contract: encounterContract.icon_contract,
+      media_roles: encounterContract.media_roles,
+      missing_media_roles: encounterContract.missing_media_roles,
+      src_intake_contract: encounterContract.src_intake_contract,
+      gate_1_completion_rule: encounterContract.gate_1_completion_rule,
+    }
+
+    assertOk(
+      await writer
+        .from("measures_encounter_def")
+        .update({ metadata: nextIisMetadata })
+        .eq("id", iisEncounter.id)
+        .select("id")
+        .single(),
+      "iis_eval_gate1 compact style contract update",
+    )
   }
 
   if (existing) {
@@ -660,6 +696,14 @@ async function main() {
       .maybeSingle(),
     "runtime encounter readback",
   )
+  const runtimeIisEncounter = assertOk(
+    await reader
+      .from("measures_encounter_def")
+      .select("encounter_key, metadata")
+      .eq("encounter_key", "iis_eval_gate1")
+      .single(),
+    "iis_eval_gate1 runtime readback",
+  )
   if (!runtimeEncounter) throw new Error("Runtime readback missing measures_ai_operational_evaluation")
 
   const runtimeMediaRows = assertOk(
@@ -710,6 +754,8 @@ async function main() {
       src_intake_contract: runtimeEncounter.metadata?.src_intake_contract,
       gate_1_completion_rule: runtimeEncounter.metadata?.gate_1_completion_rule,
       styling_contract: runtimeEncounter.metadata?.styling_contract,
+      layout_contract: runtimeEncounter.metadata?.layout_contract,
+      iis_eval_gate1_layout_contract: runtimeIisEncounter.metadata?.layout_contract,
       icon_contract: runtimeEncounter.metadata?.icon_contract,
       missing_media_roles: runtimeEncounter.metadata?.missing_media_roles ?? [],
     },

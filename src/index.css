@@ -4112,7 +4112,7 @@ body,
   margin: 0;
   color: var(--registry-brand-secondary-text);
   font-size: var(--registry-entry-sub-active);
-  line-height: 1.42;
+  line-height: 1.32;
 }
 
 .registry-diagnostic-passage button {
@@ -4180,7 +4180,7 @@ body,
 }
 
 .registry-diagnostic-recognition {
-  max-width: min(58rem, 100%);
+  max-width: min(62rem, 100%);
   border-left: 1px solid var(--registry-brand-accent);
   padding: 0.25rem 0 0.25rem var(--registry-plaque-padding-active);
   display: grid;
@@ -5065,6 +5065,86 @@ body,
   min-height: 9rem;
 }
 
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="src_capture"] {
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-assessment-chamber {
+  min-height: calc(100svh - 2 * var(--registry-page-padding-active));
+  gap: clamp(0.75rem, 1.4vw, 1.1rem);
+  padding: clamp(0.75rem, 1.6vw, 1.2rem);
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-chamber-heading {
+  gap: 0.45rem;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-chamber-heading h1 {
+  font-size: clamp(2.2rem, 4.2vw, 3.7rem);
+  line-height: 0.96;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-chamber-heading p,
+.measures-registry-runtime[data-copy-density="compact"] .registry-assessment-support {
+  max-width: min(62rem, 100%);
+  font-size: clamp(0.92rem, 1.15vw, 1.12rem);
+  line-height: 1.32;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture {
+  width: min(62rem, 100%);
+  gap: clamp(0.48rem, 0.9vw, 0.72rem);
+  padding: clamp(0.58rem, 1.05vw, 0.82rem);
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture .registry-chamber-copy {
+  gap: 0.35rem;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture .registry-chamber-copy h2 {
+  font-size: clamp(1.18rem, 1.7vw, 1.55rem);
+  line-height: 1.02;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture fieldset {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.34rem 0.65rem;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture legend,
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture .registry-diagnostic-passage-controls {
+  grid-column: 1 / -1;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture input {
+  min-height: 2.05rem;
+  padding: 0.38rem 0.55rem;
+}
+
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture label {
+  gap: 0.18rem;
+  font-size: 0.72rem;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture legend {
+  margin-bottom: 0;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture .registry-diagnostic-passage-controls {
+  margin-top: 0.1rem;
+}
+@media (max-width: 720px) {
+  .measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="src_capture"] {
+    overflow: visible;
+  }
+
+  .measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture fieldset {
+    grid-template-columns: 1fr;
+  }
+}
 .registry-structured-question {
   display: grid;
   gap: clamp(0.95rem, 2vw, 1.35rem);
@@ -5151,6 +5231,20 @@ body,
   white-space: nowrap;
 }
 
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture label {
+  gap: 0.18rem;
+  font-size: 0.72rem;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture legend {
+  margin-bottom: 0;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"] .registry-src-capture .registry-diagnostic-passage-controls {
+  margin-top: 0.1rem;
+}
 @media (max-width: 720px) {
   .registry-assessment-chamber {
     max-width: calc(100% - 1rem);
@@ -7008,7 +7102,7 @@ body {
   overflow-y: auto;
   color: rgba(232, 238, 248, 0.58);
   font-size: 0.64rem;
-  line-height: 1.42;
+  line-height: 1.32;
 }
 
 .phase-map-explanation h2 {
