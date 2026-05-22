@@ -288,6 +288,15 @@ function asRecordArray(value: unknown) {
     : []
 }
 
+function asRecordFromPaths(...values: unknown[]) {
+  for (const value of values) {
+    const record = asRecord(value)
+    if (record) return record
+  }
+
+  return null
+}
+
 function asStringArray(value: unknown) {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
 }
@@ -524,6 +533,14 @@ function sectionCopy(row?: LandingSectionRow) {
     assessmentCompletion: asRecord(metadata.assessment_completion),
     encounterContract: asRecord(metadata.encounter_contract),
     layoutContract: asRecord(metadata.layout_contract),
+    stylingContract: asRecordFromPaths(
+      metadata.styling_contract,
+      asRecord(metadata.encounter_contract)?.styling_contract,
+    ),
+    srcIntakeContract: asRecordFromPaths(
+      metadata.src_intake_contract,
+      asRecord(metadata.encounter_contract)?.src_intake_contract,
+    ),
     featuredPublication: asRecord(metadata.featured_publication),
     subscriptionEntry: asRecord(metadata.subscription_entry),
     heroPaths: asRecordArray(metadata.hero_paths),
@@ -1420,17 +1437,15 @@ export default function MeasuresRegistryRuntime() {
     return true
   }
 
+  function requiredEvalIdentityFields() {
+    const requiredFields = activeEvaluationCopy.srcIntakeContract?.entry_required_fields
+    return Array.isArray(requiredFields)
+      ? requiredFields.filter((field): field is string => typeof field === "string")
+      : ["institution_name", "institution_type", "contact_name", "contact_email"]
+  }
+
   function continueToDiagnostic() {
-    const requiredFields = [
-      "institution_name",
-      "institution_type",
-      "institution_address",
-      "institution_phone",
-      "contact_name",
-      "contact_position",
-      "contact_email",
-      "intent",
-    ]
+    const requiredFields = requiredEvalIdentityFields()
     const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
 
     if (missing.length > 0) {
@@ -1448,16 +1463,7 @@ export default function MeasuresRegistryRuntime() {
     setEvalSubmitting(true)
     setEvalError(null)
 
-    const requiredFields = [
-      "institution_name",
-      "institution_type",
-      "institution_address",
-      "institution_phone",
-      "contact_name",
-      "contact_position",
-      "contact_email",
-      "intent",
-    ]
+    const requiredFields = requiredEvalIdentityFields()
     const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
 
     if (missing.length > 0) {
@@ -1498,18 +1504,21 @@ export default function MeasuresRegistryRuntime() {
 
     const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
       institution_name: evalFields.institution_name.trim(),
-      institution_address: evalFields.institution_address.trim(),
-      institution_phone: evalFields.institution_phone.trim(),
+      institution_address: evalFields.institution_address?.trim() ?? "",
+      institution_phone: evalFields.institution_phone?.trim() ?? "",
       contact_name: evalFields.contact_name.trim(),
-      contact_position: evalFields.contact_position.trim(),
+      contact_position: evalFields.contact_position?.trim() ?? "",
       contact_email: evalFields.contact_email.trim(),
       evaluation_answers: populatedEvalAnswers,
-      capture_context: evalFields.capture_context?.trim() || activeEvaluationEncounterKey,
-      intent: evalFields.intent.trim(),
+      capture_context: evalFields.capture_context?.trim() || "iis_eval_gate1",
+      intent: evalFields.intent?.trim() || "system_evaluation_request",
       eligibility: {
         gate_1: "complete",
         assessment_returned: true,
+        minimum_identity_captured: true,
         src_requirements_satisfied: true,
+        implementation_src_requirements_satisfied: false,
+        deferred_src_fields_held: true,
         foundational_courses: true,
         conversion_assessment: "pending_review",
       },
@@ -1519,10 +1528,21 @@ export default function MeasuresRegistryRuntime() {
       metadata: {
         encounter_key: activeEvaluationEncounterKey,
         institution_type: evalFields.institution_type.trim(),
+        deferred_src_fields: {
+          institution_address: evalFields.institution_address?.trim() || null,
+          institution_phone: evalFields.institution_phone?.trim() || null,
+          contact_position: evalFields.contact_position?.trim() || null,
+          assessment_intent: evalFields.intent?.trim() || null,
+          capture_context: evalFields.capture_context?.trim() || null,
+        },
+        visible_src_fields: requiredFields,
+        minimum_identity_captured: true,
         src_requirements_satisfied: true,
+        implementation_src_requirements_satisfied: false,
         source_oar2: "docs/oar/measures_registry/oar2_operational_evaluation_single_question_chamber_public_label_cleanup_v1.meta.md",
         encounter_contract_source_oar2: "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v1.meta.md",
         src_intake_media_role_mapping_source_oar2: "docs/oar/measures_registry/oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md",
+        obsidian_intake_simplification_source_oar2: "docs/oar/measures_registry/oar2_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md",
         branding_source_oar2: "docs/oar/measures_registry/oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md",
         semantic_source_oar2: "docs/oar/measures_registry/oar2_refine_measures_ai_operational_evaluation_semantics_v1.meta.md",
         interpretation_source_oar2: "docs/oar/measures_registry/oar2_deterministic_environmental_standing_report_routing_v1.meta.md",
@@ -2141,8 +2161,10 @@ export default function MeasuresRegistryRuntime() {
         registryWatermarkUrl={activeEvaluationMedia.watermarkUrl}
         registryTokenStyle={registryTokenStyle}
         layoutContract={copy.layoutContract}
+        srcIntakeContract={copy.srcIntakeContract}
+        stylingContract={copy.stylingContract}
         resolutionText={copy.resolutionText ?? undefined}
-        showQuestionContext={encounterKey !== "measures_ai_operational_evaluation"}
+        showQuestionContext={false}
         structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}
         structuredQuestions={structuredQuestions}
         onBackQuestion={() => setEvalSectionIndex((current) => Math.max(0, current - 1))}

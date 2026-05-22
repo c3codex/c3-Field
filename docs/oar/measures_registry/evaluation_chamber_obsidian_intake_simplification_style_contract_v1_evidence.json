@@ -1,0 +1,210 @@
+{
+  "generatedAt": "2026-05-22T15:08:15.015Z",
+  "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md",
+  "expected_oar1": "docs/oar/measures_registry/oar1_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md",
+  "mutationPerformed": true,
+  "registryRows": [
+    {
+      "registry_key": "iis_eval_gate1",
+      "display_title": "Institutional Structural Evaluation",
+      "material_family": "obsidian",
+      "release_state": "released",
+      "access_state": "callable",
+      "styling_contract": {
+        "version": "v2",
+        "accent_tone": "restrained_gold",
+        "field_style": "capsule_beveled_plaque",
+        "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md",
+        "answer_style": "numbered_capsule_plaque",
+        "geometry_tone": "cool_white_edge",
+        "blue_intensity": "reduced",
+        "material_family": "obsidian",
+        "watermark_presence": "visible_restrained",
+        "disallowed_patterns": [
+          "administrative_intake_wall",
+          "plain_rectangular_inputs",
+          "lapis_dominant_assessment_gate",
+          "frontend_owned_truth",
+          "suppressed_registry_warning"
+        ],
+        "foundation_material": "obsidian",
+        "atmospheric_material": "smoke_glass"
+      },
+      "src_intake_contract": {
+        "version": "v3",
+        "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md",
+        "capture_table": "public.measures_iis_eval_gate1_capture",
+        "field_mapping": {
+          "contact_name": "contact_name",
+          "contact_email": "contact_email",
+          "company_organization_name": "institution_name",
+          "type_of_business_organization": "metadata.institution_type"
+        },
+        "visible_fields": [
+          "institution_name",
+          "institution_type",
+          "contact_name",
+          "contact_email"
+        ],
+        "deferred_src_fields": {
+          "capture_context": null,
+          "contact_position": null,
+          "assessment_intent": null,
+          "institution_phone": null,
+          "institution_address": null
+        },
+        "entry_required_fields": [
+          "institution_name",
+          "institution_type",
+          "contact_name",
+          "contact_email"
+        ],
+        "institution_type_route": "metadata.institution_type",
+        "schema_change_required": false,
+        "deferred_fields_block_entry": false
+      }
+    },
+    {
+      "registry_key": "measures_ai_operational_evaluation",
+      "display_title": "Measures AI Operational Evaluation",
+      "material_family": "obsidian",
+      "release_state": "released",
+      "access_state": "callable",
+      "styling_contract": {
+        "version": "v2",
+        "accent_tone": "restrained_gold",
+        "field_style": "capsule_beveled_plaque",
+        "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md",
+        "answer_style": "numbered_capsule_plaque",
+        "geometry_tone": "cool_white_edge",
+        "blue_intensity": "reduced",
+        "material_family": "obsidian",
+        "watermark_presence": "visible_restrained",
+        "disallowed_patterns": [
+          "administrative_intake_wall",
+          "plain_rectangular_inputs",
+          "lapis_dominant_assessment_gate",
+          "frontend_owned_truth",
+          "suppressed_registry_warning"
+        ],
+        "foundation_material": "obsidian",
+        "atmospheric_material": "smoke_glass"
+      },
+      "src_intake_contract": {
+        "version": "v3",
+        "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md",
+        "capture_table": "public.measures_iis_eval_gate1_capture",
+        "field_mapping": {
+          "contact_name": "contact_name",
+          "contact_email": "contact_email",
+          "company_organization_name": "institution_name",
+          "type_of_business_organization": "metadata.institution_type"
+        },
+        "visible_fields": [
+          "institution_name",
+          "institution_type",
+          "contact_name",
+          "contact_email"
+        ],
+        "deferred_src_fields": {
+          "capture_context": null,
+          "contact_position": null,
+          "assessment_intent": null,
+          "institution_phone": null,
+          "institution_address": null
+        },
+        "entry_required_fields": [
+          "institution_name",
+          "institution_type",
+          "contact_name",
+          "contact_email"
+        ],
+        "institution_type_route": "metadata.institution_type",
+        "schema_change_required": false,
+        "deferred_fields_block_entry": false
+      }
+    }
+  ],
+  "encounterRows": [
+    {
+      "encounter_key": "iis_eval_gate1",
+      "display_title": "MEASURES AI OPERATIONAL EVALUATION",
+      "material_family": "obsidian"
+    },
+    {
+      "encounter_key": "measures_ai_operational_evaluation",
+      "display_title": "MEASURES AI OPERATIONAL EVALUATION",
+      "material_family": "obsidian"
+    }
+  ],
+  "runtimeReadback": [
+    {
+      "encounter_key": "iis_eval_gate1",
+      "material_family": "obsidian",
+      "visible_fields": [
+        "institution_name",
+        "institution_type",
+        "contact_name",
+        "contact_email"
+      ],
+      "entry_required_fields": [
+        "institution_name",
+        "institution_type",
+        "contact_name",
+        "contact_email"
+      ],
+      "deferred_src_fields": {
+        "capture_context": null,
+        "contact_position": null,
+        "assessment_intent": null,
+        "institution_phone": null,
+        "institution_address": null
+      },
+      "styling_material_family": "obsidian",
+      "layout_viewport_fit": "single_screen_initial_view",
+      "question_count": 5,
+      "option_counts": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "frontend_hardcode_allowed": false
+    },
+    {
+      "encounter_key": "measures_ai_operational_evaluation",
+      "material_family": "obsidian",
+      "visible_fields": [
+        "institution_name",
+        "institution_type",
+        "contact_name",
+        "contact_email"
+      ],
+      "entry_required_fields": [
+        "institution_name",
+        "institution_type",
+        "contact_name",
+        "contact_email"
+      ],
+      "deferred_src_fields": {
+        "capture_context": null,
+        "contact_position": null,
+        "assessment_intent": null,
+        "institution_phone": null,
+        "institution_address": null
+      },
+      "styling_material_family": "obsidian",
+      "layout_viewport_fit": "single_screen_initial_view",
+      "question_count": 5,
+      "option_counts": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "frontend_hardcode_allowed": false
+    }
+  ]
+}

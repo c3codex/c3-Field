@@ -35,6 +35,8 @@ type MeasuresAssessmentChamberProps = {
   registryWatermarkUrl: string | null
   registryTokenStyle: CSSProperties
   layoutContract?: Record<string, unknown>
+  srcIntakeContract?: Record<string, unknown>
+  stylingContract?: Record<string, unknown>
   resolutionText?: string
   showQuestionContext?: boolean
   structuredEnvironmentPassageVideoUrl: string | null
@@ -72,6 +74,8 @@ export function MeasuresAssessmentChamber({
   registryWatermarkUrl,
   registryTokenStyle,
   layoutContract,
+  srcIntakeContract,
+  stylingContract,
   resolutionText,
   showQuestionContext = true,
   structuredEnvironmentPassageVideoUrl,
@@ -97,6 +101,27 @@ export function MeasuresAssessmentChamber({
     typeof layoutContract?.viewport_fit === "string" ? layoutContract.viewport_fit : "standard"
   const layoutCopyDensity =
     typeof layoutContract?.copy_density === "string" ? layoutContract.copy_density : "standard"
+  const materialFamily =
+    typeof stylingContract?.material_family === "string"
+      ? stylingContract.material_family
+      : typeof stylingContract?.foundation_material === "string"
+        ? stylingContract.foundation_material
+        : "standard"
+  const visibleSrcFields = Array.isArray(srcIntakeContract?.visible_fields)
+    ? srcIntakeContract.visible_fields.filter((field): field is string => typeof field === "string")
+    : ["institution_name", "institution_type", "contact_name", "contact_email"]
+  const srcFieldLabels = {
+    institution_name: "Company / Organization Name",
+    institution_type: "Type of Business / Organization",
+    contact_name: "Contact Name",
+    contact_email: "Contact Email",
+  } as Record<string, string>
+  const srcFieldTypes = {
+    institution_name: "text",
+    institution_type: "text",
+    contact_name: "text",
+    contact_email: "email",
+  } as Record<string, string>
   const chamberStyle = {
     ...registryTokenStyle,
     ...(registryBackgroundUrl ? { "--registry-assessment-background-image": `url("${registryBackgroundUrl}")` } : {}),
@@ -109,6 +134,7 @@ export function MeasuresAssessmentChamber({
       data-chamber-state={evalStep}
       data-copy-density={layoutCopyDensity}
       data-layout-fit={layoutViewportFit}
+      data-material-family={materialFamily}
       style={chamberStyle}
     >
       <section className="registry-iis-eval registry-assessment-chamber" aria-label={assessmentProcessTitle}>
@@ -161,33 +187,17 @@ export function MeasuresAssessmentChamber({
             </div>
             <fieldset>
               <legend>Institutional Contact</legend>
-              {[
-                ["institution_name", "Institution Name", "text"],
-                ["institution_type", "Institution Type", "text"],
-                ["institution_address", "Institution Address", "text"],
-                ["institution_phone", "Institution Phone", "tel"],
-                ["contact_name", "Contact Name", "text"],
-                ["contact_position", "Contact Position", "text"],
-                ["contact_email", "Email", "email"],
-                ["intent", "Assessment Intent", "text"],
-              ].map(([key, label, type]) => (
+              {visibleSrcFields.map((key) => (
                 <label key={key}>
-                  <span>{label}</span>
+                  <span>{srcFieldLabels[key] ?? key.replaceAll("_", " ")}</span>
                   <input
-                    type={type}
+                    type={srcFieldTypes[key] ?? "text"}
                     value={evalFields[key] ?? ""}
                     onChange={(event) => onSetEvalField(key, event.target.value)}
                     required
                   />
                 </label>
               ))}
-              <label>
-                <span>Capture Context</span>
-                <input
-                  value={evalFields.capture_context ?? ""}
-                  onChange={(event) => onSetEvalField("capture_context", event.target.value)}
-                />
-              </label>
             </fieldset>
             {evalError ? <p className="registry-form-error">{evalError}</p> : null}
             <div className="registry-diagnostic-passage-controls">

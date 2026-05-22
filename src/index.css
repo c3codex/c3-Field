@@ -5275,6 +5275,181 @@ body,
   text-transform: none;
   letter-spacing: 0;
 }
+.measures-registry-runtime[data-material-family="obsidian"] {
+  --registry-obsidian-edge: color-mix(in srgb, #f8efe2 54%, transparent);
+  --registry-obsidian-gold: color-mix(in srgb, #d8b46b 58%, transparent);
+  --registry-obsidian-smoke: color-mix(in srgb, #05070d 72%, transparent);
+  background:
+    radial-gradient(circle at 50% 12%, color-mix(in srgb, #ffffff 6%, transparent), transparent 24rem),
+    linear-gradient(145deg, #03050a 0%, #090b14 46%, #020307 100%);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-chamber {
+  border-color: var(--registry-obsidian-edge);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, #070912 90%, transparent), color-mix(in srgb, #11131c 78%, transparent)),
+    var(--registry-assessment-background-image);
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #ffffff 7%, transparent),
+    inset 0 2rem 5rem color-mix(in srgb, #000 34%, transparent),
+    0 1.4rem 5rem color-mix(in srgb, #000 48%, transparent);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-brand-layer {
+  opacity: 0.24;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-brand-layer .registry-assessment-watermark {
+  opacity: 0.17;
+  filter: saturate(0.72) contrast(1.05) brightness(1.18);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-brand-layer img:not(.registry-assessment-watermark) {
+  opacity: 0.38;
+  filter: saturate(0.7) brightness(1.16);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-chamber-heading h1 {
+  text-shadow: 0 0.75rem 2.4rem color-mix(in srgb, #000 56%, transparent);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-chamber .registry-iis-eval-form,
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-resolving {
+  border-radius: 2rem 0.85rem 2rem 0.85rem;
+  border-color: var(--registry-obsidian-edge);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, #10121b 72%, transparent), color-mix(in srgb, #04050a 66%, transparent));
+  box-shadow:
+    inset 0 0 1.2rem color-mix(in srgb, #ffffff 6%, transparent),
+    0 1rem 3.5rem color-mix(in srgb, #000 42%, transparent);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-src-capture fieldset,
+.measures-registry-runtime[data-material-family="obsidian"] .registry-single-question-fieldset {
+  border-color: color-mix(in srgb, var(--registry-obsidian-edge) 68%, transparent);
+  border-radius: 1.5rem 0.75rem 1.5rem 0.75rem;
+  background: color-mix(in srgb, #05070d 40%, transparent);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-chamber .registry-iis-eval-form input,
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-chamber .registry-iis-eval-form textarea {
+  border-radius: 999px;
+  border-color: color-mix(in srgb, var(--registry-obsidian-edge) 74%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 8%, transparent), transparent),
+    color-mix(in srgb, #03050a 56%, transparent);
+  box-shadow:
+    inset 0 0.3rem 0.85rem color-mix(in srgb, #000 34%, transparent),
+    0 0 0 1px color-mix(in srgb, #000 18%, transparent);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-chamber .registry-iis-eval-form textarea {
+  border-radius: 1.15rem;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-structured-options {
+  counter-reset: registry-option;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-structured-option {
+  counter-increment: registry-option;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  border-radius: 999px;
+  border-color: color-mix(in srgb, var(--registry-obsidian-edge) 62%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #ffffff 7%, transparent), transparent 42%),
+    color-mix(in srgb, #05070d 60%, transparent);
+  box-shadow: inset 0 0 1rem color-mix(in srgb, #000 22%, transparent);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-structured-option::before {
+  content: counter(registry-option, decimal-leading-zero);
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--registry-obsidian-gold);
+  border-radius: 999px;
+  color: var(--registry-brand-primary-text);
+  font-size: 0.66rem;
+  letter-spacing: 0.02em;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-structured-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-structured-option:has(input:checked) {
+  border-color: var(--registry-obsidian-gold);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #d8b46b 15%, transparent), transparent 44%),
+    color-mix(in srgb, #080a10 70%, transparent);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"][data-layout-fit="single_screen_initial_view"] .registry-src-capture {
+  width: min(52rem, 100%);
+}
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-assessment-chamber {
+  min-height: 100svh;
+  gap: clamp(0.55rem, 1vw, 0.85rem);
+  padding: clamp(0.55rem, 1.2vw, 0.9rem);
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-chamber-heading {
+  gap: 0.3rem;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-chamber-heading h1 {
+  font-size: clamp(1.75rem, 3.15vw, 2.75rem);
+  line-height: 0.98;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-chamber-heading p {
+  font-size: clamp(0.82rem, 1vw, 0.98rem);
+  line-height: 1.22;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-assessment-chamber .registry-iis-eval-form {
+  gap: clamp(0.55rem, 1vw, 0.8rem);
+  padding: clamp(0.7rem, 1.25vw, 1rem);
+  width: min(46rem, 100%);
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-chamber-copy {
+  gap: 0.28rem;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-chamber-copy h2 {
+  font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  line-height: 1.05;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-structured-question {
+  gap: clamp(0.5rem, 1vw, 0.7rem);
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-structured-question-text {
+  font-size: clamp(1.08rem, 1.85vw, 1.42rem);
+  line-height: 1.12;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-structured-options {
+  gap: 0.42rem;
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-structured-option {
+  min-height: 2.55rem;
+  padding: 0.48rem 0.72rem;
+  font-size: clamp(0.78rem, 1.25vw, 0.92rem);
+}
+
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] .registry-diagnostic-passage-controls {
+  margin-top: 0;
+}
 .registry-assessment-complete {
   display: grid;
   gap: 0.85rem;
