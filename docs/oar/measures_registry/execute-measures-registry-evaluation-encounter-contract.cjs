@@ -25,12 +25,12 @@ const reader = createClient(supabaseUrl, anonKey, {
 })
 
 const campaignKey = "agents_of_chaos_integrity_governance"
-const sourceOar2 = "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md"
+const sourceOar2 = "docs/oar/measures_registry/oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md"
 const evidencePath = path.join(
   "docs",
   "oar",
   "measures_registry",
-  "measures_registry_evaluation_encounter_contract_v2_evidence.json",
+  "evaluation_chamber_src_intake_media_role_mapping_completion_v1_evidence.json",
 )
 
 const encounterKey = "measures_ai_operational_evaluation"
@@ -38,6 +38,31 @@ const rendererKey = "measures_registry_evaluation_chamber"
 const themeKey = "evaluation_chamber_lapis_obsidian_v1"
 
 const mediaContract = [
+  {
+    role: "background",
+    storagePath: "lapis_background.webp",
+    runtimeUse: "evaluation_chamber_background",
+  },
+  {
+    role: "watermark",
+    storagePath: "measures_registry_emblem_watermark_preview_lapis.webp",
+    runtimeUse: "evaluation_chamber_watermark",
+  },
+  {
+    role: "question_chamber_background",
+    storagePath: "evaluation_chamber_reference.webp",
+    runtimeUse: "evaluation_question_chamber_background",
+  },
+  {
+    role: "assessment_background",
+    storagePath: "obsidian_background.webp",
+    runtimeUse: "evaluation_returned_assessment_background",
+  },
+  {
+    role: "transition_or_pause",
+    storagePath: "return_antechamber.webp",
+    runtimeUse: "evaluation_transition_or_pause_surface",
+  },
   {
     role: "lapis_background",
     storagePath: "lapis_background.webp",
@@ -254,6 +279,41 @@ const encounterContract = {
     sub_support_line: "Structure enables acceleration. Ambiguity creates drift.",
   },
   media_roles: mediaContract.map((item) => item.role),
+  missing_media_roles: [
+    {
+      role: "ambient_audio",
+      expected_storage_bucket: "measures-registry",
+      expected_storage_path: "ambient_audio.*",
+      reason: "No audio object was present in the measures-registry bucket during OAR2 execution.",
+    },
+  ],
+  src_intake_contract: {
+    required_fields: [
+      "institution_name",
+      "institution_type",
+      "institution_address",
+      "institution_phone",
+      "contact_name",
+      "contact_position",
+      "contact_email",
+      "intent",
+    ],
+    optional_fields: ["capture_context"],
+    institution_type_route: "metadata.institution_type",
+    capture_table: "public.measures_iis_eval_gate1_capture",
+    schema_change_required: false,
+  },
+  gate_1_completion_rule: {
+    complete: {
+      gate_1: "complete",
+      assessment_returned: true,
+      src_requirements_satisfied: true,
+    },
+    held: {
+      gate_1: "held",
+      src_requirements_satisfied: false,
+    },
+  },
   interaction_contract: {
     pacing: "one_question_at_a_time",
     selection_required_before_continue: true,
@@ -483,6 +543,9 @@ async function ensureEncounterRow(registryRow) {
     styling_contract: encounterContract.styling_contract,
     icon_contract: encounterContract.icon_contract,
     media_roles: encounterContract.media_roles,
+    missing_media_roles: encounterContract.missing_media_roles,
+    src_intake_contract: encounterContract.src_intake_contract,
+    gate_1_completion_rule: encounterContract.gate_1_completion_rule,
   }
 
   const payload = {
@@ -644,8 +707,11 @@ async function main() {
         runtimeEncounter.metadata?.assessment_interpretation?.report_templates?.structural_drift_detected?.assessment_result,
       returned_assessment_title:
         runtimeEncounter.metadata?.assessment_completion?.returned_assessment_title,
+      src_intake_contract: runtimeEncounter.metadata?.src_intake_contract,
+      gate_1_completion_rule: runtimeEncounter.metadata?.gate_1_completion_rule,
       styling_contract: runtimeEncounter.metadata?.styling_contract,
       icon_contract: runtimeEncounter.metadata?.icon_contract,
+      missing_media_roles: runtimeEncounter.metadata?.missing_media_roles ?? [],
     },
     mediaRoleMappings: runtimeMediaRows.map((row) => ({
       media_role: row.media_role,

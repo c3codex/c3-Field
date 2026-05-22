@@ -149,10 +149,14 @@ export function MeasuresAssessmentChamber({
             <fieldset>
               <legend>Institutional Contact</legend>
               {[
-                ["institution_name", "Company / Organization Name", "text"],
-                ["organization_type", "Type of Business / Organization", "text"],
+                ["institution_name", "Institution Name", "text"],
+                ["institution_type", "Institution Type", "text"],
+                ["institution_address", "Institution Address", "text"],
+                ["institution_phone", "Institution Phone", "tel"],
                 ["contact_name", "Contact Name", "text"],
+                ["contact_position", "Contact Position", "text"],
                 ["contact_email", "Email", "email"],
+                ["intent", "Assessment Intent", "text"],
               ].map(([key, label, type]) => (
                 <label key={key}>
                   <span>{label}</span>
@@ -164,6 +168,13 @@ export function MeasuresAssessmentChamber({
                   />
                 </label>
               ))}
+              <label>
+                <span>Capture Context</span>
+                <input
+                  value={evalFields.capture_context ?? ""}
+                  onChange={(event) => onSetEvalField("capture_context", event.target.value)}
+                />
+              </label>
             </fieldset>
             {evalError ? <p className="registry-form-error">{evalError}</p> : null}
             <div className="registry-diagnostic-passage-controls">

@@ -43,6 +43,11 @@ const REQUIRED_MEDIA_ROLES = [
   "hero_video",
   "hero_poster",
   "path_choice_background",
+  "background",
+  "watermark",
+  "question_chamber_background",
+  "assessment_background",
+  "transition_or_pause",
   "lapis_background",
   "registry_watermark",
   "registry_mark",
@@ -851,8 +856,8 @@ export default function MeasuresRegistryRuntime() {
   const thresholdRightStillUrl = mediaUrl(mediaMap.get("right_measured_hero")) ?? heroMeasuredImageUrl ?? splitHeroImageUrl
   const thresholdRightMotionUrl = mediaUrl(mediaMap.get("measured_hero_motion_graphic"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
-  const lapisBackgroundUrl = mediaUrl(mediaMap.get("lapis_background"))
-  const registryWatermarkUrl = mediaUrl(mediaMap.get("registry_watermark"))
+  const lapisBackgroundUrl = mediaUrl(mediaMap.get("background")) ?? mediaUrl(mediaMap.get("lapis_background"))
+  const registryWatermarkUrl = mediaUrl(mediaMap.get("watermark")) ?? mediaUrl(mediaMap.get("registry_watermark"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
   const structuredEnvironmentPassageVideoUrl =
@@ -1417,9 +1422,13 @@ export default function MeasuresRegistryRuntime() {
   function continueToDiagnostic() {
     const requiredFields = [
       "institution_name",
-      "organization_type",
+      "institution_type",
+      "institution_address",
+      "institution_phone",
       "contact_name",
+      "contact_position",
       "contact_email",
+      "intent",
     ]
     const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
 
@@ -1440,8 +1449,13 @@ export default function MeasuresRegistryRuntime() {
 
     const requiredFields = [
       "institution_name",
+      "institution_type",
+      "institution_address",
+      "institution_phone",
       "contact_name",
+      "contact_position",
       "contact_email",
+      "intent",
     ]
     const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
 
@@ -1483,15 +1497,18 @@ export default function MeasuresRegistryRuntime() {
 
     const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
       institution_name: evalFields.institution_name.trim(),
-      institution_address: evalFields.institution_address?.trim() ?? "",
-      institution_phone: evalFields.institution_phone?.trim() ?? "",
+      institution_address: evalFields.institution_address.trim(),
+      institution_phone: evalFields.institution_phone.trim(),
       contact_name: evalFields.contact_name.trim(),
-      contact_position: evalFields.contact_position?.trim() || evalFields.organization_type?.trim() || "",
+      contact_position: evalFields.contact_position.trim(),
       contact_email: evalFields.contact_email.trim(),
       evaluation_answers: populatedEvalAnswers,
-      capture_context: "iis_eval_gate1",
-      intent: "system_evaluation_request",
+      capture_context: evalFields.capture_context?.trim() || activeEvaluationEncounterKey,
+      intent: evalFields.intent.trim(),
       eligibility: {
+        gate_1: "complete",
+        assessment_returned: true,
+        src_requirements_satisfied: true,
         foundational_courses: true,
         conversion_assessment: "pending_review",
       },
@@ -1500,8 +1517,11 @@ export default function MeasuresRegistryRuntime() {
       confirmation_email_state: "queued",
       metadata: {
         encounter_key: activeEvaluationEncounterKey,
+        institution_type: evalFields.institution_type.trim(),
+        src_requirements_satisfied: true,
         source_oar2: "docs/oar/measures_registry/oar2_operational_evaluation_single_question_chamber_public_label_cleanup_v1.meta.md",
         encounter_contract_source_oar2: "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v1.meta.md",
+        src_intake_media_role_mapping_source_oar2: "docs/oar/measures_registry/oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md",
         branding_source_oar2: "docs/oar/measures_registry/oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md",
         semantic_source_oar2: "docs/oar/measures_registry/oar2_refine_measures_ai_operational_evaluation_semantics_v1.meta.md",
         interpretation_source_oar2: "docs/oar/measures_registry/oar2_deterministic_environmental_standing_report_routing_v1.meta.md",
