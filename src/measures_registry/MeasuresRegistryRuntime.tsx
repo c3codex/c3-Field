@@ -1783,11 +1783,16 @@ export default function MeasuresRegistryRuntime() {
 
   function renderEducationalDiagnosticPassageSurface() {
     if (reportMissingClassification("educational_diagnostic_passage", educationalDiagnosticPassageCopy)) return null
+    const materialFamily =
+      typeof educationalDiagnosticPassageCopy.stylingContract?.material_family === "string"
+        ? educationalDiagnosticPassageCopy.stylingContract.material_family
+        : "standard"
 
     return (
       <main
         className="measures-registry-runtime"
         data-surface="educational_diagnostic_passage"
+        data-material-family={materialFamily}
         style={registryTokenStyle}
       >
         <section className="registry-diagnostic-passage" aria-label={educationalDiagnosticPassageCopy.title ?? undefined}>
@@ -1821,7 +1826,6 @@ export default function MeasuresRegistryRuntime() {
               {educationalDiagnosticPassageCopy.subtitle ??
                 "Most AI instability is not model failure alone. It emerges where authority, validation, oversight, implementation structure, and behavioral registration are unclear or absent."}
             </p>
-            <p>This passage prepares the assessment chamber.</p>
           </div>
           <button
             type="button"
