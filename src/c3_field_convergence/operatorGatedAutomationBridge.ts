@@ -16,8 +16,10 @@ export type AutomationBridgeAction =
   | "prepare_oar_transfer"
   | "prepare_path_continuity"
   | "prepare_expected_manifest"
+  | "prepare_cody_execution_handoff"
   | "check_oar1_requirement"
   | "verify_file_existence"
+  | "prepare_chazz_review_prompt"
   | "check_commit_readiness"
   | "prompt_continuation"
   | "remind_seeded_reference"
@@ -74,8 +76,10 @@ function handoffSurfaces(instance: OarProcessInstance): AutomationBridgeAction[]
     "prepare_oar_transfer",
     "prepare_path_continuity",
     "prepare_expected_manifest",
+    "prepare_cody_execution_handoff",
     "check_oar1_requirement",
     "verify_file_existence",
+    "prepare_chazz_review_prompt",
     "check_commit_readiness",
     "prompt_continuation",
     "remind_seeded_reference",
@@ -173,9 +177,9 @@ export function deriveOperatorGatedAutomationBridge(
       branch_key: instance.process_instance_key,
       automation_state: automationState,
       operator_gate: operatorGateFor(automationState, branch, operatorAuthorized),
-      mutation_allowed: false,
-      bridge_boundary: "governed_propagation_only",
-      lifecycle_required: "OAR2 -> execution -> OAR1 -> validation -> commit -> closeout",
+      mutation_allowed: false as const,
+      bridge_boundary: "governed_propagation_only" as const,
+      lifecycle_required: "OAR2 -> execution -> OAR1 -> validation -> commit -> closeout" as const,
       handoff_surfaces: handoffSurfaces(instance),
       blocked_reasons:
         automationState === "blocked" || automationState === "held" || automationState === "awaiting_operator"

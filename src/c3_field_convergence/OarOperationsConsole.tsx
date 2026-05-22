@@ -18,6 +18,10 @@ import {
   validateOperatorGatedAutomationBridge,
 } from "./operatorGatedAutomationBridge"
 import {
+  buildChazzReviewPrompt,
+  validateOperatorGatedOarAutomation,
+} from "./oarAutomationHandoff"
+import {
   deriveRuntimeBranchEncounterReadiness,
   validateRuntimeBranchEncounterReadiness,
 } from "./branchEncounterReadiness"
@@ -116,6 +120,9 @@ export default function OarOperationsConsole() {
   const automationBridgeChecks: SpineValidationCheck[] = registryState
     ? validateOperatorGatedAutomationBridge(automationBridge)
     : []
+  const oarAutomationChecks: SpineValidationCheck[] = registryState
+    ? validateOperatorGatedOarAutomation(processInstances)
+    : []
   const branchReadinessChecks: SpineValidationCheck[] = registryState
     ? validateRuntimeBranchEncounterReadiness(branchReadiness)
     : []
@@ -124,11 +131,12 @@ export default function OarOperationsConsole() {
     registryState?.persistenceMessage ??
     `Persistent registry state is not available: ${registryError ?? "loading registry standing"}`
   const selectedProcess = processInstances.find((instance) => instance.process_instance_key === selectedProcessKey) ?? null
+  const selectedChazzPrompt = selectedProcess ? buildChazzReviewPrompt(selectedProcess) : null
   const selectedTransitions = selectedProcess
     ? transitionLog.filter((entry) => transitionTouchesProcess(entry, selectedProcess.process_instance_key))
     : []
   const selectedChecks = selectedProcess
-    ? [...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...branchReadinessChecks].filter((check) => {
+    ? [...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...oarAutomationChecks, ...branchReadinessChecks].filter((check) => {
         const evidence = check.evidence.toLowerCase()
         return evidence.includes(selectedProcess.process_instance_key.toLowerCase()) || check.standing !== "passed"
       })
@@ -192,7 +200,7 @@ export default function OarOperationsConsole() {
       <RuntimeCoherenceOptics
         processInstances={processInstances}
         transitionLog={transitionLog}
-        validationChecks={[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...branchReadinessChecks]}
+        validationChecks={[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...oarAutomationChecks, ...branchReadinessChecks]}
         persistenceStanding={persistenceStanding}
         branchReadiness={branchReadiness}
       />
@@ -399,6 +407,8 @@ export default function OarOperationsConsole() {
               <div><dt>Execution</dt><dd><StatusPill value={selectedProcess.execution_standing} /></dd></div>
               <div><dt>Validation</dt><dd><StatusPill value={selectedProcess.validation_standing} /></dd></div>
               <div><dt>Deploy</dt><dd><StatusPill value={selectedProcess.deploy_standing} /></dd></div>
+              <div><dt>DB</dt><dd><StatusPill value={selectedProcess.db_mutation_standing} /></dd></div>
+              <div><dt>src</dt><dd><StatusPill value={selectedProcess.src_mutation_standing} /></dd></div>
               <div><dt>Held</dt><dd><StatusPill value={selectedProcess.held_standing} /></dd></div>
             </dl>
             <ol className="c3-lens-lineage-trace" aria-label="Selected OAR lineage trace">
@@ -415,6 +425,17 @@ export default function OarOperationsConsole() {
                 <p>{selectedProcess.correction_oar2_path ?? selectedProcess.validation_finding}</p>
               </div>
             ) : null}
+            {selectedChazzPrompt?.prompt ? (
+              <div className="c3-lens-correction-trace">
+                <span>Chazz Review Prompt</span>
+                <pre>{selectedChazzPrompt.prompt}</pre>
+              </div>
+            ) : (
+              <div className="c3-lens-correction-trace">
+                <span>Chazz Review Prompt</span>
+                <p>{selectedChazzPrompt?.blocked_reason ?? "Select a process to inspect Chazz prompt standing."}</p>
+              </div>
+            )}
           </aside>
         ) : null}
         <div className="c3-process-grid">
@@ -502,7 +523,7 @@ export default function OarOperationsConsole() {
           <h2 id="validation-checks">Validation Checks</h2>
         </div>
         <div className="c3-check-grid">
-          {[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...branchReadinessChecks].map((check) => (
+          {[...queueChecks, ...logChecks, ...seededChecks, ...governanceChecks, ...automationBridgeChecks, ...oarAutomationChecks, ...branchReadinessChecks].map((check) => (
             <article
               className="c3-check-card"
               data-check-standing={check.standing}

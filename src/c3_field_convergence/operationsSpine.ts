@@ -14,6 +14,7 @@ export type ValidationStanding =
   | "operator_required"
   | "correction_required"
 export type DeployStanding = "not_authorized" | "not_applicable" | "configured" | "deployed" | "held"
+export type MutationStanding = "not_authorized" | "not_applicable" | "mutated" | "held" | "failed"
 export type HeldStanding =
   | "held_pending_operator"
   | "held_pending_source"
@@ -33,6 +34,8 @@ export type OarProcessInstance = {
   evidence_path: string | null
   execution_standing: ExecutionStanding
   validation_standing: ValidationStanding
+  db_mutation_standing: MutationStanding
+  src_mutation_standing: MutationStanding
   deploy_standing: DeployStanding
   held_standing: HeldStanding | null
   seeded_reference_standing: "seeded" | "unseeded_blocked" | "pending"
@@ -83,6 +86,8 @@ export const oarProcessInstances: OarProcessInstance[] = [
     evidence_path: "src/c3_field_convergence/operationsSpine.ts",
     execution_standing: "completed",
     validation_standing: "pending_validation",
+    db_mutation_standing: "not_applicable",
+    src_mutation_standing: "mutated",
     deploy_standing: "configured",
     held_standing: null,
     seeded_reference_standing: "seeded",
@@ -103,6 +108,8 @@ export const oarProcessInstances: OarProcessInstance[] = [
     evidence_path: "src/c3_field_convergence/operationsSpine.ts",
     execution_standing: "completed",
     validation_standing: "chazz_review_required",
+    db_mutation_standing: "not_applicable",
+    src_mutation_standing: "mutated",
     deploy_standing: "not_applicable",
     held_standing: null,
     seeded_reference_standing: "seeded",
@@ -123,6 +130,8 @@ export const oarProcessInstances: OarProcessInstance[] = [
     evidence_path: "src/c3_field_convergence/operationsSpine.ts",
     execution_standing: "held",
     validation_standing: "operator_required",
+    db_mutation_standing: "not_authorized",
+    src_mutation_standing: "not_authorized",
     deploy_standing: "held",
     held_standing: "held_pending_operator",
     seeded_reference_standing: "seeded",
@@ -143,6 +152,8 @@ export const oarProcessInstances: OarProcessInstance[] = [
     evidence_path: "src/c3_field_convergence/operationsSpine.ts",
     execution_standing: "held",
     validation_standing: "correction_required",
+    db_mutation_standing: "held",
+    src_mutation_standing: "held",
     deploy_standing: "not_authorized",
     held_standing: "held_pending_correction_oar2",
     seeded_reference_standing: "seeded",
@@ -163,6 +174,8 @@ export const oarProcessInstances: OarProcessInstance[] = [
     evidence_path: null,
     execution_standing: "blocked",
     validation_standing: "not_ready",
+    db_mutation_standing: "not_authorized",
+    src_mutation_standing: "not_authorized",
     deploy_standing: "not_authorized",
     held_standing: "held_pending_source",
     seeded_reference_standing: "unseeded_blocked",
@@ -183,6 +196,8 @@ export const oarProcessInstances: OarProcessInstance[] = [
     evidence_path: null,
     execution_standing: "blocked",
     validation_standing: "not_ready",
+    db_mutation_standing: "not_authorized",
+    src_mutation_standing: "not_authorized",
     deploy_standing: "not_authorized",
     held_standing: "held_pending_operator",
     seeded_reference_standing: "unseeded_blocked",

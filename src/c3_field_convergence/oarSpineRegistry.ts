@@ -78,6 +78,8 @@ export async function loadOarSpineRegistry(): Promise<OarSpineRegistryState> {
       evidence_path: row.evidence_path,
       execution_standing: row.execution_standing,
       validation_standing: row.validation_standing,
+      db_mutation_standing: row.db_mutation_standing ?? "not_authorized",
+      src_mutation_standing: row.src_mutation_standing ?? "not_authorized",
       deploy_standing: row.deploy_standing,
       held_standing: row.held_standing,
       seeded_reference_standing: row.seeded_reference_standing,

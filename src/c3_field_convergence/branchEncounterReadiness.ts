@@ -178,9 +178,9 @@ export function deriveRuntimeBranchEncounterReadiness(
     return {
       branch_key: instance.process_instance_key,
       readiness_state: state,
-      read_only: true,
-      permission_source: "seated_runtime_standing",
-      route_visibility_permission: false,
+      read_only: true as const,
+      permission_source: "seated_runtime_standing" as const,
+      route_visibility_permission: false as const,
       reasons,
       reason_details: details,
       transition_standing: {
@@ -190,7 +190,7 @@ export function deriveRuntimeBranchEncounterReadiness(
         passage_engine: branch?.passage_engine ?? "blocked",
         release_cadence: branch?.release_cadence ?? "not_authorized",
       },
-      automation_gate: automation?.operator_gate ?? "missing",
+      automation_gate: automation?.operator_gate ?? ("missing" as const),
       optics_downstream: opticsFor(state),
     }
   })
