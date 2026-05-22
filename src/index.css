@@ -5284,6 +5284,10 @@ body,
     linear-gradient(145deg, #03050a 0%, #090b14 46%, #020307 100%);
 }
 
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-chamber::before {
+  content: none;
+}
+
 .measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-chamber {
   border-color: var(--registry-obsidian-edge);
   background:
@@ -6369,7 +6373,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Session 24 — DB-driven exhibition render shell */
+/* Session 24 ï¿½ DB-driven exhibition render shell */
 .encounter {
   min-height: 100vh;
   width: 100vw;
@@ -7336,7 +7340,7 @@ body {
   margin: 0 0 0.5rem;
 }
 
-/* Session 24 — mobile/fullscreen refinement */
+/* Session 24 ï¿½ mobile/fullscreen refinement */
 html,
 body,
 #root {
