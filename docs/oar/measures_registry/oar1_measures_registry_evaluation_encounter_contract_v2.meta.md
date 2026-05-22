@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: closeout
 document_scope: measures_registry_evaluation_encounter_contract_v2
 title: OAR1 - Measures Registry Evaluation Encounter Contract v2
-status: completed_git_deploy_ready
+status: completed_git_deployed
 version: v2
 operator: op044
 system: measures_registry
@@ -14,6 +14,7 @@ tags:
   - db-contract
   - measures-branch
   - git-connected-deploy
+  - pushed
 ---
 
 # OAR1 - Measures Registry Evaluation Encounter Contract v2
@@ -133,12 +134,18 @@ Build artifact:
 
 Deployment is performed by committing and pushing the `measures` branch. Wrangler is not part of this deployment path.
 
+Git deployment trigger:
+
+- branch: `measures`
+- remote: `origin/measures`
+- pushed commit: `12cfb08 Seat Measures evaluation encounter contract v2`
+
 ## CLOSEOUT ASSESSMENT
 
 OAR2 v2 is resolved at the DB contract and Measures build layers.
 
-The deploy artifact is ready for the Git-connected Measures branch. No `c3field.online` production deploy was performed.
+The deploy artifact was pushed to the Git-connected Measures branch. No `c3field.online` production deploy was performed.
 
 Next routing:
 
-Push the local `measures` branch to `origin/measures` to trigger the Cloudflare Pages Measures deployment.
+Monitor the Cloudflare Pages Measures branch deployment and verify the live Measures surface after the Git-connected build completes.
