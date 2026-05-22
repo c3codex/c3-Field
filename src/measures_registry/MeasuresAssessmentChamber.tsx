@@ -16,6 +16,10 @@ import type {
 } from "./measuresAssessmentTypes"
 
 type MeasuresAssessmentChamberProps = {
+  encounterKey: string
+  assessmentProcessTitle?: string
+  assessmentSupportLine?: string
+  assessmentSubSupportLine?: string
   evalAnswers: Record<string, StructuredEvalAnswer>
   evalEmailArtifact: AssessmentEmailArtifact | null
   evalError: string | null
@@ -26,9 +30,12 @@ type MeasuresAssessmentChamberProps = {
   evalSubmitted: boolean
   evalSubmitting: boolean
   passageMuted: boolean
+  registryBackgroundUrl: string | null
   registryMarkUrl: string | null
+  registryWatermarkUrl: string | null
   registryTokenStyle: CSSProperties
   resolutionText?: string
+  showQuestionContext?: boolean
   structuredEnvironmentPassageVideoUrl: string | null
   structuredQuestions: AssessmentMechanicQuestion[]
   onBackQuestion: () => void
@@ -45,6 +52,10 @@ type MeasuresAssessmentChamberProps = {
 }
 
 export function MeasuresAssessmentChamber({
+  encounterKey,
+  assessmentProcessTitle = ASSESSMENT_PROCESS_TITLE,
+  assessmentSupportLine = ASSESSMENT_SUPPORT_LINE,
+  assessmentSubSupportLine = ASSESSMENT_SUB_SUPPORT_LINE,
   evalAnswers,
   evalEmailArtifact,
   evalError,
@@ -55,9 +66,12 @@ export function MeasuresAssessmentChamber({
   evalSubmitted,
   evalSubmitting,
   passageMuted,
+  registryBackgroundUrl,
   registryMarkUrl,
+  registryWatermarkUrl,
   registryTokenStyle,
   resolutionText,
+  showQuestionContext = true,
   structuredEnvironmentPassageVideoUrl,
   structuredQuestions,
   onBackQuestion,
@@ -74,17 +88,27 @@ export function MeasuresAssessmentChamber({
 }: MeasuresAssessmentChamberProps) {
   const currentQuestion = structuredQuestions[evalSectionIndex] ?? null
   const finalDiagnosticQuestion = evalSectionIndex >= Math.max(structuredQuestions.length - 1, 0)
+  const currentQuestionAnswered = Boolean(currentQuestion && evalAnswers[currentQuestion.questionKey]?.selected)
   const progressLabel = structuredQuestions.length > 0 ? `${evalSectionIndex + 1} of ${structuredQuestions.length}` : null
   const progressValue = structuredQuestions.length > 0 ? ((evalSectionIndex + 1) / structuredQuestions.length) * 100 : 0
+  const chamberStyle = {
+    ...registryTokenStyle,
+    ...(registryBackgroundUrl ? { "--registry-assessment-background-image": `url("${registryBackgroundUrl}")` } : {}),
+  } as CSSProperties
 
   return (
-    <main className="measures-registry-runtime" data-surface="iis_eval_gate1" data-chamber-state={evalStep} style={registryTokenStyle}>
-      <section className="registry-iis-eval registry-assessment-chamber" aria-label={ASSESSMENT_PROCESS_TITLE}>
-        <MeasuresAssessmentBrandLayer registryMarkUrl={registryMarkUrl} />
+    <main className="measures-registry-runtime" data-surface={encounterKey} data-chamber-state={evalStep} style={chamberStyle}>
+      <section className="registry-iis-eval registry-assessment-chamber" aria-label={assessmentProcessTitle}>
+        <MeasuresAssessmentBrandLayer registryMarkUrl={registryMarkUrl} registryWatermarkUrl={registryWatermarkUrl} />
+        {!registryBackgroundUrl || !registryWatermarkUrl || !registryMarkUrl ? (
+          <p className="registry-media-absence">
+            Evaluation chamber media role mapping is incomplete in the runtime registry.
+          </p>
+        ) : null}
         <div className="registry-chamber-heading">
           <span>Measures Registry</span>
-          <h1>{ASSESSMENT_PROCESS_TITLE}</h1>
-          <p>{`${ASSESSMENT_SUPPORT_LINE} ${ASSESSMENT_SUB_SUPPORT_LINE}`}</p>
+          <h1>{assessmentProcessTitle}</h1>
+          <p>{`${assessmentSupportLine} ${assessmentSubSupportLine}`}</p>
         </div>
 
         {evalSubmitted ? (
@@ -102,7 +126,7 @@ export function MeasuresAssessmentChamber({
           <div className="registry-eval-resolution registry-assessment-resolving">
             <span>Resolving environmental standing</span>
             <h2>Reviewing operating conditions.</h2>
-            <p className="registry-assessment-support">{ASSESSMENT_SUPPORT_LINE}</p>
+            <p className="registry-assessment-support">{assessmentSupportLine}</p>
             <ol>
               <li>Resolving environmental standing...</li>
               <li>Reviewing operating conditions...</li>
@@ -120,7 +144,7 @@ export function MeasuresAssessmentChamber({
             <div className="registry-chamber-copy">
               <span>Environment Identity</span>
               <h2>Before the evaluation begins, identify the environment being assessed.</h2>
-              <p className="registry-assessment-support">{ASSESSMENT_SUB_SUPPORT_LINE}</p>
+              <p className="registry-assessment-support">{assessmentSubSupportLine}</p>
             </div>
             <fieldset>
               <legend>Institutional Contact</legend>
@@ -152,8 +176,8 @@ export function MeasuresAssessmentChamber({
         ) : (
           <form className="registry-iis-eval-form" onSubmit={onSubmitEvaluation}>
             <div className="registry-chamber-copy">
-              <h2>{ASSESSMENT_SUPPORT_LINE}</h2>
-              <p className="registry-assessment-support">{ASSESSMENT_SUB_SUPPORT_LINE}</p>
+              <h2>{assessmentSupportLine}</h2>
+              <p className="registry-assessment-support">{assessmentSubSupportLine}</p>
               {progressLabel ? (
                 <div className="registry-question-progress" aria-label={`Evaluation progress ${progressLabel}`}>
                   <span>{progressLabel}</span>
@@ -183,13 +207,15 @@ export function MeasuresAssessmentChamber({
                       </label>
                     ))}
                   </div>
-                  <label className="registry-structured-context">
-                    <span>{currentQuestion.contextLabel}</span>
-                    <textarea
-                      value={evalAnswers[currentQuestion.questionKey]?.institutional_context ?? ""}
-                      onChange={(event) => onSetEvalAnswerContext(currentQuestion, event.target.value)}
-                    />
-                  </label>
+                  {showQuestionContext ? (
+                    <label className="registry-structured-context">
+                      <span>{currentQuestion.contextLabel}</span>
+                      <textarea
+                        value={evalAnswers[currentQuestion.questionKey]?.institutional_context ?? ""}
+                        onChange={(event) => onSetEvalAnswerContext(currentQuestion, event.target.value)}
+                      />
+                    </label>
+                  ) : null}
                 </div>
               </fieldset>
             ) : (
@@ -204,13 +230,13 @@ export function MeasuresAssessmentChamber({
                 </button>
               ) : null}
               {!finalDiagnosticQuestion && currentQuestion ? (
-                <button type="button" onClick={() => onContinueQuestion(currentQuestion)}>
+                <button type="button" disabled={!currentQuestionAnswered} onClick={() => onContinueQuestion(currentQuestion)}>
                   Continue
                 </button>
               ) : (
                 <button
                   type="submit"
-                  disabled={evalSubmitting}
+                  disabled={evalSubmitting || !currentQuestionAnswered}
                   onClick={(event) => onCompleteQuestionClick(event, currentQuestion)}
                 >
                   {evalSubmitting ? "Resolving Assessment" : "Complete Evaluation"}

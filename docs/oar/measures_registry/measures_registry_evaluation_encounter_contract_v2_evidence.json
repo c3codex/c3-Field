@@ -1,0 +1,126 @@
+{
+  "generatedAt": "2026-05-22T00:31:11.600Z",
+  "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+  "mutationPerformed": true,
+  "registry": {
+    "registry_key": "measures_ai_operational_evaluation",
+    "release_state": "released",
+    "access_state": "callable",
+    "is_active": true
+  },
+  "encounter": {
+    "encounter_key": "measures_ai_operational_evaluation",
+    "display_title": "MEASURES AI OPERATIONAL EVALUATION",
+    "renderer_key": "measures_registry_evaluation_chamber",
+    "theme_key": "evaluation_chamber_lapis_obsidian_v1",
+    "contract_version": "v2",
+    "question_count": 5,
+    "answer_count": 15,
+    "returned_standing": "Structural Drift Detected",
+    "returned_assessment_title": "Structural Drift Detected",
+    "styling_contract": {
+      "body_tone": "operational_clarity",
+      "body_style": "operational_sans",
+      "accent_tone": "restrained_gold",
+      "heading_tone": "measured_authoritative",
+      "pacing_style": "chamber_progression",
+      "geometry_tone": "silver",
+      "heading_style": "institutional_serif",
+      "spacing_style": "architectural_negative_space",
+      "transition_style": "dissolve",
+      "atmospheric_motion": "restrained",
+      "interaction_motion": "minimal",
+      "disallowed_patterns": [
+        "dashboard_cards",
+        "startup_saas_ui",
+        "neon_glow",
+        "gamified_progress",
+        "playful_iconography",
+        "ecommerce_pricing_grid",
+        "floating_widget_ui"
+      ],
+      "foundation_material": "obsidian",
+      "atmospheric_material": "lapis"
+    },
+    "icon_contract": {
+      "warning_icon": "triangle_alert",
+      "relation_icon": "network",
+      "assessment_icon": "clipboard_check",
+      "governance_icon": "shield",
+      "visibility_icon": "scan_search",
+      "continuation_icon": "arrow_right"
+    }
+  },
+  "mediaRoleMappings": [
+    {
+      "media_role": "evaluation_reference_image",
+      "storage_bucket": "measures-registry",
+      "storage_path": "evaluation_chamber_reference.webp",
+      "storage_provider": "supabase",
+      "runtime_use": "evaluation_chamber_reference_image",
+      "is_active": true
+    },
+    {
+      "media_role": "lapis_background",
+      "storage_bucket": "measures-registry",
+      "storage_path": "lapis_background.webp",
+      "storage_provider": "supabase",
+      "runtime_use": "evaluation_chamber_lapis_background",
+      "is_active": true
+    },
+    {
+      "media_role": "registry_mark",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry_mark.webp",
+      "storage_provider": "supabase",
+      "runtime_use": "evaluation_chamber_registry_mark",
+      "is_active": true
+    },
+    {
+      "media_role": "registry_watermark",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry_emblem_watermark_preview_lapis.webp",
+      "storage_provider": "supabase",
+      "runtime_use": "evaluation_chamber_registry_watermark",
+      "is_active": true
+    }
+  ],
+  "storageReadback": [
+    {
+      "role": "lapis_background",
+      "storage_bucket": "measures-registry",
+      "storage_path": "lapis_background.webp",
+      "public_url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/lapis_background.webp",
+      "mime_type": "image/webp",
+      "content_length": 128976,
+      "head_status": 200
+    },
+    {
+      "role": "registry_watermark",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry_emblem_watermark_preview_lapis.webp",
+      "public_url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry_emblem_watermark_preview_lapis.webp",
+      "mime_type": "image/webp",
+      "content_length": 46842,
+      "head_status": 200
+    },
+    {
+      "role": "registry_mark",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry_mark.webp",
+      "public_url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry_mark.webp",
+      "mime_type": "image/webp",
+      "content_length": 178128,
+      "head_status": 200
+    },
+    {
+      "role": "evaluation_reference_image",
+      "storage_bucket": "measures-registry",
+      "storage_path": "evaluation_chamber_reference.webp",
+      "public_url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/evaluation_chamber_reference.webp",
+      "mime_type": "image/webp",
+      "content_length": 64150,
+      "head_status": 200
+    }
+  ]
+}

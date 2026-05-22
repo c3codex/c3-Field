@@ -23,6 +23,7 @@ const REQUIRED_SECTION_KEYS = [
   "educate_eval_encounter",
   "structural_drift_dispatches",
   "cohort_conversion_encounter",
+  "measures_ai_operational_evaluation",
   "iis_eval_gate1",
   "understand_failure",
   "c3_field",
@@ -42,7 +43,10 @@ const REQUIRED_MEDIA_ROLES = [
   "hero_video",
   "hero_poster",
   "path_choice_background",
+  "lapis_background",
+  "registry_watermark",
   "registry_mark",
+  "evaluation_reference_image",
 ] as const
 const OPTIONAL_MEDIA_ROLES = [
   "foundation_intro_video",
@@ -96,6 +100,7 @@ type SurfaceState =
   | "educate_eval"
   | "structural_drift_dispatches"
   | "cohort_conversion"
+  | "measures_ai_operational_evaluation"
   | "iis_eval_gate1"
   | "understand_failure"
   | "c3_field"
@@ -115,6 +120,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   educate_eval: "educate_eval_encounter",
   structural_drift_dispatches: "structural_drift_dispatches",
   cohort_conversion: "cohort_conversion_encounter",
+  measures_ai_operational_evaluation: "measures_ai_operational_evaluation",
   iis_eval_gate1: "iis_eval_gate1",
   understand_failure: "understand_failure",
   c3_field: "c3_field",
@@ -509,6 +515,9 @@ function sectionCopy(row?: LandingSectionRow) {
     evaluationEntry: asRecord(metadata.evaluation_entry),
     assessmentMechanics: asRecord(metadata.assessment_mechanics),
     assessmentInterpretation: asRecord(metadata.assessment_interpretation),
+    assessmentChamber: asRecord(metadata.assessment_chamber),
+    assessmentCompletion: asRecord(metadata.assessment_completion),
+    encounterContract: asRecord(metadata.encounter_contract),
     featuredPublication: asRecord(metadata.featured_publication),
     subscriptionEntry: asRecord(metadata.subscription_entry),
     heroPaths: asRecordArray(metadata.hero_paths),
@@ -814,6 +823,7 @@ export default function MeasuresRegistryRuntime() {
   const educateEvalCopy = sectionCopy(sectionMap.get("educate_eval_encounter"))
   const structuralDriftDispatchesCopy = sectionCopy(sectionMap.get("structural_drift_dispatches"))
   const cohortConversionCopy = sectionCopy(sectionMap.get("cohort_conversion_encounter"))
+  const evaluationChamberCopy = sectionCopy(sectionMap.get("measures_ai_operational_evaluation"))
   const iisEvalCopy = sectionCopy(sectionMap.get("iis_eval_gate1"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
   const c3FieldCopy = sectionCopy(sectionMap.get("c3_field"))
@@ -841,6 +851,8 @@ export default function MeasuresRegistryRuntime() {
   const thresholdRightStillUrl = mediaUrl(mediaMap.get("right_measured_hero")) ?? heroMeasuredImageUrl ?? splitHeroImageUrl
   const thresholdRightMotionUrl = mediaUrl(mediaMap.get("measured_hero_motion_graphic"))
   const pathChoiceBackgroundUrl = mediaUrl(mediaMap.get("path_choice_background"))
+  const lapisBackgroundUrl = mediaUrl(mediaMap.get("lapis_background"))
+  const registryWatermarkUrl = mediaUrl(mediaMap.get("registry_watermark"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
   const structuredEnvironmentPassageVideoUrl =
@@ -850,6 +862,19 @@ export default function MeasuresRegistryRuntime() {
     mediaUrl(mediaMap.get("marble_tone")) ??
     mediaUrl(mediaMap.get("installation_tone_marble")) ??
     mediaUrl(mediaMap.get("installation_tone_marble_rise_return_v1"))
+  const activeEvaluationEncounterKey =
+    activeSurface === "measures_ai_operational_evaluation"
+      ? "measures_ai_operational_evaluation"
+      : "iis_eval_gate1"
+  const activeEvaluationCopy =
+    activeEvaluationEncounterKey === "measures_ai_operational_evaluation"
+      ? evaluationChamberCopy
+      : iisEvalCopy
+  const activeEvaluationMedia = {
+    backgroundUrl: activeEvaluationEncounterKey === "measures_ai_operational_evaluation" ? lapisBackgroundUrl : null,
+    watermarkUrl: activeEvaluationEncounterKey === "measures_ai_operational_evaluation" ? registryWatermarkUrl : null,
+    markUrl: registryMarkUrl,
+  }
 
   function actionLabel(actionKey: string, actions = pathChoiceCopy.actions) {
     const plaque = pathChoiceCopy.plaques.find(
@@ -1078,7 +1103,7 @@ export default function MeasuresRegistryRuntime() {
       behavior === "route_surface" &&
       (target === "iis_eval_gate1" || actionKey === "begin_evaluation")
     ) {
-      navigateSurface("iis_eval_gate1")
+      navigateSurface(sectionMap.has("measures_ai_operational_evaluation") ? "measures_ai_operational_evaluation" : "iis_eval_gate1")
       return
     }
 
@@ -1091,7 +1116,7 @@ export default function MeasuresRegistryRuntime() {
     }
 
     if (actionKey === "begin_structural_evaluation") {
-      navigateSurface("iis_eval_gate1")
+      navigateSurface(sectionMap.has("measures_ai_operational_evaluation") ? "measures_ai_operational_evaluation" : "iis_eval_gate1")
       return
     }
 
@@ -1430,7 +1455,8 @@ export default function MeasuresRegistryRuntime() {
       Object.entries(evalAnswers).filter(([, answer]) => answer.selected),
     )
 
-    const missingEvaluationAnswers = allAssessmentMechanics(iisEvalCopy.assessmentMechanics).filter(
+    const activeAssessmentMechanics = allAssessmentMechanics(activeEvaluationCopy.assessmentMechanics)
+    const missingEvaluationAnswers = activeAssessmentMechanics.filter(
       (question) => !populatedEvalAnswers[question.questionKey],
     )
 
@@ -1441,10 +1467,10 @@ export default function MeasuresRegistryRuntime() {
     }
 
     const traces = selectedConditionTraces(
-      allAssessmentMechanics(iisEvalCopy.assessmentMechanics),
+      activeAssessmentMechanics,
       evalAnswers,
     )
-    const interpretation = resolveEnvironmentalReport(iisEvalCopy.assessmentInterpretation, traces)
+    const interpretation = resolveEnvironmentalReport(activeEvaluationCopy.assessmentInterpretation, traces)
 
     if (!interpretation) {
       setEvalSubmitting(false)
@@ -1473,7 +1499,9 @@ export default function MeasuresRegistryRuntime() {
       notification_state: "queued",
       confirmation_email_state: "queued",
       metadata: {
+        encounter_key: activeEvaluationEncounterKey,
         source_oar2: "docs/oar/measures_registry/oar2_operational_evaluation_single_question_chamber_public_label_cleanup_v1.meta.md",
+        encounter_contract_source_oar2: "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v1.meta.md",
         branding_source_oar2: "docs/oar/measures_registry/oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md",
         semantic_source_oar2: "docs/oar/measures_registry/oar2_refine_measures_ai_operational_evaluation_semantics_v1.meta.md",
         interpretation_source_oar2: "docs/oar/measures_registry/oar2_deterministic_environmental_standing_report_routing_v1.meta.md",
@@ -2055,13 +2083,28 @@ export default function MeasuresRegistryRuntime() {
     )
   }
 
-  function renderIisEvalGateSurface() {
-    if (reportMissingClassification("iis_eval_gate1", iisEvalCopy)) return null
+  function renderEvaluationChamberSurface(encounterKey: "measures_ai_operational_evaluation" | "iis_eval_gate1") {
+    const copy = encounterKey === "measures_ai_operational_evaluation" ? evaluationChamberCopy : iisEvalCopy
+    if (reportMissingClassification(encounterKey, copy)) return null
 
-    const structuredQuestions = allAssessmentMechanics(iisEvalCopy.assessmentMechanics)
+    const structuredQuestions = allAssessmentMechanics(copy.assessmentMechanics)
 
     return (
       <MeasuresAssessmentChamber
+        encounterKey={encounterKey}
+        assessmentProcessTitle={
+          asString(copy.assessmentChamber?.title) ??
+          asString(copy.encounterContract?.content_blocks && asRecord(copy.encounterContract.content_blocks)?.process_title) ??
+          undefined
+        }
+        assessmentSupportLine={
+          asString(copy.encounterContract?.content_blocks && asRecord(copy.encounterContract.content_blocks)?.support_line) ??
+          undefined
+        }
+        assessmentSubSupportLine={
+          asString(copy.encounterContract?.content_blocks && asRecord(copy.encounterContract.content_blocks)?.sub_support_line) ??
+          undefined
+        }
         evalAnswers={evalAnswers}
         evalEmailArtifact={evalEmailArtifact}
         evalError={evalError}
@@ -2072,9 +2115,12 @@ export default function MeasuresRegistryRuntime() {
         evalSubmitted={evalSubmitted}
         evalSubmitting={evalSubmitting}
         passageMuted={passageMuted}
-        registryMarkUrl={registryMarkUrl}
+        registryBackgroundUrl={encounterKey === "measures_ai_operational_evaluation" ? activeEvaluationMedia.backgroundUrl : null}
+        registryMarkUrl={activeEvaluationMedia.markUrl}
+        registryWatermarkUrl={encounterKey === "measures_ai_operational_evaluation" ? activeEvaluationMedia.watermarkUrl : null}
         registryTokenStyle={registryTokenStyle}
-        resolutionText={iisEvalCopy.resolutionText ?? undefined}
+        resolutionText={copy.resolutionText ?? undefined}
+        showQuestionContext={encounterKey !== "measures_ai_operational_evaluation"}
         structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}
         structuredQuestions={structuredQuestions}
         onBackQuestion={() => setEvalSectionIndex((current) => Math.max(0, current - 1))}
@@ -2998,7 +3044,8 @@ export default function MeasuresRegistryRuntime() {
     : activeSurface === "educate_eval" ? renderEducateEvalSurface()
     : activeSurface === "structural_drift_dispatches" ? renderStructuralDriftDispatchesSurface()
     : activeSurface === "cohort_conversion" ? renderCohortConversionSurface()
-    : activeSurface === "iis_eval_gate1" ? renderIisEvalGateSurface()
+    : activeSurface === "measures_ai_operational_evaluation" ? renderEvaluationChamberSurface("measures_ai_operational_evaluation")
+    : activeSurface === "iis_eval_gate1" ? renderEvaluationChamberSurface("iis_eval_gate1")
     : activeSurface === "understand_failure" ? renderUnderstandFailureSurface()
     : activeSurface === "c3_field" ? renderC3FieldSurface()
     : activeSurface === "reserve_seat" ? renderReserveSeatSurface()

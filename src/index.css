@@ -4912,7 +4912,7 @@ body,
   border: 1px solid color-mix(in srgb, var(--registry-brand-border) 82%, transparent);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--registry-brand-field) 70%, transparent), color-mix(in srgb, var(--registry-brand-panel-surface) 86%, transparent)),
-    url("/obsidian_background.png") center / cover no-repeat;
+    var(--registry-assessment-background-image, linear-gradient(135deg, var(--registry-brand-panel-surface), var(--registry-brand-field))) center / cover no-repeat;
   box-shadow: 0 1.75rem 5rem color-mix(in srgb, #000 58%, transparent);
 }
 
@@ -4923,7 +4923,7 @@ body,
   z-index: -1;
   background:
     linear-gradient(90deg, color-mix(in srgb, var(--registry-brand-field) 92%, transparent), color-mix(in srgb, var(--registry-brand-field) 62%, transparent)),
-    url("/obsidian_background.png") center / cover no-repeat,
+    var(--registry-assessment-background-image, linear-gradient(135deg, var(--registry-brand-panel-surface), var(--registry-brand-field))) center / cover no-repeat,
     radial-gradient(circle at 50% 10%, var(--registry-brand-panel-wash), transparent 28rem),
     linear-gradient(135deg, var(--registry-brand-panel-surface), var(--registry-brand-field) 58%, var(--registry-brand-panel-surface));
 }
@@ -5004,6 +5004,14 @@ body,
   max-width: 44%;
   opacity: 0.24;
   filter: saturate(0.85) contrast(0.95);
+}
+
+.registry-assessment-brand-layer .registry-assessment-watermark {
+  position: absolute;
+  inset: auto;
+  width: min(76vw, 46rem);
+  max-width: 86%;
+  opacity: 0.1;
 }
 
 .registry-assessment-brand-layer span,
