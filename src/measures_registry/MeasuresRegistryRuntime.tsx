@@ -52,6 +52,7 @@ const REQUIRED_MEDIA_ROLES = [
   "registry_watermark",
   "registry_mark",
   "evaluation_reference_image",
+  "marble_accent_reference",
 ] as const
 const OPTIONAL_MEDIA_ROLES = [
   "foundation_intro_video",
@@ -877,6 +878,7 @@ export default function MeasuresRegistryRuntime() {
   const lapisBackgroundUrl = mediaUrl(mediaMap.get("background")) ?? mediaUrl(mediaMap.get("lapis_background"))
   const registryWatermarkUrl = mediaUrl(mediaMap.get("watermark")) ?? mediaUrl(mediaMap.get("registry_watermark"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
+  const marbleAccentReferenceUrl = mediaUrl(mediaMap.get("marble_accent_reference"))
   const c3FieldVideoUrl = mediaUrl(mediaMap.get("c3_field_video"))
   const structuredEnvironmentPassageVideoUrl =
     mediaUrl(mediaMap.get("structured_environment_passage_video")) ??
@@ -2158,8 +2160,10 @@ export default function MeasuresRegistryRuntime() {
         passageMuted={passageMuted}
         registryBackgroundUrl={activeEvaluationMedia.backgroundUrl}
         registryMarkUrl={activeEvaluationMedia.markUrl}
+        marbleAccentReferenceUrl={marbleAccentReferenceUrl}
         registryWatermarkUrl={activeEvaluationMedia.watermarkUrl}
         registryTokenStyle={registryTokenStyle}
+        assessmentCompletion={copy.assessmentCompletion}
         layoutContract={copy.layoutContract}
         srcIntakeContract={copy.srcIntakeContract}
         stylingContract={copy.stylingContract}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-22T00:59:59.824Z",
+  "generatedAt": "2026-05-22T16:36:21.819Z",
   "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
   "mutationPerformed": true,
   "registry": {
@@ -244,5 +244,675 @@
       "content_length": 64150,
       "head_status": 200
     }
-  ]
+  ],
+  "amendment": "marble_accent_and_returned_assessment_contract",
+  "marbleAccent": {
+    "contract": {
+      "version": "v1",
+      "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+      "roles": [
+        "marble_surface_panel",
+        "marble_section_frame",
+        "marble_divider",
+        "marble_icon_backplate",
+        "marble_corner_accent",
+        "marble_base_molding",
+        "marble_accent_reference"
+      ],
+      "required_media_role": "marble_accent_reference",
+      "allowed_usage": [
+        "assessment framing",
+        "section plaques",
+        "progression threshold framing",
+        "icon backplates",
+        "separator structures",
+        "lower chamber architectural accents"
+      ],
+      "behavior": [
+        "softly illuminated",
+        "lightly engraved",
+        "calm",
+        "dimensional",
+        "architectural"
+      ],
+      "disallowed_behavior": [
+        "glossy",
+        "luxury retail",
+        "bright white",
+        "ornamental",
+        "heavy decorative"
+      ],
+      "styling_direction": {
+        "material": "soft ivory marble",
+        "veining": "restrained_gold_allowed",
+        "contrast": "low",
+        "texture": "subtle",
+        "frame": "thin_gold_or_silver",
+        "disallowed": [
+          "saturated_colors",
+          "black_marble",
+          "high_polish_reflections"
+        ]
+      },
+      "ui_constraints": {
+        "role": "support_chamber_structure",
+        "disallowed": [
+          "dominant_page_atmosphere",
+          "replace_lapis_atmosphere",
+          "card_heavy_ui",
+          "luxury_ecommerce_feel"
+        ]
+      }
+    },
+    "mediaRole": {
+      "media_role": "marble_accent_reference",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+      "mime_type": "image/webp",
+      "is_active": true,
+      "metadata": {
+        "theme_key": "evaluation_chamber_lapis_marble_v1",
+        "runtime_use": "evaluation_chamber_marble_accent_reference",
+        "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+        "storage_provider": "supabase",
+        "frontend_hardcode_allowed": false
+      }
+    },
+    "storageReadback": {
+      "role": "marble_accent_reference",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+      "public_url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+      "mime_type": "image/webp",
+      "content_length": "162026",
+      "head_status": 200
+    }
+  },
+  "returnedAssessmentContract": {
+    "version": "v2",
+    "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+    "returned_assessment_title": "Structural Drift Detected",
+    "returned_assessment_body": "Observed findings indicate the current operational environment is fragmented across systems, responsibilities, review pathways, and runtime dependencies.\n\nCurrent standing suggests AI optimization efforts are occurring within an unstable operational environment.",
+    "operational_risk_standing": "Without structured operational coherence:\n- ambiguity compounds over time\n- implementation reliability degrades\n- undocumented automation expands\n- acceleration increasingly outpaces governance capacity",
+    "clarification_title": "The issue is not AI itself.",
+    "clarification_body": "AI systems inherit the operational conditions of the environments they operate within.\n\nMost currently available solutions focus on accelerating deployment, automation, or output generation without first resolving the operational fragmentation limiting stable performance.\n\nAs a result, organizations often increase AI activity without realizing proportional operational benefit.",
+    "measures_registry_standing_title": "Measures Registry Standing",
+    "measures_registry_standing_body": "Measures Registry was established specifically to address this operational gap.\n\nStable AI optimization requires an environment capable of supporting it.\n\nWe know what will.",
+    "progression_threshold_label": "Next Step",
+    "progression_threshold_title": "Review Recommended Progression Pathway",
+    "progression_threshold_body": "Explore the structured pathway designed to help organizations move toward operational stability and implementation readiness.",
+    "progression_threshold_cta": "Review Recommended Progression Pathway",
+    "assessment_completion_label": "Assessment Complete",
+    "findings": [
+      "Fragmented Operational Procedures",
+      "System Environment Inconsistency",
+      "Unbounded Automation Exposure",
+      "Undefined Role Assignments"
+    ],
+    "positioning_contract": {
+      "communicates": [
+        "the organization has a real operational problem",
+        "the issue is not AI itself",
+        "current market solutions do not resolve the operational environment",
+        "operational coherence determines AI optimization potential",
+        "Measures Registry understands the operational gap",
+        "a progression pathway exists"
+      ],
+      "tone": [
+        "calm",
+        "measured",
+        "institutional",
+        "confident",
+        "operationally authoritative"
+      ],
+      "not": [
+        "fear-selling",
+        "startup hype",
+        "doom signaling",
+        "AI panic messaging"
+      ]
+    }
+  },
+  "stylingContract": {
+    "version": "v3",
+    "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+    "theme_key": "evaluation_chamber_lapis_marble_v1",
+    "material_family": "obsidian",
+    "foundation_material": "obsidian",
+    "atmospheric_material": "lapis",
+    "structural_material": "marble",
+    "geometry_tone": "silver",
+    "accent_tone": "restrained_gold",
+    "spacing_style": "architectural_negative_space",
+    "pacing_style": "measured_threshold_progression",
+    "heading_style": "institutional_serif",
+    "body_style": "operational_sans",
+    "heading_tone": "measured_authoritative",
+    "body_tone": "operational_clarity",
+    "transition_style": "dissolve",
+    "atmospheric_motion": "restrained",
+    "interaction_motion": "minimal",
+    "lapis_contract": {
+      "must_feel": [
+        "mineral",
+        "dimensional",
+        "architectural",
+        "coherent"
+      ],
+      "may_not_feel": [
+        "neon",
+        "sci-fi",
+        "startup gradient",
+        "synthetic UI blue"
+      ]
+    },
+    "marble_contract": {
+      "must_feel": [
+        "institutional",
+        "engraved",
+        "calm",
+        "structural",
+        "lightly illuminated"
+      ],
+      "may_not_resemble": [
+        "ecommerce cards",
+        "glossy panels",
+        "bright containers"
+      ]
+    },
+    "watermark_contract": {
+      "scale": "giant",
+      "opacity": "low",
+      "layer": "behind_content_only",
+      "blend": "softly_blended_into_atmosphere",
+      "cropping": "partially_cropped_acceptable",
+      "foreground_branding": false
+    },
+    "findings_contract": {
+      "render_as": [
+        "separated operational rows",
+        "softly divided",
+        "lightly engraved",
+        "calm but serious"
+      ],
+      "disallowed": [
+        "markdown bullets",
+        "dashboard alerts",
+        "aggressive warnings"
+      ]
+    },
+    "disallowed_patterns": [
+      "dashboard_cards",
+      "startup_saas_ui",
+      "neon_glow",
+      "stacked_form_layouts",
+      "floating_widgets",
+      "progress_gamification",
+      "playful_iconography",
+      "ecommerce_funnel",
+      "analytics_platform",
+      "chatbot_ui",
+      "quiz_interface"
+    ]
+  },
+  "registryRows": [
+    {
+      "registry_key": "measures_ai_operational_evaluation",
+      "release_state": "released",
+      "access_state": "callable",
+      "theme_key": "evaluation_chamber_lapis_marble_v1",
+      "structural_material": "marble"
+    },
+    {
+      "registry_key": "iis_eval_gate1",
+      "release_state": "released",
+      "access_state": "callable",
+      "theme_key": "evaluation_chamber_lapis_marble_v1",
+      "structural_material": "marble"
+    }
+  ],
+  "runtimeReadback": [
+    {
+      "encounter_key": "iis_eval_gate1",
+      "theme_key": "evaluation_chamber_lapis_marble_v1",
+      "media_roles": [
+        "background",
+        "watermark",
+        "question_chamber_background",
+        "assessment_background",
+        "transition_or_pause",
+        "lapis_background",
+        "registry_watermark",
+        "registry_mark",
+        "evaluation_reference_image",
+        "marble_accent_reference"
+      ],
+      "styling_contract": {
+        "version": "v3",
+        "body_tone": "operational_clarity",
+        "theme_key": "evaluation_chamber_lapis_marble_v1",
+        "body_style": "operational_sans",
+        "accent_tone": "restrained_gold",
+        "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+        "heading_tone": "measured_authoritative",
+        "pacing_style": "measured_threshold_progression",
+        "geometry_tone": "silver",
+        "heading_style": "institutional_serif",
+        "spacing_style": "architectural_negative_space",
+        "lapis_contract": {
+          "must_feel": [
+            "mineral",
+            "dimensional",
+            "architectural",
+            "coherent"
+          ],
+          "may_not_feel": [
+            "neon",
+            "sci-fi",
+            "startup gradient",
+            "synthetic UI blue"
+          ]
+        },
+        "marble_contract": {
+          "must_feel": [
+            "institutional",
+            "engraved",
+            "calm",
+            "structural",
+            "lightly illuminated"
+          ],
+          "may_not_resemble": [
+            "ecommerce cards",
+            "glossy panels",
+            "bright containers"
+          ]
+        },
+        "material_family": "obsidian",
+        "transition_style": "dissolve",
+        "findings_contract": {
+          "render_as": [
+            "separated operational rows",
+            "softly divided",
+            "lightly engraved",
+            "calm but serious"
+          ],
+          "disallowed": [
+            "markdown bullets",
+            "dashboard alerts",
+            "aggressive warnings"
+          ]
+        },
+        "atmospheric_motion": "restrained",
+        "interaction_motion": "minimal",
+        "watermark_contract": {
+          "blend": "softly_blended_into_atmosphere",
+          "layer": "behind_content_only",
+          "scale": "giant",
+          "opacity": "low",
+          "cropping": "partially_cropped_acceptable",
+          "foreground_branding": false
+        },
+        "disallowed_patterns": [
+          "dashboard_cards",
+          "startup_saas_ui",
+          "neon_glow",
+          "stacked_form_layouts",
+          "floating_widgets",
+          "progress_gamification",
+          "playful_iconography",
+          "ecommerce_funnel",
+          "analytics_platform",
+          "chatbot_ui",
+          "quiz_interface"
+        ],
+        "foundation_material": "obsidian",
+        "structural_material": "marble",
+        "atmospheric_material": "lapis"
+      },
+      "marble_accent_contract": {
+        "roles": [
+          "marble_surface_panel",
+          "marble_section_frame",
+          "marble_divider",
+          "marble_icon_backplate",
+          "marble_corner_accent",
+          "marble_base_molding",
+          "marble_accent_reference"
+        ],
+        "version": "v1",
+        "behavior": [
+          "softly illuminated",
+          "lightly engraved",
+          "calm",
+          "dimensional",
+          "architectural"
+        ],
+        "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+        "allowed_usage": [
+          "assessment framing",
+          "section plaques",
+          "progression threshold framing",
+          "icon backplates",
+          "separator structures",
+          "lower chamber architectural accents"
+        ],
+        "ui_constraints": {
+          "role": "support_chamber_structure",
+          "disallowed": [
+            "dominant_page_atmosphere",
+            "replace_lapis_atmosphere",
+            "card_heavy_ui",
+            "luxury_ecommerce_feel"
+          ]
+        },
+        "styling_direction": {
+          "frame": "thin_gold_or_silver",
+          "texture": "subtle",
+          "veining": "restrained_gold_allowed",
+          "contrast": "low",
+          "material": "soft ivory marble",
+          "disallowed": [
+            "saturated_colors",
+            "black_marble",
+            "high_polish_reflections"
+          ]
+        },
+        "disallowed_behavior": [
+          "glossy",
+          "luxury retail",
+          "bright white",
+          "ornamental",
+          "heavy decorative"
+        ],
+        "required_media_role": "marble_accent_reference"
+      },
+      "returned_assessment_contract": {
+        "version": "v2",
+        "findings": [
+          "Fragmented Operational Procedures",
+          "System Environment Inconsistency",
+          "Unbounded Automation Exposure",
+          "Undefined Role Assignments"
+        ],
+        "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+        "clarification_body": "AI systems inherit the operational conditions of the environments they operate within.\n\nMost currently available solutions focus on accelerating deployment, automation, or output generation without first resolving the operational fragmentation limiting stable performance.\n\nAs a result, organizations often increase AI activity without realizing proportional operational benefit.",
+        "clarification_title": "The issue is not AI itself.",
+        "positioning_contract": {
+          "not": [
+            "fear-selling",
+            "startup hype",
+            "doom signaling",
+            "AI panic messaging"
+          ],
+          "tone": [
+            "calm",
+            "measured",
+            "institutional",
+            "confident",
+            "operationally authoritative"
+          ],
+          "communicates": [
+            "the organization has a real operational problem",
+            "the issue is not AI itself",
+            "current market solutions do not resolve the operational environment",
+            "operational coherence determines AI optimization potential",
+            "Measures Registry understands the operational gap",
+            "a progression pathway exists"
+          ]
+        },
+        "returned_assessment_body": "Observed findings indicate the current operational environment is fragmented across systems, responsibilities, review pathways, and runtime dependencies.\n\nCurrent standing suggests AI optimization efforts are occurring within an unstable operational environment.",
+        "operational_risk_standing": "Without structured operational coherence:\n- ambiguity compounds over time\n- implementation reliability degrades\n- undocumented automation expands\n- acceleration increasingly outpaces governance capacity",
+        "progression_threshold_cta": "Review Recommended Progression Pathway",
+        "returned_assessment_title": "Structural Drift Detected",
+        "progression_threshold_body": "Explore the structured pathway designed to help organizations move toward operational stability and implementation readiness.",
+        "assessment_completion_label": "Assessment Complete",
+        "progression_threshold_label": "Next Step",
+        "progression_threshold_title": "Review Recommended Progression Pathway",
+        "measures_registry_standing_body": "Measures Registry was established specifically to address this operational gap.\n\nStable AI optimization requires an environment capable of supporting it.\n\nWe know what will.",
+        "measures_registry_standing_title": "Measures Registry Standing"
+      },
+      "assessment_completion": {
+        "returned_assessment_title": "Structural Drift Detected",
+        "clarification_title": "The issue is not AI itself.",
+        "measures_registry_standing_title": "Measures Registry Standing",
+        "progression_threshold_cta": "Review Recommended Progression Pathway"
+      },
+      "question_count": 5,
+      "option_counts": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "encounter_key": "measures_ai_operational_evaluation",
+      "theme_key": "evaluation_chamber_lapis_marble_v1",
+      "media_roles": [
+        "background",
+        "watermark",
+        "question_chamber_background",
+        "assessment_background",
+        "transition_or_pause",
+        "lapis_background",
+        "registry_watermark",
+        "registry_mark",
+        "evaluation_reference_image",
+        "marble_accent_reference"
+      ],
+      "styling_contract": {
+        "version": "v3",
+        "body_tone": "operational_clarity",
+        "theme_key": "evaluation_chamber_lapis_marble_v1",
+        "body_style": "operational_sans",
+        "accent_tone": "restrained_gold",
+        "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+        "heading_tone": "measured_authoritative",
+        "pacing_style": "measured_threshold_progression",
+        "geometry_tone": "silver",
+        "heading_style": "institutional_serif",
+        "spacing_style": "architectural_negative_space",
+        "lapis_contract": {
+          "must_feel": [
+            "mineral",
+            "dimensional",
+            "architectural",
+            "coherent"
+          ],
+          "may_not_feel": [
+            "neon",
+            "sci-fi",
+            "startup gradient",
+            "synthetic UI blue"
+          ]
+        },
+        "marble_contract": {
+          "must_feel": [
+            "institutional",
+            "engraved",
+            "calm",
+            "structural",
+            "lightly illuminated"
+          ],
+          "may_not_resemble": [
+            "ecommerce cards",
+            "glossy panels",
+            "bright containers"
+          ]
+        },
+        "material_family": "obsidian",
+        "transition_style": "dissolve",
+        "findings_contract": {
+          "render_as": [
+            "separated operational rows",
+            "softly divided",
+            "lightly engraved",
+            "calm but serious"
+          ],
+          "disallowed": [
+            "markdown bullets",
+            "dashboard alerts",
+            "aggressive warnings"
+          ]
+        },
+        "atmospheric_motion": "restrained",
+        "interaction_motion": "minimal",
+        "watermark_contract": {
+          "blend": "softly_blended_into_atmosphere",
+          "layer": "behind_content_only",
+          "scale": "giant",
+          "opacity": "low",
+          "cropping": "partially_cropped_acceptable",
+          "foreground_branding": false
+        },
+        "disallowed_patterns": [
+          "dashboard_cards",
+          "startup_saas_ui",
+          "neon_glow",
+          "stacked_form_layouts",
+          "floating_widgets",
+          "progress_gamification",
+          "playful_iconography",
+          "ecommerce_funnel",
+          "analytics_platform",
+          "chatbot_ui",
+          "quiz_interface"
+        ],
+        "foundation_material": "obsidian",
+        "structural_material": "marble",
+        "atmospheric_material": "lapis"
+      },
+      "marble_accent_contract": {
+        "roles": [
+          "marble_surface_panel",
+          "marble_section_frame",
+          "marble_divider",
+          "marble_icon_backplate",
+          "marble_corner_accent",
+          "marble_base_molding",
+          "marble_accent_reference"
+        ],
+        "version": "v1",
+        "behavior": [
+          "softly illuminated",
+          "lightly engraved",
+          "calm",
+          "dimensional",
+          "architectural"
+        ],
+        "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+        "allowed_usage": [
+          "assessment framing",
+          "section plaques",
+          "progression threshold framing",
+          "icon backplates",
+          "separator structures",
+          "lower chamber architectural accents"
+        ],
+        "ui_constraints": {
+          "role": "support_chamber_structure",
+          "disallowed": [
+            "dominant_page_atmosphere",
+            "replace_lapis_atmosphere",
+            "card_heavy_ui",
+            "luxury_ecommerce_feel"
+          ]
+        },
+        "styling_direction": {
+          "frame": "thin_gold_or_silver",
+          "texture": "subtle",
+          "veining": "restrained_gold_allowed",
+          "contrast": "low",
+          "material": "soft ivory marble",
+          "disallowed": [
+            "saturated_colors",
+            "black_marble",
+            "high_polish_reflections"
+          ]
+        },
+        "disallowed_behavior": [
+          "glossy",
+          "luxury retail",
+          "bright white",
+          "ornamental",
+          "heavy decorative"
+        ],
+        "required_media_role": "marble_accent_reference"
+      },
+      "returned_assessment_contract": {
+        "version": "v2",
+        "findings": [
+          "Fragmented Operational Procedures",
+          "System Environment Inconsistency",
+          "Unbounded Automation Exposure",
+          "Undefined Role Assignments"
+        ],
+        "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+        "clarification_body": "AI systems inherit the operational conditions of the environments they operate within.\n\nMost currently available solutions focus on accelerating deployment, automation, or output generation without first resolving the operational fragmentation limiting stable performance.\n\nAs a result, organizations often increase AI activity without realizing proportional operational benefit.",
+        "clarification_title": "The issue is not AI itself.",
+        "positioning_contract": {
+          "not": [
+            "fear-selling",
+            "startup hype",
+            "doom signaling",
+            "AI panic messaging"
+          ],
+          "tone": [
+            "calm",
+            "measured",
+            "institutional",
+            "confident",
+            "operationally authoritative"
+          ],
+          "communicates": [
+            "the organization has a real operational problem",
+            "the issue is not AI itself",
+            "current market solutions do not resolve the operational environment",
+            "operational coherence determines AI optimization potential",
+            "Measures Registry understands the operational gap",
+            "a progression pathway exists"
+          ]
+        },
+        "returned_assessment_body": "Observed findings indicate the current operational environment is fragmented across systems, responsibilities, review pathways, and runtime dependencies.\n\nCurrent standing suggests AI optimization efforts are occurring within an unstable operational environment.",
+        "operational_risk_standing": "Without structured operational coherence:\n- ambiguity compounds over time\n- implementation reliability degrades\n- undocumented automation expands\n- acceleration increasingly outpaces governance capacity",
+        "progression_threshold_cta": "Review Recommended Progression Pathway",
+        "returned_assessment_title": "Structural Drift Detected",
+        "progression_threshold_body": "Explore the structured pathway designed to help organizations move toward operational stability and implementation readiness.",
+        "assessment_completion_label": "Assessment Complete",
+        "progression_threshold_label": "Next Step",
+        "progression_threshold_title": "Review Recommended Progression Pathway",
+        "measures_registry_standing_body": "Measures Registry was established specifically to address this operational gap.\n\nStable AI optimization requires an environment capable of supporting it.\n\nWe know what will.",
+        "measures_registry_standing_title": "Measures Registry Standing"
+      },
+      "assessment_completion": {
+        "returned_assessment_title": "Structural Drift Detected",
+        "clarification_title": "The issue is not AI itself.",
+        "measures_registry_standing_title": "Measures Registry Standing",
+        "progression_threshold_cta": "Review Recommended Progression Pathway"
+      },
+      "question_count": 5,
+      "option_counts": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    }
+  ],
+  "runtimeMedia": {
+    "media_role": "marble_accent_reference",
+    "storage_bucket": "measures-registry",
+    "storage_path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+    "mime_type": "image/webp",
+    "is_active": true,
+    "metadata": {
+      "theme_key": "evaluation_chamber_lapis_marble_v1",
+      "runtime_use": "evaluation_chamber_marble_accent_reference",
+      "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+      "storage_provider": "supabase",
+      "frontend_hardcode_allowed": false
+    }
+  }
 }

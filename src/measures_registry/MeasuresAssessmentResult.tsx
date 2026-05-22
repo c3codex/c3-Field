@@ -15,6 +15,7 @@ function RecommendedOperatingProtocol({ report }: RecommendedOperatingProtocolPr
 }
 
 type MeasuresAssessmentResultProps = {
+  assessmentCompletion?: Record<string, unknown> | null
   emailArtifact: AssessmentEmailArtifact | null
   passageMuted: boolean
   report: EnvironmentalStandingReport | null
@@ -26,6 +27,7 @@ type MeasuresAssessmentResultProps = {
 }
 
 export function MeasuresAssessmentResult({
+  assessmentCompletion,
   emailArtifact,
   passageMuted,
   report,
@@ -35,9 +37,29 @@ export function MeasuresAssessmentResult({
   onStructuredEnvironmentVideoEnded,
   onTogglePassageMuted,
 }: MeasuresAssessmentResultProps) {
+  const completion = assessmentCompletion ?? {}
+  const completionLabel =
+    typeof completion.assessment_completion_label === "string" ? completion.assessment_completion_label : "Assessment Complete"
+  const clarificationTitle =
+    typeof completion.clarification_title === "string" ? completion.clarification_title : null
+  const clarificationBody =
+    typeof completion.clarification_body === "string" ? completion.clarification_body : null
+  const measuresStandingTitle =
+    typeof completion.measures_registry_standing_title === "string" ? completion.measures_registry_standing_title : null
+  const measuresStandingBody =
+    typeof completion.measures_registry_standing_body === "string" ? completion.measures_registry_standing_body : null
+  const progressionLabel =
+    typeof completion.progression_threshold_label === "string" ? completion.progression_threshold_label : null
+  const progressionTitle =
+    typeof completion.progression_threshold_title === "string" ? completion.progression_threshold_title : null
+  const progressionBody =
+    typeof completion.progression_threshold_body === "string" ? completion.progression_threshold_body : null
+  const progressionCta =
+    typeof completion.progression_threshold_cta === "string" ? completion.progression_threshold_cta : "Enter Structured Environment"
+
   return (
     <div className="registry-eval-resolution registry-assessment-complete">
-      <span>Assessment Complete</span>
+      <span>{completionLabel}</span>
       <h2>{report?.assessment_title ?? ASSESSMENT_TITLE}</h2>
       <p className="registry-assessment-support">{ASSESSMENT_SUB_SUPPORT_LINE}</p>
       {report ? (
@@ -46,7 +68,7 @@ export function MeasuresAssessmentResult({
           <h3>{report.assessment_result}</h3>
           <p>{report.operational_exposure_summary}</p>
           {report.findings.length > 0 ? (
-            <div>
+            <div className="registry-standing-findings">
               <strong>Findings</strong>
               <ul>
                 {report.findings.map((finding) => (
@@ -56,6 +78,18 @@ export function MeasuresAssessmentResult({
             </div>
           ) : null}
           <RecommendedOperatingProtocol report={report} />
+          {clarificationTitle || clarificationBody ? (
+            <section className="registry-standing-clarification">
+              {clarificationTitle ? <strong>{clarificationTitle}</strong> : null}
+              {clarificationBody ? <p>{clarificationBody}</p> : null}
+            </section>
+          ) : null}
+          {measuresStandingTitle || measuresStandingBody ? (
+            <section className="registry-standing-measures">
+              {measuresStandingTitle ? <strong>{measuresStandingTitle}</strong> : null}
+              {measuresStandingBody ? <p>{measuresStandingBody}</p> : null}
+            </section>
+          ) : null}
           <small>
             Assessment basis: {report.explainability.question_keys.length} response keys / {report.explainability.condition_tags.length} condition signals
           </small>
@@ -70,7 +104,15 @@ export function MeasuresAssessmentResult({
           <p>{emailArtifact.preview}</p>
         </section>
       ) : null}
-      <p>Continue into the Structured Environment.</p>
+      {progressionLabel || progressionTitle || progressionBody ? (
+        <section className="registry-progression-threshold">
+          {progressionLabel ? <span>{progressionLabel}</span> : null}
+          {progressionTitle ? <strong>{progressionTitle}</strong> : null}
+          {progressionBody ? <p>{progressionBody}</p> : null}
+        </section>
+      ) : (
+        <p>Continue into the Structured Environment.</p>
+      )}
       {structuredEnvironmentPassageVideoUrl ? (
         <video
           src={structuredEnvironmentPassageVideoUrl}
@@ -87,7 +129,7 @@ export function MeasuresAssessmentResult({
       )}
       <div className="registry-diagnostic-passage-controls" aria-label="Structured Environment passage controls">
         <button type="button" onClick={onEnterStructuredEnvironment}>
-          Enter Structured Environment
+          {progressionCta}
         </button>
         <button type="button" onClick={onTogglePassageMuted}>
           {passageMuted ? "Audio" : "Mute"}

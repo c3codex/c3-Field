@@ -30,6 +30,8 @@ type MeasuresAssessmentChamberProps = {
   evalSubmitted: boolean
   evalSubmitting: boolean
   passageMuted: boolean
+  assessmentCompletion?: Record<string, unknown> | null
+  marbleAccentReferenceUrl: string | null
   registryBackgroundUrl: string | null
   registryMarkUrl: string | null
   registryWatermarkUrl: string | null
@@ -69,6 +71,8 @@ export function MeasuresAssessmentChamber({
   evalSubmitted,
   evalSubmitting,
   passageMuted,
+  assessmentCompletion,
+  marbleAccentReferenceUrl,
   registryBackgroundUrl,
   registryMarkUrl,
   registryWatermarkUrl,
@@ -125,6 +129,7 @@ export function MeasuresAssessmentChamber({
   const chamberStyle = {
     ...registryTokenStyle,
     ...(registryBackgroundUrl ? { "--registry-assessment-background-image": `url("${registryBackgroundUrl}")` } : {}),
+    ...(marbleAccentReferenceUrl ? { "--registry-marble-accent-image": `url("${marbleAccentReferenceUrl}")` } : {}),
   } as CSSProperties
 
   return (
@@ -152,6 +157,7 @@ export function MeasuresAssessmentChamber({
 
         {evalSubmitted ? (
           <MeasuresAssessmentResult
+            assessmentCompletion={assessmentCompletion}
             emailArtifact={evalEmailArtifact}
             passageMuted={passageMuted}
             report={evalReport}

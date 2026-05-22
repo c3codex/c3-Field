@@ -5455,6 +5455,52 @@ body,
   gap: 0.85rem;
 }
 
+.measures-registry-runtime[data-material-family="obsidian"] .registry-assessment-chamber::after {
+  content: "";
+  position: absolute;
+  inset: auto 9% 0;
+  height: clamp(0.35rem, 1vw, 0.7rem);
+  border: 1px solid color-mix(in srgb, #d8b46b 34%, transparent);
+  border-bottom: 0;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, #f4efe4 18%, transparent), transparent 34%, color-mix(in srgb, #c7cbd2 14%, transparent)),
+    var(--registry-marble-accent-image);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.52;
+  pointer-events: none;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-standing-report,
+.measures-registry-runtime[data-material-family="obsidian"] .registry-email-artifact,
+.measures-registry-runtime[data-material-family="obsidian"] .registry-progression-threshold {
+  border-radius: 1.25rem 0.55rem 1.25rem 0.55rem;
+  border-color: color-mix(in srgb, #f4efe4 34%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #f4efe4 8%, transparent), transparent 44%),
+    color-mix(in srgb, #05070d 58%, transparent);
+  box-shadow: inset 0 0 1rem color-mix(in srgb, #ffffff 5%, transparent);
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-standing-findings ul {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0;
+  list-style: none;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-standing-findings li {
+  border-top: 1px solid color-mix(in srgb, #f4efe4 18%, transparent);
+  padding: 0.48rem 0 0;
+  color: var(--registry-brand-secondary-text);
+}
+
+.registry-standing-clarification,
+.registry-standing-measures,
+.registry-progression-threshold {
+  display: grid;
+  gap: 0.45rem;
+}
 .registry-assessment-resolving {
   display: grid;
   gap: 0.85rem;

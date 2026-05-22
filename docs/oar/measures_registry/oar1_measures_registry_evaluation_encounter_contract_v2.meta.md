@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: closeout
 document_scope: measures_registry_evaluation_encounter_contract_v2
 title: OAR1 - Measures Registry Evaluation Encounter Contract v2
-status: completed_git_deployed
+status: completed_git_deployed_amended
 version: v2
 operator: op044
 system: measures_registry
@@ -149,3 +149,52 @@ The deploy artifact was pushed to the Git-connected Measures branch. No `c3field
 Next routing:
 
 Monitor the Cloudflare Pages Measures branch deployment and verify the live Measures surface after the Git-connected build completes.
+
+## V2 AMENDMENT - MARBLE ACCENT + RETURNED ASSESSMENT
+
+Operator extended the same OAR2 with Section 8, Section 9, and Section 10:
+
+- precise `evaluation_chamber_lapis_marble_v1` styling contract
+- returned assessment content expansion
+- marble accent contract
+- `marble_accent_reference` media role
+
+Execution:
+
+```powershell
+node docs/oar/measures_registry/execute-measures-registry-evaluation-encounter-contract-v2-amendment.cjs
+```
+
+Evidence:
+
+```text
+docs/oar/measures_registry/measures_registry_evaluation_encounter_contract_v2_evidence.json
+```
+
+Readback confirmed:
+
+- `theme_key = evaluation_chamber_lapis_marble_v1`
+- `styling_contract.structural_material = marble`
+- `marble_accent_contract.required_media_role = marble_accent_reference`
+- `returned_assessment_contract.returned_assessment_title = Structural Drift Detected`
+- `assessment_completion.clarification_title = The issue is not AI itself.`
+- `assessment_completion.measures_registry_standing_title = Measures Registry Standing`
+- `assessment_completion.progression_threshold_cta = Review Recommended Progression Pathway`
+- 5 questions remain seated
+- each question retains 3 options
+
+Marble media role:
+
+| media_role | storage_bucket | storage_path | status |
+| --- | --- | --- | --- |
+| `marble_accent_reference` | `measures-registry` | `measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp` | public HEAD 200 |
+
+Renderer alignment:
+
+- `marble_accent_reference` is now included in required Measures media-role resolution.
+- The evaluation chamber receives the seated marble accent image as `--registry-marble-accent-image`.
+- Returned assessment sections render from DB-seated `assessment_completion` metadata.
+- Findings render as separated engraved rows rather than markdown-style bullets.
+- The progression CTA label renders from the seated contract.
+
+No frontend-owned copy, fallback media, or invented route authority was introduced.
