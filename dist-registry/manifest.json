@@ -1,7 +1,0 @@
-{
-  "name": "Measures Registry",
-  "short_name": "Registry",
-  "description": "Integrity Governance for AI Systems",
-  "start_url": "/",
-  "display": "standalone"
-}
