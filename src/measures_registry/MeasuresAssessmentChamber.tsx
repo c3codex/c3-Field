@@ -231,6 +231,9 @@ export function MeasuresAssessmentChamber({
             {currentQuestion ? (
               <fieldset className="registry-single-question-fieldset">
                 <legend className="registry-question-legend">Operational Evaluation</legend>
+                {registryMarkUrl ? (
+                  <img className="registry-question-mark" src={registryMarkUrl} alt="" aria-hidden="true" />
+                ) : null}
                 <div className="registry-structured-question" key={currentQuestion.questionKey}>
                   <span className="registry-structured-question-text">{currentQuestion.question}</span>
                   <div className="registry-structured-options" role="radiogroup" aria-label={currentQuestion.question}>

@@ -5218,8 +5218,22 @@ body,
 }
 
 .registry-single-question-fieldset {
+  position: relative;
   justify-self: center;
   width: min(40rem, 100%);
+}
+
+.registry-question-mark {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: clamp(1.5rem, 2.5vw, 2rem);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] .registry-question-mark {
+  opacity: 0.72;
 }
 
 .registry-question-legend {
