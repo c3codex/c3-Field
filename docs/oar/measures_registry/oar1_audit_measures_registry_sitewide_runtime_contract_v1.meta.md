@@ -1,6 +1,6 @@
 ---
 document_type: oar1
-authority_level: working
+authority_level: seeded
 document_scope: measures_registry_sitewide_runtime
 title: OAR1 — Audit Measures Registry Sitewide Runtime Contract
 status: closed
@@ -9,6 +9,16 @@ operator: op044
 system: measures_registry
 source_oar2: docs/oar/measures_registry/oar2_audit_measures_registry_sitewide_runtime_contract_v1.meta.md
 executor: claude_vs
+system_intel: true
+intel_scope:
+  - runtime-governance-preflight
+  - encounter-contract-reference
+  - frontend-authority-drift-reference
+  - codex-first-implementation-sequencing
+  - ai-executor-interoperability
+  - runtime-stabilization-intelligence
+referenced_by:
+  - docs/oar/c3field/oar2_seat_measures_registry_sitewide_runtime_audit_as_system_intel_v1.meta.md
 tags:
   - oar1
   - measures-registry
@@ -17,6 +27,9 @@ tags:
   - style-contract
   - audit
   - codex-first
+  - system-intel
+  - implementation-intelligence
+  - c3field
 ---
 
 # OAR1 — Audit Measures Registry Sitewide Runtime Contract
