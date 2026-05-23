@@ -36,6 +36,20 @@ const REQUIRED_SECTION_KEYS = [
 ] as const
 const OPERATOR_SECTION_KEYS = ["seat_hold_notification_review"] as const
 const QUERY_SECTION_KEYS = [...REQUIRED_SECTION_KEYS, ...OPERATOR_SECTION_KEYS] as const
+const REGISTERED_ENCOUNTER_KEYS = [
+  "ai_isnt_broken_intro",
+  "evaluate_structure_path",
+  "eval_passage",
+  "connect_src",
+  "measures_assessment",
+  "structural_drift_publication",
+  "phase_payment",
+  "structure_passage",
+  "structured_eval",
+  "measures_phases_reveal",
+  "about_measures_registry",
+  "measures_eval_email_contract",
+] as const
 const REQUIRED_MEDIA_ROLES = [
   "epigraph_video",
   "hero_image",
@@ -118,6 +132,13 @@ type SurfaceState =
   | "registered_process_log"
   | "publication_dispatch"
   | "seat_hold_notification_review"
+  | "connect_src"
+  | "measures_assessment"
+  | "structure_passage"
+  | "structured_eval"
+  | "measures_phases_reveal"
+  | "about_measures_registry"
+  | "measures_eval_email_contract"
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
   intro: "landing_root",
@@ -138,6 +159,21 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   registered_process_log: "registered_process_log",
   publication_dispatch: "publication_dispatch",
   seat_hold_notification_review: "seat_hold_notification_review",
+  connect_src: "connect_src",
+  measures_assessment: "measures_assessment",
+  structure_passage: "structure_passage",
+  structured_eval: "structured_eval",
+  measures_phases_reveal: "measures_phases_reveal",
+  about_measures_registry: "about_measures_registry",
+  measures_eval_email_contract: "measures_eval_email_contract",
+}
+
+const REGISTERED_KEY_TO_SURFACE: Partial<Record<string, SurfaceState>> = {
+  ai_isnt_broken_intro: "intro",
+  evaluate_structure_path: "path_choice",
+  eval_passage: "educational_diagnostic_passage",
+  structural_drift_publication: "structural_drift_dispatches",
+  reserve_seat: "reserve_seat",
 }
 
 const STRUCTURAL_DRIFT_DISPATCH_ROUTE = "/publication/structural_drift/agents_of_chaos_dispatch_v1"
@@ -149,8 +185,10 @@ function surfaceFromQuery(value: string | null): SurfaceState {
 }
 
 function surfaceFromEncounterKey(value: string | null): SurfaceState | null {
+  if (!value) return null
   const match = Object.entries(SURFACE_QUERY).find(([, queryValue]) => queryValue === value)
-  return (match?.[0] as SurfaceState | undefined) ?? null
+  if (match) return match[0] as SurfaceState
+  return REGISTERED_KEY_TO_SURFACE[value] ?? null
 }
 
 type RequiredSectionKey = (typeof REQUIRED_SECTION_KEYS)[number]
@@ -636,6 +674,7 @@ export default function MeasuresRegistryRuntime() {
   const [publicationError, setPublicationError] = useState<string | null>(null)
   const epigraphVideoRef = useRef<HTMLVideoElement | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
+  const [connectSrcNextEncounter, setConnectSrcNextEncounter] = useState<"measures_assessment" | "structured_eval">("measures_assessment")
 
   function historyUrl(surface: SurfaceState) {
     const url = new URL(window.location.href)
@@ -705,7 +744,7 @@ export default function MeasuresRegistryRuntime() {
         supabase
           .from("measures_encounter_def")
           .select("encounter_key, display_title, metadata")
-          .in("encounter_key", [...QUERY_SECTION_KEYS])
+          .in("encounter_key", [...QUERY_SECTION_KEYS, ...REGISTERED_ENCOUNTER_KEYS])
           .order("sequence_order", { ascending: true }),
         supabase
           .from("measures_media_map")
@@ -840,14 +879,22 @@ export default function MeasuresRegistryRuntime() {
     return style as CSSProperties
   }, [designTokens])
   const showDiagnostics = false
-  const landingRootCopy = sectionCopy(sectionMap.get("landing_root"))
-  const educationalDiagnosticPassageCopy = sectionCopy(sectionMap.get("educational_diagnostic_passage"))
+  const landingRootCopy = sectionCopy(sectionMap.get("ai_isnt_broken_intro") ?? sectionMap.get("landing_root"))
+  const educationalDiagnosticPassageCopy = sectionCopy(
+    sectionMap.get("eval_passage") ?? sectionMap.get("educational_diagnostic_passage"),
+  )
   const introCopy = landingRootCopy
-  const pathChoiceCopy = sectionCopy(sectionMap.get("landing_path_choice"))
+  const pathChoiceCopy = sectionCopy(
+    sectionMap.get("evaluate_structure_path") ?? sectionMap.get("landing_path_choice"),
+  )
   const educateEvalCopy = sectionCopy(sectionMap.get("educate_eval_encounter"))
-  const structuralDriftDispatchesCopy = sectionCopy(sectionMap.get("structural_drift_dispatches"))
+  const structuralDriftDispatchesCopy = sectionCopy(
+    sectionMap.get("structural_drift_publication") ?? sectionMap.get("structural_drift_dispatches"),
+  )
   const cohortConversionCopy = sectionCopy(sectionMap.get("cohort_conversion_encounter"))
-  const evaluationChamberCopy = sectionCopy(sectionMap.get("measures_ai_operational_evaluation"))
+  const evaluationChamberCopy = sectionCopy(
+    sectionMap.get("measures_assessment") ?? sectionMap.get("measures_ai_operational_evaluation"),
+  )
   const iisEvalCopy = sectionCopy(sectionMap.get("iis_eval_gate1"))
   const understandFailureCopy = sectionCopy(sectionMap.get("understand_failure"))
   const c3FieldCopy = sectionCopy(sectionMap.get("c3_field"))
@@ -858,6 +905,17 @@ export default function MeasuresRegistryRuntime() {
   const systemsSeatHoldCopy = sectionCopy(sectionMap.get("systems_seat_hold"))
   const registeredProcessLogCopy = sectionCopy(sectionMap.get("registered_process_log"))
   const notificationReviewCopy = sectionCopy(sectionMap.get("seat_hold_notification_review"))
+  const connectSrcCopy = sectionCopy(sectionMap.get("connect_src"))
+  const structurePassageSection = sectionMap.get("structure_passage")
+  const structurePassageCopy = sectionCopy(structurePassageSection)
+  const structuredEvalSection = sectionMap.get("structured_eval")
+  const structuredEvalCopy = sectionCopy(structuredEvalSection)
+  const measuresPhasesRevealSection = sectionMap.get("measures_phases_reveal")
+  const measuresPhasesRevealCopy = sectionCopy(measuresPhasesRevealSection)
+  const aboutMeasuresRegistrySection = sectionMap.get("about_measures_registry")
+  const aboutMeasuresRegistryCopy = sectionCopy(aboutMeasuresRegistrySection)
+  const measuresEvalEmailSection = sectionMap.get("measures_eval_email_contract")
+  const measuresEvalEmailCopy = sectionCopy(measuresEvalEmailSection)
   const structuralDriftPublication = publicationRows.find((row) => row.publication_key === "structural_drift")
   const structuralDriftDispatches = publicationDispatchRows.filter((row) => row.publication_key === "structural_drift")
   const selectedDispatchKey = window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)
@@ -888,7 +946,9 @@ export default function MeasuresRegistryRuntime() {
     mediaUrl(mediaMap.get("installation_tone_marble")) ??
     mediaUrl(mediaMap.get("installation_tone_marble_rise_return_v1"))
   const activeEvaluationEncounterKey =
-    activeSurface === "measures_ai_operational_evaluation"
+    activeSurface === "measures_ai_operational_evaluation" ||
+    activeSurface === "measures_assessment" ||
+    activeSurface === "structured_eval"
       ? "measures_ai_operational_evaluation"
       : "iis_eval_gate1"
   const activeEvaluationCopy =
@@ -1202,6 +1262,376 @@ export default function MeasuresRegistryRuntime() {
     if (behavior === "route_surface" && routedSurface) {
       navigateSurface(routedSurface)
     }
+  }
+
+  function renderConnectSrcSurface() {
+    return (
+      <main className="measures-registry-runtime" data-surface="connect_src" style={registryTokenStyle}>
+        {renderHeader(connectSrcCopy.header)}
+        <section className="registry-connect-src" aria-label={connectSrcCopy.title ?? "Structured Response Contract"}>
+          {registryWatermarkUrl ? (
+            <img className="registry-authority-watermark" src={registryWatermarkUrl} alt="" aria-hidden="true" />
+          ) : null}
+          <div className="registry-encounter-entry">
+            {connectSrcCopy.eyebrow ? <span>{connectSrcCopy.eyebrow}</span> : null}
+            <h1>{connectSrcCopy.title ?? "Structured Response Contract"}</h1>
+            {connectSrcCopy.subtitle ? <p>{connectSrcCopy.subtitle}</p> : null}
+          </div>
+          {connectSrcCopy.paragraphs.length > 0 ? (
+            <div className="registry-connect-paragraphs">
+              {connectSrcCopy.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          ) : null}
+          <div className="registry-encounter-actions">
+            <button
+              type="button"
+              onClick={() => navigateSurface(connectSrcNextEncounter)}
+            >
+              {connectSrcCopy.ctaPrimary ?? "Continue to Evaluation"}
+            </button>
+          </div>
+        </section>
+      </main>
+    )
+  }
+
+  function renderStructurePassageSurface() {
+    const approvedCopy = asRecord(structurePassageSection?.metadata?.approved_copy_pending_contract)
+    const eyebrow = asString(approvedCopy?.eyebrow) ?? structurePassageCopy.eyebrow
+    const title = asString(approvedCopy?.title) ?? structurePassageCopy.title ?? "How does a structured environment optimize AI performance?"
+    const subtitle = asString(approvedCopy?.subtitle) ?? structurePassageCopy.subtitle
+    const materialFamily =
+      typeof structurePassageCopy.stylingContract?.material_family === "string"
+        ? structurePassageCopy.stylingContract.material_family
+        : "obsidian"
+
+    function navigateToStructuredEval() {
+      setConnectSrcNextEncounter("structured_eval")
+      navigateSurface("connect_src")
+    }
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="structure_passage"
+        data-material-family={materialFamily}
+        style={registryTokenStyle}
+      >
+        <section className="registry-diagnostic-passage" aria-label={title}>
+          {structuredEnvironmentPassageVideoUrl ? (
+            <video
+              src={structuredEnvironmentPassageVideoUrl}
+              autoPlay
+              muted={passageMuted}
+              controls
+              playsInline
+              preload="auto"
+              onEnded={navigateToStructuredEval}
+              aria-label="Structure passage"
+            />
+          ) : null}
+          <div className="registry-diagnostic-passage-controls" aria-label="Passage controls">
+            <button type="button" onClick={navigateToStructuredEval}>
+              Continue
+            </button>
+            <button type="button" onClick={() => setPassageMuted((current) => !current)}>
+              {passageMuted ? "Audio" : "Mute"}
+            </button>
+          </div>
+          <div>
+            {eyebrow ? <span>{eyebrow}</span> : null}
+            <h1>{title}</h1>
+            {subtitle ? <p>{subtitle}</p> : null}
+          </div>
+          <button type="button" onClick={navigateToStructuredEval}>
+            Continue to Structured Evaluation
+          </button>
+        </section>
+      </main>
+    )
+  }
+
+  function renderMeasuresAssessmentSurface() {
+    const structuredQuestions = allAssessmentMechanics(evaluationChamberCopy.assessmentMechanics)
+
+    return (
+      <MeasuresAssessmentChamber
+        encounterKey="measures_ai_operational_evaluation"
+        assessmentProcessTitle={
+          asString(evaluationChamberCopy.assessmentChamber?.title) ??
+          asString(evaluationChamberCopy.encounterContract?.content_blocks && asRecord(evaluationChamberCopy.encounterContract.content_blocks)?.process_title) ??
+          undefined
+        }
+        assessmentSupportLine={
+          asString(evaluationChamberCopy.encounterContract?.content_blocks && asRecord(evaluationChamberCopy.encounterContract.content_blocks)?.support_line) ??
+          undefined
+        }
+        assessmentSubSupportLine={
+          asString(evaluationChamberCopy.encounterContract?.content_blocks && asRecord(evaluationChamberCopy.encounterContract.content_blocks)?.sub_support_line) ??
+          undefined
+        }
+        evalAnswers={evalAnswers}
+        evalEmailArtifact={evalEmailArtifact}
+        evalError={evalError}
+        evalFields={evalFields}
+        evalReport={evalReport}
+        evalSectionIndex={evalSectionIndex}
+        evalStep={evalStep}
+        evalSubmitted={evalSubmitted}
+        evalSubmitting={evalSubmitting}
+        passageMuted={passageMuted}
+        registryBackgroundUrl={lapisBackgroundUrl}
+        registryMarkUrl={registryMarkUrl}
+        marbleAccentReferenceUrl={marbleAccentReferenceUrl}
+        registryWatermarkUrl={registryWatermarkUrl}
+        registryTokenStyle={registryTokenStyle}
+        assessmentCompletion={evaluationChamberCopy.assessmentCompletion}
+        layoutContract={evaluationChamberCopy.layoutContract}
+        srcIntakeContract={evaluationChamberCopy.srcIntakeContract}
+        stylingContract={evaluationChamberCopy.stylingContract}
+        resolutionText={evaluationChamberCopy.resolutionText ?? undefined}
+        showQuestionContext={false}
+        structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}
+        structuredQuestions={structuredQuestions}
+        onBackQuestion={() => setEvalSectionIndex((current) => Math.max(0, current - 1))}
+        onCompleteQuestionClick={(event, currentQuestion) => {
+          if (currentQuestion && validateDiagnosticSection([currentQuestion])) return
+          event.preventDefault()
+        }}
+        onContinueQuestion={(currentQuestion) => {
+          if (!validateDiagnosticSection([currentQuestion])) return
+          setEvalSectionIndex((current) => Math.min(structuredQuestions.length - 1, current + 1))
+        }}
+        onContinueToDiagnostic={continueToDiagnostic}
+        onEnterStructuredEnvironment={() => navigateSurface("measures_phases_reveal")}
+        onSetEvalAnswerContext={setEvalAnswerContext}
+        onSetEvalAnswerSelection={setEvalAnswerSelection}
+        onSetEvalField={setEvalField}
+        onSubmitEvaluation={submitIisEvaluation}
+        onStructuredEnvironmentVideoEnded={() => navigateSurface("measures_phases_reveal")}
+        onTogglePassageMuted={() => setPassageMuted((current) => !current)}
+      />
+    )
+  }
+
+  function renderStructuredEvalSurface() {
+    const mechanics = structuredEvalCopy.assessmentMechanics ?? evaluationChamberCopy.assessmentMechanics
+    const stylingContract = structuredEvalCopy.stylingContract ?? evaluationChamberCopy.stylingContract
+    const layoutContract = structuredEvalCopy.layoutContract ?? evaluationChamberCopy.layoutContract
+    const srcIntakeContract = structuredEvalCopy.srcIntakeContract ?? evaluationChamberCopy.srcIntakeContract
+    const assessmentCompletion = structuredEvalCopy.assessmentCompletion ?? evaluationChamberCopy.assessmentCompletion
+    const structuredQuestions = allAssessmentMechanics(mechanics)
+
+    return (
+      <MeasuresAssessmentChamber
+        encounterKey="measures_ai_operational_evaluation"
+        assessmentProcessTitle={
+          asString(structuredEvalCopy.assessmentChamber?.title) ??
+          asString(evaluationChamberCopy.assessmentChamber?.title) ??
+          undefined
+        }
+        assessmentSupportLine={undefined}
+        assessmentSubSupportLine={undefined}
+        evalAnswers={evalAnswers}
+        evalEmailArtifact={evalEmailArtifact}
+        evalError={evalError}
+        evalFields={evalFields}
+        evalReport={evalReport}
+        evalSectionIndex={evalSectionIndex}
+        evalStep={evalStep}
+        evalSubmitted={evalSubmitted}
+        evalSubmitting={evalSubmitting}
+        passageMuted={passageMuted}
+        registryBackgroundUrl={lapisBackgroundUrl}
+        registryMarkUrl={registryMarkUrl}
+        marbleAccentReferenceUrl={marbleAccentReferenceUrl}
+        registryWatermarkUrl={registryWatermarkUrl}
+        registryTokenStyle={registryTokenStyle}
+        assessmentCompletion={assessmentCompletion}
+        layoutContract={layoutContract}
+        srcIntakeContract={srcIntakeContract}
+        stylingContract={stylingContract}
+        resolutionText={structuredEvalCopy.resolutionText ?? evaluationChamberCopy.resolutionText ?? undefined}
+        showQuestionContext={false}
+        structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}
+        structuredQuestions={structuredQuestions}
+        onBackQuestion={() => setEvalSectionIndex((current) => Math.max(0, current - 1))}
+        onCompleteQuestionClick={(event, currentQuestion) => {
+          if (currentQuestion && validateDiagnosticSection([currentQuestion])) return
+          event.preventDefault()
+        }}
+        onContinueQuestion={(currentQuestion) => {
+          if (!validateDiagnosticSection([currentQuestion])) return
+          setEvalSectionIndex((current) => Math.min(structuredQuestions.length - 1, current + 1))
+        }}
+        onContinueToDiagnostic={continueToDiagnostic}
+        onEnterStructuredEnvironment={() => navigateSurface("measures_phases_reveal")}
+        onSetEvalAnswerContext={setEvalAnswerContext}
+        onSetEvalAnswerSelection={setEvalAnswerSelection}
+        onSetEvalField={setEvalField}
+        onSubmitEvaluation={submitIisEvaluation}
+        onStructuredEnvironmentVideoEnded={() => navigateSurface("measures_phases_reveal")}
+        onTogglePassageMuted={() => setPassageMuted((current) => !current)}
+      />
+    )
+  }
+
+  function renderMeasuresPhasesRevealSurface() {
+    const materialFamily = "marble"
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="measures_phases_reveal"
+        data-material-family={materialFamily}
+        style={registryTokenStyle}
+      >
+        {renderHeader(measuresPhasesRevealCopy.header)}
+        <section className="registry-phases-reveal" aria-label={measuresPhasesRevealCopy.title ?? "Measures phases reveal"}>
+          {lapisBackgroundUrl ? (
+            <img className="registry-phases-background" src={lapisBackgroundUrl} alt="" aria-hidden="true" />
+          ) : null}
+          <div className="registry-encounter-entry">
+            {measuresPhasesRevealCopy.eyebrow ? <span>{measuresPhasesRevealCopy.eyebrow}</span> : null}
+            {measuresPhasesRevealCopy.title ? <h1>{measuresPhasesRevealCopy.title}</h1> : null}
+            {measuresPhasesRevealCopy.subtitle ? <p>{measuresPhasesRevealCopy.subtitle}</p> : null}
+          </div>
+          {evalReport ? (
+            <div className="registry-phases-standing" aria-label="Assessment standing">
+              <span>{evalReport.assessment_title}</span>
+              <h2>{evalReport.assessment_result}</h2>
+              {evalReport.environmental_standing ? <p>{evalReport.environmental_standing}</p> : null}
+              {evalReport.recommended_structured_action ? (
+                <p>{evalReport.recommended_structured_action}</p>
+              ) : null}
+            </div>
+          ) : null}
+          {measuresPhasesRevealCopy.sections.length > 0 ? (
+            <div className="registry-phases-sections">
+              {measuresPhasesRevealCopy.sections.map((section, index) => {
+                const title = asString(section.title)
+                const body = asString(section.body)
+                return (
+                  <article key={title ?? index}>
+                    {title ? <h3>{title}</h3> : null}
+                    {body ? <p>{body}</p> : null}
+                  </article>
+                )
+              })}
+            </div>
+          ) : null}
+          <div className="registry-encounter-actions">
+            <button type="button" onClick={() => navigateSurface("about_measures_registry")}>
+              {measuresPhasesRevealCopy.ctaPrimary ?? "Continue"}
+            </button>
+          </div>
+        </section>
+      </main>
+    )
+  }
+
+  function renderAboutMeasuresRegistrySurface() {
+    const approvedContent = asRecord(aboutMeasuresRegistrySection?.metadata?.approved_content_contract)
+    const eyebrow = asString(approvedContent?.eyebrow) ?? aboutMeasuresRegistryCopy.eyebrow ?? "ABOUT MEASURES REGISTRY"
+    const title = asString(approvedContent?.title) ?? aboutMeasuresRegistryCopy.title ?? "A registered environment for governing AI behavior."
+    const subtitle = asString(approvedContent?.subtitle) ?? aboutMeasuresRegistryCopy.subtitle
+    const primaryStatement = asString(approvedContent?.primary_statement)
+    const supportPoints = asStringArray(approvedContent?.support_points ?? [])
+    const ctaLabel = asString(approvedContent?.cta_label) ?? aboutMeasuresRegistryCopy.ctaPrimary ?? "Read Structural Drift"
+    const materialFamily = "marble"
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="about_measures_registry"
+        data-material-family={materialFamily}
+        style={registryTokenStyle}
+      >
+        {renderHeader(aboutMeasuresRegistryCopy.header)}
+        <section className="registry-about-authority" aria-label={title}>
+          {marbleAccentReferenceUrl ? (
+            <img className="registry-about-marble" src={marbleAccentReferenceUrl} alt="" aria-hidden="true" />
+          ) : null}
+          <div className="registry-encounter-entry">
+            {eyebrow ? <span>{eyebrow}</span> : null}
+            <h1>{title}</h1>
+            {subtitle ? <p>{subtitle}</p> : null}
+          </div>
+          {primaryStatement ? (
+            <p className="registry-about-primary-statement">{primaryStatement}</p>
+          ) : null}
+          {supportPoints.length > 0 ? (
+            <ol className="registry-about-support-points">
+              {supportPoints.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ol>
+          ) : null}
+          <div className="registry-encounter-actions">
+            <button type="button" onClick={() => navigateSurface("structural_drift_dispatches")}>
+              {ctaLabel}
+            </button>
+          </div>
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
+  }
+
+  function renderMeasuresEvalEmailContractSurface() {
+    const emailContract = asRecord(measuresEvalEmailSection?.metadata?.email_delivery_contract)
+    const emailStructure = asRecord(emailContract?.email_structure)
+    const subject = asString(emailStructure?.subject) ?? "Your Measures Registry Assessment Package"
+    const preheader = asString(emailStructure?.preheader) ?? "Your assessment result and recommended structural response are enclosed."
+
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="measures_eval_email_contract"
+        style={registryTokenStyle}
+      >
+        {renderHeader(measuresEvalEmailCopy.header)}
+        <section className="registry-eval-email-contract" aria-label={measuresEvalEmailCopy.title ?? subject}>
+          <div className="registry-encounter-entry">
+            {measuresEvalEmailCopy.eyebrow ? <span>{measuresEvalEmailCopy.eyebrow}</span> : null}
+            <h1>{measuresEvalEmailCopy.title ?? subject}</h1>
+            <p>{preheader}</p>
+          </div>
+          {evalReport ? (
+            <div className="registry-email-assessment-package" aria-label="Assessment package">
+              <article className="registry-email-section">
+                <span>{evalReport.assessment_title}</span>
+                <h2>{evalReport.assessment_result}</h2>
+                {evalReport.environmental_standing ? <p>{evalReport.environmental_standing}</p> : null}
+              </article>
+              {evalReport.findings.length > 0 ? (
+                <article className="registry-email-section">
+                  <span>Primary Finding</span>
+                  {evalReport.findings.map((finding) => (
+                    <p key={finding}>{finding}</p>
+                  ))}
+                </article>
+              ) : null}
+              <article className="registry-email-section">
+                <span>Assessment Interpretation</span>
+                <p>{evalReport.operational_exposure_summary}</p>
+              </article>
+              <article className="registry-email-section">
+                <span>{evalReport.recommended_response_label}</span>
+                <p>{evalReport.recommended_structured_action}</p>
+              </article>
+            </div>
+          ) : null}
+          <div className="registry-encounter-actions">
+            <button type="button" onClick={() => navigateSurface("reserve_seat")}>
+              {measuresEvalEmailCopy.ctaPrimary ?? "Reserve Seat"}
+            </button>
+          </div>
+        </section>
+      </main>
+    )
   }
 
   function renderCorrectionReport() {
@@ -1807,14 +2237,28 @@ export default function MeasuresRegistryRuntime() {
               controls
               playsInline
               preload="auto"
-              onEnded={() => navigateSurface("iis_eval_gate1")}
+              onEnded={() => {
+                if (sectionMap.has("connect_src")) {
+                  setConnectSrcNextEncounter("measures_assessment")
+                  navigateSurface("connect_src")
+                } else {
+                  navigateSurface("iis_eval_gate1")
+                }
+              }}
               aria-label="Measures Registry diagnostic passage"
             />
           ) : null}
           <div className="registry-diagnostic-passage-controls" aria-label="Passage controls">
             <button
               type="button"
-              onClick={() => navigateSurface("iis_eval_gate1")}
+              onClick={() => {
+                if (sectionMap.has("connect_src")) {
+                  setConnectSrcNextEncounter("measures_assessment")
+                  navigateSurface("connect_src")
+                } else {
+                  navigateSurface("iis_eval_gate1")
+                }
+              }}
             >
               Continue
             </button>
@@ -1832,7 +2276,14 @@ export default function MeasuresRegistryRuntime() {
           </div>
           <button
             type="button"
-            onClick={() => navigateSurface("iis_eval_gate1")}
+            onClick={() => {
+              if (sectionMap.has("connect_src")) {
+                setConnectSrcNextEncounter("measures_assessment")
+                navigateSurface("connect_src")
+              } else {
+                navigateSurface("iis_eval_gate1")
+              }
+            }}
           >
             {asString(continueAction?.label) ?? "Continue to Evaluation"}
           </button>
@@ -2922,15 +3373,25 @@ export default function MeasuresRegistryRuntime() {
           <section className="registry-field-guide-cta" aria-label="Evaluation entry">
             <div>
               <span>Diagnostic Intake</span>
-              <h2>Begin Structural Evaluation</h2>
-              <p>Move from recognition into structured diagnostic intake.</p>
+              <h2>{evalReport ? "Continue to Assessment Package" : "Begin Structural Evaluation"}</h2>
+              <p>
+                {evalReport
+                  ? "Your assessment result is ready. Continue to receive your assessment package."
+                  : "Move from recognition into structured diagnostic intake."}
+              </p>
             </div>
-            <button
-              type="button"
-              onClick={() => handleAction(asString(beginAction?.action_key) ?? "begin_structural_evaluation", dispatchActions)}
-            >
-              {asString(beginAction?.label) ?? "Begin Structural Evaluation"}
-            </button>
+            {evalReport ? (
+              <button type="button" onClick={() => navigateSurface("measures_eval_email_contract")}>
+                Continue to Assessment Package
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleAction(asString(beginAction?.action_key) ?? "begin_structural_evaluation", dispatchActions)}
+              >
+                {asString(beginAction?.label) ?? "Begin Structural Evaluation"}
+              </button>
+            )}
           </section>
 
           {renderSystemFooter()}
@@ -3047,9 +3508,15 @@ export default function MeasuresRegistryRuntime() {
               <p>{selectedPublicationDispatch.secondary_cta}</p>
             </div>
             <div>
-              <button type="button" onClick={() => navigateSurface("educational_diagnostic_passage")}>
-                {selectedPublicationDispatch.primary_cta ?? "Evaluate Structural Coherence"}
-              </button>
+              {evalReport ? (
+                <button type="button" onClick={() => navigateSurface("measures_eval_email_contract")}>
+                  Continue to Assessment Package
+                </button>
+              ) : (
+                <button type="button" onClick={() => navigateSurface("educational_diagnostic_passage")}>
+                  {selectedPublicationDispatch.primary_cta ?? "Evaluate Structural Coherence"}
+                </button>
+              )}
               {selectedPublicationDispatch.article_url ?? selectedPublicationDispatch.external_url ? (
                 <a href={selectedPublicationDispatch.article_url ?? selectedPublicationDispatch.external_url ?? ""} target="_blank" rel="noreferrer">
                   Read on Paragraph
@@ -3096,6 +3563,13 @@ export default function MeasuresRegistryRuntime() {
   const activeSurfaceElement =
     activeSurface === "path_choice" ? renderPathChoiceSurface()
     : activeSurface === "educational_diagnostic_passage" ? renderEducationalDiagnosticPassageSurface()
+    : activeSurface === "connect_src" ? renderConnectSrcSurface()
+    : activeSurface === "structure_passage" ? renderStructurePassageSurface()
+    : activeSurface === "measures_assessment" ? renderMeasuresAssessmentSurface()
+    : activeSurface === "structured_eval" ? renderStructuredEvalSurface()
+    : activeSurface === "measures_phases_reveal" ? renderMeasuresPhasesRevealSurface()
+    : activeSurface === "about_measures_registry" ? renderAboutMeasuresRegistrySurface()
+    : activeSurface === "measures_eval_email_contract" ? renderMeasuresEvalEmailContractSurface()
     : activeSurface === "educate_eval" ? renderEducateEvalSurface()
     : activeSurface === "structural_drift_dispatches" ? renderStructuralDriftDispatchesSurface()
     : activeSurface === "cohort_conversion" ? renderCohortConversionSurface()
