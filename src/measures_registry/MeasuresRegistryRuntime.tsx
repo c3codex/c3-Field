@@ -2241,6 +2241,13 @@ export default function MeasuresRegistryRuntime() {
               playsInline
               preload="auto"
               onEnded={() => {
+                if (import.meta.env.DEV) {
+                  console.debug("[MR] eval_passage video ended", {
+                    has_connect_src: sectionMap.has("connect_src"),
+                    routing_to: sectionMap.has("connect_src") ? "connect_src" : "iis_eval_gate1",
+                    connectSrcNextEncounter: "measures_assessment",
+                  })
+                }
                 if (sectionMap.has("connect_src")) {
                   setConnectSrcNextEncounter("measures_assessment")
                   navigateSurface("connect_src")
@@ -2255,6 +2262,13 @@ export default function MeasuresRegistryRuntime() {
             <button
               type="button"
               onClick={() => {
+                if (import.meta.env.DEV) {
+                  console.debug("[MR] eval_passage continue click", {
+                    has_connect_src: sectionMap.has("connect_src"),
+                    routing_to: sectionMap.has("connect_src") ? "connect_src" : "iis_eval_gate1",
+                    connectSrcNextEncounter: "measures_assessment",
+                  })
+                }
                 if (sectionMap.has("connect_src")) {
                   setConnectSrcNextEncounter("measures_assessment")
                   navigateSurface("connect_src")
@@ -2280,6 +2294,13 @@ export default function MeasuresRegistryRuntime() {
           <button
             type="button"
             onClick={() => {
+              if (import.meta.env.DEV) {
+                console.debug("[MR] eval_passage continue to evaluation click", {
+                  has_connect_src: sectionMap.has("connect_src"),
+                  routing_to: sectionMap.has("connect_src") ? "connect_src" : "iis_eval_gate1",
+                  connectSrcNextEncounter: "measures_assessment",
+                })
+              }
               if (sectionMap.has("connect_src")) {
                 setConnectSrcNextEncounter("measures_assessment")
                 navigateSurface("connect_src")
