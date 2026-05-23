@@ -139,6 +139,7 @@ type SurfaceState =
   | "measures_phases_reveal"
   | "about_measures_registry"
   | "measures_eval_email_contract"
+  | "phase_payment"
 const HISTORY_SOURCE = "measures_registry"
 const SURFACE_QUERY: Record<SurfaceState, string> = {
   intro: "landing_root",
@@ -166,6 +167,7 @@ const SURFACE_QUERY: Record<SurfaceState, string> = {
   measures_phases_reveal: "measures_phases_reveal",
   about_measures_registry: "about_measures_registry",
   measures_eval_email_contract: "measures_eval_email_contract",
+  phase_payment: "phase_payment",
 }
 
 const REGISTERED_KEY_TO_SURFACE: Partial<Record<string, SurfaceState>> = {
@@ -916,6 +918,7 @@ export default function MeasuresRegistryRuntime() {
   const aboutMeasuresRegistryCopy = sectionCopy(aboutMeasuresRegistrySection)
   const measuresEvalEmailSection = sectionMap.get("measures_eval_email_contract")
   const measuresEvalEmailCopy = sectionCopy(measuresEvalEmailSection)
+  const phasePaymentCopy = sectionCopy(sectionMap.get("phase_payment"))
   const structuralDriftPublication = publicationRows.find((row) => row.publication_key === "structural_drift")
   const structuralDriftDispatches = publicationDispatchRows.filter((row) => row.publication_key === "structural_drift")
   const selectedDispatchKey = window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)
@@ -2791,6 +2794,11 @@ export default function MeasuresRegistryRuntime() {
                   data-state={offering.enrollment_state}
                   disabled={!isOpen}
                   onClick={() => {
+                    if (sectionMap.has("phase_payment")) {
+                      navigateSurface("phase_payment")
+                      return
+                    }
+
                     if (offering.offering_surface_key === "systems_offering") {
                       navigateSurface("systems_offering")
                     }
@@ -2888,7 +2896,7 @@ export default function MeasuresRegistryRuntime() {
 
   async function submitSeatHold(
     event: FormEvent<HTMLFormElement>,
-    encounterKey: "foundation_seat_hold" | "systems_seat_hold",
+    encounterKey: "foundation_seat_hold" | "systems_seat_hold" | "phase_payment",
     copy: ReturnType<typeof sectionCopy>,
   ) {
     event.preventDefault()
@@ -3014,6 +3022,72 @@ export default function MeasuresRegistryRuntime() {
             ) : null}
             {holdError[encounterKey] ? (
               <p className="reserve-seat-error">{holdError[encounterKey]}</p>
+            ) : null}
+          </form>
+        </section>
+      </main>
+    )
+  }
+
+  function renderPhasePaymentSurface() {
+    const copy = phasePaymentCopy
+    const actions = copy.actions
+    const emailField = copy.fields.find(
+      (field) =>
+        asString(field.key) === "email" &&
+        asString(field.type) === "email" &&
+        field.required === true,
+    )
+    const primaryLabel =
+      copy.ctaPrimary ??
+      asString(actions.find((action) => asString(action.action_key) === "reserve_seat_hold")?.label) ??
+      "Reserve Seat"
+    const backHeaderAction = {
+      label: "Back",
+      behavior: "route_surface",
+      action_key: "back_to_reserve_seat",
+      target_encounter_key: "reserve_seat",
+    }
+
+    return (
+      <main className="measures-registry-runtime" data-surface="phase_payment" style={registryTokenStyle}>
+        {renderHeader(null, [backHeaderAction])}
+        <section className="registry-hold-surface" aria-label={copy.entryLabel ?? "Seat Hold"}>
+          <div className="registry-encounter-entry">
+            {copy.entryLabel ? <span>{copy.entryLabel}</span> : null}
+            {copy.entryHeadline ? <h1>{copy.entryHeadline}</h1> : <h1>Reserve Your Seat</h1>}
+            {copy.entrySub ? <p>{copy.entrySub}</p> : null}
+          </div>
+          <form
+            className="registry-hold-form"
+            onSubmit={(event) => submitSeatHold(event, "phase_payment", copy)}
+          >
+            {emailField ? (
+              <label>
+                <span>Email</span>
+                <input
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={holdEmail}
+                  onChange={(event) => setHoldEmail(event.target.value)}
+                />
+              </label>
+            ) : null}
+            <div className="registry-encounter-actions">
+              <button type="submit" disabled={holdSubmitting || !emailField}>
+                {holdSubmitting ? "Reserving..." : primaryLabel}
+              </button>
+            </div>
+            {holdStatus["phase_payment"] ? (
+              <p className="reserve-seat-success">
+                {holdStatus["phase_payment"]}
+                {copy.successSubtext ? <span>{copy.successSubtext}</span> : null}
+              </p>
+            ) : null}
+            {holdError["phase_payment"] ? (
+              <p className="reserve-seat-error">{holdError["phase_payment"]}</p>
             ) : null}
           </form>
         </section>
@@ -3570,6 +3644,7 @@ export default function MeasuresRegistryRuntime() {
     : activeSurface === "measures_phases_reveal" ? renderMeasuresPhasesRevealSurface()
     : activeSurface === "about_measures_registry" ? renderAboutMeasuresRegistrySurface()
     : activeSurface === "measures_eval_email_contract" ? renderMeasuresEvalEmailContractSurface()
+    : activeSurface === "phase_payment" ? renderPhasePaymentSurface()
     : activeSurface === "educate_eval" ? renderEducateEvalSurface()
     : activeSurface === "structural_drift_dispatches" ? renderStructuralDriftDispatchesSurface()
     : activeSurface === "cohort_conversion" ? renderCohortConversionSurface()
