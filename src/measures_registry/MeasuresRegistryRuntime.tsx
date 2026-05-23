@@ -677,6 +677,12 @@ export default function MeasuresRegistryRuntime() {
   const epigraphVideoRef = useRef<HTMLVideoElement | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
   const [connectSrcNextEncounter, setConnectSrcNextEncounter] = useState<"measures_assessment" | "structured_eval">("measures_assessment")
+  const [softSrcFields, setSoftSrcFields] = useState<Record<string, string>>({
+    institution_name: "",
+    institution_type: "",
+    contact_name: "",
+    contact_email: "",
+  })
 
   function historyUrl(surface: SurfaceState) {
     const url = new URL(window.location.href)
@@ -1204,7 +1210,7 @@ export default function MeasuresRegistryRuntime() {
     }
 
     if (actionKey === "begin_structural_evaluation") {
-      navigateSurface(sectionMap.has("measures_ai_operational_evaluation") ? "measures_ai_operational_evaluation" : "iis_eval_gate1")
+      navigateSurface("measures_assessment")
       return
     }
 
@@ -1268,33 +1274,50 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function renderConnectSrcSurface() {
+    const softSrcLabels: Record<string, string> = {
+      institution_name: "Institution / Company Name",
+      institution_type: "Business Type",
+      contact_name: "Contact Name",
+      contact_email: "Contact Email",
+    }
+
     return (
       <main className="measures-registry-runtime" data-surface="connect_src" style={registryTokenStyle}>
         {renderHeader(connectSrcCopy.header)}
         <section className="registry-connect-src" aria-label={connectSrcCopy.title ?? "Structured Response Contract"}>
-          {registryWatermarkUrl ? (
-            <img className="registry-authority-watermark" src={registryWatermarkUrl} alt="" aria-hidden="true" />
-          ) : null}
           <div className="registry-encounter-entry">
             {connectSrcCopy.eyebrow ? <span>{connectSrcCopy.eyebrow}</span> : null}
             <h1>{connectSrcCopy.title ?? "Structured Response Contract"}</h1>
             {connectSrcCopy.subtitle ? <p>{connectSrcCopy.subtitle}</p> : null}
           </div>
-          {connectSrcCopy.paragraphs.length > 0 ? (
-            <div className="registry-connect-paragraphs">
-              {connectSrcCopy.paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+          <form
+            className="registry-iis-eval-form"
+            onSubmit={(event) => {
+              event.preventDefault()
+              setEvalFields((current) => ({ ...current, ...softSrcFields }))
+              navigateSurface(connectSrcNextEncounter)
+            }}
+          >
+            <fieldset>
+              <legend>Institution Contact</legend>
+              {["institution_name", "institution_type", "contact_name", "contact_email"].map((key) => (
+                <label key={key}>
+                  <span>{softSrcLabels[key] ?? key.replaceAll("_", " ")}</span>
+                  <input
+                    type={key === "contact_email" ? "email" : "text"}
+                    value={softSrcFields[key] ?? ""}
+                    onChange={(event) => setSoftSrcFields((current) => ({ ...current, [key]: event.target.value }))}
+                    required
+                  />
+                </label>
               ))}
+            </fieldset>
+            <div className="registry-encounter-actions">
+              <button type="submit">
+                {connectSrcCopy.ctaPrimary ?? "Continue to Evaluation"}
+              </button>
             </div>
-          ) : null}
-          <div className="registry-encounter-actions">
-            <button
-              type="button"
-              onClick={() => navigateSurface(connectSrcNextEncounter)}
-            >
-              {connectSrcCopy.ctaPrimary ?? "Continue to Evaluation"}
-            </button>
-          </div>
+          </form>
         </section>
       </main>
     )
@@ -2007,7 +2030,7 @@ export default function MeasuresRegistryRuntime() {
       "route_educate_eval"
     const rightAction =
       asString(landingRootCopy.heroPaths.find((path) => asString(path.side) === "right")?.action_key) ??
-      "route_cohort_conversion"
+      "route_structure_passage"
 
     function settleThresholdMotion(side: "left" | "right") {
       setThresholdMotionSettled((current) =>
