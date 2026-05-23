@@ -28,7 +28,7 @@ tags:
 
 Runtime reconciliation established a target governed 13 encounter structure for Measures Registry.
 
-Before encounter contracts can be seated, DB encounter rows must align to the registered target keys.
+Before encounter contracts can be seated, DB encounter rows must align to the registered target keys and runtime sequence.
 
 Current state includes:
 
@@ -175,7 +175,45 @@ Set target state_expressions:
 - reserve_seat: public_learning_reserve_seat
 - phase_payment: public_phase_payment
 
-### 7. Validation required
+### 7. Capture registered runtime sequence
+
+Seat the registered 13 encounter sequence as retrievable runtime order.
+
+Required sequence:
+
+1. ai_isnt_broken_intro
+2. evaluate_structure_path
+3. eval_passage
+4. connect_src
+5. measures_assessment
+6. structure_passage
+7. structured_eval
+8. measures_phases_reveal
+9. about_measures_registry
+10. structural_drift_publication
+11. measures_eval_email_contract
+12. reserve_seat
+13. phase_payment
+
+Preserve route structure:
+
+- ai_isnt_broken_intro -> evaluate_structure_path
+- evaluate_structure_path -> eval_passage OR structure_passage
+- eval_passage -> connect_src -> measures_assessment
+- structure_passage -> connect_src -> structured_eval
+- measures_assessment -> measures_phases_reveal
+- structured_eval -> measures_phases_reveal
+- measures_phases_reveal -> about_measures_registry
+- about_measures_registry -> structural_drift_publication
+- structural_drift_publication -> measures_eval_email_contract
+- measures_eval_email_contract -> reserve_seat
+- reserve_seat -> phase_payment
+
+If an existing transition/routing table exists, use it.
+
+If no valid routing table exists, seat sequence metadata on the appropriate registered runtime authority surface and report the absence of transition-table support.
+
+### 8. Validation required
 
 Return:
 
@@ -184,6 +222,8 @@ Return:
 - rows deprecated
 - rows created
 - state_expressions after reconciliation
+- registered sequence seat location
+- route structure validation
 - validation query
 - readback confirmation
 - any conflicts or blocked operations
@@ -201,7 +241,7 @@ Return:
 
 ## SUCCESS CONDITION
 
-The Measures Registry DB contains the registered 13 encounter rows with correct encounter keys and state_expressions.
+The Measures Registry DB contains the registered 13 encounter rows with correct encounter keys, state_expressions, and retrievable runtime sequence.
 
 Deprecated rows remain traceable and flagged.
 
