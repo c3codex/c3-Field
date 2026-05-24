@@ -691,6 +691,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
         registryTokenStyle={registryTokenStyle}
         pathChoiceCopy={pathChoiceCopy}
         pathChoiceBackgroundUrl={pathChoiceBackgroundUrl}
+        leftHeroUrl={thresholdLeftStillUrl}
+        rightHeroUrl={thresholdRightStillUrl}
         registryMarkUrl={registryMarkUrl}
         onLeftChoice={() => navigate("eval_passage")}
         onRightChoice={() => navigate("structure_passage")}
