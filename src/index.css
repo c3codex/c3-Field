@@ -5065,7 +5065,7 @@ body,
   min-height: 9rem;
 }
 
-.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="src_capture"] {
+.measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] {
   min-height: 100svh;
   overflow: hidden;
 }
@@ -5137,7 +5137,7 @@ body,
   margin-top: 0.1rem;
 }
 @media (max-width: 720px) {
-  .measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="src_capture"] {
+  .measures-registry-runtime[data-layout-fit="single_screen_initial_view"][data-chamber-state="diagnostic"] {
     overflow: visible;
   }
 
@@ -5145,6 +5145,17 @@ body,
     grid-template-columns: 1fr;
   }
 }
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] {
+  overflow: hidden;
+}
+
+@media (max-width: 720px) {
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] {
+    overflow: auto;
+  }
+}
+
 .registry-structured-question {
   display: grid;
   gap: clamp(0.95rem, 2vw, 1.35rem);

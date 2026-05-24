@@ -662,7 +662,7 @@ export default function MeasuresRegistryRuntime() {
   })
   const [evalFields, setEvalFields] = useState<Record<string, string>>({})
   const [evalAnswers, setEvalAnswers] = useState<Record<string, StructuredEvalAnswer>>({})
-  const [evalStep, setEvalStep] = useState<EvalStep>("src_capture")
+  const [evalStep, setEvalStep] = useState<EvalStep>("diagnostic")
   const [evalSectionIndex, setEvalSectionIndex] = useState(0)
   const [evalSubmitting, setEvalSubmitting] = useState(false)
   const [evalSubmitted, setEvalSubmitted] = useState(false)
@@ -1951,15 +1951,6 @@ export default function MeasuresRegistryRuntime() {
     setEvalSubmitting(true)
     setEvalError(null)
 
-    const requiredFields = requiredEvalIdentityFields()
-    const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
-
-    if (missing.length > 0) {
-      setEvalSubmitting(false)
-      setEvalError(`Missing required fields: ${missing.join(", ")}`)
-      return
-    }
-
     const populatedEvalAnswers = Object.fromEntries(
       Object.entries(evalAnswers).filter(([, answer]) => answer.selected),
     )
@@ -1991,12 +1982,12 @@ export default function MeasuresRegistryRuntime() {
     await new Promise((resolve) => window.setTimeout(resolve, 1200))
 
     const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
-      institution_name: evalFields.institution_name.trim(),
+      institution_name: evalFields.institution_name?.trim() ?? "",
       institution_address: evalFields.institution_address?.trim() ?? "",
       institution_phone: evalFields.institution_phone?.trim() ?? "",
-      contact_name: evalFields.contact_name.trim(),
+      contact_name: evalFields.contact_name?.trim() ?? "",
       contact_position: evalFields.contact_position?.trim() ?? "",
-      contact_email: evalFields.contact_email.trim(),
+      contact_email: evalFields.contact_email?.trim() ?? "",
       evaluation_answers: populatedEvalAnswers,
       capture_context: evalFields.capture_context?.trim() || "iis_eval_gate1",
       intent: evalFields.intent?.trim() || "system_evaluation_request",
@@ -2015,7 +2006,7 @@ export default function MeasuresRegistryRuntime() {
       confirmation_email_state: "queued",
       metadata: {
         encounter_key: activeEvaluationEncounterKey,
-        institution_type: evalFields.institution_type.trim(),
+        institution_type: evalFields.institution_type?.trim() ?? "",
         deferred_src_fields: {
           institution_address: evalFields.institution_address?.trim() || null,
           institution_phone: evalFields.institution_phone?.trim() || null,
