@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import Temple from "../measures_of_inanna/Temple"
-import MeasuresRegistryRuntime from "../measures_registry/MeasuresRegistryRuntime"
+import MeasuresRegistryRuntime from "../measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered"
 
 const REGISTRY_METADATA = {
   title: "Measures Registry",
