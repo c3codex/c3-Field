@@ -1334,8 +1334,7 @@ export default function MeasuresRegistryRuntime() {
         : "obsidian"
 
     function navigateToStructuredEval() {
-      setConnectSrcNextEncounter("structured_eval")
-      navigateSurface("connect_src")
+      navigateSurface("structured_eval")
     }
 
     return (
@@ -1431,12 +1430,12 @@ export default function MeasuresRegistryRuntime() {
           setEvalSectionIndex((current) => Math.min(structuredQuestions.length - 1, current + 1))
         }}
         onContinueToDiagnostic={continueToDiagnostic}
-        onEnterStructuredEnvironment={() => navigateSurface("measures_phases_reveal")}
+        onEnterStructuredEnvironment={() => navigateSurface("measures_eval_email_contract")}
         onSetEvalAnswerContext={setEvalAnswerContext}
         onSetEvalAnswerSelection={setEvalAnswerSelection}
         onSetEvalField={setEvalField}
         onSubmitEvaluation={submitIisEvaluation}
-        onStructuredEnvironmentVideoEnded={() => navigateSurface("measures_phases_reveal")}
+        onStructuredEnvironmentVideoEnded={() => navigateSurface("measures_eval_email_contract")}
         onTogglePassageMuted={() => setPassageMuted((current) => !current)}
       />
     )
@@ -1493,12 +1492,12 @@ export default function MeasuresRegistryRuntime() {
           setEvalSectionIndex((current) => Math.min(structuredQuestions.length - 1, current + 1))
         }}
         onContinueToDiagnostic={continueToDiagnostic}
-        onEnterStructuredEnvironment={() => navigateSurface("measures_phases_reveal")}
+        onEnterStructuredEnvironment={() => navigateSurface("measures_eval_email_contract")}
         onSetEvalAnswerContext={setEvalAnswerContext}
         onSetEvalAnswerSelection={setEvalAnswerSelection}
         onSetEvalField={setEvalField}
         onSubmitEvaluation={submitIisEvaluation}
-        onStructuredEnvironmentVideoEnded={() => navigateSurface("measures_phases_reveal")}
+        onStructuredEnvironmentVideoEnded={() => navigateSurface("measures_eval_email_contract")}
         onTogglePassageMuted={() => setPassageMuted((current) => !current)}
       />
     )
@@ -1610,7 +1609,16 @@ export default function MeasuresRegistryRuntime() {
     const emailContract = asRecord(measuresEvalEmailSection?.metadata?.email_delivery_contract)
     const emailStructure = asRecord(emailContract?.email_structure)
     const subject = asString(emailStructure?.subject) ?? "Your Measures Registry Assessment Package"
-    const preheader = asString(emailStructure?.preheader) ?? "Your assessment result and recommended structural response are enclosed."
+    const instruction =
+      measuresEvalEmailCopy.subtitle ??
+      "Your assessment is being generated. Enter where the completed assessment package and recommended structural response should be sent."
+
+    const deliveryLabels: Record<string, string> = {
+      institution_name: "Institution / Company Name",
+      institution_type: "Business Type",
+      contact_name: "Contact Name",
+      contact_email: "Contact Email",
+    }
 
     return (
       <main
@@ -1623,7 +1631,7 @@ export default function MeasuresRegistryRuntime() {
           <div className="registry-encounter-entry">
             {measuresEvalEmailCopy.eyebrow ? <span>{measuresEvalEmailCopy.eyebrow}</span> : null}
             <h1>{measuresEvalEmailCopy.title ?? subject}</h1>
-            <p>{preheader}</p>
+            <p>{instruction}</p>
           </div>
           {evalReport ? (
             <div className="registry-email-assessment-package" aria-label="Assessment package">
@@ -1650,11 +1658,33 @@ export default function MeasuresRegistryRuntime() {
               </article>
             </div>
           ) : null}
-          <div className="registry-encounter-actions">
-            <button type="button" onClick={() => navigateSurface("reserve_seat")}>
-              {measuresEvalEmailCopy.ctaPrimary ?? "Reserve Seat"}
-            </button>
-          </div>
+          <form
+            className="registry-iis-eval-form"
+            onSubmit={(event) => {
+              event.preventDefault()
+              navigateSurface("measures_phases_reveal")
+            }}
+          >
+            <fieldset>
+              <legend>Delivery Contact</legend>
+              {["institution_name", "institution_type", "contact_name", "contact_email"].map((key) => (
+                <label key={key}>
+                  <span>{deliveryLabels[key] ?? key.replaceAll("_", " ")}</span>
+                  <input
+                    type={key === "contact_email" ? "email" : "text"}
+                    value={evalFields[key] ?? ""}
+                    onChange={(event) => setEvalFields((current) => ({ ...current, [key]: event.target.value }))}
+                    required
+                  />
+                </label>
+              ))}
+            </fieldset>
+            <div className="registry-encounter-actions">
+              <button type="submit">
+                {measuresEvalEmailCopy.ctaPrimary ?? "Continue"}
+              </button>
+            </div>
+          </form>
         </section>
       </main>
     )
@@ -1723,7 +1753,7 @@ export default function MeasuresRegistryRuntime() {
   }
 
   function renderHeader(headerOverride?: Record<string, unknown> | null, actionsOverride?: Record<string, unknown>[]) {
-    const header = headerOverride ?? pathChoiceCopy.header
+    const header = headerOverride ?? null
     const headerActions = asActionArray(header?.actions)
     const actions = actionsOverride ?? headerActions
     const title = asString(header?.title)
@@ -2263,42 +2293,14 @@ export default function MeasuresRegistryRuntime() {
               controls
               playsInline
               preload="auto"
-              onEnded={() => {
-                if (import.meta.env.DEV) {
-                  console.debug("[MR] eval_passage video ended", {
-                    has_connect_src: sectionMap.has("connect_src"),
-                    routing_to: sectionMap.has("connect_src") ? "connect_src" : "iis_eval_gate1",
-                    connectSrcNextEncounter: "measures_assessment",
-                  })
-                }
-                if (sectionMap.has("connect_src")) {
-                  setConnectSrcNextEncounter("measures_assessment")
-                  navigateSurface("connect_src")
-                } else {
-                  navigateSurface("iis_eval_gate1")
-                }
-              }}
+              onEnded={() => navigateSurface("measures_assessment")}
               aria-label="Measures Registry diagnostic passage"
             />
           ) : null}
           <div className="registry-diagnostic-passage-controls" aria-label="Passage controls">
             <button
               type="button"
-              onClick={() => {
-                if (import.meta.env.DEV) {
-                  console.debug("[MR] eval_passage continue click", {
-                    has_connect_src: sectionMap.has("connect_src"),
-                    routing_to: sectionMap.has("connect_src") ? "connect_src" : "iis_eval_gate1",
-                    connectSrcNextEncounter: "measures_assessment",
-                  })
-                }
-                if (sectionMap.has("connect_src")) {
-                  setConnectSrcNextEncounter("measures_assessment")
-                  navigateSurface("connect_src")
-                } else {
-                  navigateSurface("iis_eval_gate1")
-                }
-              }}
+              onClick={() => navigateSurface("measures_assessment")}
             >
               Continue
             </button>
@@ -2316,21 +2318,7 @@ export default function MeasuresRegistryRuntime() {
           </div>
           <button
             type="button"
-            onClick={() => {
-              if (import.meta.env.DEV) {
-                console.debug("[MR] eval_passage continue to evaluation click", {
-                  has_connect_src: sectionMap.has("connect_src"),
-                  routing_to: sectionMap.has("connect_src") ? "connect_src" : "iis_eval_gate1",
-                  connectSrcNextEncounter: "measures_assessment",
-                })
-              }
-              if (sectionMap.has("connect_src")) {
-                setConnectSrcNextEncounter("measures_assessment")
-                navigateSurface("connect_src")
-              } else {
-                navigateSurface("iis_eval_gate1")
-              }
-            }}
+            onClick={() => navigateSurface("measures_assessment")}
           >
             {asString(continueAction?.label) ?? "Continue to Evaluation"}
           </button>
@@ -3499,7 +3487,7 @@ export default function MeasuresRegistryRuntime() {
               </p>
             </div>
             {evalReport ? (
-              <button type="button" onClick={() => navigateSurface("measures_eval_email_contract")}>
+              <button type="button" onClick={() => navigateSurface("reserve_seat")}>
                 Continue to Assessment Package
               </button>
             ) : (
@@ -3627,7 +3615,7 @@ export default function MeasuresRegistryRuntime() {
             </div>
             <div>
               {evalReport ? (
-                <button type="button" onClick={() => navigateSurface("measures_eval_email_contract")}>
+                <button type="button" onClick={() => navigateSurface("reserve_seat")}>
                   Continue to Assessment Package
                 </button>
               ) : (
