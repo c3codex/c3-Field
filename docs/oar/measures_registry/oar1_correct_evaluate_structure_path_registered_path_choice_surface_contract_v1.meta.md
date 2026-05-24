@@ -22,7 +22,86 @@ tags:
 
 ## STATUS
 
-Closed. Two files modified. Build clean.
+Re-closed. OAR1 returned by operator after false-positive validation. CSS fix applied. Three files total modified. Build clean.
+
+---
+
+## RETURNED — FALSE-POSITIVE CORRECTION
+
+**Operator flag:** OAR1 returned, not accepted. Reason: `evaluate_structure_path` renders blank in browser.
+
+**Classification:** clean-shell renderer visual failure / false-positive validation.
+
+**False-positive source:** Prior OAR1 close validated on build success only. No actual browser visual QA was performed. The component logic was correct, but an unstyled `<img>` element inserted by the OAR1 fix caused a runtime visual failure that build did not catch.
+
+### DB State Inspection (post-return)
+
+Inspection script `inspect-evaluate-structure-path-metadata-v1.cjs` confirmed actual DB state:
+
+| Field | Value |
+|---|---|
+| `plaques` | **2 items** — left (`title: "Evaluate Structure"`, `side: "left"`) and right (`title: "Orient to Structure"`, `side: "right"`) |
+| `hero_paths` | **absent** — null/not present in metadata |
+| `more` | Single record (left-path only) |
+| `title` | "AI isn't broken.\nSystems are." |
+| `display_title` | "AI isn't broken. Systems are." |
+
+The OAR2 assumption that `evaluate_structure_path` uses `hero_paths` for its path buttons was incorrect. The row uses `plaques`. The `heroPaths` fallback added in the prior OAR1 is inert for this row — `pathChoiceCopy.plaques.length > 0` is true (2 items) so the first branch of the fallback chain resolves the plaques correctly.
+
+### Media State Inspection
+
+Inspection script `inspect-path-choice-media-state-v1.cjs` confirmed:
+
+| Role | is_active | Result |
+|---|---|---|
+| `left_hero_fracture` | true | resolves to non-null URL (`left_hero_fracture.webp`) |
+| `right_measured_hero` | true | resolves to non-null URL (`right_measured_hero.webp`) |
+| `path_choice_background` | **false** | resolves to null — no section background image |
+
+### Blank Render Root Cause
+
+The new `<img className="registry-route-plate-image" ... />` inserted by the prior OAR1 rendered at natural image dimensions inside the `display: grid` plaque buttons. No CSS existed for `.registry-route-plate-image`. The hero `.webp` images (large natural dimensions) expanded the buttons beyond the grid container's allocated height, causing the path-choice contrast section to render blank or visually broken.
+
+Additionally, `.registry-route-plate > span` lacked `position: relative; z-index: 1`, meaning the span text was below the absolute-positioned image in the stacking order — while `.registry-route-plate p` and `.registry-route-plate strong` already had `position: relative; z-index: 1` from existing CSS.
+
+### CSS Fix Applied
+
+Added to `src/index.css` (before `.registry-route-plate > span` rule):
+
+```css
+.registry-route-plate-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  opacity: 0.38;
+  pointer-events: none;
+}
+```
+
+Updated `.registry-route-plate > span`:
+
+```css
+.registry-route-plate > span {
+  position: relative;
+  z-index: 1;
+  color: var(--registry-brand-primary-text);
+  font-size: var(--registry-plaque-title-active);
+  letter-spacing: 0.08em;
+}
+```
+
+The image is now:
+- Absolutely positioned covering the full plate (`inset: 0`)
+- Object-fit cover — fills plate at any aspect ratio
+- `z-index: 0` — below text content
+- `opacity: 0.38` — subdued so text remains readable
+- `pointer-events: none` — click passes through to button
+
+The span title is now `position: relative; z-index: 1` — rendered above the image, consistent with existing `p` / `strong` treatment.
 
 ---
 
@@ -47,8 +126,9 @@ With no `plaques` and no `more` field on `evaluate_structure_path`, the `plaques
 
 | File | Change |
 |---|---|
-| `src/measures_registry/registered_runtime/renderers/RegisteredPathChoice.tsx` | Added `heroPaths` as plaque fallback; made `choiceHandler` side-aware; added `leftHeroUrl`/`rightHeroUrl` props; updated plaque rendering to resolve `cta`/`label` and render hero image; removed invalid `coherence` reference |
+| `src/measures_registry/registered_runtime/renderers/RegisteredPathChoice.tsx` | Added `heroPaths` as plaque fallback (inert for this row — `plaques` resolves first); made `choiceHandler` side-aware; added `leftHeroUrl`/`rightHeroUrl` props; updated plaque rendering to resolve `cta`/`label` and render hero image; removed invalid `coherence` reference |
 | `src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx` | Added `leftHeroUrl={thresholdLeftStillUrl}` and `rightHeroUrl={thresholdRightStillUrl}` to path_choice dispatcher block |
+| `src/index.css` | Added `.registry-route-plate-image` CSS (position absolute, inset 0, object-fit cover, z-index 0, opacity 0.38); added `position: relative; z-index: 1` to `.registry-route-plate > span` |
 
 ---
 
@@ -195,11 +275,17 @@ No media URLs hardcoded. If either role resolves to null, the corresponding `<im
 
 ## BUILD RESULT
 
+Initial close (false-positive):
 ```
 ✓ built in 3.79s
 ```
 
-Pre-existing chunk size warning (506.05 kB > 500 kB). Non-fatal. Not new.
+Re-close (CSS fix applied):
+```
+✓ built in 3.54s
+```
+
+Pre-existing chunk size warning (~506 kB > 500 kB). Non-fatal. Not new.
 
 ---
 
