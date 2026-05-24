@@ -62,6 +62,7 @@ const REGISTERED_ENCOUNTER_KEYS = [
 
 const REGISTERED_MEDIA_ROLES = [
   "epigraph_video",
+  "explainer_video",
   "left_hero_fracture",
   "left_hero_fracture_motion",
   "right_measured_hero",
@@ -319,6 +320,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   // --- media URLs ---
 
   const epigraphVideoUrl = mediaUrl(mediaMap.get("epigraph_video"))
+  const explainerVideoUrl = mediaUrl(mediaMap.get("explainer_video"))
   const thresholdLeftStillUrl = mediaUrl(mediaMap.get("left_hero_fracture"))
   const thresholdLeftMotionUrl = mediaUrl(mediaMap.get("left_hero_fracture_motion"))
   const thresholdRightStillUrl = mediaUrl(mediaMap.get("right_measured_hero"))
@@ -489,6 +491,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
     setEvalReport(interpretation.report)
     setEvalEmailArtifact(interpretation.emailArtifact)
     setEvalSubmitted(true)
+    navigate("measures_eval_email_contract")
   }
 
   // --- seat hold handler ---
@@ -704,7 +707,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         variant="eval"
         registryTokenStyle={registryTokenStyle}
         passageCopy={evalPassageCopy}
-        passageVideoUrl={null}
+        passageVideoUrl={explainerVideoUrl}
         passageMuted={passageMuted}
         renderHeader={() => renderHeader(evalPassageCopy.header)}
         onContinue={() => navigate("measures_assessment")}
