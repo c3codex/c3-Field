@@ -666,6 +666,7 @@ export default function MeasuresRegistryRuntime() {
   const [evalSectionIndex, setEvalSectionIndex] = useState(0)
   const [evalSubmitting, setEvalSubmitting] = useState(false)
   const [evalSubmitted, setEvalSubmitted] = useState(false)
+  const [emailContractResolving, setEmailContractResolving] = useState(false)
   const [evalReport, setEvalReport] = useState<EnvironmentalStandingReport | null>(null)
   const [evalEmailArtifact, setEvalEmailArtifact] = useState<AssessmentEmailArtifact | null>(null)
   const [evalError, setEvalError] = useState<string | null>(null)
@@ -1620,6 +1621,27 @@ export default function MeasuresRegistryRuntime() {
       contact_email: "Contact Email",
     }
 
+    if (emailContractResolving) {
+      return (
+        <main
+          className="measures-registry-runtime"
+          data-surface="measures_eval_email_contract"
+          data-resolving="true"
+          style={registryTokenStyle}
+        >
+          <div className="registry-eval-resolution registry-assessment-resolving">
+            <span>Resolving environmental standing</span>
+            <h2>Reviewing operating conditions.</h2>
+            <ol>
+              <li>Resolving environmental standing...</li>
+              <li>Reviewing operating conditions...</li>
+              <li>Assessing implementation structure...</li>
+            </ol>
+          </div>
+        </main>
+      )
+    }
+
     return (
       <main
         className="measures-registry-runtime"
@@ -1662,7 +1684,8 @@ export default function MeasuresRegistryRuntime() {
             className="registry-iis-eval-form"
             onSubmit={(event) => {
               event.preventDefault()
-              navigateSurface("measures_phases_reveal")
+              setEmailContractResolving(true)
+              window.setTimeout(() => navigateSurface("measures_phases_reveal"), 4000)
             }}
           >
             <fieldset>
@@ -1978,8 +2001,7 @@ export default function MeasuresRegistryRuntime() {
       return
     }
 
-    setEvalStep("resolving")
-    await new Promise((resolve) => window.setTimeout(resolve, 1200))
+    const requiredFields = requiredEvalIdentityFields()
 
     const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
       institution_name: evalFields.institution_name?.trim() ?? "",

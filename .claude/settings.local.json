@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm.cmd run *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(node docs/oar/measures_registry/inspect-left-path-copy-v1.cjs)"
     ]
   }
 }

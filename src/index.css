@@ -5156,6 +5156,11 @@ body,
   }
 }
 
+.measures-registry-runtime[data-surface="measures_eval_email_contract"][data-resolving="true"] {
+  overflow: hidden;
+  min-height: 100svh;
+}
+
 .registry-structured-question {
   display: grid;
   gap: clamp(0.95rem, 2vw, 1.35rem);

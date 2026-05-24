@@ -1,4 +1,5 @@
-﻿---
+﻿
+---
 document_type: recovery_working
 authority_level: working
 document_scope: chamber_registry_seating
