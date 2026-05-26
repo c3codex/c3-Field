@@ -1,0 +1,13 @@
+/* Registered runtime CSS layer — contract-native, scoped to .measures-registry-runtime */
+/* Consumes DB-injected CSS variables. Does not replace src/index.css. */
+
+@import "./registry.tokens.css";
+@import "./registry.layout.css";
+@import "./registry.materials.css";
+@import "./registry.buttons.css";
+@import "./registry.footer.css";
+@import "./encounters/passage.css";
+@import "./encounters/assessment.css";
+@import "./encounters/contact_capture.css";
+@import "./encounters/phases_reveal.css";
+@import "./encounters/about.css";

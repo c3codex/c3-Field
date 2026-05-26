@@ -5,7 +5,10 @@ type Props = {
   registryTokenStyle: CSSProperties
   connectSrcCopy: SectionCopy
   evalFields: Record<string, string>
+  evalSubmitting: boolean
+  evalError: string | null
   renderHeader: () => ReactNode
+  renderSystemFooter: () => ReactNode
   onFieldChange: (key: string, value: string) => void
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
 }
@@ -23,22 +26,25 @@ export default function RegisteredConnectSrc({
   registryTokenStyle,
   connectSrcCopy,
   evalFields,
+  evalSubmitting,
+  evalError,
   renderHeader,
+  renderSystemFooter,
   onFieldChange,
   onSubmit,
 }: Props) {
   return (
     <main className="measures-registry-runtime" data-surface="connect_src" style={registryTokenStyle}>
       {renderHeader()}
-      <section className="registry-connect-src" aria-label={connectSrcCopy.title ?? "Structured Response Contract"}>
+      <section className="registry-connect-src" aria-label={connectSrcCopy.title ?? "Assessment Package Delivery"}>
         <div className="registry-encounter-entry">
           {connectSrcCopy.eyebrow ? <span>{connectSrcCopy.eyebrow}</span> : null}
-          <h1>{connectSrcCopy.title ?? "Structured Response Contract"}</h1>
+          <h1>{connectSrcCopy.title ?? "Your Assessment is Being Prepared"}</h1>
           {connectSrcCopy.subtitle ? <p>{connectSrcCopy.subtitle}</p> : null}
         </div>
         <form className="registry-iis-eval-form" onSubmit={onSubmit}>
-          <fieldset>
-            <legend>Institution Contact</legend>
+          <fieldset disabled={evalSubmitting}>
+            <legend>Contact Information</legend>
             {SRC_FIELDS.map((key) => (
               <label key={key}>
                 <span>{SRC_LABELS[key] ?? key.replaceAll("_", " ")}</span>
@@ -51,11 +57,15 @@ export default function RegisteredConnectSrc({
               </label>
             ))}
           </fieldset>
+          {evalError ? <p className="registry-eval-error" role="alert">{evalError}</p> : null}
           <div className="registry-encounter-actions">
-            <button type="submit">{connectSrcCopy.ctaPrimary ?? "Continue to Evaluation"}</button>
+            <button type="submit" disabled={evalSubmitting}>
+              {evalSubmitting ? "Seating contact..." : (connectSrcCopy.ctaPrimary ?? "Continue")}
+            </button>
           </div>
         </form>
       </section>
+      {renderSystemFooter()}
     </main>
   )
 }

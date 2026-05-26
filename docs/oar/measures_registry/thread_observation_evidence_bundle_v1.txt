@@ -1,0 +1,1045 @@
+﻿THREAD OBSERVATION EVIDENCE BUNDLE v1
+Generated: 2026-05-26T00:32:39
+
+=== GIT STATUS ===
+M  .claude/settings.local.json
+R  dist-registry/assets/index-EjfMY-Jq.css -> dist-registry/assets/index-BVA27ESr.css
+D  dist-registry/assets/index-BmRo2Byk.js
+A  dist-registry/assets/index-CWfKzbZf.js
+M  dist-registry/index.html
+A  docs/oar/measures_registry/inspect-connect-src-and-scoring-mechanics-v1.cjs
+A  docs/oar/measures_registry/inspect-contact-capture-and-email-contract-v1.cjs
+A  docs/oar/measures_registry/inspect-eval-passage-and-assessment-contracts-v1.cjs
+A  docs/oar/measures_registry/inspect-material-token-standing-v1.cjs
+A  docs/oar/measures_registry/inspect-sitewide-style-contract-and-token-seating-v1.cjs
+A  docs/oar/measures_registry/inspect-styling-contract-audit-from-passage-forward-v1.cjs
+A  docs/oar/measures_registry/oar1_apply_footer_contract_to_registered_runtime_downstream_surfaces_v1.meta.md
+A  docs/oar/measures_registry/oar1_correct_assessment_surface_routing_and_structured_eval_bypass_v1.meta.md
+A  docs/oar/measures_registry/oar1_correct_css_parity_for_registered_runtime_downstream_surfaces_v1.meta.md
+A  docs/oar/measures_registry/oar1_correct_eval_passage_and_assessment_chamber_contract_expression_gaps_v1.meta.md
+A  docs/oar/measures_registry/oar1_correct_registered_runtime_one_step_late_url_history_sync_v1.meta.md
+A  docs/oar/measures_registry/oar1_create_minimal_contract_native_css_layer_for_registered_runtime_v1.meta.md
+A  docs/oar/measures_registry/oar1_read_only_sitewide_style_contract_and_runtime_token_seating_audit_v1.meta.md
+A  docs/oar/measures_registry/oar1_read_only_styling_contract_audit_from_passage_surfaces_forward_v1.meta.md
+A  docs/oar/measures_registry/oar1_reseat_about_measures_registry_featured_structural_drift_v1.meta.md
+A  docs/oar/measures_registry/oar1_reseat_measures_phases_reveal_guided_session_conversion_bridge_v1.meta.md
+A  docs/oar/measures_registry/oar1_seat_contact_capture_and_hide_internal_eval_email_contract_v1.meta.md
+A  docs/oar/measures_registry/oar1_seat_eval_passage_and_assessment_chamber_visual_contracts_v1.meta.md
+A  docs/oar/measures_registry/oar1_seat_measures_phases_reveal_lapis_structural_requirements_bridge_v1.meta.md
+A  docs/oar/measures_registry/oar1_seat_measures_registry_material_style_contracts_v1.meta.md
+A  docs/oar/measures_registry/oar1_seat_partial_src_contact_capture_and_assessment_scoring_contract_v1.meta.md
+A  docs/oar/measures_registry/oar2_apply_footer_contract_to_registered_runtime_downstream_surfaces_v1.meta.md
+A  docs/oar/measures_registry/oar2_correct_assessment_surface_routing_and_structured_eval_bypass_v1.meta.md
+A  docs/oar/measures_registry/oar2_correct_css_parity_for_registered_runtime_downstream_surfaces_v1.meta.md
+A  docs/oar/measures_registry/oar2_correct_eval_passage_and_assessment_chamber_contract_expression_gaps_v1.meta.md
+A  docs/oar/measures_registry/oar2_correct_registered_runtime_one_step_late_url_history_sync_v1.meta.md
+A  docs/oar/measures_registry/oar2_create_minimal_contract_native_css_layer_for_registered_runtime_v1.meta.md
+A  docs/oar/measures_registry/oar2_read_only_sitewide_style_contract_and_runtime_token_seating_audit_v1.meta.md
+A  docs/oar/measures_registry/oar2_read_only_styling_contract_audit_from_passage_surfaces_forward_v1.meta.md
+A  docs/oar/measures_registry/oar2_reseat_about_measures_registry_featured_structural_drift_v1.meta.md
+A  docs/oar/measures_registry/oar2_reseat_measures_phases_reveal_guided_session_conversion_bridge_v1.meta.md
+A  docs/oar/measures_registry/oar2_seat_contact_capture_and_hide_internal_eval_email_contract_v1.meta.md
+A  docs/oar/measures_registry/oar2_seat_eval_passage_and_assessment_chamber_visual_contracts_v1.meta.md
+A  docs/oar/measures_registry/oar2_seat_measures_phases_reveal_lapis_structural_requirements_bridge_v1.meta.md
+A  docs/oar/measures_registry/oar2_seat_measures_registry_material_style_contracts_v1.meta.md
+A  docs/oar/measures_registry/oar2_seat_partial_src_contact_capture_and_assessment_scoring_contract_v1.meta.md
+A  docs/oar/measures_registry/update-about-measures-registry-featured-structural-drift-v1.cjs
+A  docs/oar/measures_registry/update-connect-src-and-assessment-scoring-v1.cjs
+A  docs/oar/measures_registry/update-contact-capture-and-email-contract-v1.cjs
+A  docs/oar/measures_registry/update-eval-passage-and-assessment-contracts-v1.cjs
+A  docs/oar/measures_registry/update-eval-passage-and-assessment-expression-gaps-v1.cjs
+A  docs/oar/measures_registry/update-material-style-contracts-v1.cjs
+A  docs/oar/measures_registry/update-measures-phases-reveal-guided-session-bridge-v1.cjs
+A  docs/oar/measures_registry/update-measures-phases-reveal-lapis-bridge-v1.cjs
+A  docs/oar/process/oar2_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md
+M  src/index.css
+M  src/measures_registry/MeasuresAssessmentChamber.tsx
+M  src/measures_registry/measuresAssessmentTypes.ts
+M  src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx
+M  src/measures_registry/registered_runtime/registeredRuntimeUtils.ts
+M  src/measures_registry/registered_runtime/renderers/RegisteredAbout.tsx
+M  src/measures_registry/registered_runtime/renderers/RegisteredAssessment.tsx
+M  src/measures_registry/registered_runtime/renderers/RegisteredConnectSrc.tsx
+M  src/measures_registry/registered_runtime/renderers/RegisteredEvalEmailContract.tsx
+M  src/measures_registry/registered_runtime/renderers/RegisteredPassage.tsx
+M  src/measures_registry/registered_runtime/renderers/RegisteredPhasePayment.tsx
+M  src/measures_registry/registered_runtime/renderers/RegisteredPhaseReveal.tsx
+M  src/measures_registry/registered_runtime/renderers/RegisteredReserveSeat.tsx
+A  src/measures_registry/registered_runtime/styles/encounters/about.css
+A  src/measures_registry/registered_runtime/styles/encounters/assessment.css
+A  src/measures_registry/registered_runtime/styles/encounters/contact_capture.css
+A  src/measures_registry/registered_runtime/styles/encounters/passage.css
+A  src/measures_registry/registered_runtime/styles/encounters/phases_reveal.css
+A  src/measures_registry/registered_runtime/styles/registry.buttons.css
+A  src/measures_registry/registered_runtime/styles/registry.footer.css
+A  src/measures_registry/registered_runtime/styles/registry.layout.css
+A  src/measures_registry/registered_runtime/styles/registry.materials.css
+A  src/measures_registry/registered_runtime/styles/registry.runtime.css
+A  src/measures_registry/registered_runtime/styles/registry.tokens.css
+?? docs/oar/measures_registry/oar1_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md
+?? docs/oar/measures_registry/oar2_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md
+?? docs/oar/measures_registry/thread_observation_evidence_bundle_v1.txt
+
+=== RECENT OAR FILES ===
+
+LastWriteTime         Length Name                                                                                  
+-------------         ------ ----                                                                                  
+5/26/2026 12:32:39 AM   6918 thread_observation_evidence_bundle_v1.txt                                             
+5/25/2026 6:35:35 PM    7480 oar1_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md       
+5/25/2026 5:50:31 PM   10575 oar2_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md       
+5/25/2026 9:47:25 AM    7516 oar1_correct_assessment_surface_routing_and_structured_eval_bypass_v1.meta.md         
+5/25/2026 9:32:40 AM    7438 oar2_correct_assessment_surface_routing_and_structured_eval_bypass_v1.meta.md         
+5/25/2026 3:29:00 AM   10654 oar1_reseat_about_measures_registry_featured_structural_drift_v1.meta.md              
+5/25/2026 3:25:48 AM    6993 update-about-measures-registry-featured-structural-drift-v1.cjs                       
+5/25/2026 3:24:09 AM    9852 oar1_reseat_measures_phases_reveal_guided_session_conversion_bridge_v1.meta.md        
+5/25/2026 3:22:46 AM    7798 oar2_reseat_about_measures_registry_featured_structural_drift_v1.meta.md              
+5/25/2026 2:58:27 AM    7146 update-measures-phases-reveal-guided-session-bridge-v1.cjs                            
+5/25/2026 2:54:18 AM    6850 oar2_reseat_measures_phases_reveal_guided_session_conversion_bridge_v1.meta.md        
+5/25/2026 2:23:03 AM    8801 oar1_seat_measures_phases_reveal_lapis_structural_requirements_bridge_v1.meta.md      
+5/25/2026 2:19:39 AM    5397 update-measures-phases-reveal-lapis-bridge-v1.cjs                                     
+5/25/2026 2:15:43 AM   10404 oar2_seat_measures_phases_reveal_lapis_structural_requirements_bridge_v1.meta.md      
+5/25/2026 1:55:22 AM   15346 oar1_correct_eval_passage_and_assessment_chamber_contract_expression_gaps_v1.meta.md  
+5/24/2026 7:37:16 PM    9949 update-eval-passage-and-assessment-expression-gaps-v1.cjs                             
+5/24/2026 7:20:13 PM   10819 oar1_seat_contact_capture_and_hide_internal_eval_email_contract_v1.meta.md            
+5/24/2026 7:16:52 PM   18331 oar2_correct_eval_passage_and_assessment_chamber_contract_expression_gaps_v1.meta.md  
+5/24/2026 7:10:38 PM    9213 update-contact-capture-and-email-contract-v1.cjs                                      
+5/24/2026 7:03:07 PM    4003 inspect-contact-capture-and-email-contract-v1.cjs                                     
+5/24/2026 6:44:34 PM   12122 oar1_seat_eval_passage_and_assessment_chamber_visual_contracts_v1.meta.md             
+5/24/2026 6:35:57 PM   14236 oar2_seat_contact_capture_and_hide_internal_eval_email_contract_v1.meta.md            
+5/24/2026 6:30:53 PM   11989 update-eval-passage-and-assessment-contracts-v1.cjs                                   
+5/24/2026 6:14:22 PM    4049 inspect-eval-passage-and-assessment-contracts-v1.cjs                                  
+5/24/2026 6:06:13 PM    6327 oar1_seat_measures_registry_material_style_contracts_v1.meta.md                       
+5/24/2026 6:02:11 PM    7084 update-material-style-contracts-v1.cjs                                                
+5/24/2026 5:59:35 PM    3365 inspect-material-token-standing-v1.cjs                                                
+5/24/2026 5:59:23 PM   14925 oar2_seat_eval_passage_and_assessment_chamber_visual_contracts_v1.meta.md             
+5/24/2026 5:46:56 PM    9528 oar2_seat_measures_registry_material_style_contracts_v1.meta.md                       
+5/24/2026 5:30:33 PM    4725 oar1_create_minimal_contract_native_css_layer_for_registered_runtime_v1.meta.md       
+5/24/2026 2:27:06 PM   10201 oar2_create_minimal_contract_native_css_layer_for_registered_runtime_v1.meta.md       
+5/24/2026 2:14:45 PM   38036 oar1_read_only_sitewide_style_contract_and_runtime_token_seating_audit_v1.meta.md     
+5/24/2026 2:07:57 PM    5915 inspect-sitewide-style-contract-and-token-seating-v1.cjs                              
+5/24/2026 2:05:32 PM   11642 oar2_read_only_sitewide_style_contract_and_runtime_token_seating_audit_v1.meta.md     
+5/24/2026 1:59:09 PM   10292 oar1_apply_footer_contract_to_registered_runtime_downstream_surfaces_v1.meta.md       
+5/24/2026 1:49:06 PM    8614 oar2_apply_footer_contract_to_registered_runtime_downstream_surfaces_v1.meta.md       
+5/24/2026 1:33:43 PM   11005 oar1_correct_css_parity_for_registered_runtime_downstream_surfaces_v1.meta.md         
+5/24/2026 1:23:55 PM    7684 oar2_correct_css_parity_for_registered_runtime_downstream_surfaces_v1.meta.md         
+5/24/2026 1:21:12 PM   29755 oar1_read_only_styling_contract_audit_from_passage_surfaces_forward_v1.meta.md        
+5/24/2026 1:16:45 PM    9307 inspect-styling-contract-audit-from-passage-forward-v1.cjs                            
+5/24/2026 1:13:07 PM   10458 oar2_read_only_styling_contract_audit_from_passage_surfaces_forward_v1.meta.md        
+5/24/2026 12:56:36 PM   9640 oar1_correct_registered_runtime_one_step_late_url_history_sync_v1.meta.md             
+5/24/2026 12:27:25 PM   7196 oar2_correct_registered_runtime_one_step_late_url_history_sync_v1.meta.md             
+5/24/2026 12:11:58 PM   8708 oar1_seat_partial_src_contact_capture_and_assessment_scoring_contract_v1.meta.md      
+5/24/2026 12:05:16 PM   8855 update-connect-src-and-assessment-scoring-v1.cjs                                      
+5/24/2026 11:57:11 AM   4450 inspect-connect-src-and-scoring-mechanics-v1.cjs                                      
+5/24/2026 11:52:55 AM  12412 oar2_seat_partial_src_contact_capture_and_assessment_scoring_contract_v1.meta.md      
+5/24/2026 1:08:48 AM   19108 oar1_read_only_db_contract_for_eval_email_capture_and_assessment_flow_v1.meta.md      
+5/24/2026 1:05:22 AM   10479 inspect-eval-email-contract-db-v1.cjs                                                 
+5/24/2026 12:56:44 AM   8012 oar2_read_only_db_contract_for_eval_email_capture_and_assessment_flow_v1.meta.md      
+5/24/2026 12:40:58 AM   9120 oar1_correct_registered_passage_eval_video_and_assessment_email_capture_route_v1.me...
+5/24/2026 12:25:59 AM   2060 inspect-eval-passage-media-roles-v1.cjs                                               
+5/24/2026 12:23:47 AM   9897 oar2_correct_registered_passage_eval_video_and_assessment_email_capture_route_v1.me...
+5/24/2026 12:09:38 AM  12157 oar1_correct_evaluate_structure_path_registered_path_choice_surface_contract_v1.met...
+5/24/2026 12:06:20 AM   1098 inspect-path-choice-media-state-v1.cjs                                                
+5/24/2026 12:02:39 AM   3041 inspect-evaluate-structure-path-metadata-v1.cjs                                       
+5/23/2026 11:42:09 PM   6976 oar2_correct_evaluate_structure_path_registered_path_choice_surface_contract_v1.met...
+5/23/2026 9:31:53 PM    5912 oar1_correct_registered_path_choice_left_right_route_targets_v1.meta.md               
+5/23/2026 9:02:35 PM    6454 oar2_correct_registered_path_choice_left_right_route_targets_v1.meta.md               
+5/23/2026 8:51:30 PM   21536 oar1_build_clean_contract_native_measures_registry_runtime_shell_v1.meta.md           
+5/23/2026 8:31:47 PM   13308 oar2_build_clean_contract_native_measures_registry_runtime_shell_v1.meta.md           
+5/23/2026 8:15:45 PM   11434 oar1_resequence_assessment_capture_and_resolving_interstitial_v1.meta.md              
+5/23/2026 8:05:45 PM    6812 oar2_resequence_assessment_capture_and_resolving_interstitial_v1.meta.md              
+5/23/2026 7:46:39 PM   10980 oar1_remove_pre_assessment_src_capture_and_start_evaluation_at_question_one_v1.meta.md
+5/23/2026 7:23:45 PM    8267 oar2_remove_pre_assessment_src_capture_and_start_evaluation_at_question_one_v1.meta.md
+5/23/2026 7:08:53 PM   12305 oar1_reposition_contact_capture_to_eval_email_contract_and_remove_header_bleed_v1.m...
+5/23/2026 7:07:13 PM    3567 execute-reposition-contact-capture-v1.cjs                                             
+5/23/2026 6:51:57 PM    9792 oar2_reposition_contact_capture_to_eval_email_contract_and_remove_header_bleed_v1.m...
+5/23/2026 5:27:26 PM   22371 oar1_audit_registered_runtime_for_legacy_residue_after_renderer_alignment_v1.meta.md  
+5/23/2026 4:48:39 PM    5997 execute-correct-registered-runtime-residue-v1.cjs                                     
+5/23/2026 4:38:32 PM    3610 inspect-registered-13-action-targets-v1.cjs                                           
+5/23/2026 4:23:44 PM   11489 oar2_audit_registered_runtime_for_legacy_residue_after_renderer_alignment_v1.meta.md  
+5/23/2026 4:10:21 PM    4417 inspect-route-bleed-source-v1.cjs                                                     
+5/23/2026 4:06:17 PM    8622 oar2_correct_left_path_route_bleed_and_convert_connect_src_soft_intake_v1.meta.md     
+5/23/2026 3:42:15 PM   10274 oar1_audit_left_path_post_passage_dead_surface_and_vite_placeholder_warning_v1.meta.md
+5/23/2026 3:27:58 PM    3778 execute-fix-eval-passage-action-target-v1.cjs                                         
+5/23/2026 3:19:52 PM    2292 inspect-anon-left-path-v1.cjs                                                         
+5/23/2026 3:15:57 PM    2182 inspect-left-path-copy-v1.cjs                                                         
+5/23/2026 3:10:18 PM    1916 inspect-left-path-route-state-v1.cjs                                                  
+5/23/2026 2:53:32 PM    7359 oar2_audit_left_path_post_passage_dead_surface_and_vite_placeholder_warning_v1.meta.md
+5/23/2026 2:44:18 PM    5637 oar1_restore_epigraph_video_mapping_and_rehold_dead_hero_video_role_v1.meta.md        
+5/23/2026 2:43:27 PM    8141 execute-restore-epigraph-video-mapping-and-rehold-dead-hero-video-role-v1.cjs         
+5/23/2026 2:42:06 PM    5181 oar2_restore_epigraph_video_mapping_and_rehold_dead_hero_video_role_v1.meta.md        
+5/23/2026 2:36:11 PM   12312 oar1_correct_registered_intro_and_path_choice_video_still_media_contracts_v1.meta.md  
+5/23/2026 2:34:47 PM   12845 execute-correct-registered-intro-and-path-choice-video-still-media-contracts-v1.cjs   
+5/23/2026 2:31:55 PM    4825 inspect-intro-path-choice-media-state-v1.cjs                                          
+5/23/2026 2:28:07 PM    7730 oar2_correct_registered_intro_and_path_choice_video_still_media_contracts_v1.meta.md  
+5/23/2026 2:16:30 PM    7666 execute-reseat-held-intro-and-path-choice-media-assets-v1.cjs                         
+5/23/2026 2:15:48 PM    6369 oar2_reseat_held_intro_and_path_choice_media_assets_v1.meta.md                        
+5/23/2026 2:12:29 PM    6336 oar2_audit_registered_intro_and_path_choice_media_asset_resolution_v1.meta.md         
+5/23/2026 1:41:51 PM   11371 oar1_audit_registered_intro_and_path_choice_media_asset_resolution_v1.meta.md         
+5/23/2026 12:36:17 PM   8919 oar1_correct_registered_runtime_activation_and_public_route_exposure_v1.meta.md       
+5/23/2026 12:33:21 PM   8154 execute-correct-registered-runtime-activation-and-public-route-exposure-v1.cjs        
+5/23/2026 12:20:00 PM   6948 oar2_correct_registered_runtime_activation_and_public_route_exposure_v1.meta.md       
+5/23/2026 12:03:59 PM  12222 oar1_implement_registered_13_runtime_renderer_alignment_v1.meta.md                    
+5/23/2026 11:58:56 AM   7219 execute-implement-registered-13-runtime-renderer-alignment-v1.cjs                     
+5/23/2026 11:36:11 AM   7916 oar2_implement_registered_13_runtime_renderer_alignment_v1.meta.md                    
+5/23/2026 11:28:56 AM  19142 oar1_codex_seat_stub_registered_encounter_contracts_v1.meta.md                        
+5/23/2026 11:26:48 AM  23335 execute-codex-seat-stub-registered-encounter-contracts-v1.cjs                         
+5/23/2026 11:23:31 AM  10146 oar2_codex_seat_stub_registered_encounter_contracts_v1.meta.md                        
+5/23/2026 10:49:31 AM  12755 oar1_assign_renderer_contracts_for_registered_stub_encounters_v1.meta.md              
+5/23/2026 10:47:51 AM  10810 execute-assign-renderer-contracts-for-registered-stub-encounters-v1.cjs               
+5/23/2026 10:39:04 AM   5389 oar2_assign_renderer_contracts_for_registered_stub_encounters_v1.meta.md              
+5/23/2026 8:35:21 AM   12661 oar1_codex_seat_active_registered_encounter_contracts_v1.meta.md                      
+5/23/2026 7:48:51 AM   20734 execute-codex-seat-active-registered-encounter-contracts-v1.cjs                       
+5/23/2026 7:42:40 AM    6632 oar2_codex_seat_active_registered_encounter_contracts_v1.meta.md                      
+5/23/2026 7:38:04 AM    6678 oar2_codex_reconcile_registered_13_encounter_rows_v1.meta.md                          
+5/23/2026 7:27:20 AM   30315 oar1_audit_measures_registry_sitewide_runtime_contract_v1.meta.md                     
+5/23/2026 7:25:33 AM   14759 oar1_codex_reconcile_registered_13_encounter_rows_v1.meta.md                          
+5/23/2026 7:24:00 AM   22877 execute-codex-reconcile-registered-13-encounter-rows-v1.cjs                           
+5/22/2026 7:50:55 PM   22008 oar1_reconcile_measures_registry_encounters_to_registered_13_surface_runtime_v1.met...
+5/22/2026 7:37:58 PM    5667 oar2_reconcile_measures_registry_encounters_to_registered_13_surface_runtime_v1.met...
+5/22/2026 6:47:42 PM   17161 oar1_audit_current_encounter_styling_contracts_against_sitewide_contract_v1.meta.md   
+5/22/2026 6:43:35 PM    3989 oar2_audit_current_encounter_styling_contracts_against_sitewide_contract_v1.meta.md   
+5/22/2026 6:37:45 PM    9887 oar1_codex_seat_measures_registry_sitewide_style_contract_v1.meta.md                  
+5/22/2026 6:36:29 PM    5633 execute-measures-registry-sitewide-style-contract-seating-v1.cjs                      
+5/22/2026 6:35:55 PM    1641 measures_registry_sitewide_style_contract_validation_v1.sql                           
+5/22/2026 6:35:43 PM   14760 measures_registry_sitewide_style_contract_seating_v1.sql                              
+5/22/2026 6:30:23 PM    4744 oar2_codex_seat_measures_registry_sitewide_style_contract_v1.meta.md                  
+5/22/2026 5:04:00 PM    3486 oar2_audit_measures_registry_sitewide_runtime_contract_v1.meta.md                     
+5/22/2026 4:28:03 PM   13500 oar1_audit_evaluation_result_surface_runtime_contract_drift_v1.meta.md                
+5/22/2026 4:19:36 PM    4755 oar2_audit_evaluation_result_surface_runtime_contract_drift_v1.meta.md                
+5/22/2026 3:50:07 PM    3291 oar1_add_registry_mark_to_evaluation_question_faces_v1.meta.md                        
+5/22/2026 3:47:36 PM    2460 oar2_add_registry_mark_to_evaluation_question_faces_v1.meta.md                        
+5/22/2026 3:31:41 PM    3562 oar1_correct_evaluation_surface_background_inheritance_drift_v1.meta.md               
+5/22/2026 3:29:42 PM    2211 oar2_correct_evaluation_surface_background_inheritance_drift_v1.meta.md               
+5/22/2026 3:23:06 PM    9784 oar1_audit_evaluation_surface_background_inheritance_drift_v1.meta.md                 
+5/22/2026 3:17:58 PM    3213 oar2_audit_evaluation_surface_background_inheritance_drift_v1.meta.md                 
+5/22/2026 3:03:33 PM    5824 oar1_correct_educational_diagnostic_passage_institutional_copy_v1.meta.md             
+5/22/2026 3:02:25 PM    2421 execute-correct-educational-diagnostic-passage-institutional-copy.cjs                 
+5/22/2026 3:00:25 PM    2974 oar2_correct_educational_diagnostic_passage_institutional_copy_v1.meta.md             
+5/22/2026 2:28:44 PM    9184 oar1_audit_educational_diagnostic_passage_content_seating_v1.meta.md                  
+5/22/2026 2:27:02 PM    2780 oar2_audit_educational_diagnostic_passage_content_seating_v1.meta.md                  
+5/22/2026 2:19:59 PM    3658 oar1_correct_educational_diagnostic_passage_institutional_eyebrow_v1.meta.md          
+5/22/2026 2:19:31 PM    2135 execute-correct-educational-diagnostic-passage-institutional-eyebrow.cjs              
+5/22/2026 2:16:37 PM    1913 oar2_correct_educational_diagnostic_passage_institutional_eyebrow_v1.meta.md          
+5/22/2026 2:10:35 PM    6031 oar1_correct_educational_diagnostic_passage_obsidian_contract_resolution_v1.meta.md   
+5/22/2026 2:08:50 PM    2196 execute-correct-educational-diagnostic-passage-obsidian-contract-resolution.cjs       
+5/22/2026 2:05:37 PM    3597 oar2_correct_educational_diagnostic_passage_obsidian_contract_resolution_v1.meta.md   
+5/22/2026 1:48:33 PM   11149 oar1_audit_obsidian_contract_resolution_failure_v1.meta.md                            
+5/22/2026 1:36:10 PM    2557 oar2_audit_obsidian_contract_resolution_failure_v1.meta.md                            
+5/22/2026 11:40:55 AM  13776 oar2_measures_registry_evaluation_encounter_contract_v2.meta.md                       
+5/22/2026 11:36:43 AM   6180 oar1_measures_registry_evaluation_encounter_contract_v2.meta.md                       
+5/22/2026 11:36:21 AM  34419 measures_registry_evaluation_encounter_contract_v2_evidence.json                      
+5/22/2026 11:36:01 AM  16215 execute-measures-registry-evaluation-encounter-contract-v2-amendment.cjs              
+5/22/2026 10:14:00 AM   4254 oar1_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md      
+5/22/2026 10:08:15 AM   6998 evaluation_chamber_obsidian_intake_simplification_style_contract_v1_evidence.json     
+5/22/2026 10:07:57 AM  10370 execute-evaluation-chamber-obsidian-intake-simplification-style-contract.cjs          
+5/22/2026 9:56:16 AM    7692 oar2_evaluation_chamber_obsidian_intake_simplification_style_contract_v1.meta.md      
+5/21/2026 10:22:36 PM  10025 evaluation_chamber_src_intake_media_role_mapping_completion_v1_evidence.json          
+5/21/2026 10:21:52 PM   5598 oar1_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md           
+5/21/2026 10:21:38 PM  29376 execute-measures-registry-evaluation-encounter-contract.cjs                           
+5/21/2026 10:13:02 PM   7748 validate-deterministic-environmental-standing-report-routing.cjs                      
+5/21/2026 10:13:02 PM  11842 seat_approved_lapis_v2_brand_tokens_v1.json                                           
+5/21/2026 10:13:02 PM   5507 oar2_seat_approved_lapis_v2_brand_tokens_v1.meta.md                                   
+5/21/2026 10:13:02 PM   4947 oar2_refine_measures_ai_operational_evaluation_semantics_v1.meta.md                   
+5/21/2026 10:13:02 PM   6590 oar2_public_encounter_language_audit_runtime_terminology_alignment_v1.meta.md         
+5/21/2026 10:13:02 PM   6493 oar2_operational_evaluation_single_question_chamber_public_label_cleanup_v1.meta.md   
+5/21/2026 10:13:02 PM   1920 oar2_measures_registry_runtime_decomposition_v1.meta.md                               
+5/21/2026 10:13:02 PM   6422 oar2_measures_registry_evaluation_encounter_contract_v1.meta.md                       
+5/21/2026 10:13:02 PM   6140 oar2_measures_registry_evaluation_chamber_runtime_v1.meta.md                          
+5/21/2026 10:13:02 PM   7486 oar2_measures_registry_branding_frontend_dependency_audit_v1.meta.md                  
+5/21/2026 10:13:02 PM   6442 oar2_measures_ai_assessment_mechanics_answer_capture_v1.meta.md                       
+5/21/2026 10:13:02 PM   4641 oar2_frontend_token_replacement_alignment_v1.meta.md                                  
+5/21/2026 10:13:02 PM   7625 oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md           
+5/21/2026 10:13:02 PM   7192 oar2_deterministic_environmental_standing_report_routing_v1.meta.md                   
+5/21/2026 10:13:02 PM   6688 oar2_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md            
+5/21/2026 10:13:02 PM   4114 oar1_seat_approved_lapis_v2_brand_tokens_v1.meta.md                                   
+5/21/2026 10:13:02 PM   5681 oar1_refine_measures_ai_operational_evaluation_semantics_v1.meta.md                   
+5/21/2026 10:13:02 PM  12945 oar1_public_encounter_language_audit_runtime_terminology_alignment_v1.meta.md         
+5/21/2026 10:13:02 PM   5710 oar1_operational_evaluation_single_question_chamber_public_label_cleanup_v1.meta.md   
+5/21/2026 10:13:02 PM   5517 oar1_measures_registry_runtime_decomposition_v1.meta.md                               
+5/21/2026 10:13:02 PM   6337 oar1_measures_registry_evaluation_encounter_contract_v1.meta.md                       
+5/21/2026 10:13:02 PM  16012 oar1_measures_registry_branding_frontend_dependency_audit_v1.meta.md                  
+5/21/2026 10:13:02 PM   5680 oar1_measures_ai_assessment_mechanics_answer_capture_v1.meta.md                       
+5/21/2026 10:13:02 PM   5000 oar1_frontend_token_replacement_alignment_v1.meta.md                                  
+5/21/2026 10:13:02 PM   6695 oar1_deterministic_environmental_standing_report_routing_v1.meta.md                   
+5/21/2026 10:13:02 PM   6333 oar1_assessment_branding_evaluation_surface_identity_refinement_v1.meta.md            
+5/21/2026 10:13:02 PM   3556 measures_registry_evaluation_encounter_contract_v1_evidence.json                      
+5/21/2026 10:13:02 PM   2436 measures_ai_assessment_mechanics_answer_capture_v1_evidence.json                      
+5/21/2026 10:13:02 PM  10138 measures_ai_assessment_mechanics_answer_capture_v1.json                               
+5/21/2026 10:13:02 PM   6608 execute-seat-approved-lapis-v2-brand-tokens.cjs                                       
+5/21/2026 10:13:02 PM   6922 execute-measures-ai-assessment-mechanics-answer-capture.cjs                           
+5/21/2026 10:13:02 PM   7830 execute-deterministic-environmental-standing-report-routing.cjs                       
+5/21/2026 10:13:02 PM   4015 deterministic_environmental_standing_report_routing_v1_evidence.json                  
+5/21/2026 10:13:02 PM  11424 deterministic_environmental_standing_report_routing_v1.json                           
+5/20/2026 3:57:22 PM    9402 seat_measures_ai_assessment_content_structured_environment_media_v1.json              
+5/20/2026 3:57:22 PM    6989 oar2_seat_measures_ai_assessment_content_structured_environment_media_v1.meta.md      
+5/20/2026 3:57:22 PM    9268 oar2_measures_registry_launch_flow_assessment_chamber_alignment_v1.meta.md            
+5/20/2026 3:57:22 PM    5467 oar1_measures_registry_launch_flow_assessment_chamber_alignment_v1.meta.md            
+5/20/2026 3:57:22 PM    5657 oar1_seat_measures_ai_assessment_content_structured_environment_media_v1.meta.md      
+5/20/2026 3:57:22 PM   11453 execute-seat-measures-ai-assessment-content-structured-environment-media.cjs          
+5/13/2026 5:33:48 PM    3360 oar1_normalize_phase_map_release_surface_and_copy_v1.meta.md                          
+5/13/2026 5:32:39 PM    7583 normalize_phase_map_release_surface_and_copy_v1.json                                  
+5/13/2026 5:32:17 PM    6434 execute-normalize-phase-map-release-surface-and-copy.cjs                              
+5/13/2026 5:28:29 PM    4913 oar2_normalize_phase_map_release_surface_and_copy_v1.meta.md                          
+5/13/2026 4:46:58 PM    6744 oar1_diagnose_seated_phase_map_logic_v1.meta.md                                       
+5/13/2026 4:36:08 PM   60161 repair_temple_epithet_phase_return_v1.json                                            
+5/13/2026 4:35:52 PM     933 oar2_diagnose_seated_phase_map_logic_v1.meta.md                                       
+5/13/2026 4:35:48 PM   14613 execute-repair-temple-epithet-phase-return.cjs                                        
+5/13/2026 4:08:48 PM    5263 loop_crystal_temple_home_video_v1.json                                                
+5/13/2026 2:47:28 PM    6398 diagnose_inanna_deployed_runtime_binding_v1.json                                      
+5/13/2026 2:47:12 PM    2986 oar1_refine_temple_home_and_seat_inanna_encounter_v1.meta.md                          
+5/13/2026 2:47:06 PM   16168 refine_temple_home_and_seat_inanna_encounter_v1.json                                  
+5/13/2026 2:22:10 PM   19540 execute-refine-temple-home-and-seat-inanna-encounter.cjs                              
+5/13/2026 2:10:14 PM    6863 oar2_refine_temple_home_and_seat_inanna_encounter_v1.meta.md                          
+5/13/2026 1:31:43 PM    4279 oar1_refine_ceremonial_traversal_and_installation_tones_v1.meta.md                    
+5/13/2026 1:30:39 PM    9826 refine_ceremonial_traversal_and_installation_tones_v1.json                            
+5/13/2026 1:30:21 PM   12778 execute-refine-ceremonial-traversal-and-installation-tones.cjs                        
+5/13/2026 1:19:13 PM    6444 oar2_refine_ceremonial_traversal_and_installation_tones_v1.meta.md                    
+5/13/2026 11:51:13 AM   7187 oar1_seat_universal_chamberplate_animated_to_still_contract_v1.meta.md                
+5/13/2026 11:48:21 AM   2594 seat_universal_chamberplate_animated_to_still_contract_v1.json                        
+5/12/2026 1:33:32 PM    5018 oar2_seat_universal_chamberplate_animated_to_still_contract_v1.meta.md                
+5/12/2026 11:43:48 AM   7001 oar1_diagnose_passage_runtime_and_enforce_epithet_contract_v1.meta.md                 
+5/12/2026 11:40:46 AM  14630 diagnose_passage_runtime_and_enforce_epithet_contract_v1.json                         
+5/12/2026 11:40:05 AM  11482 execute-diagnose-passage-runtime-and-enforce-epithet-contract.cjs                     
+5/12/2026 11:22:44 AM   6028 oar2_diagnose_passage_runtime_and_enforce_epithet_contract_v1.meta.md                 
+5/12/2026 11:14:43 AM   6872 oar1_repair_governed_chamberplate_media_authority_v1.meta.md                          
+5/12/2026 10:50:13 AM 166877 diagnose_inanna_full_encounter_matrix_v1.json                                         
+5/12/2026 10:49:38 AM   8765 repair_governed_chamberplate_media_authority_v1.json                                  
+5/12/2026 10:49:16 AM  13028 execute-repair-governed-chamberplate-media-authority.cjs                              
+5/12/2026 10:38:41 AM   3964 oar2_repair_governed_chamberplate_media_authority_v1.meta.md                          
+5/12/2026 10:13:34 AM   6290 oar1_repair_inanna_governed_media_authority_across_passages_v1.meta.md                
+5/12/2026 10:09:32 AM  11094 repair_inanna_governed_media_authority_across_passages_v1.json                        
+5/12/2026 10:08:53 AM  13256 execute-repair-inanna-governed-media-authority-across-passages.cjs                    
+5/12/2026 10:05:24 AM  24003 execute-diagnose-inanna-full-encounter-matrix.cjs                                     
+5/12/2026 9:57:03 AM    5251 oar2_repair_inanna_governed_media_authority_across_passages_v1.meta.md                
+5/12/2026 9:39:52 AM    6945 oar1_diagnose_inanna_full_encounter_matrix_v1.meta.md                                 
+5/12/2026 9:22:40 AM    5839 oar2_diagnose_inanna_full_encounter_matrix_v1.meta.md                                 
+5/12/2026 6:44:38 AM    4615 oar1_repair_gate_1_crown_removed_encounter_resolution_v1.meta.md                      
+5/12/2026 6:42:25 AM    8630 repair_gate_1_crown_removed_encounter_resolution_v1.json                              
+5/12/2026 6:42:00 AM    7657 execute-repair-gate-1-crown-removed-encounter-resolution.cjs                          
+5/12/2026 6:34:14 AM    4743 oar2_repair_gate_1_crown_removed_encounter_resolution_v1.meta.md                      
+5/12/2026 6:23:53 AM    6612 oar1_diagnose_inanna_transition_and_encounter_resolution_v1.meta.md                   
+5/12/2026 6:20:41 AM   45798 diagnose_inanna_transition_and_encounter_resolution_v1.json                           
+5/12/2026 6:20:12 AM   16954 execute-diagnose-inanna-transition-and-encounter-resolution.cjs                       
+5/12/2026 6:10:44 AM    4441 oar2_diagnose_inanna_transition_and_encounter_resolution_v1.meta.md                   
+5/12/2026 4:50:28 AM    5568 oar1_inanna_governed_media_public_read_policy_v1.meta.md                              
+5/12/2026 4:21:20 AM    5694 inanna_governed_media_public_read_policy_v1.json                                      
+5/12/2026 4:20:57 AM    8223 execute-inanna-governed-media-public-read-policy.cjs                                  
+5/12/2026 3:45:21 AM   11409 execute-promote-current-inanna-build-artifact.cjs                                     
+5/12/2026 3:37:31 AM    4654 oar2_promote_current_inanna_build_artifact_v1.meta.md                                 
+5/12/2026 3:20:31 AM    6180 oar1_diagnose_inanna_deployed_runtime_binding_v1.meta.md                              
+5/12/2026 3:18:21 AM   15958 execute-diagnose-inanna-deployed-runtime-binding.cjs                                  
+5/12/2026 3:10:29 AM    4126 oar2_diagnose_inanna_deployed_runtime_binding_v1.meta.md                              
+5/12/2026 2:54:09 AM    3000 oar1_seat_epigraph_governed_animated_media_v1.meta.md                                 
+5/12/2026 2:45:43 AM    6680 seat_epigraph_governed_animated_media_v1.json                                         
+5/12/2026 2:33:10 AM   12073 execute-seat-epigraph-governed-animated-media.cjs                                     
+5/12/2026 2:13:57 AM    3881 oar2_seat_epigraph_governed_animated_media_v1.meta.md                                 
+5/12/2026 1:59:48 AM    7075 oar1_enable_non_chamberplate_governed_media_resolution_v1.meta.md                     
+5/12/2026 1:58:44 AM   12014 enable_non_chamberplate_governed_media_resolution_v1.json                             
+5/12/2026 1:58:28 AM   11693 execute-enable-non-chamberplate-governed-media-resolution.cjs                         
+5/12/2026 1:49:05 AM    4473 oar2_enable_non_chamberplate_governed_media_resolution_v1.meta.md                     
+5/12/2026 1:34:41 AM    6504 oar1_correct_measures_registry_media_rows_and_migrate_inanna_fallbacks_v1.meta.md     
+5/12/2026 1:33:34 AM   12065 correct_measures_registry_media_rows_and_migrate_inanna_fallbacks_v1.json             
+5/12/2026 1:33:06 AM   13986 execute-correct-measures-registry-media-rows-and-migrate-inanna-fallbacks.cjs         
+5/12/2026 1:28:50 AM    5690 oar2_correct_measures_registry_media_rows_and_migrate_inanna_fallbacks_v1.meta.md     
+5/12/2026 1:22:55 AM    9266 oar1_reconcile_measures_registry_and_pre_codex_media_inventory_v1.meta.md             
+5/12/2026 1:21:42 AM  155991 reconcile_measures_registry_and_pre_codex_media_inventory_v1.json                     
+5/12/2026 1:21:14 AM   19747 execute-reconcile-measures-registry-and-pre-codex-media-inventory.cjs                 
+5/12/2026 1:14:15 AM    4487 oar2_reconcile_measures_registry_and_pre_codex_media_inventory_v1.meta.md             
+5/12/2026 12:54:06 AM  10099 oar1_diagnose_measures_media_runtime_resolution_v1.meta.md                            
+5/12/2026 12:52:53 AM  18708 diagnose_measures_media_runtime_resolution_v1.json                                    
+5/12/2026 12:52:33 AM  13928 execute-diagnose-measures-media-runtime-resolution.cjs                                
+5/12/2026 12:43:57 AM   4976 oar2_diagnose_measures_media_runtime_resolution_v1.meta.md                            
+5/11/2026 11:58:03 PM   5483 oar1_remap_verified_pre_codex_assets_to_supabase_provider_v1.meta.md                  
+5/11/2026 11:57:25 PM  26392 remap_verified_pre_codex_assets_to_supabase_provider_v1.json                          
+5/11/2026 11:56:58 PM  11152 execute-remap-verified-pre-codex-assets-to-supabase-provider.cjs                      
+5/11/2026 11:55:02 PM   4299 oar2_remap_verified_pre_codex_assets_to_supabase_provider_v1.meta.md                  
+5/11/2026 11:49:29 PM   3366 oar1_expand_codex_media_asset_storage_provider_contract_v1.meta.md                    
+5/11/2026 11:48:48 PM   3182 expand_codex_media_asset_storage_provider_contract_v1.json                            
+5/11/2026 11:48:30 PM   7620 execute-expand-codex-media-asset-storage-provider-contract.cjs                        
+5/11/2026 11:45:33 PM   4597 oar2_expand_codex_media_asset_storage_provider_contract_v1.meta.md                    
+5/11/2026 11:34:59 PM   1710 oar1_copy_corrected_inanna_epigraph_asset_v1.meta.md                                  
+5/11/2026 11:34:45 PM   1409 copy_corrected_inanna_epigraph_asset_v1.json                                          
+5/11/2026 11:34:33 PM   5579 execute-copy-corrected-inanna-epigraph-asset.cjs                                      
+5/11/2026 11:32:32 PM   2889 oar2_copy_corrected_inanna_epigraph_asset_v1.meta.md                                  
+5/11/2026 11:19:26 PM   2894 oar1_copy_corrected_pre_codex_media_assets_to_measures_registry_v1.meta.md            
+5/11/2026 11:19:02 PM   5154 copy_corrected_pre_codex_media_assets_to_measures_registry_v1.json                    
+5/11/2026 11:18:35 PM   7285 execute-copy-corrected-pre-codex-media-assets-to-measures-registry.cjs                
+5/11/2026 11:13:44 PM   3821 oar2_copy_corrected_pre_codex_media_assets_to_measures_registry_v1.meta.md            
+5/11/2026 11:06:40 PM   5779 oar1_confirm_transfer_and_remap_operator_verified_pre_codex_assets_v1.meta.md         
+5/11/2026 11:05:57 PM  18022 confirm_transfer_and_remap_operator_verified_pre_codex_assets_v1.json                 
+5/11/2026 11:05:40 PM   8196 execute-confirm-transfer-and-remap-operator-verified-pre-codex-assets.cjs             
+5/11/2026 11:01:21 PM   4473 oar2_confirm_transfer_and_remap_operator_verified_pre_codex_assets_v1.meta.md         
+5/11/2026 10:31:57 PM   6575 oar1_copy_and_remap_pre_codex_webp_images_to_measures_registry_v1.meta.md             
+5/11/2026 10:31:15 PM  16470 copy_and_remap_pre_codex_webp_images_to_measures_registry_v1.json                     
+5/11/2026 10:29:51 PM   8381 execute-copy-and-remap-pre-codex-webp-images-to-measures-registry.cjs                 
+5/11/2026 10:25:58 PM   5871 oar2_copy_and_remap_pre_codex_webp_images_to_measures_registry_v1.meta.md             
+5/11/2026 9:50:49 AM    2585 oar1_reconcile_registry_unmatched_l2_media_v1.meta.md                                 
+5/11/2026 9:49:35 AM    8759 reconcile_registry_unmatched_l2_media_v1.json                                         
+5/11/2026 9:36:03 AM   10650 execute-reconcile-registry-unmatched-l2-media.cjs                                     
+5/11/2026 8:51:43 AM    4718 oar2_reconcile_registry_unmatched_l2_media_v1.meta.md                                 
+5/10/2026 3:19:04 PM    2809 oar1_migrate_registry_media_references_to_l2_v1.meta.md                               
+5/10/2026 3:18:46 PM    5589 migrate_registry_media_references_to_l2_v1.json                                       
+5/10/2026 3:18:32 PM    9717 execute-migrate-registry-media-references-to-l2.cjs                                   
+5/10/2026 3:11:51 PM    6618 oar2_migrate_registry_media_references_to_l2_v1.meta.md                               
+5/7/2026 8:46:57 PM     2080 oar1_registered_process_log_runtime_refinement_v1.meta.md                             
+5/7/2026 8:46:57 PM     1234 registered_process_log_runtime_refinement_v1.md                                       
+5/7/2026 8:46:57 PM      929 registered_process_log_runtime_refinement_v1.json                                     
+5/7/2026 8:42:31 PM     3758 oar2_registered_process_log_runtime_refinement_v1.meta.md                             
+5/7/2026 8:23:12 PM     2873 oar1_registered_process_log_runtime_v1.meta.md                                        
+5/7/2026 8:23:12 PM     1627 registered_process_log_runtime_v1.md                                                  
+5/7/2026 8:23:12 PM     2081 registered_process_log_runtime_v1.json                                                
+5/7/2026 8:19:51 PM    14600 execute-registered-process-log-runtime.cjs                                            
+5/7/2026 8:15:54 PM     5687 oar2_registered_process_log_runtime_v1.meta.md                                        
+5/7/2026 6:53:31 PM     3336 oar1_recommended_process_seed_transfer_wave_v1.meta.md                                
+5/7/2026 6:53:31 PM     2122 recommended_process_seed_transfer_wave_v1.md                                          
+5/7/2026 6:53:31 PM     3370 recommended_process_seed_transfer_wave_v1.json                                        
+5/7/2026 6:52:16 PM     5270 execute-recommended-process-seed-transfer-wave.cjs                                    
+5/7/2026 6:48:22 PM     3624 oar2_recommended_process_seed_transfer_wave_v1.meta.md                                
+5/7/2026 6:38:30 PM     4533 oar1_process_seeding_reaudit_v1.meta.md                                               
+5/7/2026 6:37:52 PM     1304 process_seeding_reaudit_v1.md                                                         
+5/7/2026 6:37:52 PM     8740 process_seeding_reaudit_v1.json                                                       
+5/7/2026 6:37:36 PM    10096 execute-process-seeding-reaudit.cjs                                                   
+5/7/2026 6:35:08 PM     4111 oar2_process_seeding_reaudit_v1.meta.md                                               
+5/7/2026 6:16:53 PM     2847 oar1_seed_qualification_rules_verification_v1.meta.md                                 
+5/7/2026 6:16:23 PM     3293 execute-seed-qualification-rules-verification.cjs                                     
+5/7/2026 6:09:03 PM     3198 oar2_seed_qualification_rules_verification_v1.meta.md                                 
+5/7/2026 5:35:28 PM     4128 oar1_process_seeding_audit_v1.meta.md                                                 
+5/7/2026 5:34:49 PM     6796 process_seeding_audit_v1.md                                                           
+5/7/2026 5:34:49 PM    28587 process_seeding_audit_v1.json                                                         
+5/7/2026 5:34:28 PM     8852 execute-process-seeding-audit.cjs                                                     
+5/7/2026 5:31:09 PM     4066 oar2_process_seeding_audit_v1.meta.md                                                 
+5/7/2026 2:32:31 PM     2489 oar1_relational_output_governance_seed_v1.meta.md                                     
+5/7/2026 2:31:55 PM     3254 execute-relational-output-governance-seed.cjs                                         
+5/7/2026 2:27:09 PM     3698 oar2_relational_output_governance_seed_v1.meta.md                                     
+5/7/2026 11:22:44 AM    3629 oar1_educate_eval_structural_drift_editorial_refinement_v1.meta.md                    
+5/7/2026 11:15:05 AM    4976 oar2_educate_eval_structural_drift_editorial_refinement_v1.meta.md                    
+5/7/2026 3:19:46 AM     5014 oar1_structural_drift_dispatches_rename_issue002_v1.meta.md                           
+5/7/2026 3:18:11 AM    14095 execute-structural-drift-dispatches-rename-issue002.cjs                               
+5/7/2026 3:12:45 AM     4342 oar2_structural_drift_dispatches_rename_issue002_v1.meta.md                           
+5/7/2026 2:31:12 AM     4495 oar1_structural_drift_field_guide_v1.meta.md                                          
+5/7/2026 2:17:16 AM     6496 oar2_structural_drift_field_guide_v1.meta.md                                          
+5/6/2026 12:23:40 PM    4486 oar1_educational_diagnostic_passage_codex_publication_surface_v1.meta.md              
+5/6/2026 12:22:42 PM   11077 execute-educational-diagnostic-passage-codex-publication-surface.cjs                  
+5/6/2026 12:16:32 PM    4127 oar2_educational_diagnostic_passage_codex_publication_surface_v1.meta.md              
+5/6/2026 11:14:45 AM    3520 oar1_educational_diagnostic_encounter_reconstruction_v1.meta.md                       
+5/6/2026 11:13:39 AM    5519 execute-educational-diagnostic-encounter-reconstruction.cjs                           
+5/6/2026 11:08:27 AM    5115 oar2_educational_diagnostic_encounter_reconstruction_v1.meta.md                       
+5/6/2026 10:57:19 AM    3658 oar1_path_threshold_hero_reconstruction_v1.meta.md                                    
+5/6/2026 10:57:12 AM    4056 oar1_addendum_seat_path_threshold_hero_media_v1.meta.md                               
+5/6/2026 10:56:17 AM    5546 execute-seat-path-threshold-hero-media.cjs                                            
+5/6/2026 10:51:10 AM    2252 oar2_addendum_seat_path_threshold_hero_media_v1.meta.md                               
+5/6/2026 10:22:27 AM    4667 oar2_path_threshold_hero_reconstruction_v1.meta.md                                    
+5/6/2026 1:02:54 AM     1745 oar1_epigraph_autoplay_muted_context_v1.meta.md                                       
+5/6/2026 12:58:36 AM    2527 oar2_epigraph_autoplay_muted_context_v1.meta.md                                       
+5/6/2026 12:21:55 AM    1739 oar1_media_map_public_read_policy_correction_v1.meta.md                               
+5/6/2026 12:21:32 AM    2525 execute-media-map-public-read-policy.cjs                                              
+5/6/2026 12:04:43 AM    3811 oar1_cohort_conversion_encounter_v1.meta.md                                           
+5/6/2026 12:03:36 AM    9341 execute-cohort-conversion-encounter.cjs                                               
+5/5/2026 11:56:52 PM    6033 oar2_cohort_conversion_encounter_v1.meta.md                                           
+5/5/2026 11:06:44 PM    4606 oar1_landing_epigraph_split_hero_v1.meta.md                                           
+5/5/2026 11:05:23 PM   15311 execute-landing-epigraph-split-hero.cjs                                               
+5/5/2026 10:59:08 PM    6073 oar2_landing_epigraph_split_hero_v1.meta.md                                           
+5/5/2026 8:40:38 PM     1842 oar1_execution_validation_cody_operator_v1.meta.md                                    
+5/5/2026 8:40:07 PM     4837 execute-execution-validation-cody-operator.cjs                                        
+5/5/2026 8:36:22 PM     2083 oar2_execution_validation_cody_operator_v1.meta.md                                    
+5/5/2026 1:50:35 PM     3855 oar1_epigraph_landing_refinement_v1.meta.md                                           
+5/5/2026 1:49:20 PM     4789 execute-epigraph-landing-refinement.cjs                                               
+5/5/2026 1:41:28 PM     3892 oar2_epigraph_landing_refinement_v1.meta.md                                           
+5/5/2026 2:35:12 AM     2446 oar1_route_plate_visual_correction_v1.meta.md                                         
+5/5/2026 2:25:40 AM     2893 oar2_route_plate_visual_correction_v1.meta.md                                         
+5/5/2026 2:21:01 AM     3146 oar1_c3_field_authority_surface_v1.meta.md                                            
+5/5/2026 2:19:37 AM     8565 execute-c3-field-authority-surface.cjs                                                
+5/5/2026 2:11:48 AM     3428 oar2_c3_field_authority_surface_v1.meta.md                                            
+5/5/2026 1:38:19 AM     2707 oar1_landing_path_surface_restructure_v1.meta.md                                      
+5/5/2026 1:33:25 AM     6143 execute-landing-path-surface-restructure.cjs                                          
+5/5/2026 1:29:06 AM     3141 oar2_landing_path_surface_restructure_v1.meta.md                                      
+5/4/2026 10:49:19 PM    2434 oar1_intro_hook_epigraph_v1.meta.md                                                   
+5/4/2026 9:19:42 PM     3028 oar2_intro_hook_epigraph_v1.meta.md                                                   
+5/4/2026 8:48:40 PM     2438 oar1_about_page_surface_v2_institution_binding.meta.md                                
+5/4/2026 8:47:51 PM     7355 execute-about-page-surface-v2-institution-binding.cjs                                 
+5/4/2026 8:44:18 PM     3221 oar2_about_page_surface_v2_institution_binding.meta.md                                
+5/4/2026 8:37:46 PM     2628 oar1_about_page_surface_v2_codex_binding.meta.md                                      
+5/4/2026 8:35:44 PM     7087 execute-about-page-surface-v2-codex-binding.cjs                                       
+5/4/2026 8:32:01 PM     2716 oar2_about_page_surface_v2_codex_binding.meta.md                                      
+5/4/2026 6:05:06 PM     2514 oar1_seat_capture_binding_v1.meta.md                                                  
+5/4/2026 6:03:55 PM     8428 execute-seat-capture-binding.cjs                                                      
+5/4/2026 6:00:21 PM     3040 oar2_seat_capture_binding_v1.meta.md                                                  
+5/4/2026 5:43:08 PM     2261 oar1_seat_offering_structure_v1.meta.md                                               
+5/4/2026 5:42:23 PM     8428 execute-seat-offering-structure.cjs                                                   
+5/4/2026 5:39:30 PM     3476 oar2_seat_offering_structure_v1.meta.md                                               
+5/4/2026 5:16:49 PM     2744 oar1_seat_hold_lifecycle_control_v1.meta.md                                           
+5/4/2026 5:15:43 PM    10513 execute-seat-hold-lifecycle-control.cjs                                               
+5/4/2026 5:12:15 PM     2435 oar2_seat_hold_lifecycle_control_v1.meta.md                                           
+5/4/2026 4:23:10 PM     1349 oar1_seed_test_capture_row_v1.meta.md                                                 
+5/4/2026 4:22:24 PM     2241 execute-seed-test-capture-row.cjs                                                     
+5/4/2026 4:19:48 PM     1530 oar2_seed_test_capture_row_v1.meta.md                                                 
+5/4/2026 3:25:33 PM     2608 oar1_seat_hold_notification_provider_integration_v1.meta.md                           
+5/4/2026 3:24:40 PM     6032 execute-seat-hold-notification-provider-integration.cjs                               
+5/4/2026 3:18:56 PM     2676 oar2_seat_hold_notification_provider_integration_v1.meta.md                           
+5/4/2026 7:04:00 AM     2637 oar1_seat_hold_notification_dispatch_v1.meta.md                                       
+5/4/2026 7:03:24 AM    13504 execute-seat-hold-notification-dispatch.cjs                                           
+5/4/2026 7:00:10 AM     2647 oar2_seat_hold_notification_dispatch_v1.meta.md                                       
+5/4/2026 6:46:56 AM     2338 oar1_seat_hold_notification_review_surface_v1.meta.md                                 
+5/4/2026 6:46:28 AM    10353 execute-seat-hold-notification-review-surface.cjs                                     
+5/4/2026 6:41:57 AM     1821 oar2_seat_hold_notification_review_surface_v1.meta.md                                 
+5/4/2026 6:34:31 AM     2853 oar1_seat_hold_notification_flow_v1.meta.md                                           
+5/4/2026 6:33:21 AM     7207 execute-seat-hold-notification-flow.cjs                                               
+5/4/2026 6:31:26 AM     1939 oar2_seat_hold_notification_flow_v1.meta.md                                           
+5/4/2026 6:15:06 AM     1950 oar1_foundation_offering_surface_v1.meta.md                                           
+5/4/2026 6:13:46 AM     6230 execute-foundation-offering-surface.cjs                                               
+5/4/2026 6:09:18 AM     3143 oar2_foundation_offering_surface_v1.meta.md                                           
+5/4/2026 6:02:13 AM     1738 oar1_foundation_seat_hold_v1.meta.md                                                  
+5/4/2026 6:01:24 AM     1519 oar1_systems_seat_hold_v1.meta.md                                                     
+5/4/2026 6:00:33 AM     8850 execute-seat-hold-surfaces.cjs                                                        
+5/4/2026 5:13:42 AM     1770 oar2_foundation_seat_hold_v1.meta.md                                                  
+5/4/2026 5:13:42 AM     1740 oar2_systems_seat_hold_v1.meta.md                                                     
+5/4/2026 4:48:02 AM     1748 oar1_systems_offering_surface_v1.meta.md                                              
+5/4/2026 4:46:02 AM     5679 execute-systems-offering-surface.cjs                                                  
+5/4/2026 4:42:34 AM     2483 oar2_systems_offering_surface_v1.meta.md                                              
+5/4/2026 4:30:50 AM     1767 oar1_build_coherence_reserve_seat_v1.meta.md                                          
+5/4/2026 4:28:45 AM     4880 execute-build-coherence-reserve-seat.cjs                                              
+5/4/2026 4:25:34 AM     2186 oar2_build_coherence_reserve_seat_v1.meta.md                                          
+5/4/2026 4:00:37 AM     1446 oar1_registry_isomorphic_surface_classification_v1.meta.md                            
+5/4/2026 3:06:07 AM     5021 execute-registry-isomorphic-surface-classification.cjs                                
+5/4/2026 2:59:53 AM     3004 oar2_registry_isomorphic_surface_classification_v1.meta.md                            
+5/4/2026 2:19:26 AM     1281 oar2_measures_registry_design_tokens_v1.meta.md                                       
+
+
+
+
+=== RECENT PROCESS OAR FILES ===
+
+LastWriteTime         Length Name                                                                           
+-------------         ------ ----                                                                           
+5/25/2026 5:46:32 PM    7896 oar2_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md
+5/20/2026 3:57:22 PM    1438 thread_closeout_process_registry_and_oar_queue_foundation_v1.meta.md           
+5/20/2026 3:57:22 PM    4699 schema_preflight_process_registry_and_oar_queue_foundation_v1.meta.md          
+5/20/2026 3:57:22 PM    6368 oar2_runtime_lens_convergence_v1.meta.md                                       
+5/20/2026 3:57:22 PM    6082 oar2_runtime_transition_governance_engine_v1.meta.md                           
+5/20/2026 3:57:22 PM    3852 oar2_runtime_operator_invocation_validation_v1.meta.md                         
+5/20/2026 3:57:22 PM    6777 oar2_runtime_optics_hierarchical_restraint_v1.meta.md                          
+5/20/2026 3:57:22 PM    5344 oar2_runtime_lens_interaction_selective_emphasis_v1.meta.md                    
+5/20/2026 3:57:22 PM    4766 oar2_runtime_branch_encounter_readiness_v1.meta.md                             
+5/20/2026 3:57:22 PM    4981 oar2_runtime_coherence_optics_mandala_seating_v1.meta.md                       
+5/20/2026 3:57:22 PM    5769 oar2_runtime_coherence_optics_deployment_surface_v1.meta.md                    
+5/20/2026 3:57:22 PM    6213 oar2_restore_field_optics_visibility_boundary_v1.meta.md                       
+5/20/2026 3:57:22 PM    6569 oar2_remote_execution_live_db_validation_v1.meta.md                            
+5/20/2026 3:57:22 PM    4645 oar2_process_registry_runtime_contract_v1.meta.md                              
+5/20/2026 3:57:22 PM    6172 oar2_process_registry_operationalization_v1.meta.md                            
+5/20/2026 3:57:22 PM    4172 oar2_process_registry_failure_state_hardening_v1.meta.md                       
+5/20/2026 3:57:22 PM    4689 oar2_process_registry_correction_path_hardening_v1.meta.md                     
+5/20/2026 3:57:22 PM    4032 oar2_process_registry_and_oar_queue_foundation_v1.meta.md                      
+5/20/2026 3:57:22 PM    6653 oar2_perceptual_hierarchy_material_spaciousness_addendum_v1.meta.md            
+5/20/2026 3:57:22 PM    5186 oar2_optics_surface_registry_v1.meta.md                                        
+5/20/2026 3:57:22 PM    6381 oar2_operator_gated_runtime_automation_bridge_v1.meta.md                       
+5/20/2026 3:57:22 PM    2752 oar2_local_validation_before_remote_process_registry_migration_v1.meta.md      
+5/20/2026 3:57:22 PM    6940 oar2_live_rls_posture_correction_v1.meta.md                                    
+5/20/2026 3:57:22 PM    6825 oar2_lapis_relation_mapping_surface_v1.meta.md                                 
+5/20/2026 3:57:22 PM    6659 oar2_lapis_field_geometry_optics_refactor_v1.meta.md                           
+5/20/2026 3:57:22 PM    4455 oar2_glyph_operator_registry_v1.meta.md                                        
+5/20/2026 3:57:22 PM    7645 oar2_geometric_rooting_preservation_surface_v1.meta.md                         
+5/20/2026 3:57:22 PM    4179 oar2_first_live_governed_queue_execution_v1.meta.md                            
+5/20/2026 3:57:22 PM    5276 oar2_db_source_relation_map_reconstruction_passage_v1.meta.md                  
+5/20/2026 3:57:22 PM    5982 oar2_field_optics_nonverbal_state_expression_v1.meta.md                        
+5/20/2026 3:57:22 PM    3964 oar2_execute_process_registry_and_oar_queue_foundation_migration_v1.meta.md    
+5/20/2026 3:57:22 PM    5204 oar2_coherence_optics_grammar_registry_v1.meta.md                              
+5/20/2026 3:57:22 PM    4094 oar2_bounded_process_registry_runtime_implementation_v1.meta.md                
+5/20/2026 3:57:22 PM    4250 oar1_runtime_transition_governance_engine_v1.meta.md                           
+5/20/2026 3:57:22 PM    4309 oar1_runtime_optics_hierarchical_restraint_v1.meta.md                          
+5/20/2026 3:57:22 PM    3364 oar1_runtime_operator_invocation_validation_v1.meta.md                         
+5/20/2026 3:57:22 PM    5168 oar1_runtime_lens_interaction_selective_emphasis_v1.meta.md                    
+5/20/2026 3:57:22 PM    7813 oar1_runtime_lens_convergence_v1.meta.md                                       
+5/20/2026 3:57:22 PM    3762 oar1_runtime_coherence_optics_mandala_seating_v1.meta.md                       
+5/20/2026 3:57:22 PM    5831 oar1_runtime_branch_encounter_readiness_v1.meta.md                             
+5/20/2026 3:57:22 PM    4266 oar1_runtime_coherence_optics_deployment_surface_v1.meta.md                    
+5/20/2026 3:57:22 PM    6831 oar1_restore_field_optics_visibility_boundary_v1.meta.md                       
+5/20/2026 3:57:22 PM    6033 oar1_process_registry_correction_path_hardening_v1.meta.md                     
+5/20/2026 3:57:22 PM     907 oar1_process_registry_and_oar_queue_foundation_v1.meta.md                      
+5/20/2026 3:57:22 PM    5181 oar1_process_registry_failure_state_hardening_v1.meta.md                       
+5/20/2026 3:57:22 PM    5513 oar1_remote_execution_live_db_validation_v1.meta.md                            
+5/20/2026 3:57:22 PM    3554 oar1_process_registry_runtime_contract_v1.meta.md                              
+5/20/2026 3:57:22 PM    4447 oar1_process_registry_operationalization_v1.meta.md                            
+5/20/2026 3:57:22 PM    5105 oar1_perceptual_hierarchy_material_spaciousness_addendum_v1.meta.md            
+5/20/2026 3:57:22 PM    5017 oar1_optics_surface_registry_v1.meta.md                                        
+5/20/2026 3:57:22 PM    4565 oar1_operator_gated_runtime_automation_bridge_v1.meta.md                       
+5/20/2026 3:57:22 PM    4601 oar1_geometric_rooting_preservation_surface_v1.meta.md                         
+5/20/2026 3:57:22 PM    5034 oar1_first_live_governed_queue_execution_v1.meta.md                            
+5/20/2026 3:57:22 PM    4942 oar1_lapis_relation_mapping_surface_v1.meta.md                                 
+5/20/2026 3:57:22 PM    4864 oar1_lapis_field_geometry_optics_refactor_v1.meta.md                           
+5/20/2026 3:57:22 PM    4573 oar1_glyph_operator_registry_v1.meta.md                                        
+5/20/2026 3:57:22 PM    9363 oar1_execute_process_registry_and_oar_queue_foundation_migration_v1.meta.md    
+5/20/2026 3:57:22 PM    3904 oar1_field_optics_nonverbal_state_expression_v1.meta.md                        
+5/20/2026 3:57:22 PM    4631 oar1_db_source_relation_map_reconstruction_passage_v1.meta.md                  
+5/20/2026 3:57:22 PM    3941 oar1_bounded_process_registry_runtime_implementation_v1.meta.md                
+5/20/2026 3:57:22 PM    4858 oar1_coherence_optics_grammar_registry_v1.meta.md                              
+5/20/2026 3:57:22 PM    3559 execute-db-source-relation-map-reconstruction-validation-v1.cjs                
+5/20/2026 3:57:22 PM    5935 db_source_relation_map_reconstruction_validation_v1.sql                        
+5/20/2026 3:57:22 PM    7463 db_source_relation_map_reconstruction_passage_v1.md                            
+5/20/2026 3:57:22 PM    1332 db_source_relation_map_reconstruction_recovery_posture_v1.md                   
+5/13/2026 6:55:03 PM    9540 oar2_institutional_media_bucket_governance_and_runtime_authority_v1.meta.md    
+5/13/2026 6:40:59 PM    4451 transfer_automation_proposal_chazz_cody_oar_cycle_v1.meta.md                   
+5/12/2026 12:05:39 PM   3483 oar2_seed_private_bucket_transfer_process_v1.meta.md                           
+5/9/2026 4:52:40 PM     4303 oar2_update_powershell_transfer_surface_rule_v1.meta.md                        
+
+
+
+
+=== TARGET OAR CONTENTS ===
+
+--- FILE: docs\oar\measures_registry\oar2_deprecate_legacy_measures_registry_route_surfaces_and_seat_installation_grammar_v1.meta.md ---
+MISSING
+
+--- FILE: docs\oar\measures_registry\oar1_deprecate_legacy_measures_registry_route_surfaces_and_seat_installation_grammar_v1.meta.md ---
+MISSING
+
+--- FILE: docs\oar\measures_registry\oar2_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md ---
+---
+document_type: oar2
+authority_level: working
+document_scope: measures_registry_registered_runtime
+title: OAR2 â€” Seat Process: DB Seating and c3field Readability Protection Rule
+status: executed
+version: v1
+operator: op044
+system: measures_registry
+source_oar1:
+  - docs/oar/measures_registry/oar1_seat_eval_passage_and_assessment_chamber_visual_contracts_v1.meta.md
+  - docs/oar/measures_registry/inspect-eval-passage-and-assessment-contracts-v1.cjs
+source_contract:
+  - measures_registry_registered_runtime
+  - eval_passage
+  - connect_src
+  - measures_assessment
+  - measures_phases_reveal
+executor: claude_sonnet_4_6
+tags:
+  - oar2
+  - measures-registry
+  - runtime-sequence
+  - contact-capture
+  - assessment-chamber
+  - db-seating
+  - c3field-protection
+  - process-governance
+---
+
+# OAR2 â€” Seat Process: DB Seating and c3field Readability Protection Rule
+
+## OBSERVED
+
+The registered runtime (`MeasuresRegistryRuntimeRegistered.tsx`) had the evaluation sequence inverted relative to the governing surface contract.
+
+### Sequence misassignment (before)
+
+    eval_passage
+      â†’ measures_assessment   (questions shown here â€” wrong)
+      â†’ connect_src           (contact captured after questions â€” wrong)
+      â†’ measures_phases_reveal  (assessment result never shown â€” wrong)
+
+### Root causes identified
+
+1. `eval_passage.onContinue` navigated to `measures_assessment` directly, bypassing `connect_src`.
+
+2. `submitIisEvaluation` called `navigate("connect_src")` immediately after scoring â€” the `MeasuresAssessmentChamber` result state (`evalSubmitted=true`) was never rendered.
+
+3. `submitContactCapture` navigated to `measures_phases_reveal`, skipping the assessment result display entirely.
+
+4. The DB capture record was structurally incorrect: contact fields and evaluation answers were written together in `submitContactCapture`, before evaluation answers existed. When contact capture happened first, `evaluation_answers` was empty. When contact capture happened after questions (as wired), the insert carried stale state references (`evalReport`, `evalEmailArtifact`, `conditionTraces`) rather than the freshly computed interpretation.
+
+5. `sharedAssessmentProps.onEnterStructuredEnvironment` and `onStructuredEnvironmentVideoEnded` both targeted `connect_src` â€” meaning the result-state CTA on `measures_assessment` routed back to contact capture, creating a loop rather than continuing to `measures_phases_reveal`.
+
+### Surface URL misassignment
+
+`?surface=measures_assessment` was rendering the evaluation intake form (questions), not the assessment result. The `measures_assessment` encounter key names the assessment â€” its URL should present the result, not the question intake.
+
+## ALIGNED
+
+The governing sequence for the eval path is:
+
+    eval_passage â†’ connect_src â†’ measures_assessment â†’ result â†’ measures_phases_reveal
+
+Contact capture must occur before assessment questions open.
+
+Assessment result must render in-place on `measures_assessment` after question submission.
+
+Phases reveal must open only after the result CTA or video completion.
+
+The DB capture record must be written with complete data â€” contact fields (from `connect_src`) plus evaluation answers plus scoring result â€” at the time of question submission, in a single coherent insert.
+
+### Constraints
+
+Do not change content.
+
+Do not change scoring.
+
+Do not change questions.
+
+Do not change contact fields.
+
+Do not change phases reveal.
+
+Fix only runtime sequence.
+
+## ROUTED
+
+### 1. eval_passage â†’ connect_src
+
+**File:** `src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx`
+
+**Change:** `eval_passage` `onContinue` navigates to `connect_src` instead of `measures_assessment`.
+
+```
+before: onContinue={() => navigate("measures_assessment")}
+after:  onContinue={() => navigate("connect_src")}
+```
+
+### 2. submitContactCapture â€” validation and navigate only
+
+**File:** `src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx`
+
+**Change:** `submitContactCapture` becomes synchronous. DB insert removed. Validates required contact fields in `evalFields` and navigates to `measures_assessment`.
+
+```
+before: async â€” DB insert â€” navigate("measures_phases_reveal")
+after:  sync â€” field validation only â€” navigate("measures_assessment")
+```
+
+No DB insert at contact capture time. Contact fields are stored in `evalFields` state and carried forward to question submission.
+
+### 3. submitIisEvaluation â€” absorbs DB insert, shows result in-place
+
+**File:** `src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx`
+
+**Change:** `submitIisEvaluation` becomes async. Absorbs the full DB insert from `submitContactCapture`. After successful insert, sets `evalSubmitted(true)` and returns without navigating. The `MeasuresAssessmentChamber` result state renders in-place on `measures_assessment`.
+
+```
+before: sync â€” score only â€” navigate("connect_src")
+after:  async â€” score + DB insert (contact + answers + interpretation) â€” setEvalSubmitted(true) â€” no navigate
+```
+
+The DB record is written once, with all data present: contact fields from `evalFields` (populated by `connect_src`), evaluation answers, environmental standing report, condition traces.
+
+Scoring contract, answer values, condition tags, and interpretation logic are not modified.
+
+### 4. sharedAssessmentProps â€” result CTA targets measures_phases_reveal
+
+**File:** `src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx`
+
+**Change:** `onEnterStructuredEnvironment` and `onStructuredEnvironmentVideoEnded` navigate to `measures_phases_reveal` instead of `connect_src`.
+
+```
+before: onEnterStructuredEnvironment: () => navigate("connect_src")
+        onStructuredEnvironmentVideoEnded: () => navigate("connect_src")
+
+after:  onEnterStructuredEnvironment: () => navigate("measures_phases_reveal")
+        onStructuredEnvironmentVideoEnded: () => navigate("measures_phases_reveal")
+```
+
+These props fire from the `MeasuresAssessmentChamber` result state only (`evalSubmitted=true`). The CTA and video completion both advance to phases reveal.
+
+### 5. Reset useEffect â€” no change required
+
+The existing reset effect is correct and requires no modification:
+
+```ts
+useEffect(() => {
+  if (activeSurface === "structured_eval" || activeSurface === "measures_assessment") {
+    setEvalSubmitted(false)
+    setEvalStep("diagnostic")
+    setEvalError(null)
+  }
+}, [activeSurface])
+```
+
+When `connect_src` navigates to `measures_assessment`, the reset fires once â€” setting `evalSubmitted=false` and `evalStep="diagnostic"` â€” so questions present correctly. After `submitIisEvaluation` sets `evalSubmitted=true`, the surface remains `measures_assessment` (no navigation), so the reset does not re-fire. The result renders in-place.
+
+## CORRECTED SEQUENCE
+
+    eval_passage
+      â†’ connect_src           (contact captured first â€” correct)
+      â†’ measures_assessment   (questions, then result in-place â€” correct)
+      â†’ measures_phases_reveal  (after result CTA or video â€” correct)
+
+`?surface=measures_assessment` now resolves to the assessment result following contact capture and question submission.
+
+---
+
+## c3FIELD READABILITY PROTECTION RULE
+
+This rule is established as a permanent governance constraint for all future measures_registry OAR executor sessions.
+
+### Rule
+
+When executing any `measures_registry` OAR, the following paths are **out of scope** and must not be read, inspected, or modified:
+
+    src/c3_field_convergence/
+    src/measures_of_inanna/
+
+These surfaces are governed under separate authority. Reading them during measures_registry execution contaminates context and creates latent modification risk.
+
+### Rationale
+
+The c3 Field convergence surfaces (`OarOperationsConsole`, `OperationsSpine`, `LapisRelationMappingSurface`, etc.) and the Measures of Inanna surfaces (`Temple`, `EncounterStageMedia`, etc.) are independent runtime domains. They share no DB tables, no component hierarchy, and no routing with `measures_registry`.
+
+When a measures_registry executor session reads these files â€” even read-only â€” the session context absorbs unrelated architectural patterns. This increases the probability of:
+
+- Importing patterns from one domain into another
+- Misidentifying shared utilities as domain-specific
+- Proposing changes that appear reasonable against c3 field context but violate measures_registry contracts
+
+### Scope boundary
+
+In-scope for measures_registry OAR execution:
+
+    src/measures_registry/
+    src/app/App.tsx (routing decisions only)
+    src/shared/
+    src/integrations/
+
+Out of scope without explicit operator authorization:
+
+    src/c3_field_convergence/
+    src/measures_of_inanna/
+
+### Enforcement
+
+If a measures_registry OAR requires a change in `src/app/App.tsx`, the executor reads only the routing block. The executor does not read component bodies for c3Field or Inanna surfaces.
+
+If a future OAR requires cross-domain coordination, the operator must explicitly authorize the scope expansion in the OAR2 directive.
+
+---
+
+## VALIDATION
+
+| item | status |
+|---|---|
+| eval_passage â†’ connect_src | âœ“ |
+| connect_src â†’ measures_assessment | âœ“ |
+| submitContactCapture â€” validation only, no DB insert | âœ“ |
+| submitIisEvaluation â€” async, absorbs DB insert, result in-place | âœ“ |
+| onEnterStructuredEnvironment â†’ measures_phases_reveal | âœ“ |
+| onStructuredEnvironmentVideoEnded â†’ measures_phases_reveal | âœ“ |
+| Reset useEffect unchanged | âœ“ |
+| TypeScript â€” no errors | âœ“ |
+| Scoring contract not modified | âœ“ |
+| Questions not modified | âœ“ |
+| Contact fields not modified | âœ“ |
+| Content not modified | âœ“ |
+| Phases reveal not modified | âœ“ |
+| c3field readability protection rule established | âœ“ |
+
+## FILES MODIFIED
+
+    src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx
+
+## SUCCESS CONDITION
+
+1. The registered runtime eval path sequence is corrected: contact capture precedes question intake, assessment result renders on `measures_assessment` after question submission, phases reveal follows result CTA or video completion.
+
+2. The DB capture record is written once with complete data at question submission time.
+
+3. The c3field readability protection rule is established and governs all future measures_registry OAR executor sessions.
+
+## EXPECTED OAR1
+
+docs/oar/measures_registry/oar1_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md
+
+## CLOSE
+
+Sequence corrected. Protection rule established.
+
+--- FILE: docs\oar\measures_registry\oar1_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md ---
+---
+document_type: oar1
+authority_level: working
+document_scope: measures_registry_registered_runtime
+title: OAR1 â€” Seat Process: DB Seating and c3field Readability Protection Rule
+status: closed
+version: v1
+operator: op044
+system: measures_registry
+source_oar2: docs/oar/measures_registry/oar2_seat_process_db_seating_and_c3field_readability_protection_rule_v1.meta.md
+executor: claude_sonnet_4_6
+tags:
+  - oar1
+  - measures-registry
+  - runtime-sequence
+  - contact-capture
+  - assessment-chamber
+  - db-seating
+  - c3field-protection
+  - process-governance
+---
+
+# OAR1 â€” Seat Process: DB Seating and c3field Readability Protection Rule
+
+## EXECUTION SUMMARY
+
+Corrected the registered runtime evaluation sequence in `MeasuresRegistryRuntimeRegistered.tsx`.
+
+Contact capture (`connect_src`) now precedes assessment questions (`measures_assessment`). Assessment result renders in-place on `measures_assessment` after question submission. Phases reveal follows result CTA or video completion.
+
+DB capture record restructured: the full insert (contact fields + evaluation answers + scoring result) now executes in `submitIisEvaluation` as a single coherent write, after all data is present.
+
+c3field readability protection rule established in the OAR2. No c3field or Inanna source files were read during execution of this session.
+
+TypeScript clean. No content, scoring, questions, contact fields, or phases reveal modified.
+
+---
+
+## DIAGNOSIS (before)
+
+### Sequence misassignment
+
+```
+eval_passage
+  â†’ measures_assessment   (questions â€” wrong position)
+  â†’ connect_src           (contact â€” wrong position)
+  â†’ measures_phases_reveal  (assessment result never rendered)
+```
+
+### Root causes
+
+| cause | location |
+|---|---|
+| `eval_passage.onContinue` routed to `measures_assessment`, bypassing `connect_src` | line 759 |
+| `submitIisEvaluation` called `navigate("connect_src")` after scoring â€” result state never shown | line 469 |
+| `submitContactCapture` navigated to `measures_phases_reveal` â€” assessment result skipped entirely | line 538 |
+| `onEnterStructuredEnvironment` and `onStructuredEnvironmentVideoEnded` both targeted `connect_src` â€” result CTA looped back to contact form | lines 693, 697 |
+| DB insert in `submitContactCapture` carried empty `evaluation_answers`, null `evalReport`, empty `conditionTraces` â€” data not yet present at capture time | lines 489â€“528 |
+
+---
+
+## MODIFICATIONS
+
+### `src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx`
+
+#### 1. eval_passage onContinue
+
+```
+before: onContinue={() => navigate("measures_assessment")}
+after:  onContinue={() => navigate("connect_src")}
+```
+
+#### 2. submitIisEvaluation â€” async, absorbs DB insert, result in-place
+
+Function made async. DB insert moved here from `submitContactCapture`. After successful insert, sets `evalSubmitted(true)` and returns without navigating. `MeasuresAssessmentChamber` result state renders in-place.
+
+Insert now carries complete data: contact fields from `evalFields` (populated by `connect_src`), `populatedEvalAnswers`, `interpretation.report`, `interpretation.emailArtifact`, `traces`. No stale state references.
+
+`evalSubmitting` guards the submit button during the async insert (`disabled={evalSubmitting}`). Button text reads "Resolving Assessment" during insert.
+
+```
+before: sync â€” score only â€” navigate("connect_src")
+after:  async â€” score + DB insert â€” setEvalSubmitted(true) â€” no navigate
+```
+
+#### 3. submitContactCapture â€” sync, validation and navigate only
+
+DB insert removed. Function made synchronous. Validates required contact fields in `evalFields`. Navigates to `measures_assessment` on success.
+
+```
+before: async â€” DB insert (with incomplete data) â€” navigate("measures_phases_reveal")
+after:  sync â€” field validation only â€” navigate("measures_assessment")
+```
+
+#### 4. sharedAssessmentProps â€” result CTA targets
+
+```
+before: onEnterStructuredEnvironment: () => navigate("connect_src")
+        onStructuredEnvironmentVideoEnded: () => navigate("connect_src")
+
+after:  onEnterStructuredEnvironment: () => navigate("measures_phases_reveal")
+        onStructuredEnvironmentVideoEnded: () => navigate("measures_phases_reveal")
+```
+
+These props are only reachable from `MeasuresAssessmentChamber` when `evalSubmitted=true`. Both the CTA and video completion advance to phases reveal.
+
+### Reset useEffect â€” no change
+
+```ts
+useEffect(() => {
+  if (activeSurface === "structured_eval" || activeSurface === "measures_assessment") {
+    setEvalSubmitted(false)
+    setEvalStep("diagnostic")
+    setEvalError(null)
+  }
+}, [activeSurface])
+```
+
+Confirmed correct as written. Fires once when `connect_src` navigates to `measures_assessment` â€” resets to question mode. Does not re-fire after `submitIisEvaluation` sets `evalSubmitted(true)` because the surface does not change.
+
+---
+
+## CORRECTED SEQUENCE
+
+```
+eval_passage
+  â†’ connect_src           (contact captured â€” correct)
+  â†’ measures_assessment   (questions, then result in-place â€” correct)
+  â†’ measures_phases_reveal  (after result CTA or video â€” correct)
+```
+
+`?surface=measures_assessment` now resolves to the assessment result following contact capture and question submission.
+
+---
+
+## c3FIELD READABILITY PROTECTION RULE â€” INACTION RECORD
+
+**No files were read under:**
+
+    src/c3_field_convergence/
+    src/measures_of_inanna/
+
+This is recorded as a deliberate inaction confirming the protection rule established in the OAR2.
+
+The rule's authority derives from the architectural fact that measures_registry is a DB-seated system. The `measures_encounter_def` records are the governing authority for surface behavior. c3field carries no DB contract authority over measures_registry operations. Reading c3field source during measures_registry execution looks in the wrong place for authority and introduces context contamination risk.
+
+This inaction record stands as the first execution instance of the rule.
+
+---
+
+## FILES MODIFIED
+
+    src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx
+
+## FILES NOT MODIFIED (confirmed)
+
+    src/measures_registry/MeasuresRegistryRuntime.tsx
+    src/index.css
+    src/c3_field_convergence/ (entire directory â€” not read, not modified)
+    src/measures_of_inanna/ (entire directory â€” not read, not modified)
+    src/measures_registry/registered_runtime/renderers/ (all renderers â€” not modified)
+    src/measures_registry/MeasuresAssessmentChamber.tsx
+    All DB records â€” not modified
+
+## BUILD RESULT
+
+TypeScript: no errors (`tsc --noEmit` â€” clean)
+
+## CONFIRMATIONS
+
+| item | status |
+|---|---|
+| Sequence corrected: eval_passage â†’ connect_src â†’ measures_assessment â†’ result â†’ measures_phases_reveal | âœ“ |
+| Contact capture precedes assessment questions | âœ“ |
+| Assessment result renders in-place on measures_assessment | âœ“ |
+| Phases reveal follows result CTA or video only | âœ“ |
+| DB insert carries complete data at question submission time | âœ“ |
+| Scoring contract not modified | âœ“ |
+| Questions not modified | âœ“ |
+| Contact fields not modified | âœ“ |
+| Content not modified | âœ“ |
+| Phases reveal not modified | âœ“ |
+| Old monolithic runtime not touched | âœ“ |
+| c3field and Inanna source not read | âœ“ |
+| c3field readability protection rule inaction recorded | âœ“ |
+| TypeScript clean | âœ“ |
+
+## CLOSE
+
+Sequence corrected. DB insert consolidated. Protection rule established and first inaction recorded.
+
+=== GIT DIFF SUMMARY ===
+
+=== GIT DIFF OAR + MEASURES REGISTRY SRC ===

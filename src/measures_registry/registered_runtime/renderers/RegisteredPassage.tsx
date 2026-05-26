@@ -9,6 +9,7 @@ type Props = {
   passageVideoUrl: string | null
   passageMuted: boolean
   renderHeader: () => ReactNode
+  renderSystemFooter: () => ReactNode
   onContinue: () => void
   onToggleMuted: () => void
 }
@@ -20,6 +21,7 @@ export default function RegisteredPassage({
   passageVideoUrl,
   passageMuted,
   renderHeader,
+  renderSystemFooter,
   onContinue,
   onToggleMuted,
 }: Props) {
@@ -27,6 +29,12 @@ export default function RegisteredPassage({
     typeof passageCopy.stylingContract?.material_family === "string"
       ? passageCopy.stylingContract.material_family
       : variant === "structure" ? "obsidian" : "standard"
+
+  const layoutMode = typeof passageCopy.layoutContract?.layout_mode === "string"
+    ? passageCopy.layoutContract.layout_mode
+    : "passage_explainer"
+
+  const isSplitScreen = layoutMode === "split_screen_passage"
 
   const surfaceKey = variant === "eval" ? "educational_diagnostic_passage" : "structure_passage"
 
@@ -46,11 +54,67 @@ export default function RegisteredPassage({
     asString(passageCopy.actions.find((a) => asString(a.action_key) === "continue_to_evaluation")?.label) ??
     (variant === "eval" ? "Continue to Evaluation" : "Continue to Structured Evaluation")
 
+  const ctaPrimary = passageCopy.ctaPrimary ?? continueLabel
+  const ctaSecondary = passageCopy.ctaSecondary ?? (passageMuted ? "Audio" : "Mute")
+  const informationalParagraph = passageCopy.informationalParagraph ?? subtitle
+
+  const autoAdvanceOnEnd = passageCopy.mediaBehaviorContract?.auto_advance_on_end !== false
+
+  if (isSplitScreen) {
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface={surfaceKey}
+        data-material-family={materialFamily}
+        data-layout-mode={layoutMode}
+        style={registryTokenStyle}
+      >
+        {renderHeader()}
+        <section className="registry-diagnostic-passage registry-passage-split" aria-label={title}>
+          <div className="registry-passage-media-panel">
+            {passageVideoUrl ? (
+              <video
+                src={passageVideoUrl}
+                autoPlay
+                muted={passageMuted}
+                playsInline
+                preload="auto"
+                onEnded={autoAdvanceOnEnd ? onContinue : undefined}
+                aria-label="Passage"
+              />
+            ) : null}
+          </div>
+          <div className="registry-passage-information-panel">
+            <div className="registry-encounter-entry">
+              {passageCopy.eyebrow ? <span>{passageCopy.eyebrow}</span> : null}
+              <h1>{title}</h1>
+              {informationalParagraph ? <p>{informationalParagraph}</p> : null}
+            </div>
+            <div className="registry-encounter-actions">
+              <button type="button" onClick={onContinue}>
+                {ctaPrimary}
+              </button>
+              <button
+                type="button"
+                onClick={onToggleMuted}
+                className="registry-passage-audio-control"
+              >
+                {passageMuted ? ctaSecondary : "Mute"}
+              </button>
+            </div>
+          </div>
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
+  }
+
   return (
     <main
       className="measures-registry-runtime"
       data-surface={surfaceKey}
       data-material-family={materialFamily}
+      data-layout-mode={layoutMode}
       style={registryTokenStyle}
     >
       {renderHeader()}
@@ -83,9 +147,10 @@ export default function RegisteredPassage({
           {subtitle ? <p>{subtitle}</p> : null}
         </div>
         <button type="button" onClick={onContinue}>
-          {continueLabel}
+          {ctaPrimary}
         </button>
       </section>
+      {renderSystemFooter()}
     </main>
   )
 }

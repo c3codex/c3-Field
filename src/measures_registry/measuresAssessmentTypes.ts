@@ -10,6 +10,7 @@ export type AssessmentMechanicQuestion = {
   questionKey: string
   question: string
   contextLabel: string
+  contextStatement: string | null
   options: AssessmentMechanicOption[]
 }
 

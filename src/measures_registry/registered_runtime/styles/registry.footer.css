@@ -1,0 +1,7 @@
+/* System footer governance for registered runtime */
+.measures-registry-runtime .registry-system-footer {
+  width: min(var(--registry-content-max-width, 64rem), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding-top: 0.85rem;
+  padding-bottom: clamp(1rem, 3vw, 2rem);
+}

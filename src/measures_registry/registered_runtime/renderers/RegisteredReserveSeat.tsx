@@ -7,6 +7,7 @@ type Props = {
   reserveSeatCopy: SectionCopy
   seatOfferings: SeatOfferingRow[]
   renderHeader: () => ReactNode
+  renderSystemFooter: () => ReactNode
   onSelectOffering: () => void
 }
 
@@ -15,6 +16,7 @@ export default function RegisteredReserveSeat({
   reserveSeatCopy,
   seatOfferings,
   renderHeader,
+  renderSystemFooter,
   onSelectOffering,
 }: Props) {
   return (
@@ -64,6 +66,7 @@ export default function RegisteredReserveSeat({
           })}
         </div>
       </section>
+      {renderSystemFooter()}
     </main>
   )
 }

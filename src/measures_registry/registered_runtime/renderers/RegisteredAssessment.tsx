@@ -1,4 +1,4 @@
-import type { CSSProperties, FormEvent, MouseEvent } from "react"
+import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
 import { MeasuresAssessmentChamber } from "../../MeasuresAssessmentChamber"
 import { asString } from "../registeredRuntimeUtils"
 import type {
@@ -41,6 +41,7 @@ type Props = {
   onSubmitEvaluation: (event: FormEvent<HTMLFormElement>) => void
   onStructuredEnvironmentVideoEnded: () => void
   onTogglePassageMuted: () => void
+  renderSystemFooter?: () => ReactNode
 }
 
 export default function RegisteredAssessment({
@@ -73,16 +74,19 @@ export default function RegisteredAssessment({
   onSubmitEvaluation,
   onStructuredEnvironmentVideoEnded,
   onTogglePassageMuted,
+  renderSystemFooter,
 }: Props) {
   return (
     <MeasuresAssessmentChamber
       encounterKey="measures_ai_operational_evaluation"
+      assessmentEyebrow={asString(encounterCopy.eyebrow) ?? undefined}
       assessmentProcessTitle={
         asString(encounterCopy.assessmentChamber?.title) ??
         asString(
           encounterCopy.encounterContract?.content_blocks &&
           (encounterCopy.encounterContract.content_blocks as Record<string, unknown>)?.process_title,
         ) ??
+        asString(encounterCopy.title) ??
         undefined
       }
       assessmentSupportLine={
@@ -95,7 +99,9 @@ export default function RegisteredAssessment({
         asString(
           encounterCopy.encounterContract?.content_blocks &&
           (encounterCopy.encounterContract.content_blocks as Record<string, unknown>)?.sub_support_line,
-        ) ?? undefined
+        ) ??
+        asString(encounterCopy.subtitle) ??
+        undefined
       }
       evalAnswers={evalAnswers}
       evalEmailArtifact={evalEmailArtifact}
@@ -131,6 +137,7 @@ export default function RegisteredAssessment({
       onSubmitEvaluation={onSubmitEvaluation}
       onStructuredEnvironmentVideoEnded={onStructuredEnvironmentVideoEnded}
       onTogglePassageMuted={onTogglePassageMuted}
+      renderSystemFooter={renderSystemFooter}
     />
   )
 }

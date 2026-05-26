@@ -1,0 +1,43 @@
+/* Button governance for registered downstream surfaces */
+
+.measures-registry-runtime .registry-encounter-actions > button,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button {
+  background: transparent;
+  border: 1px solid var(--registry-brand-border);
+  color: var(--registry-brand-primary-text);
+  font-family: var(--registry-font-body);
+  font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+  letter-spacing: 0.08em;
+  padding: 0.55rem 1.5rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.measures-registry-runtime .registry-encounter-actions > button:hover,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button:hover {
+  border-color: var(--registry-brand-primary-text);
+  background: color-mix(in srgb, var(--registry-brand-border) 10%, transparent);
+}
+
+.measures-registry-runtime .registry-encounter-actions > button:focus-visible,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button:focus-visible {
+  outline: 2px solid var(--registry-brand-highlight);
+  outline-offset: 2px;
+}
+
+.measures-registry-runtime .registry-encounter-actions > button:active,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button:active {
+  opacity: 0.8;
+  transform: translateY(1px);
+}
+
+.measures-registry-runtime .registry-encounter-actions > button:disabled,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.measures-registry-runtime .registry-connect-src .registry-encounter-actions > button[type="submit"] {
+  border-color: var(--registry-brand-primary-text);
+}

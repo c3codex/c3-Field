@@ -6122,6 +6122,220 @@ body,
   color: #ffd8d8;
 }
 
+/* ── connect_src surface ──────────────────────────────────────────────────── */
+
+.registry-connect-src {
+  min-height: 100svh;
+  width: min(var(--registry-text-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + var(--registry-section-spacing-active)) 0 var(--registry-page-padding-active);
+  display: grid;
+  gap: var(--registry-section-spacing-active);
+  align-content: start;
+}
+
+.registry-eval-error {
+  margin: 0;
+  color: #ffb7a8;
+  font-size: var(--registry-body-active);
+}
+
+/* ── measures_eval_email_contract surface ─────────────────────────────────── */
+
+.registry-eval-email-contract {
+  min-height: 100svh;
+  width: min(var(--registry-text-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + var(--registry-section-spacing-active)) 0 var(--registry-page-padding-active);
+  display: grid;
+  gap: var(--registry-section-spacing-active);
+  align-content: start;
+}
+
+.registry-email-package-summary {
+  display: grid;
+  gap: 0.85rem;
+  border: 1px solid var(--registry-brand-border);
+  background: var(--registry-brand-field-wash);
+  padding: clamp(0.9rem, 2.2vw, 1.35rem);
+}
+
+.registry-email-section {
+  display: grid;
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--registry-brand-border);
+  padding-bottom: 0.7rem;
+}
+
+.registry-email-section span {
+  color: var(--registry-brand-muted-text);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.registry-email-section h2 {
+  margin: 0;
+  color: var(--registry-brand-primary-text);
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.05;
+  font-weight: 600;
+}
+
+.registry-email-package-includes {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--registry-brand-secondary-text);
+  font-size: var(--registry-body-active);
+}
+
+.registry-email-package-includes li {
+  border-top: 1px solid var(--registry-brand-border);
+  padding: 0.45rem 0;
+}
+
+.registry-email-dispatch-note {
+  margin: 0;
+  color: var(--registry-brand-muted-text);
+  font-size: var(--registry-entry-label);
+  line-height: 1.45;
+}
+
+/* ── marble material token overrides (measures_phases_reveal, about_measures_registry) */
+
+.measures-registry-runtime[data-material-family="marble"] {
+  --registry-brand-field: #f4efe4;
+  --registry-brand-panel-surface: #eae4d9;
+  --registry-brand-primary-text: #13110e;
+  --registry-brand-secondary-text: #3d3830;
+  --registry-brand-muted-text: #6b6357;
+  --registry-brand-border: rgba(19, 17, 14, 0.14);
+  --registry-brand-accent: #2b5ab8;
+  --registry-brand-highlight: #2b5ab8;
+  --registry-brand-panel-wash: color-mix(in srgb, #eae4d9 72%, transparent);
+  --registry-brand-field-wash: color-mix(in srgb, #f4efe4 76%, transparent);
+}
+
+/* ── measures_phases_reveal surface — marble ──────────────────────────────── */
+
+.registry-phases-reveal {
+  min-height: 100svh;
+  width: min(var(--registry-content-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + var(--registry-section-spacing-active)) 0 var(--registry-page-padding-active);
+  display: grid;
+  gap: var(--registry-section-spacing-active);
+  align-content: start;
+  position: relative;
+  overflow: hidden;
+}
+
+.registry-phases-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.registry-phases-reveal > *:not(.registry-phases-background) {
+  position: relative;
+  z-index: 1;
+}
+
+.registry-phases-standing {
+  display: grid;
+  gap: 0.45rem;
+  border: 1px solid var(--registry-brand-border);
+  background: var(--registry-brand-field-wash);
+  padding: clamp(0.9rem, 2.2vw, 1.35rem);
+}
+
+.registry-phases-standing span {
+  color: var(--registry-brand-muted-text);
+  font-size: var(--registry-entry-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.registry-phases-standing h2 {
+  margin: 0;
+  color: var(--registry-brand-primary-text);
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.05;
+  font-weight: 600;
+}
+
+.registry-phases-standing p {
+  margin: 0;
+  color: var(--registry-brand-secondary-text);
+  font-size: var(--registry-body-active);
+  line-height: 1.45;
+}
+
+.registry-phases-sections {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.registry-phases-sections article {
+  border: 1px solid var(--registry-brand-border);
+  background: var(--registry-brand-field-wash);
+  padding: clamp(0.85rem, 2vw, 1.25rem);
+  display: grid;
+  gap: 0.45rem;
+}
+
+.registry-phases-sections h3 {
+  margin: 0;
+  color: var(--registry-brand-primary-text);
+  font-size: var(--registry-plaque-title-active);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.registry-phases-sections p {
+  margin: 0;
+  color: var(--registry-brand-secondary-text);
+  font-size: var(--registry-body-active);
+  line-height: 1.45;
+}
+
+/* ── about_measures_registry surface — marble ─────────────────────────────── */
+
+.registry-about-authority {
+  min-height: 100svh;
+  width: min(var(--registry-content-max-width), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height) + var(--registry-section-spacing-active)) 0 var(--registry-page-padding-active);
+  display: grid;
+  gap: var(--registry-section-spacing-active);
+  align-content: start;
+  position: relative;
+  overflow: hidden;
+}
+
+.registry-about-marble {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.registry-about-authority > *:not(.registry-about-marble) {
+  position: relative;
+  z-index: 1;
+}
+
 @media (max-width: 760px) {
   .measures-registry-runtime {
     --registry-entry-headline-active: var(--registry-entry-headline-mobile);

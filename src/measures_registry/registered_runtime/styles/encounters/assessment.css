@@ -1,0 +1,215 @@
+/* Assessment chamber governance — diagnostic_question_chamber, obsidian material */
+
+/* ── CHAMBER FRAME ─────────────────────────────────────────────────────── */
+.measures-registry-runtime .registry-iis-eval.registry-assessment-chamber {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 3rem))
+    var(--registry-page-padding-active)
+    clamp(2rem, 4vw, 3rem);
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  background-image: var(--registry-assessment-background-image, none);
+  background-size: cover;
+  background-position: center;
+}
+
+/* ── EVAL FORM — centered in chamber ───────────────────────────────────── */
+.measures-registry-runtime .registry-assessment-chamber .registry-iis-eval-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: min(var(--registry-content-max-width, 70rem), 100%);
+  margin: 0 auto;
+}
+
+/* ── CHAMBER HEADING — page header, shown once ─────────────────────────── */
+.measures-registry-runtime .registry-chamber-heading {
+  padding-top: 0;
+  padding-bottom: clamp(0.75rem, 2vw, 1.25rem);
+  max-width: min(var(--registry-content-max-width, 70rem), 100%);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.measures-registry-runtime .registry-chamber-heading > span {
+  display: block;
+  font-size: clamp(0.65rem, 1vw, 0.75rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--registry-brand-muted-text);
+  margin-bottom: 0.35rem;
+}
+
+.measures-registry-runtime .registry-chamber-heading > h1 {
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.4rem;
+  color: var(--registry-brand-primary-text);
+}
+
+.measures-registry-runtime .registry-chamber-heading > p {
+  font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+  color: var(--registry-brand-secondary-text);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── QUESTION PROGRESS ─────────────────────────────────────────────────── */
+.measures-registry-runtime .registry-question-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: min(var(--registry-content-max-width, 70rem), 100%);
+  width: 100%;
+  margin: 0 auto clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.measures-registry-runtime .registry-question-progress > span {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--registry-brand-muted-text);
+}
+
+.measures-registry-runtime .registry-question-progress > div {
+  height: 1px;
+  background: var(--registry-brand-border);
+  width: 100%;
+  overflow: hidden;
+}
+
+.measures-registry-runtime .registry-question-progress > div > i {
+  display: block;
+  height: 100%;
+  background: var(--registry-brand-accent);
+  transition: width 0.3s ease;
+}
+
+/* ── QUESTION FIELDSET — 860px governed card ───────────────────────────── */
+.measures-registry-runtime .registry-single-question-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: min(53.75rem, 100%); /* 860px */
+  width: 100%;
+}
+
+.measures-registry-runtime .registry-question-legend {
+  display: none;
+}
+
+/* In-card mark suppressed — mark governs from header position only */
+.measures-registry-runtime .registry-question-mark {
+  display: none;
+}
+
+/* ── PER-QUESTION CONTEXT STATEMENT ───────────────────────────────────── */
+.measures-registry-runtime .registry-structured-context-statement {
+  font-size: clamp(0.78rem, 1.1vw, 0.88rem);
+  color: var(--registry-brand-muted-text);
+  line-height: 1.6;
+  margin: 0 0 clamp(0.6rem, 1.5vw, 0.9rem);
+  font-family: var(--registry-font-body);
+  letter-spacing: 0.01em;
+}
+
+/* ── QUESTION TEXT ─────────────────────────────────────────────────────── */
+.measures-registry-runtime .registry-structured-question-text {
+  display: block;
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-weight: 500;
+  color: var(--registry-brand-primary-text);
+  line-height: 1.4;
+  margin-bottom: clamp(0.85rem, 2vw, 1.25rem);
+}
+
+/* ── ANSWER OPTIONS — refined operational rows ─────────────────────────── */
+.measures-registry-runtime .registry-structured-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.measures-registry-runtime .registry-structured-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: clamp(0.6rem, 1.5vw, 0.85rem) clamp(0.75rem, 2vw, 1rem);
+  border-bottom: 1px solid var(--registry-brand-border);
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.measures-registry-runtime .registry-structured-option:first-child {
+  border-top: 1px solid var(--registry-brand-border);
+}
+
+.measures-registry-runtime .registry-structured-option:hover {
+  background: color-mix(in srgb, var(--registry-brand-accent, currentColor) 6%, transparent);
+}
+
+.measures-registry-runtime .registry-structured-option input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  min-width: 1rem;
+  border: 1px solid var(--registry-brand-border);
+  border-radius: 50%;
+  margin-top: 0.1rem;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background-color 0.12s ease;
+  flex-shrink: 0;
+}
+
+.measures-registry-runtime .registry-structured-option input[type="radio"]:checked {
+  border-color: var(--registry-brand-accent);
+  background: var(--registry-brand-accent);
+}
+
+.measures-registry-runtime .registry-structured-option > span {
+  font-size: clamp(0.8rem, 1.2vw, 0.92rem);
+  color: var(--registry-brand-secondary-text);
+  line-height: 1.5;
+  font-family: var(--registry-font-body);
+}
+
+.measures-registry-runtime .registry-structured-option:has(input:checked) > span {
+  color: var(--registry-brand-primary-text);
+}
+
+/* ── FORM ERROR ────────────────────────────────────────────────────────── */
+.measures-registry-runtime .registry-form-error {
+  color: var(--registry-brand-accent);
+  font-size: 0.82rem;
+  margin: 0.5rem 0 0;
+  max-width: min(var(--registry-content-max-width, 70rem), 100%);
+}
+
+/* ── MEDIA ABSENCE ─────────────────────────────────────────────────────── */
+.measures-registry-runtime .registry-media-absence {
+  font-size: 0.78rem;
+  color: var(--registry-brand-muted-text);
+  margin: 0 0 1rem;
+  opacity: 0.6;
+}
+
+@media (max-width: 620px) {
+  .measures-registry-runtime .registry-iis-eval.registry-assessment-chamber {
+    padding: clamp(0.75rem, 3vw, 1.5rem) var(--registry-page-padding-active);
+    justify-content: flex-start;
+    padding-top: calc(var(--registry-header-height, 3rem) + clamp(1rem, 3vw, 2rem));
+  }
+
+  .measures-registry-runtime .registry-structured-option {
+    padding: 0.65rem 0.5rem;
+  }
+}

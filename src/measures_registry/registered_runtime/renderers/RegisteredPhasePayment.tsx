@@ -10,6 +10,7 @@ type Props = {
   holdStatus: string | null
   holdError: string | null
   renderHeader: () => ReactNode
+  renderSystemFooter: () => ReactNode
   onHoldEmailChange: (value: string) => void
   onBack: () => void
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
@@ -23,6 +24,7 @@ export default function RegisteredPhasePayment({
   holdStatus,
   holdError,
   renderHeader,
+  renderSystemFooter,
   onHoldEmailChange,
   onBack,
   onSubmit,
@@ -89,6 +91,7 @@ export default function RegisteredPhasePayment({
           {holdError ? <p className="reserve-seat-error">{holdError}</p> : null}
         </form>
       </section>
+      {renderSystemFooter()}
     </main>
   )
 }

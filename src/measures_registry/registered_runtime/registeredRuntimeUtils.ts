@@ -71,6 +71,7 @@ export function allAssessmentMechanics(metadataValue: unknown): AssessmentMechan
         questionKey,
         question: questionText,
         contextLabel: asString(question.context_label) ?? "Additional institutional context (optional)",
+        contextStatement: asString(question.context_statement),
         options,
       }
     })
@@ -224,6 +225,114 @@ export function resolveEnvironmentalReport(
   }
 }
 
+export function resolveEnvironmentalReportByScore(
+  mechanics: AssessmentMechanicQuestion[],
+  traces: AssessmentConditionTrace[],
+  interpretationValue: unknown,
+): { report: EnvironmentalStandingReport; emailArtifact: AssessmentEmailArtifact; score: number } | null {
+  const interpretation = asRecord(interpretationValue)
+  const scoringThresholds = asRecordArray(interpretation?.scoring_thresholds)
+  const emailTemplate = asRecord(interpretation?.email_artifact_template)
+  const reportLabels = asRecord(interpretation?.report_labels)
+  const findingMap = asRecord(interpretation?.finding_map)
+
+  if (scoringThresholds.length === 0 || !emailTemplate) {
+    const fallback = resolveEnvironmentalReport(interpretationValue, traces)
+    if (!fallback) return null
+    return { ...fallback, score: -1 }
+  }
+
+  let totalScore = 0
+  let maxScore = 0
+  for (const question of mechanics) {
+    const tagCounts = question.options.map((o) => o.conditionTags.length)
+    const minTags = Math.min(...tagCounts)
+    const maxTags = Math.max(...tagCounts)
+    maxScore += maxTags - minTags
+    const trace = traces.find((t) => t.question_key === question.questionKey)
+    if (trace) totalScore += Math.max(0, trace.condition_tags.length - minTags)
+  }
+  const scorePercent = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0
+
+  const threshold =
+    scoringThresholds.find((t) => {
+      const min = typeof t.min === "number" ? t.min : 0
+      const max = typeof t.max === "number" ? t.max : 100
+      return scorePercent >= min && scorePercent <= max
+    }) ?? scoringThresholds[scoringThresholds.length - 1]
+
+  if (!threshold) return null
+
+  const standingKey = asString(threshold.standing_key) ?? "structural_drift_detected"
+  const standing = asString(threshold.standing) ?? "Structural Drift Detected"
+
+  const submittedTags = [...new Set(traces.flatMap((t) => t.condition_tags))]
+  const findings = [
+    ...new Set(
+      submittedTags.flatMap((tag) => {
+        const mapped = findingMap?.[tag]
+        return typeof mapped === "string" ? [mapped] : []
+      }),
+    ),
+  ]
+  const detectedConditions = submittedTags
+    .map((tag) => asString(asRecord(interpretation?.condition_labels)?.[tag]) ?? tag.replaceAll("_", " "))
+    .slice(0, 8)
+
+  const report: EnvironmentalStandingReport = {
+    environmental_standing: standing,
+    standing_key: standingKey,
+    assessment_title: asString(reportLabels?.assessment_title) ?? "MEASURES AI ENVIRONMENT ASSESSMENT",
+    assessment_result: asString(threshold.assessment_result) ?? standing,
+    detected_conditions: detectedConditions,
+    findings,
+    operational_exposure_summary:
+      asString(threshold.operational_exposure_summary) ??
+      "Assessment resolved through seated scoring contract.",
+    recommended_structured_action:
+      asString(threshold.recommended_structured_action) ??
+      "Continue through the Measures structured pathway.",
+    recommended_response_label:
+      asString(reportLabels?.recommended_response_label) ?? "Recommended Operational Response",
+    continuation_pathway:
+      asString(threshold.continuation_pathway) ?? "Structured Environment continuation",
+    explainability: {
+      question_keys: traces.map((t) => t.question_key),
+      condition_tags: submittedTags,
+      standing_rule: `scoring_threshold_${standingKey}`,
+    },
+  }
+
+  const replacements = {
+    assessment_title: report.assessment_title,
+    assessment_result: report.assessment_result,
+    environmental_standing: report.environmental_standing,
+    operational_exposure_summary: report.operational_exposure_summary,
+    recommended_structured_action: report.recommended_structured_action,
+    recommended_response_label: report.recommended_response_label,
+    continuation_pathway: report.continuation_pathway,
+    findings: report.findings.join(", "),
+    detected_conditions: report.detected_conditions.join(", "),
+  }
+
+  return {
+    score: scorePercent,
+    report,
+    emailArtifact: {
+      subject: replaceTemplateTokens(
+        asString(emailTemplate.subject) ?? "Measures AI Environment Assessment",
+        replacements,
+      ),
+      preview: replaceTemplateTokens(
+        asString(emailTemplate.preview) ?? report.operational_exposure_summary,
+        replacements,
+      ),
+      body: asStringArray(emailTemplate.body).map((line) => replaceTemplateTokens(line, replacements)),
+      source: "scoring_threshold_contract",
+    },
+  }
+}
+
 export function mediaUrl(row?: MediaRow): string | null {
   return resolveRuntimeMediaUrl({
     bucketName: row?.storage_bucket,
@@ -246,6 +355,7 @@ export function sectionCopy(row?: LandingSectionRow) {
     eyebrow: asString(metadata.eyebrow),
     title: asString(metadata.title) ?? row?.display_title ?? null,
     subtitle: asString(metadata.subtitle),
+    informationalParagraph: asString(metadata.informational_paragraph),
     plaques: asRecordArray(metadata.plaques),
     entryLabel: asString(metadata.entry_label),
     entryHeadline: asString(metadata.entry_headline),
@@ -298,6 +408,10 @@ export function sectionCopy(row?: LandingSectionRow) {
     options: asRecordArray(metadata.options),
     more: asRecord(metadata.more),
     actions: asActionArray(metadata.actions),
+    mediaBehaviorContract: asRecord(metadata.media_behavior_contract),
+    brandingContract: asRecord(metadata.branding_contract),
+    contentContract: asRecord(metadata.content_contract),
+    routeCards: asRecordArray(metadata.route_cards),
   }
 }
 

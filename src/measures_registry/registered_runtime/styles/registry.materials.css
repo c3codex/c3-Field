@@ -1,0 +1,48 @@
+/* Material surface contracts for registered runtime.
+   Consumes DB-injected CSS variables. color-mix() wash values are derived here; base values are in DB. */
+
+/* ── OBSIDIAN (default — already operational, preserved) ───────────────── */
+.measures-registry-runtime[data-material-family="obsidian"] {
+  --registry-brand-field:         var(--registry-brand-obsidian, var(--registry-background-obsidian, #0b0c11));
+  --registry-brand-panel-surface: var(--registry-brand-lapis-night, var(--registry-panel-obsidian, #13141c));
+  --registry-brand-accent:        var(--registry-brand-deep-lapis, var(--registry-accent-cool, #5b7fa6));
+  --registry-brand-primary-text:  var(--registry-brand-silver-frame, var(--registry-text-primary, #dde0e7));
+  --registry-brand-secondary-text:var(--registry-brand-marble-accent, var(--registry-text-secondary, #9fa4b0));
+  --registry-brand-muted-text:    var(--registry-brand-marble-accent, var(--registry-text-muted, #6b7080));
+  --registry-brand-border:        var(--registry-brand-silver-frame, var(--registry-border-subtle, rgba(221,224,231,0.12)));
+  --registry-brand-highlight:     var(--registry-brand-crystal-star, var(--registry-text-primary, #dde0e7));
+  background: var(--registry-brand-field, #0b0c11);
+  color: var(--registry-brand-primary-text, #dde0e7);
+}
+
+/* ── LAPIS ──────────────────────────────────────────────────────────────── */
+.measures-registry-runtime[data-material-family="lapis"] {
+  --registry-brand-field:         var(--registry-lapis-field, #0B1238);
+  --registry-brand-panel-surface: var(--registry-lapis-panel-surface, #101A4D);
+  --registry-brand-accent:        var(--registry-lapis-accent, rgba(108,154,208,0.82));
+  --registry-brand-primary-text:  var(--registry-lapis-primary-text, #D7DBE3);
+  --registry-brand-secondary-text:var(--registry-lapis-secondary-text, rgba(215,219,227,0.72));
+  --registry-brand-muted-text:    var(--registry-lapis-muted-text, rgba(215,219,227,0.52));
+  --registry-brand-border:        var(--registry-lapis-border, rgba(215,219,227,0.14));
+  --registry-brand-highlight:     var(--registry-lapis-highlight, #F2F4F8);
+  --registry-brand-panel-wash:    color-mix(in srgb, var(--registry-lapis-panel-surface, #101A4D) 72%, transparent);
+  --registry-brand-field-wash:    color-mix(in srgb, var(--registry-lapis-field, #0B1238) 76%, transparent);
+  background: var(--registry-brand-field);
+  color: var(--registry-brand-primary-text);
+}
+
+/* ── MARBLE ─────────────────────────────────────────────────────────────── */
+.measures-registry-runtime[data-material-family="marble"] {
+  --registry-brand-field:         var(--registry-marble-field, #f4efe4);
+  --registry-brand-panel-surface: var(--registry-marble-panel-surface, #eae4d9);
+  --registry-brand-accent:        var(--registry-marble-accent, #2b5ab8);
+  --registry-brand-primary-text:  var(--registry-marble-primary-text, #13110e);
+  --registry-brand-secondary-text:var(--registry-marble-secondary-text, #3d3830);
+  --registry-brand-muted-text:    var(--registry-marble-muted-text, #6b6357);
+  --registry-brand-border:        var(--registry-marble-border, rgba(19,17,14,0.14));
+  --registry-brand-highlight:     var(--registry-marble-highlight, #2b5ab8);
+  --registry-brand-panel-wash:    color-mix(in srgb, var(--registry-marble-panel-surface, #eae4d9) 72%, transparent);
+  --registry-brand-field-wash:    color-mix(in srgb, var(--registry-marble-field, #f4efe4) 76%, transparent);
+  background: var(--registry-brand-field);
+  color: var(--registry-brand-primary-text);
+}

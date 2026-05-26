@@ -1,3 +1,4 @@
+import "./styles/registry.runtime.css"
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties, FormEvent } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
@@ -8,7 +9,7 @@ import {
   asString,
   cssTokenName,
   mediaUrl,
-  resolveEnvironmentalReport,
+  resolveEnvironmentalReportByScore,
   sectionCopy,
   selectedConditionTraces,
 } from "./registeredRuntimeUtils"
@@ -80,6 +81,7 @@ const REGISTERED_MEDIA_ROLES = [
   "marble_tone",
   "installation_tone_marble",
   "installation_tone_marble_rise_return_v1",
+  "structural_drift_feature_image",
 ] as const
 
 const SURFACE_QUERY: Record<RegisteredSurface, string> = {
@@ -109,6 +111,20 @@ const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
 }
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
+
+function historyUrl(surface: RegisteredSurface) {
+  const url = new URL(window.location.href)
+  url.searchParams.set("surface", SURFACE_QUERY[surface])
+  return `${url.pathname}${url.search}${url.hash}`
+}
+
+function writeHistory(method: "pushState" | "replaceState", surface: RegisteredSurface) {
+  window.history[method](
+    { source: HISTORY_SOURCE, surface, surface_key: SURFACE_QUERY[surface] },
+    "",
+    historyUrl(surface),
+  )
+}
 
 function initialSurface(): RegisteredSurface {
   if (window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
@@ -145,10 +161,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const [evalSectionIndex, setEvalSectionIndex] = useState(0)
   const [evalSubmitting, setEvalSubmitting] = useState(false)
   const [evalSubmitted, setEvalSubmitted] = useState(false)
-  const [emailContractResolving, setEmailContractResolving] = useState(false)
   const [evalReport, setEvalReport] = useState<EnvironmentalStandingReport | null>(null)
   const [evalEmailArtifact, setEvalEmailArtifact] = useState<AssessmentEmailArtifact | null>(null)
   const [evalError, setEvalError] = useState<string | null>(null)
+  const [conditionTraces, setConditionTraces] = useState<import("./registeredRuntimeUtils").AssessmentConditionTrace[]>([])
 
   const [holdEmail, setHoldEmail] = useState("")
   const [holdSubmitting, setHoldSubmitting] = useState(false)
@@ -255,41 +271,51 @@ export default function MeasuresRegistryRuntimeRegistered() {
     return style as CSSProperties
   }, [designTokens])
 
-  function historyUrl(surface: RegisteredSurface) {
-    const url = new URL(window.location.href)
-    url.searchParams.set("surface", SURFACE_QUERY[surface])
-    return `${url.pathname}${url.search}${url.hash}`
-  }
-
-  function writeHistory(method: "pushState" | "replaceState", surface: RegisteredSurface) {
-    window.history[method](
-      { source: HISTORY_SOURCE, surface, surface_key: SURFACE_QUERY[surface] },
-      "",
-      historyUrl(surface),
-    )
-  }
-
   function navigate(surface: RegisteredSurface) {
-    if (navigationSourceRef.current === "app") writeHistory("pushState", surface)
+    navigationSourceRef.current = "app"
     setActiveSurface(surface)
   }
 
+  // URL sync: runs after every activeSurface change so URL always matches visible surface
   useEffect(() => {
-    const currentState = window.history.state
-    if (currentState?.source !== HISTORY_SOURCE || currentState.surface !== activeSurface) {
-      writeHistory("replaceState", activeSurface)
+    if (navigationSourceRef.current === "history") {
+      // Surface was set by popstate — browser already updated URL; just reset ref
+      navigationSourceRef.current = "app"
+      return
     }
+    const state = window.history.state
+    if (state?.source === HISTORY_SOURCE && state.surface === activeSurface) return
+    const method = state?.source === HISTORY_SOURCE ? "pushState" : "replaceState"
+    writeHistory(method, activeSurface)
+  }, [activeSurface])
 
+  useEffect(() => {
     function handlePopState(event: PopStateEvent) {
       if (event.state?.source !== HISTORY_SOURCE || !event.state.surface) return
       navigationSourceRef.current = "history"
       setActiveSurface(event.state.surface as RegisteredSurface)
-      window.setTimeout(() => { navigationSourceRef.current = "app" }, 0)
     }
-
     window.addEventListener("popstate", handlePopState)
     return () => window.removeEventListener("popstate", handlePopState)
   }, [])
+
+  // measures_eval_email_contract is internal — redirect any direct access to phases_reveal
+  useEffect(() => {
+    if (activeSurface === "measures_eval_email_contract") {
+      navigate("measures_phases_reveal")
+    }
+  }, [activeSurface])
+
+  // Assessment surfaces must always render questions, never a completion carry-over.
+  // evalSubmitted persists across SPA surface changes via browser back/forward navigation.
+  // Resetting it here ensures structured_eval and measures_assessment always start in question mode.
+  useEffect(() => {
+    if (activeSurface === "structured_eval" || activeSurface === "measures_assessment") {
+      setEvalSubmitted(false)
+      setEvalStep("diagnostic")
+      setEvalError(null)
+    }
+  }, [activeSurface])
 
   // --- derived copy ---
 
@@ -330,6 +356,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const registryWatermarkUrl = mediaUrl(mediaMap.get("watermark")) ?? mediaUrl(mediaMap.get("registry_watermark"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const marbleAccentReferenceUrl = mediaUrl(mediaMap.get("marble_accent_reference"))
+  const structuralDriftFeatureImageUrl = mediaUrl(mediaMap.get("structural_drift_feature_image"))
   const structuredEnvironmentPassageVideoUrl =
     mediaUrl(mediaMap.get("structured_environment_passage_video")) ??
     mediaUrl(mediaMap.get("measures_structured_enviroments"))
@@ -426,11 +453,15 @@ export default function MeasuresRegistryRuntimeRegistered() {
     }
 
     const traces = selectedConditionTraces(activeAssessmentMechanics, evalAnswers)
-    const interpretation = resolveEnvironmentalReport(activeEvaluationCopy.assessmentInterpretation, traces)
+    const interpretation = resolveEnvironmentalReportByScore(
+      activeAssessmentMechanics,
+      traces,
+      activeEvaluationCopy.assessmentInterpretation,
+    )
 
     if (!interpretation) {
       setEvalSubmitting(false)
-      setEvalError("Deterministic interpretation routing is not seated for this assessment.")
+      setEvalError("Scoring contract is not seated for this assessment.")
       return
     }
 
@@ -444,8 +475,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
       contact_position: evalFields.contact_position?.trim() ?? "",
       contact_email: evalFields.contact_email?.trim() ?? "",
       evaluation_answers: populatedEvalAnswers,
-      capture_context: evalFields.capture_context?.trim() || "iis_eval_gate1",
-      intent: evalFields.intent?.trim() || "system_evaluation_request",
+      capture_context: "iis_eval_gate1",
+      intent: "system_evaluation_request",
       eligibility: {
         gate_1: "complete",
         assessment_returned: true,
@@ -466,8 +497,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
           institution_address: evalFields.institution_address?.trim() || null,
           institution_phone: evalFields.institution_phone?.trim() || null,
           contact_position: evalFields.contact_position?.trim() || null,
-          assessment_intent: evalFields.intent?.trim() || null,
-          capture_context: evalFields.capture_context?.trim() || null,
         },
         visible_src_fields: requiredFields,
         minimum_identity_captured: true,
@@ -483,15 +512,28 @@ export default function MeasuresRegistryRuntimeRegistered() {
     setEvalSubmitting(false)
 
     if (error) {
-      setEvalStep("diagnostic")
       setEvalError("Evaluation could not be seated. Please try again.")
       return
     }
 
+    setConditionTraces(traces)
     setEvalReport(interpretation.report)
     setEvalEmailArtifact(interpretation.emailArtifact)
     setEvalSubmitted(true)
-    navigate("measures_eval_email_contract")
+  }
+
+  function submitContactCapture(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setEvalError(null)
+
+    const requiredFields = requiredEvalIdentityFields()
+    const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
+    if (missing.length > 0) {
+      setEvalError(`Missing required fields: ${missing.join(", ")}`)
+      return
+    }
+
+    navigate("measures_assessment")
   }
 
   // --- seat hold handler ---
@@ -645,13 +687,14 @@ export default function MeasuresRegistryRuntimeRegistered() {
     structuredEnvironmentPassageVideoUrl,
     onBackQuestion: () => setEvalSectionIndex((current) => Math.max(0, current - 1)),
     onContinueToDiagnostic: continueToDiagnostic,
-    onEnterStructuredEnvironment: () => navigate("measures_eval_email_contract"),
+    onEnterStructuredEnvironment: () => navigate("measures_phases_reveal"),
     onSetEvalAnswerContext: setEvalAnswerContext,
     onSetEvalAnswerSelection: setEvalAnswerSelection,
     onSetEvalField: setEvalField,
     onSubmitEvaluation: submitIisEvaluation,
-    onStructuredEnvironmentVideoEnded: () => navigate("measures_eval_email_contract"),
+    onStructuredEnvironmentVideoEnded: () => navigate("measures_phases_reveal"),
     onTogglePassageMuted: () => setPassageMuted((current) => !current),
+    renderSystemFooter,
   }
 
   // --- surface dispatcher ---
@@ -684,8 +727,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
             current[side] ? current : { ...current, [side]: true },
           )
         }
-        onLeftChoice={() => navigate("path_choice")}
-        onRightChoice={() => navigate("path_choice")}
+        onLeftChoice={() => navigate("eval_passage")}
+        onRightChoice={() => navigate("structure_passage")}
       />
     )
   } else if (activeSurface === "path_choice") {
@@ -710,7 +753,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
         passageVideoUrl={explainerVideoUrl}
         passageMuted={passageMuted}
         renderHeader={() => renderHeader(evalPassageCopy.header)}
-        onContinue={() => navigate("measures_assessment")}
+        renderSystemFooter={renderSystemFooter}
+        onContinue={() => navigate("connect_src")}
         onToggleMuted={() => setPassageMuted((current) => !current)}
       />
     )
@@ -723,6 +767,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         passageVideoUrl={structuredEnvironmentPassageVideoUrl}
         passageMuted={passageMuted}
         renderHeader={() => renderHeader(structurePassageCopy.header)}
+        renderSystemFooter={renderSystemFooter}
         onContinue={() => navigate("structured_eval")}
         onToggleMuted={() => setPassageMuted((current) => !current)}
       />
@@ -768,31 +813,25 @@ export default function MeasuresRegistryRuntimeRegistered() {
       />
     )
   } else if (activeSurface === "measures_eval_email_contract") {
-    activeSurfaceElement = (
-      <RegisteredEvalEmailContract
-        registryTokenStyle={registryTokenStyle}
-        emailContractResolving={emailContractResolving}
-        evalReport={evalReport}
-        evalFields={evalFields}
-        emailCopy={measuresEvalEmailCopy}
-        renderHeader={() => renderHeader(measuresEvalEmailCopy.header)}
-        onFieldChange={(key, value) => setEvalFields((current) => ({ ...current, [key]: value }))}
-        onSubmit={(event) => {
-          event.preventDefault()
-          setEmailContractResolving(true)
-          window.setTimeout(() => navigate("measures_phases_reveal"), 4000)
-        }}
-      />
-    )
+    // Internal contract — not a public encounter surface; redirect handled by useEffect above
+    activeSurfaceElement = null
   } else if (activeSurface === "measures_phases_reveal") {
     activeSurfaceElement = (
       <RegisteredPhaseReveal
         registryTokenStyle={registryTokenStyle}
         phaseRevealCopy={measuresPhasesRevealCopy}
         lapisBackgroundUrl={lapisBackgroundUrl}
-        evalReport={evalReport}
         renderHeader={() => renderHeader(measuresPhasesRevealCopy.header)}
-        onContinue={() => navigate("about_measures_registry")}
+        renderSystemFooter={renderSystemFooter}
+        onNavigateRoute={(route) => {
+          const routeMap: Partial<Record<string, RegisteredSurface>> = {
+            about_measures_registry: "about_measures_registry",
+            structural_drift_publication: "structural_drift_dispatches",
+            reserve_seat: "reserve_seat",
+          }
+          const surface = routeMap[route]
+          if (surface) navigate(surface)
+        }}
       />
     )
   } else if (activeSurface === "about_measures_registry") {
@@ -800,10 +839,17 @@ export default function MeasuresRegistryRuntimeRegistered() {
       <RegisteredAbout
         registryTokenStyle={registryTokenStyle}
         aboutCopy={aboutMeasuresRegistryCopy}
-        marbleAccentReferenceUrl={marbleAccentReferenceUrl}
+        structuralDriftFeatureImageUrl={structuralDriftFeatureImageUrl}
         renderHeader={() => renderHeader(aboutMeasuresRegistryCopy.header)}
         renderSystemFooter={renderSystemFooter}
-        onContinue={() => navigate("structural_drift_dispatches")}
+        onNavigateRoute={(route) => {
+          const routeMap: Partial<Record<string, RegisteredSurface>> = {
+            reserve_seat: "reserve_seat",
+            structural_drift_publication: "structural_drift_dispatches",
+          }
+          const surface = routeMap[route]
+          if (surface) navigate(surface)
+        }}
       />
     )
   } else if (activeSurface === "structural_drift_dispatches" || activeSurface === "publication_dispatch") {
@@ -837,6 +883,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         reserveSeatCopy={reserveSeatCopy}
         seatOfferings={seatOfferings}
         renderHeader={() => renderHeader()}
+        renderSystemFooter={renderSystemFooter}
         onSelectOffering={() => navigate("phase_payment")}
       />
     )
@@ -850,6 +897,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         holdStatus={holdStatus["phase_payment"] ?? null}
         holdError={holdError["phase_payment"] ?? null}
         renderHeader={() => renderHeader()}
+        renderSystemFooter={renderSystemFooter}
         onHoldEmailChange={setHoldEmail}
         onBack={() => navigate("reserve_seat")}
         onSubmit={(event) =>
@@ -869,12 +917,12 @@ export default function MeasuresRegistryRuntimeRegistered() {
         registryTokenStyle={registryTokenStyle}
         connectSrcCopy={connectSrcCopy}
         evalFields={evalFields}
+        evalSubmitting={evalSubmitting}
+        evalError={evalError}
         renderHeader={() => renderHeader(connectSrcCopy.header)}
+        renderSystemFooter={renderSystemFooter}
         onFieldChange={(key, value) => setEvalFields((current) => ({ ...current, [key]: value }))}
-        onSubmit={(event) => {
-          event.preventDefault()
-          navigate("measures_assessment")
-        }}
+        onSubmit={submitContactCapture}
       />
     )
   } else {

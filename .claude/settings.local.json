@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npm.cmd run *)",
       "Bash(npm run *)",
-      "Bash(node docs/oar/measures_registry/inspect-left-path-copy-v1.cjs)"
+      "Bash(node docs/oar/measures_registry/inspect-left-path-copy-v1.cjs)",
+      "Bash(node docs/oar/measures_registry/inspect-sitewide-style-contract-and-token-seating-v1.cjs)",
+      "Bash(node docs/oar/measures_registry/update-measures-phases-reveal-guided-session-bridge-v1.cjs)"
     ]
   }
 }

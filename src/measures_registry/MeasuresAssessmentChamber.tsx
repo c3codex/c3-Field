@@ -1,4 +1,4 @@
-import type { CSSProperties, FormEvent, MouseEvent } from "react"
+import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
 import { MeasuresAssessmentBrandLayer } from "./MeasuresAssessmentBrandLayer"
 import { MeasuresAssessmentResult } from "./MeasuresAssessmentResult"
 import {
@@ -17,6 +17,7 @@ import type {
 
 type MeasuresAssessmentChamberProps = {
   encounterKey: string
+  assessmentEyebrow?: string
   assessmentProcessTitle?: string
   assessmentSupportLine?: string
   assessmentSubSupportLine?: string
@@ -40,6 +41,7 @@ type MeasuresAssessmentChamberProps = {
   srcIntakeContract?: Record<string, unknown>
   stylingContract?: Record<string, unknown>
   resolutionText?: string
+  renderSystemFooter?: () => ReactNode
   showQuestionContext?: boolean
   structuredEnvironmentPassageVideoUrl: string | null
   structuredQuestions: AssessmentMechanicQuestion[]
@@ -58,6 +60,7 @@ type MeasuresAssessmentChamberProps = {
 
 export function MeasuresAssessmentChamber({
   encounterKey,
+  assessmentEyebrow,
   assessmentProcessTitle = ASSESSMENT_PROCESS_TITLE,
   assessmentSupportLine = ASSESSMENT_SUPPORT_LINE,
   assessmentSubSupportLine = ASSESSMENT_SUB_SUPPORT_LINE,
@@ -81,6 +84,7 @@ export function MeasuresAssessmentChamber({
   srcIntakeContract,
   stylingContract,
   resolutionText,
+  renderSystemFooter,
   showQuestionContext = true,
   structuredEnvironmentPassageVideoUrl,
   structuredQuestions,
@@ -142,6 +146,12 @@ export function MeasuresAssessmentChamber({
       data-material-family={materialFamily}
       style={chamberStyle}
     >
+      <header className="registry-public-header">
+        <div className="registry-public-brand">
+          {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
+          <span>Measures Registry</span>
+        </div>
+      </header>
       <section className="registry-iis-eval registry-assessment-chamber" aria-label={assessmentProcessTitle}>
         <MeasuresAssessmentBrandLayer registryMarkUrl={registryMarkUrl} registryWatermarkUrl={registryWatermarkUrl} />
         {!registryBackgroundUrl || !registryWatermarkUrl || !registryMarkUrl ? (
@@ -150,9 +160,9 @@ export function MeasuresAssessmentChamber({
           </p>
         ) : null}
         <div className="registry-chamber-heading">
-          <span>Measures Registry</span>
+          <span>{assessmentEyebrow ?? "Measures Registry"}</span>
           <h1>{assessmentProcessTitle}</h1>
-          <p>{`${assessmentSupportLine} ${assessmentSubSupportLine}`}</p>
+          <p>{assessmentSubSupportLine}</p>
         </div>
 
         {evalSubmitted ? (
@@ -215,26 +225,22 @@ export function MeasuresAssessmentChamber({
           </form>
         ) : (
           <form className="registry-iis-eval-form" onSubmit={onSubmitEvaluation}>
-            <div className="registry-chamber-copy">
-              <h2>{assessmentSupportLine}</h2>
-              <p className="registry-assessment-support">{assessmentSubSupportLine}</p>
-              {progressLabel ? (
-                <div className="registry-question-progress" aria-label={`Evaluation progress ${progressLabel}`}>
-                  <span>{progressLabel}</span>
-                  <div aria-hidden="true">
-                    <i style={{ width: `${progressValue}%` }} />
-                  </div>
+            {progressLabel ? (
+              <div className="registry-question-progress" aria-label={`Evaluation progress ${progressLabel}`}>
+                <span>{progressLabel}</span>
+                <div aria-hidden="true">
+                  <i style={{ width: `${progressValue}%` }} />
                 </div>
-              ) : null}
-            </div>
+              </div>
+            ) : null}
 
             {currentQuestion ? (
               <fieldset className="registry-single-question-fieldset">
                 <legend className="registry-question-legend">Operational Evaluation</legend>
-                {registryMarkUrl ? (
-                  <img className="registry-question-mark" src={registryMarkUrl} alt="" aria-hidden="true" />
-                ) : null}
                 <div className="registry-structured-question" key={currentQuestion.questionKey}>
+                  {currentQuestion.contextStatement ? (
+                    <p className="registry-structured-context-statement">{currentQuestion.contextStatement}</p>
+                  ) : null}
                   <span className="registry-structured-question-text">{currentQuestion.question}</span>
                   <div className="registry-structured-options" role="radiogroup" aria-label={currentQuestion.question}>
                     {currentQuestion.options.map((option) => (
@@ -292,6 +298,7 @@ export function MeasuresAssessmentChamber({
           </form>
         )}
       </section>
+      {renderSystemFooter?.()}
     </main>
   )
 }
