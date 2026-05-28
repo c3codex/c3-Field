@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Lapis: relation / passage / continuity — rev1 -->
+  <!-- Three relational nodes -->
+  <circle cx="50" cy="20" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+  <circle cx="24" cy="73" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+  <circle cx="76" cy="73" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Diagonal route connections -->
+  <line x1="46.5" y1="25" x2="28" y2="68" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="53.5" y1="25" x2="72" y2="68" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Bottom route: arc expressing passage / continuity — not a flat status bar -->
+  <path d="M 29.5,73 Q 50,82 70.5,73" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Route waypoint marks: open circles (passage indicators, not status buttons) -->
+  <circle cx="37" cy="46" r="2" stroke="currentColor" stroke-width="1"/>
+  <circle cx="63" cy="46" r="2" stroke="currentColor" stroke-width="1"/>
+</svg>
