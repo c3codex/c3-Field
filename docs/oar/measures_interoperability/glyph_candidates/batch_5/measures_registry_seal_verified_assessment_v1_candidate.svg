@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Verified Assessment seal: proof-backed assessment standing -->
+  <!-- Octagonal outer boundary: formal sealed standing — new form class, reserved for sealed marks -->
+  <polygon points="50,12 77,23 88,50 77,77 50,88 23,77 12,50 23,23" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Interior downward triangle: assessment contained and reduced to a proved point — closed form -->
+  <!-- Two nested closed forms = proof-backed sealed standing -->
+  <polygon points="38,40 62,40 50,70" stroke="currentColor" stroke-width="1"/>
+</svg>

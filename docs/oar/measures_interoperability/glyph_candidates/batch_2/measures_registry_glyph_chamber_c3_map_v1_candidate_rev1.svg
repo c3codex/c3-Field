@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- c3 MAP rev1: recognition / assessment protocol -->
+  <!-- Outer circle: protocol boundary and assessment frame -->
+  <circle cx="50" cy="50" r="35" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Cross-axes: full H+V measurement framework, center open -->
+  <line x1="15" y1="50" x2="85" y2="50" stroke="currentColor" stroke-width="1"/>
+  <line x1="50" y1="15" x2="50" y2="85" stroke="currentColor" stroke-width="1"/>
+  <!-- Diagonal inward ticks: calibration marks at 45° circle boundary positions -->
+  <line x1="75" y1="25" x2="69" y2="31" stroke="currentColor" stroke-width="0.75" opacity="0.7"/>
+  <line x1="25" y1="25" x2="31" y2="31" stroke="currentColor" stroke-width="0.75" opacity="0.7"/>
+  <line x1="25" y1="75" x2="31" y2="69" stroke="currentColor" stroke-width="0.75" opacity="0.7"/>
+  <line x1="75" y1="75" x2="69" y2="69" stroke="currentColor" stroke-width="0.75" opacity="0.7"/>
+</svg>

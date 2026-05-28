@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Media Passage: signal carrier / right-path media vessel -->
+  <!-- Passage route: right-path / structure-path direction — lower-left to upper-right -->
+  <line x1="22" y1="72" x2="78" y2="28" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Signal carrier node: the media vessel on the passage route — where signal enters the carrier -->
+  <circle cx="50" cy="50" r="6" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Signal delivery mark: signal descends from carrier into the surface -->
+  <line x1="50" y1="56" x2="50" y2="68" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+</svg>
