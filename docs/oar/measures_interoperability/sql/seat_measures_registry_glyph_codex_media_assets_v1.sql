@@ -84,7 +84,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -108,7 +108,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -132,7 +132,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -156,7 +156,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -182,7 +182,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -206,7 +206,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -230,7 +230,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -254,7 +254,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -278,7 +278,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -302,7 +302,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -326,7 +326,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -350,7 +350,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
@@ -374,7 +374,7 @@ VALUES
     "activation_status": "inactive_for_runtime",
     "authority_status": "reference_only",
     "runtime_status": "not_rendered_until_runtime_oar2",
-    "proof_required": "media_map_validation"
+    "proof_required": "media_asset_validation"
   }'::jsonb
 ),
 
