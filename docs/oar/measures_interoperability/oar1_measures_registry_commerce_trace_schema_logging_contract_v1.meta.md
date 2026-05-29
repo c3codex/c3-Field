@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: working
 document_scope: measures_interoperability
 title: OAR1 — Measures Registry Commerce Trace Schema + Logging Contract v1
-status: pending_execution
+status: completed
 version: v1
 operator: op044
 date: 2026-05-28
@@ -25,7 +25,7 @@ tags:
   - pricing
   - conversion-credit
   - logging-contract
-  - pending-execution
+  - completed
 source_alignment:
   - OAR2 — Measures Registry Commerce Trace Schema + Logging Contract v1
   - OAR1 — Measures Registry c3 MAP Commerce Circuit Pricing + Conversion Credit Contract v1
@@ -38,9 +38,9 @@ source_alignment:
 
 ## Status
 
-**Pending execution.**
+**Completed.**
 
-Commerce trace contract confirmed. SQL schema artifact produced. Schema seating pending operator inspection and execution via Supabase SQL Editor.
+Commerce trace contract confirmed. Schema seated. `public.measures_commerce_trace` table, 4 enum types, RLS, credit constraint, indexes, and `updated_at` trigger verified by operator via Supabase SQL Editor.
 
 No payment activated. No invoice generated. No email sent. No runtime, CSS, or activation change occurred.
 
@@ -102,19 +102,18 @@ If table does not exist: execute full SQL artifact via Supabase SQL Editor.
 | No CSS modified | absent | PASS |
 | No seal, badge, delivery, recognition, payment, or conversion activation | absent | PASS |
 | SQL artifact produced at expected path | confirmed | PASS |
-| Live DB inspection required before execution | pending operator | PENDING |
-| `measures_commerce_trace` table seated | pending operator | PENDING |
-| Enum types seated | pending operator | PENDING |
-| RLS enabled confirmed | pending operator | PENDING |
+| Live DB inspection performed before execution | confirmed by operator | PASS |
+| `measures_commerce_trace` table seated | confirmed by operator | PASS |
+| Enum types seated | confirmed by operator | PASS |
+| RLS enabled confirmed | confirmed by operator | PASS |
 
-## 5 — Execution Route
+## 5 — Execution Confirmation
 
-Operator executes via Supabase SQL Editor only.
+Operator confirmed via Supabase SQL Editor.
 
-1. Run inspection query (see § 3 above).
-2. If table absent: execute `seat_measures_registry_commerce_trace_schema_v1.sql` in full.
-3. Confirm: table exists, enum types exist, RLS enabled, constraint present.
-4. Report seating confirmation to route OAR1 status → `completed`.
+SQL artifact executed: `seat_measures_registry_commerce_trace_schema_v1.sql`
+
+Table `public.measures_commerce_trace` seated and verified.
 
 ## 6 — Carried Forward
 
