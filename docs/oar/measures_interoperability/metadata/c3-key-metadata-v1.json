@@ -1,7 +1,7 @@
 {
   "name": "c3 Key",
   "description": "Wallet-bound governed access key for c3 Field participation and Measures Registry eligibility. The c3 Key establishes access-bearing origin relation only. It does not confer recognition, verification, certification, payment standing, seal standing, delivery contract standing, or conversion status.",
-  "image": "PENDING — https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key/c3-key-v2-governed-access-mark.png",
+  "image": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key-v2-governed-access-mark.png",
   "external_url": "https://c3field.online",
   "attributes": [
     {

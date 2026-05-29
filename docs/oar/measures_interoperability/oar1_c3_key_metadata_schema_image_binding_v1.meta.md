@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: working
 document_scope: measures_interoperability
 title: OAR1 — c3 Key Metadata Schema + Image Binding v1
-status: pending_image_upload
+status: completed
 version: v1
 operator: op044
 date: 2026-05-29
@@ -23,7 +23,7 @@ tags:
   - nft-metadata
   - image-binding
   - supabase-storage
-  - pending-image-upload
+  - image-upload-confirmed
 source_alignment:
   - OAR2 — c3 Key Metadata Schema + Image Binding v1
   - OAR1 — c3 Key NFT Contract Setup v1
@@ -35,9 +35,9 @@ source_alignment:
 
 ## Status
 
-**Pending image upload.**
+**Completed.**
 
-Metadata schema defined. Metadata JSON draft produced. Image URI placeholder in place — image not yet confirmed at expected Supabase storage path. No contract deployed. No keys minted. No payment activated. No runtime, CSS, or DB change occurred.
+Metadata schema defined. Metadata JSON produced with confirmed image URI. Image confirmed at Supabase storage (HTTP 200). No contract deployed. No keys minted. No payment activated. No runtime, CSS, or DB change occurred.
 
 ## 1 — Pre-Seating Gate Confirmation
 
@@ -61,22 +61,20 @@ Metadata schema defined. Metadata JSON draft produced. Image URI placeholder in 
 
 **Bucket:** `measures-registry` — confirmed (used by all glyph media assets)
 
-**Expected path:** `c3-key/c3-key-v2-governed-access-mark.png`
+**OAR2 expected path:** `c3-key/c3-key-v2-governed-access-mark.png`
 
-**Observed result:** `c3-key/` prefix returns empty. Image not present at expected path.
+**Actual observed path:** `c3-key-v2-governed-access-mark.png` (root of `measures-registry` bucket — no `c3-key/` subfolder)
 
-**Likely cause:** Render OAR1 (`oar1_c3_key_visual_identity_opus_render_prompt_v1.meta.md`) is in `pending_render` status — the actual v2 render has not yet been executed and the image has not yet been uploaded to storage.
+**Confirmed public URL (HTTP 200):**
+`https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key-v2-governed-access-mark.png`
 
-**Expected public URL once uploaded:**
-`https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key/c3-key-v2-governed-access-mark.png`
-
-When operator uploads the approved render to Supabase storage, executor must verify the URL resolves (HTTP 200) before finalizing the metadata image field.
+Path difference from OAR2 expectation documented per OAR2 rule: "If the actual uploaded path differs, executor must report the observed Supabase bucket and storage path before final metadata binding."
 
 ## 4 — Metadata Draft Produced
 
 `docs/oar/measures_interoperability/metadata/c3-key-metadata-v1.json`
 
-**Image field:** marked `PENDING` — must be replaced with confirmed Supabase public URL before this file is used as contract metadata URI.
+**Image field:** confirmed — bound to `https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key-v2-governed-access-mark.png`
 
 **Schema confirmed:**
 - `name`: c3 Key
@@ -98,7 +96,7 @@ PNG is the authority-grade format for NFT metadata. WEBP is derivative/display o
 | Approved image bound as metadata-prep asset only | confirmed | PASS |
 | Supabase bucket observed: `measures-registry` | confirmed | PASS |
 | Expected storage path documented | confirmed | PASS |
-| Storage path verified (image present) | pending upload | PENDING |
+| Storage path verified (image present, HTTP 200) | confirmed | PASS |
 | Primary image format PNG | confirmed | PASS |
 | WEBP is derivative only | confirmed | PASS |
 | Metadata JSON contains no PII | confirmed | PASS |
@@ -107,8 +105,8 @@ PNG is the authority-grade format for NFT metadata. WEBP is derivative/display o
 | Metadata does not imply payment standing | confirmed | PASS |
 | Metadata does not imply seal activation | confirmed | PASS |
 | Metadata does not imply delivery contract standing | confirmed | PASS |
-| Image URI stable or marked pending | marked pending | PASS |
-| Metadata URI stable or marked pending | marked pending | PASS |
+| Image URI stable (confirmed Supabase URL) | confirmed | PASS |
+| Metadata URI stable (draft path confirmed) | confirmed | PASS |
 | No contract deployment | absent | PASS |
 | No minting | absent | PASS |
 | No payment activated | absent | PASS |
@@ -140,14 +138,14 @@ PNG is the authority-grade format for NFT metadata. WEBP is derivative/display o
 
 Schema seated.
 
-Draft ready.
+Image confirmed at Supabase storage (HTTP 200).
 
-Image waits for its render.
+Metadata JSON bound to confirmed URI.
 
-Render waits for its session.
+Actual path: root of `measures-registry` bucket (no subfolder) — documented per OAR2 path-difference rule.
 
-URI finalizes after upload.
+Contract waits for tooling.
 
-Contract waits.
+Metadata URI hosting waits for future OAR2.
 
 Codex holds.

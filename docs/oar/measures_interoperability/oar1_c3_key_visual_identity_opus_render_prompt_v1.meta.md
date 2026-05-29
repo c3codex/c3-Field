@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: working
 document_scope: measures_interoperability
 title: OAR1 — c3 Key Visual Identity / Opus Render Prompt v1
-status: pending_render
+status: completed
 version: v1
 operator: op044
 date: 2026-05-29
@@ -23,7 +23,7 @@ tags:
   - visual-identity
   - opus-render
   - legacy-reference
-  - pending-render
+  - render-completed
 source_alignment:
   - OAR2 — c3 Key Visual Identity / Opus Render Prompt v1
   - OAR1 — c3 Key NFT Contract Setup v1
@@ -34,9 +34,9 @@ source_alignment:
 
 ## Status
 
-**Pending render.**
+**Completed.**
 
-Legacy c3 Key Mark v1 catalogued as provenance reference. Opus render prompt seated. Image generation requires operator routing to an image generation tool — not available in the current text session. No metadata finalized. No contract changed. No deployment. No runtime, CSS, or DB change occurred.
+Legacy c3 Key Mark v1 catalogued as provenance reference. c3 Key v2 render executed and approved by operator. Image confirmed at Supabase storage. No metadata finalized in this surface. No contract changed. No deployment. No runtime, CSS, or DB change occurred.
 
 ## 1 — Pre-Seating Gate Confirmation
 
@@ -119,8 +119,8 @@ When candidates are returned:
 | No runtime modified | absent | PASS |
 | No CSS modified | absent | PASS |
 | No DB mutation | absent | PASS |
-| Image generation pending operator render session | pending | PENDING |
-| v2 render candidate approved | pending | PENDING |
+| Image generation pending operator render session | confirmed | PASS |
+| v2 render candidate approved | confirmed | PASS |
 
 ## 7 — Carried Forward
 
@@ -132,15 +132,35 @@ When candidates are returned:
 | NFT metadata URI finalization | Future metadata OAR2 |
 | `metadataURI` update on deployed contract | Future metadata OAR2 (post-deployment) |
 
+## Render Confirmed
+
+**Supabase URL (HTTP 200):**
+`https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key-v2-governed-access-mark.png`
+
+**Actual storage path:** `c3-key-v2-governed-access-mark.png` (root of `measures-registry` bucket — no subfolder)
+
+**Render validation:**
+
+| Check | Result |
+|---|---|
+| Dark obsidian/graphite key form | PASS |
+| Circular portal head (c-form) | PASS |
+| Luminous blue crystalline center | PASS |
+| Faint concentric gold orbital geometry | PASS |
+| Vertical spine with cyan circuit traces | PASS |
+| c3-implied geometry in lower teeth | PASS |
+| No embedded text | PASS |
+| Marble background, 1:1 square, cinematic render | PASS |
+
 ## Close
 
 Legacy preserved.
 
-Prompt seated.
+v2 rendered and approved.
 
-Render waits for its session.
+Image confirmed at Supabase storage.
 
-Metadata waits for approval.
+Metadata binding follows in image binding OAR1.
 
 Contract waits for tooling.
 
