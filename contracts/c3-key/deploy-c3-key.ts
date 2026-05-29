@@ -13,7 +13,9 @@
 //
 // Testnet (Base Sepolia) should be validated before any mainnet deployment.
 
-import { ethers } from "hardhat"
+import hre from "hardhat"
+
+const { ethers } = hre
 
 async function main() {
   const adminAddress = process.env.ADMIN_ADDRESS
