@@ -92,16 +92,21 @@ Negative prompt catalogued: no embedded words, no misspelled text, no coin, no c
 
 ## 5 — Render Execution Route
 
-Operator routes the seated prompt to an image generation tool (Midjourney, DALL-E 3, Stable Diffusion XL, or equivalent).
+Render executed.
 
-Image generation is not available in the current text session.
+Operator selected and approved c3 Key v2 — Governed Access Mark.
 
-When candidates are returned:
+Approved PNG uploaded to Supabase storage.
 
-1. Operator reviews against OAR2 success condition.
-2. Operator selects approved candidate.
-3. Approved image stored at governed path (future media OAR2).
-4. OAR1 status updated to `completed`.
+Confirmed public URL:
+`https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key-v2-governed-access-mark.png`
+
+Actual storage path:
+`c3-key-v2-governed-access-mark.png`
+
+No metadata finalized in this surface.
+
+Metadata binding is handled by OAR1 — c3 Key Metadata Schema + Image Binding v1.
 
 ## 6 — Validation Proof
 

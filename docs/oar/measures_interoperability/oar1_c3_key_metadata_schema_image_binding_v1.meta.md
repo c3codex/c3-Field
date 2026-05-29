@@ -79,7 +79,7 @@ Path difference from OAR2 expectation documented per OAR2 rule: "If the actual u
 **Schema confirmed:**
 - `name`: c3 Key
 - `description`: access-bearing relation only, no recognition/conversion/payment/seal/delivery claimed
-- `image`: pending upload
+- `image`: https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key-v2-governed-access-mark.png
 - `external_url`: https://c3field.online
 - `attributes`: 8 fields — key type, key status, transferability, wallet rule, authority boundary, registry boundary, payment boundary, conversion boundary
 
@@ -113,14 +113,18 @@ PNG is the authority-grade format for NFT metadata. WEBP is derivative/display o
 | No runtime / CSS modified | absent | PASS |
 | No DB mutation | absent | PASS |
 
-## 7 — Execution Route to Close
+## 7 — Execution Route Closed
 
-1. Operator completes render session (routes OAR2 prompt to image generation tool).
-2. Operator approves render candidate.
-3. Operator uploads PNG to Supabase storage: `measures-registry / c3-key / c3-key-v2-governed-access-mark.png`.
-4. Executor verifies URL resolves (HTTP 200).
-5. Executor replaces `PENDING` placeholder in `c3-key-metadata-v1.json` with confirmed URL.
+1. Render session completed.
+2. Operator approved c3 Key v2 render.
+3. PNG uploaded to Supabase storage.
+4. Executor verified public URL resolves HTTP 200.
+5. `PENDING` placeholder replaced in metadata JSON.
 6. OAR1 status updated to `completed`.
+
+Actual confirmed path:
+
+`measures-registry / c3-key-v2-governed-access-mark.png`
 
 ## 8 — Carried Forward
 
