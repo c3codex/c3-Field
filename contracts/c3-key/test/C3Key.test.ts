@@ -6,7 +6,9 @@
 // See: docs/oar/measures_interoperability/oar1_c3_key_nft_contract_setup_v1.meta.md
 
 import { expect } from "chai"
-import { ethers } from "hardhat"
+import { network } from "hardhat"
+// In Hardhat v3, ethers is obtained per-network: const { ethers } = await network.create()
+// Uncomment and wire into beforeEach hooks when implementing test bodies.
 
 describe("C3Key", () => {
   // ─── Deployment ────────────────────────────────────────────────────────────

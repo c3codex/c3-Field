@@ -9,3 +9,10 @@ dist
 .dev.vars
 .wrangler/
 *.lnk
+
+# Hardhat contract build artifacts
+cache/
+artifacts/
+.hardhat-build/
+typechain-types/
+types/ethers-contracts/
