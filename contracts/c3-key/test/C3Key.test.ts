@@ -260,6 +260,37 @@ describe("C3Key", () => {
         c3Key.connect(registrar).migrate(tokenId, wallet2.address, "ipfs://meta-m", traceMigrate)
       ).to.be.revertedWith("C3Key: new wallet already holds active key")
     })
+
+    it("allows migrate on a held key", async () => {
+      const { c3Key, registrar, wallet1, wallet2, tokenId, ethers } = await deployWithKey()
+      const reasonHash   = ethers.keccak256(ethers.toUtf8Bytes("hold-reason"))
+      const traceMigrate = ethers.keccak256(ethers.toUtf8Bytes("migrate"))
+      await c3Key.connect(registrar).hold(tokenId, reasonHash)
+      await expect(
+        c3Key.connect(registrar).migrate(tokenId, wallet2.address, "ipfs://meta-m", traceMigrate)
+      ).to.emit(c3Key, "C3KeyMigrated")
+      expect(await c3Key.hasActiveKey(wallet2.address)).to.be.true
+    })
+
+    it("reverts migrate if source key is revoked", async () => {
+      const { c3Key, registrar, wallet2, tokenId, ethers } = await deployWithKey()
+      const reasonHash   = ethers.keccak256(ethers.toUtf8Bytes("reason"))
+      const traceMigrate = ethers.keccak256(ethers.toUtf8Bytes("migrate"))
+      await c3Key.connect(registrar).revoke(tokenId, reasonHash)
+      await expect(
+        c3Key.connect(registrar).migrate(tokenId, wallet2.address, "ipfs://meta-m", traceMigrate)
+      ).to.be.revertedWith("C3Key: key not migratable")
+    })
+
+    it("reverts migrate if source key is redacted", async () => {
+      const { c3Key, admin, registrar, wallet2, tokenId, ethers } = await deployWithKey()
+      const reasonHash   = ethers.keccak256(ethers.toUtf8Bytes("reason"))
+      const traceMigrate = ethers.keccak256(ethers.toUtf8Bytes("migrate"))
+      await c3Key.connect(admin).redact(tokenId, reasonHash)
+      await expect(
+        c3Key.connect(registrar).migrate(tokenId, wallet2.address, "ipfs://meta-m", traceMigrate)
+      ).to.be.revertedWith("C3Key: key not migratable")
+    })
   })
 
   // ─── tokenURI / metadata ───────────────────────────────────────────────────

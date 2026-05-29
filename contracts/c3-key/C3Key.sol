@@ -161,6 +161,8 @@ contract C3Key is ERC721, AccessControl, Pausable {
         string calldata metadataURI,
         bytes32 sourceTraceHash
     ) external onlyRole(REGISTRAR_ROLE) whenNotPaused returns (uint256) {
+        KeyStatus s = _keyData[oldTokenId].keyStatus;
+        require(s == KeyStatus.active || s == KeyStatus.held, "C3Key: key not migratable");
         require(!_walletHasActiveKey[newWallet], "C3Key: new wallet already holds active key");
         address oldWallet = ownerOf(oldTokenId);
 
