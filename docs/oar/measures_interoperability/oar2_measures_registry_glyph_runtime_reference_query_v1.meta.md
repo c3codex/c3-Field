@@ -3,7 +3,7 @@ document_type: oar2
 authority_level: working
 document_scope: measures_interoperability
 title: OAR2 — Measures Registry Glyph Runtime Reference Query v1
-status: proposed
+status: completed
 version: v1
 operator: op044
 system: measures_interoperability
