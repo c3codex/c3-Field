@@ -1,0 +1,40 @@
+{
+  "name": "c3 Key",
+  "description": "Wallet-bound governed access key for c3 Field participation and Measures Registry eligibility. The c3 Key establishes access-bearing origin relation only. It does not confer recognition, verification, certification, payment standing, seal standing, delivery contract standing, or conversion status.",
+  "image": "PENDING — https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/c3-key/c3-key-v2-governed-access-mark.png",
+  "external_url": "https://c3field.online",
+  "attributes": [
+    {
+      "trait_type": "Key Type",
+      "value": "named_individual"
+    },
+    {
+      "trait_type": "Key Status",
+      "value": "active"
+    },
+    {
+      "trait_type": "Transferability",
+      "value": "non-transferable"
+    },
+    {
+      "trait_type": "Wallet Rule",
+      "value": "one active key per wallet"
+    },
+    {
+      "trait_type": "Authority Boundary",
+      "value": "Codex holds authority"
+    },
+    {
+      "trait_type": "Registry Boundary",
+      "value": "Measures registers standing"
+    },
+    {
+      "trait_type": "Payment Boundary",
+      "value": "does not create payment standing"
+    },
+    {
+      "trait_type": "Conversion Boundary",
+      "value": "does not confer conversion"
+    }
+  ]
+}
