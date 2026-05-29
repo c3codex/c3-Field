@@ -85,6 +85,31 @@ const OPTIONAL_MEDIA_ROLES = [
   "installation_tone_marble_rise_return_v1",
 ] as const
 const QUERY_MEDIA_ROLES = [...REQUIRED_MEDIA_ROLES, ...OPTIONAL_MEDIA_ROLES] as const
+const GLYPH_REGISTRY_KEY = "measures_registry_glyphs"
+const GLYPH_CAMPAIGN_KEY = "measures_registry_v1"
+const GLYPH_MEDIA_ROLES = [
+  "glyph_material_obsidian",
+  "glyph_material_crystal",
+  "glyph_material_lapis",
+  "glyph_material_marble",
+  "glyph_chamber_epigraph",
+  "glyph_chamber_temple_path",
+  "glyph_chamber_lapis_relational",
+  "glyph_chamber_c3_map",
+  "glyph_chamber_obsidian_assessment_gate",
+  "glyph_chamber_marble_governance",
+  "glyph_chamber_marble_commerced_circuit",
+  "glyph_chamber_media_passage",
+  "glyph_chamber_lapis_interoperability",
+  "glyph_circuit_c1",
+  "glyph_circuit_c2",
+  "glyph_circuit_c3",
+  "glyph_circuit_3x33",
+  "glyph_mark",
+  "glyph_seal_verified_assessment",
+  "glyph_seal_delivery_contract",
+  "glyph_badge_held_placeholder",
+] as const
 const REQUIRED_DESIGN_TOKEN_KEYS = [
   "text_primary",
   "text_secondary",
@@ -208,6 +233,17 @@ type MediaRow = {
   storage_path: string
   mime_type?: string | null
   is_active: boolean | null
+}
+
+type GlyphReferenceRow = {
+  media_role: string
+  encounter_key: string | null
+  storage_bucket: string
+  storage_path: string
+  mime_type: string | null
+  sort_order: number | null
+  is_active: boolean | null
+  metadata: Record<string, unknown> | null
 }
 
 type DesignTokenRow = {
@@ -633,6 +669,7 @@ export default function MeasuresRegistryRuntime() {
   const [activeSurface, setActiveSurface] = useState<SurfaceState>(() => initialSurfaceFromLocation())
   const [sections, setSections] = useState<LandingSectionRow[]>([])
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
+  const [glyphReferenceRows, setGlyphReferenceRows] = useState<GlyphReferenceRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
   const [seatOfferings, setSeatOfferings] = useState<SeatOfferingRow[]>([])
   const [codexEntities, setCodexEntities] = useState<CodexEntityRow[]>([])
@@ -749,7 +786,7 @@ export default function MeasuresRegistryRuntime() {
         return
       }
 
-      const [sectionResult, mediaResult, tokenResult, offeringResult, publicationResult, dispatchResult, processLogResult] = await Promise.all([
+      const [sectionResult, mediaResult, glyphReferenceResult, tokenResult, offeringResult, publicationResult, dispatchResult, processLogResult] = await Promise.all([
         supabase
           .from("measures_encounter_def")
           .select("encounter_key, display_title, metadata")
@@ -760,6 +797,13 @@ export default function MeasuresRegistryRuntime() {
           .select("media_role, storage_bucket, storage_path, mime_type, is_active")
           .eq("campaign_key", CAMPAIGN_KEY)
           .in("media_role", [...QUERY_MEDIA_ROLES])
+          .order("sort_order", { ascending: true }),
+        supabase
+          .from("measures_media_map")
+          .select("media_role, encounter_key, storage_bucket, storage_path, mime_type, sort_order, is_active, metadata")
+          .eq("registry_key", GLYPH_REGISTRY_KEY)
+          .eq("campaign_key", GLYPH_CAMPAIGN_KEY)
+          .in("media_role", [...GLYPH_MEDIA_ROLES])
           .order("sort_order", { ascending: true }),
         supabase
           .from("measures_design_token")
@@ -793,6 +837,7 @@ export default function MeasuresRegistryRuntime() {
       if (
         sectionResult.error ||
         mediaResult.error ||
+        glyphReferenceResult.error ||
         tokenResult.error ||
         offeringResult.error ||
         publicationResult.error ||
@@ -802,6 +847,7 @@ export default function MeasuresRegistryRuntime() {
         setReadError("Measures Registry landing records could not be read.")
         setSections([])
         setMediaRows([])
+        setGlyphReferenceRows([])
         setDesignTokens([])
         setSeatOfferings([])
         setCodexEntities([])
@@ -831,6 +877,7 @@ export default function MeasuresRegistryRuntime() {
 
       setSections(nextSections)
       setMediaRows(((mediaResult.data ?? []) as MediaRow[]) ?? [])
+      setGlyphReferenceRows(((glyphReferenceResult.data ?? []) as GlyphReferenceRow[]) ?? [])
       setDesignTokens(((tokenResult.data ?? []) as DesignTokenRow[]) ?? [])
       setSeatOfferings(((offeringResult.data ?? []) as SeatOfferingRow[]) ?? [])
       setCodexEntities(entityResult.error ? [] : (((entityResult.data ?? []) as CodexEntityRow[]) ?? []))
@@ -869,6 +916,10 @@ export default function MeasuresRegistryRuntime() {
           .map((row) => [row.media_role, row]),
       ),
     [mediaRows],
+  )
+  const glyphReferenceMap = useMemo(
+    () => new Map(glyphReferenceRows.map((row) => [row.media_role, row])),
+    [glyphReferenceRows],
   )
   const missingSections = REQUIRED_SECTION_KEYS.filter((key) => !sectionMap.has(key))
   const missingMediaRoles = REQUIRED_MEDIA_ROLES.filter((role) => !mediaMap.has(role))
