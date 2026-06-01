@@ -1,5 +1,6 @@
 import type { CSSProperties, FormEvent, ReactNode } from "react"
 import type { SectionCopy } from "../registeredRuntimeUtils"
+import RegisteredGovernedStatus from "./RegisteredGovernedStatus"
 
 type Props = {
   registryTokenStyle: CSSProperties
@@ -42,6 +43,7 @@ export default function RegisteredConnectSrc({
           <h1>{connectSrcCopy.title ?? "Your Assessment is Being Prepared"}</h1>
           {connectSrcCopy.subtitle ? <p>{connectSrcCopy.subtitle}</p> : null}
         </div>
+        <RegisteredGovernedStatus status={connectSrcCopy.governedStatus} />
         <form className="registry-iis-eval-form" onSubmit={onSubmit}>
           <fieldset disabled={evalSubmitting}>
             <legend>Contact Information</legend>

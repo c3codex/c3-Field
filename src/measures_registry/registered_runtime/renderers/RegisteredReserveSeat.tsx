@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react"
 import type { SectionCopy } from "../registeredRuntimeUtils"
 import type { SeatOfferingRow } from "../registeredRuntimeTypes"
+import RegisteredGovernedStatus from "./RegisteredGovernedStatus"
 
 type Props = {
   registryTokenStyle: CSSProperties
@@ -36,6 +37,8 @@ export default function RegisteredReserveSeat({
         {reserveSeatCopy.coreStatement ? (
           <p className="registry-offering-core">{reserveSeatCopy.coreStatement}</p>
         ) : null}
+
+        <RegisteredGovernedStatus status={reserveSeatCopy.governedStatus} />
 
         {reserveSeatCopy.sections.length > 0 ? (
           <div className="registry-path-signal" aria-label="Governance structure">

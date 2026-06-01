@@ -41,6 +41,7 @@ type MeasuresAssessmentChamberProps = {
   srcIntakeContract?: Record<string, unknown>
   stylingContract?: Record<string, unknown>
   resolutionText?: string
+  governedStatus?: ReactNode
   renderSystemFooter?: () => ReactNode
   showQuestionContext?: boolean
   structuredEnvironmentPassageVideoUrl: string | null
@@ -84,6 +85,7 @@ export function MeasuresAssessmentChamber({
   srcIntakeContract,
   stylingContract,
   resolutionText,
+  governedStatus,
   renderSystemFooter,
   showQuestionContext = true,
   structuredEnvironmentPassageVideoUrl,
@@ -164,6 +166,7 @@ export function MeasuresAssessmentChamber({
           <h1>{assessmentProcessTitle}</h1>
           <p>{assessmentSubSupportLine}</p>
         </div>
+        {governedStatus}
 
         {evalSubmitted ? (
           <MeasuresAssessmentResult

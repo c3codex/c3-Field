@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react"
 import { asRecord, asRecordArray, asString, asStringArray } from "../registeredRuntimeUtils"
 import type { SectionCopy } from "../registeredRuntimeUtils"
+import RegisteredGovernedStatus from "./RegisteredGovernedStatus"
 
 type Props = {
   registryTokenStyle: CSSProperties
@@ -49,6 +50,7 @@ export default function RegisteredPhaseReveal({
           {phaseRevealCopy.title ? <h1>{phaseRevealCopy.title}</h1> : null}
           {phaseRevealCopy.subtitle ? <p>{phaseRevealCopy.subtitle}</p> : null}
         </div>
+        <RegisteredGovernedStatus status={phaseRevealCopy.governedStatus} />
 
         {guidedSessions.length > 0 ? (
           <div className="registry-phases-sessions">

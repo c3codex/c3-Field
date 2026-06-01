@@ -44,6 +44,128 @@ export function asStringArray(value: unknown) {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
 }
 
+const GOVERNED_STATUS_KEYS = [
+  "held_state",
+  "status_state",
+  "missing_state",
+  "incomplete_state",
+  "unavailable_state",
+  "renderer_gap_state",
+]
+
+const RECOGNIZED_STATUS_VALUES = new Set([
+  "held",
+  "pending",
+  "under_review",
+  "missing",
+  "incomplete",
+  "unavailable",
+  "sealed",
+  "not_yet_active",
+  "renderer_gap",
+  "source_absent",
+  "file_absent",
+  "chamber_not_ready",
+  "encounter_not_ready",
+])
+
+const RECOGNIZED_SURFACE_ROLES = new Set([
+  "payment",
+  "c3_key",
+  "c3_map",
+  "recognition",
+  "conversion",
+  "processor",
+  "wallet_migration",
+  "permission",
+  "encounter",
+  "chamber",
+  "file",
+  "source",
+  "renderer",
+  "route",
+  "media",
+])
+
+const PROHIBITED_STATUS_DISPLAY_TERMS = [
+  "payment complete",
+  "conversion complete",
+  "recognized",
+  "verified",
+  "access granted",
+  "permission activated",
+  "c3 key issued",
+  "wallet-bound",
+  "nft minted",
+  "dao voting active",
+  "distribution eligible",
+  "processor connected",
+  "webhook active",
+  "automatic enrollment",
+  "automatic conversion",
+  "guaranteed acceptance",
+  "c3 map access active",
+]
+
+export type GovernedStatusCopy = {
+  status: string
+  surfaceRole: string
+  displayTitle: string | null
+  displayBody: string | null
+  allowedNextStep: string | null
+  activationBoundary: string
+}
+
+function containsProhibitedStatusDisplay(value: string) {
+  const normalized = value.toLocaleLowerCase()
+  return PROHIBITED_STATUS_DISPLAY_TERMS.some((term) => normalized.includes(term))
+}
+
+export function governedStatusCopy(metadata: Record<string, unknown>): GovernedStatusCopy | null {
+  for (const key of GOVERNED_STATUS_KEYS) {
+    const payload = asRecord(metadata[key])
+    if (!payload || payload.support_safe !== true) continue
+
+    const status = asString(payload.status)
+    const surfaceRole = asString(payload.surface_role)
+    const activationBoundary = asString(payload.activation_boundary)
+    if (
+      !status ||
+      !surfaceRole ||
+      !activationBoundary ||
+      !RECOGNIZED_STATUS_VALUES.has(status) ||
+      !RECOGNIZED_SURFACE_ROLES.has(surfaceRole)
+    ) {
+      continue
+    }
+
+    const displayTitle = asString(payload.display_title)
+    const displayBody = asString(payload.display_body)
+    const allowedNextStep = asString(payload.allowed_next_step)
+    const displayFields = [
+      displayTitle,
+      displayBody,
+      allowedNextStep,
+      activationBoundary,
+      status,
+      surfaceRole,
+    ].filter((value): value is string => Boolean(value))
+
+    if (displayFields.some(containsProhibitedStatusDisplay)) continue
+
+    return {
+      status,
+      surfaceRole,
+      displayTitle,
+      displayBody,
+      allowedNextStep,
+      activationBoundary,
+    }
+  }
+
+  return null
+}
+
 export function allAssessmentMechanics(metadataValue: unknown): AssessmentMechanicQuestion[] {
   const metadata = asRecord(metadataValue)
   const questions = asRecordArray(metadata?.questions)
@@ -412,6 +534,7 @@ export function sectionCopy(row?: LandingSectionRow) {
     brandingContract: asRecord(metadata.branding_contract),
     contentContract: asRecord(metadata.content_contract),
     routeCards: asRecordArray(metadata.route_cards),
+    governedStatus: governedStatusCopy(metadata),
   }
 }
 

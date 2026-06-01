@@ -10,6 +10,7 @@ import type {
   SectionCopy,
 } from "../registeredRuntimeUtils"
 import type { EvalStep } from "../../measuresAssessmentTypes"
+import RegisteredGovernedStatus from "./RegisteredGovernedStatus"
 
 type Props = {
   encounterCopy: SectionCopy
@@ -123,6 +124,7 @@ export default function RegisteredAssessment({
       srcIntakeContract={encounterCopy.srcIntakeContract ?? undefined}
       stylingContract={encounterCopy.stylingContract ?? undefined}
       resolutionText={encounterCopy.resolutionText ?? undefined}
+      governedStatus={<RegisteredGovernedStatus status={encounterCopy.governedStatus} />}
       showQuestionContext={false}
       structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}
       structuredQuestions={structuredQuestions}

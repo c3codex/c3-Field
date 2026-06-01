@@ -1,6 +1,7 @@
 import type { CSSProperties, FormEvent, ReactNode } from "react"
 import { asString } from "../registeredRuntimeUtils"
 import type { SectionCopy } from "../registeredRuntimeUtils"
+import RegisteredGovernedStatus from "./RegisteredGovernedStatus"
 
 type Props = {
   registryTokenStyle: CSSProperties
@@ -59,6 +60,7 @@ export default function RegisteredPhasePayment({
           {phasePaymentCopy.entryHeadline ? <h1>{phasePaymentCopy.entryHeadline}</h1> : <h1>Reserve Your Seat</h1>}
           {phasePaymentCopy.entrySub ? <p>{phasePaymentCopy.entrySub}</p> : null}
         </div>
+        <RegisteredGovernedStatus status={phasePaymentCopy.governedStatus} />
 
         <form className="registry-hold-form" onSubmit={onSubmit}>
           {emailField ? (
