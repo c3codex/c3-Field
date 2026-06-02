@@ -1,5 +1,5 @@
 import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
-import { MeasuresAssessmentChamber } from "../../MeasuresAssessmentChamber"
+import { PublicAssessmentSurface } from "../../PublicAssessmentSurface"
 import { asString } from "../registeredRuntimeUtils"
 import type {
   AssessmentEmailArtifact,
@@ -50,7 +50,7 @@ type Props = {
   renderSystemFooter?: () => ReactNode
 }
 
-export default function RegisteredAssessment({
+export default function RegisteredPublicAssessment({
   encounterCopy,
   structuredQuestions,
   evalAnswers,
@@ -84,7 +84,7 @@ export default function RegisteredAssessment({
   renderSystemFooter,
 }: Props) {
   return (
-    <MeasuresAssessmentChamber
+    <PublicAssessmentSurface
       encounterKey="measures_ai_operational_evaluation"
       assessmentEyebrow={asString(encounterCopy.eyebrow) ?? undefined}
       assessmentProcessTitle={

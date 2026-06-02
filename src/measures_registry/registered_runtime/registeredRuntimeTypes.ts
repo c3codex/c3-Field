@@ -2,16 +2,9 @@ export type RegisteredSurface =
   | "intro"
   | "path_choice"
   | "eval_passage"
-  | "connect_src"
   | "measures_assessment"
   | "structure_passage"
-  | "structured_eval"
-  | "measures_eval_email_contract"
-  | "measures_phases_reveal"
-  | "about_measures_registry"
   | "structural_drift_dispatches"
-  | "reserve_seat"
-  | "phase_payment"
   | "publication_dispatch"
 
 export type LandingSectionRow = {
@@ -34,19 +27,6 @@ export type DesignTokenRow = {
   token_value: string
   media_query: string | null
   is_active: boolean | null
-}
-
-export type SeatOfferingRow = {
-  offering_key: string
-  label: string
-  short_label: string | null
-  description: string | null
-  offering_type: string
-  sequence_order: number
-  enrollment_state: "open" | "coming_soon" | "held" | "closed"
-  hold_target_key: string | null
-  offering_surface_key: string | null
-  metadata: Record<string, unknown> | null
 }
 
 export type PublicationRegistryRow = {

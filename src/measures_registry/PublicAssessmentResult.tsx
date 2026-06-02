@@ -14,7 +14,7 @@ function RecommendedOperatingProtocol({ report }: RecommendedOperatingProtocolPr
   )
 }
 
-type MeasuresAssessmentResultProps = {
+type PublicAssessmentResultProps = {
   assessmentCompletion?: Record<string, unknown> | null
   emailArtifact: AssessmentEmailArtifact | null
   passageMuted: boolean
@@ -31,7 +31,7 @@ type MeasuresAssessmentResultProps = {
   onTogglePassageMuted: () => void
 }
 
-export function MeasuresAssessmentResult({
+export function PublicAssessmentResult({
   assessmentCompletion,
   emailArtifact,
   passageMuted,
@@ -42,7 +42,7 @@ export function MeasuresAssessmentResult({
   onEnterStructuredEnvironment,
   onStructuredEnvironmentVideoEnded,
   onTogglePassageMuted,
-}: MeasuresAssessmentResultProps) {
+}: PublicAssessmentResultProps) {
   const completion = assessmentCompletion ?? {}
   const completionLabel =
     typeof completion.assessment_completion_label === "string" ? completion.assessment_completion_label : "Assessment Complete"

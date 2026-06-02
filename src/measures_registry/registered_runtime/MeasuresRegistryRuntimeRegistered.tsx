@@ -28,19 +28,12 @@ import type {
   PublicationDispatchRow,
   PublicationRegistryRow,
   RegisteredSurface,
-  SeatOfferingRow,
 } from "./registeredRuntimeTypes"
 import RegisteredIntro from "./renderers/RegisteredIntro"
 import RegisteredPathChoice from "./renderers/RegisteredPathChoice"
 import RegisteredPassage from "./renderers/RegisteredPassage"
-import RegisteredAssessment from "./renderers/RegisteredAssessment"
-import RegisteredEvalEmailContract from "./renderers/RegisteredEvalEmailContract"
-import RegisteredPhaseReveal from "./renderers/RegisteredPhaseReveal"
-import RegisteredAbout from "./renderers/RegisteredAbout"
+import RegisteredPublicAssessment from "./renderers/RegisteredPublicAssessment"
 import RegisteredStructuralDrift from "./renderers/RegisteredStructuralDrift"
-import RegisteredReserveSeat from "./renderers/RegisteredReserveSeat"
-import RegisteredPhasePayment from "./renderers/RegisteredPhasePayment"
-import RegisteredConnectSrc from "./renderers/RegisteredConnectSrc"
 import RegisteredPublicUnderstand from "./renderers/RegisteredPublicUnderstand"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
@@ -51,16 +44,9 @@ const REGISTERED_ENCOUNTER_KEYS = [
   "ai_isnt_broken_intro",
   "evaluate_structure_path",
   "eval_passage",
-  "connect_src",
   "measures_assessment",
   "structure_passage",
-  "structured_eval",
-  "measures_phases_reveal",
-  "about_measures_registry",
   "structural_drift_publication",
-  "measures_eval_email_contract",
-  "reserve_seat",
-  "phase_payment",
 ] as const
 
 const REGISTERED_MEDIA_ROLES = [
@@ -91,16 +77,9 @@ const SURFACE_QUERY: Record<RegisteredSurface, string> = {
   intro: "ai_isnt_broken_intro",
   path_choice: "evaluate_structure_path",
   eval_passage: "eval_passage",
-  connect_src: "connect_src",
   measures_assessment: "measures_assessment",
   structure_passage: "structure_passage",
-  structured_eval: "structured_eval",
-  measures_eval_email_contract: "measures_eval_email_contract",
-  measures_phases_reveal: "measures_phases_reveal",
-  about_measures_registry: "about_measures_registry",
   structural_drift_dispatches: "structural_drift_publication",
-  reserve_seat: "reserve_seat",
-  phase_payment: "phase_payment",
   publication_dispatch: "publication_dispatch",
 }
 
@@ -114,15 +93,6 @@ const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
 }
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
-
-const PUBLIC_HELD_SURFACES = new Set<RegisteredSurface>([
-  "structured_eval",
-  "measures_eval_email_contract",
-  "measures_phases_reveal",
-  "about_measures_registry",
-  "reserve_seat",
-  "phase_payment",
-])
 
 function historyUrl(surface: RegisteredSurface) {
   const url = new URL(window.location.href)
@@ -138,10 +108,6 @@ function writeHistory(method: "pushState" | "replaceState", surface: RegisteredS
   )
 }
 
-function publicSurface(surface: RegisteredSurface) {
-  return PUBLIC_HELD_SURFACES.has(surface) ? "structure_passage" : surface
-}
-
 function initialSurface(): RegisteredSurface {
   if (window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
   if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCHES_ROUTE) return "structural_drift_dispatches"
@@ -150,9 +116,9 @@ function initialSurface(): RegisteredSurface {
   if (!queryValue) return "intro"
 
   const match = Object.entries(SURFACE_QUERY).find(([, v]) => v === queryValue)
-  if (match) return publicSurface(match[0] as RegisteredSurface)
+  if (match) return match[0] as RegisteredSurface
 
-  return publicSurface(SURFACE_QUERY_ALIASES[queryValue] ?? "intro")
+  return SURFACE_QUERY_ALIASES[queryValue] ?? "intro"
 }
 
 export default function MeasuresRegistryRuntimeRegistered() {
@@ -160,7 +126,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const [sections, setSections] = useState<LandingSectionRow[]>([])
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
-  const [seatOfferings, setSeatOfferings] = useState<SeatOfferingRow[]>([])
   const [publicationRows, setPublicationRows] = useState<PublicationRegistryRow[]>([])
   const [publicationDispatchRows, setPublicationDispatchRows] = useState<PublicationDispatchRow[]>([])
 
@@ -182,11 +147,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const [evalError, setEvalError] = useState<string | null>(null)
   const [conditionTraces, setConditionTraces] = useState<import("./registeredRuntimeUtils").AssessmentConditionTrace[]>([])
 
-  const [holdEmail, setHoldEmail] = useState("")
-  const [holdSubmitting, setHoldSubmitting] = useState(false)
-  const [holdStatus, setHoldStatus] = useState<Record<string, string | null>>({})
-  const [holdError, setHoldError] = useState<Record<string, string | null>>({})
-
   const [publicationEmail, setPublicationEmail] = useState("")
   const [publicationOrganization, setPublicationOrganization] = useState("")
   const [publicationSubmitting, setPublicationSubmitting] = useState(false)
@@ -204,7 +164,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
     async function loadData() {
       if (supabaseConfigError) return
 
-      const [sectionResult, mediaResult, tokenResult, offeringResult, publicationResult, dispatchResult] =
+      const [sectionResult, mediaResult, tokenResult, publicationResult, dispatchResult] =
         await Promise.all([
           supabase
             .from("measures_encounter_def")
@@ -223,11 +183,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
             .eq("registry_key", DESIGN_REGISTRY_KEY)
             .eq("is_active", true),
           supabase
-            .from("measures_seat_offering")
-            .select("offering_key, label, short_label, description, offering_type, sequence_order, enrollment_state, hold_target_key, offering_surface_key, metadata")
-            .eq("system_key", DESIGN_REGISTRY_KEY)
-            .order("sequence_order", { ascending: true }),
-          supabase
             .from("measures_publication_registry")
             .select("publication_key, title, subtitle, publication_type, status, external_url, tone, metadata")
             .eq("publication_key", "structural_drift")
@@ -245,7 +200,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
       if (!sectionResult.error) setSections((sectionResult.data ?? []) as LandingSectionRow[])
       if (!mediaResult.error) setMediaRows((mediaResult.data ?? []) as MediaRow[])
       if (!tokenResult.error) setDesignTokens((tokenResult.data ?? []) as DesignTokenRow[])
-      if (!offeringResult.error) setSeatOfferings((offeringResult.data ?? []) as SeatOfferingRow[])
       if (!publicationResult.error) setPublicationRows((publicationResult.data ?? []) as PublicationRegistryRow[])
       if (!dispatchResult.error) setPublicationDispatchRows((dispatchResult.data ?? []) as PublicationDispatchRow[])
     }
@@ -315,18 +269,11 @@ export default function MeasuresRegistryRuntimeRegistered() {
     return () => window.removeEventListener("popstate", handlePopState)
   }, [])
 
-  // Public runtime pass: held/private surfaces remain seated, but are not exposed by query navigation.
-  useEffect(() => {
-    if (PUBLIC_HELD_SURFACES.has(activeSurface)) {
-      navigate("structure_passage")
-    }
-  }, [activeSurface])
-
   // Assessment surfaces must always render questions, never a completion carry-over.
   // evalSubmitted persists across SPA surface changes via browser back/forward navigation.
-  // Resetting it here ensures structured_eval and measures_assessment always start in question mode.
+  // Resetting it here ensures measures_assessment always starts in question mode.
   useEffect(() => {
-    if (activeSurface === "structured_eval" || activeSurface === "measures_assessment") {
+    if (activeSurface === "measures_assessment") {
       setEvalSubmitted(false)
       setEvalStep("diagnostic")
       setEvalError(null)
@@ -338,16 +285,9 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const introCopy = sectionCopy(sectionMap.get("ai_isnt_broken_intro"))
   const pathChoiceCopy = sectionCopy(sectionMap.get("evaluate_structure_path"))
   const evalPassageCopy = sectionCopy(sectionMap.get("eval_passage"))
-  const connectSrcCopy = sectionCopy(sectionMap.get("connect_src"))
   const evaluationChamberCopy = sectionCopy(sectionMap.get("measures_assessment"))
   const structurePassageCopy = sectionCopy(sectionMap.get("structure_passage"))
-  const structuredEvalCopy = sectionCopy(sectionMap.get("structured_eval"))
-  const measuresPhasesRevealCopy = sectionCopy(sectionMap.get("measures_phases_reveal"))
-  const aboutMeasuresRegistryCopy = sectionCopy(sectionMap.get("about_measures_registry"))
   const structuralDriftCopy = sectionCopy(sectionMap.get("structural_drift_publication"))
-  const measuresEvalEmailCopy = sectionCopy(sectionMap.get("measures_eval_email_contract"))
-  const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
-  const phasePaymentCopy = sectionCopy(sectionMap.get("phase_payment"))
   const publicAssessBoundary = asRecord(
     asRecord(evaluationChamberCopy.publicRuntimeBoundary?.public_paths)?.assess_environment ??
     evaluationChamberCopy.publicRuntimeBoundary?.public_paths,
@@ -399,10 +339,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
   // --- assessment active copy ---
 
-  const activeEvaluationCopy =
-    activeSurface === "structured_eval" && structuredEvalCopy.assessmentMechanics
-      ? structuredEvalCopy
-      : evaluationChamberCopy
+  const activeEvaluationCopy = evaluationChamberCopy
 
   // --- assessment handlers ---
 
@@ -554,67 +491,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
     setEvalSubmitted(true)
   }
 
-  function submitContactCapture(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setEvalError(null)
-
-    const requiredFields = requiredEvalIdentityFields()
-    const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
-    if (missing.length > 0) {
-      setEvalError(`Missing required fields: ${missing.join(", ")}`)
-      return
-    }
-
-    navigate("measures_assessment")
-  }
-
-  // --- seat hold handler ---
-
-  async function submitSeatHold(
-    event: FormEvent<HTMLFormElement>,
-    encounterKey: "phase_payment",
-    offeringKey: string | null,
-    successMessage: string | null,
-    successSubtext: string | null,
-  ) {
-    event.preventDefault()
-
-    const normalizedEmail = holdEmail.trim().toLowerCase()
-    setHoldStatus((current) => ({ ...current, [encounterKey]: null }))
-    setHoldError((current) => ({ ...current, [encounterKey]: null }))
-
-    if (!normalizedEmail) {
-      setHoldError((current) => ({ ...current, [encounterKey]: "Email is required." }))
-      return
-    }
-
-    if (!offeringKey) {
-      setHoldError((current) => ({ ...current, [encounterKey]: "Seat hold offering is not seated correctly." }))
-      return
-    }
-
-    setHoldSubmitting(true)
-
-    const response = await fetch("/api/create-seat-hold-capture", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ email: normalizedEmail, offering_key: offeringKey }),
-    })
-
-    setHoldSubmitting(false)
-
-    if (!response.ok) {
-      setHoldError((current) => ({ ...current, [encounterKey]: "Seat hold could not be recorded." }))
-      return
-    }
-
-    setHoldEmail("")
-    setHoldStatus((current) => ({
-      ...current,
-      [encounterKey]: successMessage ?? "Your seat hold has been recorded.",
-    }))
-  }
-
   // --- publication subscription ---
 
   async function submitPublicationSubscription(event: FormEvent<HTMLFormElement>) {
@@ -696,9 +572,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
   // --- assessment mechanics ---
 
   const measuresMechanics = allAssessmentMechanics(evaluationChamberCopy.assessmentMechanics)
-  const structuredMechanics = allAssessmentMechanics(
-    structuredEvalCopy.assessmentMechanics ?? evaluationChamberCopy.assessmentMechanics,
-  )
 
   const sharedAssessmentProps = {
     evalAnswers,
@@ -719,12 +592,12 @@ export default function MeasuresRegistryRuntimeRegistered() {
     structuredEnvironmentPassageVideoUrl,
     onBackQuestion: () => setEvalSectionIndex((current) => Math.max(0, current - 1)),
     onContinueToDiagnostic: continueToDiagnostic,
-    onEnterStructuredEnvironment: () => navigate("measures_phases_reveal"),
+    onEnterStructuredEnvironment: () => navigate("structure_passage"),
     onSetEvalAnswerContext: setEvalAnswerContext,
     onSetEvalAnswerSelection: setEvalAnswerSelection,
     onSetEvalField: setEvalField,
     onSubmitEvaluation: submitIisEvaluation,
-    onStructuredEnvironmentVideoEnded: () => navigate("measures_phases_reveal"),
+    onStructuredEnvironmentVideoEnded: () => navigate("structure_passage"),
     onTogglePassageMuted: () => setPassageMuted((current) => !current),
     renderSystemFooter,
   }
@@ -786,7 +659,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         passageMuted={passageMuted}
         renderHeader={() => renderHeader(evalPassageCopy.header)}
         renderSystemFooter={renderSystemFooter}
-        onContinue={() => navigate("connect_src")}
+        onContinue={() => navigate("measures_assessment")}
         onToggleMuted={() => setPassageMuted((current) => !current)}
       />
     )
@@ -808,7 +681,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
     )
   } else if (activeSurface === "measures_assessment") {
     activeSurfaceElement = (
-      <RegisteredAssessment
+      <RegisteredPublicAssessment
         {...sharedAssessmentProps}
         encounterCopy={evaluationChamberCopy}
         publicResultBoundary={publicAssessmentResultBoundary}
@@ -820,70 +693,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onCompleteQuestionClick={(event, currentQuestion) => {
           if (currentQuestion && validateDiagnosticSection([currentQuestion])) return
           event.preventDefault()
-        }}
-      />
-    )
-  } else if (activeSurface === "structured_eval") {
-    activeSurfaceElement = (
-      <RegisteredAssessment
-        {...sharedAssessmentProps}
-        encounterCopy={{
-          ...evaluationChamberCopy,
-          assessmentChamber: structuredEvalCopy.assessmentChamber ?? evaluationChamberCopy.assessmentChamber,
-          assessmentCompletion: structuredEvalCopy.assessmentCompletion ?? evaluationChamberCopy.assessmentCompletion,
-          layoutContract: structuredEvalCopy.layoutContract ?? evaluationChamberCopy.layoutContract,
-          srcIntakeContract: structuredEvalCopy.srcIntakeContract ?? evaluationChamberCopy.srcIntakeContract,
-          stylingContract: structuredEvalCopy.stylingContract ?? evaluationChamberCopy.stylingContract,
-          resolutionText: structuredEvalCopy.resolutionText ?? evaluationChamberCopy.resolutionText,
-        }}
-        structuredQuestions={structuredMechanics}
-        onContinueQuestion={(currentQuestion) => {
-          if (!validateDiagnosticSection([currentQuestion])) return
-          setEvalSectionIndex((current) => Math.min(structuredMechanics.length - 1, current + 1))
-        }}
-        onCompleteQuestionClick={(event, currentQuestion) => {
-          if (currentQuestion && validateDiagnosticSection([currentQuestion])) return
-          event.preventDefault()
-        }}
-      />
-    )
-  } else if (activeSurface === "measures_eval_email_contract") {
-    // Internal contract — not a public encounter surface; redirect handled by useEffect above
-    activeSurfaceElement = null
-  } else if (activeSurface === "measures_phases_reveal") {
-    activeSurfaceElement = (
-      <RegisteredPhaseReveal
-        registryTokenStyle={registryTokenStyle}
-        phaseRevealCopy={measuresPhasesRevealCopy}
-        lapisBackgroundUrl={lapisBackgroundUrl}
-        renderHeader={() => renderHeader(measuresPhasesRevealCopy.header)}
-        renderSystemFooter={renderSystemFooter}
-        onNavigateRoute={(route) => {
-          const routeMap: Partial<Record<string, RegisteredSurface>> = {
-            about_measures_registry: "about_measures_registry",
-            structural_drift_publication: "structural_drift_dispatches",
-            reserve_seat: "reserve_seat",
-          }
-          const surface = routeMap[route]
-          if (surface) navigate(surface)
-        }}
-      />
-    )
-  } else if (activeSurface === "about_measures_registry") {
-    activeSurfaceElement = (
-      <RegisteredAbout
-        registryTokenStyle={registryTokenStyle}
-        aboutCopy={aboutMeasuresRegistryCopy}
-        structuralDriftFeatureImageUrl={structuralDriftFeatureImageUrl}
-        renderHeader={() => renderHeader(aboutMeasuresRegistryCopy.header)}
-        renderSystemFooter={renderSystemFooter}
-        onNavigateRoute={(route) => {
-          const routeMap: Partial<Record<string, RegisteredSurface>> = {
-            reserve_seat: "reserve_seat",
-            structural_drift_publication: "structural_drift_dispatches",
-          }
-          const surface = routeMap[route]
-          if (surface) navigate(surface)
         }}
       />
     )
@@ -903,61 +712,12 @@ export default function MeasuresRegistryRuntimeRegistered() {
         publicationStatus={publicationStatus}
         publicationError={publicationError}
         onBeginEvaluation={() => navigate("measures_assessment")}
-        onContinueToAssessmentPackage={() => navigate("reserve_seat")}
+        onContinueToAssessmentPackage={() => navigate("eval_passage")}
         onGoToEvalPassage={() => navigate("eval_passage")}
         onPublicationEmailChange={setPublicationEmail}
         onPublicationOrganizationChange={setPublicationOrganization}
         onSubmitSubscription={submitPublicationSubscription}
         renderSystemFooter={renderSystemFooter}
-      />
-    )
-  } else if (activeSurface === "reserve_seat") {
-    activeSurfaceElement = (
-      <RegisteredReserveSeat
-        registryTokenStyle={registryTokenStyle}
-        reserveSeatCopy={reserveSeatCopy}
-        seatOfferings={seatOfferings}
-        renderHeader={() => renderHeader()}
-        renderSystemFooter={renderSystemFooter}
-        onSelectOffering={() => navigate("phase_payment")}
-      />
-    )
-  } else if (activeSurface === "phase_payment") {
-    activeSurfaceElement = (
-      <RegisteredPhasePayment
-        registryTokenStyle={registryTokenStyle}
-        phasePaymentCopy={phasePaymentCopy}
-        holdEmail={holdEmail}
-        holdSubmitting={holdSubmitting}
-        holdStatus={holdStatus["phase_payment"] ?? null}
-        holdError={holdError["phase_payment"] ?? null}
-        renderHeader={() => renderHeader()}
-        renderSystemFooter={renderSystemFooter}
-        onHoldEmailChange={setHoldEmail}
-        onBack={() => navigate("reserve_seat")}
-        onSubmit={(event) =>
-          submitSeatHold(
-            event,
-            "phase_payment",
-            phasePaymentCopy.offeringKey,
-            phasePaymentCopy.successMessage,
-            phasePaymentCopy.successSubtext,
-          )
-        }
-      />
-    )
-  } else if (activeSurface === "connect_src") {
-    activeSurfaceElement = (
-      <RegisteredConnectSrc
-        registryTokenStyle={registryTokenStyle}
-        connectSrcCopy={connectSrcCopy}
-        evalFields={evalFields}
-        evalSubmitting={evalSubmitting}
-        evalError={evalError}
-        renderHeader={() => renderHeader(connectSrcCopy.header)}
-        renderSystemFooter={renderSystemFooter}
-        onFieldChange={(key, value) => setEvalFields((current) => ({ ...current, [key]: value }))}
-        onSubmit={submitContactCapture}
       />
     )
   } else {
@@ -999,3 +759,5 @@ export default function MeasuresRegistryRuntimeRegistered() {
     </>
   )
 }
+
+

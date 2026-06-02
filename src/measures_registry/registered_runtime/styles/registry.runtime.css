@@ -8,7 +8,4 @@
 @import "./registry.footer.css";
 @import "./encounters/passage.css";
 @import "./encounters/assessment.css";
-@import "./encounters/contact_capture.css";
-@import "./encounters/phases_reveal.css";
-@import "./encounters/about.css";
 @import "./encounters/public_understand.css";

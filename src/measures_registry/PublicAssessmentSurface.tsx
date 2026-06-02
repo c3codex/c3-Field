@@ -1,6 +1,6 @@
 import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
 import { MeasuresAssessmentBrandLayer } from "./MeasuresAssessmentBrandLayer"
-import { MeasuresAssessmentResult } from "./MeasuresAssessmentResult"
+import { PublicAssessmentResult } from "./PublicAssessmentResult"
 import {
   ASSESSMENT_PROCESS_TITLE,
   ASSESSMENT_SUB_SUPPORT_LINE,
@@ -15,7 +15,7 @@ import type {
   StructuredEvalAnswer,
 } from "./measuresAssessmentTypes"
 
-type MeasuresAssessmentChamberProps = {
+type PublicAssessmentSurfaceProps = {
   encounterKey: string
   assessmentEyebrow?: string
   assessmentProcessTitle?: string
@@ -64,7 +64,7 @@ type MeasuresAssessmentChamberProps = {
   onTogglePassageMuted: () => void
 }
 
-export function MeasuresAssessmentChamber({
+export function PublicAssessmentSurface({
   encounterKey,
   assessmentEyebrow,
   assessmentProcessTitle = ASSESSMENT_PROCESS_TITLE,
@@ -107,7 +107,7 @@ export function MeasuresAssessmentChamber({
   onSubmitEvaluation,
   onStructuredEnvironmentVideoEnded,
   onTogglePassageMuted,
-}: MeasuresAssessmentChamberProps) {
+}: PublicAssessmentSurfaceProps) {
   const currentQuestion = structuredQuestions[evalSectionIndex] ?? null
   const finalDiagnosticQuestion = evalSectionIndex >= Math.max(structuredQuestions.length - 1, 0)
   const currentQuestionAnswered = Boolean(currentQuestion && evalAnswers[currentQuestion.questionKey]?.selected)
@@ -175,7 +175,7 @@ export function MeasuresAssessmentChamber({
         {governedStatus}
 
         {evalSubmitted ? (
-          <MeasuresAssessmentResult
+          <PublicAssessmentResult
             assessmentCompletion={assessmentCompletion}
             emailArtifact={evalEmailArtifact}
             passageMuted={passageMuted}
