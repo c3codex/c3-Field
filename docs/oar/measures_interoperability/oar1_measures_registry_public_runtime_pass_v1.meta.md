@@ -20,7 +20,8 @@ tags:
   - understand-environment
   - render-seated-public-state-only
   - system-chambers-held
-  - no-deployment
+  - private-runtime-pruned
+  - deployed-by-git-push
 ---
 
 # OAR1 Measures Registry Public Runtime Pass v1
@@ -31,7 +32,7 @@ The Measures Registry public runtime pass was implemented in `src` as a renderer
 
 No DB mutation was performed.
 
-No deployment was performed.
+Initial runtime implementation was not deployed until later operator confirmation.
 
 No runtime final pass was executed.
 
@@ -50,13 +51,26 @@ Implemented public-runtime support in:
 
 - `src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx`
 - `src/measures_registry/registered_runtime/renderers/RegisteredPublicUnderstand.tsx`
+- `src/measures_registry/registered_runtime/renderers/RegisteredPublicAssessment.tsx`
 - `src/measures_registry/registered_runtime/styles/encounters/public_understand.css`
 - `src/measures_registry/registered_runtime/styles/registry.runtime.css`
 - `src/measures_registry/registered_runtime/registeredRuntimeTypes.ts`
 - `src/measures_registry/registered_runtime/registeredRuntimeUtils.ts`
-- `src/measures_registry/registered_runtime/renderers/RegisteredAssessment.tsx`
-- `src/measures_registry/MeasuresAssessmentChamber.tsx`
-- `src/measures_registry/MeasuresAssessmentResult.tsx`
+- `src/measures_registry/PublicAssessmentSurface.tsx`
+- `src/measures_registry/PublicAssessmentResult.tsx`
+
+Removed previous/private runtime drift from `src`:
+
+- `src/measures_registry/MeasuresRegistryRuntime.tsx`
+- `src/measures_registry/registered_runtime/renderers/RegisteredConnectSrc.tsx`
+- `src/measures_registry/registered_runtime/renderers/RegisteredEvalEmailContract.tsx`
+- `src/measures_registry/registered_runtime/renderers/RegisteredPhaseReveal.tsx`
+- `src/measures_registry/registered_runtime/renderers/RegisteredAbout.tsx`
+- `src/measures_registry/registered_runtime/renderers/RegisteredReserveSeat.tsx`
+- `src/measures_registry/registered_runtime/renderers/RegisteredPhasePayment.tsx`
+- `src/measures_registry/registered_runtime/styles/encounters/contact_capture.css`
+- `src/measures_registry/registered_runtime/styles/encounters/phases_reveal.css`
+- `src/measures_registry/registered_runtime/styles/encounters/about.css`
 
 ## Understand the Environment
 
@@ -86,7 +100,7 @@ The Understand CTA routes to the Assess passage only.
 The public assessment path remains active through:
 
 - assessment passage
-- scoped contact / institution intake
+- scoped public assessment intake
 - 7-question scored assessment
 - public-safe result
 - governed pathway recommendation labels only
@@ -101,12 +115,13 @@ Public pathway labels rendered from seated boundary metadata:
 
 Private route mechanics remain held outside public runtime.
 
-## Held Route Guard
+## Private Runtime Pruning
 
-The registered runtime now redirects query navigation for held/private registered surfaces back to the public Understand surface.
+The registered runtime no longer carries previous/private renderer files in `src`.
 
-Held registered surfaces guarded:
+Removed source-resident route/render drift for:
 
+- `connect_src`
 - `structured_eval`
 - `measures_eval_email_contract`
 - `measures_phases_reveal`
@@ -114,7 +129,17 @@ Held registered surfaces guarded:
 - `reserve_seat`
 - `phase_payment`
 
-This preserves existing seated structures in source while preventing public query exposure.
+The previous `PUBLIC_HELD_SURFACES` redirect guard was removed because those surfaces are no longer valid registered runtime surfaces.
+
+Active public runtime surfaces are limited to:
+
+- `intro`
+- `path_choice`
+- `eval_passage`
+- `measures_assessment`
+- `structure_passage`
+- `structural_drift_dispatches`
+- `publication_dispatch`
 
 ## Media Resolution
 
@@ -141,7 +166,7 @@ Build notes:
 - `VITE_R2_PUBLIC_BASE_URL` remains missing locally, but the new media resolver uses seated `metadata.public_url` for the Questions video.
 - Vite reported the existing chunk-size warning.
 - Browserslist reported the existing stale-data notice.
-- Generated `dist-registry` output was restored/removed after validation because deployment and build artifact publication were not authorized by this OAR2.
+- Generated `dist-registry` output was restored/removed after validation because deployment is triggered by Git push from the `measures` branch, not by committing local build artifacts.
 
 Source validation:
 
@@ -149,9 +174,15 @@ Source validation:
 - `measures_media_map` registered runtime select includes `metadata`.
 - public Understand surface is scoped by `data-public-path="understand_environment"`.
 - public assessment completion uses `publicResultBoundary`.
-- held route guard is seated as `PUBLIC_HELD_SURFACES`.
-- `RegisteredPublicUnderstand.tsx` and `MeasuresAssessmentResult.tsx` contain no public strings for C1, C2, C3, commerce circuit, wallet connect, temp payment provider, c3 Key, SRC binding, permission standing, recognition standing, conversion standing, certification standing, DAO standing, or distribution standing.
-- fixed-string route search found no public renderer navigation to `structured_eval`, `measures_phases_reveal`, `reserve_seat`, or `phase_payment`.
+- `RegisteredPublicUnderstand.tsx` and `PublicAssessmentResult.tsx` contain no public strings for C1, C2, C3, commerce circuit, wallet connect, temp payment provider, c3 Key, SRC binding, permission standing, recognition standing, conversion standing, certification standing, DAO standing, or distribution standing.
+- fixed-string route search found no `src/measures_registry` matches for: `connect_src`, `MeasuresAssessmentChamber`, `MeasuresAssessmentResult`, `RegisteredAssessment`, `5 question`, `commerce circuit`, `C1 / C2 / C3`, `payment standing`, `permission standing`, `conversion standing`, `SRC binding`, or `PUBLIC_HELD_SURFACES`.
+
+Git validation:
+
+- Public runtime implementation commit: `dc16385 Implement measures public runtime pass`
+- Private runtime pruning commit: `2834b08 Prune measures private runtime drift`
+- Branch pushed: `measures -> origin/measures`
+- Deploy trigger mode: Git push
 
 Browser smoke note:
 
@@ -176,7 +207,6 @@ This pass did not implement:
 - DAO standing
 - distribution standing
 - pricing
-- deployment
 
 No hardcoded truth was introduced.
 
@@ -190,7 +220,8 @@ DB/runtime metadata remains the source of public content and media state.
 
 OAR2 execution is complete for the public runtime pass.
 
-Full runtime final pass remains unauthorized.
+Previous/private runtime drift has been removed from `src`.
 
-Deployment remains unauthorized.
+The confirmed build and deploy were completed by Git push to `origin/measures`.
 
+Full runtime final pass remains separate from this public runtime pass.
