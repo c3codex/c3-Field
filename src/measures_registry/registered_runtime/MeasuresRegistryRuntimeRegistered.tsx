@@ -7,6 +7,7 @@ import {
   allAssessmentMechanics,
   asRecord,
   asString,
+  asStringArray,
   cssTokenName,
   mediaUrl,
   resolveEnvironmentalReportByScore,
@@ -40,6 +41,7 @@ import RegisteredStructuralDrift from "./renderers/RegisteredStructuralDrift"
 import RegisteredReserveSeat from "./renderers/RegisteredReserveSeat"
 import RegisteredPhasePayment from "./renderers/RegisteredPhasePayment"
 import RegisteredConnectSrc from "./renderers/RegisteredConnectSrc"
+import RegisteredPublicUnderstand from "./renderers/RegisteredPublicUnderstand"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
@@ -82,6 +84,7 @@ const REGISTERED_MEDIA_ROLES = [
   "installation_tone_marble",
   "installation_tone_marble_rise_return_v1",
   "structural_drift_feature_image",
+  "questions_ungoverned_systems_cannot_answer_video",
 ] as const
 
 const SURFACE_QUERY: Record<RegisteredSurface, string> = {
@@ -112,6 +115,15 @@ const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
 
+const PUBLIC_HELD_SURFACES = new Set<RegisteredSurface>([
+  "structured_eval",
+  "measures_eval_email_contract",
+  "measures_phases_reveal",
+  "about_measures_registry",
+  "reserve_seat",
+  "phase_payment",
+])
+
 function historyUrl(surface: RegisteredSurface) {
   const url = new URL(window.location.href)
   url.searchParams.set("surface", SURFACE_QUERY[surface])
@@ -126,6 +138,10 @@ function writeHistory(method: "pushState" | "replaceState", surface: RegisteredS
   )
 }
 
+function publicSurface(surface: RegisteredSurface) {
+  return PUBLIC_HELD_SURFACES.has(surface) ? "structure_passage" : surface
+}
+
 function initialSurface(): RegisteredSurface {
   if (window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
   if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCHES_ROUTE) return "structural_drift_dispatches"
@@ -134,9 +150,9 @@ function initialSurface(): RegisteredSurface {
   if (!queryValue) return "intro"
 
   const match = Object.entries(SURFACE_QUERY).find(([, v]) => v === queryValue)
-  if (match) return match[0] as RegisteredSurface
+  if (match) return publicSurface(match[0] as RegisteredSurface)
 
-  return SURFACE_QUERY_ALIASES[queryValue] ?? "intro"
+  return publicSurface(SURFACE_QUERY_ALIASES[queryValue] ?? "intro")
 }
 
 export default function MeasuresRegistryRuntimeRegistered() {
@@ -197,8 +213,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
             .order("sequence_order", { ascending: true }),
           supabase
             .from("measures_media_map")
-            .select("media_role, storage_bucket, storage_path, mime_type, is_active")
-            .eq("campaign_key", CAMPAIGN_KEY)
+            .select("media_role, storage_bucket, storage_path, mime_type, is_active, metadata")
+            .in("campaign_key", [CAMPAIGN_KEY, "measures_registry_crystal_chamber"])
             .in("media_role", [...REGISTERED_MEDIA_ROLES])
             .order("sort_order", { ascending: true }),
           supabase
@@ -299,10 +315,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
     return () => window.removeEventListener("popstate", handlePopState)
   }, [])
 
-  // measures_eval_email_contract is internal — redirect any direct access to phases_reveal
+  // Public runtime pass: held/private surfaces remain seated, but are not exposed by query navigation.
   useEffect(() => {
-    if (activeSurface === "measures_eval_email_contract") {
-      navigate("measures_phases_reveal")
+    if (PUBLIC_HELD_SURFACES.has(activeSurface)) {
+      navigate("structure_passage")
     }
   }, [activeSurface])
 
@@ -332,6 +348,21 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const measuresEvalEmailCopy = sectionCopy(sectionMap.get("measures_eval_email_contract"))
   const reserveSeatCopy = sectionCopy(sectionMap.get("reserve_seat"))
   const phasePaymentCopy = sectionCopy(sectionMap.get("phase_payment"))
+  const publicAssessBoundary = asRecord(
+    asRecord(evaluationChamberCopy.publicRuntimeBoundary?.public_paths)?.assess_environment ??
+    evaluationChamberCopy.publicRuntimeBoundary?.public_paths,
+  )
+  const publicAssessPathwayLabels = asStringArray(publicAssessBoundary?.allowed_public_pathway_labels)
+  const publicRecommendationCopy = asStringArray(
+    asRecord(evaluationChamberCopy.publicRuntimeBoundary?.commerce_circuit_public_boundary)?.public_copy_allowed,
+  )[0] ?? null
+  const publicAssessmentResultBoundary =
+    publicAssessPathwayLabels.length > 0
+      ? {
+          pathwayLabels: publicAssessPathwayLabels,
+          recommendationCopy: publicRecommendationCopy,
+        }
+      : null
 
   const structuralDriftPublication = publicationRows.find((row) => row.publication_key === "structural_drift") ?? null
   const structuralDriftDispatches = publicationDispatchRows.filter((row) => row.publication_key === "structural_drift")
@@ -357,6 +388,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const marbleAccentReferenceUrl = mediaUrl(mediaMap.get("marble_accent_reference"))
   const structuralDriftFeatureImageUrl = mediaUrl(mediaMap.get("structural_drift_feature_image"))
+  const questionsUngovernedSystemsVideoUrl = mediaUrl(mediaMap.get("questions_ungoverned_systems_cannot_answer_video"))
   const structuredEnvironmentPassageVideoUrl =
     mediaUrl(mediaMap.get("structured_environment_passage_video")) ??
     mediaUrl(mediaMap.get("measures_structured_enviroments"))
@@ -760,15 +792,17 @@ export default function MeasuresRegistryRuntimeRegistered() {
     )
   } else if (activeSurface === "structure_passage") {
     activeSurfaceElement = (
-      <RegisteredPassage
-        variant="structure"
+      <RegisteredPublicUnderstand
         registryTokenStyle={registryTokenStyle}
-        passageCopy={structurePassageCopy}
-        passageVideoUrl={structuredEnvironmentPassageVideoUrl}
+        structurePassageCopy={structurePassageCopy}
+        questionsVideoUrl={questionsUngovernedSystemsVideoUrl}
+        talkingHeadVideoUrl={structuredEnvironmentPassageVideoUrl}
         passageMuted={passageMuted}
+        structuralDriftAvailable={Boolean(structuralDriftPublication || structuralDriftDispatches.length > 0)}
         renderHeader={() => renderHeader(structurePassageCopy.header)}
         renderSystemFooter={renderSystemFooter}
-        onContinue={() => navigate("structured_eval")}
+        onAssessEnvironment={() => navigate("eval_passage")}
+        onStructuralDrift={() => navigate("structural_drift_dispatches")}
         onToggleMuted={() => setPassageMuted((current) => !current)}
       />
     )
@@ -777,6 +811,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
       <RegisteredAssessment
         {...sharedAssessmentProps}
         encounterCopy={evaluationChamberCopy}
+        publicResultBoundary={publicAssessmentResultBoundary}
         structuredQuestions={measuresMechanics}
         onContinueQuestion={(currentQuestion) => {
           if (!validateDiagnosticSection([currentQuestion])) return

@@ -2251,14 +2251,14 @@ export default function MeasuresRegistryRuntime() {
           <section className="registry-threshold-hero" aria-label={landingRootCopy.title ?? "Measures Registry threshold"}>
             {renderThresholdSeat("left", thresholdLeftStillUrl, thresholdLeftMotionUrl, {
               body: "Complexity is scaling faster than clarity. Your systems are producing outcomes nobody can fully explain.",
-              cta: "Evaluate the Environment",
+              cta: "Assess the Environment",
               actionKey: leftAction,
               ariaLabel: "Fractured environment motion",
             })}
             <div className="registry-threshold-divide" aria-hidden="true" />
             {renderThresholdSeat("right", thresholdRightStillUrl, thresholdRightMotionUrl, {
               body: "Coherence must be structured. Measured environments produce stable and governable outcomes.",
-              cta: "Structure the Environment",
+              cta: "Understand the Environment",
               actionKey: rightAction,
               ariaLabel: "Measured environment motion",
             })}

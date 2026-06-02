@@ -156,7 +156,7 @@ export default function RegisteredIntro({
             thresholdLeftMotionUrl,
             {
               body: "Complexity is scaling faster than clarity. Your systems are producing outcomes nobody can fully explain.",
-              cta: "Evaluate the Environment",
+              cta: "Assess the Environment",
               ariaLabel: "Fractured environment motion",
             },
             onLeftChoice,
@@ -168,7 +168,7 @@ export default function RegisteredIntro({
             thresholdRightMotionUrl,
             {
               body: "Coherence must be structured. Measured environments produce stable and governable outcomes.",
-              cta: "Structure the Environment",
+              cta: "Understand the Environment",
               ariaLabel: "Measured environment motion",
             },
             onRightChoice,

@@ -456,9 +456,12 @@ export function resolveEnvironmentalReportByScore(
 }
 
 export function mediaUrl(row?: MediaRow): string | null {
+  const metadata = asRecord(row?.metadata)
   return resolveRuntimeMediaUrl({
+    publicUrl: asString(metadata?.public_url) ?? asString(metadata?.exact_url_seated),
     bucketName: row?.storage_bucket,
     storagePath: row?.storage_path,
+    storageProvider: asString(metadata?.storage_provider),
   })
 }
 
@@ -533,6 +536,8 @@ export function sectionCopy(row?: LandingSectionRow) {
     mediaBehaviorContract: asRecord(metadata.media_behavior_contract),
     brandingContract: asRecord(metadata.branding_contract),
     contentContract: asRecord(metadata.content_contract),
+    crystalContentContracts: asRecord(metadata.crystal_chamber_content_contracts),
+    publicRuntimeBoundary: asRecord(metadata.measures_registry_public_runtime_boundary_v1),
     routeCards: asRecordArray(metadata.route_cards),
     governedStatus: governedStatusCopy(metadata),
   }

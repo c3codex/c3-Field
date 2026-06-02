@@ -25,6 +25,11 @@ type Props = {
   evalSubmitted: boolean
   evalSubmitting: boolean
   passageMuted: boolean
+  publicResultBoundary?: {
+    pathwayLabels: string[]
+    recommendationCopy?: string | null
+    heldCopy?: string | null
+  } | null
   lapisBackgroundUrl: string | null
   registryMarkUrl: string | null
   marbleAccentReferenceUrl: string | null
@@ -58,6 +63,7 @@ export default function RegisteredAssessment({
   evalSubmitted,
   evalSubmitting,
   passageMuted,
+  publicResultBoundary,
   lapisBackgroundUrl,
   registryMarkUrl,
   marbleAccentReferenceUrl,
@@ -114,6 +120,7 @@ export default function RegisteredAssessment({
       evalSubmitted={evalSubmitted}
       evalSubmitting={evalSubmitting}
       passageMuted={passageMuted}
+      publicResultBoundary={publicResultBoundary}
       registryBackgroundUrl={lapisBackgroundUrl}
       registryMarkUrl={registryMarkUrl}
       marbleAccentReferenceUrl={marbleAccentReferenceUrl}

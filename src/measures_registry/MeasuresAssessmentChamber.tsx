@@ -31,6 +31,11 @@ type MeasuresAssessmentChamberProps = {
   evalSubmitted: boolean
   evalSubmitting: boolean
   passageMuted: boolean
+  publicResultBoundary?: {
+    pathwayLabels: string[]
+    recommendationCopy?: string | null
+    heldCopy?: string | null
+  } | null
   assessmentCompletion?: Record<string, unknown> | null
   marbleAccentReferenceUrl: string | null
   registryBackgroundUrl: string | null
@@ -75,6 +80,7 @@ export function MeasuresAssessmentChamber({
   evalSubmitted,
   evalSubmitting,
   passageMuted,
+  publicResultBoundary,
   assessmentCompletion,
   marbleAccentReferenceUrl,
   registryBackgroundUrl,
@@ -173,6 +179,7 @@ export function MeasuresAssessmentChamber({
             assessmentCompletion={assessmentCompletion}
             emailArtifact={evalEmailArtifact}
             passageMuted={passageMuted}
+            publicResultBoundary={publicResultBoundary}
             report={evalReport}
             resolutionText={resolutionText}
             structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}

@@ -18,6 +18,11 @@ type MeasuresAssessmentResultProps = {
   assessmentCompletion?: Record<string, unknown> | null
   emailArtifact: AssessmentEmailArtifact | null
   passageMuted: boolean
+  publicResultBoundary?: {
+    pathwayLabels: string[]
+    recommendationCopy?: string | null
+    heldCopy?: string | null
+  } | null
   report: EnvironmentalStandingReport | null
   resolutionText?: string
   structuredEnvironmentPassageVideoUrl: string | null
@@ -30,6 +35,7 @@ export function MeasuresAssessmentResult({
   assessmentCompletion,
   emailArtifact,
   passageMuted,
+  publicResultBoundary,
   report,
   resolutionText,
   structuredEnvironmentPassageVideoUrl,
@@ -56,6 +62,7 @@ export function MeasuresAssessmentResult({
     typeof completion.progression_threshold_body === "string" ? completion.progression_threshold_body : null
   const progressionCta =
     typeof completion.progression_threshold_cta === "string" ? completion.progression_threshold_cta : "Enter Structured Environment"
+  const publicPathwayLabels = publicResultBoundary?.pathwayLabels ?? []
 
   return (
     <div className="registry-eval-resolution registry-assessment-complete">
@@ -110,10 +117,24 @@ export function MeasuresAssessmentResult({
           {progressionTitle ? <strong>{progressionTitle}</strong> : null}
           {progressionBody ? <p>{progressionBody}</p> : null}
         </section>
+      ) : publicResultBoundary ? (
+        <section className="registry-progression-threshold" aria-label="Public pathway recommendation">
+          <span>Governed Pathways</span>
+          <strong>Public continuation labels only</strong>
+          {publicResultBoundary.recommendationCopy ? <p>{publicResultBoundary.recommendationCopy}</p> : null}
+          {publicPathwayLabels.length > 0 ? (
+            <ul className="registry-public-pathway-list">
+              {publicPathwayLabels.map((label) => (
+                <li key={label}>{label}</li>
+              ))}
+            </ul>
+          ) : null}
+          {publicResultBoundary.heldCopy ? <p>{publicResultBoundary.heldCopy}</p> : null}
+        </section>
       ) : (
         <p>Continue into the Structured Environment.</p>
       )}
-      {structuredEnvironmentPassageVideoUrl ? (
+      {!publicResultBoundary && structuredEnvironmentPassageVideoUrl ? (
         <video
           src={structuredEnvironmentPassageVideoUrl}
           autoPlay
@@ -124,17 +145,19 @@ export function MeasuresAssessmentResult({
           onEnded={onStructuredEnvironmentVideoEnded}
           aria-label="Structured Environment passage"
         />
-      ) : (
+      ) : !publicResultBoundary ? (
         <p className="registry-media-absence">Structured Environment passage media is not seated in the runtime registry.</p>
-      )}
-      <div className="registry-diagnostic-passage-controls" aria-label="Structured Environment passage controls">
-        <button type="button" onClick={onEnterStructuredEnvironment}>
-          {progressionCta}
-        </button>
-        <button type="button" onClick={onTogglePassageMuted}>
-          {passageMuted ? "Audio" : "Mute"}
-        </button>
-      </div>
+      ) : null}
+      {!publicResultBoundary ? (
+        <div className="registry-diagnostic-passage-controls" aria-label="Structured Environment passage controls">
+          <button type="button" onClick={onEnterStructuredEnvironment}>
+            {progressionCta}
+          </button>
+          <button type="button" onClick={onTogglePassageMuted}>
+            {passageMuted ? "Audio" : "Mute"}
+          </button>
+        </div>
+      ) : null}
     </div>
   )
 }

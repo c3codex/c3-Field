@@ -26,6 +26,7 @@ export type MediaRow = {
   storage_path: string
   mime_type?: string | null
   is_active: boolean | null
+  metadata?: Record<string, unknown> | null
 }
 
 export type DesignTokenRow = {
