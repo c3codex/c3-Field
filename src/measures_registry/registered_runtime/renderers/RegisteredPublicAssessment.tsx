@@ -24,6 +24,14 @@ type Props = {
   evalStep: EvalStep
   evalSubmitted: boolean
   evalSubmitting: boolean
+  questionContractStanding?: {
+    ready: boolean
+    expectedQuestionCount: number
+    actualQuestionCount: number
+    displayTitle: string
+    displayBody: string
+    allowedNextStep: string
+  }
   passageMuted: boolean
   publicResultBoundary?: {
     pathwayLabels: string[]
@@ -37,6 +45,7 @@ type Props = {
   registryTokenStyle: CSSProperties
   structuredEnvironmentPassageVideoUrl: string | null
   onBackQuestion: () => void
+  onBeginPathwayReview: () => void
   onCompleteQuestionClick: (event: MouseEvent<HTMLButtonElement>, question: AssessmentMechanicQuestion | null) => void
   onContinueQuestion: (question: AssessmentMechanicQuestion) => void
   onContinueToDiagnostic: () => void
@@ -62,15 +71,15 @@ export default function RegisteredPublicAssessment({
   evalStep,
   evalSubmitted,
   evalSubmitting,
+  questionContractStanding,
   passageMuted,
   publicResultBoundary,
-  lapisBackgroundUrl,
   registryMarkUrl,
   marbleAccentReferenceUrl,
-  registryWatermarkUrl,
   registryTokenStyle,
   structuredEnvironmentPassageVideoUrl,
   onBackQuestion,
+  onBeginPathwayReview,
   onCompleteQuestionClick,
   onContinueQuestion,
   onContinueToDiagnostic,
@@ -119,14 +128,17 @@ export default function RegisteredPublicAssessment({
       evalStep={evalStep}
       evalSubmitted={evalSubmitted}
       evalSubmitting={evalSubmitting}
+      questionContractStanding={questionContractStanding}
       passageMuted={passageMuted}
       publicResultBoundary={publicResultBoundary}
-      registryBackgroundUrl={lapisBackgroundUrl}
+      registryBackgroundUrl={null}
       registryMarkUrl={registryMarkUrl}
       marbleAccentReferenceUrl={marbleAccentReferenceUrl}
-      registryWatermarkUrl={registryWatermarkUrl}
+      registryWatermarkUrl={null}
       registryTokenStyle={registryTokenStyle}
       assessmentCompletion={encounterCopy.assessmentCompletion}
+      assessmentContactCaptureContract={encounterCopy.assessmentContactCaptureBindingContract}
+      assessmentEvaluationReportContract={encounterCopy.assessmentEvaluationReportContract}
       layoutContract={encounterCopy.layoutContract ?? undefined}
       srcIntakeContract={encounterCopy.srcIntakeContract ?? undefined}
       stylingContract={encounterCopy.stylingContract ?? undefined}
@@ -136,6 +148,7 @@ export default function RegisteredPublicAssessment({
       structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}
       structuredQuestions={structuredQuestions}
       onBackQuestion={onBackQuestion}
+      onBeginPathwayReview={onBeginPathwayReview}
       onCompleteQuestionClick={onCompleteQuestionClick}
       onContinueQuestion={onContinueQuestion}
       onContinueToDiagnostic={onContinueToDiagnostic}

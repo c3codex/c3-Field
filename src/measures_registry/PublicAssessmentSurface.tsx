@@ -1,5 +1,4 @@
 import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
-import { MeasuresAssessmentBrandLayer } from "./MeasuresAssessmentBrandLayer"
 import { PublicAssessmentResult } from "./PublicAssessmentResult"
 import {
   ASSESSMENT_PROCESS_TITLE,
@@ -30,6 +29,14 @@ type PublicAssessmentSurfaceProps = {
   evalStep: EvalStep
   evalSubmitted: boolean
   evalSubmitting: boolean
+  questionContractStanding?: {
+    ready: boolean
+    expectedQuestionCount: number
+    actualQuestionCount: number
+    displayTitle: string
+    displayBody: string
+    allowedNextStep: string
+  }
   passageMuted: boolean
   publicResultBoundary?: {
     pathwayLabels: string[]
@@ -37,6 +44,8 @@ type PublicAssessmentSurfaceProps = {
     heldCopy?: string | null
   } | null
   assessmentCompletion?: Record<string, unknown> | null
+  assessmentContactCaptureContract?: Record<string, unknown> | null
+  assessmentEvaluationReportContract?: Record<string, unknown> | null
   marbleAccentReferenceUrl: string | null
   registryBackgroundUrl: string | null
   registryMarkUrl: string | null
@@ -52,6 +61,7 @@ type PublicAssessmentSurfaceProps = {
   structuredEnvironmentPassageVideoUrl: string | null
   structuredQuestions: AssessmentMechanicQuestion[]
   onBackQuestion: () => void
+  onBeginPathwayReview: () => void
   onCompleteQuestionClick: (event: MouseEvent<HTMLButtonElement>, question: AssessmentMechanicQuestion | null) => void
   onContinueQuestion: (question: AssessmentMechanicQuestion) => void
   onContinueToDiagnostic: () => void
@@ -79,13 +89,15 @@ export function PublicAssessmentSurface({
   evalStep,
   evalSubmitted,
   evalSubmitting,
+  questionContractStanding,
   passageMuted,
   publicResultBoundary,
   assessmentCompletion,
+  assessmentContactCaptureContract,
+  assessmentEvaluationReportContract,
   marbleAccentReferenceUrl,
   registryBackgroundUrl,
   registryMarkUrl,
-  registryWatermarkUrl,
   registryTokenStyle,
   layoutContract,
   srcIntakeContract,
@@ -97,6 +109,7 @@ export function PublicAssessmentSurface({
   structuredEnvironmentPassageVideoUrl,
   structuredQuestions,
   onBackQuestion,
+  onBeginPathwayReview,
   onCompleteQuestionClick,
   onContinueQuestion,
   onContinueToDiagnostic,
@@ -109,10 +122,17 @@ export function PublicAssessmentSurface({
   onTogglePassageMuted,
 }: PublicAssessmentSurfaceProps) {
   const currentQuestion = structuredQuestions[evalSectionIndex] ?? null
+  const questionContractHeld = questionContractStanding && !questionContractStanding.ready
   const finalDiagnosticQuestion = evalSectionIndex >= Math.max(structuredQuestions.length - 1, 0)
   const currentQuestionAnswered = Boolean(currentQuestion && evalAnswers[currentQuestion.questionKey]?.selected)
-  const progressLabel = structuredQuestions.length > 0 ? `${evalSectionIndex + 1} of ${structuredQuestions.length}` : null
-  const progressValue = structuredQuestions.length > 0 ? ((evalSectionIndex + 1) / structuredQuestions.length) * 100 : 0
+  const progressLabel =
+    !questionContractHeld && structuredQuestions.length > 0
+      ? `${evalSectionIndex + 1} of ${structuredQuestions.length}`
+      : null
+  const progressValue =
+    !questionContractHeld && structuredQuestions.length > 0
+      ? ((evalSectionIndex + 1) / structuredQuestions.length) * 100
+      : 0
   const layoutViewportFit =
     typeof layoutContract?.viewport_fit === "string" ? layoutContract.viewport_fit : "standard"
   const layoutCopyDensity =
@@ -121,8 +141,12 @@ export function PublicAssessmentSurface({
     typeof stylingContract?.material_family === "string"
       ? stylingContract.material_family
       : typeof stylingContract?.foundation_material === "string"
-        ? stylingContract.foundation_material
+      ? stylingContract.foundation_material
         : "standard"
+  const headingEyebrow =
+    assessmentEyebrow && assessmentEyebrow.trim().toLowerCase() !== "measures registry"
+      ? assessmentEyebrow
+      : null
   const visibleSrcFields = Array.isArray(srcIntakeContract?.visible_fields)
     ? srcIntakeContract.visible_fields.filter((field): field is string => typeof field === "string")
     : ["institution_name", "institution_type", "contact_name", "contact_email"]
@@ -143,6 +167,108 @@ export function PublicAssessmentSurface({
     ...(registryBackgroundUrl ? { "--registry-assessment-background-image": `url("${registryBackgroundUrl}")` } : {}),
     ...(marbleAccentReferenceUrl ? { "--registry-marble-accent-image": `url("${marbleAccentReferenceUrl}")` } : {}),
   } as CSSProperties
+  const asRecord = (value: unknown): Record<string, unknown> | null =>
+    value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null
+  const asString = (value: unknown): string | null => typeof value === "string" ? value : null
+  const asBoolean = (value: unknown): boolean => value === true
+  const asFormFields = (value: unknown) =>
+    Array.isArray(value)
+      ? value.filter((field): field is Record<string, unknown> => Boolean(asRecord(field)))
+      : []
+  const contactForm = asRecord(assessmentContactCaptureContract?.post_assessment_contact_form)
+  const consentFields = asFormFields(assessmentContactCaptureContract?.consent_fields)
+  const optionalOptInFields = asFormFields(assessmentContactCaptureContract?.optional_opt_in_fields)
+  const contactFields = [
+    ...asFormFields(contactForm?.fields),
+    ...consentFields,
+    ...optionalOptInFields,
+  ]
+  const resultWithheldCopy =
+    asString(assessmentContactCaptureContract?.result_withheld_transition_copy) ??
+    "Your assessment evaluation is ready. Enter your information to receive the evaluation and recommended actions."
+  const contactHelperCopy =
+    asString(assessmentContactCaptureContract?.public_helper_copy) ??
+    asString(contactForm?.public_helper_copy) ??
+    "Enter your information to receive the assessment evaluation and recommended actions."
+  const renderContactField = (field: Record<string, unknown>) => {
+    const key = asString(field.field_key)
+    const label = asString(field.public_label)
+    if (!key || !label) return null
+    const type = asString(field.type) ?? "text"
+    const required = asBoolean(field.required)
+    const value = evalFields[key] ?? ""
+    if (type === "checkbox") {
+      return (
+        <label key={key} className="registry-consent-field">
+          <input
+            type="checkbox"
+            checked={value === "true"}
+            required={required}
+            onChange={(event) => onSetEvalField(key, event.target.checked ? "true" : "")}
+          />
+          <span>{label}</span>
+        </label>
+      )
+    }
+    if (type === "textarea") {
+      return (
+        <label key={key}>
+          <span>{label}</span>
+          <textarea
+            value={value}
+            required={required}
+            onChange={(event) => onSetEvalField(key, event.target.value)}
+          />
+        </label>
+      )
+    }
+    if (type === "select" || type === "text_or_select") {
+      const options = Array.isArray(field.options)
+        ? field.options.filter((option): option is string => typeof option === "string")
+        : []
+      if (type === "text_or_select" && options.length === 0) {
+        return (
+          <label key={key}>
+            <span>{label}</span>
+            <input
+              type="text"
+              value={value}
+              required={required}
+              onChange={(event) => onSetEvalField(key, event.target.value)}
+            />
+          </label>
+        )
+      }
+      return (
+        <label key={key}>
+          <span>{label}</span>
+          <select
+            value={value}
+            required={required}
+            onChange={(event) => onSetEvalField(key, event.target.value)}
+          >
+            <option value="">Select</option>
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option.replaceAll("_", " ")}
+              </option>
+            ))}
+          </select>
+        </label>
+      )
+    }
+    return (
+      <label key={key}>
+        <span>{label}</span>
+        <input
+          type={type === "url" || type === "email" ? type : "text"}
+          value={value}
+          required={required}
+          onChange={(event) => onSetEvalField(key, event.target.value)}
+        />
+      </label>
+    )
+  }
 
   return (
     <main
@@ -161,28 +287,41 @@ export function PublicAssessmentSurface({
         </div>
       </header>
       <section className="registry-iis-eval registry-assessment-chamber" aria-label={assessmentProcessTitle}>
-        <MeasuresAssessmentBrandLayer registryMarkUrl={registryMarkUrl} registryWatermarkUrl={registryWatermarkUrl} />
-        {!registryBackgroundUrl || !registryWatermarkUrl || !registryMarkUrl ? (
+        {!registryMarkUrl ? (
           <p className="registry-media-absence">
-            Evaluation chamber media role mapping is incomplete in the runtime registry.
+            Measures Registry mark is not seated in the runtime registry.
           </p>
         ) : null}
         <div className="registry-chamber-heading">
-          <span>{assessmentEyebrow ?? "Measures Registry"}</span>
+          {headingEyebrow ? <span>{headingEyebrow}</span> : null}
           <h1>{assessmentProcessTitle}</h1>
           <p>{assessmentSubSupportLine}</p>
         </div>
         {governedStatus}
 
-        {evalSubmitted ? (
+        {questionContractHeld ? (
+          <div className="registry-held-state registry-assessment-contract-held" role="status" aria-live="polite">
+            <span>Runtime registry held state</span>
+            <h2>{questionContractStanding.displayTitle}</h2>
+            <p>{questionContractStanding.displayBody}</p>
+            <p>
+              Expected {questionContractStanding.expectedQuestionCount} seated questions; found{" "}
+              {questionContractStanding.actualQuestionCount}.
+            </p>
+            <p>{questionContractStanding.allowedNextStep}</p>
+          </div>
+        ) : evalSubmitted ? (
           <PublicAssessmentResult
             assessmentCompletion={assessmentCompletion}
             emailArtifact={evalEmailArtifact}
             passageMuted={passageMuted}
             publicResultBoundary={publicResultBoundary}
             report={evalReport}
+            reportContract={assessmentEvaluationReportContract}
+            reportFields={evalFields}
             resolutionText={resolutionText}
             structuredEnvironmentPassageVideoUrl={structuredEnvironmentPassageVideoUrl}
+            onBeginPathwayReview={onBeginPathwayReview}
             onEnterStructuredEnvironment={onEnterStructuredEnvironment}
             onStructuredEnvironmentVideoEnded={onStructuredEnvironmentVideoEnded}
             onTogglePassageMuted={onTogglePassageMuted}
@@ -198,6 +337,31 @@ export function PublicAssessmentSurface({
               <li>Assessing implementation structure...</li>
             </ol>
           </div>
+        ) : evalStep === "contact_capture" ? (
+          <form className="registry-iis-eval-form registry-contact-capture" onSubmit={onSubmitEvaluation}>
+            <div className="registry-chamber-copy">
+              <span>Assessment evaluation ready</span>
+              <h2>{resultWithheldCopy}</h2>
+              <p className="registry-assessment-support">{contactHelperCopy}</p>
+            </div>
+            <fieldset>
+              <legend>Contact and Consent</legend>
+              {contactFields.length > 0 ? (
+                contactFields.map(renderContactField)
+              ) : (
+                <p className="registry-media-absence">Contact capture contract is not seated.</p>
+              )}
+            </fieldset>
+            {evalError ? <p className="registry-form-error">{evalError}</p> : null}
+            <div className="registry-diagnostic-passage-controls">
+              <button type="submit" disabled={evalSubmitting || contactFields.length === 0}>
+                {evalSubmitting ? "Submitting" : "Receive Evaluation"}
+              </button>
+              <button type="button" onClick={onTogglePassageMuted}>
+                {passageMuted ? "Audio" : "Mute"}
+              </button>
+            </div>
+          </form>
         ) : evalStep === "src_capture" ? (
           <form
             className="registry-iis-eval-form registry-src-capture"

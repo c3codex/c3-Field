@@ -6,6 +6,7 @@ import type { EvalStep } from "../measuresAssessmentTypes"
 import {
   allAssessmentMechanics,
   asRecord,
+  asRecordArray,
   asString,
   asStringArray,
   cssTokenName,
@@ -35,6 +36,7 @@ import RegisteredPassage from "./renderers/RegisteredPassage"
 import RegisteredPublicAssessment from "./renderers/RegisteredPublicAssessment"
 import RegisteredStructuralDrift from "./renderers/RegisteredStructuralDrift"
 import RegisteredPublicUnderstand from "./renderers/RegisteredPublicUnderstand"
+import RegisteredCrystalChamber from "./renderers/RegisteredCrystalChamber"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
@@ -45,7 +47,10 @@ const REGISTERED_ENCOUNTER_KEYS = [
   "evaluate_structure_path",
   "eval_passage",
   "measures_assessment",
+  "obsidian_to_marble_passage_video",
+  "marble_pathway_reveal",
   "structure_passage",
+  "crystal_chamber",
   "structural_drift_publication",
 ] as const
 
@@ -70,7 +75,13 @@ const REGISTERED_MEDIA_ROLES = [
   "installation_tone_marble",
   "installation_tone_marble_rise_return_v1",
   "structural_drift_feature_image",
+  "structural_drift_featured_image",
+  "structural_drift_cover",
+  "structural_drift_cover_photo",
+  "structural_drift_publication_cover",
+  "publication_structural_drift_cover",
   "questions_ungoverned_systems_cannot_answer_video",
+  "before_the_pathway_obsidian_to_marble_passage_video",
 ] as const
 
 const SURFACE_QUERY: Record<RegisteredSurface, string> = {
@@ -78,7 +89,10 @@ const SURFACE_QUERY: Record<RegisteredSurface, string> = {
   path_choice: "evaluate_structure_path",
   eval_passage: "eval_passage",
   measures_assessment: "measures_assessment",
+  obsidian_to_marble_passage_video: "obsidian_to_marble_passage_video",
+  marble_pathway_reveal: "marble_pathway_reveal",
   structure_passage: "structure_passage",
+  crystal_chamber: "crystal_chamber",
   structural_drift_dispatches: "structural_drift_publication",
   publication_dispatch: "publication_dispatch",
 }
@@ -93,6 +107,7 @@ const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
 }
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
+const PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT = 7
 
 function historyUrl(surface: RegisteredSurface) {
   const url = new URL(window.location.href)
@@ -286,7 +301,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const pathChoiceCopy = sectionCopy(sectionMap.get("evaluate_structure_path"))
   const evalPassageCopy = sectionCopy(sectionMap.get("eval_passage"))
   const evaluationChamberCopy = sectionCopy(sectionMap.get("measures_assessment"))
+  const obsidianToMarblePassageCopy = sectionCopy(sectionMap.get("obsidian_to_marble_passage_video"))
+  const marblePathwayRevealCopy = sectionCopy(sectionMap.get("marble_pathway_reveal"))
   const structurePassageCopy = sectionCopy(sectionMap.get("structure_passage"))
+  const crystalChamberCopy = sectionCopy(sectionMap.get("crystal_chamber"))
   const structuralDriftCopy = sectionCopy(sectionMap.get("structural_drift_publication"))
   const publicAssessBoundary = asRecord(
     asRecord(evaluationChamberCopy.publicRuntimeBoundary?.public_paths)?.assess_environment ??
@@ -327,8 +345,15 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const registryWatermarkUrl = mediaUrl(mediaMap.get("watermark")) ?? mediaUrl(mediaMap.get("registry_watermark"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const marbleAccentReferenceUrl = mediaUrl(mediaMap.get("marble_accent_reference"))
-  const structuralDriftFeatureImageUrl = mediaUrl(mediaMap.get("structural_drift_feature_image"))
+  const structuralDriftFeatureImageUrl =
+    mediaUrl(mediaMap.get("structural_drift_cover")) ??
+    mediaUrl(mediaMap.get("structural_drift_cover_photo")) ??
+    mediaUrl(mediaMap.get("structural_drift_publication_cover")) ??
+    mediaUrl(mediaMap.get("publication_structural_drift_cover")) ??
+    mediaUrl(mediaMap.get("structural_drift_feature_image")) ??
+    mediaUrl(mediaMap.get("structural_drift_featured_image"))
   const questionsUngovernedSystemsVideoUrl = mediaUrl(mediaMap.get("questions_ungoverned_systems_cannot_answer_video"))
+  const beforeThePathwayVideoUrl = mediaUrl(mediaMap.get("before_the_pathway_obsidian_to_marble_passage_video"))
   const structuredEnvironmentPassageVideoUrl =
     mediaUrl(mediaMap.get("structured_environment_passage_video")) ??
     mediaUrl(mediaMap.get("measures_structured_enviroments"))
@@ -340,6 +365,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
   // --- assessment active copy ---
 
   const activeEvaluationCopy = evaluationChamberCopy
+  const assessmentBindingContract = activeEvaluationCopy.assessmentContactCaptureBindingContract
+  const assessmentContactForm = asRecord(assessmentBindingContract?.post_assessment_contact_form)
 
   // --- assessment handlers ---
 
@@ -389,6 +416,15 @@ export default function MeasuresRegistryRuntimeRegistered() {
       : ["institution_name", "institution_type", "contact_name", "contact_email"]
   }
 
+  function requiredAssessmentContactFields(): string[] {
+    const formFields = asRecordArray(assessmentContactForm?.fields)
+    const consentFields = asRecordArray(assessmentBindingContract?.consent_fields)
+    return [...formFields, ...consentFields]
+      .filter((field) => field.required === true)
+      .map((field) => asString(field.field_key))
+      .filter((field): field is string => Boolean(field))
+  }
+
   function continueToDiagnostic() {
     const requiredFields = requiredEvalIdentityFields()
     const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
@@ -406,11 +442,102 @@ export default function MeasuresRegistryRuntimeRegistered() {
     setEvalSubmitting(true)
     setEvalError(null)
 
+    if (evalStep === "contact_capture") {
+      if (!evalReport || !evalEmailArtifact) {
+        setEvalSubmitting(false)
+        setEvalError("Assessment result is not ready for contact binding.")
+        return
+      }
+
+      const requiredContactFields = requiredAssessmentContactFields()
+      const missingContactFields = requiredContactFields.filter((field) => !evalFields[field]?.trim())
+      if (missingContactFields.length > 0) {
+        setEvalSubmitting(false)
+        setEvalError("Please complete the required contact and consent fields.")
+        return
+      }
+
+      const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
+        institution_name: evalFields.institution_name?.trim() ?? "",
+        institution_address: evalFields.website?.trim() ?? "",
+        institution_phone: "",
+        contact_name: evalFields.contact_name?.trim() ?? "",
+        contact_position: evalFields.role_title?.trim() ?? "",
+        contact_email: evalFields.contact_email?.trim() ?? "",
+        evaluation_answers: Object.fromEntries(
+          Object.entries(evalAnswers).filter(([, answer]) => answer.selected),
+        ),
+        capture_context: "measures_assessment_contact_gated_delivery",
+        intent: "assessment_result_delivery_request",
+        eligibility: {
+          gate_1: "complete",
+          assessment_returned: true,
+          contact_capture_submitted: true,
+          consent_confirmed: true,
+          minimum_identity_captured: true,
+          src_requirements_satisfied: true,
+          implementation_src_requirements_satisfied: false,
+          deferred_src_fields_held: true,
+        },
+        campaign_tag: "measures_assessment_contact_gated_delivery",
+        notification_state: "queued",
+        confirmation_email_state: "queued",
+        metadata: {
+          encounter_key: "measures_ai_operational_evaluation",
+          organization_type: evalFields.organization_type?.trim() ?? "",
+          ai_deployment_status: evalFields.ai_deployment_status?.trim() ?? "",
+          next_support_question: evalFields.next_support_question?.trim() || null,
+          assessment_result_email_consent: evalFields.assessment_result_email_consent === "true",
+          assessment_boundary_acknowledgment: evalFields.assessment_boundary_acknowledgment === "true",
+          measures_registry_updates_opt_in: evalFields.measures_registry_updates_opt_in === "true",
+          required_contact_fields: requiredContactFields,
+          source_runtime: "registered_runtime_v1",
+          assessment_result_binding: {
+            environmental_standing_report: evalReport,
+            institution_name: evalFields.institution_name?.trim() ?? "",
+            organization_type: evalFields.organization_type?.trim() ?? "",
+            contact_name: evalFields.contact_name?.trim() ?? "",
+            contact_email: evalFields.contact_email?.trim() ?? "",
+            role_title: evalFields.role_title?.trim() ?? "",
+            website: evalFields.website?.trim() || null,
+            ai_deployment_status: evalFields.ai_deployment_status?.trim() ?? "",
+            next_support_question: evalFields.next_support_question?.trim() || null,
+            assessment_result_email_consent: evalFields.assessment_result_email_consent === "true",
+            assessment_boundary_acknowledgment: evalFields.assessment_boundary_acknowledgment === "true",
+            measures_registry_updates_opt_in: evalFields.measures_registry_updates_opt_in === "true",
+            continuation_pathway: evalReport.continuation_pathway,
+            public_internal_boundary_preserved: true,
+          },
+          environmental_standing_report: evalReport,
+          structured_email_artifact: evalEmailArtifact,
+          condition_traces: conditionTraces,
+          contact_gated_result_delivery: true,
+          result_displayed_after_contact_capture: true,
+        },
+      })
+
+      setEvalSubmitting(false)
+
+      if (error) {
+        setEvalError("Evaluation could not be seated. Please try again.")
+        return
+      }
+
+      setEvalSubmitted(true)
+      return
+    }
+
     const populatedEvalAnswers = Object.fromEntries(
       Object.entries(evalAnswers).filter(([, answer]) => answer.selected),
     )
 
     const activeAssessmentMechanics = allAssessmentMechanics(activeEvaluationCopy.assessmentMechanics)
+    if (activeAssessmentMechanics.length !== PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT) {
+      setEvalSubmitting(false)
+      setEvalError("Assessment contract is incomplete in the runtime registry.")
+      return
+    }
+
     const missingEvaluationAnswers = activeAssessmentMechanics.filter(
       (question) => !populatedEvalAnswers[question.questionKey],
     )
@@ -434,61 +561,12 @@ export default function MeasuresRegistryRuntimeRegistered() {
       return
     }
 
-    const requiredFields = requiredEvalIdentityFields()
-
-    const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
-      institution_name: evalFields.institution_name?.trim() ?? "",
-      institution_address: evalFields.institution_address?.trim() ?? "",
-      institution_phone: evalFields.institution_phone?.trim() ?? "",
-      contact_name: evalFields.contact_name?.trim() ?? "",
-      contact_position: evalFields.contact_position?.trim() ?? "",
-      contact_email: evalFields.contact_email?.trim() ?? "",
-      evaluation_answers: populatedEvalAnswers,
-      capture_context: "iis_eval_gate1",
-      intent: "system_evaluation_request",
-      eligibility: {
-        gate_1: "complete",
-        assessment_returned: true,
-        minimum_identity_captured: true,
-        src_requirements_satisfied: true,
-        implementation_src_requirements_satisfied: false,
-        deferred_src_fields_held: true,
-        foundational_courses: true,
-        conversion_assessment: "pending_review",
-      },
-      campaign_tag: "iis_eval_gate1",
-      notification_state: "queued",
-      confirmation_email_state: "queued",
-      metadata: {
-        encounter_key: "measures_ai_operational_evaluation",
-        institution_type: evalFields.institution_type?.trim() ?? "",
-        deferred_src_fields: {
-          institution_address: evalFields.institution_address?.trim() || null,
-          institution_phone: evalFields.institution_phone?.trim() || null,
-          contact_position: evalFields.contact_position?.trim() || null,
-        },
-        visible_src_fields: requiredFields,
-        minimum_identity_captured: true,
-        src_requirements_satisfied: true,
-        implementation_src_requirements_satisfied: false,
-        source_runtime: "registered_runtime_v1",
-        environmental_standing_report: interpretation.report,
-        structured_email_artifact: interpretation.emailArtifact,
-        condition_traces: traces,
-      },
-    })
-
     setEvalSubmitting(false)
-
-    if (error) {
-      setEvalError("Evaluation could not be seated. Please try again.")
-      return
-    }
 
     setConditionTraces(traces)
     setEvalReport(interpretation.report)
     setEvalEmailArtifact(interpretation.emailArtifact)
-    setEvalSubmitted(true)
+    setEvalStep("contact_capture")
   }
 
   // --- publication subscription ---
@@ -546,10 +624,25 @@ export default function MeasuresRegistryRuntimeRegistered() {
   }
 
   function renderSystemFooter() {
+    const footerCopy = (() => {
+      const activeCopy = sectionCopy(sectionMap.get(SURFACE_QUERY[activeSurface]))
+      const contract = activeCopy.footerContract
+      const lines = asStringArray(contract?.copy_lines)
+      if (lines.length > 0) return lines
+
+      const copyright = asString(contract?.copyright)
+      const systemStatement = asString(contract?.system_statement)
+      const operatorStatement = asString(contract?.operator_statement)
+      return [copyright, systemStatement, operatorStatement].filter((line): line is string => Boolean(line))
+    })()
+
+    if (footerCopy.length === 0) return null
+
     return (
       <footer className="registry-system-footer">
-        <p>&copy; 2026 c3 Community Partners DAO, LLC</p>
-        <p>Measures Registry is a registered c3 Field system.</p>
+        {footerCopy.map((line) => (
+          <p key={line}>{line}</p>
+        ))}
       </footer>
     )
   }
@@ -572,6 +665,26 @@ export default function MeasuresRegistryRuntimeRegistered() {
   // --- assessment mechanics ---
 
   const measuresMechanics = allAssessmentMechanics(evaluationChamberCopy.assessmentMechanics)
+  const activeAssessmentContractKeys = asStringArray(
+    evaluationChamberCopy.activeContractKeyReconciliation?.active_contract_keys,
+  )
+  const measuresAssessmentContractSeated = activeAssessmentContractKeys.includes("measures_assessment_contract")
+  const publicAssessmentQuestionContractReady =
+    measuresAssessmentContractSeated &&
+    measuresMechanics.length === PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT
+  const renderedMeasuresMechanics = publicAssessmentQuestionContractReady ? measuresMechanics : []
+  const questionContractStanding = {
+    ready: publicAssessmentQuestionContractReady,
+    expectedQuestionCount: PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT,
+    actualQuestionCount: measuresMechanics.length,
+    displayTitle: measuresAssessmentContractSeated
+      ? "Assessment question contract is incomplete."
+      : "Assessment contract is not seated.",
+    displayBody: measuresAssessmentContractSeated
+      ? "The active assessment content is seated in the runtime registry, but the registered public question body is not seated with the required seven-question AI Operations Assessment."
+      : "The public assessment route is active, but the required measures_assessment_contract is not seated in the runtime registry.",
+    allowedNextStep: "Public rendering is held until Measures seats the complete registered assessment content.",
+  }
 
   const sharedAssessmentProps = {
     evalAnswers,
@@ -668,15 +781,28 @@ export default function MeasuresRegistryRuntimeRegistered() {
       <RegisteredPublicUnderstand
         registryTokenStyle={registryTokenStyle}
         structurePassageCopy={structurePassageCopy}
-        questionsVideoUrl={questionsUngovernedSystemsVideoUrl}
         talkingHeadVideoUrl={structuredEnvironmentPassageVideoUrl}
         passageMuted={passageMuted}
-        structuralDriftAvailable={Boolean(structuralDriftPublication || structuralDriftDispatches.length > 0)}
         renderHeader={() => renderHeader(structurePassageCopy.header)}
+        renderSystemFooter={renderSystemFooter}
+        onContinueToCrystal={() => navigate("crystal_chamber")}
+        onToggleMuted={() => setPassageMuted((current) => !current)}
+      />
+    )
+  } else if (activeSurface === "crystal_chamber") {
+    activeSurfaceElement = (
+      <RegisteredCrystalChamber
+        registryTokenStyle={registryTokenStyle}
+        crystalChamberCopy={crystalChamberCopy}
+        chamberCarrierCopy={structurePassageCopy}
+        questionsVideoUrl={questionsUngovernedSystemsVideoUrl}
+        structuralDriftCoverUrl={structuralDriftFeatureImageUrl}
+        registryMarkUrl={registryMarkUrl}
+        structuralDriftAvailable={Boolean(structuralDriftPublication || structuralDriftDispatches.length > 0)}
+        renderHeader={() => renderHeader(crystalChamberCopy.header ?? structurePassageCopy.header)}
         renderSystemFooter={renderSystemFooter}
         onAssessEnvironment={() => navigate("eval_passage")}
         onStructuralDrift={() => navigate("structural_drift_dispatches")}
-        onToggleMuted={() => setPassageMuted((current) => !current)}
       />
     )
   } else if (activeSurface === "measures_assessment") {
@@ -684,17 +810,76 @@ export default function MeasuresRegistryRuntimeRegistered() {
       <RegisteredPublicAssessment
         {...sharedAssessmentProps}
         encounterCopy={evaluationChamberCopy}
+        questionContractStanding={questionContractStanding}
         publicResultBoundary={publicAssessmentResultBoundary}
-        structuredQuestions={measuresMechanics}
+        structuredQuestions={renderedMeasuresMechanics}
+        onBeginPathwayReview={() => navigate("obsidian_to_marble_passage_video")}
         onContinueQuestion={(currentQuestion) => {
           if (!validateDiagnosticSection([currentQuestion])) return
-          setEvalSectionIndex((current) => Math.min(measuresMechanics.length - 1, current + 1))
+          setEvalSectionIndex((current) => Math.min(renderedMeasuresMechanics.length - 1, current + 1))
         }}
         onCompleteQuestionClick={(event, currentQuestion) => {
           if (currentQuestion && validateDiagnosticSection([currentQuestion])) return
           event.preventDefault()
         }}
       />
+    )
+  } else if (activeSurface === "obsidian_to_marble_passage_video") {
+    const passageTitle = asString(obsidianToMarblePassageCopy.title) ?? "Before the Pathway"
+    const passageTranscript = obsidianToMarblePassageCopy.passageTranscript
+    const passageCta = obsidianToMarblePassageCopy.cta
+    const passageCtaLabel = asString(passageCta?.label) ?? "Begin Pathway Reveal"
+    activeSurfaceElement = (
+      <main className="measures-registry-runtime" data-surface="obsidian_to_marble_passage_video" style={registryTokenStyle}>
+        {renderHeader({ title: "Measures Registry" })}
+        <section className="registry-held-state registry-assessment-contract-held registry-pathway-passage" aria-label={passageTitle}>
+          <span>Pathway review passage</span>
+          <h2>{passageTitle}</h2>
+          {beforeThePathwayVideoUrl ? (
+            <div className="registry-pathway-passage-video-frame">
+              <video
+                className="registry-pathway-passage-video"
+                src={beforeThePathwayVideoUrl}
+                autoPlay
+                muted={passageMuted}
+                controls
+                playsInline
+                preload="auto"
+                aria-label="Before the Pathway"
+              />
+            </div>
+          ) : (
+            <p className="registry-media-absence">Before the Pathway video is not seated in the runtime registry.</p>
+          )}
+          {passageTranscript.length > 0 ? (
+            <div className="registry-report-group">
+              <strong>Before the Pathway</strong>
+              {passageTranscript.slice(-2).map((line) => <p key={line}>{line}</p>)}
+            </div>
+          ) : null}
+          <div className="registry-diagnostic-passage-controls registry-report-controls">
+            <button type="button" onClick={() => navigate("marble_pathway_reveal")}>{passageCtaLabel}</button>
+            <button type="button" onClick={() => setPassageMuted((current) => !current)}>
+              {passageMuted ? "Audio" : "Mute"}
+            </button>
+          </div>
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
+  } else if (activeSurface === "marble_pathway_reveal") {
+    const heldCopy = marblePathwayRevealCopy.heldCopy
+    activeSurfaceElement = (
+      <main className="measures-registry-runtime" data-surface="marble_pathway_reveal" style={registryTokenStyle}>
+        {renderHeader({ title: "Measures Registry" })}
+        <section className="registry-held-state registry-assessment-contract-held" role="status" aria-live="polite">
+          <span>Marble Chamber</span>
+          <h2>{asString(heldCopy?.title) ?? "Recommended Governed Pathway is held."}</h2>
+          <p>{asString(heldCopy?.body) ?? "The pathway reveal is held until seated."}</p>
+          <p>{asString(heldCopy?.allowed_next_step) ?? "Seat the Marble reveal boundary in a later OAR2."}</p>
+        </section>
+        {renderSystemFooter()}
+      </main>
     )
   } else if (activeSurface === "structural_drift_dispatches" || activeSurface === "publication_dispatch") {
     activeSurfaceElement = (

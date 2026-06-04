@@ -2,6 +2,18 @@
 .measures-registry-runtime .registry-system-footer {
   width: min(var(--registry-content-max-width, 64rem), calc(100% - 2 * var(--registry-page-padding-active)));
   margin: 0 auto;
-  padding-top: 0.85rem;
-  padding-bottom: clamp(1rem, 3vw, 2rem);
+  padding-top: 0.65rem;
+  padding-bottom: clamp(0.75rem, 1.8vw, 1.15rem);
+  border-top: 1px solid color-mix(in srgb, var(--registry-brand-border) 72%, transparent);
+  color: var(--registry-brand-muted-text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  justify-content: space-between;
+  font-size: clamp(0.66rem, 0.8vw, 0.74rem);
+  line-height: 1.45;
+}
+
+.measures-registry-runtime .registry-system-footer > p {
+  margin: 0;
 }

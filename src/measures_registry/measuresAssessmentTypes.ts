@@ -1,4 +1,4 @@
-export type EvalStep = "src_capture" | "diagnostic" | "resolving"
+export type EvalStep = "src_capture" | "diagnostic" | "resolving" | "contact_capture"
 
 export type AssessmentMechanicOption = {
   value: string

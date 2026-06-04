@@ -354,41 +354,102 @@ export function resolveEnvironmentalReportByScore(
 ): { report: EnvironmentalStandingReport; emailArtifact: AssessmentEmailArtifact; score: number } | null {
   const interpretation = asRecord(interpretationValue)
   const scoringThresholds = asRecordArray(interpretation?.scoring_thresholds)
+  const standingRules = asRecordArray(interpretation?.standing_rules)
   const emailTemplate = asRecord(interpretation?.email_artifact_template)
   const reportLabels = asRecord(interpretation?.report_labels)
   const findingMap = asRecord(interpretation?.finding_map)
 
   if (scoringThresholds.length === 0 || !emailTemplate) {
-    const fallback = resolveEnvironmentalReport(interpretationValue, traces)
-    if (!fallback) return null
-    return { ...fallback, score: -1 }
+    return null
   }
+
+  const submittedTags = [...new Set(traces.flatMap((t) => t.condition_tags))]
+  const criticalCount = submittedTags.filter((tag) => tag === "critical_ai_drift_condition").length
+  const emergingCount = submittedTags.filter((tag) => tag === "emerging_ai_drift_condition").length
+  const probableCount = submittedTags.filter((tag) => tag === "probable_ai_drift_condition").length
+  const governedReviewCount = submittedTags.filter((tag) => tag === "governed_review_condition").length
+  const totalDriftScore = criticalCount * 3 + emergingCount * 2 + probableCount
+
+  const matchingRule =
+    standingRules
+      .map((rule, index) => {
+        const match = asRecord(rule.match)
+        const requiredTags = asStringArray(match?.required_tags)
+        const anyTags = asStringArray(match?.any_tags)
+        const minGovernedReviewCount =
+          typeof match?.min_governed_review_count === "number" ? match.min_governed_review_count : null
+        const maxTotalDriftScore =
+          typeof match?.max_total_drift_score === "number" ? match.max_total_drift_score : null
+        const minCriticalCount = typeof match?.min_critical_count === "number" ? match.min_critical_count : null
+        const minEmergingCount = typeof match?.min_emerging_count === "number" ? match.min_emerging_count : null
+        const minTotalDriftScore =
+          typeof match?.min_total_drift_score === "number" ? match.min_total_drift_score : null
+
+        const eligible =
+          Boolean(asString(rule.standing_key)) &&
+          requiredTags.every((tag) => submittedTags.includes(tag)) &&
+          (anyTags.length === 0 || anyTags.some((tag) => submittedTags.includes(tag))) &&
+          (minGovernedReviewCount === null || governedReviewCount >= minGovernedReviewCount) &&
+          (maxTotalDriftScore === null || totalDriftScore <= maxTotalDriftScore) &&
+          (minCriticalCount === null || criticalCount >= minCriticalCount) &&
+          (minEmergingCount === null || emergingCount >= minEmergingCount) &&
+          (minTotalDriftScore === null || totalDriftScore >= minTotalDriftScore)
+
+        return {
+          index,
+          eligible,
+          priority: typeof rule.priority === "number" ? rule.priority : 0,
+          standingKey: asString(rule.standing_key),
+        }
+      })
+      .filter((rule) => rule.eligible)
+      .sort((a, b) => b.priority - a.priority || a.index - b.index)[0] ?? null
 
   let totalScore = 0
   let maxScore = 0
   for (const question of mechanics) {
-    const tagCounts = question.options.map((o) => o.conditionTags.length)
-    const minTags = Math.min(...tagCounts)
-    const maxTags = Math.max(...tagCounts)
-    maxScore += maxTags - minTags
     const trace = traces.find((t) => t.question_key === question.questionKey)
-    if (trace) totalScore += Math.max(0, trace.condition_tags.length - minTags)
+    const optionScores = question.options.map((option) =>
+      option.conditionTags.reduce((score, tag) => {
+        if (tag === "critical_ai_drift_condition") return score + 3
+        if (tag === "emerging_ai_drift_condition") return score + 2
+        if (tag === "probable_ai_drift_condition") return score + 1
+        return score
+      }, 0),
+    )
+    const maxOptionScore = Math.max(...optionScores)
+    maxScore += maxOptionScore
+    if (trace) {
+      totalScore += trace.condition_tags.reduce((score, tag) => {
+        if (tag === "critical_ai_drift_condition") return score + 3
+        if (tag === "emerging_ai_drift_condition") return score + 2
+        if (tag === "probable_ai_drift_condition") return score + 1
+        return score
+      }, 0)
+    }
   }
   const scorePercent = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0
 
   const threshold =
+    (matchingRule?.standingKey
+      ? scoringThresholds.find((t) => asString(t.standing_key) === matchingRule.standingKey)
+      : null) ??
     scoringThresholds.find((t) => {
       const min = typeof t.min === "number" ? t.min : 0
       const max = typeof t.max === "number" ? t.max : 100
       return scorePercent >= min && scorePercent <= max
-    }) ?? scoringThresholds[scoringThresholds.length - 1]
+    }) ??
+    scoringThresholds.find((t) => asString(t.standing_key) === asString(interpretation.fallback_standing_key)) ??
+    scoringThresholds[scoringThresholds.length - 1]
 
   if (!threshold) return null
 
   const standingKey = asString(threshold.standing_key) ?? "structural_drift_detected"
-  const standing = asString(threshold.standing) ?? "Structural Drift Detected"
+  const standing =
+    asString(threshold.standing) ??
+    asString(threshold.environmental_standing) ??
+    "Structural Drift Detected"
 
-  const submittedTags = [...new Set(traces.flatMap((t) => t.condition_tags))]
   const findings = [
     ...new Set(
       submittedTags.flatMap((tag) => {
@@ -421,7 +482,9 @@ export function resolveEnvironmentalReportByScore(
     explainability: {
       question_keys: traces.map((t) => t.question_key),
       condition_tags: submittedTags,
-      standing_rule: `scoring_threshold_${standingKey}`,
+      standing_rule: matchingRule?.standingKey
+        ? `standing_rule_${matchingRule.standingKey}`
+        : `scoring_threshold_${standingKey}`,
     },
   }
 
@@ -522,12 +585,16 @@ export function sectionCopy(row?: LandingSectionRow) {
     fields: asRecordArray(metadata.fields),
     ctaPrimary: asString(metadata.cta_primary),
     ctaSecondary: asString(metadata.cta_secondary),
+    cta: asRecord(metadata.cta),
+    passageTranscript: asStringArray(metadata.passage_transcript),
+    heldCopy: asRecord(metadata.held_copy),
     successMessage: asString(metadata.success_message),
     successSubtext: asString(metadata.success_subtext),
     offeringKey: asString(metadata.offering_key),
     dataSource: asString(metadata.data_source),
     allowedTransitions: asRecord(metadata.allowed_transitions),
     capture: asRecord(metadata.capture),
+    activeContractKeyReconciliation: asRecord(metadata.active_contract_key_reconciliation),
     mediaRenderMode: asString(metadata.media_render_mode),
     videoMode: asString(metadata.video_mode),
     options: asRecordArray(metadata.options),
@@ -537,7 +604,13 @@ export function sectionCopy(row?: LandingSectionRow) {
     brandingContract: asRecord(metadata.branding_contract),
     contentContract: asRecord(metadata.content_contract),
     crystalContentContracts: asRecord(metadata.crystal_chamber_content_contracts),
+    footerContract: asRecord(metadata.footer_contract),
     publicRuntimeBoundary: asRecord(metadata.measures_registry_public_runtime_boundary_v1),
+    assessmentContactCaptureBindingContract: asRecord(
+      metadata.assessment_contact_capture_oar1_binding_contract_v1,
+    ),
+    assessmentEvaluationReportContract: asRecord(metadata.assessment_evaluation_report_contract_v1),
+    obsidianAssessmentReportStyleContract: asRecord(metadata.obsidian_assessment_report_style_contract_v1),
     routeCards: asRecordArray(metadata.route_cards),
     governedStatus: governedStatusCopy(metadata),
   }

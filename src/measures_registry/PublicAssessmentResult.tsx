@@ -24,8 +24,11 @@ type PublicAssessmentResultProps = {
     heldCopy?: string | null
   } | null
   report: EnvironmentalStandingReport | null
+  reportContract?: Record<string, unknown> | null
+  reportFields?: Record<string, string>
   resolutionText?: string
   structuredEnvironmentPassageVideoUrl: string | null
+  onBeginPathwayReview: () => void
   onEnterStructuredEnvironment: () => void
   onStructuredEnvironmentVideoEnded: () => void
   onTogglePassageMuted: () => void
@@ -37,8 +40,11 @@ export function PublicAssessmentResult({
   passageMuted,
   publicResultBoundary,
   report,
+  reportContract,
+  reportFields = {},
   resolutionText,
   structuredEnvironmentPassageVideoUrl,
+  onBeginPathwayReview,
   onEnterStructuredEnvironment,
   onStructuredEnvironmentVideoEnded,
   onTogglePassageMuted,
@@ -63,28 +69,110 @@ export function PublicAssessmentResult({
   const progressionCta =
     typeof completion.progression_threshold_cta === "string" ? completion.progression_threshold_cta : "Enter Structured Environment"
   const publicPathwayLabels = publicResultBoundary?.pathwayLabels ?? []
+  const reportHeader = reportContract?.report_header && typeof reportContract.report_header === "object"
+    ? reportContract.report_header as Record<string, unknown>
+    : null
+  const reportTemplates = reportContract?.report_templates && typeof reportContract.report_templates === "object"
+    ? reportContract.report_templates as Record<string, unknown>
+    : null
+  const reportTemplate =
+    report?.standing_key && reportTemplates?.[report.standing_key] && typeof reportTemplates[report.standing_key] === "object"
+      ? reportTemplates[report.standing_key] as Record<string, unknown>
+      : null
+  const reportTitle = typeof reportHeader?.title === "string"
+    ? reportHeader.title
+    : "Measures Registry Assessment Evaluation Report"
+  const reportSubtitle = typeof reportHeader?.subtitle === "string"
+    ? reportHeader.subtitle
+    : "Governed System Integrity for Optimized AI Deployment"
+  const reportDescriptor = typeof reportHeader?.descriptor === "string"
+    ? reportHeader.descriptor
+    : "Integrity Governance for AI-Accelerated Systems"
+  const boundaryNote = typeof reportContract?.report_boundary_note === "string"
+    ? reportContract.report_boundary_note
+    : "This report provides an environment evaluation and recommended actions based on the assessment responses submitted. It does not create approval, enrollment, implementation, or verified registry status."
+  const reportCta = reportContract?.report_cta && typeof reportContract.report_cta === "object"
+    ? reportContract.report_cta as Record<string, unknown>
+    : null
+  const reportCtaLabel = typeof reportCta?.label === "string" ? reportCta.label : "Begin Pathway Review"
+  const institutionName = reportFields.institution_name?.trim() || "Submitted Institution"
+  const organizationType = reportFields.organization_type?.trim()
+  const reportTimestamp = new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date())
+  const templateSummary = typeof reportTemplate?.summary === "string" ? reportTemplate.summary : null
+  const detectedConditions = Array.isArray(reportTemplate?.detected_conditions)
+    ? reportTemplate.detected_conditions.filter((item): item is string => typeof item === "string")
+    : report?.detected_conditions ?? []
+  const findings = Array.isArray(reportTemplate?.findings)
+    ? reportTemplate.findings.filter((item): item is string => typeof item === "string")
+    : report?.findings ?? []
+  const recommendedActions = Array.isArray(reportTemplate?.recommended_actions)
+    ? reportTemplate.recommended_actions.filter((item): item is string => typeof item === "string")
+    : []
+  const recommendedStructuredAction =
+    typeof reportTemplate?.recommended_structured_action === "string"
+      ? reportTemplate.recommended_structured_action
+      : report?.recommended_structured_action
 
   return (
     <div className="registry-eval-resolution registry-assessment-complete">
-      <span>{completionLabel}</span>
-      <h2>{report?.assessment_title ?? ASSESSMENT_TITLE}</h2>
-      <p className="registry-assessment-support">{ASSESSMENT_SUB_SUPPORT_LINE}</p>
       {report ? (
-        <section className="registry-standing-report" aria-label="Environmental standing report">
-          <span>Assessment</span>
-          <h3>{report.assessment_result}</h3>
-          <p>{report.operational_exposure_summary}</p>
-          {report.findings.length > 0 ? (
-            <div className="registry-standing-findings">
+        <section className="registry-standing-report registry-branded-assessment-report" aria-label={reportTitle}>
+          <header className="registry-report-header">
+            <span>{completionLabel}</span>
+            <h2>{reportTitle}</h2>
+            <p>{reportSubtitle}</p>
+            <small>{reportDescriptor}</small>
+          </header>
+          <div className="registry-report-meta">
+            <p>Prepared for: {institutionName}</p>
+            {organizationType ? <p>Organization type: {organizationType.replaceAll("_", " ")}</p> : null}
+            <p>Report generated: {reportTimestamp}</p>
+          </div>
+          <div className="registry-report-result">
+            <span>{report.assessment_title ?? ASSESSMENT_TITLE}</span>
+            <h3>{reportTemplate?.report_title as string ?? report.assessment_result}</h3>
+            <p>{templateSummary ?? report.operational_exposure_summary}</p>
+            <strong>{report.environmental_standing}</strong>
+          </div>
+          {detectedConditions.length > 0 ? (
+            <div className="registry-report-group">
+              <strong>Detected Conditions</strong>
+              <ul>
+                {detectedConditions.map((condition) => (
+                  <li key={condition}>{condition}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {findings.length > 0 ? (
+            <div className="registry-report-group">
               <strong>Findings</strong>
               <ul>
-                {report.findings.map((finding) => (
+                {findings.map((finding) => (
                   <li key={finding}>{finding}</li>
                 ))}
               </ul>
             </div>
           ) : null}
-          <RecommendedOperatingProtocol report={report} />
+          <div className="registry-report-group">
+            <strong>Recommended Actions</strong>
+            {recommendedActions.length > 0 ? (
+              <ul>
+                {recommendedActions.map((action) => (
+                  <li key={action}>{action}</li>
+                ))}
+              </ul>
+            ) : (
+              <RecommendedOperatingProtocol report={report} />
+            )}
+          </div>
+          <div className="registry-report-action">
+            <strong>Recommended Structured Action</strong>
+            <p>{recommendedStructuredAction}</p>
+          </div>
           {clarificationTitle || clarificationBody ? (
             <section className="registry-standing-clarification">
               {clarificationTitle ? <strong>{clarificationTitle}</strong> : null}
@@ -97,27 +185,30 @@ export function PublicAssessmentResult({
               {measuresStandingBody ? <p>{measuresStandingBody}</p> : null}
             </section>
           ) : null}
-          <small>
-            Assessment basis: {report.explainability.question_keys.length} response keys / {report.explainability.condition_tags.length} condition signals
-          </small>
+          <p className="registry-report-boundary">{boundaryNote}</p>
+          <div className="registry-diagnostic-passage-controls registry-report-controls" aria-label="Assessment report controls">
+            <button type="button" onClick={onBeginPathwayReview}>
+              {reportCtaLabel}
+            </button>
+          </div>
         </section>
       ) : (
         <p>{resolutionText ?? "Structural conditions have been recorded."}</p>
       )}
-      {emailArtifact ? (
+      {emailArtifact && !reportContract ? (
         <section className="registry-email-artifact" aria-label="Structured email artifact">
           <span>Assessment Delivery</span>
           <strong>{emailArtifact.subject}</strong>
           <p>{emailArtifact.preview}</p>
         </section>
       ) : null}
-      {progressionLabel || progressionTitle || progressionBody ? (
+      {!reportContract && (progressionLabel || progressionTitle || progressionBody) ? (
         <section className="registry-progression-threshold">
           {progressionLabel ? <span>{progressionLabel}</span> : null}
           {progressionTitle ? <strong>{progressionTitle}</strong> : null}
           {progressionBody ? <p>{progressionBody}</p> : null}
         </section>
-      ) : publicResultBoundary ? (
+      ) : !reportContract && publicResultBoundary ? (
         <section className="registry-progression-threshold" aria-label="Public pathway recommendation">
           <span>Governed Pathways</span>
           <strong>Public continuation labels only</strong>
@@ -134,7 +225,7 @@ export function PublicAssessmentResult({
       ) : (
         <p>Continue into the Structured Environment.</p>
       )}
-      {!publicResultBoundary && structuredEnvironmentPassageVideoUrl ? (
+      {!reportContract && !publicResultBoundary && structuredEnvironmentPassageVideoUrl ? (
         <video
           src={structuredEnvironmentPassageVideoUrl}
           autoPlay
@@ -145,10 +236,10 @@ export function PublicAssessmentResult({
           onEnded={onStructuredEnvironmentVideoEnded}
           aria-label="Structured Environment passage"
         />
-      ) : !publicResultBoundary ? (
+      ) : !reportContract && !publicResultBoundary ? (
         <p className="registry-media-absence">Structured Environment passage media is not seated in the runtime registry.</p>
       ) : null}
-      {!publicResultBoundary ? (
+      {!reportContract && !publicResultBoundary ? (
         <div className="registry-diagnostic-passage-controls" aria-label="Structured Environment passage controls">
           <button type="button" onClick={onEnterStructuredEnvironment}>
             {progressionCta}

@@ -22,6 +22,8 @@ tags:
   - system-chambers-held
   - private-runtime-pruned
   - deployed-by-git-push
+  - assessment-contract-held
+  - not-deployed
 ---
 
 # OAR1 Measures Registry Public Runtime Pass v1
@@ -225,3 +227,99 @@ Previous/private runtime drift has been removed from `src`.
 The confirmed build and deploy were completed by Git push to `origin/measures`.
 
 Full runtime final pass remains separate from this public runtime pass.
+
+## Amendment: Assessment Contract Loading Correction
+
+Operator NotChazz flag received after deployment:
+
+- `/?surface=measures_assessment` was active.
+- `connect_src` was no longer exposed.
+- Assessment progress still displayed `1 of 5`.
+- Expected public flow was the seated 7-question Measures AI Operational Evaluation.
+- Renderer appeared to be loading legacy/static/fallback assessment body rather than the seated registered chamber contract.
+
+### Audit Findings
+
+Source audit confirmed:
+
+- No local static 5-question array remains in `src/measures_registry`.
+- `measures_assessment` rendered questions from `measures_encounter_def.metadata.assessment_mechanics.questions`.
+- The renderer accepted whatever question count that metadata supplied.
+- `resolveEnvironmentalReportByScore()` still contained a legacy deterministic fallback when scoring thresholds were absent.
+
+Live DB readback confirmed:
+
+- `measures_assessment.metadata.active_contract_key_reconciliation.active_contract_keys` includes `measures_assessment_contract`.
+- The active contract definition states the assessment contract presents seven scored questions.
+- The only live question carrier on the row is `metadata.assessment_mechanics`.
+- `metadata.assessment_mechanics.questions` currently contains 5 questions.
+- Therefore the 7-question registered chamber body is not seated in the live `measures_assessment` row.
+
+### Correction Applied
+
+Source correction applied in:
+
+- `src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx`
+- `src/measures_registry/registered_runtime/registeredRuntimeUtils.ts`
+- `src/measures_registry/registered_runtime/renderers/RegisteredPublicAssessment.tsx`
+- `src/measures_registry/PublicAssessmentSurface.tsx`
+- `src/measures_registry/registered_runtime/styles/encounters/assessment.css`
+
+Correction behavior:
+
+- Public assessment now requires the seated `measures_assessment_contract`.
+- Public assessment now requires exactly 7 validated questions.
+- If the question contract is missing or malformed, no questions render.
+- If the live row supplies 5 questions, the renderer displays a public-safe held state.
+- Submit path refuses malformed question contracts.
+- Scoring fallback was removed so malformed metadata cannot resolve through legacy interpretation logic.
+
+Held public copy rendered from current registry standing:
+
+`Assessment question contract is incomplete.`
+
+Readback detail:
+
+`Expected 7 seated questions; found 5.`
+
+### Browser Verification
+
+Local preview route:
+
+`http://127.0.0.1:4187/?surface=measures_assessment`
+
+Desktop browser automation result:
+
+- `1 of 5`: NOT SHOWN
+- `1 of 7`: NOT SHOWN
+- held state: SHOWN
+- incomplete contract message: SHOWN
+- expected/found message: SHOWN
+- `connect_src`: NOT SHOWN
+
+Mobile browser automation result:
+
+- `1 of 5`: NOT SHOWN
+- `1 of 7`: NOT SHOWN
+- held state: SHOWN
+- question form count: 0
+- result surface count: 0
+- body width equals viewport width
+
+### Deployment Standing
+
+No deployment was performed for this amendment.
+
+Deployment remains held because the browser could not truthfully validate `1 OF 7`.
+
+The renderer correction passes build and prevents legacy 5-question exposure, but live DB seating of the complete 7-question registered chamber contract remains required before public route deployment.
+
+### Required Next Bounded Route
+
+Open a bounded DB/OAR2 seating pass for:
+
+- seating the actual 7-question `measures_assessment_contract` body into the live Measures Registry runtime authority surface
+- preserving active contract keys
+- preserving public boundary prohibitions
+- verifying `/?surface=measures_assessment` renders `1 OF 7`
+- verifying result boundary remains public-safe

@@ -3,7 +3,10 @@ export type RegisteredSurface =
   | "path_choice"
   | "eval_passage"
   | "measures_assessment"
+  | "obsidian_to_marble_passage_video"
+  | "marble_pathway_reveal"
   | "structure_passage"
+  | "crystal_chamber"
   | "structural_drift_dispatches"
   | "publication_dispatch"
 

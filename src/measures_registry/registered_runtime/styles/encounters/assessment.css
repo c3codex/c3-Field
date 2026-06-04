@@ -5,16 +5,16 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100svh;
-  padding: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 3rem))
+  min-height: calc(100svh - clamp(3rem, 5.4vw, 3.65rem));
+  padding: calc(var(--registry-header-height, 3rem) + clamp(0.45rem, 1.2vw, 0.8rem))
     var(--registry-page-padding-active)
-    clamp(2rem, 4vw, 3rem);
+    clamp(0.45rem, 1vw, 0.65rem);
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  background-image: var(--registry-assessment-background-image, none);
-  background-size: cover;
-  background-position: center;
+  background:
+    radial-gradient(circle at 50% 5%, color-mix(in srgb, var(--registry-brand-highlight) 5%, transparent), transparent 28rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--registry-brand-field, #050607) 92%, #000 8%), var(--registry-brand-field, #050607));
 }
 
 /* ── EVAL FORM — centered in chamber ───────────────────────────────────── */
@@ -29,7 +29,7 @@
 /* ── CHAMBER HEADING — page header, shown once ─────────────────────────── */
 .measures-registry-runtime .registry-chamber-heading {
   padding-top: 0;
-  padding-bottom: clamp(0.75rem, 2vw, 1.25rem);
+  padding-bottom: clamp(0.45rem, 1vw, 0.7rem);
   max-width: min(var(--registry-content-max-width, 70rem), 100%);
   width: 100%;
   margin: 0 auto;
@@ -46,7 +46,7 @@
 
 .measures-registry-runtime .registry-chamber-heading > h1 {
   font-family: var(--registry-font-heading);
-  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-size: clamp(1.15rem, 2.2vw, 1.55rem);
   font-weight: 500;
   letter-spacing: 0.04em;
   margin: 0 0 0.4rem;
@@ -54,7 +54,7 @@
 }
 
 .measures-registry-runtime .registry-chamber-heading > p {
-  font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+  font-size: clamp(0.74rem, 1vw, 0.84rem);
   color: var(--registry-brand-secondary-text);
   margin: 0;
   line-height: 1.55;
@@ -67,7 +67,7 @@
   gap: 0.35rem;
   max-width: min(var(--registry-content-max-width, 70rem), 100%);
   width: 100%;
-  margin: 0 auto clamp(0.75rem, 2vw, 1.25rem);
+  margin: 0 auto clamp(0.45rem, 1vw, 0.7rem);
 }
 
 .measures-registry-runtime .registry-question-progress > span {
@@ -111,10 +111,10 @@
 
 /* ── PER-QUESTION CONTEXT STATEMENT ───────────────────────────────────── */
 .measures-registry-runtime .registry-structured-context-statement {
-  font-size: clamp(0.78rem, 1.1vw, 0.88rem);
+  font-size: clamp(0.76rem, 0.95vw, 0.84rem);
   color: var(--registry-brand-muted-text);
-  line-height: 1.6;
-  margin: 0 0 clamp(0.6rem, 1.5vw, 0.9rem);
+  line-height: 1.45;
+  margin: 0 0 clamp(0.4rem, 0.9vw, 0.55rem);
   font-family: var(--registry-font-body);
   letter-spacing: 0.01em;
 }
@@ -123,11 +123,11 @@
 .measures-registry-runtime .registry-structured-question-text {
   display: block;
   font-family: var(--registry-font-heading);
-  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-size: clamp(0.95rem, 1.45vw, 1.12rem);
   font-weight: 500;
   color: var(--registry-brand-primary-text);
   line-height: 1.4;
-  margin-bottom: clamp(0.85rem, 2vw, 1.25rem);
+  margin-bottom: clamp(0.45rem, 1vw, 0.7rem);
 }
 
 /* ── ANSWER OPTIONS — refined operational rows ─────────────────────────── */
@@ -141,7 +141,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  padding: clamp(0.6rem, 1.5vw, 0.85rem) clamp(0.75rem, 2vw, 1rem);
+  padding: clamp(0.48rem, 0.95vw, 0.62rem) clamp(0.65rem, 1.3vw, 0.85rem);
   border-bottom: 1px solid var(--registry-brand-border);
   cursor: pointer;
   transition: background-color 0.12s ease;
@@ -176,10 +176,24 @@
 }
 
 .measures-registry-runtime .registry-structured-option > span {
-  font-size: clamp(0.8rem, 1.2vw, 0.92rem);
+  font-size: clamp(0.76rem, 0.95vw, 0.84rem);
   color: var(--registry-brand-secondary-text);
-  line-height: 1.5;
+  line-height: 1.36;
   font-family: var(--registry-font-body);
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-diagnostic-passage-controls {
+  margin-top: clamp(0.55rem, 1.1vw, 0.75rem);
+  margin-left: auto;
+  margin-right: auto;
+  max-width: min(53.75rem, 100%);
+  width: 100%;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-system-footer {
+  width: min(64rem, calc(100% - 2 * var(--registry-page-padding-active)));
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
 }
 
 .measures-registry-runtime .registry-structured-option:has(input:checked) > span {
@@ -192,6 +206,151 @@
   font-size: 0.82rem;
   margin: 0.5rem 0 0;
   max-width: min(var(--registry-content-max-width, 70rem), 100%);
+}
+
+/* Held state - public-safe registry absence, no question fallback */
+.measures-registry-runtime .registry-assessment-contract-held {
+  width: 100%;
+  max-width: min(53.75rem, 100%);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  border: 1px solid var(--registry-brand-border);
+  background: color-mix(in srgb, var(--registry-brand-surface, #050607) 88%, transparent);
+}
+
+.measures-registry-runtime .registry-assessment-contract-held > span {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--registry-brand-muted-text);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime .registry-assessment-contract-held > h2 {
+  margin: 0 0 0.75rem;
+  color: var(--registry-brand-primary-text);
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  font-weight: 500;
+}
+
+.measures-registry-runtime .registry-assessment-contract-held > p {
+  margin: 0.5rem 0 0;
+  color: var(--registry-brand-secondary-text);
+  font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+  line-height: 1.55;
+}
+
+.measures-registry-runtime .registry-branded-assessment-report {
+  width: min(58rem, 100%);
+  margin: 0 auto;
+  padding: clamp(1rem, 2.6vw, 1.8rem);
+  border: 1px solid color-mix(in srgb, var(--registry-brand-border) 72%, var(--registry-brand-accent));
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--registry-brand-surface, #06070b) 94%, transparent), color-mix(in srgb, var(--registry-brand-panel, #11131b) 86%, transparent));
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.34);
+}
+
+.measures-registry-runtime .registry-report-header,
+.measures-registry-runtime .registry-report-result,
+.measures-registry-runtime .registry-report-meta,
+.measures-registry-runtime .registry-report-group,
+.measures-registry-runtime .registry-report-action {
+  border-bottom: 1px solid color-mix(in srgb, var(--registry-brand-border) 62%, transparent);
+  padding-bottom: clamp(0.75rem, 1.8vw, 1rem);
+  margin-bottom: clamp(0.75rem, 1.8vw, 1rem);
+}
+
+.measures-registry-runtime .registry-report-header > span,
+.measures-registry-runtime .registry-report-result > span {
+  display: block;
+  color: var(--registry-brand-muted-text);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+}
+
+.measures-registry-runtime .registry-report-header h2,
+.measures-registry-runtime .registry-report-result h3 {
+  margin: 0;
+  color: var(--registry-brand-primary-text);
+  font-family: var(--registry-font-heading);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.measures-registry-runtime .registry-report-header h2 {
+  font-size: clamp(1.28rem, 3.2vw, 2rem);
+}
+
+.measures-registry-runtime .registry-report-result h3 {
+  font-size: clamp(1.12rem, 2.6vw, 1.55rem);
+}
+
+.measures-registry-runtime .registry-report-header p,
+.measures-registry-runtime .registry-report-result p,
+.measures-registry-runtime .registry-report-action p,
+.measures-registry-runtime .registry-report-meta p {
+  margin: 0.4rem 0 0;
+  color: var(--registry-brand-secondary-text);
+  line-height: 1.55;
+}
+
+.measures-registry-runtime .registry-report-header small,
+.measures-registry-runtime .registry-report-boundary {
+  display: block;
+  color: var(--registry-brand-muted-text);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.measures-registry-runtime .registry-report-result strong,
+.measures-registry-runtime .registry-report-group strong,
+.measures-registry-runtime .registry-report-action strong {
+  color: var(--registry-brand-primary-text);
+  font-family: var(--registry-font-heading);
+  font-weight: 500;
+}
+
+.measures-registry-runtime .registry-report-group ul {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--registry-brand-secondary-text);
+}
+
+.measures-registry-runtime .registry-report-group li {
+  margin: 0.35rem 0;
+  line-height: 1.45;
+}
+
+.measures-registry-runtime .registry-report-controls {
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.measures-registry-runtime .registry-pathway-passage {
+  width: min(58rem, 100%);
+}
+
+.measures-registry-runtime .registry-pathway-passage-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #030406;
+  border: 1px solid color-mix(in srgb, var(--registry-brand-border) 68%, transparent);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: clamp(0.8rem, 2vw, 1.2rem) 0;
+}
+
+.measures-registry-runtime .registry-pathway-passage-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* ── MEDIA ABSENCE ─────────────────────────────────────────────────────── */
