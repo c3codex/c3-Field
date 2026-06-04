@@ -24,10 +24,16 @@
 }
 
 .measures-registry-runtime .registry-public-brand img {
-  height: 1.4rem;
-  width: auto;
+  height: auto;
+  min-width: 40px;
+  width: 44px;
   display: block;
-  opacity: 0.88;
+  opacity: 0.72;
+  transition: opacity 0.15s ease;
+}
+
+.measures-registry-runtime .registry-public-brand:hover img {
+  opacity: 1;
 }
 
 .measures-registry-runtime .registry-public-brand > span {
@@ -69,6 +75,11 @@
 }
 
 @media (max-width: 620px) {
+  .measures-registry-runtime .registry-public-brand img {
+    min-width: 30px;
+    width: 34px;
+  }
+
   .measures-registry-runtime .registry-diagnostic-passage {
     padding-left: var(--registry-page-padding-active);
     padding-right: var(--registry-page-padding-active);
