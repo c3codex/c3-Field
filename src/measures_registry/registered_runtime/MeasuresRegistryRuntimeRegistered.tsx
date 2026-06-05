@@ -25,6 +25,7 @@ import type {
 import type {
   DesignTokenRow,
   LandingSectionRow,
+  LandingUnitRow,
   MediaRow,
   PublicationDispatchRow,
   PublicationRegistryRow,
@@ -110,6 +111,18 @@ const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
 const PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT = 7
 
+const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
+  "/ai-operations-assessment": "eval_passage",
+  "/structural-drift": "structural_drift_dispatches",
+}
+
+const ROUTE_UNIT_KEYS: Record<string, string> = {
+  "/ai-operations-assessment": "ai_operations_assessment_landing",
+  "/structural-drift": "structural_drift_landing",
+}
+
+const REGISTERED_SURFACES = new Set<RegisteredSurface>(Object.keys(SURFACE_QUERY) as RegisteredSurface[])
+
 function historyUrl(surface: RegisteredSurface) {
   const url = new URL(window.location.href)
   url.searchParams.set("surface", SURFACE_QUERY[surface])
@@ -129,6 +142,8 @@ function writeHistory(method: "pushState" | "replaceState", surface: RegisteredS
 }
 
 function initialSurface(): RegisteredSurface {
+  const routeSurface = ROUTE_SURFACE_ALIASES[window.location.pathname]
+  if (routeSurface) return routeSurface
   if (window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
   if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCHES_ROUTE) return "structural_drift_dispatches"
 
@@ -144,6 +159,8 @@ function initialSurface(): RegisteredSurface {
 export default function MeasuresRegistryRuntimeRegistered() {
   const [activeSurface, setActiveSurface] = useState<RegisteredSurface>(initialSurface)
   const [sections, setSections] = useState<LandingSectionRow[]>([])
+  const [landingUnits, setLandingUnits] = useState<LandingUnitRow[]>([])
+  const [landingUnitsLoaded, setLandingUnitsLoaded] = useState(false)
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
   const [publicationRows, setPublicationRows] = useState<PublicationRegistryRow[]>([])
@@ -175,6 +192,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
   const epigraphVideoRef = useRef<HTMLVideoElement | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
+  const governedRouteSurfaceAppliedRef = useRef(false)
 
   // --- data fetch ---
 
@@ -184,13 +202,18 @@ export default function MeasuresRegistryRuntimeRegistered() {
     async function loadData() {
       if (supabaseConfigError) return
 
-      const [sectionResult, mediaResult, tokenResult, publicationResult, dispatchResult] =
+      const [sectionResult, landingUnitResult, mediaResult, tokenResult, publicationResult, dispatchResult] =
         await Promise.all([
           supabase
             .from("measures_encounter_def")
             .select("encounter_key, display_title, metadata")
             .in("encounter_key", [...REGISTERED_ENCOUNTER_KEYS])
             .order("sequence_order", { ascending: true }),
+          supabase
+            .from("measures_registry")
+            .select("registry_key, release_state, access_state, metadata")
+            .in("registry_key", Object.values(ROUTE_UNIT_KEYS))
+            .eq("is_active", true),
           supabase
             .from("measures_media_map")
             .select("media_role, storage_bucket, storage_path, mime_type, is_active, metadata")
@@ -218,6 +241,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
       if (cancelled) return
 
       if (!sectionResult.error) setSections((sectionResult.data ?? []) as LandingSectionRow[])
+      if (!landingUnitResult.error) setLandingUnits((landingUnitResult.data ?? []) as LandingUnitRow[])
+      setLandingUnitsLoaded(true)
       if (!mediaResult.error) setMediaRows((mediaResult.data ?? []) as MediaRow[])
       if (!tokenResult.error) setDesignTokens((tokenResult.data ?? []) as DesignTokenRow[])
       if (!publicationResult.error) setPublicationRows((publicationResult.data ?? []) as PublicationRegistryRow[])
@@ -244,6 +269,30 @@ export default function MeasuresRegistryRuntimeRegistered() {
     () => new Map(sections.map((section) => [section.encounter_key, section])),
     [sections],
   )
+
+  const landingUnitMap = useMemo(
+    () => new Map(landingUnits.map((unit) => [unit.registry_key, unit])),
+    [landingUnits],
+  )
+
+  const activeRouteUnitKey = ROUTE_UNIT_KEYS[window.location.pathname] ?? null
+  const activeRouteUnit = activeRouteUnitKey ? landingUnitMap.get(activeRouteUnitKey) ?? null : null
+
+  function governedSurface(unit: LandingUnitRow | null, metadataKey: "runtime_surface" | "cta_surface" | "secondary_cta_surface") {
+    const surface = asString(unit?.metadata?.[metadataKey])
+    return surface && REGISTERED_SURFACES.has(surface as RegisteredSurface) ? surface as RegisteredSurface : null
+  }
+
+  useEffect(() => {
+    if (governedRouteSurfaceAppliedRef.current) return
+    const surface = governedSurface(activeRouteUnit, "runtime_surface")
+    if (surface && activeSurface !== surface) {
+      governedRouteSurfaceAppliedRef.current = true
+      navigate(surface)
+      return
+    }
+    if (surface) governedRouteSurfaceAppliedRef.current = true
+  }, [activeRouteUnit, activeSurface])
 
   const mediaMap = useMemo(
     () => new Map(
@@ -738,8 +787,28 @@ export default function MeasuresRegistryRuntimeRegistered() {
   // --- surface dispatcher ---
 
   let activeSurfaceElement: React.ReactNode
+  const routeCtaSurface = governedSurface(activeRouteUnit, "cta_surface")
 
-  if (activeSurface === "intro") {
+  if (activeRouteUnitKey && landingUnitsLoaded && !activeRouteUnit) {
+    activeSurfaceElement = (
+      <main
+        className="measures-registry-runtime"
+        data-surface="landing_unit_missing"
+        data-material-family="obsidian"
+        data-layout-contract="missing_governed_route"
+        data-release-standing="missing_registry_state"
+        style={launchMediaStyle}
+      >
+        {renderHeader({ title: "Measures Registry" })}
+        <section className="registry-held-state registry-assessment-contract-held" role="status" aria-live="polite">
+          <span>Governed route metadata</span>
+          <h2>Landing page registry unit is not seated.</h2>
+          <p>{activeRouteUnitKey} is required before this route may render as public truth.</p>
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
+  } else if (activeSurface === "intro") {
     activeSurfaceElement = (
       <RegisteredIntro
         registryTokenStyle={launchMediaStyle}
@@ -792,7 +861,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         passageMuted={passageMuted}
         renderHeader={() => renderHeader(evalPassageCopy.header)}
         renderSystemFooter={renderSystemFooter}
-        onContinue={() => navigate("measures_assessment")}
+        onContinue={() => navigate(routeCtaSurface ?? "measures_assessment")}
         onToggleMuted={() => setPassageMuted((current) => !current)}
       />
     )
@@ -929,9 +998,9 @@ export default function MeasuresRegistryRuntimeRegistered() {
         publicationSubmitting={publicationSubmitting}
         publicationStatus={publicationStatus}
         publicationError={publicationError}
-        onBeginEvaluation={() => navigate("measures_assessment")}
-        onContinueToAssessmentPackage={() => navigate("eval_passage")}
-        onGoToEvalPassage={() => navigate("eval_passage")}
+        onBeginEvaluation={() => navigate(routeCtaSurface ?? "measures_assessment")}
+        onContinueToAssessmentPackage={() => navigate(routeCtaSurface ?? "eval_passage")}
+        onGoToEvalPassage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onPublicationEmailChange={setPublicationEmail}
         onPublicationOrganizationChange={setPublicationOrganization}
         onSubmitSubscription={submitPublicationSubscription}
@@ -977,5 +1046,3 @@ export default function MeasuresRegistryRuntimeRegistered() {
     </>
   )
 }
-
-

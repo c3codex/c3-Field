@@ -16,6 +16,13 @@ export type LandingSectionRow = {
   metadata: Record<string, unknown> | null
 }
 
+export type LandingUnitRow = {
+  registry_key: string
+  release_state: string | null
+  access_state: string | null
+  metadata: Record<string, unknown> | null
+}
+
 export type MediaRow = {
   media_role: string
   storage_bucket: string
