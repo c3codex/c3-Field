@@ -48,6 +48,9 @@ export default function RegisteredPathChoice({
     <main
       className="measures-registry-runtime"
       data-surface="landing_path_choice"
+      data-material-family="lapis"
+      data-layout-contract="transition_choice"
+      data-release-standing="public"
       style={registryTokenStyle}
     >
       <header className="registry-public-header">

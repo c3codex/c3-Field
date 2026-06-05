@@ -82,6 +82,9 @@ export default function RegisteredPublicUnderstand({
       className="measures-registry-runtime"
       data-surface="structure_passage"
       data-public-path="understand_environment"
+      data-material-family="crystal"
+      data-layout-contract="passage"
+      data-release-standing="public"
       style={registryTokenStyle}
     >
       {renderHeader()}
@@ -98,7 +101,6 @@ export default function RegisteredPublicUnderstand({
                 src={talkingHeadVideoUrl}
                 autoPlay
                 muted={passageMuted}
-                controls
                 playsInline
                 preload="auto"
                 onEnded={onContinueToCrystal}

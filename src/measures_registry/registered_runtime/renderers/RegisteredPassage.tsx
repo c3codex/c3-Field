@@ -28,7 +28,7 @@ export default function RegisteredPassage({
   const materialFamily =
     typeof passageCopy.stylingContract?.material_family === "string"
       ? passageCopy.stylingContract.material_family
-      : variant === "structure" ? "obsidian" : "standard"
+      : variant === "structure" ? "crystal" : "obsidian"
 
   const layoutMode = typeof passageCopy.layoutContract?.layout_mode === "string"
     ? passageCopy.layoutContract.layout_mode
@@ -66,7 +66,9 @@ export default function RegisteredPassage({
         className="measures-registry-runtime"
         data-surface={surfaceKey}
         data-material-family={materialFamily}
+        data-layout-contract="passage"
         data-layout-mode={layoutMode}
+        data-release-standing="public"
         style={registryTokenStyle}
       >
         {renderHeader()}
@@ -114,7 +116,9 @@ export default function RegisteredPassage({
       className="measures-registry-runtime"
       data-surface={surfaceKey}
       data-material-family={materialFamily}
+      data-layout-contract="passage"
       data-layout-mode={layoutMode}
+      data-release-standing="public"
       style={registryTokenStyle}
     >
       {renderHeader()}
@@ -124,7 +128,6 @@ export default function RegisteredPassage({
             src={passageVideoUrl}
             autoPlay
             muted={passageMuted}
-            controls
             playsInline
             preload="auto"
             onEnded={onContinue}

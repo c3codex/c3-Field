@@ -142,7 +142,12 @@ export function PublicAssessmentSurface({
       ? stylingContract.material_family
       : typeof stylingContract?.foundation_material === "string"
       ? stylingContract.foundation_material
-        : "standard"
+        : "obsidian"
+  const layoutContractName = evalSubmitted
+    ? "result_gate"
+    : evalStep === "contact_capture"
+    ? "contact_contract"
+    : "assessment"
   const headingEyebrow =
     assessmentEyebrow && assessmentEyebrow.trim().toLowerCase() !== "measures registry"
       ? assessmentEyebrow
@@ -276,8 +281,10 @@ export function PublicAssessmentSurface({
       data-surface={encounterKey}
       data-chamber-state={evalStep}
       data-copy-density={layoutCopyDensity}
+      data-layout-contract={layoutContractName}
       data-layout-fit={layoutViewportFit}
       data-material-family={materialFamily}
+      data-release-standing="public_contact_gated"
       style={chamberStyle}
     >
       <header className="registry-public-header">
@@ -344,6 +351,11 @@ export function PublicAssessmentSurface({
               <h2>{resultWithheldCopy}</h2>
               <p className="registry-assessment-support">{contactHelperCopy}</p>
             </div>
+            <p className="registry-contact-standing-note">
+              {asString(assessmentContactCaptureContract?.standing_boundary_note) ??
+               asString(contactForm?.standing_boundary_note) ??
+               "This assessment does not create approval, enrollment, implementation, or verified registry status. It provides an operational evaluation and a recommended next step."}
+            </p>
             <fieldset>
               <legend>Contact and Consent</legend>
               {contactFields.length > 0 ? (

@@ -88,7 +88,14 @@ export default function RegisteredIntro({
   }
 
   return (
-    <main className="measures-registry-runtime" data-surface="landing_root" style={registryTokenStyle}>
+    <main
+      className="measures-registry-runtime"
+      data-surface="landing_root"
+      data-material-family="crystal"
+      data-layout-contract="intro"
+      data-release-standing="public"
+      style={registryTokenStyle}
+    >
       {!landingHeroReady ? (
         <section
           className="registry-intro-video"

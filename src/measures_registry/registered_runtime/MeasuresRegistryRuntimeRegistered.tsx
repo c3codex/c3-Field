@@ -103,6 +103,7 @@ const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
   landing_path_choice: "path_choice",
   evaluate_structure_path: "path_choice",
   educational_diagnostic_passage: "eval_passage",
+  understand_environment: "structure_passage",
   structural_drift_dispatches: "structural_drift_dispatches",
 }
 
@@ -113,6 +114,10 @@ function historyUrl(surface: RegisteredSurface) {
   const url = new URL(window.location.href)
   url.searchParams.set("surface", SURFACE_QUERY[surface])
   return `${url.pathname}${url.search}${url.hash}`
+}
+
+function cssImageUrl(url: string | null) {
+  return url ? `url("${url.replace(/"/g, "\\\"")}")` : undefined
 }
 
 function writeHistory(method: "pushState" | "replaceState", surface: RegisteredSurface) {
@@ -361,6 +366,17 @@ export default function MeasuresRegistryRuntimeRegistered() {
     mediaUrl(mediaMap.get("marble_tone")) ??
     mediaUrl(mediaMap.get("installation_tone_marble")) ??
     mediaUrl(mediaMap.get("installation_tone_marble_rise_return_v1"))
+
+  const launchMediaStyle = useMemo(() => {
+    const style = { ...registryTokenStyle } as Record<string, string>
+    const obsidianSource = cssImageUrl(thresholdLeftStillUrl)
+    const crystalSource = cssImageUrl(thresholdRightStillUrl)
+    const lapisSource = cssImageUrl(pathChoiceBackgroundUrl)
+    if (obsidianSource) style["--registry-obsidian-source-image"] = obsidianSource
+    if (crystalSource) style["--registry-crystal-source-image"] = crystalSource
+    if (lapisSource) style["--registry-lapis-source-image"] = lapisSource
+    return style as CSSProperties
+  }, [pathChoiceBackgroundUrl, registryTokenStyle, thresholdLeftStillUrl, thresholdRightStillUrl])
 
   // --- assessment active copy ---
 
@@ -639,7 +655,11 @@ export default function MeasuresRegistryRuntimeRegistered() {
     if (footerCopy.length === 0) return null
 
     return (
-      <footer className="registry-system-footer">
+      <footer
+        className="registry-system-footer"
+        data-layout-contract="footer"
+        data-release-standing="system_frame"
+      >
         {footerCopy.map((line) => (
           <p key={line}>{line}</p>
         ))}
@@ -701,7 +721,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
     registryMarkUrl,
     marbleAccentReferenceUrl,
     registryWatermarkUrl,
-    registryTokenStyle,
+    registryTokenStyle: launchMediaStyle,
     structuredEnvironmentPassageVideoUrl,
     onBackQuestion: () => setEvalSectionIndex((current) => Math.max(0, current - 1)),
     onContinueToDiagnostic: continueToDiagnostic,
@@ -722,7 +742,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   if (activeSurface === "intro") {
     activeSurfaceElement = (
       <RegisteredIntro
-        registryTokenStyle={registryTokenStyle}
+        registryTokenStyle={launchMediaStyle}
         epigraphVideoRef={epigraphVideoRef}
         epigraphVideoUrl={epigraphVideoUrl}
         epigraphEntered={epigraphEntered}
@@ -752,7 +772,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   } else if (activeSurface === "path_choice") {
     activeSurfaceElement = (
       <RegisteredPathChoice
-        registryTokenStyle={registryTokenStyle}
+        registryTokenStyle={launchMediaStyle}
         pathChoiceCopy={pathChoiceCopy}
         pathChoiceBackgroundUrl={pathChoiceBackgroundUrl}
         leftHeroUrl={thresholdLeftStillUrl}
@@ -766,7 +786,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
     activeSurfaceElement = (
       <RegisteredPassage
         variant="eval"
-        registryTokenStyle={registryTokenStyle}
+        registryTokenStyle={launchMediaStyle}
         passageCopy={evalPassageCopy}
         passageVideoUrl={explainerVideoUrl}
         passageMuted={passageMuted}
@@ -779,7 +799,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   } else if (activeSurface === "structure_passage") {
     activeSurfaceElement = (
       <RegisteredPublicUnderstand
-        registryTokenStyle={registryTokenStyle}
+        registryTokenStyle={launchMediaStyle}
         structurePassageCopy={structurePassageCopy}
         talkingHeadVideoUrl={structuredEnvironmentPassageVideoUrl}
         passageMuted={passageMuted}
@@ -792,7 +812,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   } else if (activeSurface === "crystal_chamber") {
     activeSurfaceElement = (
       <RegisteredCrystalChamber
-        registryTokenStyle={registryTokenStyle}
+        registryTokenStyle={launchMediaStyle}
         crystalChamberCopy={crystalChamberCopy}
         chamberCarrierCopy={structurePassageCopy}
         questionsVideoUrl={questionsUngovernedSystemsVideoUrl}
@@ -830,7 +850,14 @@ export default function MeasuresRegistryRuntimeRegistered() {
     const passageCta = obsidianToMarblePassageCopy.cta
     const passageCtaLabel = asString(passageCta?.label) ?? "Begin Pathway Reveal"
     activeSurfaceElement = (
-      <main className="measures-registry-runtime" data-surface="obsidian_to_marble_passage_video" style={registryTokenStyle}>
+      <main
+        className="measures-registry-runtime"
+        data-surface="obsidian_to_marble_passage_video"
+        data-material-family="obsidian"
+        data-layout-contract="passage"
+        data-release-standing="held_continuation"
+        style={launchMediaStyle}
+      >
         {renderHeader({ title: "Measures Registry" })}
         <section className="registry-held-state registry-assessment-contract-held registry-pathway-passage" aria-label={passageTitle}>
           <span>Pathway review passage</span>
@@ -842,7 +869,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
                 src={beforeThePathwayVideoUrl}
                 autoPlay
                 muted={passageMuted}
-                controls
                 playsInline
                 preload="auto"
                 aria-label="Before the Pathway"
@@ -870,7 +896,14 @@ export default function MeasuresRegistryRuntimeRegistered() {
   } else if (activeSurface === "marble_pathway_reveal") {
     const heldCopy = marblePathwayRevealCopy.heldCopy
     activeSurfaceElement = (
-      <main className="measures-registry-runtime" data-surface="marble_pathway_reveal" style={registryTokenStyle}>
+      <main
+        className="measures-registry-runtime"
+        data-surface="marble_pathway_reveal"
+        data-material-family="marble"
+        data-layout-contract="result_gate"
+        data-release-standing="held"
+        style={launchMediaStyle}
+      >
         {renderHeader({ title: "Measures Registry" })}
         <section className="registry-held-state registry-assessment-contract-held" role="status" aria-live="polite">
           <span>Marble Chamber</span>
@@ -884,7 +917,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   } else if (activeSurface === "structural_drift_dispatches" || activeSurface === "publication_dispatch") {
     activeSurfaceElement = (
       <RegisteredStructuralDrift
-        registryTokenStyle={registryTokenStyle}
+        registryTokenStyle={launchMediaStyle}
         variant={activeSurface === "publication_dispatch" ? "article" : "index"}
         structuralDriftCopy={structuralDriftCopy}
         structuralDriftPublication={structuralDriftPublication}
@@ -908,7 +941,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   } else {
     activeSurfaceElement = (
       <RegisteredIntro
-        registryTokenStyle={registryTokenStyle}
+        registryTokenStyle={launchMediaStyle}
         epigraphVideoRef={epigraphVideoRef}
         epigraphVideoUrl={epigraphVideoUrl}
         epigraphEntered={epigraphEntered}

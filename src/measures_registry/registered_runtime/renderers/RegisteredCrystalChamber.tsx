@@ -76,6 +76,7 @@ export default function RegisteredCrystalChamber({
       contracts?.foundational_leadership_contact_contract_v1,
   )
   const [leadershipHeld, setLeadershipHeld] = useState(false)
+  const [videoMuted, setVideoMuted] = useState(true)
 
   const eyebrow =
     publicSafeString(asString(sparseContract?.public_eyebrow)) ??
@@ -127,6 +128,9 @@ export default function RegisteredCrystalChamber({
       className="measures-registry-runtime"
       data-surface="crystal_chamber"
       data-public-path="crystal_chamber"
+      data-material-family="crystal"
+      data-layout-contract="sparse_chamber"
+      data-release-standing="public"
       style={registryTokenStyle}
     >
       {renderHeader()}
@@ -139,13 +143,20 @@ export default function RegisteredCrystalChamber({
 
         <div className="registry-crystal-chamber-video">
           {questionsVideoUrl ? (
-            <video
-              src={questionsVideoUrl}
-              controls
-              playsInline
-              preload="metadata"
-              aria-label="Questions Explainer"
-            />
+            <>
+              <video
+                src={questionsVideoUrl}
+                muted={videoMuted}
+                playsInline
+                preload="metadata"
+                aria-label="Questions Explainer"
+              />
+              <div className="registry-crystal-chamber-video-controls">
+                <button type="button" onClick={() => setVideoMuted((m) => !m)}>
+                  {videoMuted ? "Audio" : "Mute"}
+                </button>
+              </div>
+            </>
           ) : (
             <p className="registry-media-absence">Questions Explainer video is not seated in the runtime registry.</p>
           )}

@@ -66,7 +66,14 @@ export default function RegisteredStructuralDrift({
   if (variant === "article") {
     if (!structuralDriftPublication || !selectedPublicationDispatch) {
       return (
-        <main className="measures-registry-runtime" data-surface="publication_dispatch" style={registryTokenStyle}>
+        <main
+          className="measures-registry-runtime"
+          data-surface="publication_dispatch"
+          data-material-family="crystal"
+          data-layout-contract="publication_encounter"
+          data-release-standing="missing_publication_state"
+          style={registryTokenStyle}
+        >
           <section className="registry-publication-dispatch">
             <p>Publication dispatch is not seated.</p>
           </section>
@@ -84,7 +91,14 @@ export default function RegisteredStructuralDrift({
     const tags = Array.isArray(selectedPublicationDispatch.tags) ? selectedPublicationDispatch.tags : []
 
     return (
-      <main className="measures-registry-runtime" data-surface="publication_dispatch" style={registryTokenStyle}>
+      <main
+        className="measures-registry-runtime"
+        data-surface="publication_dispatch"
+        data-material-family="crystal"
+        data-layout-contract="publication_encounter"
+        data-release-standing="published"
+        style={registryTokenStyle}
+      >
         <article className="registry-publication-dispatch" aria-label={selectedPublicationDispatch.title}>
           <header className="registry-publication-dispatch-header">
             <span>{structuralDriftPublication.title}</span>
@@ -217,7 +231,14 @@ export default function RegisteredStructuralDrift({
   const featuredDispatch = structuralDriftDispatches[0] ?? null
 
   return (
-    <main className="measures-registry-runtime" data-surface="structural_drift_dispatches" style={registryTokenStyle}>
+    <main
+      className="measures-registry-runtime"
+      data-surface="structural_drift_dispatches"
+      data-material-family="crystal"
+      data-layout-contract="publication_encounter"
+      data-release-standing="published"
+      style={registryTokenStyle}
+    >
       <section className="registry-field-guide" aria-label={structuralDriftPublication?.title ?? "Structural Drift"}>
         <header className="registry-field-guide-masthead">
           <span>Measures Registry Analysis Surface</span>

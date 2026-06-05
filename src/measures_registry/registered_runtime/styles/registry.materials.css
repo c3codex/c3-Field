@@ -15,6 +15,22 @@
   color: var(--registry-brand-primary-text, #dde0e7);
 }
 
+/* CRYSTAL */
+.measures-registry-runtime[data-material-family="crystal"] {
+  --registry-brand-field:         var(--registry-crystal-field, var(--registry-brand-obsidian, #0b0c11));
+  --registry-brand-panel-surface: var(--registry-crystal-panel-surface, var(--registry-panel-obsidian, #151821));
+  --registry-brand-accent:        var(--registry-crystal-accent, var(--registry-brand-crystal-star, #e6edf7));
+  --registry-brand-primary-text:  var(--registry-crystal-primary-text, var(--registry-text-primary, #edf2f8));
+  --registry-brand-secondary-text:var(--registry-crystal-secondary-text, var(--registry-text-secondary, #b6c2d1));
+  --registry-brand-muted-text:    var(--registry-crystal-muted-text, var(--registry-text-muted, #7f8998));
+  --registry-brand-border:        var(--registry-crystal-border, rgba(230,237,247,0.18));
+  --registry-brand-highlight:     var(--registry-crystal-highlight, var(--registry-brand-crystal-star, #ffffff));
+  --registry-brand-panel-wash:    color-mix(in srgb, var(--registry-brand-panel-surface, #151821) 70%, transparent);
+  --registry-brand-field-wash:    color-mix(in srgb, var(--registry-brand-field, #0b0c11) 74%, transparent);
+  background: var(--registry-brand-field);
+  color: var(--registry-brand-primary-text);
+}
+
 /* ── LAPIS ──────────────────────────────────────────────────────────────── */
 .measures-registry-runtime[data-material-family="lapis"] {
   --registry-brand-field:         var(--registry-lapis-field, #0B1238);

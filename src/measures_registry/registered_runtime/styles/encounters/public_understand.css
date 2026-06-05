@@ -96,29 +96,10 @@
 
 .measures-registry-runtime .registry-public-understand-video > button,
 .measures-registry-runtime .registry-public-understand-video-controls > button,
-.measures-registry-runtime .registry-crystal-chamber-section > button,
 .measures-registry-runtime .registry-public-understand-panel > button,
 .measures-registry-runtime .registry-public-understand-assess > button,
 .measures-registry-runtime .registry-public-understand-contact > button {
   align-self: flex-start;
-  border: 1px solid var(--registry-brand-primary-text);
-  background: transparent;
-  color: var(--registry-brand-primary-text);
-  font-family: var(--registry-font-body);
-  font-size: clamp(0.75rem, 1vw, 0.86rem);
-  letter-spacing: 0.06em;
-  padding: 0.55rem 1.25rem;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-
-.measures-registry-runtime .registry-public-understand-video > button:hover,
-.measures-registry-runtime .registry-public-understand-video-controls > button:hover,
-.measures-registry-runtime .registry-crystal-chamber-section > button:hover,
-.measures-registry-runtime .registry-public-understand-panel > button:hover,
-.measures-registry-runtime .registry-public-understand-assess > button:hover,
-.measures-registry-runtime .registry-public-understand-contact > button:hover {
-  background: color-mix(in srgb, var(--registry-brand-primary-text) 8%, transparent);
 }
 
 .measures-registry-runtime .registry-public-understand-video-controls {
@@ -383,4 +364,12 @@
     align-items: flex-start;
     flex-direction: column;
   }
+}
+
+.measures-registry-runtime .registry-crystal-chamber-video-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+  margin-top: 0.5rem;
 }
