@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: closeout
 document_scope: measures_registry_api_validation_and_undrifted_route
 title: OAR1 - Validate API Credentials and Seat unDrifted Publication Landing Route v1
-status: completed
+status: completed_deployed
 version: v1
 operator: op044
 system: measures_registry
@@ -275,11 +275,64 @@ Build warning:
 
 - Vite reported a chunk larger than 500 kB after minification. This was informational and did not fail the build.
 
+## Deployment Package
+
+Deploy path:
+
+- Git push to `origin/measures`
+- Wrangler is not the Measures Registry deploy path for this repo.
+
+Deployment package commit:
+
+```text
+82ff07b39a277dc6092cc8ba32efae8c7aa5c490
+Seat unDrifted publication route and automation contracts
+```
+
+Remote branch verification:
+
+```text
+82ff07b39a277dc6092cc8ba32efae8c7aa5c490 refs/heads/measures
+```
+
+Push result:
+
+```text
+902f0d3..82ff07b  measures -> measures
+```
+
+Live deployment verification after branch propagation:
+
+```json
+[
+  {
+    "url": "https://measuresregistry.com/undrifted",
+    "status": 200,
+    "title": "unDrifted | Measures Registry",
+    "canonical": "https://measuresregistry.com/undrifted",
+    "jsAssets": ["index-_m7XPJf9.js"],
+    "hasUndriftedLine": true
+  },
+  {
+    "url": "https://measuresregistry.com/structural-drift",
+    "status": 200,
+    "title": "Structural Drift | unDrifted",
+    "canonical": "https://measuresregistry.com/structural-drift",
+    "jsAssets": ["index-_m7XPJf9.js"]
+  },
+  {
+    "url": "https://measuresregistry.com/ai-operations-assessment",
+    "status": 200,
+    "title": "AI Operations Assessment | Measures Registry",
+    "canonical": "https://measuresregistry.com/ai-operations-assessment",
+    "jsAssets": ["index-_m7XPJf9.js"]
+  }
+]
+```
+
 ## Git Status Standing
 
-Working tree remains dirty with prior OAR/runtime work.
-
-Current OAR files added or updated:
+Deployment package files added or updated in commit `82ff07b`:
 
 - `.gitignore`
 - `scripts/generate-registry-route-heads.cjs`
@@ -291,7 +344,9 @@ Current OAR files added or updated:
 - `dist-registry/undrifted/index.html`
 - regenerated `dist-registry` assets and route HTML
 
-No staging or commit was performed.
+Closeout amendment file updated after deploy verification:
+
+- `docs/oar/measures_registry/oar1_validate_api_credentials_and_seat_undrifted_publication_landing_route_v1.meta.md`
 
 ## Close
 
