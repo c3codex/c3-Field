@@ -29,18 +29,26 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     type: "website",
   },
   "/structural-drift": {
-    title: "Structural Drift | Measures Registry",
+    title: "Structural Drift | unDrifted",
     description:
-      "Structural drift appears when AI systems, roles, runtime surfaces, and review pathways scale without governed operational structure.",
+      "Structural Drift is the diagnostic series inside unDrifted, naming the seams where AI operations lose alignment.",
     url: "https://measuresregistry.com/structural-drift",
     image: "https://measuresregistry.com/og.jpeg",
-    type: "article",
+    type: "website",
+  },
+  "/undrifted": {
+    title: "unDrifted | Measures Registry",
+    description: "Structural drift is detectable. Collapse is not the default.",
+    url: "https://measuresregistry.com/undrifted",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
   },
 }
 
 const REGISTRY_ROUTE_UNITS: Record<string, string> = {
   "/ai-operations-assessment": "ai_operations_assessment_landing",
   "/structural-drift": "structural_drift_landing",
+  "/undrifted": "undrifted_publication_landing",
 }
 
 const INANNA_METADATA = {

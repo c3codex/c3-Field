@@ -36,7 +36,7 @@ export default function RegisteredPassage({
 
   const isSplitScreen = layoutMode === "split_screen_passage"
 
-  const surfaceKey = variant === "eval" ? "educational_diagnostic_passage" : "structure_passage"
+  const surfaceKey = variant === "eval" ? "eval_passage" : "structure_passage"
 
   const title =
     passageCopy.title ??

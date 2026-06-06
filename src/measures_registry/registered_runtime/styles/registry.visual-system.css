@@ -367,6 +367,311 @@
   border: 1px solid var(--registry-chamber-border);
 }
 
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] {
+  --undrifted-bg: #030608;
+  --undrifted-panel: #070b0f;
+  --undrifted-graphite: #111820;
+  --undrifted-line: rgba(180, 210, 255, 0.18);
+  --undrifted-line-strong: rgba(70, 145, 255, 0.55);
+  --undrifted-text: #e8edf2;
+  --undrifted-muted: #aab4bf;
+  --undrifted-faint: #687481;
+  --undrifted-blue: #1f8cff;
+  --undrifted-cyan: #59c7ff;
+  --undrifted-obsidian: #05070a;
+  background: var(--undrifted-bg);
+  color: var(--undrifted-text);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"]::before {
+  background:
+    linear-gradient(118deg, transparent 0 17%, rgba(89, 199, 255, 0.12) 17.12% 17.28%, transparent 17.42% 100%),
+    linear-gradient(64deg, transparent 0 62%, rgba(31, 140, 255, 0.11) 62.1% 62.26%, transparent 62.42% 100%),
+    radial-gradient(circle at 82% 16%, rgba(89, 199, 255, 0.13), transparent 21rem),
+    linear-gradient(180deg, rgba(3, 6, 8, 0.44), var(--undrifted-bg));
+  opacity: 1;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"]::after {
+  background-image:
+    linear-gradient(var(--undrifted-line) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 210, 255, 0.1) 1px, transparent 1px),
+    repeating-linear-gradient(126deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 18px);
+  background-size: 6.5rem 6.5rem, 6.5rem 6.5rem, auto;
+  mask-image: radial-gradient(circle at 50% 18%, black, transparent 74%);
+  opacity: 0.38;
+}
+
+.measures-registry-runtime .undrifted-shell {
+  width: min(78rem, 100%);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height, 3rem) + 1.4rem) var(--registry-page-padding-active) 1.5rem;
+  box-sizing: border-box;
+}
+
+.measures-registry-runtime .undrifted-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.28fr) minmax(18rem, 0.72fr);
+  gap: clamp(1rem, 3vw, 2.4rem);
+  align-items: end;
+  min-height: clamp(20rem, 42svh, 29rem);
+  border-bottom: 1px solid var(--undrifted-line-strong);
+  padding-bottom: clamp(1rem, 2.4vw, 1.8rem);
+}
+
+.measures-registry-runtime .undrifted-hero-copy > span,
+.measures-registry-runtime .undrifted-series-nav > span,
+.measures-registry-runtime .undrifted-latest > span,
+.measures-registry-runtime .undrifted-evaluation span {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--undrifted-cyan);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime .undrifted-hero-copy h1 {
+  margin: 0;
+  color: var(--undrifted-text);
+  font-family: var(--registry-font-heading);
+  font-size: clamp(4.4rem, 6rem, 6rem);
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+.measures-registry-runtime .undrifted-hero-copy h1 > span {
+  color: var(--undrifted-cyan);
+  font-weight: 300;
+}
+
+.measures-registry-runtime .undrifted-primary-lockup {
+  display: block;
+  width: min(18rem, 72vw);
+  height: auto;
+  margin: 0 0 0.85rem;
+  border-radius: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 1.2rem 2.2rem rgba(0, 0, 0, 0.34));
+}
+
+.measures-registry-runtime .undrifted-hero-copy p {
+  max-width: 42rem;
+  margin: 0.95rem 0 0;
+  color: var(--undrifted-muted);
+  font-size: 1rem;
+  line-height: 1.62;
+}
+
+.measures-registry-runtime .undrifted-hero-copy .undrifted-brand-line {
+  color: var(--undrifted-text);
+  font-size: clamp(1.28rem, 1.55rem, 1.55rem);
+  line-height: 1.24;
+}
+
+.measures-registry-runtime .undrifted-brand-line span {
+  display: block;
+}
+
+.measures-registry-runtime .undrifted-principles {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.measures-registry-runtime .undrifted-principles article,
+.measures-registry-runtime .undrifted-series-nav article,
+.measures-registry-runtime .undrifted-featured,
+.measures-registry-runtime .undrifted-latest,
+.measures-registry-runtime .undrifted-empty,
+.measures-registry-runtime .undrifted-evaluation {
+  border: 1px solid var(--undrifted-line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(89, 199, 255, 0.055), transparent 42%),
+    color-mix(in srgb, var(--undrifted-panel) 86%, transparent);
+  box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.22);
+}
+
+.measures-registry-runtime .undrifted-principles article {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.75rem 0.85rem;
+}
+
+.measures-registry-runtime .undrifted-principles article > span {
+  width: 100%;
+  height: 1px;
+  background: var(--undrifted-line-strong);
+}
+
+.measures-registry-runtime .undrifted-principles p {
+  margin: 0;
+  color: var(--undrifted-text);
+  font-size: 0.9rem;
+}
+
+.measures-registry-runtime .undrifted-grid {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.76fr) minmax(0, 1.45fr) minmax(16rem, 0.9fr);
+  gap: 0.9rem;
+  padding: 1rem 0;
+}
+
+.measures-registry-runtime .undrifted-series-nav,
+.measures-registry-runtime .undrifted-latest {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.measures-registry-runtime .undrifted-series-nav article {
+  padding: 0.72rem 0.78rem;
+}
+
+.measures-registry-runtime .undrifted-series-nav article[data-series-state="future"] {
+  opacity: 0.58;
+}
+
+.measures-registry-runtime .undrifted-series-nav strong,
+.measures-registry-runtime .undrifted-series-nav small {
+  display: block;
+}
+
+.measures-registry-runtime .undrifted-series-nav strong {
+  color: var(--undrifted-text);
+  font-size: 0.9rem;
+}
+
+.measures-registry-runtime .undrifted-series-nav small,
+.measures-registry-runtime .undrifted-article-card small {
+  color: var(--undrifted-faint);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime .undrifted-featured {
+  min-height: 22rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  position: relative;
+}
+
+.measures-registry-runtime .undrifted-featured::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(132deg, transparent 0 50%, rgba(89, 199, 255, 0.13) 50.12% 50.35%, transparent 50.52%),
+    radial-gradient(circle at 82% 18%, rgba(31, 140, 255, 0.14), transparent 15rem);
+  pointer-events: none;
+}
+
+.measures-registry-runtime .undrifted-featured > * {
+  position: relative;
+}
+
+.measures-registry-runtime .undrifted-featured div {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  color: var(--undrifted-cyan);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime .undrifted-featured h2 {
+  margin: 0.55rem 0 0;
+  color: var(--undrifted-text);
+  font-family: var(--registry-font-heading);
+  font-size: clamp(2.15rem, 3.15rem, 3.15rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.measures-registry-runtime .undrifted-featured p,
+.measures-registry-runtime .undrifted-article-card p,
+.measures-registry-runtime .undrifted-rule,
+.measures-registry-runtime .undrifted-evaluation p {
+  color: var(--undrifted-muted);
+  line-height: 1.55;
+}
+
+.measures-registry-runtime .undrifted-featured a,
+.measures-registry-runtime .undrifted-article-card a,
+.measures-registry-runtime .undrifted-evaluation button {
+  width: fit-content;
+  min-height: 2.25rem;
+  border: 1px solid var(--undrifted-line-strong);
+  border-radius: 6px;
+  background: rgba(31, 140, 255, 0.08);
+  color: var(--undrifted-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.52rem 0.82rem;
+  text-decoration: none;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.measures-registry-runtime .undrifted-featured a:hover,
+.measures-registry-runtime .undrifted-article-card a:hover,
+.measures-registry-runtime .undrifted-evaluation button:hover {
+  background: rgba(89, 199, 255, 0.12);
+  border-color: var(--undrifted-cyan);
+  transform: translateY(-1px);
+}
+
+.measures-registry-runtime .undrifted-article-card {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--undrifted-line);
+}
+
+.measures-registry-runtime .undrifted-article-card h3 {
+  margin: 0.32rem 0 0;
+  color: var(--undrifted-text);
+  font-family: var(--registry-font-heading);
+  font-size: 1.25rem;
+  line-height: 1.1;
+}
+
+.measures-registry-runtime .undrifted-rule {
+  margin: auto 0 0;
+  padding-top: 0.8rem;
+  font-size: 0.82rem;
+}
+
+.measures-registry-runtime .undrifted-evaluation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem;
+}
+
+.measures-registry-runtime .undrifted-evaluation h2 {
+  margin: 0;
+  color: var(--undrifted-text);
+  font-family: var(--registry-font-heading);
+  font-size: 1.5rem;
+  letter-spacing: 0;
+}
+
+.measures-registry-runtime .undrifted-evaluation p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+
 /* Assessment laptop fit and branded obsidian chamber */
 .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-iis-eval.registry-assessment-chamber {
   justify-content: flex-start;
@@ -714,6 +1019,30 @@
     width: min(18rem, 100%);
     justify-self: center;
   }
+
+  .measures-registry-runtime .undrifted-hero,
+  .measures-registry-runtime .undrifted-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .measures-registry-runtime .undrifted-hero {
+    min-height: auto;
+    align-items: stretch;
+  }
+
+  .measures-registry-runtime .undrifted-series-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .measures-registry-runtime .undrifted-series-nav > span {
+    grid-column: 1 / -1;
+  }
+
+  .measures-registry-runtime .undrifted-evaluation {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 620px) {
@@ -761,6 +1090,27 @@
 
   .measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide-masthead h1 {
     font-size: 2.2rem;
+  }
+
+  .measures-registry-runtime .undrifted-shell {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .measures-registry-runtime .undrifted-hero-copy h1 {
+    font-size: 3.2rem;
+  }
+
+  .measures-registry-runtime .undrifted-primary-lockup {
+    width: min(14rem, 76vw);
+  }
+
+  .measures-registry-runtime .undrifted-series-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .measures-registry-runtime .undrifted-featured h2 {
+    font-size: 2rem;
   }
 
   .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-iis-eval-form {

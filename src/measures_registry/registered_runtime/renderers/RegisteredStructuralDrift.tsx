@@ -1,6 +1,8 @@
 import type { CSSProperties, FormEvent, ReactNode } from "react"
 import {
+  asRecord,
   asString,
+  asStringArray,
   dispatchIssueLabel,
   dispatchThesis,
   dispatchTypeLabel,
@@ -16,6 +18,7 @@ type Props = {
   registryTokenStyle: CSSProperties
   variant: "index" | "article"
   structuralDriftCopy: SectionCopy
+  undriftedPublication: PublicationRegistryRow | null
   structuralDriftPublication: PublicationRegistryRow | null
   structuralDriftDispatches: PublicationDispatchRow[]
   selectedPublicationDispatch: PublicationDispatchRow | null
@@ -42,10 +45,15 @@ function publicationAssetUrl(path: string | null): string | null {
   return supabase.storage.from("measures-registry").getPublicUrl(normalized).data.publicUrl
 }
 
+function metadataRecord(row: PublicationRegistryRow | null, key: string) {
+  return asRecord(row?.metadata?.[key])
+}
+
 export default function RegisteredStructuralDrift({
   registryTokenStyle,
   variant,
   structuralDriftCopy,
+  undriftedPublication,
   structuralDriftPublication,
   structuralDriftDispatches,
   selectedPublicationDispatch,
@@ -177,7 +185,7 @@ export default function RegisteredStructuralDrift({
                 </button>
               ) : (
                 <button type="button" onClick={onGoToEvalPassage}>
-                  {selectedPublicationDispatch.primary_cta ?? "Evaluate Structural Coherence"}
+                  {selectedPublicationDispatch.primary_cta ?? "Continue to Structural Evaluation"}
                 </button>
               )}
               {selectedPublicationDispatch.article_url ?? selectedPublicationDispatch.external_url ? (
@@ -186,7 +194,7 @@ export default function RegisteredStructuralDrift({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Read on Paragraph
+                  Read the Dispatch
                 </a>
               ) : null}
             </div>
@@ -195,7 +203,7 @@ export default function RegisteredStructuralDrift({
           <section className="registry-publication-subscribe-capture" aria-label="Subscribe to Structural Drift">
             <div>
               <span>Structural Drift</span>
-              <h2>Receive Registry Dispatches</h2>
+              <h2>View Field Notes</h2>
               <p>Paragraph subscription remains available. This Codex-native capture records registry dispatch interest.</p>
             </div>
             <form onSubmit={onSubmitSubscription}>
@@ -216,7 +224,7 @@ export default function RegisteredStructuralDrift({
                 />
               </label>
               <button type="submit" disabled={publicationSubmitting}>
-                {publicationSubmitting ? "Recording..." : "Receive Registry Dispatches"}
+                {publicationSubmitting ? "Recording..." : "View Field Notes"}
               </button>
               {publicationStatus ? <p className="reserve-seat-success">{publicationStatus}</p> : null}
               {publicationError ? <p className="reserve-seat-error">{publicationError}</p> : null}
@@ -229,74 +237,126 @@ export default function RegisteredStructuralDrift({
 
   // index variant
   const featuredDispatch = structuralDriftDispatches[0] ?? null
+  const brandCopy = metadataRecord(undriftedPublication, "brand_copy")
+  const brandAssets = metadataRecord(undriftedPublication, "brand_assets")
+  const hierarchy = metadataRecord(undriftedPublication, "hierarchy")
+  const styleContract = metadataRecord(undriftedPublication, "style_contract")
+  const series = Array.isArray(hierarchy?.series) ? hierarchy.series : []
+  const brandTitle = asString(brandCopy?.header) ?? undriftedPublication?.title ?? "unDrifted"
+  const subtitleLines = asStringArray(brandCopy?.subtitle_lines)
+  const principles = asStringArray(brandCopy?.principles)
+  const publicationRule = asString(brandCopy?.publication_rule)
+  const styleKey = asString(styleContract?.key) ?? asString(undriftedPublication?.metadata?.style_contract_key)
+  const primaryLogoPath = asString(brandAssets?.primary_full_lockup_path)
 
   return (
     <main
       className="measures-registry-runtime"
       data-surface="structural_drift_dispatches"
-      data-material-family="crystal"
-      data-layout-contract="publication_encounter"
+      data-material-family="obsidian"
+      data-layout-contract="undrifted_publication"
+      data-style-contract={styleKey ?? "missing_style_contract"}
       data-release-standing="published"
       style={registryTokenStyle}
     >
-      <section className="registry-field-guide" aria-label={structuralDriftPublication?.title ?? "Structural Drift"}>
-        <header className="registry-field-guide-masthead">
-          <span>Measures Registry Analysis Surface</span>
-          <h1>{structuralDriftPublication?.title ?? "Structural Drift publication state missing"}</h1>
-          {structuralDriftPublication?.subtitle ? <p>{structuralDriftPublication.subtitle}</p> : null}
-          <p>
-            Structural Drift documents recurring implementation failures, governance gaps, authority fragmentation,
-            and environmental instability observed across AI-accelerated systems.
-          </p>
+      <section className="undrifted-shell" aria-label={brandTitle}>
+        <header className="undrifted-hero">
+          <div className="undrifted-hero-copy">
+            <span>Measures Registry Publication</span>
+            {primaryLogoPath ? (
+              <img
+                className="undrifted-primary-lockup"
+                src={primaryLogoPath}
+                alt="unDrifted primary mark"
+              />
+            ) : null}
+            <h1 aria-label={brandTitle}>
+              <span>{brandTitle.slice(0, 2)}</span>{brandTitle.slice(2)}
+            </h1>
+            {subtitleLines.length > 0 ? (
+              <p className="undrifted-brand-line">
+                {subtitleLines.map((line) => (
+                  <span key={line}>{line}</span>
+                ))}
+              </p>
+            ) : undriftedPublication?.subtitle ? (
+              <p>{undriftedPublication.subtitle}</p>
+            ) : null}
+          </div>
+          <div className="undrifted-principles" aria-label="Publication principles">
+            {(principles.length > 0 ? principles : [
+              "Drift is detectable.",
+              "Systems can be measured.",
+              "Authority can be restored.",
+            ]).map((principle) => (
+              <article key={principle}>
+                <span />
+                <p>{principle}</p>
+              </article>
+            ))}
+          </div>
         </header>
 
-        {featuredDispatch ? (
-          <article className="registry-field-guide-featured">
-            <div>
-              <span>{dispatchIssueLabel(featuredDispatch)}</span>
-              <strong>{dispatchTypeLabel(featuredDispatch)}</strong>
-            </div>
-            <h2>{featuredDispatch.title}</h2>
-            {dispatchThesis(featuredDispatch) ? <p>{dispatchThesis(featuredDispatch)}</p> : null}
-            {featuredDispatch.internal_route ? (
-              <a href={featuredDispatch.internal_route}>Read dispatch</a>
-            ) : (
-              <span>Article route not seated</span>
-            )}
-          </article>
-        ) : (
-          <section className="registry-field-guide-empty" aria-label="Missing dispatch state">
-            <span>Article registry state</span>
-            <p>No published Structural Drift dispatch rows are currently seated.</p>
-          </section>
-        )}
+        <section className="undrifted-grid" aria-label="Publication dispatches">
+          <aside className="undrifted-series-nav" aria-label="Dispatch series navigation">
+            <span>Series</span>
+            {(series.length > 0 ? series : [{ series_key: "structural_drift", title: "Structural Drift" }]).map((item) => {
+              const record = asRecord(item)
+              const title = asString(record?.title)
+              const key = asString(record?.series_key) ?? title
+              if (!title || !key) return null
+              return (
+                <article key={key} data-series-state={record?.future_state ? "future" : "active"}>
+                  <strong>{title}</strong>
+                  {record?.future_state ? <small>Registered future lane</small> : <small>Active diagnostic series</small>}
+                </article>
+              )
+            })}
+          </aside>
 
-        <section className="registry-field-guide-index" aria-label="Dispatch index">
-          <div>
-            <span>Dispatch Index</span>
-            <h2>Registered field notes</h2>
-          </div>
-          <div className="registry-field-guide-grid">
-            {structuralDriftDispatches.map((dispatch) => (
-              <article key={dispatch.dispatch_key}>
-                <span>{dispatchIssueLabel(dispatch)}</span>
-                <strong>{dispatchTypeLabel(dispatch)}</strong>
+          {featuredDispatch ? (
+            <article className="undrifted-featured">
+              <div>
+                <span>{dispatchIssueLabel(featuredDispatch)}</span>
+                <strong>{dispatchTypeLabel(featuredDispatch)}</strong>
+              </div>
+              <h2>{featuredDispatch.title}</h2>
+              {dispatchThesis(featuredDispatch) ? <p>{dispatchThesis(featuredDispatch)}</p> : null}
+              {featuredDispatch.internal_route ? (
+                <a href={featuredDispatch.internal_route}>Read the Dispatch</a>
+              ) : (
+                <span>Article route not seated</span>
+              )}
+            </article>
+          ) : (
+            <section className="undrifted-empty" aria-label="Missing dispatch state">
+              <span>Article registry state</span>
+              <p>No published Structural Drift dispatch rows are currently seated.</p>
+            </section>
+          )}
+
+          <aside className="undrifted-latest" aria-label="Latest dispatch">
+            <span>Latest Dispatch</span>
+            {structuralDriftDispatches.slice(0, 2).map((dispatch) => (
+              <article key={dispatch.dispatch_key} className="undrifted-article-card">
+                <small>{dispatchIssueLabel(dispatch)} / {dispatchTypeLabel(dispatch)}</small>
                 <h3>{dispatch.title}</h3>
-                {dispatchThesis(dispatch) ? <p>{dispatchThesis(dispatch)}</p> : null}
+                {dispatch.excerpt ?? dispatchThesis(dispatch) ? <p>{dispatch.excerpt ?? dispatchThesis(dispatch)}</p> : null}
                 {dispatch.internal_route ? (
-                  <a href={dispatch.internal_route}>Read dispatch</a>
+                  <a href={dispatch.internal_route}>Read the Dispatch</a>
                 ) : (
                   <small>Article route not seated</small>
                 )}
               </article>
             ))}
-          </div>
+            {publicationRule ? <p className="undrifted-rule">{publicationRule}</p> : null}
+          </aside>
         </section>
 
-        <section className="registry-field-guide-cta" aria-label="Evaluation entry">
+        <section className="undrifted-evaluation" aria-label="Evaluation entry">
           <div>
             <span>Diagnostic Intake</span>
-            <h2>{evalReport ? "Continue to Assessment Package" : "Begin Structural Evaluation"}</h2>
+            <h2>{evalReport ? "Continue to Assessment Package" : "Continue to Structural Evaluation"}</h2>
             <p>
               {evalReport
                 ? "Your assessment result is ready. Continue to receive your assessment package."
@@ -309,7 +369,7 @@ export default function RegisteredStructuralDrift({
             </button>
           ) : (
             <button type="button" onClick={onBeginEvaluation}>
-              Begin Structural Evaluation
+              Continue to Structural Evaluation
             </button>
           )}
         </section>

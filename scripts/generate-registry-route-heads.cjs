@@ -22,6 +22,10 @@ const routeUnits = [
     routePath: "/structural-drift",
     unitKey: "structural_drift_landing",
   },
+  {
+    routePath: "/undrifted",
+    unitKey: "undrifted_publication_landing",
+  },
 ]
 
 function escapeHtml(value) {

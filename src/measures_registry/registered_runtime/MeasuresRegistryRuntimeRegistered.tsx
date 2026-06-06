@@ -103,6 +103,7 @@ const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
   ai_isnt_broken_intro: "intro",
   landing_path_choice: "path_choice",
   evaluate_structure_path: "path_choice",
+  // Deprecated internal compatibility only; active governed route authority is eval_passage.
   educational_diagnostic_passage: "eval_passage",
   understand_environment: "structure_passage",
   structural_drift_dispatches: "structural_drift_dispatches",
@@ -114,11 +115,13 @@ const PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT = 7
 const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
   "/ai-operations-assessment": "eval_passage",
   "/structural-drift": "structural_drift_dispatches",
+  "/undrifted": "structural_drift_dispatches",
 }
 
 const ROUTE_UNIT_KEYS: Record<string, string> = {
   "/ai-operations-assessment": "ai_operations_assessment_landing",
   "/structural-drift": "structural_drift_landing",
+  "/undrifted": "undrifted_publication_landing",
 }
 
 const REGISTERED_SURFACES = new Set<RegisteredSurface>(Object.keys(SURFACE_QUERY) as RegisteredSurface[])
@@ -228,7 +231,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
           supabase
             .from("measures_publication_registry")
             .select("publication_key, title, subtitle, publication_type, status, external_url, tone, metadata")
-            .eq("publication_key", "structural_drift")
+            .in("publication_key", ["structural_drift", "undrifted"])
             .eq("status", "published"),
           supabase
             .from("measures_publication_dispatch")
@@ -377,6 +380,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
       : null
 
   const structuralDriftPublication = publicationRows.find((row) => row.publication_key === "structural_drift") ?? null
+  const undriftedPublication = publicationRows.find((row) => row.publication_key === "undrifted") ?? null
   const structuralDriftDispatches = publicationDispatchRows.filter((row) => row.publication_key === "structural_drift")
   const selectedDispatchKey = window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)
     ? window.location.pathname.slice(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`.length)
@@ -989,6 +993,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         registryTokenStyle={launchMediaStyle}
         variant={activeSurface === "publication_dispatch" ? "article" : "index"}
         structuralDriftCopy={structuralDriftCopy}
+        undriftedPublication={undriftedPublication}
         structuralDriftPublication={structuralDriftPublication}
         structuralDriftDispatches={structuralDriftDispatches}
         selectedPublicationDispatch={selectedPublicationDispatch}
