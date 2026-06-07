@@ -266,7 +266,8 @@ export function PublicAssessmentSurface({
       <label key={key}>
         <span>{label}</span>
         <input
-          type={type === "url" || type === "email" ? type : "text"}
+          type={type === "email" ? "email" : "text"}
+          inputMode={type === "url" ? "url" : undefined}
           value={value}
           required={required}
           onChange={(event) => onSetEvalField(key, event.target.value)}

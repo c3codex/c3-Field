@@ -494,6 +494,11 @@ export default function MeasuresRegistryRuntimeRegistered() {
       .filter((field): field is string => Boolean(field))
   }
 
+  function normalizeAssessmentWebsite(value: string | undefined): string {
+    const trimmed = value?.trim() ?? ""
+    return /^www\./i.test(trimmed) ? `https://${trimmed}` : trimmed
+  }
+
   function continueToDiagnostic() {
     const requiredFields = requiredEvalIdentityFields()
     const missing = requiredFields.filter((field) => !evalFields[field]?.trim())
@@ -526,9 +531,11 @@ export default function MeasuresRegistryRuntimeRegistered() {
         return
       }
 
+      const normalizedWebsite = normalizeAssessmentWebsite(evalFields.website)
+
       const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
         institution_name: evalFields.institution_name?.trim() ?? "",
-        institution_address: evalFields.website?.trim() ?? "",
+        institution_address: normalizedWebsite,
         institution_phone: "",
         contact_name: evalFields.contact_name?.trim() ?? "",
         contact_position: evalFields.role_title?.trim() ?? "",
@@ -568,7 +575,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
             contact_name: evalFields.contact_name?.trim() ?? "",
             contact_email: evalFields.contact_email?.trim() ?? "",
             role_title: evalFields.role_title?.trim() ?? "",
-            website: evalFields.website?.trim() || null,
+            website: normalizedWebsite || null,
             ai_deployment_status: evalFields.ai_deployment_status?.trim() ?? "",
             next_support_question: evalFields.next_support_question?.trim() || null,
             assessment_result_email_consent: evalFields.assessment_result_email_consent === "true",

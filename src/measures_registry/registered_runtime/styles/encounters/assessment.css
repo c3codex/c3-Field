@@ -371,4 +371,33 @@
   .measures-registry-runtime .registry-structured-option {
     padding: 0.65rem 0.5rem;
   }
+
+  .measures-registry-runtime[data-layout-contract="result_gate"] {
+    min-height: 100svh;
+    overflow-y: auto;
+  }
+
+  .measures-registry-runtime[data-layout-contract="result_gate"] .registry-iis-eval.registry-assessment-chamber {
+    min-height: 100svh;
+    height: auto;
+    overflow: visible;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+
+  .measures-registry-runtime[data-layout-contract="result_gate"] .registry-eval-resolution,
+  .measures-registry-runtime[data-layout-contract="result_gate"] .registry-branded-assessment-report {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .measures-registry-runtime[data-layout-contract="result_gate"] .registry-report-controls {
+    justify-content: stretch;
+  }
+
+  .measures-registry-runtime[data-layout-contract="result_gate"] .registry-report-controls > button {
+    width: 100%;
+    white-space: normal;
+  }
 }
