@@ -11,6 +11,13 @@ dist
 .wrangler/
 *.lnk
 
+# Local session scripts (contain secrets, never commit)
+execute_via_api.js
+execute_obsidian_sql.js
+validate_obsidian.js
+test_conn.js
+.claude/settings.local.json
+
 # Hardhat contract build artifacts
 cache/
 artifacts/

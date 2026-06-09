@@ -476,6 +476,17 @@
   display: block;
 }
 
+.measures-registry-runtime .undrifted-description {
+  max-width: 36rem;
+}
+
+.measures-registry-runtime .undrifted-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
 .measures-registry-runtime .undrifted-principles {
   display: grid;
   gap: 0.55rem;
@@ -486,6 +497,8 @@
 .measures-registry-runtime .undrifted-featured,
 .measures-registry-runtime .undrifted-latest,
 .measures-registry-runtime .undrifted-empty,
+.measures-registry-runtime .undrifted-legacy-route,
+.measures-registry-runtime .undrifted-about,
 .measures-registry-runtime .undrifted-evaluation {
   border: 1px solid var(--undrifted-line);
   border-radius: 8px;
@@ -520,6 +533,41 @@
   grid-template-columns: minmax(13rem, 0.76fr) minmax(0, 1.45fr) minmax(16rem, 0.9fr);
   gap: 0.9rem;
   padding: 1rem 0;
+}
+
+.measures-registry-runtime .undrifted-grid-publication {
+  grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.85fr);
+}
+
+.measures-registry-runtime .undrifted-legacy-route {
+  margin: 1rem 0 0;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.measures-registry-runtime .undrifted-legacy-route > span {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--undrifted-cyan);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime .undrifted-legacy-route h2 {
+  margin: 0;
+  color: var(--undrifted-text);
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1.8rem, 2.6rem, 2.6rem);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.measures-registry-runtime .undrifted-legacy-route p {
+  max-width: 42rem;
+  margin: 0.7rem 0 0;
+  color: var(--undrifted-muted);
+  line-height: 1.55;
 }
 
 .measures-registry-runtime .undrifted-series-nav,
@@ -602,6 +650,7 @@
 .measures-registry-runtime .undrifted-featured p,
 .measures-registry-runtime .undrifted-article-card p,
 .measures-registry-runtime .undrifted-rule,
+.measures-registry-runtime .undrifted-about p,
 .measures-registry-runtime .undrifted-evaluation p {
   color: var(--undrifted-muted);
   line-height: 1.55;
@@ -609,6 +658,10 @@
 
 .measures-registry-runtime .undrifted-featured a,
 .measures-registry-runtime .undrifted-article-card a,
+.measures-registry-runtime .undrifted-legacy-route a,
+.measures-registry-runtime .undrifted-hero-actions a,
+.measures-registry-runtime .undrifted-hero-actions button,
+.measures-registry-runtime .undrifted-evaluation a,
 .measures-registry-runtime .undrifted-evaluation button {
   width: fit-content;
   min-height: 2.25rem;
@@ -626,10 +679,29 @@
 
 .measures-registry-runtime .undrifted-featured a:hover,
 .measures-registry-runtime .undrifted-article-card a:hover,
+.measures-registry-runtime .undrifted-legacy-route a:hover,
+.measures-registry-runtime .undrifted-hero-actions a:hover,
+.measures-registry-runtime .undrifted-hero-actions button:hover,
+.measures-registry-runtime .undrifted-evaluation a:hover,
 .measures-registry-runtime .undrifted-evaluation button:hover {
   background: rgba(89, 199, 255, 0.12);
   border-color: var(--undrifted-cyan);
   transform: translateY(-1px);
+}
+
+.measures-registry-runtime .undrifted-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.9rem;
+}
+
+.measures-registry-runtime .undrifted-card-tags span {
+  border: 1px solid var(--undrifted-line);
+  border-radius: 999px;
+  padding: 0.22rem 0.48rem;
+  color: var(--undrifted-muted);
+  font-size: 0.68rem;
 }
 
 .measures-registry-runtime .undrifted-article-card {
@@ -670,6 +742,143 @@
 .measures-registry-runtime .undrifted-evaluation p {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
+}
+
+.measures-registry-runtime .undrifted-about {
+  margin: 0 0 1rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.measures-registry-runtime .undrifted-about span {
+  display: block;
+  color: var(--undrifted-cyan);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime .undrifted-about p {
+  max-width: 50rem;
+  margin: 0.55rem 0 0;
+}
+
+.measures-registry-runtime[data-layout-contract="assessment_public_landing"] {
+  background:
+    radial-gradient(circle at 80% 12%, rgba(49, 165, 255, 0.16), transparent 22rem),
+    linear-gradient(180deg, rgba(4, 9, 14, 0.96), #05070a);
+  color: var(--registry-brand-text);
+}
+
+.measures-registry-runtime .assessment-landing-shell {
+  width: min(72rem, 100%);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height, 3rem) + 1.4rem) var(--registry-page-padding-active) 1.5rem;
+  box-sizing: border-box;
+}
+
+.measures-registry-runtime .assessment-landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1rem, 3vw, 2.4rem);
+  align-items: end;
+  min-height: clamp(18rem, 38svh, 27rem);
+  border-bottom: 1px solid rgba(96, 186, 255, 0.5);
+  padding-bottom: clamp(1rem, 2.4vw, 1.8rem);
+}
+
+.measures-registry-runtime .assessment-landing-hero span,
+.measures-registry-runtime .assessment-landing-panel > span,
+.measures-registry-runtime .assessment-landing-cta span {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: #59c7ff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime .assessment-landing-hero h1 {
+  max-width: 48rem;
+  margin: 0;
+  color: #f2f6f8;
+  font-family: var(--registry-font-heading);
+  font-size: clamp(3.6rem, 5.2rem, 5.2rem);
+  font-weight: 500;
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.measures-registry-runtime .assessment-landing-hero p,
+.measures-registry-runtime .assessment-landing-panel p,
+.measures-registry-runtime .assessment-landing-cta p {
+  max-width: 48rem;
+  color: #aab4bf;
+  line-height: 1.6;
+}
+
+.measures-registry-runtime .assessment-landing-line {
+  color: #f2f6f8;
+  font-size: 1.22rem;
+}
+
+.measures-registry-runtime .assessment-landing-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+  gap: 0.9rem;
+  padding: 1rem 0;
+}
+
+.measures-registry-runtime .assessment-landing-panel,
+.measures-registry-runtime .assessment-landing-cta {
+  border: 1px solid rgba(180, 210, 255, 0.18);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(89, 199, 255, 0.055), rgba(7, 11, 15, 0.9) 42%);
+  box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.22);
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.measures-registry-runtime .assessment-landing-panel div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.measures-registry-runtime .assessment-landing-panel p {
+  margin: 0;
+  border-top: 1px solid rgba(180, 210, 255, 0.18);
+  padding-top: 0.55rem;
+}
+
+.measures-registry-runtime .assessment-landing-boundary p {
+  color: #c0c8cf;
+}
+
+.measures-registry-runtime .assessment-landing-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.measures-registry-runtime .assessment-landing-hero button,
+.measures-registry-runtime .assessment-landing-cta button {
+  min-height: 2.55rem;
+  border: 1px solid rgba(96, 186, 255, 0.68);
+  border-radius: 6px;
+  background: rgba(31, 140, 255, 0.1);
+  color: #f2f6f8;
+  padding: 0.6rem 0.9rem;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.measures-registry-runtime .assessment-landing-hero button:hover,
+.measures-registry-runtime .assessment-landing-cta button:hover {
+  background: rgba(89, 199, 255, 0.14);
+  border-color: #59c7ff;
+  transform: translateY(-1px);
 }
 
 /* Assessment laptop fit and branded obsidian chamber */

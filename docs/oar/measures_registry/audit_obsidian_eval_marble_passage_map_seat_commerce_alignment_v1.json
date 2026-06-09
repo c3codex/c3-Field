@@ -1,0 +1,1129 @@
+{
+  "generated_at": "2026-06-08T00:23:04.845Z",
+  "source_oar2": "docs/oar/measures_registry/oar2_audit_obsidian_eval_marble_passage_map_seat_commerce_alignment_v1.meta.md",
+  "mutation": "none; read-only audit artifact",
+  "route_units": [
+    {
+      "registry_key": "ai_operations_assessment_landing",
+      "registry_family": "spine",
+      "release_state": "released",
+      "access_state": "visible",
+      "is_active": true,
+      "metadata": {
+        "seo": {
+          "title": "AI Operations Assessment | Measures Registry",
+          "og_url": "https://measuresregistry.com/ai-operations-assessment",
+          "og_type": "website",
+          "og_image": "https://measuresregistry.com/og.jpeg",
+          "og_title": "AI Operations Assessment | Measures Registry",
+          "description": "Identify structural drift in AI operations and begin where drift becomes visible.",
+          "twitter_card": "summary_large_image",
+          "canonical_url": "https://measuresregistry.com/ai-operations-assessment",
+          "twitter_image": "https://measuresregistry.com/og.jpeg",
+          "twitter_title": "AI Operations Assessment | Measures Registry",
+          "og_description": "Identify structural drift in AI operations and begin where drift becomes visible.",
+          "twitter_description": "Identify structural drift in AI operations and begin where drift becomes visible."
+        },
+        "unit_key": "ai_operations_assessment_landing",
+        "unit_type": "landing_page",
+        "route_path": "/ai-operations-assessment",
+        "route_role": "public_assessment_landing",
+        "cta_surface": "eval_passage",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_measures_registry_landing_pages_as_governed_registry_units_v1.meta.md",
+        "public_state": "released",
+        "canonical_url": "https://measuresregistry.com/ai-operations-assessment",
+        "frontend_role": "renderer",
+        "runtime_target": "eval_passage",
+        "claims_boundary": "assessment_entry_only",
+        "material_family": "none_public_route_shell",
+        "route_authority": "registry",
+        "runtime_surface": "ai_operations_assessment_landing",
+        "metadata_profile": "ai_operations_assessment_seo",
+        "primary_cta_label": "Begin Assessment",
+        "prohibited_claims": [
+          "pricing",
+          "payment standing",
+          "wallet connection",
+          "c3 Key issuance",
+          "temp c3 Key issuance",
+          "SRC binding",
+          "certification",
+          "conversion",
+          "DAO standing",
+          "permission state",
+          "recognition state",
+          "distribution standing",
+          "Marble Chamber readiness",
+          "Registry Certification claim",
+          "Measures Conversion claim"
+        ],
+        "primary_cta_target": "assess_environment_flow",
+        "style_contract_key": "assessment_public_landing_v1",
+        "landing_contract_key": "ai_operations_assessment_landing_v1",
+        "landing_design_contract": {
+          "cta": {
+            "label": "Assess the Environment",
+            "subline": "Routes into the registered encounter flow without bypassing gates.",
+            "target_surface": "eval_passage",
+            "result_gate_bypass_allowed": false,
+            "contact_gate_bypass_allowed": false,
+            "direct_scoring_shortcut_allowed": false
+          },
+          "hero": {
+            "title": "AI Operations Assessment",
+            "supporting_line": "Identify structural drift before collapse becomes visible.",
+            "public_explanation": "Measures Registry evaluates the environment around AI operations: authority, roles, automation, runtime surfaces, review pathways, and traceable action."
+          },
+          "source_oar2": "docs/oar/measures_registry/oar2_seat_public_landing_page_design_contracts_for_undrifted_and_ai_operations_assessment_v1.meta.md",
+          "runtime_target": "eval_passage",
+          "what_it_is_not": {
+            "items": [
+              {
+                "claim": "certification",
+                "label": "not certification",
+                "allowed": false
+              },
+              {
+                "claim": "conversion",
+                "label": "not conversion",
+                "allowed": false
+              },
+              {
+                "claim": "c3_map_completion",
+                "label": "not c3 MAP completion",
+                "allowed": false
+              },
+              {
+                "claim": "payment",
+                "label": "not payment",
+                "allowed": false
+              },
+              {
+                "claim": "c3_key_issuance",
+                "label": "not c3 Key issuance",
+                "allowed": false
+              }
+            ]
+          },
+          "claims_boundary": "assessment_entry_only",
+          "what_it_evaluates": {
+            "items": [
+              "authority clarity",
+              "role boundaries",
+              "runtime behavior",
+              "automation exposure",
+              "review pathway standing",
+              "traceability"
+            ]
+          },
+          "style_contract_key": "assessment_public_landing_v1",
+          "landing_contract_key": "ai_operations_assessment_landing_v1"
+        }
+      }
+    },
+    {
+      "registry_key": "structural_drift_landing",
+      "registry_family": "spine",
+      "release_state": "released",
+      "access_state": "visible",
+      "is_active": true,
+      "metadata": {
+        "seo": {
+          "title": "Structural Drift | unDrifted",
+          "og_url": "https://measuresregistry.com/structural-drift",
+          "og_type": "website",
+          "og_image": "https://measuresregistry.com/og.jpeg",
+          "og_title": "Structural Drift | unDrifted",
+          "description": "Structural Drift is now a diagnostic concept within unDrifted, the Measures Registry publication on structural drift and governed AI operations.",
+          "twitter_card": "summary_large_image",
+          "canonical_url": "https://measuresregistry.com/undrifted",
+          "twitter_image": "https://measuresregistry.com/og.jpeg",
+          "twitter_title": "Structural Drift | unDrifted",
+          "og_description": "Continue to unDrifted, the Measures Registry publication where Structural Drift is documented as a diagnostic concept.",
+          "twitter_description": "Continue to unDrifted, the Measures Registry publication where Structural Drift is documented as a diagnostic concept."
+        },
+        "unit_key": "structural_drift_landing",
+        "unit_type": "landing_page",
+        "route_path": "/structural-drift",
+        "route_role": "legacy_inbound_route",
+        "series_key": "structural_drift",
+        "cta_surface": null,
+        "legacy_note": "Structural Drift is now part of unDrifted.",
+        "source_oar2": "docs/oar/measures_registry/oar2_seat_measures_registry_landing_pages_as_governed_registry_units_v1.meta.md",
+        "access_state": "visible",
+        "public_state": "released",
+        "canonical_url": "https://measuresregistry.com/undrifted",
+        "frontend_role": "renderer",
+        "release_state": "legacy_visible",
+        "diagnostic_tag": "structural_drift",
+        "runtime_target": "structural_drift_series",
+        "style_contract": "undrifted_publication_style_v1",
+        "claims_boundary": "education_only",
+        "legacy_behavior": "render_legacy_note_under_undrifted_branding",
+        "material_family": "none_public_route_shell",
+        "publication_key": "undrifted",
+        "route_authority": "registry",
+        "runtime_surface": "structural_drift_dispatches",
+        "legacy_cta_label": "Continue to unDrifted",
+        "metadata_profile": "structural_drift_seo",
+        "public_authority": false,
+        "primary_cta_label": "Begin Structural Evaluation",
+        "prohibited_claims": [
+          "pricing",
+          "payment standing",
+          "wallet connection",
+          "c3 Key issuance",
+          "temp c3 Key issuance",
+          "SRC binding",
+          "certification",
+          "conversion",
+          "DAO standing",
+          "permission state",
+          "recognition state",
+          "distribution standing",
+          "Marble Chamber readiness",
+          "Registry Certification claim",
+          "Measures Conversion claim"
+        ],
+        "replacement_route": "/undrifted",
+        "primary_cta_target": "assess_environment_flow",
+        "publication_relation": "structural_drift_dispatches",
+        "publication_standing": {
+          "publication_key": "structural_drift",
+          "published_dispatch_count": 2
+        },
+        "secondary_cta_target": "understand_environment_flow",
+        "secondary_cta_surface": null,
+        "legacy_inbound_supported": true,
+        "source_oar2_legacy_route": "docs/oar/measures_registry/oar2_deprecate_structural_drift_section_and_seat_undrifted_only_publication_architecture_v1.meta.md",
+        "umbrella_publication_key": "undrifted",
+        "source_oar2_route_reclassification": "docs/oar/measures_registry/oar2_validate_api_credentials_and_seat_undrifted_publication_landing_route_v1.meta.md"
+      }
+    },
+    {
+      "registry_key": "undrifted_publication_landing",
+      "registry_family": "spine",
+      "release_state": "released",
+      "access_state": "visible",
+      "is_active": true,
+      "metadata": {
+        "seo": {
+          "title": "unDrifted | Measures Registry",
+          "og_url": "https://measuresregistry.com/undrifted",
+          "og_type": "website",
+          "og_image": "https://measuresregistry.com/og.jpeg",
+          "og_title": "unDrifted | Measures Registry",
+          "description": "Structural drift is detectable. Collapse is not the default.",
+          "twitter_card": "summary_large_image",
+          "canonical_url": "https://measuresregistry.com/undrifted",
+          "twitter_image": "https://measuresregistry.com/og.jpeg",
+          "twitter_title": "unDrifted | Measures Registry",
+          "og_description": "Structural drift is detectable. Collapse is not the default.",
+          "twitter_description": "Structural drift is detectable. Collapse is not the default."
+        },
+        "unit_key": "undrifted_publication_landing",
+        "unit_type": "landing_page",
+        "route_path": "/undrifted",
+        "route_role": "primary_publication_landing",
+        "cta_surface": "ai_operations_assessment_landing",
+        "source_oar2": "docs/oar/measures_registry/oar2_validate_api_credentials_and_seat_undrifted_publication_landing_route_v1.meta.md",
+        "access_state": "visible",
+        "public_state": "released",
+        "canonical_url": "https://measuresregistry.com/undrifted",
+        "frontend_role": "renderer",
+        "release_state": "released",
+        "runtime_target": "undrifted_publication",
+        "style_contract": "undrifted_publication_style_v1",
+        "claims_boundary": "education_only",
+        "material_family": "obsidian",
+        "publication_key": "undrifted",
+        "route_authority": "registry",
+        "runtime_surface": "structural_drift_dispatches",
+        "metadata_profile": "undrifted_publication_landing_seo",
+        "parent_authority": "measures_registry",
+        "public_authority": true,
+        "primary_cta_label": "Assess the Environment",
+        "prohibited_claims": [
+          "pricing",
+          "payment standing",
+          "wallet connection",
+          "c3 Key issuance",
+          "temp c3 Key issuance",
+          "SRC binding",
+          "certification",
+          "conversion",
+          "DAO standing",
+          "permission state",
+          "recognition state",
+          "distribution standing",
+          "Marble Chamber readiness",
+          "Registry Certification claim",
+          "Measures Conversion claim"
+        ],
+        "sections_required": false,
+        "primary_cta_target": "assess_environment_flow",
+        "style_contract_key": "undrifted_publication_style_v1",
+        "secondary_cta_label": "Read unDrifted",
+        "landing_contract_key": "undrifted_publication_landing_v1",
+        "secondary_cta_target": "https://paragraph.com/@undrifted",
+        "secondary_cta_surface": "ai_operations_assessment_landing",
+        "runtime_surface_reason": "existing renderer consumes undrifted publication metadata through the structural_drift_dispatches surface",
+        "landing_design_contract": {
+          "hero": {
+            "brand": "unDrifted",
+            "function": "dispatches on AI operations, governed environments, and structural correction",
+            "description": "Dispatches from Measures Registry on structural drift, AI operations, and governed environments.",
+            "canonical_line": [
+              "Structural drift is detectable.",
+              "Collapse is not the default."
+            ],
+            "parent_authority": "Measures Registry",
+            "primary_cta_label": "Read the Dispatches",
+            "secondary_cta_label": "Assess the Environment",
+            "secondary_cta_route": "/ai-operations-assessment"
+          },
+          "about": {
+            "body": "unDrifted is a Measures Registry publication for observing structural drift and documenting governed correction paths.",
+            "title": "Measures Registry relationship"
+          },
+          "sections": [
+            "hero",
+            "principles",
+            "dispatches",
+            "about",
+            "cta_footer"
+          ],
+          "cta_footer": {
+            "label": "Assess the Environment",
+            "subline": "Begin where drift becomes visible.",
+            "target_route": "/ai-operations-assessment"
+          },
+          "principles": [
+            "Detect drift",
+            "Measure condition",
+            "Correct authority path",
+            "Govern continuity"
+          ],
+          "source_oar2": "docs/oar/measures_registry/oar2_seat_public_landing_page_design_contracts_for_undrifted_and_ai_operations_assessment_v1.meta.md",
+          "media_contract": {
+            "allowed_sources": [
+              "governed_publication_brand_assets",
+              "governed_r2_media",
+              "governed_supabase_media_mappings"
+            ],
+            "missing_asset_behavior": "designed_missing_state",
+            "invented_asset_paths_allowed": false
+          },
+          "claims_boundary": "education_only",
+          "publication_key": "undrifted",
+          "public_authority": true,
+          "style_contract_key": "undrifted_publication_style_v1",
+          "landing_contract_key": "undrifted_publication_landing_v1",
+          "dispatch_card_contract": {
+            "source": "measures_publication_dispatch",
+            "required_fields": [
+              "dispatch_key",
+              "title",
+              "subtitle_or_excerpt",
+              "tags",
+              "article_url_or_internal_route",
+              "publish_state",
+              "media_key",
+              "claim_boundary",
+              "cta_label"
+            ],
+            "allowed_cta_labels": [
+              "Read the Dispatch",
+              "Assess the Environment",
+              "Continue to unDrifted"
+            ],
+            "disallowed_cta_labels": [
+              "Buy",
+              "Pay",
+              "Mint",
+              "Certify",
+              "Convert",
+              "Claim c3 Key",
+              "Join DAO",
+              "Get Recognized",
+              "Enter Marble"
+            ]
+          }
+        },
+        "route_rendering_contract": "renderer_reads_governed_publication_and_dispatch_records",
+        "source_oar2_undrifted_only_architecture": "docs/oar/measures_registry/oar2_deprecate_structural_drift_section_and_seat_undrifted_only_publication_architecture_v1.meta.md"
+      }
+    }
+  ],
+  "encounters": [
+    {
+      "encounter_key": "eval_passage",
+      "display_title": "Evaluation Passage",
+      "metadata_keys": [
+        "actions",
+        "branding_contract",
+        "contract_status",
+        "cta_primary",
+        "cta_secondary",
+        "deprecated_trace",
+        "encounter_isolation_contract",
+        "eyebrow",
+        "footer_contract",
+        "function_layer",
+        "informational_paragraph",
+        "layout_contract",
+        "media_behavior_contract",
+        "media_roles",
+        "public_style_contract_alias_registry_v1",
+        "reconciliation_source",
+        "renderer",
+        "source_sitewide_contract",
+        "state_expression",
+        "styling_contract",
+        "subtitle",
+        "title",
+        "transition_contract"
+      ],
+      "title": "How does the operational environment shape AI behavior?",
+      "eyebrow": "Assessment Readiness",
+      "subtitle": "AI instability often develops inside unstructured environments where oversight, connected systems, external tools, and operational decisions are not fully visible or clearly governed.",
+      "active_contract_keys": null,
+      "assessment_question_count": null,
+      "scoring_thresholds": [],
+      "standing_rules": [],
+      "condition_labels": null,
+      "finding_map": null,
+      "report_templates_keys": [],
+      "report_cta": null,
+      "result_boundary": null,
+      "public_runtime_boundary": {
+        "commerce_runtime_state": null,
+        "map_execution_state": null,
+        "pricing_changed": null,
+        "pricing_published": null,
+        "public_copy_allowed": null,
+        "renderer_rule": null
+      },
+      "passage_transcript_tail": null,
+      "cta": null,
+      "held_copy": null,
+      "layout_contract": {
+        "version": "v2",
+        "layout_mode": "split_screen_passage",
+        "source_oar2": "docs/oar/measures_registry/oar2_correct_eval_passage_and_assessment_chamber_contract_expression_gaps_v1.meta.md",
+        "copy_density": "measured",
+        "viewport_fit": "single_screen",
+        "cta_placement": "information_panel_below_copy",
+        "heading_scale": "passage_heading",
+        "mobile_layout": "media_first_then_information",
+        "media_position": "left",
+        "progression_mode": "user_controlled",
+        "footer_visibility": "visible",
+        "branding_visibility": "visible",
+        "information_position": "right",
+        "audio_control_placement": "information_panel_secondary_action"
+      },
+      "styling_contract": {
+        "version": "v1",
+        "body_tone": "operational_clarity",
+        "body_style": "operational_sans",
+        "source_oar2": "docs/oar/measures_registry/oar2_correct_eval_passage_and_assessment_chamber_contract_expression_gaps_v1.meta.md",
+        "heading_tone": "measured_authoritative",
+        "passage_mode": "assessment_passage",
+        "heading_style": "institutional_serif",
+        "background_mode": "obsidian_material_field",
+        "material_family": "obsidian",
+        "transition_style": "dissolve",
+        "atmospheric_motion": "restrained",
+        "interaction_motion": "minimal",
+        "disallowed_patterns": [
+          "dashboard_cards",
+          "startup_saas_ui",
+          "progress_gamification",
+          "ecommerce_funnel"
+        ],
+        "foundation_material": "obsidian",
+        "material_texture_visibility": true
+      },
+      "prohibited_term_hits": [
+        "C3",
+        "DAO"
+      ]
+    },
+    {
+      "encounter_key": "marble_pathway_reveal",
+      "display_title": "Recommended Governed Pathway",
+      "metadata_keys": [
+        "chamber",
+        "encounter_type",
+        "footer_contract",
+        "held_copy",
+        "internal_route_visible",
+        "key_mechanics_allowed",
+        "material_family",
+        "payment_allowed",
+        "pricing_allowed",
+        "prohibited_public_rendering",
+        "public_circuit_visible",
+        "public_label",
+        "public_runtime_allowed",
+        "recommended_pathway_reveal_body_seated",
+        "renderer_rule",
+        "source_oar2",
+        "source_state_required",
+        "status",
+        "title"
+      ],
+      "title": "Recommended Governed Pathway",
+      "eyebrow": null,
+      "subtitle": null,
+      "active_contract_keys": null,
+      "assessment_question_count": null,
+      "scoring_thresholds": [],
+      "standing_rules": [],
+      "condition_labels": null,
+      "finding_map": null,
+      "report_templates_keys": [],
+      "report_cta": null,
+      "result_boundary": null,
+      "public_runtime_boundary": {
+        "commerce_runtime_state": null,
+        "map_execution_state": null,
+        "pricing_changed": null,
+        "pricing_published": null,
+        "public_copy_allowed": null,
+        "renderer_rule": null
+      },
+      "passage_transcript_tail": null,
+      "cta": null,
+      "held_copy": {
+        "body": "The pathway reveal is a Marble Chamber function and is not seated in this route.",
+        "title": "Recommended Governed Pathway is held.",
+        "allowed_next_step": "Seat the Marble pathway reveal boundary in a later OAR2."
+      },
+      "layout_contract": null,
+      "styling_contract": null,
+      "prohibited_term_hits": [
+        "C1",
+        "C2",
+        "C3",
+        "pricing",
+        "payment",
+        "certification",
+        "conversion",
+        "DAO",
+        "permission",
+        "distribution",
+        "c3 key",
+        "SRC"
+      ]
+    },
+    {
+      "encounter_key": "measures_assessment",
+      "display_title": "AI Operations Assessment",
+      "metadata_keys": [
+        "actions",
+        "active_contract_chain_authority",
+        "active_contract_key_reconciliation",
+        "assess_environment_public_runtime_boundary",
+        "assessment_chamber",
+        "assessment_completion",
+        "assessment_contact_capture_oar1_binding_contract_v1",
+        "assessment_evaluation_report_contract_v1",
+        "assessment_interpretation",
+        "assessment_mechanics",
+        "branding_contract",
+        "c3_map_runtime_audit_contract",
+        "capture_context",
+        "capture_fields",
+        "capture_metadata",
+        "chamber_contract",
+        "commerce_circuit_deliverables_contract_v1",
+        "commerce_circuit_deliverables_runtime_audit_boundary_hardening",
+        "contract_status",
+        "db_before_site_edit_rule",
+        "email_flow",
+        "encounter_contract",
+        "encounter_isolation_contract",
+        "evaluation_sections",
+        "eyebrow",
+        "footer_contract",
+        "function_layer",
+        "gate_1_completion_rule",
+        "glyph_contracts_v1",
+        "governed_layout_contract",
+        "held_state",
+        "icon_contract",
+        "layout_contract",
+        "layout_contracts_v1",
+        "map_circuit_relation_contract",
+        "marble_accent_contract",
+        "material_public_boundary_contract",
+        "material_style_contracts_v1",
+        "measures_registry_public_runtime_boundary_v1",
+        "media_behavior_contract",
+        "media_roles",
+        "missing_media_roles",
+        "obsidian_assessment_report_style_contract_v1",
+        "obsidian_intake_simplification_source_oar2",
+        "passage_contracts",
+        "post_assessment_result_binding_contract_source_oar2",
+        "public_runtime_boundary_seating",
+        "public_style_contract_alias_registry_v1",
+        "reconciled_from",
+        "reconciliation_source",
+        "refined_assessment_result_set_contact_gate_source_oar2",
+        "renderer",
+        "renderer_key",
+        "resolution_text",
+        "returned_assessment_contract",
+        "seated_assessment_report_obsidian_style_source_oar2",
+        "source",
+        "source_oar2",
+        "source_sitewide_contract",
+        "src_intake_contract",
+        "state_expression",
+        "styling_contract",
+        "subtitle",
+        "theme_key",
+        "title",
+        "transition_contract"
+      ],
+      "title": "AI Operations Assessment",
+      "eyebrow": "Measures Registry",
+      "subtitle": "Answer each prompt to assess whether your current environment can safely support AI acceleration.",
+      "active_contract_keys": [
+        "measures_assessment_contract",
+        "assessment_result_contract",
+        "commerce_circuit_recommendation_contract"
+      ],
+      "assessment_question_count": 7,
+      "scoring_thresholds": [
+        {
+          "standing_key": "structured_ai_environment_confirmed",
+          "min": 0,
+          "max": 0,
+          "assessment_result": "Structured AI Environment Confirmed",
+          "continuation_pathway": "Foundational Leadership",
+          "recommended_structured_action": "Begin Foundational Leadership conversation."
+        },
+        {
+          "standing_key": "early_structural_drift",
+          "min": 1,
+          "max": 33,
+          "assessment_result": "Early Structural Drift Detected",
+          "continuation_pathway": "AI Environment Review",
+          "recommended_structured_action": "Begin AI Environment Review."
+        },
+        {
+          "standing_key": "active_structural_drift",
+          "min": 34,
+          "max": 66,
+          "assessment_result": "Active Structural Drift Detected",
+          "continuation_pathway": "MAP the Environment",
+          "recommended_structured_action": "Begin MAP the Environment."
+        },
+        {
+          "standing_key": "system_integrity_risk",
+          "min": 67,
+          "max": 100,
+          "assessment_result": "System Integrity Risk Detected",
+          "continuation_pathway": "Governed System Integrity Implementation",
+          "recommended_structured_action": "Begin Governed System Integrity Implementation."
+        }
+      ],
+      "standing_rules": [
+        {
+          "standing_key": "structured_ai_environment_confirmed",
+          "priority": 4,
+          "match": {
+            "required_tags": [
+              "review_pathway_present",
+              "runtime_surface_visibility",
+              "traceability_present",
+              "persistent_review_standard",
+              "role_integrity_present",
+              "implementation_boundary_present"
+            ],
+            "max_total_drift_score": 1,
+            "min_governed_review_count": 6
+          }
+        },
+        {
+          "standing_key": "system_integrity_risk",
+          "priority": 3,
+          "match": {
+            "any_tags": [
+              "role_boundary_failure",
+              "traceability_absent",
+              "review_pathway_absent",
+              "runtime_surface_unregistered",
+              "implementation_boundary_absent"
+            ],
+            "min_critical_count": 2
+          }
+        },
+        {
+          "standing_key": "active_structural_drift",
+          "priority": 2,
+          "match": {
+            "min_emerging_count": 2,
+            "min_total_drift_score": 5
+          }
+        },
+        {
+          "standing_key": "early_structural_drift",
+          "priority": 1,
+          "match": {
+            "min_total_drift_score": 1
+          }
+        }
+      ],
+      "condition_labels": {
+        "governed_review_condition": "governed review condition",
+        "critical_ai_drift_condition": "critical AI drift condition",
+        "emerging_ai_drift_condition": "emerging AI drift condition",
+        "probable_ai_drift_condition": "probable AI drift condition"
+      },
+      "finding_map": {
+        "traceability_absent": "Failure traceability may be insufficient for accountable AI operations.",
+        "review_pathway_absent": "Review pathway absence may create unmanaged decision influence.",
+        "role_boundary_failure": "Role and authority boundaries may not hold under AI-assisted work.",
+        "emerging_ai_drift_condition": "Emerging AI drift conditions may require structured review.",
+        "probable_ai_drift_condition": "Probable AI drift conditions may require early preparation.",
+        "runtime_surface_unregistered": "AI-facing runtime surfaces may be unregistered or only partially visible.",
+        "implementation_boundary_absent": "Experimentation may be crossing into operational influence without governed boundary."
+      },
+      "report_templates_keys": [
+        "system_integrity_risk",
+        "early_structural_drift",
+        "active_structural_drift",
+        "structured_ai_environment_confirmed"
+      ],
+      "report_cta": {
+        "label": "Begin Pathway Review",
+        "cta_type": "passage_entry",
+        "routes_to": "obsidian_to_marble_passage_video"
+      },
+      "result_boundary": null,
+      "public_runtime_boundary": {
+        "commerce_runtime_state": null,
+        "map_execution_state": null,
+        "pricing_changed": null,
+        "pricing_published": null,
+        "public_copy_allowed": null,
+        "renderer_rule": null
+      },
+      "passage_transcript_tail": null,
+      "cta": null,
+      "held_copy": null,
+      "layout_contract": {
+        "version": "v3",
+        "card_scale": "compact_governed",
+        "layout_mode": "single_question_obsidian_assessment",
+        "source_oar2": "docs/oar/measures-registry/oar2_correct_ai_operations_assessment_title_obsidian_references_and_fit_v1.meta.md",
+        "copy_density": "restrained",
+        "form_density": "minimal_obsidian_identity",
+        "viewport_fit": "fit_to_page_desktop",
+        "heading_scale": "restrained_evaluation_heading",
+        "mobile_layout": "single_column_scroll_allowed",
+        "scroll_policy": "avoid_initial_copy_scroll_desktop",
+        "header_redundancy": false,
+        "initial_copy_rule": "title, brief framing, compact identity chamber, begin control, and audio control remain visible on default desktop viewport",
+        "watermark_visible": false,
+        "src_capture_layout": "minimal_two_column_identity_grid",
+        "brand_mark_position": "chamber_header_or_background_only",
+        "progress_visibility": true,
+        "question_card_position": "centered_below_header",
+        "question_card_alignment": "centered",
+        "question_card_max_width": "governed",
+        "duplicate_branding_allowed": false,
+        "control_accessibility_required": true,
+        "question_5_controls_accessible": true
+      },
+      "styling_contract": {
+        "version": "v3",
+        "body_tone": "operational_clarity",
+        "theme_key": "evaluation_chamber_lapis_marble_v1",
+        "body_style": "operational_sans",
+        "accent_tone": "restrained_gold",
+        "source_oar2": "docs/oar/measures-registry/oar2_correct_ai_operations_assessment_title_obsidian_references_and_fit_v1.meta.md",
+        "heading_tone": "measured_authoritative",
+        "pacing_style": "measured_threshold_progression",
+        "surface_mode": "obsidian_assessment_threshold",
+        "branding_mode": "governed_measures_registry",
+        "geometry_tone": "silver",
+        "heading_style": "institutional_serif",
+        "spacing_style": "architectural_negative_space",
+        "lapis_contract": {
+          "must_feel": [
+            "mineral",
+            "dimensional",
+            "architectural",
+            "coherent"
+          ],
+          "may_not_feel": [
+            "neon",
+            "sci-fi",
+            "startup gradient",
+            "synthetic UI blue"
+          ]
+        },
+        "background_mode": "obsidian_material_field",
+        "marble_contract": {
+          "must_feel": [
+            "institutional",
+            "engraved",
+            "calm",
+            "structural",
+            "lightly illuminated"
+          ],
+          "may_not_resemble": [
+            "ecommerce cards",
+            "glossy panels",
+            "bright containers"
+          ]
+        },
+        "material_family": "obsidian",
+        "transition_style": "dissolve",
+        "findings_contract": {
+          "render_as": [
+            "separated operational rows",
+            "softly divided",
+            "lightly engraved",
+            "calm but serious"
+          ],
+          "disallowed": [
+            "markdown bullets",
+            "dashboard alerts",
+            "aggressive warnings"
+          ]
+        },
+        "over_glow_allowed": false,
+        "atmospheric_motion": "restrained",
+        "interaction_motion": "minimal",
+        "watermark_contract": {
+          "blend": "softly_blended_into_atmosphere",
+          "layer": "behind_content_only",
+          "scale": "giant",
+          "opacity": "low",
+          "cropping": "partially_cropped_acceptable",
+          "foreground_branding": false
+        },
+        "answer_option_style": "compact_operational_rows",
+        "disallowed_patterns": [
+          "dashboard_cards",
+          "startup_saas_ui",
+          "neon_glow",
+          "stacked_form_layouts",
+          "floating_widgets",
+          "progress_gamification",
+          "playful_iconography",
+          "ecommerce_funnel",
+          "analytics_platform",
+          "chatbot_ui",
+          "quiz_interface"
+        ],
+        "foundation_material": "obsidian",
+        "structural_material": "marble",
+        "atmospheric_material": "lapis",
+        "metadata_bleed_allowed": false,
+        "watermark_text_allowed": false,
+        "material_texture_visibility": true,
+        "question_context_visibility": true,
+        "bright_lapis_chamber_allowed": false
+      },
+      "prohibited_term_hits": [
+        "C1",
+        "C2",
+        "C3",
+        "pricing",
+        "price",
+        "payment",
+        "wallet",
+        "certification",
+        "conversion",
+        "DAO",
+        "permission",
+        "recognition",
+        "distribution",
+        "c3 key",
+        "SRC"
+      ]
+    },
+    {
+      "encounter_key": "obsidian_to_marble_passage_video",
+      "display_title": "Before the Pathway",
+      "metadata_keys": [
+        "ai_deployment_status_override_input_preserved_for_marble",
+        "cta",
+        "encounter_type",
+        "footer_contract",
+        "internal_route_visible",
+        "key_mechanics_allowed",
+        "marble_reveal_boundary",
+        "material_family",
+        "material_transition",
+        "media_key",
+        "media_mapping",
+        "passage_function",
+        "passage_transcript",
+        "payment_allowed",
+        "pricing_allowed",
+        "prohibited_public_rendering",
+        "public_circuit_visible",
+        "public_label",
+        "public_runtime_allowed",
+        "renderer_rule",
+        "source_chamber",
+        "source_oar2",
+        "target_chamber",
+        "title"
+      ],
+      "title": "Before the Pathway",
+      "eyebrow": null,
+      "subtitle": null,
+      "active_contract_keys": null,
+      "assessment_question_count": null,
+      "scoring_thresholds": [],
+      "standing_rules": [],
+      "condition_labels": null,
+      "finding_map": null,
+      "report_templates_keys": [],
+      "report_cta": null,
+      "result_boundary": null,
+      "public_runtime_boundary": {
+        "commerce_runtime_state": null,
+        "map_execution_state": null,
+        "pricing_changed": null,
+        "pricing_published": null,
+        "public_copy_allowed": null,
+        "renderer_rule": null
+      },
+      "passage_transcript_tail": [
+        "Each pathway is designed to help the institution move from uncertainty into structured action.",
+        "This may include mapping AI-facing surfaces, clarifying review and approval pathways, defining role authority, preparing structured assets, and creating the conditions required for Optimized AI Deployment.",
+        "Measures Registry is designed to help institutions restructure while maintaining operations, then monitor, maintain, and protect the operational environment AI systems interact with as deployment expands.",
+        "Your pathway review is ready."
+      ],
+      "cta": {
+        "label": "Begin Pathway Reveal",
+        "cta_type": "marble_entry",
+        "routes_to": "marble_pathway_reveal"
+      },
+      "held_copy": null,
+      "layout_contract": null,
+      "styling_contract": null,
+      "prohibited_term_hits": [
+        "C1",
+        "C2",
+        "C3",
+        "pricing",
+        "payment",
+        "certification",
+        "conversion",
+        "DAO",
+        "permission",
+        "distribution",
+        "c3 key",
+        "SRC"
+      ]
+    }
+  ],
+  "media": [
+    {
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": "marble_accent_reference",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry/pre_codex_exhibition/images/marble_chamber_codexstone.webp",
+      "mime_type": "image/webp",
+      "is_active": true,
+      "metadata": {
+        "theme_key": "evaluation_chamber_lapis_marble_v1",
+        "runtime_use": "evaluation_chamber_marble_accent_reference",
+        "source_oar2": "docs/oar/measures_registry/oar2_measures_registry_evaluation_encounter_contract_v2.meta.md",
+        "storage_provider": "supabase",
+        "frontend_hardcode_allowed": false
+      },
+      "prohibited_term_hits": []
+    },
+    {
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": "watermark",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry_emblem_watermark_preview_lapis.webp",
+      "mime_type": "image/webp",
+      "is_active": true,
+      "metadata": {
+        "theme_key": "evaluation_chamber_lapis_obsidian_v1",
+        "runtime_use": "evaluation_chamber_watermark",
+        "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md",
+        "renderer_key": "measures_registry_evaluation_chamber",
+        "storage_provider": "supabase",
+        "frontend_hardcode_allowed": false
+      },
+      "prohibited_term_hits": []
+    },
+    {
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": "lapis_background",
+      "storage_bucket": "measures-registry",
+      "storage_path": "lapis_background.webp",
+      "mime_type": "image/webp",
+      "is_active": true,
+      "metadata": {
+        "theme_key": "evaluation_chamber_lapis_obsidian_v1",
+        "runtime_use": "evaluation_chamber_lapis_background",
+        "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md",
+        "renderer_key": "measures_registry_evaluation_chamber",
+        "storage_provider": "supabase",
+        "frontend_hardcode_allowed": false
+      },
+      "prohibited_term_hits": []
+    },
+    {
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": "registry_watermark",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry_emblem_watermark_preview_lapis.webp",
+      "mime_type": "image/webp",
+      "is_active": true,
+      "metadata": {
+        "theme_key": "evaluation_chamber_lapis_obsidian_v1",
+        "runtime_use": "evaluation_chamber_registry_watermark",
+        "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md",
+        "renderer_key": "measures_registry_evaluation_chamber",
+        "storage_provider": "supabase",
+        "frontend_hardcode_allowed": false
+      },
+      "prohibited_term_hits": []
+    },
+    {
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": "registry_mark",
+      "storage_bucket": "measures-registry",
+      "storage_path": "measures_registry_mark.webp",
+      "mime_type": "image/webp",
+      "is_active": true,
+      "metadata": {
+        "theme_key": "evaluation_chamber_lapis_obsidian_v1",
+        "runtime_use": "evaluation_chamber_registry_mark",
+        "source_oar2": "docs/oar/measures_registry/oar2_evaluation_chamber_src_intake_media_role_mapping_completion_v1.meta.md",
+        "renderer_key": "measures_registry_evaluation_chamber",
+        "storage_provider": "supabase",
+        "frontend_hardcode_allowed": false
+      },
+      "prohibited_term_hits": []
+    },
+    {
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": "explainer_video",
+      "storage_bucket": "measures-media",
+      "storage_path": "structural_coherence_explainer_45s.mp4",
+      "mime_type": "video/mp4",
+      "is_active": true,
+      "metadata": {
+        "source": "landing_epigraph_split_hero_v1",
+        "oar_role": "explainer_video",
+        "storage_size": 47144235,
+        "migration_oar": "oar2_reconcile_registry_unmatched_l2_media_v1",
+        "previous_bucket": "measures-media",
+        "heavy_media_only": true,
+        "previous_storage_path": "structural_coherence_explainer_45s.mp4",
+        "migrated_to_storage_key": "l2_shared_media",
+        "migration_match_strategy": "r2_exact_object_key_match",
+        "migration_source_manifest": "docs/_source/working/media/l2_bucket_manifest_v1.txt",
+        "legacy_reference_preserved": true
+      },
+      "prohibited_term_hits": []
+    },
+    {
+      "campaign_key": "agents_of_chaos_integrity_governance",
+      "media_role": "before_the_pathway_obsidian_to_marble_passage_video",
+      "storage_bucket": "measures-media",
+      "storage_path": "before_the_pathway_obsidian_to_marble_passage_v1.mp4",
+      "mime_type": "video/mp4",
+      "is_active": true,
+      "metadata": {
+        "media_key": "before_the_pathway_obsidian_to_marble_passage_video",
+        "media_type": "video",
+        "object_fit": "contain",
+        "public_url": "https://media.c3field.online/before_the_pathway_obsidian_to_marble_passage_v1.mp4",
+        "source_oar2": "docs/oar/measures_interoperability/oar2_seat_obsidian_to_marble_passage_video_and_marble_pathway_reveal_boundary_v1.meta.md",
+        "aspect_ratio": "16:9",
+        "crop_allowed": false,
+        "display_mode": "contained",
+        "skip_allowed": true,
+        "autoplay_allowed": true,
+        "controls_allowed": true,
+        "exact_url_seated": "https://media.c3field.online/before_the_pathway_obsidian_to_marble_passage_v1.mp4",
+        "storage_provider": "cloudflare_r2",
+        "mute_control_allowed": true,
+        "frontend_hardcode_allowed": false
+      },
+      "prohibited_term_hits": []
+    }
+  ],
+  "recent_contact_gated_captures": [
+    {
+      "id": "64755840-7008-44b1-9d5b-7cca8f31db06",
+      "contact_email": "c3dao@outlook.com",
+      "capture_context": "measures_assessment_contact_gated_delivery",
+      "intent": "assessment_result_delivery_request",
+      "answer_count": 7,
+      "standing_key": "early_structural_drift",
+      "assessment_result": "Early Structural Drift Detected",
+      "continuation_pathway": "AI Environment Review",
+      "public_internal_boundary_preserved": true,
+      "created_at": "2026-06-07T19:23:51.129226+00:00"
+    },
+    {
+      "id": "a763d890-3d9b-48fd-9ded-a9493b76bd8d",
+      "contact_email": "c3dao@outlook.com",
+      "capture_context": "measures_assessment_contact_gated_delivery",
+      "intent": "assessment_result_delivery_request",
+      "answer_count": 7,
+      "standing_key": "early_structural_drift",
+      "assessment_result": "Early Structural Drift Detected",
+      "continuation_pathway": "AI Environment Review",
+      "public_internal_boundary_preserved": true,
+      "created_at": "2026-06-07T19:17:42.970455+00:00"
+    },
+    {
+      "id": "efabb33a-c164-4361-82a6-ff30722e8e7e",
+      "contact_email": "c3dao@outlook.com",
+      "capture_context": "measures_assessment_contact_gated_delivery",
+      "intent": "assessment_result_delivery_request",
+      "answer_count": 7,
+      "standing_key": "early_structural_drift",
+      "assessment_result": "Early Structural Drift Detected",
+      "continuation_pathway": "AI Environment Review",
+      "public_internal_boundary_preserved": true,
+      "created_at": "2026-06-07T19:12:39.219502+00:00"
+    },
+    {
+      "id": "81d8c5d8-fb72-43a9-adb7-24c82461d341",
+      "contact_email": "c3dao@outlook.com",
+      "capture_context": "measures_assessment_contact_gated_delivery",
+      "intent": "assessment_result_delivery_request",
+      "answer_count": 7,
+      "standing_key": "structured_ai_environment_confirmed",
+      "assessment_result": "Structured AI Environment Confirmed",
+      "continuation_pathway": "Foundational Leadership",
+      "public_internal_boundary_preserved": true,
+      "created_at": "2026-06-07T19:03:20.637091+00:00"
+    },
+    {
+      "id": "c6f9c73f-078a-4a60-833a-6ce6ef549a09",
+      "contact_email": "oar2-assessment-seating-1780858247476@example.com",
+      "capture_context": "measures_assessment_contact_gated_delivery",
+      "intent": "assessment_result_delivery_request",
+      "answer_count": 7,
+      "standing_key": "oar2_validation_standing",
+      "assessment_result": "Validation result",
+      "continuation_pathway": "MAP path recommendation",
+      "public_internal_boundary_preserved": true,
+      "created_at": "2026-06-07T18:50:49.080622+00:00"
+    }
+  ]
+}

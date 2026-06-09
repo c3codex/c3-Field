@@ -1,6 +1,7 @@
 export type RegisteredSurface =
   | "intro"
   | "path_choice"
+  | "ai_operations_assessment_landing"
   | "eval_passage"
   | "measures_assessment"
   | "obsidian_to_marble_passage_video"
@@ -48,6 +49,23 @@ export type PublicationRegistryRow = {
   external_url: string | null
   tone: string[] | null
   metadata: Record<string, unknown> | null
+}
+
+export type MapCommerceContractRow = {
+  contract_key: string
+  map_circuit_key: string
+  evaluation_standing: string
+  applicable_standing_keys: string[]
+  product_name: string
+  amount_usd: number
+  currency: string
+  stripe_product_id: string | null
+  release_state: string
+  seat_contract_state: string
+  map_boundary: string
+  access_boundary: string
+  deliverables: string[]
+  seat_hold_notice: string
 }
 
 export type PublicationDispatchRow = {

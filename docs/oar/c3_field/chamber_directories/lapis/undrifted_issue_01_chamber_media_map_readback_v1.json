@@ -1,0 +1,240 @@
+{
+  "source_oar2": "docs/oar/c3_field/chamber_directories/lapis/oar2_seat_undrifted_issue_01_landing_contracts_and_chamber_media_map_v1.meta.md",
+  "target_tables": [
+    "public.codex_media_asset",
+    "public.measures_surface_media_map"
+  ],
+  "surface_key": "undrifted_issue_01",
+  "route_path": "/undrifted",
+  "bucket": "measures-registry",
+  "registered_media_count": 8,
+  "registered_media_keys": [
+    "registry_mark_v1",
+    "undrifted_logo_v1",
+    "undrifted_banner_website_social_v1",
+    "undrifted_issue_01_hero_still_v1",
+    "undrifted_feature_assess_environment_cover_v1",
+    "undrifted_dispatch_structural_drift_cover_v1",
+    "undrifted_dispatch_agents_with_keys_cover_v1",
+    "undrifted_dispatch_agents_of_chaos_cover_v1"
+  ],
+  "storage_readback": [
+    {
+      "path": "registry_mark_transparent_v1.png",
+      "found": true,
+      "metadata": {
+        "eTag": "\"20f2b510aa1bee98bd1083b1ce2f91c8-1\"",
+        "size": 1593942,
+        "mimetype": "image/png",
+        "cacheControl": "max-age=3600",
+        "lastModified": "2026-05-21T23:25:21.000Z",
+        "contentLength": 1593942,
+        "httpStatusCode": 200
+      }
+    },
+    {
+      "path": "undrifted_logo.webp",
+      "found": true,
+      "metadata": {
+        "eTag": "\"db23ba43736b55387038a4efd32f9861-1\"",
+        "size": 27344,
+        "mimetype": "image/webp",
+        "cacheControl": "max-age=3600",
+        "lastModified": "2026-06-07T04:27:38.000Z",
+        "contentLength": 27344,
+        "httpStatusCode": 200
+      }
+    },
+    {
+      "path": "undrifted_banner_website_social.webp",
+      "found": true,
+      "metadata": {
+        "eTag": "\"433339ff052ceddbbffffe2a15e7ee7a-1\"",
+        "size": 21154,
+        "mimetype": "image/webp",
+        "cacheControl": "max-age=3600",
+        "lastModified": "2026-06-07T04:27:38.000Z",
+        "contentLength": 21154,
+        "httpStatusCode": 200
+      }
+    },
+    {
+      "path": "undrifted_banner_website_social.webp",
+      "found": true,
+      "metadata": {
+        "eTag": "\"433339ff052ceddbbffffe2a15e7ee7a-1\"",
+        "size": 21154,
+        "mimetype": "image/webp",
+        "cacheControl": "max-age=3600",
+        "lastModified": "2026-06-07T04:27:38.000Z",
+        "contentLength": 21154,
+        "httpStatusCode": 200
+      }
+    },
+    {
+      "path": "ai_isnt_broken_landing.webp",
+      "found": true,
+      "metadata": {
+        "eTag": "\"a64083ba28564d9daacc91332ed19f36-1\"",
+        "size": 194738,
+        "mimetype": "image/webp",
+        "cacheControl": "max-age=3600",
+        "lastModified": "2026-06-07T04:19:17.000Z",
+        "contentLength": 194738,
+        "httpStatusCode": 200
+      }
+    },
+    {
+      "path": "structural_drift.webp",
+      "found": true,
+      "metadata": {
+        "eTag": "\"633d372c9c968047a84d23d94d5beed4\"",
+        "size": 109632,
+        "mimetype": "image/webp",
+        "cacheControl": "max-age=3600",
+        "lastModified": "2026-05-07T00:27:14.000Z",
+        "contentLength": 109632,
+        "httpStatusCode": 200
+      }
+    },
+    {
+      "path": "agents_with_keys.webp",
+      "found": true,
+      "metadata": {
+        "eTag": "\"21c5661dcff44ece11f20877577fe1aa-1\"",
+        "size": 89840,
+        "mimetype": "image/webp",
+        "cacheControl": "max-age=3600",
+        "lastModified": "2026-06-06T19:58:53.000Z",
+        "contentLength": 89840,
+        "httpStatusCode": 200
+      }
+    },
+    {
+      "path": "agents_of_chaos .webp",
+      "found": true,
+      "metadata": {
+        "eTag": "\"997dc3cd87d1b49f507bcdfbc0a98cc8-1\"",
+        "size": 140876,
+        "mimetype": "image/webp",
+        "cacheControl": "max-age=3600",
+        "lastModified": "2026-06-07T05:41:43.000Z",
+        "contentLength": 140876,
+        "httpStatusCode": 200
+      }
+    }
+  ],
+  "media_map_readback": [
+    {
+      "media_key": "registry_mark_v1",
+      "source_label": "registry_mark",
+      "object_label": "registry_mark_transparent_v1.png",
+      "bucket": "measures-registry",
+      "storage_reference": "measures-registry/registry_mark_transparent_v1.png",
+      "usage_scope": "Measures Registry brand mark; header identity; issue cover identity accent",
+      "status": "active",
+      "duplicate_count_for_surface_media_key": 1,
+      "role": "primary",
+      "sequence_index": 10
+    },
+    {
+      "media_key": "undrifted_logo_v1",
+      "source_label": "undrifted_logo",
+      "object_label": "undrifted_logo.webp",
+      "bucket": "measures-registry",
+      "storage_reference": "measures-registry/undrifted_logo.webp",
+      "usage_scope": "publication masthead or masthead support",
+      "status": "active",
+      "duplicate_count_for_surface_media_key": 1,
+      "role": "image",
+      "sequence_index": 20
+    },
+    {
+      "media_key": "undrifted_banner_website_social_v1",
+      "source_label": "undrifted_banner_website_social",
+      "object_label": "undrifted_banner_website_social.webp",
+      "bucket": "measures-registry",
+      "storage_reference": "measures-registry/undrifted_banner_website_social.webp",
+      "usage_scope": "publication identity strip and possible social preview candidate",
+      "status": "active",
+      "duplicate_count_for_surface_media_key": 1,
+      "role": "image",
+      "sequence_index": 30
+    },
+    {
+      "media_key": "undrifted_issue_01_hero_still_v1",
+      "source_label": "undrifted_banner_website_social",
+      "object_label": "undrifted_banner_website_social.webp",
+      "bucket": "measures-registry",
+      "storage_reference": "measures-registry/undrifted_banner_website_social.webp",
+      "usage_scope": "right-side hero still fallback because motion media was not observed",
+      "status": "active",
+      "duplicate_count_for_surface_media_key": 1,
+      "role": "background",
+      "sequence_index": 40
+    },
+    {
+      "media_key": "undrifted_feature_assess_environment_cover_v1",
+      "source_label": "ai_isnt_broken_landing",
+      "object_label": "ai_isnt_broken_landing.webp",
+      "bucket": "measures-registry",
+      "storage_reference": "measures-registry/ai_isnt_broken_landing.webp",
+      "usage_scope": "featured assessment cover on /undrifted",
+      "status": "active",
+      "duplicate_count_for_surface_media_key": 1,
+      "role": "image",
+      "sequence_index": 50
+    },
+    {
+      "media_key": "undrifted_dispatch_structural_drift_cover_v1",
+      "source_label": "structural_drift",
+      "object_label": "structural_drift.webp",
+      "bucket": "measures-registry",
+      "storage_reference": "measures-registry/structural_drift.webp",
+      "usage_scope": "Structural Drift dispatch cover",
+      "status": "active",
+      "duplicate_count_for_surface_media_key": 1,
+      "role": "image",
+      "sequence_index": 60
+    },
+    {
+      "media_key": "undrifted_dispatch_agents_with_keys_cover_v1",
+      "source_label": "agents_with_keys",
+      "object_label": "agents_with_keys.webp",
+      "bucket": "measures-registry",
+      "storage_reference": "measures-registry/agents_with_keys.webp",
+      "usage_scope": "Agents with Keys dispatch cover",
+      "status": "active",
+      "duplicate_count_for_surface_media_key": 1,
+      "role": "image",
+      "sequence_index": 70
+    },
+    {
+      "media_key": "undrifted_dispatch_agents_of_chaos_cover_v1",
+      "source_label": "agents_of_chaos",
+      "object_label": "agents_of_chaos .webp",
+      "bucket": "measures-registry",
+      "storage_reference": "measures-registry/agents_of_chaos .webp",
+      "usage_scope": "Agents of Chaos dispatch cover",
+      "status": "active",
+      "duplicate_count_for_surface_media_key": 1,
+      "role": "image",
+      "sequence_index": 80
+    }
+  ],
+  "held_media": [
+    {
+      "media_key": "undrifted_issue_01_hero_motion_v1",
+      "reason": "motion media not observed in confirmed bucket object readback"
+    }
+  ],
+  "held_glyphs": [
+    {
+      "scope": "glyph assets",
+      "reason": "glyph semantic usage is ambiguous for Issue 01 public surface; internal/circuit-labeled glyphs include C1/C2/C3 and commerce-adjacent names, so no glyph meaning was guessed"
+    }
+  ],
+  "runtime_implementation_performed": false,
+  "route_behavior_changed": false,
+  "seo_social_paragraph_buffer_execution_performed": false
+}

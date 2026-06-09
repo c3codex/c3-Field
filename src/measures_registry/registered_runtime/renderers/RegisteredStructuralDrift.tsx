@@ -11,13 +11,15 @@ import {
   youtubeEmbedUrl,
 } from "../registeredRuntimeUtils"
 import type { EnvironmentalStandingReport, SectionCopy } from "../registeredRuntimeUtils"
-import type { PublicationDispatchRow, PublicationRegistryRow } from "../registeredRuntimeTypes"
+import type { LandingUnitRow, PublicationDispatchRow, PublicationRegistryRow } from "../registeredRuntimeTypes"
 import { supabase } from "@/integrations/supabase/client"
 
 type Props = {
   registryTokenStyle: CSSProperties
   variant: "index" | "article"
+  routePath: string
   structuralDriftCopy: SectionCopy
+  publicationLandingUnit: LandingUnitRow | null
   undriftedPublication: PublicationRegistryRow | null
   structuralDriftPublication: PublicationRegistryRow | null
   structuralDriftDispatches: PublicationDispatchRow[]
@@ -49,10 +51,16 @@ function metadataRecord(row: PublicationRegistryRow | null, key: string) {
   return asRecord(row?.metadata?.[key])
 }
 
+function landingRecord(row: LandingUnitRow | null, key: string) {
+  return asRecord(row?.metadata?.[key])
+}
+
 export default function RegisteredStructuralDrift({
   registryTokenStyle,
   variant,
+  routePath,
   structuralDriftCopy,
+  publicationLandingUnit,
   undriftedPublication,
   structuralDriftPublication,
   structuralDriftDispatches,
@@ -72,7 +80,9 @@ export default function RegisteredStructuralDrift({
   renderSystemFooter,
 }: Props) {
   if (variant === "article") {
-    if (!structuralDriftPublication || !selectedPublicationDispatch) {
+    const publicationAuthority = undriftedPublication ?? structuralDriftPublication
+
+    if (!publicationAuthority || !selectedPublicationDispatch) {
       return (
         <main
           className="measures-registry-runtime"
@@ -109,8 +119,8 @@ export default function RegisteredStructuralDrift({
       >
         <article className="registry-publication-dispatch" aria-label={selectedPublicationDispatch.title}>
           <header className="registry-publication-dispatch-header">
-            <span>{structuralDriftPublication.title}</span>
-            <p>{structuralDriftPublication.subtitle}</p>
+            <span>{publicationAuthority.title}</span>
+            <p>{publicationAuthority.subtitle}</p>
             <h1>{selectedPublicationDispatch.title}</h1>
             {selectedPublicationDispatch.excerpt ? <p>{selectedPublicationDispatch.excerpt}</p> : null}
             {tags.length > 0 ? (
@@ -237,16 +247,37 @@ export default function RegisteredStructuralDrift({
 
   // index variant
   const featuredDispatch = structuralDriftDispatches[0] ?? null
+  const isLegacyStructuralDriftRoute = routePath === "/structural-drift"
+  const routeShell =
+    routePath === "/undrifted"
+      ? "undrifted_publication_landing"
+      : isLegacyStructuralDriftRoute ? "structural_drift_legacy_inbound" : null
   const brandCopy = metadataRecord(undriftedPublication, "brand_copy")
   const brandAssets = metadataRecord(undriftedPublication, "brand_assets")
-  const hierarchy = metadataRecord(undriftedPublication, "hierarchy")
   const styleContract = metadataRecord(undriftedPublication, "style_contract")
-  const series = Array.isArray(hierarchy?.series) ? hierarchy.series : []
+  const landingContract = landingRecord(publicationLandingUnit, "landing_design_contract")
+  const heroContract = asRecord(landingContract?.hero)
+  const aboutContract = asRecord(landingContract?.about)
+  const ctaContract = asRecord(landingContract?.cta_footer)
   const brandTitle = asString(brandCopy?.header) ?? undriftedPublication?.title ?? "unDrifted"
   const subtitleLines = asStringArray(brandCopy?.subtitle_lines)
-  const principles = asStringArray(brandCopy?.principles)
+  const principles = asStringArray(landingContract?.principles)
   const publicationRule = asString(brandCopy?.publication_rule)
-  const styleKey = asString(styleContract?.key) ?? asString(undriftedPublication?.metadata?.style_contract_key)
+  const styleKey =
+    asString(landingContract?.style_contract_key) ??
+    asString(styleContract?.key) ??
+    asString(undriftedPublication?.metadata?.style_contract_key)
+  const landingKey = asString(landingContract?.landing_contract_key)
+  const parentAuthority = asString(heroContract?.parent_authority)
+  const description = asString(heroContract?.description)
+  const primaryCta = asString(heroContract?.primary_cta_label) ?? "Read the Dispatches"
+  const secondaryCta = asString(heroContract?.secondary_cta_label) ?? "Assess the Environment"
+  const secondaryCtaRoute = asString(heroContract?.secondary_cta_route)
+  const aboutTitle = asString(aboutContract?.title)
+  const aboutBody = asString(aboutContract?.body)
+  const footerCtaLabel = asString(ctaContract?.label) ?? "Assess the Environment"
+  const footerCtaSubline = asString(ctaContract?.subline) ?? "Begin where drift becomes visible."
+  const footerCtaRoute = asString(ctaContract?.target_route)
   const primaryLogoPath = asString(brandAssets?.primary_full_lockup_path)
 
   return (
@@ -255,6 +286,8 @@ export default function RegisteredStructuralDrift({
       data-surface="structural_drift_dispatches"
       data-material-family="obsidian"
       data-layout-contract="undrifted_publication"
+      data-route-shell={routeShell ?? undefined}
+      data-landing-contract={landingKey ?? "missing_landing_contract"}
       data-style-contract={styleKey ?? "missing_style_contract"}
       data-release-standing="published"
       style={registryTokenStyle}
@@ -262,7 +295,7 @@ export default function RegisteredStructuralDrift({
       <section className="undrifted-shell" aria-label={brandTitle}>
         <header className="undrifted-hero">
           <div className="undrifted-hero-copy">
-            <span>Measures Registry Publication</span>
+            <span>{parentAuthority ? `${parentAuthority} Publication` : "Measures Registry Publication"}</span>
             {primaryLogoPath ? (
               <img
                 className="undrifted-primary-lockup"
@@ -282,12 +315,19 @@ export default function RegisteredStructuralDrift({
             ) : undriftedPublication?.subtitle ? (
               <p>{undriftedPublication.subtitle}</p>
             ) : null}
+            {description ? <p className="undrifted-description">{description}</p> : null}
+            <div className="undrifted-hero-actions" aria-label="Publication actions">
+              <a href="#undrifted-dispatches">{primaryCta}</a>
+              {secondaryCtaRoute ? (
+                <a href={secondaryCtaRoute}>{secondaryCta}</a>
+              ) : (
+                <button type="button" onClick={onBeginEvaluation}>{secondaryCta}</button>
+              )}
+            </div>
           </div>
           <div className="undrifted-principles" aria-label="Publication principles">
             {(principles.length > 0 ? principles : [
-              "Drift is detectable.",
-              "Systems can be measured.",
-              "Authority can be restored.",
+              "Landing design contract missing.",
             ]).map((principle) => (
               <article key={principle}>
                 <span />
@@ -297,31 +337,36 @@ export default function RegisteredStructuralDrift({
           </div>
         </header>
 
-        <section className="undrifted-grid" aria-label="Publication dispatches">
-          <aside className="undrifted-series-nav" aria-label="Dispatch series navigation">
-            <span>Series</span>
-            {(series.length > 0 ? series : [{ series_key: "structural_drift", title: "Structural Drift" }]).map((item) => {
-              const record = asRecord(item)
-              const title = asString(record?.title)
-              const key = asString(record?.series_key) ?? title
-              if (!title || !key) return null
-              return (
-                <article key={key} data-series-state={record?.future_state ? "future" : "active"}>
-                  <strong>{title}</strong>
-                  {record?.future_state ? <small>Registered future lane</small> : <small>Active diagnostic series</small>}
-                </article>
-              )
-            })}
-          </aside>
+        {isLegacyStructuralDriftRoute ? (
+          <section className="undrifted-legacy-route" aria-label="Legacy route standing">
+            <span>Legacy Inbound Route</span>
+            <h2>Continue to unDrifted</h2>
+            <p>Structural Drift is now part of unDrifted.</p>
+            <a href="/undrifted">Continue to unDrifted</a>
+          </section>
+        ) : null}
+
+        <section id="undrifted-dispatches" className="undrifted-grid undrifted-grid-publication" aria-label="Publication dispatches">
 
           {featuredDispatch ? (
-            <article className="undrifted-featured">
+            <article
+              className="undrifted-featured"
+              data-dispatch-key={featuredDispatch.dispatch_key}
+              data-publish-state={featuredDispatch.status}
+              data-claim-boundary={asString(featuredDispatch.metadata?.claim_boundary) ?? asString(publicationLandingUnit?.metadata?.claims_boundary) ?? "education_only"}
+              data-media-key={asString(featuredDispatch.media_manifest?.media_key) ?? undefined}
+            >
               <div>
                 <span>{dispatchIssueLabel(featuredDispatch)}</span>
                 <strong>{dispatchTypeLabel(featuredDispatch)}</strong>
               </div>
               <h2>{featuredDispatch.title}</h2>
               {dispatchThesis(featuredDispatch) ? <p>{dispatchThesis(featuredDispatch)}</p> : null}
+              {featuredDispatch.tags?.length ? (
+                <div className="undrifted-card-tags" aria-label="Dispatch tags">
+                  {featuredDispatch.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}
+                </div>
+              ) : null}
               {featuredDispatch.internal_route ? (
                 <a href={featuredDispatch.internal_route}>Read the Dispatch</a>
               ) : (
@@ -338,7 +383,14 @@ export default function RegisteredStructuralDrift({
           <aside className="undrifted-latest" aria-label="Latest dispatch">
             <span>Latest Dispatch</span>
             {structuralDriftDispatches.slice(0, 2).map((dispatch) => (
-              <article key={dispatch.dispatch_key} className="undrifted-article-card">
+              <article
+                key={dispatch.dispatch_key}
+                className="undrifted-article-card"
+                data-dispatch-key={dispatch.dispatch_key}
+                data-publish-state={dispatch.status}
+                data-claim-boundary={asString(dispatch.metadata?.claim_boundary) ?? asString(publicationLandingUnit?.metadata?.claims_boundary) ?? "education_only"}
+                data-media-key={asString(dispatch.media_manifest?.media_key) ?? undefined}
+              >
                 <small>{dispatchIssueLabel(dispatch)} / {dispatchTypeLabel(dispatch)}</small>
                 <h3>{dispatch.title}</h3>
                 {dispatch.excerpt ?? dispatchThesis(dispatch) ? <p>{dispatch.excerpt ?? dispatchThesis(dispatch)}</p> : null}
@@ -353,23 +405,32 @@ export default function RegisteredStructuralDrift({
           </aside>
         </section>
 
+        {aboutTitle || aboutBody ? (
+          <section className="undrifted-about" aria-label="About unDrifted">
+            {aboutTitle ? <span>{aboutTitle}</span> : null}
+            {aboutBody ? <p>{aboutBody}</p> : null}
+          </section>
+        ) : null}
+
         <section className="undrifted-evaluation" aria-label="Evaluation entry">
           <div>
             <span>Diagnostic Intake</span>
-            <h2>{evalReport ? "Continue to Assessment Package" : "Continue to Structural Evaluation"}</h2>
+            <h2>{evalReport ? "Continue to Assessment Package" : footerCtaLabel}</h2>
             <p>
               {evalReport
                 ? "Your assessment result is ready. Continue to receive your assessment package."
-                : "Move from recognition into structured diagnostic intake."}
+                : footerCtaSubline}
             </p>
           </div>
           {evalReport ? (
             <button type="button" onClick={onContinueToAssessmentPackage}>
               Continue to Assessment Package
             </button>
+          ) : footerCtaRoute ? (
+            <a href={footerCtaRoute}>{footerCtaLabel}</a>
           ) : (
             <button type="button" onClick={onBeginEvaluation}>
-              Continue to Structural Evaluation
+              {footerCtaLabel}
             </button>
           )}
         </section>

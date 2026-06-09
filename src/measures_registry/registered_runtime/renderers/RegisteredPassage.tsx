@@ -8,6 +8,7 @@ type Props = {
   passageCopy: SectionCopy
   passageVideoUrl: string | null
   passageMuted: boolean
+  routeShell?: string | null
   renderHeader: () => ReactNode
   renderSystemFooter: () => ReactNode
   onContinue: () => void
@@ -20,6 +21,7 @@ export default function RegisteredPassage({
   passageCopy,
   passageVideoUrl,
   passageMuted,
+  routeShell,
   renderHeader,
   renderSystemFooter,
   onContinue,
@@ -68,6 +70,7 @@ export default function RegisteredPassage({
         data-material-family={materialFamily}
         data-layout-contract="passage"
         data-layout-mode={layoutMode}
+        data-route-shell={routeShell ?? undefined}
         data-release-standing="public"
         style={registryTokenStyle}
       >
@@ -118,6 +121,7 @@ export default function RegisteredPassage({
       data-material-family={materialFamily}
       data-layout-contract="passage"
       data-layout-mode={layoutMode}
+      data-route-shell={routeShell ?? undefined}
       data-release-standing="public"
       style={registryTokenStyle}
     >

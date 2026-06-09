@@ -8,6 +8,8 @@ type PageMetadata = {
   title: string
   description: string
   url: string
+  canonicalUrl?: string
+  ogUrl?: string
   image: string
   type: string
 }
@@ -23,7 +25,7 @@ const REGISTRY_METADATA: PageMetadata = {
 const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
   "/ai-operations-assessment": {
     title: "AI Operations Assessment | Measures Registry",
-    description: "Identify structural drift in AI operations and route into a governed assessment-first pathway.",
+    description: "Identify structural drift in AI operations and begin where drift becomes visible.",
     url: "https://measuresregistry.com/ai-operations-assessment",
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
@@ -31,8 +33,10 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
   "/structural-drift": {
     title: "Structural Drift | unDrifted",
     description:
-      "Structural Drift is the diagnostic series inside unDrifted, naming the seams where AI operations lose alignment.",
-    url: "https://measuresregistry.com/structural-drift",
+      "Structural Drift is now a diagnostic concept within unDrifted, the Measures Registry publication on structural drift and governed AI operations.",
+    url: "https://measuresregistry.com/undrifted",
+    canonicalUrl: "https://measuresregistry.com/undrifted",
+    ogUrl: "https://measuresregistry.com/structural-drift",
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
   },
@@ -108,13 +112,14 @@ function metadataFromGovernedRow(row: { metadata: Record<string, unknown> | null
   const seoRecord = seo as Record<string, unknown>
   const title = stringFromRecord(seoRecord, "title")
   const description = stringFromRecord(seoRecord, "description")
-  const url = stringFromRecord(seoRecord, "canonical_url")
+  const canonicalUrl = stringFromRecord(seoRecord, "canonical_url")
+  const ogUrl = stringFromRecord(seoRecord, "og_url")
   const image = stringFromRecord(seoRecord, "og_image") ?? stringFromRecord(seoRecord, "twitter_image")
   const type = stringFromRecord(seoRecord, "og_type")
 
-  if (!title || !description || !url || !image || !type) return null
+  if (!title || !description || !canonicalUrl || !image || !type) return null
 
-  return { title, description, url, image, type }
+  return { title, description, url: canonicalUrl, canonicalUrl, ogUrl: ogUrl ?? canonicalUrl, image, type }
 }
 
 function missingGovernedRouteMetadata(pathname: string): PageMetadata {
@@ -128,13 +133,15 @@ function missingGovernedRouteMetadata(pathname: string): PageMetadata {
 }
 
 function applyPageMetadata(metadata: PageMetadata) {
+  const canonicalUrl = metadata.canonicalUrl ?? metadata.url
+  const ogUrl = metadata.ogUrl ?? metadata.url
   document.title = metadata.title
   setMeta('meta[name="description"]', metadata.description)
-  setCanonical(metadata.url)
+  setCanonical(canonicalUrl)
   setMeta('meta[property="og:type"]', metadata.type)
   setMeta('meta[property="og:title"]', metadata.title)
   setMeta('meta[property="og:description"]', metadata.description)
-  setMeta('meta[property="og:url"]', metadata.url)
+  setMeta('meta[property="og:url"]', ogUrl)
   setMeta('meta[property="og:image"]', metadata.image)
   setMeta('meta[name="twitter:card"]', "summary_large_image")
   setMeta('meta[name="twitter:title"]', metadata.title)
