@@ -639,6 +639,27 @@ export default function MeasuresRegistryRuntimeRegistered() {
           measures_registry_updates_opt_in: evalFields.measures_registry_updates_opt_in === "true",
           required_contact_fields: requiredContactFields,
           source_runtime: "registered_runtime_v1",
+          carry_forward: {
+            source_surface: "measures_assessment",
+            passage_surface: "obsidian_to_marble_passage_video",
+            destination_surface: "map_integrity_governance",
+            destination_legacy_alias: "marble_pathway_reveal",
+            environment_score: evalReport.score,
+            circuit_identification: evalReport.standing_key,
+            continuation_pathway: evalReport.continuation_pathway,
+            organization_name: evalFields.institution_name?.trim() ?? "",
+            contact_name: evalFields.contact_name?.trim() ?? "",
+            contact_email: evalFields.contact_email?.trim() ?? "",
+            current_ai_usage: evalFields.ai_deployment_status?.trim() ?? "",
+            state: "carried_forward",
+          },
+          oar1_trace: {
+            objective: "Carry completed assessment standing into governed review.",
+            action: "Assessment result computed; contact submitted; durable carry-forward created; assessment standing bound for passage.",
+            result: "Assessment standing ready for MAP circuit review.",
+            source_oar2: "oar2_deactivate_deprecated_eval_residue_and_seat_obsidian_to_marble_carry_forward_v1",
+            carry_forward_version: "1",
+          },
           assessment_result_binding: {
             environmental_standing_report: evalReport,
             institution_name: evalFields.institution_name?.trim() ?? "",
@@ -659,7 +680,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
           structured_email_artifact: evalEmailArtifact,
           condition_traces: conditionTraces,
           contact_gated_result_delivery: true,
-          result_displayed_after_contact_capture: true,
+          passage_autoloads_after_submit: true,
         },
       })
 
@@ -671,6 +692,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
       }
 
       setEvalSubmitted(true)
+      navigate("obsidian_to_marble_passage_video")
       return
     }
 
