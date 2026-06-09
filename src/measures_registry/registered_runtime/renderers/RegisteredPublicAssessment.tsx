@@ -41,6 +41,9 @@ type Props = {
   lapisBackgroundUrl: string | null
   registryMarkUrl: string | null
   marbleAccentReferenceUrl: string | null
+  obsidianContactVisualUrl?: string | null
+  obsidianAssessmentVisualUrl?: string | null
+  obsidianEvalResultVisualUrl?: string | null
   registryWatermarkUrl: string | null
   registryTokenStyle: CSSProperties
   structuredEnvironmentPassageVideoUrl: string | null
@@ -76,6 +79,9 @@ export default function RegisteredPublicAssessment({
   publicResultBoundary,
   registryMarkUrl,
   marbleAccentReferenceUrl,
+  obsidianContactVisualUrl,
+  obsidianAssessmentVisualUrl,
+  obsidianEvalResultVisualUrl,
   registryTokenStyle,
   structuredEnvironmentPassageVideoUrl,
   onBackQuestion,
@@ -134,6 +140,9 @@ export default function RegisteredPublicAssessment({
       registryBackgroundUrl={null}
       registryMarkUrl={registryMarkUrl}
       marbleAccentReferenceUrl={marbleAccentReferenceUrl}
+      obsidianContactVisualUrl={obsidianContactVisualUrl}
+      obsidianAssessmentVisualUrl={obsidianAssessmentVisualUrl}
+      obsidianEvalResultVisualUrl={obsidianEvalResultVisualUrl}
       registryWatermarkUrl={null}
       registryTokenStyle={registryTokenStyle}
       assessmentCompletion={encounterCopy.assessmentCompletion}

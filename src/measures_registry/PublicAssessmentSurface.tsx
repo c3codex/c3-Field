@@ -47,6 +47,9 @@ type PublicAssessmentSurfaceProps = {
   assessmentContactCaptureContract?: Record<string, unknown> | null
   assessmentEvaluationReportContract?: Record<string, unknown> | null
   marbleAccentReferenceUrl: string | null
+  obsidianContactVisualUrl?: string | null
+  obsidianAssessmentVisualUrl?: string | null
+  obsidianEvalResultVisualUrl?: string | null
   registryBackgroundUrl: string | null
   registryMarkUrl: string | null
   registryWatermarkUrl: string | null
@@ -96,6 +99,9 @@ export function PublicAssessmentSurface({
   assessmentContactCaptureContract,
   assessmentEvaluationReportContract,
   marbleAccentReferenceUrl,
+  obsidianContactVisualUrl,
+  obsidianAssessmentVisualUrl,
+  obsidianEvalResultVisualUrl,
   registryBackgroundUrl,
   registryMarkUrl,
   registryTokenStyle,
@@ -171,6 +177,9 @@ export function PublicAssessmentSurface({
     ...registryTokenStyle,
     ...(registryBackgroundUrl ? { "--registry-assessment-background-image": `url("${registryBackgroundUrl}")` } : {}),
     ...(marbleAccentReferenceUrl ? { "--registry-marble-accent-image": `url("${marbleAccentReferenceUrl}")` } : {}),
+    ...(obsidianContactVisualUrl ? { "--registry-obsidian-contact-visual": `url("${obsidianContactVisualUrl}")` } : {}),
+    ...(obsidianAssessmentVisualUrl ? { "--registry-obsidian-assessment-visual": `url("${obsidianAssessmentVisualUrl}")` } : {}),
+    ...(obsidianEvalResultVisualUrl ? { "--registry-obsidian-eval-result-visual": `url("${obsidianEvalResultVisualUrl}")` } : {}),
   } as CSSProperties
   const asRecord = (value: unknown): Record<string, unknown> | null =>
     value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null
