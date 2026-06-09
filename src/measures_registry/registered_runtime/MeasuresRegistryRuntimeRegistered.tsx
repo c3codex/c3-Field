@@ -54,6 +54,7 @@ const REGISTERED_ENCOUNTER_KEYS = [
   "measures_assessment",
   "obsidian_to_marble_passage_video",
   "marble_pathway_reveal",
+  "map_integrity_governance",
   "structure_passage",
   "crystal_chamber",
   "structural_drift_publication",
@@ -99,7 +100,7 @@ const SURFACE_QUERY: Record<RegisteredSurface, string> = {
   eval_passage: "eval_passage",
   measures_assessment: "measures_assessment",
   obsidian_to_marble_passage_video: "obsidian_to_marble_passage_video",
-  marble_pathway_reveal: "marble_pathway_reveal",
+  map_integrity_governance: "map_integrity_governance",
   structure_passage: "structure_passage",
   crystal_chamber: "crystal_chamber",
   structural_drift_dispatches: "structural_drift_publication",
@@ -115,6 +116,8 @@ const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
   educational_diagnostic_passage: "eval_passage",
   understand_environment: "structure_passage",
   structural_drift_dispatches: "structural_drift_dispatches",
+  // Legacy alias — active governed surface is map_integrity_governance.
+  marble_pathway_reveal: "map_integrity_governance",
 }
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
@@ -124,6 +127,7 @@ const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
   "/ai-operations-assessment": "ai_operations_assessment_landing",
   "/structural-drift": "structural_drift_dispatches",
   "/undrifted": "structural_drift_dispatches",
+  "/map-integrity-governance": "map_integrity_governance",
 }
 
 const ROUTE_UNIT_KEYS: Record<string, string> = {
@@ -209,6 +213,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const [evalSubmitting, setEvalSubmitting] = useState(false)
   const [evalSubmitted, setEvalSubmitted] = useState(false)
   const [evalReport, setEvalReport] = useState<EnvironmentalStandingReport | null>(null)
+  const [evalScore, setEvalScore] = useState<number | null>(null)
+  const [evalCaptureId, setEvalCaptureId] = useState<string | null>(null)
   const [evalEmailArtifact, setEvalEmailArtifact] = useState<AssessmentEmailArtifact | null>(null)
   const [evalError, setEvalError] = useState<string | null>(null)
   const [conditionTraces, setConditionTraces] = useState<import("./registeredRuntimeUtils").AssessmentConditionTrace[]>([])
@@ -306,7 +312,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
           prev ? { ...prev, verifying: false, schedulingReleased: data.scheduling_released === true, error: null } : null,
         )
         if (data.scheduling_released) {
-          navigate("marble_pathway_reveal")
+          navigate("map_integrity_governance")
         }
       })
       .catch(() => {
@@ -419,6 +425,34 @@ export default function MeasuresRegistryRuntimeRegistered() {
     }
   }, [activeSurface])
 
+  // Carry-forward DB resolution: if MAP surface loads without session-state evalReport but a
+  // capture ID exists (user navigated back or page reloaded mid-session), reconstruct from DB.
+  useEffect(() => {
+    if (activeSurface !== "map_integrity_governance") return
+    if (evalReport || !evalCaptureId) return
+    let cancelled = false
+    void supabase
+      .from("measures_iis_eval_gate1_capture")
+      .select("id, metadata")
+      .eq("id", evalCaptureId)
+      .single()
+      .then(({ data, error: fetchError }) => {
+        if (cancelled || fetchError || !data) return
+        const binding = asRecord(asRecord(data.metadata)?.assessment_result_binding)
+        const report = binding?.environmental_standing_report as EnvironmentalStandingReport | undefined
+        const cf = asRecord(asRecord(data.metadata)?.carry_forward)
+        if (report) setEvalReport(report)
+        if (cf) {
+          setEvalFields((prev) => ({
+            ...prev,
+            institution_name: asString(cf.organization_name) || prev.institution_name || "",
+            ai_deployment_status: asString(cf.current_ai_usage) || prev.ai_deployment_status || "",
+          }))
+        }
+      })
+    return () => { cancelled = true }
+  }, [activeSurface, evalCaptureId, evalReport])
+
   // --- derived copy ---
 
   const introCopy = sectionCopy(sectionMap.get("ai_isnt_broken_intro"))
@@ -426,7 +460,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const evalPassageCopy = sectionCopy(sectionMap.get("eval_passage"))
   const evaluationChamberCopy = sectionCopy(sectionMap.get("measures_assessment"))
   const obsidianToMarblePassageCopy = sectionCopy(sectionMap.get("obsidian_to_marble_passage_video"))
-  const marblePathwayRevealCopy = sectionCopy(sectionMap.get("marble_pathway_reveal"))
   const structurePassageCopy = sectionCopy(sectionMap.get("structure_passage"))
   const crystalChamberCopy = sectionCopy(sectionMap.get("crystal_chamber"))
   const structuralDriftCopy = sectionCopy(sectionMap.get("structural_drift_publication"))
@@ -604,7 +637,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
       const normalizedWebsite = normalizeAssessmentWebsite(evalFields.website)
 
-      const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
+      const { data: captureData, error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
         institution_name: evalFields.institution_name?.trim() ?? "",
         institution_address: normalizedWebsite,
         institution_phone: "",
@@ -644,7 +677,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
             passage_surface: "obsidian_to_marble_passage_video",
             destination_surface: "map_integrity_governance",
             destination_legacy_alias: "marble_pathway_reveal",
-            environment_score: evalReport.score,
+            environment_score: evalScore,
             circuit_identification: evalReport.standing_key,
             continuation_pathway: evalReport.continuation_pathway,
             organization_name: evalFields.institution_name?.trim() ?? "",
@@ -682,7 +715,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
           contact_gated_result_delivery: true,
           passage_autoloads_after_submit: true,
         },
-      })
+      }).select("id").single()
 
       setEvalSubmitting(false)
 
@@ -691,6 +724,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         return
       }
 
+      if (captureData?.id) setEvalCaptureId(captureData.id)
       setEvalSubmitted(true)
       navigate("obsidian_to_marble_passage_video")
       return
@@ -734,6 +768,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
     setConditionTraces(traces)
     setEvalReport(interpretation.report)
+    setEvalScore(interpretation.score)
     setEvalEmailArtifact(interpretation.emailArtifact)
     setEvalStep("contact_capture")
   }
@@ -783,8 +818,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
     try {
       const origin = window.location.origin
-      const successUrl = `${origin}/?surface=marble_pathway_reveal`
-      const cancelUrl = `${origin}/?surface=marble_pathway_reveal`
+      const successUrl = `${origin}/?surface=map_integrity_governance`
+      const cancelUrl = `${origin}/?surface=map_integrity_governance`
 
       const response = await fetch("/api/map/create-checkout-session", {
         method: "POST",
@@ -1097,7 +1132,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
                 playsInline
                 preload="auto"
                 aria-label="Before the Pathway"
-                onEnded={() => navigate("marble_pathway_reveal")}
+                onEnded={() => navigate("map_integrity_governance")}
               />
             </div>
           ) : (
@@ -1110,7 +1145,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
             </div>
           ) : null}
           <div className="registry-diagnostic-passage-controls registry-report-controls">
-            <button type="button" onClick={() => navigate("marble_pathway_reveal")}>{passageCtaLabel}</button>
+            <button type="button" onClick={() => navigate("map_integrity_governance")}>{passageCtaLabel}</button>
             <button type="button" onClick={() => setPassageMuted((current) => !current)}>
               {passageMuted ? "Audio" : "Mute"}
             </button>
@@ -1119,11 +1154,15 @@ export default function MeasuresRegistryRuntimeRegistered() {
         {renderSystemFooter()}
       </main>
     )
-  } else if (activeSurface === "marble_pathway_reveal") {
+  } else if (activeSurface === "map_integrity_governance") {
     activeSurfaceElement = (
       <MarbleCommerceDirectory
         registryTokenStyle={launchMediaStyle}
         evalReport={evalReport}
+        organizationName={evalFields.institution_name?.trim() || null}
+        currentAiUsage={evalFields.ai_deployment_status?.trim() || null}
+        conditionTraces={conditionTraces}
+        environmentScore={evalScore}
         mapCommerceContracts={mapCommerceContracts}
         checkoutLoading={mapCheckoutLoading}
         checkoutError={mapCheckoutError}

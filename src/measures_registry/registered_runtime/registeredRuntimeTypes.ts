@@ -5,7 +5,7 @@ export type RegisteredSurface =
   | "eval_passage"
   | "measures_assessment"
   | "obsidian_to_marble_passage_video"
-  | "marble_pathway_reveal"
+  | "map_integrity_governance"
   | "structure_passage"
   | "crystal_chamber"
   | "structural_drift_dispatches"

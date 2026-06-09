@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react"
 import type { MapCommerceContractRow } from "../registeredRuntimeTypes"
-import type { EnvironmentalStandingReport } from "../registeredRuntimeUtils"
+import type { AssessmentConditionTrace, EnvironmentalStandingReport } from "../registeredRuntimeUtils"
 
 type PaymentReturnStatus = {
   mapOrderId: string
@@ -12,6 +12,10 @@ type PaymentReturnStatus = {
 type Props = {
   registryTokenStyle: CSSProperties
   evalReport: EnvironmentalStandingReport | null
+  organizationName: string | null
+  currentAiUsage: string | null
+  conditionTraces: AssessmentConditionTrace[]
+  environmentScore: number | null
   mapCommerceContracts: MapCommerceContractRow[]
   checkoutLoading: boolean
   checkoutError: string | null
@@ -29,6 +33,10 @@ function formatUsd(amount: number) {
 export default function MarbleCommerceDirectory({
   registryTokenStyle,
   evalReport,
+  organizationName,
+  currentAiUsage,
+  conditionTraces,
+  environmentScore,
   mapCommerceContracts,
   checkoutLoading,
   checkoutError,
@@ -51,7 +59,7 @@ export default function MarbleCommerceDirectory({
     return (
       <main
         className="measures-registry-runtime"
-        data-surface="marble_pathway_reveal"
+        data-surface="map_integrity_governance"
         data-material-family="marble"
         data-layout-contract="payment_confirmation"
         data-release-standing={paymentReturn.schedulingReleased ? "scheduling_released" : "payment_verifying"}
@@ -86,7 +94,7 @@ export default function MarbleCommerceDirectory({
                   A System Readiness Consultation will be scheduled to begin your MAP the Environment engagement.
                 </p>
                 <p className="registry-map-seat-hold">
-                  A full SEAT Contract may be generated only after MAP the Environment is complete.
+                  SEAT standing releases only after MAP deliverables and resolution complete the commerce circuit.
                 </p>
               </div>
             </>
@@ -102,22 +110,21 @@ export default function MarbleCommerceDirectory({
     )
   }
 
-  // No evaluation result — passage integrity required
+  // No evaluation result — assessment context required
   if (!evalReport || !standingKey) {
     return (
       <main
         className="measures-registry-runtime"
-        data-surface="marble_pathway_reveal"
+        data-surface="map_integrity_governance"
         data-material-family="marble"
-        data-layout-contract="passage_required"
-        data-release-standing="held_eval_result_required"
+        data-layout-contract="context_required"
+        data-release-standing="held_assessment_context_required"
         style={registryTokenStyle}
       >
         {renderHeader()}
         <section className="registry-held-state" role="status" aria-live="polite">
-          <span>Marble Chamber</span>
-          <h2>Evaluation result is required to enter the Marble Chamber.</h2>
-          <p>Complete the AI Operations Assessment to receive your evaluation-determined pathway.</p>
+          <h2>Assessment context unavailable.</h2>
+          <p>Please return to the assessment to continue.</p>
         </section>
         {renderSystemFooter()}
       </main>
@@ -129,7 +136,7 @@ export default function MarbleCommerceDirectory({
     return (
       <main
         className="measures-registry-runtime"
-        data-surface="marble_pathway_reveal"
+        data-surface="map_integrity_governance"
         data-material-family="marble"
         data-layout-contract="loading"
         data-release-standing="contracts_loading"
@@ -137,7 +144,6 @@ export default function MarbleCommerceDirectory({
       >
         {renderHeader()}
         <section className="registry-held-state" role="status" aria-live="polite">
-          <span>Marble Chamber</span>
           <h2>Loading governed pathway.</h2>
         </section>
         {renderSystemFooter()}
@@ -145,30 +151,64 @@ export default function MarbleCommerceDirectory({
     )
   }
 
-  // Marble Chamber Directory — evaluation-determined MAP circuit
+  const selectedIndicators = conditionTraces.slice(0, 3)
+  const scoreDisplay = environmentScore !== null ? String(environmentScore) : evalReport.environmental_standing
+
+  // MAP Integrity Governance — evaluation-determined MAP circuit
   return (
     <main
       className="measures-registry-runtime"
-      data-surface="marble_pathway_reveal"
+      data-surface="map_integrity_governance"
       data-material-family="marble"
       data-layout-contract="marble_chamber_directory"
       data-release-standing="public"
       style={registryTokenStyle}
     >
       {renderHeader()}
-      <section className="registry-marble-chamber registry-marble-directory" aria-label="Marble Chamber Directory">
+      <section className="registry-marble-chamber registry-marble-directory" aria-label="MAP Integrity Governance">
         {marbleAccentReferenceUrl ? (
           <img src={marbleAccentReferenceUrl} alt="" className="registry-marble-accent" aria-hidden="true" />
         ) : null}
 
         <header className="registry-marble-directory-header">
-          <span>Marble Chamber</span>
-          <h2>Governed Pathway</h2>
+          <h2>MAP Integrity Governance</h2>
           <p>
-            A structured environmental alignment path has been prepared for your review. The circuit below reflects your
-            evaluation-determined standing.
+            Your initial assessment identified the review path. The MAP is not a repeat of that assessment. It is the
+            structured review required to measure, audit, and prepare your organization for the System Environment
+            Alignment Track.
+          </p>
+          <p>
+            Measures Registry does not provide generic helpful suggestions from this assessment. Suggestions can
+            describe possible improvements, but they do not verify authority, role boundaries, evidence paths, review
+            ownership, or implementation readiness. The selected MAP is the governed review path for determining what
+            can be acted on responsibly.
           </p>
         </header>
+
+        <div className="registry-marble-assessment-standing">
+          <strong>Assessment Standing</strong>
+          <p>Your result has been matched to a structured review path.</p>
+          {organizationName ? (
+            <div className="registry-marble-personalization">
+              <p>For {organizationName}, the assessment result identified:</p>
+              <ul>
+                <li>Environment score: {scoreDisplay}</li>
+                <li>Selected review path: {recommendedContract?.product_name ?? evalReport.continuation_pathway}</li>
+                {currentAiUsage ? <li>Current AI usage: {currentAiUsage}</li> : null}
+              </ul>
+            </div>
+          ) : null}
+          {selectedIndicators.length > 0 ? (
+            <div className="registry-marble-assessment-indicators">
+              <strong>Assessment Indicators</strong>
+              <ul>
+                {selectedIndicators.map((trace) => (
+                  <li key={trace.question_key}>{trace.label}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </div>
 
         <div className="registry-marble-circuit-list">
           {mapCommerceContracts.map((contract) => {
@@ -187,11 +227,6 @@ export default function MarbleCommerceDirectory({
                 ) : null}
 
                 <h3>{contract.product_name}</h3>
-
-                <div className="registry-marble-circuit-standing">
-                  <strong>System Standing</strong>
-                  <p>{evalReport.environmental_standing}</p>
-                </div>
 
                 <div className="registry-marble-circuit-description">
                   <strong>MAP Boundary</strong>
@@ -231,7 +266,7 @@ export default function MarbleCommerceDirectory({
                       disabled={checkoutLoading}
                       aria-busy={checkoutLoading}
                     >
-                      {checkoutLoading ? "Preparing payment…" : "Proceed to MAP Payment"}
+                      {checkoutLoading ? "Preparing payment…" : "Begin MAP Review"}
                     </button>
                     {checkoutError ? (
                       <p className="registry-marble-checkout-error" role="alert">
