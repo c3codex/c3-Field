@@ -54,6 +54,10 @@
   --registry-source-position: 18% 50%;
 }
 
+.measures-registry-runtime[data-material-family="obsidian"][data-layout-contract="result_gate"] {
+  --registry-source-image: var(--registry-obsidian-eval-result-visual, none);
+}
+
 .measures-registry-runtime[data-material-family="crystal"]::before {
   background:
     linear-gradient(90deg, rgba(4, 9, 17, 0.72), rgba(4, 9, 17, 0.28) 48%, rgba(4, 9, 17, 0.72)),

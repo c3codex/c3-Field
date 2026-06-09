@@ -1075,6 +1075,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
                 playsInline
                 preload="auto"
                 aria-label="Before the Pathway"
+                onEnded={() => navigate("marble_pathway_reveal")}
               />
             </div>
           ) : (
