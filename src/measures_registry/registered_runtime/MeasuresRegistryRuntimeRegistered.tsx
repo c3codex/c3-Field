@@ -134,6 +134,8 @@ const ROUTE_UNIT_KEYS: Record<string, string> = {
   "/ai-operations-assessment": "ai_operations_assessment_landing",
   "/structural-drift": "structural_drift_landing",
   "/undrifted": "undrifted_publication_landing",
+  // Governed held state: renders landing_unit_missing until map_integrity_governance_landing is seated in measures_registry.
+  "/map-integrity-governance": "map_integrity_governance_landing",
 }
 
 const REGISTERED_SURFACES = new Set<RegisteredSurface>(Object.keys(SURFACE_QUERY) as RegisteredSurface[])
@@ -412,6 +414,13 @@ export default function MeasuresRegistryRuntimeRegistered() {
     }
     window.addEventListener("popstate", handlePopState)
     return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
+
+  // /structural-drift is a deprecated alias. Redirect to the active /undrifted public route.
+  useEffect(() => {
+    if (window.location.pathname === "/structural-drift") {
+      window.location.replace("/undrifted")
+    }
   }, [])
 
   // Assessment surfaces must always render questions, never a completion carry-over.
