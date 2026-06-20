@@ -1,0 +1,655 @@
+---
+document_type: register_seat_actual_created_file_manifest
+authority_level: canonical_actual_file_manifest
+system_scope: measures_registry_register_seat_manifest_reconciliation
+title: register_SEAT Actual Created File Manifest v1
+status: actual_manifest_reconciled_bucket_target_held
+version: v1
+operator: op044
+process_key: register_SEAT
+source_oar2: docs/seat/measures_registry_isolated/09_oar/oar2_reconcile_register_seat_baseline_estimate_against_actual_created_seat_file_manifest_before_bucket_transfer_v1.meta.md
+---
+
+# register_SEAT Actual Created File Manifest v1
+
+standing:
+  process_key: register_SEAT
+  source_folder: docs/seat/measures_registry_isolated/
+  prior_expected_manifest_count: 89
+  prior_resolved_manifest_count: 33
+  prior_unresolved_estimate_count: 56
+  prior_56_were_row_identified: false
+  prior_56_authoritative_manifest: false
+  prior_89_authoritative_manifest: false
+  actual_present_file_count: 473
+  actual_upload_candidate_count: 46
+  actual_excluded_count: 427
+  canonical_manifest_count: 46
+  approved_bucket_name: measures-seed
+  provider: supabase_storage
+  bucket_policy: private
+  retrieval_model: signed_url
+  public_exposure_allowed: false
+  upload_prefix: measures_registry/seat/register_SEAT/v1/
+  bucket_upload_performed: false
+  live_DB_content_registration_performed: false
+
+canonical_selection_rule:
+  candidate_root: docs/seat/measures_registry_isolated/01_records/
+  include: expanded_or_canonical_transfer_payloads
+  exclude_duplicate_expanded_traces: true
+  canonical_record_governs_duplicate_pair: canonical_undrifted_lapis_paragraph_publication_path_transfer_payload_v1.meta.md
+  source_directory_components_uploaded_separately: false
+  reason: transfer payloads are the resolved bucket-path surface; raw requirement records and process evidence remain local
+
+manifest_rows:
+  - manifest_row_number: 1
+    source_path: docs/seat/measures_registry_isolated/01_records/canonical_undrifted_lapis_paragraph_publication_path_transfer_payload_v1.meta.md
+    relative_path: 01_records/canonical_undrifted_lapis_paragraph_publication_path_transfer_payload_v1.meta.md
+    file_name: canonical_undrifted_lapis_paragraph_publication_path_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 2170
+    sha256_checksum: 864E11190E5BCCF16F66B3EB879E690BED92F65DD141369D600A894ED85264CF
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/canonical_undrifted_lapis_paragraph_publication_path_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 2
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_carryover_state_rule_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_carryover_state_rule_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_assessment_carryover_state_rule_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1849
+    sha256_checksum: F6D84BA4EBE89721B2AC92CDC1574386A5C8BA2589BFF0DA9125B0F0014ACFC0
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_carryover_state_rule_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 3
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_carryover_surface_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_carryover_surface_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_assessment_carryover_surface_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1831
+    sha256_checksum: 3E58B6696F57B064A7F3A3486EB0D1902DF11D0E34149B76F5E16C96CD802593
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_carryover_surface_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 4
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_contact_capture_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_contact_capture_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_assessment_contact_capture_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1870
+    sha256_checksum: 3E700540F798813E41A0F200909CC3404A6DDD6C2E5E8DC3C3EF70D536A27603
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_contact_capture_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 5
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_logic_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_logic_record_transfer_payload_v1.meta.md
+    file_name: expanded_assessment_logic_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1751
+    sha256_checksum: 5C2DB77BAFA0A7A07F0BE6718FB670630C6763A5D23E97CF5006299201A5D46F
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_logic_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 6
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_orientation_media_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_orientation_media_map_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_assessment_orientation_media_map_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1855
+    sha256_checksum: 0E0F442BC42A5576D1128264027CE7252A1C73EBC726625A330A445ECD1E0782
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_orientation_media_map_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 7
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_orientation_surface_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_orientation_surface_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_assessment_orientation_surface_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1843
+    sha256_checksum: 08B5D11C33975384B39BE3525E9D940F6055F72EEC9A6B028005FCAD7524AEA0
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_orientation_surface_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 8
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_c2_route_logic_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_c2_route_logic_record_transfer_payload_v1.meta.md
+    file_name: expanded_c2_route_logic_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1739
+    sha256_checksum: B590311C695B875D560B71D768D994851CC1B882FD7E1179E3FF77E6FFBCC36E
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_c2_route_logic_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 9
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_contact_capture_email_sendout_rules_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_contact_capture_email_sendout_rules_v1_transfer_payload_v1.meta.md
+    file_name: expanded_contact_capture_email_sendout_rules_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1882
+    sha256_checksum: B5863BE59A5CE7CE8B3BFA8A31A19EB86855FA23B3B3218E307EC94ECF4FE76F
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_contact_capture_email_sendout_rules_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 10
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_contact_capture_terminology_boundary_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_contact_capture_terminology_boundary_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_contact_capture_terminology_boundary_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1930
+    sha256_checksum: 6AABEEA7C61A81BB6E227583334AE0483350659B992582F02A669527B8A80F28
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_contact_capture_terminology_boundary_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 11
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_contact_permission_scope_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_contact_permission_scope_record_transfer_payload_v1.meta.md
+    file_name: expanded_contact_permission_scope_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1799
+    sha256_checksum: A7EC7D6BD2E6C72ECC9C3961918241B17C1A0C9E52069909FD823287521D31E9
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_contact_permission_scope_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 12
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_content_records_requirements_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_content_records_requirements_record_transfer_payload_v1.meta.md
+    file_name: expanded_content_records_requirements_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1823
+    sha256_checksum: FF40EC0513D1E05D00E30F211078DCBD46EBD52A323A71D3B07B8A57927B6CCC
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_content_records_requirements_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 13
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_dependency_state_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_dependency_state_record_transfer_payload_v1.meta.md
+    file_name: expanded_dependency_state_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1751
+    sha256_checksum: 7094B3328AD64146BF9B8F031C89894990716119A64B7A48AAEA18E10B3F9C45
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_dependency_state_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 14
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_email_dispatch_requirements_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_email_dispatch_requirements_record_transfer_payload_v1.meta.md
+    file_name: expanded_email_dispatch_requirements_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1817
+    sha256_checksum: 86C6D14DFDE1B17821B481F3B682BDB1717E7D797B135C5A5ADD6CE9EB91488A
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_email_dispatch_requirements_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 15
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_eyebrow_records_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_eyebrow_records_transfer_payload_v1.meta.md
+    file_name: expanded_eyebrow_records_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1703
+    sha256_checksum: C80CBE5BFAD724D6C22CFE2C283286E92214B34B43867B4B18CC75043F9B847E
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_eyebrow_records_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 16
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_launch_landing_pages_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_launch_landing_pages_record_transfer_payload_v1.meta.md
+    file_name: expanded_launch_landing_pages_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1793
+    sha256_checksum: 07CFC24496CA71641FEFB2CAEBBAF3EB6C6921BDFC0CA542FDEFFE5D0F739464
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_launch_landing_pages_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 17
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_launch_style_profile_set_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_launch_style_profile_set_record_transfer_payload_v1.meta.md
+    file_name: expanded_launch_style_profile_set_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1817
+    sha256_checksum: 363F926A58D84B7430515332FCFEFA284E16D291A7FF082E095F04D0E93C146E
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_launch_style_profile_set_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 18
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_launch_surface_order_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_launch_surface_order_record_transfer_payload_v1.meta.md
+    file_name: expanded_launch_surface_order_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1775
+    sha256_checksum: 8CE7D9F849EC059B9619E1DB387655C06FFDC5F3DF1C1C02E0769B15EC171EBB
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_launch_surface_order_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 19
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_c3_7s_disclosure_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_c3_7s_disclosure_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_marble_c3_7s_disclosure_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1801
+    sha256_checksum: 21FBDF0A06631B7AB2C3A8FF0F1D184C9FAC3E49C85BDE1D73EE60EBDDEF3F7A
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_c3_7s_disclosure_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 20
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_dynamic_fields_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_dynamic_fields_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_marble_map_payment_scope_dynamic_fields_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1897
+    sha256_checksum: 57E32D3672F2EC947FE47841D701B3932EF93D4C8000C0D7AD5791589261C079
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_dynamic_fields_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 21
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_footer_disclosure_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_footer_disclosure_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_marble_map_payment_scope_footer_disclosure_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1915
+    sha256_checksum: 2DC8A302384D340CC55715B69859900C69848600BF214AA20FDCCC721EF54C38
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_footer_disclosure_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 22
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_layout_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_layout_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_marble_map_payment_scope_layout_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1849
+    sha256_checksum: F7DF68B63F00C6FADCB4706344D64861E82FE24B09AFD883BC327FE618868166
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_layout_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 23
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_media_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_media_map_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_marble_map_payment_scope_media_map_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1867
+    sha256_checksum: CB8AC6F2B828A0B6828FFB844F515D5F5BD00146342509B6DC6E1134BF83DE5B
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_media_map_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 24
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_marble_map_payment_scope_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1891
+    sha256_checksum: 0AF18CC5C10830A05C460D9EAEDDC06747A8BFCC4B008785DAFFA8650217FCF3
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_style_profile_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 25
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_media_mapping_requirements_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_media_mapping_requirements_record_transfer_payload_v1.meta.md
+    file_name: expanded_media_mapping_requirements_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1811
+    sha256_checksum: 5954BC06BBB22A287BBAD57FC0CD49AA5A400647DE4931875157A4BEC7DE7DEB
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_media_mapping_requirements_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 26
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_contact_capture_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_contact_capture_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_obsidian_assessment_contact_capture_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1957
+    sha256_checksum: 48E575A09C6442ACF033B86626075147DCC31910738B57EBA0D71E424D6526E0
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_contact_capture_style_profile_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 27
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_landing_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_landing_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_obsidian_assessment_landing_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1909
+    sha256_checksum: 2E33C1A8775146349F79D8EC682ABE2D2A7836779CC1B19027CB32A650F73CB4
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_landing_style_profile_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 28
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_media_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_media_map_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_obsidian_assessment_media_map_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1837
+    sha256_checksum: 193077B28A5A6720B817FD57AB9192AD4CCAD7278BEA6F15E7142D407587B20C
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_media_map_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 29
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_question_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_question_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_obsidian_assessment_question_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1915
+    sha256_checksum: AE43120D5CF8DB1DD84D8CFBF235388CE3B9690D8517D09F8E16939AB369539E
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_question_style_profile_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 30
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_style_profile_set_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_style_profile_set_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_obsidian_assessment_style_profile_set_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1885
+    sha256_checksum: 67049A6449E40B0F3FE8DE14FAE816F76E07426FFA5394FDF66617813F6CA46D
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_style_profile_set_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 31
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_surface_sequence_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_surface_sequence_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_obsidian_assessment_surface_sequence_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1879
+    sha256_checksum: CDA93B3C930934D5C912BC8A93919D38A5C75E05177A759892FDE738D0914CD8
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_surface_sequence_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 32
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_release_state_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_release_state_record_transfer_payload_v1.meta.md
+    file_name: expanded_release_state_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1733
+    sha256_checksum: A9DA411B0BBBF3E8EE91F33C9DEB1FC678C53FACCF81644C3AE21E380A7E4963
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_release_state_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 33
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_seo_metadata_records_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_seo_metadata_records_transfer_payload_v1.meta.md
+    file_name: expanded_seo_metadata_records_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1751
+    sha256_checksum: 3F687AC8CCA875D420A1ED96E7613C12C9629087AADD2DD519D7F22D64A62335
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_seo_metadata_records_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 34
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_set_ready_directory_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_set_ready_directory_record_transfer_payload_v1.meta.md
+    file_name: expanded_set_ready_directory_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1769
+    sha256_checksum: 1D903DC9820705654FA03E2BC1821F07A9D2D00C2F004386578F3D7B63EA8E40
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_set_ready_directory_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 35
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_social_campaign_asset_route_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_social_campaign_asset_route_map_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_social_campaign_asset_route_map_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1849
+    sha256_checksum: 9201D8012CEB51264FA6C3B6CE8D075E582BD2F54D1ADC68CB2C05F7E247D0D3
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_social_campaign_asset_route_map_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 36
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_social_campaign_copy_cadence_and_claim_boundary_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_social_campaign_copy_cadence_and_claim_boundary_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_social_campaign_copy_cadence_and_claim_boundary_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1945
+    sha256_checksum: 361E210B0A7FB9DD64F731AD7A997D3A82C617E8925B222897D9D15B1BE417DB
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_social_campaign_copy_cadence_and_claim_boundary_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 37
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_social_campaign_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_social_campaign_record_transfer_payload_v1.meta.md
+    file_name: expanded_social_campaign_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1763
+    sha256_checksum: 66DA68D72900660F7B49A90D9C1D97D33F8E1948682FBE4E2DF2E06F6A25A3C7
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_social_campaign_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 38
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_social_media_account_presence_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_social_media_account_presence_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_social_media_account_presence_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1874
+    sha256_checksum: 4319304F64FB85F73BFB5AB6181FB6F689EE6DCC78D9CC88BA0AC6A9672DC3C3
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_social_media_account_presence_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 39
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_survey_intake_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_survey_intake_record_transfer_payload_v1.meta.md
+    file_name: expanded_survey_intake_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1733
+    sha256_checksum: BEB648D6CB21AA89DE21EFAF5FD3E699BBDDC4F4B3CE719CA425EE50A0669D5F
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_survey_intake_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 40
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_terminology_replacement_map_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_terminology_replacement_map_transfer_payload_v1.meta.md
+    file_name: expanded_terminology_replacement_map_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1775
+    sha256_checksum: 6AC9A3057CC63AD59D2727B5F88F5BC4CBF059D5F15BB0A6E5FECA5D8A2A044B
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_terminology_replacement_map_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 41
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_article_and_paragraph_integration_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_article_and_paragraph_integration_record_transfer_payload_v1.meta.md
+    file_name: expanded_undrifted_article_and_paragraph_integration_record_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1931
+    sha256_checksum: 4BCFC3520A5C243B019F4FDA373679196447E588EDC66739F1D7B6488D2BD025
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_article_and_paragraph_integration_record_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 42
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_9x16_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_9x16_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_undrifted_lapis_9x16_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1918
+    sha256_checksum: 021AC8F7D537EF02AE59CA8DD49B00C1DF0D4549E6F173DDA4BD533AFA8C3D59
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_9x16_style_profile_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 43
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_icon_registry_usage_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_icon_registry_usage_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_undrifted_lapis_icon_registry_usage_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1924
+    sha256_checksum: 0B6C1B7D8336C80D24F8BEB91D90DAE0C9A79354782CD6A3C99E9555B8FE98C5
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_icon_registry_usage_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 44
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_leadership_contact_capture_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_leadership_contact_capture_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_undrifted_lapis_leadership_contact_capture_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1966
+    sha256_checksum: 160EE1229F6C5D6CFCE4F3882566D09BDA4610E0AD37B8C169C3EBECAAF10BF5
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_leadership_contact_capture_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 45
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_media_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_media_map_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_undrifted_lapis_media_map_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1864
+    sha256_checksum: 187397FDFECA1A18DDE9CA6A4A7145F26629E3725504BFE4F8070E726016EB27
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_media_map_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+  - manifest_row_number: 46
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_video_to_headline_behavior_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_video_to_headline_behavior_record_v1_transfer_payload_v1.meta.md
+    file_name: expanded_undrifted_lapis_video_to_headline_behavior_record_v1_transfer_payload_v1.meta.md
+    file_extension: .md
+    file_size_bytes: 1966
+    sha256_checksum: 616065521F00D03D668AB8C53192D650B5E9C2CC7713D70F671D2C0F49681D58
+    created_or_existing_state: created_after_gap_identified
+    register_SEAT_candidate: true
+    exclusion_reason: null
+    upload_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_video_to_headline_behavior_record_v1_transfer_payload_v1.meta.md
+    content_type: text/markdown
+    privacy_class: private_source_reference
+
+reconciliation:
+  old_estimate_retired_as_authority: true
+  actual_manifest_created: true
+  all_upload_candidates_classified: true
+  candidate_secret_or_credential_files: 0
+  canonical_manifest_count_equals_actual_upload_candidate_count: true
+  bucket_target_resolved: true
+  bucket_contract_validation: docs/seat/measures_registry_isolated/10_validation/register_seat_private_bucket_contract_v1.meta.md
+  git_commit_ready: true
+
+Bucket contract is resolved to the existing private `measures-seed` bucket with signed-URL retrieval. This manifest performs no upload.
