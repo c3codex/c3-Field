@@ -1,0 +1,10 @@
+/* Registered runtime frame — deterministic page shell */
+.measures-registry-runtime {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  background: var(--registry-brand-field);
+  color: var(--registry-brand-primary-text);
+  font-family: var(--registry-font-body);
+  box-sizing: border-box;
+}

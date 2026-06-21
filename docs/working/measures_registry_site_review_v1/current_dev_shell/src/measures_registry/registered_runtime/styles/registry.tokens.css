@@ -1,0 +1,18 @@
+/* Deterministic shell tokens — all registered downstream surfaces */
+.measures-registry-runtime {
+  --registry-font-heading: "Cormorant Garamond", Georgia, serif;
+  --registry-font-body: Inter, system-ui, sans-serif;
+  /* Fixed layout shell — not contract-derived */
+  --registry-header-height: 3rem;
+  --registry-content-max-width: 70rem; /* 1120px */
+  --registry-page-padding-active: clamp(1.25rem, 4vw, 3rem);
+  /* Obsidian baseline — applies to all surfaces without a material override */
+  --registry-brand-field: #0b0c11;
+  --registry-brand-panel-surface: #13141c;
+  --registry-brand-accent: #5b7fa6;
+  --registry-brand-primary-text: #dde0e7;
+  --registry-brand-secondary-text: #9fa4b0;
+  --registry-brand-muted-text: #6b7080;
+  --registry-brand-border: rgba(221, 224, 231, 0.12);
+  --registry-brand-highlight: #dde0e7;
+}

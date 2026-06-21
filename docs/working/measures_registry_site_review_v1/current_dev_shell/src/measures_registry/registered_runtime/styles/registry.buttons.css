@@ -1,0 +1,99 @@
+/* Button governance for registered downstream surfaces — sitewide contract */
+
+.measures-registry-runtime .registry-encounter-actions > button,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button,
+.measures-registry-runtime .registry-crystal-chamber-section > button,
+.measures-registry-runtime .registry-crystal-publication-encounter > button,
+.measures-registry-runtime .registry-crystal-chamber-video-controls > button,
+.measures-registry-runtime .registry-public-understand-video-controls > button,
+.measures-registry-runtime .registry-public-understand-panel > button,
+.measures-registry-runtime .registry-public-understand-assess > button,
+.measures-registry-runtime .registry-public-understand-contact > button,
+.measures-registry-runtime .registry-field-guide-featured a,
+.measures-registry-runtime .registry-field-guide-grid a,
+.measures-registry-runtime .registry-field-guide-cta button,
+.measures-registry-runtime .registry-publication-cta button,
+.measures-registry-runtime .registry-publication-cta a {
+  background: transparent;
+  border: 1px solid var(--registry-brand-border);
+  color: var(--registry-brand-primary-text);
+  font-family: var(--registry-font-body);
+  font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+  letter-spacing: 0.08em;
+  padding: 0.55rem 1.5rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.measures-registry-runtime .registry-encounter-actions > button:hover,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button:hover,
+.measures-registry-runtime .registry-crystal-chamber-section > button:hover,
+.measures-registry-runtime .registry-crystal-publication-encounter > button:hover,
+.measures-registry-runtime .registry-crystal-chamber-video-controls > button:hover,
+.measures-registry-runtime .registry-public-understand-video-controls > button:hover,
+.measures-registry-runtime .registry-public-understand-panel > button:hover,
+.measures-registry-runtime .registry-public-understand-assess > button:hover,
+.measures-registry-runtime .registry-public-understand-contact > button:hover,
+.measures-registry-runtime .registry-field-guide-featured a:hover,
+.measures-registry-runtime .registry-field-guide-grid a:hover,
+.measures-registry-runtime .registry-field-guide-cta button:hover,
+.measures-registry-runtime .registry-publication-cta button:hover,
+.measures-registry-runtime .registry-publication-cta a:hover {
+  border-color: var(--registry-brand-primary-text);
+  background: color-mix(in srgb, var(--registry-brand-border) 10%, transparent);
+}
+
+.measures-registry-runtime .registry-encounter-actions > button:focus-visible,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button:focus-visible,
+.measures-registry-runtime .registry-crystal-chamber-section > button:focus-visible,
+.measures-registry-runtime .registry-crystal-publication-encounter > button:focus-visible,
+.measures-registry-runtime .registry-crystal-chamber-video-controls > button:focus-visible,
+.measures-registry-runtime .registry-public-understand-video-controls > button:focus-visible,
+.measures-registry-runtime .registry-public-understand-panel > button:focus-visible,
+.measures-registry-runtime .registry-public-understand-assess > button:focus-visible,
+.measures-registry-runtime .registry-public-understand-contact > button:focus-visible,
+.measures-registry-runtime .registry-field-guide-featured a:focus-visible,
+.measures-registry-runtime .registry-field-guide-grid a:focus-visible,
+.measures-registry-runtime .registry-field-guide-cta button:focus-visible,
+.measures-registry-runtime .registry-publication-cta button:focus-visible,
+.measures-registry-runtime .registry-publication-cta a:focus-visible {
+  outline: 2px solid var(--registry-brand-highlight);
+  outline-offset: 2px;
+}
+
+.measures-registry-runtime .registry-encounter-actions > button:active,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button:active,
+.measures-registry-runtime .registry-crystal-chamber-section > button:active,
+.measures-registry-runtime .registry-crystal-publication-encounter > button:active,
+.measures-registry-runtime .registry-crystal-chamber-video-controls > button:active,
+.measures-registry-runtime .registry-public-understand-video-controls > button:active,
+.measures-registry-runtime .registry-public-understand-panel > button:active,
+.measures-registry-runtime .registry-public-understand-assess > button:active,
+.measures-registry-runtime .registry-public-understand-contact > button:active,
+.measures-registry-runtime .registry-field-guide-featured a:active,
+.measures-registry-runtime .registry-field-guide-grid a:active,
+.measures-registry-runtime .registry-field-guide-cta button:active,
+.measures-registry-runtime .registry-publication-cta button:active,
+.measures-registry-runtime .registry-publication-cta a:active {
+  opacity: 0.8;
+  transform: translateY(1px);
+}
+
+.measures-registry-runtime .registry-encounter-actions > button:disabled,
+.measures-registry-runtime .registry-diagnostic-passage-controls > button:disabled,
+.measures-registry-runtime .registry-crystal-chamber-video-controls > button:disabled,
+.measures-registry-runtime .registry-public-understand-video-controls > button:disabled,
+.measures-registry-runtime .registry-public-understand-panel > button:disabled,
+.measures-registry-runtime .registry-public-understand-assess > button:disabled,
+.measures-registry-runtime .registry-public-understand-contact > button:disabled,
+.measures-registry-runtime .registry-field-guide-cta button:disabled,
+.measures-registry-runtime .registry-publication-cta button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.measures-registry-runtime .registry-connect-src .registry-encounter-actions > button[type="submit"] {
+  border-color: var(--registry-brand-primary-text);
+}

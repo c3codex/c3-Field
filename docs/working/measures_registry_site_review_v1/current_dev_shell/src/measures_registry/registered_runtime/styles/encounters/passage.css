@@ -1,0 +1,206 @@
+/* Passage encounter governance — eval_passage and structure_passage */
+
+/* ── SHARED HEADER — governs registry mark upper-left placement ─────────── */
+.measures-registry-runtime .registry-public-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(0.75rem, 1.8vw, 1.1rem) clamp(1.25rem, 3vw, 2.5rem);
+  height: var(--registry-header-height, 3rem);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.measures-registry-runtime .registry-public-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  pointer-events: auto;
+}
+
+.measures-registry-runtime .registry-public-brand img {
+  height: auto;
+  min-width: 40px;
+  width: 44px;
+  display: block;
+  opacity: 0.72;
+  transition: opacity 0.15s ease;
+}
+
+.measures-registry-runtime .registry-public-brand:hover img {
+  opacity: 1;
+}
+
+.measures-registry-runtime .registry-public-brand > span {
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--registry-brand-muted-text);
+}
+
+
+/* Header offset: content must not sit under the absolute-positioned header */
+.measures-registry-runtime .registry-diagnostic-passage {
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(0.8rem, 2.2vw, 1.35rem));
+  padding-left: var(--registry-page-padding-active);
+  padding-right: var(--registry-page-padding-active);
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Video: constrained, centered, reads as governed encounter media */
+.measures-registry-runtime .registry-diagnostic-passage video {
+  max-width: min(var(--registry-content-max-width, 64rem), 100%);
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+/* Controls: align to video edge */
+.measures-registry-runtime .registry-diagnostic-passage-controls {
+  max-width: min(var(--registry-content-max-width, 64rem), 100%);
+  margin-left: auto;
+}
+
+/* Primary CTA: anchored right within the content measure */
+.measures-registry-runtime .registry-diagnostic-passage > button {
+  max-width: min(var(--registry-content-max-width, 64rem), 100%);
+  margin-left: auto;
+}
+
+@media (max-width: 620px) {
+  .measures-registry-runtime .registry-public-brand img {
+    min-width: 30px;
+    width: 34px;
+  }
+
+  .measures-registry-runtime .registry-diagnostic-passage {
+    padding-left: var(--registry-page-padding-active);
+    padding-right: var(--registry-page-padding-active);
+  }
+}
+
+/* ── SPLIT-SCREEN PASSAGE — eval_passage desktop layout ────────────────── */
+.measures-registry-runtime .registry-passage-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  min-height: 100svh;
+  padding: 0;
+  padding-top: 0;
+}
+
+.measures-registry-runtime .registry-passage-media-panel {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.measures-registry-runtime .registry-passage-media-panel video {
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  object-fit: cover;
+  display: block;
+  max-width: none;
+  margin: 0;
+}
+
+.measures-registry-runtime .registry-passage-information-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--registry-header-height, 3rem) + clamp(2rem, 5vw, 4rem))
+    clamp(2rem, 5vw, 4rem)
+    clamp(2rem, 5vw, 4rem);
+  box-sizing: border-box;
+  min-height: 100svh;
+  background: var(--registry-brand-field, #0b0c11);
+}
+
+.measures-registry-runtime .registry-passage-information-panel .registry-encounter-entry {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.measures-registry-runtime .registry-passage-information-panel .registry-encounter-entry > span {
+  font-size: clamp(0.65rem, 1vw, 0.75rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--registry-brand-muted-text);
+}
+
+.measures-registry-runtime .registry-passage-information-panel .registry-encounter-entry > h1 {
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--registry-brand-primary-text);
+}
+
+.measures-registry-runtime .registry-passage-information-panel .registry-encounter-entry > p {
+  font-size: clamp(0.82rem, 1.3vw, 0.96rem);
+  color: var(--registry-brand-secondary-text);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 44ch;
+}
+
+.measures-registry-runtime .registry-passage-information-panel .registry-encounter-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.measures-registry-runtime .registry-passage-audio-control {
+  font-size: clamp(0.78rem, 1.1vw, 0.88rem);
+  letter-spacing: 0.06em;
+  color: var(--registry-brand-secondary-text);
+  background: transparent;
+  border: 1px solid var(--registry-brand-border);
+  padding: 0.3rem 0.85rem;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.12s ease, border-color 0.12s ease;
+}
+
+.measures-registry-runtime .registry-passage-audio-control:hover {
+  opacity: 1;
+  border-color: var(--registry-brand-primary-text);
+}
+
+/* Mobile: stack media first, information second */
+@media (max-width: 768px) {
+  .measures-registry-runtime .registry-passage-split {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    min-height: auto;
+  }
+
+  .measures-registry-runtime .registry-passage-media-panel {
+    order: 1;
+  }
+
+  .measures-registry-runtime .registry-passage-media-panel video {
+    min-height: 45svh;
+  }
+
+  .measures-registry-runtime .registry-passage-information-panel {
+    order: 2;
+    min-height: auto;
+    padding: clamp(1.5rem, 5vw, 2.5rem) var(--registry-page-padding-active)
+      clamp(1.5rem, 5vw, 2.5rem);
+  }
+}
