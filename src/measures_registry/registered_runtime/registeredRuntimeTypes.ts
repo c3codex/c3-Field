@@ -7,7 +7,6 @@ export type RegisteredSurface =
   | "obsidian_to_marble_passage_video"
   | "map_integrity_governance"
   | "structure_passage"
-  | "crystal_chamber"
   | "structural_drift_dispatches"
   | "publication_dispatch"
 
@@ -51,9 +50,9 @@ export type PublicationRegistryRow = {
   metadata: Record<string, unknown> | null
 }
 
-export type MapCommerceContractRow = {
-  contract_key: string
+export type MapC2CircuitRow = {
   map_circuit_key: string
+  map_pathway: "foundational" | "optimization" | "remediation"
   evaluation_standing: string
   applicable_standing_keys: string[]
   product_name: string
@@ -61,11 +60,12 @@ export type MapCommerceContractRow = {
   currency: string
   stripe_product_id: string | null
   release_state: string
-  seat_contract_state: string
   map_boundary: string
   access_boundary: string
+  public_map_boundary: string
+  public_access_boundary: string
+  public_payment_boundary: string
   deliverables: string[]
-  seat_hold_notice: string
 }
 
 export type PublicationDispatchRow = {

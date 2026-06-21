@@ -26,7 +26,7 @@ import type {
   DesignTokenRow,
   LandingSectionRow,
   LandingUnitRow,
-  MapCommerceContractRow,
+  MapC2CircuitRow,
   MediaRow,
   PublicationDispatchRow,
   PublicationRegistryRow,
@@ -38,7 +38,6 @@ import RegisteredPassage from "./renderers/RegisteredPassage"
 import RegisteredPublicAssessment from "./renderers/RegisteredPublicAssessment"
 import RegisteredStructuralDrift from "./renderers/RegisteredStructuralDrift"
 import RegisteredPublicUnderstand from "./renderers/RegisteredPublicUnderstand"
-import RegisteredCrystalChamber from "./renderers/RegisteredCrystalChamber"
 import RegisteredAssessmentLanding from "./renderers/RegisteredAssessmentLanding"
 import MarbleCommerceDirectory from "./renderers/MarbleCommerceDirectory"
 
@@ -56,7 +55,6 @@ const REGISTERED_ENCOUNTER_KEYS = [
   "marble_pathway_reveal",
   "map_integrity_governance",
   "structure_passage",
-  "crystal_chamber",
   "structural_drift_publication",
 ] as const
 
@@ -102,22 +100,8 @@ const SURFACE_QUERY: Record<RegisteredSurface, string> = {
   obsidian_to_marble_passage_video: "obsidian_to_marble_passage_video",
   map_integrity_governance: "map_integrity_governance",
   structure_passage: "structure_passage",
-  crystal_chamber: "crystal_chamber",
   structural_drift_dispatches: "structural_drift_publication",
   publication_dispatch: "publication_dispatch",
-}
-
-const SURFACE_QUERY_ALIASES: Record<string, RegisteredSurface> = {
-  landing_root: "intro",
-  ai_isnt_broken_intro: "intro",
-  landing_path_choice: "path_choice",
-  evaluate_structure_path: "path_choice",
-  // Deprecated internal compatibility only; active governed route authority is eval_passage.
-  educational_diagnostic_passage: "eval_passage",
-  understand_environment: "structure_passage",
-  structural_drift_dispatches: "structural_drift_dispatches",
-  // Legacy alias — active governed surface is map_integrity_governance.
-  marble_pathway_reveal: "map_integrity_governance",
 }
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
@@ -128,6 +112,13 @@ const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
   "/structural-drift": "structural_drift_dispatches",
   "/undrifted": "structural_drift_dispatches",
   "/map-integrity-governance": "map_integrity_governance",
+}
+
+const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<RegisteredSurface, string>> = {
+  ai_operations_assessment_landing: "/ai-operations-assessment",
+  map_integrity_governance: "/map-integrity-governance",
+  structural_drift_dispatches: "/undrifted",
+  publication_dispatch: STRUCTURAL_DRIFT_DISPATCHES_ROUTE,
 }
 
 const ROUTE_UNIT_KEYS: Record<string, string> = {
@@ -142,7 +133,8 @@ const REGISTERED_SURFACES = new Set<RegisteredSurface>(Object.keys(SURFACE_QUERY
 
 function historyUrl(surface: RegisteredSurface) {
   const url = new URL(window.location.href)
-  url.searchParams.set("surface", SURFACE_QUERY[surface])
+  url.pathname = PUBLIC_ROUTE_BY_SURFACE[surface] ?? "/"
+  url.searchParams.delete("surface")
   return `${url.pathname}${url.search}${url.hash}`
 }
 
@@ -164,13 +156,7 @@ function initialSurface(): RegisteredSurface {
   if (window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
   if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCHES_ROUTE) return "structural_drift_dispatches"
 
-  const queryValue = new URLSearchParams(window.location.search).get("surface")
-  if (!queryValue) return "intro"
-
-  const match = Object.entries(SURFACE_QUERY).find(([, v]) => v === queryValue)
-  if (match) return match[0] as RegisteredSurface
-
-  return SURFACE_QUERY_ALIASES[queryValue] ?? "intro"
+  return "intro"
 }
 
 export default function MeasuresRegistryRuntimeRegistered() {
@@ -182,7 +168,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
   const [publicationRows, setPublicationRows] = useState<PublicationRegistryRow[]>([])
   const [publicationDispatchRows, setPublicationDispatchRows] = useState<PublicationDispatchRow[]>([])
-  const [mapCommerceContracts, setMapCommerceContracts] = useState<MapCommerceContractRow[]>([])
+  const [mapC2Circuit, setMapC2Circuit] = useState<MapC2CircuitRow[]>([])
 
   const [mapCheckoutLoading, setMapCheckoutLoading] = useState(false)
   const [mapCheckoutError, setMapCheckoutError] = useState<string | null>(null)
@@ -239,7 +225,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
     async function loadData() {
       if (supabaseConfigError) return
 
-      const [sectionResult, landingUnitResult, mediaResult, tokenResult, publicationResult, dispatchResult, mapContractResult] =
+      const [sectionResult, landingUnitResult, mediaResult, tokenResult, publicationResult, dispatchResult, mapC2CircuitResult] =
         await Promise.all([
           supabase
             .from("measures_encounter_def")
@@ -274,8 +260,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
             .eq("status", "published")
             .order("issue_number", { ascending: true }),
           supabase
-            .from("map_commerce_contracts")
-            .select("contract_key, map_circuit_key, evaluation_standing, applicable_standing_keys, product_name, amount_usd, currency, stripe_product_id, release_state, seat_contract_state, map_boundary, access_boundary, deliverables, seat_hold_notice")
+            .from("map_c2_circuit")
+            .select("map_circuit_key, map_pathway, evaluation_standing, applicable_standing_keys, product_name, amount_usd, currency, stripe_product_id, release_state, map_boundary, access_boundary, public_map_boundary, public_access_boundary, public_payment_boundary, deliverables")
             .eq("release_state", "active")
             .order("amount_usd", { ascending: true }),
         ])
@@ -289,7 +275,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
       if (!tokenResult.error) setDesignTokens((tokenResult.data ?? []) as DesignTokenRow[])
       if (!publicationResult.error) setPublicationRows((publicationResult.data ?? []) as PublicationRegistryRow[])
       if (!dispatchResult.error) setPublicationDispatchRows((dispatchResult.data ?? []) as PublicationDispatchRow[])
-      if (!mapContractResult.error) setMapCommerceContracts((mapContractResult.data ?? []) as MapCommerceContractRow[])
+      if (!mapC2CircuitResult.error) setMapC2Circuit((mapC2CircuitResult.data ?? []) as MapC2CircuitRow[])
     }
 
     void loadData()
@@ -470,7 +456,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const evaluationChamberCopy = sectionCopy(sectionMap.get("measures_assessment"))
   const obsidianToMarblePassageCopy = sectionCopy(sectionMap.get("obsidian_to_marble_passage_video"))
   const structurePassageCopy = sectionCopy(sectionMap.get("structure_passage"))
-  const crystalChamberCopy = sectionCopy(sectionMap.get("crystal_chamber"))
   const structuralDriftCopy = sectionCopy(sectionMap.get("structural_drift_publication"))
   const publicAssessBoundary = asRecord(
     asRecord(evaluationChamberCopy.publicRuntimeBoundary?.public_paths)?.assess_environment ??
@@ -821,21 +806,22 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
   // --- MAP payment ---
 
-  async function handleProceedToMapPayment(contract: MapCommerceContractRow) {
+  async function handleProceedToMapPayment(paymentOption: MapC2CircuitRow) {
     setMapCheckoutLoading(true)
     setMapCheckoutError(null)
 
     try {
       const origin = window.location.origin
-      const successUrl = `${origin}/?surface=map_integrity_governance`
-      const cancelUrl = `${origin}/?surface=map_integrity_governance`
+      const successUrl = `${origin}/map-integrity-governance`
+      const cancelUrl = `${origin}/map-integrity-governance`
 
       const response = await fetch("/api/map/create-checkout-session", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           evaluation_result_id: evalReport?.standing_key ?? null,
-          map_standing: evalReport?.standing_key ?? contract.evaluation_standing,
+          map_standing: evalReport?.standing_key ?? paymentOption.evaluation_standing,
+          map_pathway: paymentOption.map_pathway,
           contact_email: evalFields.contact_email ?? "",
           success_url: successUrl,
           cancel_url: cancelUrl,
@@ -1013,6 +999,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         thresholdRightStillUrl={thresholdRightStillUrl}
         thresholdRightMotionUrl={thresholdRightMotionUrl}
         introCopy={introCopy}
+        thresholdCopy={pathChoiceCopy}
         onEpigraphEnter={() => setEpigraphEntered(true)}
         onEpigraphMuteToggle={() => setEpigraphMuted((current) => !current)}
         onEpigraphSkip={() => setLandingHeroReady(true)}
@@ -1074,24 +1061,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         passageMuted={passageMuted}
         renderHeader={() => renderHeader(structurePassageCopy.header)}
         renderSystemFooter={renderSystemFooter}
-        onContinueToCrystal={() => navigate("crystal_chamber")}
         onToggleMuted={() => setPassageMuted((current) => !current)}
-      />
-    )
-  } else if (activeSurface === "crystal_chamber") {
-    activeSurfaceElement = (
-      <RegisteredCrystalChamber
-        registryTokenStyle={launchMediaStyle}
-        crystalChamberCopy={crystalChamberCopy}
-        chamberCarrierCopy={structurePassageCopy}
-        questionsVideoUrl={questionsUngovernedSystemsVideoUrl}
-        structuralDriftCoverUrl={structuralDriftFeatureImageUrl}
-        registryMarkUrl={registryMarkUrl}
-        structuralDriftAvailable={Boolean(structuralDriftPublication || structuralDriftDispatches.length > 0)}
-        renderHeader={() => renderHeader(crystalChamberCopy.header ?? structurePassageCopy.header)}
-        renderSystemFooter={renderSystemFooter}
-        onAssessEnvironment={() => navigate("eval_passage")}
-        onStructuralDrift={() => navigate("structural_drift_dispatches")}
       />
     )
   } else if (activeSurface === "measures_assessment") {
@@ -1172,7 +1142,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         currentAiUsage={evalFields.ai_deployment_status?.trim() || null}
         conditionTraces={conditionTraces}
         environmentScore={evalScore}
-        mapCommerceContracts={mapCommerceContracts}
+        mapC2Circuit={mapC2Circuit}
         checkoutLoading={mapCheckoutLoading}
         checkoutError={mapCheckoutError}
         paymentReturn={mapPaymentReturn}

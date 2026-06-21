@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react"
-import type { MapCommerceContractRow } from "../registeredRuntimeTypes"
+import type { MapC2CircuitRow } from "../registeredRuntimeTypes"
 import type { AssessmentConditionTrace, EnvironmentalStandingReport } from "../registeredRuntimeUtils"
 
 type PaymentReturnStatus = {
@@ -16,14 +16,14 @@ type Props = {
   currentAiUsage: string | null
   conditionTraces: AssessmentConditionTrace[]
   environmentScore: number | null
-  mapCommerceContracts: MapCommerceContractRow[]
+  mapC2Circuit: MapC2CircuitRow[]
   checkoutLoading: boolean
   checkoutError: string | null
   paymentReturn: PaymentReturnStatus | null
   marbleAccentReferenceUrl: string | null
   renderHeader: () => ReactNode
   renderSystemFooter: () => ReactNode
-  onProceedToPayment: (contract: MapCommerceContractRow) => void
+  onProceedToPayment: (paymentOption: MapC2CircuitRow) => void
 }
 
 function formatUsd(amount: number) {
@@ -37,7 +37,7 @@ export default function MarbleCommerceDirectory({
   currentAiUsage,
   conditionTraces,
   environmentScore,
-  mapCommerceContracts,
+  mapC2Circuit,
   checkoutLoading,
   checkoutError,
   paymentReturn,
@@ -48,8 +48,8 @@ export default function MarbleCommerceDirectory({
 }: Props) {
   const standingKey = evalReport?.standing_key ?? null
 
-  const recommendedContract = standingKey
-    ? mapCommerceContracts.find(
+  const recommendedOption = standingKey
+    ? mapC2Circuit.find(
         (c) => Array.isArray(c.applicable_standing_keys) && c.applicable_standing_keys.includes(standingKey),
       ) ?? null
     : null
@@ -94,7 +94,8 @@ export default function MarbleCommerceDirectory({
                   A System Readiness Consultation will be scheduled to begin your MAP the Environment engagement.
                 </p>
                 <p className="registry-map-seat-hold">
-                  SEAT standing releases only after MAP deliverables and resolution complete the commerce circuit.
+                  MAP review prepares operational findings and next-step recommendations. It does not create certification,
+                  registration, governance standing, or system authority.
                 </p>
               </div>
             </>
@@ -131,8 +132,8 @@ export default function MarbleCommerceDirectory({
     )
   }
 
-  // MAP contracts not yet loaded
-  if (mapCommerceContracts.length === 0) {
+  // MAP C2 circuit payment options not yet loaded
+  if (mapC2Circuit.length === 0) {
     return (
       <main
         className="measures-registry-runtime"
@@ -174,8 +175,7 @@ export default function MarbleCommerceDirectory({
           <h2>MAP Integrity Governance</h2>
           <p>
             Your initial assessment identified the review path. The MAP is not a repeat of that assessment. It is the
-            structured review required to measure, audit, and prepare your organization for the System Environment
-            Alignment Track.
+            structured MAP review required to measure, audit, and prepare your operational environment.
           </p>
           <p>
             Measures Registry does not provide generic helpful suggestions from this assessment. Suggestions can
@@ -193,7 +193,7 @@ export default function MarbleCommerceDirectory({
               <p>For {organizationName}, the assessment result identified:</p>
               <ul>
                 <li>Environment score: {scoreDisplay}</li>
-                <li>Selected review path: {recommendedContract?.product_name ?? evalReport.continuation_pathway}</li>
+                <li>Selected review path: {recommendedOption?.product_name ?? evalReport.continuation_pathway}</li>
                 {currentAiUsage ? <li>Current AI usage: {currentAiUsage}</li> : null}
               </ul>
             </div>
@@ -211,38 +211,38 @@ export default function MarbleCommerceDirectory({
         </div>
 
         <div className="registry-marble-circuit-list">
-          {mapCommerceContracts.map((contract) => {
-            const isRecommended = contract.contract_key === recommendedContract?.contract_key
+          {mapC2Circuit.map((paymentOption) => {
+            const isRecommended = paymentOption.map_circuit_key === recommendedOption?.map_circuit_key
 
             return (
               <article
-                key={contract.contract_key}
+                key={paymentOption.map_circuit_key}
                 className={`registry-marble-circuit-card${isRecommended ? " registry-marble-circuit-card--recommended" : ""}`}
-                data-map-circuit={contract.map_circuit_key}
+                data-map-circuit={paymentOption.map_circuit_key}
                 data-recommended={isRecommended ? "true" : undefined}
-                aria-label={contract.product_name}
+                aria-label={paymentOption.product_name}
               >
                 {isRecommended ? (
                   <span className="registry-marble-circuit-recommendation">Evaluation-Determined Recommendation</span>
                 ) : null}
 
-                <h3>{contract.product_name}</h3>
+                <h3>{paymentOption.product_name}</h3>
 
                 <div className="registry-marble-circuit-description">
                   <strong>MAP Boundary</strong>
-                  <p>{contract.map_boundary}</p>
+                  <p>{paymentOption.public_map_boundary}</p>
                 </div>
 
                 <div className="registry-marble-circuit-access">
                   <strong>Access Requirement</strong>
-                  <p>{contract.access_boundary}</p>
+                  <p>{paymentOption.public_access_boundary}</p>
                 </div>
 
-                {Array.isArray(contract.deliverables) && contract.deliverables.length > 0 ? (
+                {Array.isArray(paymentOption.deliverables) && paymentOption.deliverables.length > 0 ? (
                   <div className="registry-marble-circuit-deliverables">
                     <strong>Deliverables</strong>
                     <ul>
-                      {contract.deliverables.map((item) => (
+                      {paymentOption.deliverables.map((item) => (
                         <li key={item}>{item}</li>
                       ))}
                     </ul>
@@ -250,11 +250,11 @@ export default function MarbleCommerceDirectory({
                 ) : null}
 
                 <div className="registry-marble-circuit-price">
-                  <strong>{formatUsd(contract.amount_usd)}</strong>
+                  <strong>{formatUsd(paymentOption.amount_usd)}</strong>
                 </div>
 
                 <div className="registry-marble-circuit-seat-hold">
-                  <p>{contract.seat_hold_notice}</p>
+                  <p>{paymentOption.public_payment_boundary}</p>
                 </div>
 
                 {isRecommended ? (
@@ -262,7 +262,7 @@ export default function MarbleCommerceDirectory({
                     <button
                       type="button"
                       className="registry-marble-circuit-payment-cta"
-                      onClick={() => onProceedToPayment(contract)}
+                      onClick={() => onProceedToPayment(paymentOption)}
                       disabled={checkoutLoading}
                       aria-busy={checkoutLoading}
                     >
@@ -280,12 +280,6 @@ export default function MarbleCommerceDirectory({
           })}
         </div>
 
-        <div className="registry-marble-directory-holds" aria-label="Post-launch held systems">
-          <p>
-            SEAT standing, c3 Key issuance, wallet integration, Registry Certification, and Registered System standing
-            are held until MAP the Environment is complete.
-          </p>
-        </div>
       </section>
       {renderSystemFooter()}
     </main>

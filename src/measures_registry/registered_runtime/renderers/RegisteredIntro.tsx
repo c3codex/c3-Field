@@ -1,4 +1,5 @@
 import type { CSSProperties, RefObject } from "react"
+import { asString } from "../registeredRuntimeUtils"
 import type { SectionCopy } from "../registeredRuntimeUtils"
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
   thresholdRightStillUrl: string | null
   thresholdRightMotionUrl: string | null
   introCopy: SectionCopy
+  thresholdCopy: SectionCopy
   onEpigraphEnter: () => void
   onEpigraphMuteToggle: () => void
   onEpigraphSkip: () => void
@@ -38,6 +40,8 @@ export default function RegisteredIntro({
   thresholdLeftMotionUrl,
   thresholdRightStillUrl,
   thresholdRightMotionUrl,
+  introCopy,
+  thresholdCopy,
   onEpigraphEnter,
   onEpigraphMuteToggle,
   onEpigraphSkip,
@@ -47,13 +51,18 @@ export default function RegisteredIntro({
   onLeftChoice,
   onRightChoice,
 }: Props) {
+  const thresholdRecords = thresholdCopy.plaques.length > 0 ? thresholdCopy.plaques : thresholdCopy.heroPaths
+  const leftThreshold = thresholdRecords.find((record) => asString(record.side) === "left") ?? thresholdRecords[0]
+  const rightThreshold = thresholdRecords.find((record) => asString(record.side) === "right") ?? thresholdRecords[1]
+
   function renderThresholdSeat(
     side: "left" | "right",
     stillUrl: string | null,
     motionUrl: string | null,
-    copy: { body: string; cta: string; ariaLabel: string },
+    copy: { body: string | null; cta: string | null; ariaLabel: string },
     onChoice: () => void,
   ) {
+    if (!copy.body || !copy.cta) return null
     const isSettled = thresholdMotionSettled[side] || !motionUrl
 
     return (
@@ -134,9 +143,8 @@ export default function RegisteredIntro({
           ) : null}
           {epigraphEntered && !epigraphFailed && epigraphVideoUrl && epigraphMuted ? (
             <div className="registry-epigraph-context">
-              <p>AI is not broken.</p>
-              <p>The systems are.</p>
-              <span>Integrity Governance begins where behavior becomes measurable.</span>
+              {introCopy.title ? <p>{introCopy.title}</p> : null}
+              {introCopy.subtitle ? <span>{introCopy.subtitle}</span> : null}
             </div>
           ) : null}
           {epigraphEntered && !epigraphFailed && epigraphVideoUrl ? (
@@ -155,15 +163,15 @@ export default function RegisteredIntro({
             </div>
           ) : null}
         </section>
-      ) : (
-        <section className="registry-threshold-hero" aria-label="Measures Registry threshold">
+      ) : thresholdRecords.length >= 2 ? (
+        <section className="registry-threshold-hero" aria-label={thresholdCopy.title ?? "Measures Registry threshold"}>
           {renderThresholdSeat(
             "left",
             thresholdLeftStillUrl,
             thresholdLeftMotionUrl,
             {
-              body: "Complexity is scaling faster than clarity. Your systems are producing outcomes nobody can fully explain.",
-              cta: "Assess the Environment",
+              body: asString(leftThreshold?.body),
+              cta: asString(leftThreshold?.title) ?? asString(leftThreshold?.cta) ?? asString(leftThreshold?.label),
               ariaLabel: "Fractured environment motion",
             },
             onLeftChoice,
@@ -174,12 +182,16 @@ export default function RegisteredIntro({
             thresholdRightStillUrl,
             thresholdRightMotionUrl,
             {
-              body: "Coherence must be structured. Measured environments produce stable and governable outcomes.",
-              cta: "Understand the Environment",
+              body: asString(rightThreshold?.body),
+              cta: asString(rightThreshold?.title) ?? asString(rightThreshold?.cta) ?? asString(rightThreshold?.label),
               ariaLabel: "Measured environment motion",
             },
             onRightChoice,
           )}
+        </section>
+      ) : (
+        <section className="registry-held-state" role="status" data-release-standing="held_missing_registry_content">
+          <p>Public threshold content is not seated in the registry.</p>
         </section>
       )}
     </main>
