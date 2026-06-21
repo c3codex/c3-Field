@@ -1,5 +1,5 @@
 // POST /api/map/create-checkout-session
-// Creates a Stripe Checkout Session server-side from DB-held MAP commerce contract.
+// Creates a Stripe Checkout Session server-side from the DB-held MAP C2 circuit.
 // Frontend must not hardcode prices, product IDs, or Stripe URLs.
 // OAR2: oar2_complete_obsidian_marble_launch_chambers_governed_map_payment_boundary_v1
 
@@ -8,18 +8,26 @@ type Env = {
   VITE_SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
   STRIPE_SECRET_KEY?: string
+  STRIPE_MAP_FOUNDATIONAL_PRICE_ID?: string
+  STRIPE_MAP_OPTIMIZATION_PRICE_ID?: string
+  STRIPE_MAP_REMEDIATION_PRICE_ID?: string
+  STRIPE_PRICE_PREDEPLOY_MAP?: string
+  STRIPE_PRICE_OPTIMIZATION_MAP?: string
+  STRIPE_PRICE_REMEDIATION_MAP?: string
 }
 
-type MapCommerceContract = {
-  contract_key: string
+type MapPathway = "foundational" | "optimization" | "remediation"
+
+type MapC2CircuitRow = {
   map_circuit_key: string
+  map_pathway: MapPathway
   product_name: string
   amount_usd: number
   currency: string
   stripe_product_id: string | null
+  stripe_price_id: string | null
+  stripe_price_env_key: string
   applicable_standing_keys: string[]
-  seat_contract_state: string
-  seat_hold_notice: string
 }
 
 type MapPaymentEventRow = {
@@ -38,6 +46,20 @@ function normalizeEmail(email: string) {
 
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+function isMapPathway(value: unknown): value is MapPathway {
+  return value === "foundational" || value === "optimization" || value === "remediation"
+}
+
+function stripePriceForPathway(env: Env, pathway: MapPathway) {
+  if (pathway === "foundational") {
+    return env.STRIPE_MAP_FOUNDATIONAL_PRICE_ID ?? env.STRIPE_PRICE_PREDEPLOY_MAP
+  }
+  if (pathway === "optimization") {
+    return env.STRIPE_MAP_OPTIMIZATION_PRICE_ID ?? env.STRIPE_PRICE_OPTIMIZATION_MAP
+  }
+  return env.STRIPE_MAP_REMEDIATION_PRICE_ID ?? env.STRIPE_PRICE_REMEDIATION_MAP
 }
 
 async function supabaseFetch<T>(env: Env, path: string, init: RequestInit = {}): Promise<T> {
@@ -73,15 +95,19 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     const body = (await request.json().catch(() => ({}))) as {
       evaluation_result_id?: string
       map_standing?: string
+      map_pathway?: string
       contact_email?: string
       success_url?: string
       cancel_url?: string
     }
 
-    const { evaluation_result_id, map_standing, success_url, cancel_url } = body
+    const { evaluation_result_id, map_standing, map_pathway, success_url, cancel_url } = body
     const contact_email = normalizeEmail(body.contact_email ?? "")
 
     if (!map_standing) return jsonResponse({ error: "map_standing is required" }, 400)
+    if (!isMapPathway(map_pathway)) {
+      return jsonResponse({ error: "approved map_pathway is required" }, 400)
+    }
     if (!contact_email || !isValidEmail(contact_email)) {
       return jsonResponse({ error: "valid contact_email is required" }, 400)
     }
@@ -89,22 +115,25 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       return jsonResponse({ error: "success_url and cancel_url are required" }, 400)
     }
 
-    // Load MAP contracts from DB — server-side authority only
-    const contracts = await supabaseFetch<MapCommerceContract[]>(
+    // Load MAP payment options from the C2 circuit; DB state remains server-side authority.
+    const paymentOptions = await supabaseFetch<MapC2CircuitRow[]>(
       env,
-      "map_commerce_contracts?select=contract_key,map_circuit_key,product_name,amount_usd,currency,stripe_product_id,applicable_standing_keys,seat_contract_state,seat_hold_notice&release_state=eq.active",
+      "map_c2_circuit?select=map_circuit_key,map_pathway,product_name,amount_usd,currency,stripe_product_id,stripe_price_id,stripe_price_env_key,applicable_standing_keys&release_state=eq.active",
     )
 
-    const contract = contracts.find(
-      (c) => Array.isArray(c.applicable_standing_keys) && c.applicable_standing_keys.includes(map_standing),
+    const paymentOption = paymentOptions.find(
+      (c) => c.map_pathway === map_pathway
+        && Array.isArray(c.applicable_standing_keys)
+        && c.applicable_standing_keys.includes(map_standing),
     )
 
-    if (!contract) {
-      return jsonResponse({ error: "No MAP contract found for the provided evaluation standing" }, 404)
+    if (!paymentOption) {
+      return jsonResponse({ error: "No MAP payment option found for the provided evaluation standing" }, 404)
     }
 
-    if (!contract.stripe_product_id) {
-      return jsonResponse({ error: "MAP contract payment configuration is incomplete" }, 503)
+    const stripePriceId = stripePriceForPathway(env, map_pathway)
+    if (!stripePriceId || !stripePriceId.startsWith("price_")) {
+      return jsonResponse({ error: "MAP payment option configuration is incomplete" }, 503)
     }
 
     // Record payment event before redirecting to Stripe
@@ -114,8 +143,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       body: JSON.stringify({
         evaluation_result_id: evaluation_result_id ?? null,
         map_standing,
-        map_circuit_key: contract.map_circuit_key,
-        contract_key: contract.contract_key,
+        map_circuit_key: paymentOption.map_circuit_key,
         contact_email,
         payment_status: "checkout_created",
         oar_state: "checkout_initiated",
@@ -127,19 +155,31 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       return jsonResponse({ error: "Payment record could not be created" }, 500)
     }
 
-    // Create Stripe Checkout Session with price_data — no static price IDs required
+    // Create Stripe Checkout Session from the verified server-side Price ID.
     const params = new URLSearchParams({
-      "line_items[0][price_data][currency]": contract.currency,
-      "line_items[0][price_data][unit_amount]": String(contract.amount_usd * 100),
-      "line_items[0][price_data][product]": contract.stripe_product_id,
+      "line_items[0][price]": stripePriceId,
       "line_items[0][quantity]": "1",
       mode: "payment",
       success_url: `${success_url}?map_order_id=${paymentEvent.map_order_id}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url,
       "metadata[map_order_id]": paymentEvent.map_order_id,
+      "metadata[system]": "measures_registry",
+      "metadata[offer_type]": "map",
+      "metadata[map_pathway]": map_pathway,
       "metadata[map_standing]": map_standing,
-      "metadata[map_circuit_key]": contract.map_circuit_key,
+      "metadata[map_circuit_key]": paymentOption.map_circuit_key,
+      "metadata[assessment_result_id]": evaluation_result_id ?? "",
       "metadata[contact_email]": contact_email,
+      "metadata[creates_seat]": "false",
+      "metadata[creates_c3_key]": "false",
+      "metadata[creates_certification]": "false",
+      "payment_intent_data[metadata][map_order_id]": paymentEvent.map_order_id,
+      "payment_intent_data[metadata][system]": "measures_registry",
+      "payment_intent_data[metadata][offer_type]": "map",
+      "payment_intent_data[metadata][map_pathway]": map_pathway,
+      "payment_intent_data[metadata][creates_seat]": "false",
+      "payment_intent_data[metadata][creates_c3_key]": "false",
+      "payment_intent_data[metadata][creates_certification]": "false",
       customer_email: contact_email,
     })
 
@@ -148,6 +188,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       headers: {
         Authorization: `Bearer ${stripeKey}`,
         "Content-Type": "application/x-www-form-urlencoded",
+        "Idempotency-Key": `map-checkout-${paymentEvent.map_order_id}`,
       },
       body: params,
     })
