@@ -421,13 +421,8 @@ export default function RegisteredStructuralDrift({
           {socialLinks.map((social) => {
             const platform = asString(social.platform)
             const url = asString(social.url)
-            const standing = asString(social.standing)
-            if (!platform) return null
-            return url ? (
-              <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
-            ) : (
-              <span key={platform} role="img" aria-label={`${platform} link held`} data-link-standing={standing ?? "held_missing_url"}>{socialGlyph(platform)}</span>
-            )
+            if (!platform || !url) return null
+            return <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
           })}
         </section>
 

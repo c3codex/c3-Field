@@ -61,7 +61,6 @@ const REGISTERED_ENCOUNTER_KEYS = [
 ] as const
 
 const REGISTERED_MEDIA_ROLES = [
-  "epigraph_video",
   "intro_hook_video",
   "explainer_video",
   "left_hero_fracture",
@@ -252,7 +251,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
           supabase
             .from("measures_media_map")
             .select("media_role, storage_bucket, storage_path, mime_type, is_active, metadata")
-            .in("campaign_key", [CAMPAIGN_KEY, "measures_registry_crystal_chamber"])
+            .in("campaign_key", [CAMPAIGN_KEY, "measures_registry_root_authority_v1"])
             .in("media_role", [...REGISTERED_MEDIA_ROLES])
             .order("sort_order", { ascending: true }),
           supabase
@@ -511,7 +510,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
   // --- media URLs ---
 
-  const epigraphVideoUrl = mediaUrl(mediaMap.get("intro_hook_video")) ?? mediaUrl(mediaMap.get("epigraph_video"))
+  const epigraphVideoUrl = mediaUrl(mediaMap.get("intro_hook_video"))
   const explainerVideoUrl = mediaUrl(mediaMap.get("explainer_video"))
   const thresholdLeftStillUrl = mediaUrl(mediaMap.get("left_hero_fracture"))
   const thresholdLeftMotionUrl = mediaUrl(mediaMap.get("left_hero_fracture_motion"))
