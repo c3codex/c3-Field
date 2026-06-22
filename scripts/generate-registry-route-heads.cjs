@@ -140,6 +140,19 @@ function writeC3FieldRouteHead(outDir, template) {
   fs.writeFileSync(path.join(routeDir, "index.html"), html)
 }
 
+function writeAboutRouteHead(outDir, template) {
+  const routeDir = path.join(outDir, "about-measures-registry")
+  fs.mkdirSync(routeDir, { recursive: true })
+  let html = template
+  html = html.replace(/<title>.*?<\/title>/s, "<title>About Measures Registry</title>")
+  html = replaceTag(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/>/s, `<meta name="description" content="Measures Registry is a media-first guided encounter for AI operations governance." />`)
+  html = replaceTag(html, /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/s, `<meta property="og:title" content="About Measures Registry" />`)
+  html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="Measures Registry is a media-first guided encounter for AI operations governance." />`)
+  html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/about-measures-registry" />`)
+  html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="${REGISTRY_BASE_URL}/about-measures-registry" />`)
+  fs.writeFileSync(path.join(routeDir, "index.html"), html)
+}
+
 async function main() {
   if (!supabaseUrl || !supabaseKey) throw new Error("Supabase URL/key missing for registry route head generation")
 
@@ -151,6 +164,7 @@ async function main() {
   fs.writeFileSync(templatePath, template)
 
   writeC3FieldRouteHead(outDir, template)
+  writeAboutRouteHead(outDir, template)
 
   const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } })
 

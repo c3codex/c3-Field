@@ -36,6 +36,7 @@ type Props = {
   onContinueToAssessmentPackage: () => void
   onGoToEvalPassage: () => void
   onAboutMeasuresRegistry: () => void
+  questionsUngovernedVideoUrl: string | null
   agentsWithKeysCoverUrl: string | null
   fablesAndMythsCoverUrl: string | null
   onPublicationEmailChange: (value: string) => void
@@ -80,6 +81,7 @@ export default function RegisteredStructuralDrift({
   onContinueToAssessmentPackage,
   onGoToEvalPassage,
   onAboutMeasuresRegistry,
+  questionsUngovernedVideoUrl,
   agentsWithKeysCoverUrl,
   fablesAndMythsCoverUrl,
   onPublicationEmailChange,
@@ -299,8 +301,8 @@ export default function RegisteredStructuralDrift({
 
   function socialGlyph(platform: string) {
     if (platform === "X") return "𝕏"
-    if (platform === "Facebook") return "f"
     if (platform === "Instagram") return "◎"
+    if (platform === "LinkedIn") return "in"
     return platform.slice(0, 1)
   }
 
@@ -382,6 +384,17 @@ export default function RegisteredStructuralDrift({
           </section>
         ) : null}
 
+        {questionsUngovernedVideoUrl ? (
+          <section className="undrifted-publication-media" aria-label="Publication media">
+            <video
+              src={questionsUngovernedVideoUrl}
+              playsInline
+              controls
+              preload="metadata"
+            />
+          </section>
+        ) : null}
+
         <section id="undrifted-dispatches" className="undrifted-grid undrifted-grid-publication" aria-label="Publication encounters">
           {featuredArticleSet.map((article) => {
             const title = asString(article.title)
@@ -408,22 +421,24 @@ export default function RegisteredStructuralDrift({
 
         <section className="undrifted-about" aria-label="About Measures Registry teaser">
           <span>About Measures Registry</span>
-          <button type="button" onClick={onAboutMeasuresRegistry}>About Measures Registry</button>
+          <a href="/about-measures-registry">About Measures Registry</a>
         </section>
 
         <section className="undrifted-about" aria-label="Leadership access">
           <span>Leadership</span>
           <p>c3 Field / Our Story access remains intentional and outside the default root sequence.</p>
-          <span>Registered Branch of c3 Field</span>
+          <a href="https://c3field.online" target="_blank" rel="noreferrer">c3 Field</a>
         </section>
 
         <section className="undrifted-social-strip" aria-label="unDrifted social profiles">
-          {socialLinks.map((social) => {
-            const platform = asString(social.platform)
-            const url = asString(social.url)
-            if (!platform || !url) return null
-            return <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
-          })}
+          {socialLinks
+            .filter((social) => asString(social.platform) !== "Facebook")
+            .map((social) => {
+              const platform = asString(social.platform)
+              const url = asString(social.url)
+              if (!platform || !url) return null
+              return <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
+            })}
         </section>
 
         <section className="undrifted-evaluation" aria-label="Evaluation entry">

@@ -118,14 +118,16 @@ const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
 const PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT = 7
 
 const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
-  "/ai-operations-assessment": "ai_operations_assessment_landing",
+  "/ai-operations-assessment": "measures_assessment",
   "/structural-drift": "structural_drift_dispatches",
   "/undrifted": "structural_drift_dispatches",
   "/map-integrity-governance": "map_integrity_governance",
+  "/about-measures-registry": "about_measures_registry",
 }
 
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<RegisteredSurface, string>> = {
-  ai_operations_assessment_landing: "/ai-operations-assessment",
+  measures_assessment: "/ai-operations-assessment",
+  about_measures_registry: "/about-measures-registry",
   map_integrity_governance: "/map-integrity-governance",
   structural_drift_dispatches: "/undrifted",
   publication_dispatch: STRUCTURAL_DRIFT_DISPATCHES_ROUTE,
@@ -133,7 +135,6 @@ const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<RegisteredSurface, string>> = {
 
 const ROUTE_UNIT_KEYS: Record<string, string> = {
   "/": "measures_registry_root",
-  "/ai-operations-assessment": "ai_operations_assessment_landing",
   "/structural-drift": "structural_drift_landing",
   "/undrifted": "undrifted_publication_landing",
   // Governed held state: renders landing_unit_missing until map_integrity_governance_landing is seated in measures_registry.
@@ -1260,6 +1261,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onContinueToAssessmentPackage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onGoToEvalPassage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onAboutMeasuresRegistry={() => navigate("about_measures_registry")}
+        questionsUngovernedVideoUrl={questionsUngovernedSystemsVideoUrl}
         agentsWithKeysCoverUrl={agentsWithKeysCoverUrl}
         fablesAndMythsCoverUrl={fablesAndMythsCoverUrl}
         onPublicationEmailChange={setPublicationEmail}
