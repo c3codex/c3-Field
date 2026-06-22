@@ -13,6 +13,13 @@ const supabaseKey =
   process.env.SUPABASE_C3_KEY ||
   process.env.SUPABASE_SERVICE_ROLE_KEY
 
+const REGISTRY_BASE_URL = "https://measuresregistry.com"
+const REGISTRY_OG_IMAGE = "https://measuresregistry.com/og.jpeg"
+
+const REGISTRY_REDIRECT_RULES = [
+  "/c3field https://c3field.online 301",
+]
+
 const routeUnits = [
   {
     routePath: "/ai-operations-assessment",
@@ -98,11 +105,34 @@ function routeSeo(row, routePath) {
   return seo
 }
 
+function patchRootHead(html) {
+  let out = html
+  out = replaceTag(out, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/" />`)
+  out = replaceTag(out, /<meta\s+property="og:image"\s+content="[^"]*"\s*\/>/s, `<meta property="og:image" content="${REGISTRY_OG_IMAGE}" />`)
+  out = replaceTag(out, /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/>/s, `<meta name="twitter:image" content="${REGISTRY_OG_IMAGE}" />`)
+  if (!/<link\s+rel="canonical"/.test(out)) {
+    out = out.replace("</head>", `    <link rel="canonical" href="${REGISTRY_BASE_URL}/" />\n  </head>`)
+  }
+  return out
+}
+
+function patchRedirects(outDir) {
+  const redirectsPath = path.join(outDir, "_redirects")
+  const existing = fs.existsSync(redirectsPath) ? fs.readFileSync(redirectsPath, "utf8") : ""
+  const lines = existing.split("\n").filter((l) => l.trim() && !REGISTRY_REDIRECT_RULES.some((r) => l.startsWith(r.split(" ")[0])))
+  fs.writeFileSync(redirectsPath, [...REGISTRY_REDIRECT_RULES, ...lines].join("\n") + "\n")
+}
+
 async function main() {
   if (!supabaseUrl || !supabaseKey) throw new Error("Supabase URL/key missing for registry route head generation")
 
+  patchRedirects(outDir)
+
   const templatePath = path.join(outDir, "index.html")
-  const template = fs.readFileSync(templatePath, "utf8")
+  const rawTemplate = fs.readFileSync(templatePath, "utf8")
+  const template = patchRootHead(rawTemplate)
+  fs.writeFileSync(templatePath, template)
+
   const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } })
 
   const { data, error } = await supabase
