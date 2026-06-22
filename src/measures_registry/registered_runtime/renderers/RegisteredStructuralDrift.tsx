@@ -331,48 +331,26 @@ export default function RegisteredStructuralDrift({
               : "This article is not yet published. Its registry position and media are seated without inventing publication standing."}</p>
           </section>
         ) : null}
-        <header className="undrifted-hero">
-          <div className="undrifted-hero-copy">
-            <span>{parentAuthority ? `${parentAuthority} Publication` : "Measures Registry Publication"}</span>
-            {primaryLogoPath ? (
-              <img
-                className="undrifted-primary-lockup"
-                src={primaryLogoPath}
-                alt="unDrifted primary mark"
-              />
-            ) : null}
-            <h1 aria-label={brandTitle}>
-              <span>{brandTitle.slice(0, 2)}</span>{brandTitle.slice(2)}
-            </h1>
-            {subtitleLines.length > 0 ? (
-              <p className="undrifted-brand-line">
-                {subtitleLines.map((line) => (
-                  <span key={line}>{line}</span>
-                ))}
-              </p>
-            ) : undriftedPublication?.subtitle ? (
-              <p>{undriftedPublication.subtitle}</p>
-            ) : null}
-            {description ? <p className="undrifted-description">{description}</p> : null}
-            <div className="undrifted-hero-actions" aria-label="Publication actions">
-              <a href="#undrifted-dispatches">{primaryCta}</a>
-              {secondaryCtaRoute ? (
-                <a href={secondaryCtaRoute}>{secondaryCta}</a>
-              ) : (
-                <button type="button" onClick={onBeginEvaluation}>{secondaryCta}</button>
-              )}
-            </div>
+
+        {/* 1. Top bar */}
+        <header className="undrifted-topbar" aria-label="unDrifted publication header">
+          <div className="undrifted-topbar-brand">
+            <span className="undrifted-wordmark" aria-label={brandTitle}>
+              <span>un</span><strong>Drifted</strong>
+            </span>
+            <span className="undrifted-topbar-sep" aria-hidden="true" />
+            <span className="undrifted-topbar-label">{parentAuthority ? `${parentAuthority} Publication` : "Measures Registry Publication"}</span>
           </div>
-          <div className="undrifted-principles" aria-label="Publication principles">
-            {(principles.length > 0 ? principles : [
-              "Landing design contract missing.",
-            ]).map((principle) => (
-              <article key={principle}>
-                <span />
-                <p>{principle}</p>
-              </article>
-            ))}
-          </div>
+          <nav className="undrifted-topbar-social" aria-label="Publication social profiles">
+            {socialLinks
+              .filter((social) => asString(social.platform) !== "Facebook")
+              .map((social) => {
+                const platform = asString(social.platform)
+                const url = asString(social.url)
+                if (!platform || !url) return null
+                return <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
+              })}
+          </nav>
         </header>
 
         {isLegacyStructuralDriftRoute ? (
@@ -384,87 +362,116 @@ export default function RegisteredStructuralDrift({
           </section>
         ) : null}
 
-        {questionsUngovernedVideoUrl ? (
-          <section className="undrifted-publication-media" aria-label="Publication media">
-            <video
-              src={questionsUngovernedVideoUrl}
-              playsInline
-              controls
-              preload="metadata"
-            />
-          </section>
-        ) : null}
-
-        <section id="undrifted-dispatches" className="undrifted-grid undrifted-grid-publication" aria-label="Publication encounters">
-          {featuredArticleSet.map((article) => {
-            const title = asString(article.title)
-            const coverUrl = manifestCover(asString(article.media_role))
-            if (!title) return null
-            return (
-              <article key={title} className="undrifted-article-card" data-publish-state={asString(article.publication_state) ?? "held"}>
-                {coverUrl ? <img src={coverUrl} alt="" /> : null}
-                <h2>{title}</h2>
-                <button type="button" onClick={() => { setSelectedManifestArticle(title); window.scrollTo({ top: 0, behavior: "smooth" }) }}>Open Article Standing</button>
-              </article>
-            )
-          })}
-          {featuredArticleSet.length === 0 ? <section className="undrifted-empty"><p>Featured article registry state is not seated.</p></section> : null}
-          {publicationRule ? <p className="undrifted-rule">{publicationRule}</p> : null}
-        </section>
-
-        {aboutTitle || aboutBody ? (
-          <section className="undrifted-about" aria-label="About unDrifted">
-            {aboutTitle ? <span>{aboutTitle}</span> : null}
-            {aboutBody ? <p>{aboutBody}</p> : null}
-          </section>
-        ) : null}
-
-        <section className="undrifted-about" aria-label="About Measures Registry teaser">
-          <span>About Measures Registry</span>
-          <a href="/about-measures-registry">About Measures Registry</a>
-        </section>
-
-        <section className="undrifted-about" aria-label="Leadership access">
-          <span>Leadership</span>
-          <p>c3 Field / Our Story access remains intentional and outside the default root sequence.</p>
-          <a href="https://c3field.online" target="_blank" rel="noreferrer">c3 Field</a>
-        </section>
-
-        <section className="undrifted-social-strip" aria-label="unDrifted social profiles">
-          {socialLinks
-            .filter((social) => asString(social.platform) !== "Facebook")
-            .map((social) => {
-              const platform = asString(social.platform)
-              const url = asString(social.url)
-              if (!platform || !url) return null
-              return <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
-            })}
-        </section>
-
-        <section className="undrifted-evaluation" aria-label="Evaluation entry">
-          <div>
-            <span>Diagnostic Intake</span>
-            <h2>{evalReport ? "Continue to Assessment Package" : footerCtaLabel}</h2>
-            <p>
-              {evalReport
-                ? "Your assessment result is ready. Continue to receive your assessment package."
-                : footerCtaSubline}
-            </p>
+        {/* 2. Hero / Diagnostic Intake */}
+        <section className="undrifted-hero-dispatch" aria-label="Dispatch and diagnostic intake">
+          <div className="undrifted-dispatch-left">
+            <span className="undrifted-eyebrow">Dispatch</span>
+            <h1>AI Isn&apos;t Broken. Systems Are.</h1>
+            {questionsUngovernedVideoUrl ? (
+              <div className="undrifted-dispatch-media">
+                <video src={questionsUngovernedVideoUrl} playsInline controls preload="metadata" />
+              </div>
+            ) : null}
+            <p>Dispatches from Measures Registry on structural drift, AI operations, and governed environments.</p>
           </div>
-          {evalReport ? (
-            <button type="button" onClick={onContinueToAssessmentPackage}>
-              Continue to Assessment Package
-            </button>
-          ) : footerCtaRoute ? (
-            <a href={footerCtaRoute}>{footerCtaLabel}</a>
-          ) : (
-            <button type="button" onClick={onBeginEvaluation}>
-              {footerCtaLabel}
-            </button>
-          )}
+          <div className="undrifted-dispatch-right">
+            <span className="undrifted-eyebrow">Diagnostic Intake</span>
+            <h2>Assess the Environment</h2>
+            <p>Begin where drift becomes visible. This assessment reveals structural gaps, operational misalignments, and governance risks across your AI environment.</p>
+            {evalReport ? (
+              <button type="button" className="undrifted-cta-primary" onClick={onContinueToAssessmentPackage}>
+                Continue to Assessment Package →
+              </button>
+            ) : (
+              <a className="undrifted-cta-primary" href="/ai-operations-assessment">
+                Assess the Environment →
+              </a>
+            )}
+            <ul className="undrifted-dispatch-bullets">
+              <li>Detect drift</li>
+              <li>Measure condition</li>
+              <li>Correct authority path</li>
+              <li>Govern continuity</li>
+            </ul>
+          </div>
         </section>
 
-        {renderSystemFooter()}
+        {/* 3. Insights / Articles */}
+        <section className="undrifted-insights" aria-label="Insights">
+          <div className="undrifted-insights-header">
+            <span className="undrifted-eyebrow">Insights</span>
+            <h2>Read unDrifted</h2>
+          </div>
+          <div className="undrifted-insights-grid">
+            {featuredArticleSet.map((article) => {
+              const title = asString(article.title)
+              const coverUrl = manifestCover(asString(article.media_role))
+              const desc = asString(article.description) ?? asString(article.subtitle)
+              const articleUrl = asString(article.article_url) ?? asString(article.external_url) ?? null
+              const pubState = asString(article.publication_state)
+              if (!title) return null
+              return (
+                <article key={title} className="undrifted-insight-card" data-publish-state={pubState ?? "held"}>
+                  {coverUrl ? (
+                    <div className="undrifted-insight-cover">
+                      <img src={coverUrl} alt="" />
+                    </div>
+                  ) : null}
+                  <div className="undrifted-insight-body">
+                    <h3>{title}</h3>
+                    {desc ? <p>{desc}</p> : null}
+                    {articleUrl ? (
+                      <a href={articleUrl} target="_blank" rel="noreferrer">Read Article →</a>
+                    ) : (
+                      <button type="button" onClick={() => { setSelectedManifestArticle(title); window.scrollTo({ top: 0, behavior: "smooth" }) }}>
+                        Open Article Standing
+                      </button>
+                    )}
+                  </div>
+                </article>
+              )
+            })}
+            {featuredArticleSet.length === 0 ? (
+              <section className="undrifted-empty"><p>Featured article registry state is not seated.</p></section>
+            ) : null}
+          </div>
+        </section>
+
+        {/* 4. Lower dispatch cards */}
+        <section className="undrifted-dispatch-cards" aria-label="Dispatch destinations">
+          <article className="undrifted-dispatch-card">
+            <span className="undrifted-eyebrow">About</span>
+            <h2>About Measures Registry</h2>
+            <p>{aboutBody ?? "Measures Registry provides the structure, standards, and governance pathways needed to convert AI potential into measurable, reliable outcomes."}</p>
+            <a href="/about-measures-registry">About Measures Registry →</a>
+          </article>
+          <article className="undrifted-dispatch-card">
+            <span className="undrifted-eyebrow">Leadership</span>
+            <h2>c3 Field</h2>
+            <p>Operational leadership and transformation support for AI environments that require measurable outcomes and governed continuity.</p>
+            <a href="https://c3field.online" target="_blank" rel="noreferrer">c3 Field / Our Story →</a>
+          </article>
+          <article className="undrifted-dispatch-card undrifted-dispatch-card--visual">
+            <h2>Leadership for Governed Environments.</h2>
+            <a href="https://c3field.online" target="_blank" rel="noreferrer">Explore c3 Field →</a>
+          </article>
+        </section>
+
+        {/* 5. Footer / Connect */}
+        <footer className="undrifted-connect-footer" aria-label="Connect">
+          <span>Connect</span>
+          <nav aria-label="Social profiles">
+            {socialLinks
+              .filter((social) => asString(social.platform) !== "Facebook")
+              .map((social) => {
+                const platform = asString(social.platform)
+                const url = asString(social.url)
+                if (!platform || !url) return null
+                return <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
+              })}
+          </nav>
+          {renderSystemFooter()}
+        </footer>
       </section>
     </main>
   )
