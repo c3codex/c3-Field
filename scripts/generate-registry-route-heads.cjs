@@ -18,6 +18,7 @@ const REGISTRY_OG_IMAGE = "https://measuresregistry.com/og.jpeg"
 
 const REGISTRY_REDIRECT_RULES = [
   "/c3field https://c3field.online 301",
+  "/c3field/ https://c3field.online 301",
 ]
 
 const routeUnits = [
@@ -123,6 +124,22 @@ function patchRedirects(outDir) {
   fs.writeFileSync(redirectsPath, [...REGISTRY_REDIRECT_RULES, ...lines].join("\n") + "\n")
 }
 
+function writeC3FieldRouteHead(outDir, template) {
+  const routeDir = path.join(outDir, "c3field")
+  fs.mkdirSync(routeDir, { recursive: true })
+  let html = template
+  html = html.replace(/<title>.*?<\/title>/s, "<title>c3 Field — Measures Registry</title>")
+  html = replaceTag(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/>/s, `<meta name="description" content="Measures Registry is a registered branch of c3 Field." />`)
+  html = replaceTag(html, /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/s, `<meta property="og:title" content="c3 Field" />`)
+  html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="Measures Registry is a registered branch of c3 Field." />`)
+  html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="https://c3field.online" />`)
+  html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="https://c3field.online" />`)
+  if (!/<meta\s+http-equiv="refresh"/.test(html)) {
+    html = html.replace("</head>", `    <meta http-equiv="refresh" content="0; url=https://c3field.online" />\n  </head>`)
+  }
+  fs.writeFileSync(path.join(routeDir, "index.html"), html)
+}
+
 async function main() {
   if (!supabaseUrl || !supabaseKey) throw new Error("Supabase URL/key missing for registry route head generation")
 
@@ -132,6 +149,8 @@ async function main() {
   const rawTemplate = fs.readFileSync(templatePath, "utf8")
   const template = patchRootHead(rawTemplate)
   fs.writeFileSync(templatePath, template)
+
+  writeC3FieldRouteHead(outDir, template)
 
   const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } })
 

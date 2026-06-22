@@ -161,11 +161,16 @@ function writeHistory(method: "pushState" | "replaceState", surface: RegisteredS
   )
 }
 
+function normalizePathname(pathname: string): string {
+  return pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname
+}
+
 function initialSurface(): RegisteredSurface | null {
-  const routeSurface = ROUTE_SURFACE_ALIASES[window.location.pathname]
+  const pathname = normalizePathname(window.location.pathname)
+  const routeSurface = ROUTE_SURFACE_ALIASES[pathname]
   if (routeSurface) return routeSurface
-  if (window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
-  if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCHES_ROUTE) return "structural_drift_dispatches"
+  if (pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
+  if (pathname === STRUCTURAL_DRIFT_DISPATCHES_ROUTE) return "structural_drift_dispatches"
 
   return null
 }
@@ -347,10 +352,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
     [landingUnits],
   )
 
-  const activeRouteUnitKey = ROUTE_UNIT_KEYS[window.location.pathname] ?? null
+  const activeRouteUnitKey = ROUTE_UNIT_KEYS[normalizePathname(window.location.pathname)] ?? null
   const activeRouteUnit = activeRouteUnitKey ? landingUnitMap.get(activeRouteUnitKey) ?? null : null
   const undriftedLandingUnit = landingUnitMap.get("undrifted_publication_landing") ?? null
-  const activeRouteDefaultSurface = ROUTE_SURFACE_ALIASES[window.location.pathname] ?? null
+  const activeRouteDefaultSurface = ROUTE_SURFACE_ALIASES[normalizePathname(window.location.pathname)] ?? null
 
   function governedSurface(unit: LandingUnitRow | null, metadataKey: string) {
     const surface = asString(unit?.metadata?.[metadataKey])
