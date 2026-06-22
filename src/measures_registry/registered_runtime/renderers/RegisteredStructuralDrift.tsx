@@ -1,6 +1,8 @@
+import { useState } from "react"
 import type { CSSProperties, FormEvent, ReactNode } from "react"
 import {
   asRecord,
+  asRecordArray,
   asString,
   asStringArray,
   dispatchIssueLabel,
@@ -33,6 +35,9 @@ type Props = {
   onBeginEvaluation: () => void
   onContinueToAssessmentPackage: () => void
   onGoToEvalPassage: () => void
+  onAboutMeasuresRegistry: () => void
+  agentsWithKeysCoverUrl: string | null
+  fablesAndMythsCoverUrl: string | null
   onPublicationEmailChange: (value: string) => void
   onPublicationOrganizationChange: (value: string) => void
   onSubmitSubscription: (event: FormEvent<HTMLFormElement>) => void
@@ -74,11 +79,15 @@ export default function RegisteredStructuralDrift({
   onBeginEvaluation,
   onContinueToAssessmentPackage,
   onGoToEvalPassage,
+  onAboutMeasuresRegistry,
+  agentsWithKeysCoverUrl,
+  fablesAndMythsCoverUrl,
   onPublicationEmailChange,
   onPublicationOrganizationChange,
   onSubmitSubscription,
   renderSystemFooter,
 }: Props) {
+  const [selectedManifestArticle, setSelectedManifestArticle] = useState<string | null>(null)
   if (variant === "article") {
     const publicationAuthority = undriftedPublication ?? structuralDriftPublication
 
@@ -246,7 +255,8 @@ export default function RegisteredStructuralDrift({
   }
 
   // index variant
-  const featuredDispatch = structuralDriftDispatches[0] ?? null
+  const featuredArticleSet = asRecordArray(publicationLandingUnit?.metadata?.featured_article_set)
+  const socialLinks = asRecordArray(publicationLandingUnit?.metadata?.social_links)
   const isLegacyStructuralDriftRoute = routePath === "/structural-drift"
   const routeShell =
     routePath === "/undrifted"
@@ -279,6 +289,20 @@ export default function RegisteredStructuralDrift({
   const footerCtaSubline = asString(ctaContract?.subline) ?? "Begin where drift becomes visible."
   const footerCtaRoute = asString(ctaContract?.target_route)
   const primaryLogoPath = asString(brandAssets?.primary_full_lockup_path)
+  const selectedArticle = featuredArticleSet.find((article) => asString(article.title) === selectedManifestArticle) ?? null
+
+  function manifestCover(mediaRole: string | null) {
+    if (mediaRole === "agents_with_keys_cover") return agentsWithKeysCoverUrl
+    if (mediaRole === "fables_and_myths_cover") return fablesAndMythsCoverUrl
+    return null
+  }
+
+  function socialGlyph(platform: string) {
+    if (platform === "X") return "𝕏"
+    if (platform === "Facebook") return "f"
+    if (platform === "Instagram") return "◎"
+    return platform.slice(0, 1)
+  }
 
   return (
     <main
@@ -293,6 +317,18 @@ export default function RegisteredStructuralDrift({
       style={registryTokenStyle}
     >
       <section className="undrifted-shell" aria-label={brandTitle}>
+        {selectedArticle ? (
+          <section className="undrifted-article-overlay" role="dialog" aria-modal="true" aria-label={asString(selectedArticle.title) ?? "Article standing"}>
+            <button type="button" onClick={() => setSelectedManifestArticle(null)}>Close</button>
+            {manifestCover(asString(selectedArticle.media_role)) ? <img src={manifestCover(asString(selectedArticle.media_role)) ?? ""} alt="" /> : null}
+            <h2>{asString(selectedArticle.title)}</h2>
+            <p>{asString(selectedArticle.publication_state) === "published"
+              ? asString(selectedArticle.article_route)
+                ? "Article content is available through its seated publication route."
+                : "Published standing is seated, but the article route and content are not. Opening remains held."
+              : "This article is not yet published. Its registry position and media are seated without inventing publication standing."}</p>
+          </section>
+        ) : null}
         <header className="undrifted-hero">
           <div className="undrifted-hero-copy">
             <span>{parentAuthority ? `${parentAuthority} Publication` : "Measures Registry Publication"}</span>
@@ -346,63 +382,21 @@ export default function RegisteredStructuralDrift({
           </section>
         ) : null}
 
-        <section id="undrifted-dispatches" className="undrifted-grid undrifted-grid-publication" aria-label="Publication dispatches">
-
-          {featuredDispatch ? (
-            <article
-              className="undrifted-featured"
-              data-dispatch-key={featuredDispatch.dispatch_key}
-              data-publish-state={featuredDispatch.status}
-              data-claim-boundary={asString(featuredDispatch.metadata?.claim_boundary) ?? asString(publicationLandingUnit?.metadata?.claims_boundary) ?? "education_only"}
-              data-media-key={asString(featuredDispatch.media_manifest?.media_key) ?? undefined}
-            >
-              <div>
-                <span>{dispatchIssueLabel(featuredDispatch)}</span>
-                <strong>{dispatchTypeLabel(featuredDispatch)}</strong>
-              </div>
-              <h2>{featuredDispatch.title}</h2>
-              {dispatchThesis(featuredDispatch) ? <p>{dispatchThesis(featuredDispatch)}</p> : null}
-              {featuredDispatch.tags?.length ? (
-                <div className="undrifted-card-tags" aria-label="Dispatch tags">
-                  {featuredDispatch.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}
-                </div>
-              ) : null}
-              {featuredDispatch.internal_route ? (
-                <a href={featuredDispatch.internal_route}>Read the Dispatch</a>
-              ) : (
-                <span>Article route not seated</span>
-              )}
-            </article>
-          ) : (
-            <section className="undrifted-empty" aria-label="Missing dispatch state">
-              <span>Article registry state</span>
-              <p>No published Structural Drift dispatch rows are currently seated.</p>
-            </section>
-          )}
-
-          <aside className="undrifted-latest" aria-label="Latest dispatch">
-            <span>Latest Dispatch</span>
-            {structuralDriftDispatches.slice(0, 2).map((dispatch) => (
-              <article
-                key={dispatch.dispatch_key}
-                className="undrifted-article-card"
-                data-dispatch-key={dispatch.dispatch_key}
-                data-publish-state={dispatch.status}
-                data-claim-boundary={asString(dispatch.metadata?.claim_boundary) ?? asString(publicationLandingUnit?.metadata?.claims_boundary) ?? "education_only"}
-                data-media-key={asString(dispatch.media_manifest?.media_key) ?? undefined}
-              >
-                <small>{dispatchIssueLabel(dispatch)} / {dispatchTypeLabel(dispatch)}</small>
-                <h3>{dispatch.title}</h3>
-                {dispatch.excerpt ?? dispatchThesis(dispatch) ? <p>{dispatch.excerpt ?? dispatchThesis(dispatch)}</p> : null}
-                {dispatch.internal_route ? (
-                  <a href={dispatch.internal_route}>Read the Dispatch</a>
-                ) : (
-                  <small>Article route not seated</small>
-                )}
+        <section id="undrifted-dispatches" className="undrifted-grid undrifted-grid-publication" aria-label="Publication encounters">
+          {featuredArticleSet.map((article) => {
+            const title = asString(article.title)
+            const coverUrl = manifestCover(asString(article.media_role))
+            if (!title) return null
+            return (
+              <article key={title} className="undrifted-article-card" data-publish-state={asString(article.publication_state) ?? "held"}>
+                {coverUrl ? <img src={coverUrl} alt="" /> : null}
+                <h2>{title}</h2>
+                <button type="button" onClick={() => { setSelectedManifestArticle(title); window.scrollTo({ top: 0, behavior: "smooth" }) }}>Open Article Standing</button>
               </article>
-            ))}
-            {publicationRule ? <p className="undrifted-rule">{publicationRule}</p> : null}
-          </aside>
+            )
+          })}
+          {featuredArticleSet.length === 0 ? <section className="undrifted-empty"><p>Featured article registry state is not seated.</p></section> : null}
+          {publicationRule ? <p className="undrifted-rule">{publicationRule}</p> : null}
         </section>
 
         {aboutTitle || aboutBody ? (
@@ -411,6 +405,31 @@ export default function RegisteredStructuralDrift({
             {aboutBody ? <p>{aboutBody}</p> : null}
           </section>
         ) : null}
+
+        <section className="undrifted-about" aria-label="About Measures Registry teaser">
+          <span>About Measures Registry</span>
+          <button type="button" onClick={onAboutMeasuresRegistry}>About Measures Registry</button>
+        </section>
+
+        <section className="undrifted-about" aria-label="Leadership access">
+          <span>Leadership</span>
+          <p>c3 Field / Our Story access remains intentional and outside the default root sequence.</p>
+          <span>Registered Branch of c3 Field</span>
+        </section>
+
+        <section className="undrifted-social-strip" aria-label="unDrifted social profiles">
+          {socialLinks.map((social) => {
+            const platform = asString(social.platform)
+            const url = asString(social.url)
+            const standing = asString(social.standing)
+            if (!platform) return null
+            return url ? (
+              <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
+            ) : (
+              <span key={platform} role="img" aria-label={`${platform} link held`} data-link-standing={standing ?? "held_missing_url"}>{socialGlyph(platform)}</span>
+            )
+          })}
+        </section>
 
         <section className="undrifted-evaluation" aria-label="Evaluation entry">
           <div>

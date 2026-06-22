@@ -1,6 +1,10 @@
 export type RegisteredSurface =
   | "intro"
+  | "intro_hook"
   | "path_choice"
+  | "structural_coherence_explainer"
+  | "measures_structured_environments"
+  | "about_measures_registry"
   | "ai_operations_assessment_landing"
   | "eval_passage"
   | "measures_assessment"

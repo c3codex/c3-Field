@@ -40,6 +40,7 @@ import RegisteredStructuralDrift from "./renderers/RegisteredStructuralDrift"
 import RegisteredPublicUnderstand from "./renderers/RegisteredPublicUnderstand"
 import RegisteredAssessmentLanding from "./renderers/RegisteredAssessmentLanding"
 import MarbleCommerceDirectory from "./renderers/MarbleCommerceDirectory"
+import RegisteredAboutMeasuresRegistry from "./renderers/RegisteredAboutMeasuresRegistry"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
@@ -55,11 +56,13 @@ const REGISTERED_ENCOUNTER_KEYS = [
   "marble_pathway_reveal",
   "map_integrity_governance",
   "structure_passage",
+  "about_measures_registry",
   "structural_drift_publication",
 ] as const
 
 const REGISTERED_MEDIA_ROLES = [
   "epigraph_video",
+  "intro_hook_video",
   "explainer_video",
   "left_hero_fracture",
   "left_hero_fracture_motion",
@@ -85,6 +88,10 @@ const REGISTERED_MEDIA_ROLES = [
   "structural_drift_publication_cover",
   "publication_structural_drift_cover",
   "questions_ungoverned_systems_cannot_answer_video",
+  "about_measures_registry_video",
+  "official_codexstone_seal",
+  "agents_with_keys_cover",
+  "fables_and_myths_cover",
   "before_the_pathway_obsidian_to_marble_passage_video",
   "obsidian_contact_surface_visual",
   "obsidian_assessment_surface_visual",
@@ -93,7 +100,11 @@ const REGISTERED_MEDIA_ROLES = [
 
 const SURFACE_QUERY: Record<RegisteredSurface, string> = {
   intro: "ai_isnt_broken_intro",
+  intro_hook: "ai_isnt_broken_intro",
   path_choice: "evaluate_structure_path",
+  structural_coherence_explainer: "eval_passage",
+  measures_structured_environments: "structure_passage",
+  about_measures_registry: "about_measures_registry",
   ai_operations_assessment_landing: "ai_operations_assessment_landing",
   eval_passage: "eval_passage",
   measures_assessment: "measures_assessment",
@@ -122,6 +133,7 @@ const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<RegisteredSurface, string>> = {
 }
 
 const ROUTE_UNIT_KEYS: Record<string, string> = {
+  "/": "measures_registry_root",
   "/ai-operations-assessment": "ai_operations_assessment_landing",
   "/structural-drift": "structural_drift_landing",
   "/undrifted": "undrifted_publication_landing",
@@ -150,17 +162,17 @@ function writeHistory(method: "pushState" | "replaceState", surface: RegisteredS
   )
 }
 
-function initialSurface(): RegisteredSurface {
+function initialSurface(): RegisteredSurface | null {
   const routeSurface = ROUTE_SURFACE_ALIASES[window.location.pathname]
   if (routeSurface) return routeSurface
   if (window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)) return "publication_dispatch"
   if (window.location.pathname === STRUCTURAL_DRIFT_DISPATCHES_ROUTE) return "structural_drift_dispatches"
 
-  return "intro"
+  return null
 }
 
 export default function MeasuresRegistryRuntimeRegistered() {
-  const [activeSurface, setActiveSurface] = useState<RegisteredSurface>(initialSurface)
+  const [activeSurface, setActiveSurface] = useState<RegisteredSurface | null>(initialSurface)
   const [sections, setSections] = useState<LandingSectionRow[]>([])
   const [landingUnits, setLandingUnits] = useState<LandingUnitRow[]>([])
   const [landingUnitsLoaded, setLandingUnitsLoaded] = useState(false)
@@ -341,8 +353,19 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const undriftedLandingUnit = landingUnitMap.get("undrifted_publication_landing") ?? null
   const activeRouteDefaultSurface = ROUTE_SURFACE_ALIASES[window.location.pathname] ?? null
 
-  function governedSurface(unit: LandingUnitRow | null, metadataKey: "runtime_surface" | "cta_surface" | "secondary_cta_surface") {
+  function governedSurface(unit: LandingUnitRow | null, metadataKey: string) {
     const surface = asString(unit?.metadata?.[metadataKey])
+    return surface && REGISTERED_SURFACES.has(surface as RegisteredSurface) ? surface as RegisteredSurface : null
+  }
+
+  const rootRouteUnit = landingUnitMap.get("measures_registry_root") ?? null
+
+  function rootStructureNode(key: string) {
+    return asRecord(asRecord(rootRouteUnit?.metadata?.encounter_structure)?.[key])
+  }
+
+  function governedNodeSurface(node: Record<string, unknown> | null, metadataKey: string) {
+    const surface = asString(node?.[metadataKey])
     return surface && REGISTERED_SURFACES.has(surface as RegisteredSurface) ? surface as RegisteredSurface : null
   }
 
@@ -380,6 +403,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
   // URL sync: runs after every activeSurface change so URL always matches visible surface
   useEffect(() => {
+    if (!activeSurface) return
     if (activeRouteDefaultSurface === activeSurface) return
     if (navigationSourceRef.current === "history") {
       // Surface was set by popstate — browser already updated URL; just reset ref
@@ -456,6 +480,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const evaluationChamberCopy = sectionCopy(sectionMap.get("measures_assessment"))
   const obsidianToMarblePassageCopy = sectionCopy(sectionMap.get("obsidian_to_marble_passage_video"))
   const structurePassageCopy = sectionCopy(sectionMap.get("structure_passage"))
+  const aboutMeasuresRegistryCopy = sectionCopy(sectionMap.get("about_measures_registry"))
   const structuralDriftCopy = sectionCopy(sectionMap.get("structural_drift_publication"))
   const publicAssessBoundary = asRecord(
     asRecord(evaluationChamberCopy.publicRuntimeBoundary?.public_paths)?.assess_environment ??
@@ -486,7 +511,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
   // --- media URLs ---
 
-  const epigraphVideoUrl = mediaUrl(mediaMap.get("epigraph_video"))
+  const epigraphVideoUrl = mediaUrl(mediaMap.get("intro_hook_video")) ?? mediaUrl(mediaMap.get("epigraph_video"))
   const explainerVideoUrl = mediaUrl(mediaMap.get("explainer_video"))
   const thresholdLeftStillUrl = mediaUrl(mediaMap.get("left_hero_fracture"))
   const thresholdLeftMotionUrl = mediaUrl(mediaMap.get("left_hero_fracture_motion"))
@@ -505,6 +530,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
     mediaUrl(mediaMap.get("structural_drift_feature_image")) ??
     mediaUrl(mediaMap.get("structural_drift_featured_image"))
   const questionsUngovernedSystemsVideoUrl = mediaUrl(mediaMap.get("questions_ungoverned_systems_cannot_answer_video"))
+  const aboutMeasuresRegistryVideoUrl = mediaUrl(mediaMap.get("about_measures_registry_video"))
+  const officialCodexstoneSealUrl = mediaUrl(mediaMap.get("official_codexstone_seal"))
+  const agentsWithKeysCoverUrl = mediaUrl(mediaMap.get("agents_with_keys_cover"))
+  const fablesAndMythsCoverUrl = mediaUrl(mediaMap.get("fables_and_myths_cover"))
   const beforeThePathwayVideoUrl = mediaUrl(mediaMap.get("before_the_pathway_obsidian_to_marble_passage_video"))
   const structuredEnvironmentPassageVideoUrl =
     mediaUrl(mediaMap.get("structured_environment_passage_video")) ??
@@ -861,7 +890,9 @@ export default function MeasuresRegistryRuntimeRegistered() {
   }
 
   function renderSystemFooter() {
+    const rootFooterContract = asRecord(rootRouteUnit?.metadata?.footer_contract)
     const footerCopy = (() => {
+      if (!activeSurface) return []
       const activeCopy = sectionCopy(sectionMap.get(SURFACE_QUERY[activeSurface]))
       const contract = activeCopy.footerContract
       const lines = asStringArray(contract?.copy_lines)
@@ -873,7 +904,12 @@ export default function MeasuresRegistryRuntimeRegistered() {
       return [copyright, systemStatement, operatorStatement].filter((line): line is string => Boolean(line))
     })()
 
-    if (footerCopy.length === 0) return null
+    const branchPrefix = asString(rootFooterContract?.copy_prefix)
+    const branchLabel = asString(rootFooterContract?.link_label)
+    const branchUrl = asString(rootFooterContract?.link_url)
+    const branchStanding = asString(rootFooterContract?.link_standing)
+
+    if (footerCopy.length === 0 && !branchPrefix && !branchLabel) return null
 
     return (
       <footer
@@ -884,6 +920,12 @@ export default function MeasuresRegistryRuntimeRegistered() {
         {footerCopy.map((line) => (
           <p key={line}>{line}</p>
         ))}
+        {branchPrefix && branchLabel ? (
+          <p className="registry-footer-branch" data-link-standing={branchStanding ?? undefined}>
+            {branchPrefix}
+            {branchUrl ? <a href={branchUrl}>{branchLabel}</a> : <span>{branchLabel}</span>}
+          </p>
+        ) : null}
       </footer>
     )
   }
@@ -963,8 +1005,20 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
   let activeSurfaceElement: React.ReactNode
   const routeCtaSurface = governedSurface(activeRouteUnit, "cta_surface")
+  const introHookNode = rootStructureNode("intro_hook")
+  const pathChoiceNode = rootStructureNode("path_choice")
+  const leftChoiceNode = asRecord(pathChoiceNode?.left)
+  const rightChoiceNode = asRecord(pathChoiceNode?.right)
+  const explainerNode = rootStructureNode("structural_coherence_explainer")
+  const structuredEnvironmentNode = rootStructureNode("measures_structured_environments")
 
-  if (activeRouteUnitKey && landingUnitsLoaded && !activeRouteUnit) {
+  if (activeRouteUnitKey && !landingUnitsLoaded) {
+    activeSurfaceElement = (
+      <main className="measures-registry-runtime" data-surface="root_authority_loading" data-release-standing="loading_registry_authority" style={launchMediaStyle}>
+        <section className="registry-held-state" role="status"><p>Resolving registry authority.</p></section>
+      </main>
+    )
+  } else if (activeRouteUnitKey && landingUnitsLoaded && !activeRouteUnit) {
     activeSurfaceElement = (
       <main
         className="measures-registry-runtime"
@@ -983,7 +1037,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         {renderSystemFooter()}
       </main>
     )
-  } else if (activeSurface === "intro") {
+  } else if (activeSurface === "intro_hook" || activeSurface === "intro") {
     activeSurfaceElement = (
       <RegisteredIntro
         registryTokenStyle={launchMediaStyle}
@@ -1002,16 +1056,22 @@ export default function MeasuresRegistryRuntimeRegistered() {
         thresholdCopy={pathChoiceCopy}
         onEpigraphEnter={() => setEpigraphEntered(true)}
         onEpigraphMuteToggle={() => setEpigraphMuted((current) => !current)}
-        onEpigraphSkip={() => setLandingHeroReady(true)}
+        onEpigraphSkip={() => {
+          const next = governedNodeSurface(introHookNode, "next_surface")
+          if (next) navigate(next)
+        }}
         onEpigraphError={() => setEpigraphFailed(true)}
-        onEpigraphEnd={() => setLandingHeroReady(true)}
+        onEpigraphEnd={() => {
+          const next = governedNodeSurface(introHookNode, "next_surface")
+          if (next) navigate(next)
+        }}
         onThresholdMotionSettled={(side) =>
           setThresholdMotionSettled((current) =>
             current[side] ? current : { ...current, [side]: true },
           )
         }
-        onLeftChoice={() => navigate("eval_passage")}
-        onRightChoice={() => navigate("structure_passage")}
+        onLeftChoice={() => { const next = governedNodeSurface(leftChoiceNode, "next_surface"); if (next) navigate(next) }}
+        onRightChoice={() => { const next = governedNodeSurface(rightChoiceNode, "next_surface"); if (next) navigate(next) }}
       />
     )
   } else if (activeSurface === "path_choice") {
@@ -1023,8 +1083,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
         leftHeroUrl={thresholdLeftStillUrl}
         rightHeroUrl={thresholdRightStillUrl}
         registryMarkUrl={registryMarkUrl}
-        onLeftChoice={() => navigate("eval_passage")}
-        onRightChoice={() => navigate("structure_passage")}
+        onLeftChoice={() => { const next = governedNodeSurface(leftChoiceNode, "next_surface"); if (next) navigate(next) }}
+        onRightChoice={() => { const next = governedNodeSurface(rightChoiceNode, "next_surface"); if (next) navigate(next) }}
       />
     )
   } else if (activeSurface === "ai_operations_assessment_landing") {
@@ -1037,7 +1097,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onAssessEnvironment={() => navigate(governedSurface(activeRouteUnit, "cta_surface") ?? "eval_passage")}
       />
     )
-  } else if (activeSurface === "eval_passage") {
+  } else if (activeSurface === "structural_coherence_explainer" || activeSurface === "eval_passage") {
     activeSurfaceElement = (
       <RegisteredPassage
         variant="eval"
@@ -1048,11 +1108,16 @@ export default function MeasuresRegistryRuntimeRegistered() {
         routeShell={activeRouteUnitKey === "ai_operations_assessment_landing" ? activeRouteUnitKey : null}
         renderHeader={() => renderHeader(evalPassageCopy.header)}
         renderSystemFooter={renderSystemFooter}
-        onContinue={() => navigate(routeCtaSurface ?? "measures_assessment")}
+        onContinue={() => {
+          const next = activeSurface === "structural_coherence_explainer"
+            ? governedNodeSurface(explainerNode, "next_surface")
+            : routeCtaSurface
+          if (next) navigate(next)
+        }}
         onToggleMuted={() => setPassageMuted((current) => !current)}
       />
     )
-  } else if (activeSurface === "structure_passage") {
+  } else if (activeSurface === "measures_structured_environments" || activeSurface === "structure_passage") {
     activeSurfaceElement = (
       <RegisteredPublicUnderstand
         registryTokenStyle={launchMediaStyle}
@@ -1061,7 +1126,24 @@ export default function MeasuresRegistryRuntimeRegistered() {
         passageMuted={passageMuted}
         renderHeader={() => renderHeader(structurePassageCopy.header)}
         renderSystemFooter={renderSystemFooter}
+        onContinue={() => {
+          const next = activeSurface === "measures_structured_environments"
+            ? governedNodeSurface(structuredEnvironmentNode, "next_surface")
+            : null
+          if (next) navigate(next)
+        }}
         onToggleMuted={() => setPassageMuted((current) => !current)}
+      />
+    )
+  } else if (activeSurface === "about_measures_registry") {
+    activeSurfaceElement = (
+      <RegisteredAboutMeasuresRegistry
+        registryTokenStyle={launchMediaStyle}
+        aboutCopy={aboutMeasuresRegistryCopy}
+        videoUrl={aboutMeasuresRegistryVideoUrl}
+        sealUrl={officialCodexstoneSealUrl}
+        renderHeader={() => renderHeader(aboutMeasuresRegistryCopy.header)}
+        renderSystemFooter={renderSystemFooter}
       />
     )
   } else if (activeSurface === "measures_assessment") {
@@ -1173,6 +1255,9 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onBeginEvaluation={() => navigate(routeCtaSurface ?? "measures_assessment")}
         onContinueToAssessmentPackage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onGoToEvalPassage={() => navigate(routeCtaSurface ?? "eval_passage")}
+        onAboutMeasuresRegistry={() => navigate("about_measures_registry")}
+        agentsWithKeysCoverUrl={agentsWithKeysCoverUrl}
+        fablesAndMythsCoverUrl={fablesAndMythsCoverUrl}
         onPublicationEmailChange={setPublicationEmail}
         onPublicationOrganizationChange={setPublicationOrganization}
         onSubmitSubscription={submitPublicationSubscription}
@@ -1181,33 +1266,9 @@ export default function MeasuresRegistryRuntimeRegistered() {
     )
   } else {
     activeSurfaceElement = (
-      <RegisteredIntro
-        registryTokenStyle={launchMediaStyle}
-        epigraphVideoRef={epigraphVideoRef}
-        epigraphVideoUrl={epigraphVideoUrl}
-        epigraphEntered={epigraphEntered}
-        epigraphMuted={epigraphMuted}
-        epigraphFailed={epigraphFailed}
-        landingHeroReady={landingHeroReady}
-        thresholdMotionSettled={thresholdMotionSettled}
-        thresholdLeftStillUrl={thresholdLeftStillUrl}
-        thresholdLeftMotionUrl={thresholdLeftMotionUrl}
-        thresholdRightStillUrl={thresholdRightStillUrl}
-        thresholdRightMotionUrl={thresholdRightMotionUrl}
-        introCopy={introCopy}
-        onEpigraphEnter={() => setEpigraphEntered(true)}
-        onEpigraphMuteToggle={() => setEpigraphMuted((current) => !current)}
-        onEpigraphSkip={() => setLandingHeroReady(true)}
-        onEpigraphError={() => setEpigraphFailed(true)}
-        onEpigraphEnd={() => setLandingHeroReady(true)}
-        onThresholdMotionSettled={(side) =>
-          setThresholdMotionSettled((current) =>
-            current[side] ? current : { ...current, [side]: true },
-          )
-        }
-        onLeftChoice={() => navigate("path_choice")}
-        onRightChoice={() => navigate("path_choice")}
-      />
+      <main className="measures-registry-runtime" data-surface="missing_root_authority" data-release-standing="held_missing_registry_authority" style={launchMediaStyle}>
+        <section className="registry-held-state" role="status"><p>Root route authority is not seated.</p></section>
+      </main>
     )
   }
 

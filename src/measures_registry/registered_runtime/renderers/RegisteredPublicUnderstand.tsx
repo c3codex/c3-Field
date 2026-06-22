@@ -9,6 +9,7 @@ type Props = {
   passageMuted: boolean
   renderHeader: () => ReactNode
   renderSystemFooter: () => ReactNode
+  onContinue: () => void
   onToggleMuted: () => void
 }
 
@@ -44,6 +45,7 @@ export default function RegisteredPublicUnderstand({
   passageMuted,
   renderHeader,
   renderSystemFooter,
+  onContinue,
   onToggleMuted,
 }: Props) {
   const contracts = structurePassageCopy.crystalContentContracts
@@ -65,6 +67,7 @@ export default function RegisteredPublicUnderstand({
     publicSafeString(asString(publicCopyContract?.context_body)) ??
     publicSafeString(structurePassageCopy.informationalParagraph) ??
     structurePassageCopy.subtitle
+  const closingStatement = publicSafeString(structurePassageCopy.closingStatement)
 
   if (!eyebrow || !title || !positionParagraph) {
     return (
@@ -95,6 +98,7 @@ export default function RegisteredPublicUnderstand({
             <span>{eyebrow}</span>
             <h1>{title}</h1>
             {positionParagraph ? <p>{positionParagraph}</p> : null}
+            {closingStatement ? <p>{closingStatement}</p> : null}
           </div>
           {talkingHeadVideoUrl ? (
             <div className="registry-public-understand-video">
@@ -110,11 +114,13 @@ export default function RegisteredPublicUnderstand({
                 <button type="button" onClick={onToggleMuted}>
                   {passageMuted ? "Audio" : "Mute"}
                 </button>
+                <button type="button" onClick={onContinue}>Continue</button>
               </div>
             </div>
           ) : (
             <div className="registry-public-understand-video">
               <p className="registry-media-absence">Understand passage media is not seated in the runtime registry.</p>
+              <button type="button" onClick={onContinue}>Continue</button>
             </div>
           )}
         </div>
