@@ -26,21 +26,18 @@ import type {
   DesignTokenRow,
   LandingSectionRow,
   LandingUnitRow,
-  MapC2CircuitRow,
   MediaRow,
-  PublicationDispatchRow,
-  PublicationRegistryRow,
   RegisteredSurface,
 } from "./registeredRuntimeTypes"
 import RegisteredIntro from "./renderers/RegisteredIntro"
 import RegisteredPathChoice from "./renderers/RegisteredPathChoice"
 import RegisteredPassage from "./renderers/RegisteredPassage"
 import RegisteredPublicAssessment from "./renderers/RegisteredPublicAssessment"
-import RegisteredStructuralDrift from "./renderers/RegisteredStructuralDrift"
 import RegisteredPublicUnderstand from "./renderers/RegisteredPublicUnderstand"
 import RegisteredAssessmentLanding from "./renderers/RegisteredAssessmentLanding"
-import MarbleCommerceDirectory from "./renderers/MarbleCommerceDirectory"
 import RegisteredAboutMeasuresRegistry from "./renderers/RegisteredAboutMeasuresRegistry"
+import LapisChamberRuntime from "./chambers/LapisChamberRuntime"
+import MarbleChamberRuntime from "./chambers/MarbleChamberRuntime"
 
 const CAMPAIGN_KEY = "agents_of_chaos_integrity_governance"
 const DESIGN_REGISTRY_KEY = "measures_registry"
@@ -60,6 +57,8 @@ const REGISTERED_ENCOUNTER_KEYS = [
   "structural_drift_publication",
 ] as const
 
+// Crystal + Obsidian + Marble media roles only.
+// Lapis publication media is loaded independently by LapisChamberRuntime.
 const REGISTERED_MEDIA_ROLES = [
   "intro_hook_video",
   "explainer_video",
@@ -80,21 +79,8 @@ const REGISTERED_MEDIA_ROLES = [
   "marble_tone",
   "installation_tone_marble",
   "installation_tone_marble_rise_return_v1",
-  "structural_drift_feature_image",
-  "structural_drift_featured_image",
-  "structural_drift_cover",
-  "structural_drift_cover_photo",
-  "structural_drift_publication_cover",
-  "publication_structural_drift_cover",
-  "questions_ungoverned_systems_cannot_answer_video",
-  "questions_ungoverned_systems_cannot_answer",
-  "measures_registry_logo",
-  "ai_isnt_broken_landing",
-  "undrifted_fill",
   "about_measures_registry_video",
   "official_codexstone_seal",
-  "agents_with_keys_cover",
-  "fables_and_myths_cover",
   "before_the_pathway_obsidian_to_marble_passage_video",
   "obsidian_contact_surface_visual",
   "obsidian_assessment_surface_visual",
@@ -187,26 +173,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const [landingUnitsLoaded, setLandingUnitsLoaded] = useState(false)
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [designTokens, setDesignTokens] = useState<DesignTokenRow[]>([])
-  const [publicationRows, setPublicationRows] = useState<PublicationRegistryRow[]>([])
-  const [publicationDispatchRows, setPublicationDispatchRows] = useState<PublicationDispatchRow[]>([])
-  const [mapC2Circuit, setMapC2Circuit] = useState<MapC2CircuitRow[]>([])
-
-  const [mapCheckoutLoading, setMapCheckoutLoading] = useState(false)
-  const [mapCheckoutError, setMapCheckoutError] = useState<string | null>(null)
-  const [mapPaymentReturn, setMapPaymentReturn] = useState<{
-    mapOrderId: string
-    verifying: boolean
-    schedulingReleased: boolean
-    error: string | null
-  } | null>(() => {
-    const params = new URLSearchParams(window.location.search)
-    const mapOrderId = params.get("map_order_id")
-    const sessionId = params.get("session_id")
-    if (mapOrderId && sessionId) {
-      return { mapOrderId, verifying: true, schedulingReleased: false, error: null }
-    }
-    return null
-  })
 
   const [epigraphEntered, setEpigraphEntered] = useState(true)
   const [epigraphMuted, setEpigraphMuted] = useState(true)
@@ -228,17 +194,11 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const [evalError, setEvalError] = useState<string | null>(null)
   const [conditionTraces, setConditionTraces] = useState<import("./registeredRuntimeUtils").AssessmentConditionTrace[]>([])
 
-  const [publicationEmail, setPublicationEmail] = useState("")
-  const [publicationOrganization, setPublicationOrganization] = useState("")
-  const [publicationSubmitting, setPublicationSubmitting] = useState(false)
-  const [publicationStatus, setPublicationStatus] = useState<string | null>(null)
-  const [publicationError, setPublicationError] = useState<string | null>(null)
-
   const epigraphVideoRef = useRef<HTMLVideoElement | null>(null)
   const navigationSourceRef = useRef<"app" | "history">("app")
   const governedRouteSurfaceAppliedRef = useRef(false)
 
-  // --- data fetch ---
+  // --- data fetch (Crystal + Obsidian + Marble shared data) ---
 
   useEffect(() => {
     let cancelled = false
@@ -246,7 +206,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
     async function loadData() {
       if (supabaseConfigError) return
 
-      const [sectionResult, landingUnitResult, mediaResult, tokenResult, publicationResult, dispatchResult] =
+      const [sectionResult, landingUnitResult, mediaResult, tokenResult] =
         await Promise.all([
           supabase
             .from("measures_encounter_def")
@@ -269,17 +229,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
             .select("token_key, token_value, media_query, is_active")
             .eq("registry_key", DESIGN_REGISTRY_KEY)
             .eq("is_active", true),
-          supabase
-            .from("measures_publication_registry")
-            .select("publication_key, title, subtitle, publication_type, status, external_url, tone, metadata")
-            .in("publication_key", ["structural_drift", "undrifted"])
-            .eq("status", "published"),
-          supabase
-            .from("measures_publication_dispatch")
-            .select("publication_key, dispatch_key, issue_number, title, dispatch_body, excerpt, seo_description, tags, primary_cta, secondary_cta, references, media_manifest, internal_route, article_url, external_url, status, published_at, metadata")
-            .eq("publication_key", "undrifted")
-            .eq("status", "published")
-            .order("issue_number", { ascending: true }),
         ])
 
       if (cancelled) return
@@ -289,53 +238,11 @@ export default function MeasuresRegistryRuntimeRegistered() {
       setLandingUnitsLoaded(true)
       if (!mediaResult.error) setMediaRows((mediaResult.data ?? []) as MediaRow[])
       if (!tokenResult.error) setDesignTokens((tokenResult.data ?? []) as DesignTokenRow[])
-      if (!publicationResult.error) setPublicationRows((publicationResult.data ?? []) as PublicationRegistryRow[])
-      if (!dispatchResult.error) setPublicationDispatchRows((dispatchResult.data ?? []) as PublicationDispatchRow[])
-
-      // map_c2_circuit queried separately — RLS requires anon SELECT policy before this resolves
-      const mapC2CircuitResult = await supabase
-        .from("map_c2_circuit")
-        .select("map_circuit_key, map_pathway, evaluation_standing, applicable_standing_keys, product_name, amount_usd, currency, stripe_product_id, release_state, map_boundary, access_boundary, public_map_boundary, public_access_boundary, public_payment_boundary, deliverables")
-        .eq("release_state", "active")
-        .order("amount_usd", { ascending: true })
-      if (!cancelled && !mapC2CircuitResult.error) setMapC2Circuit((mapC2CircuitResult.data ?? []) as MapC2CircuitRow[])
     }
 
     void loadData()
     return () => { cancelled = true }
   }, [])
-
-  // --- MAP payment return verification ---
-
-  useEffect(() => {
-    if (!mapPaymentReturn?.verifying) return
-    let cancelled = false
-
-    void fetch(`/api/map/payment-status/${mapPaymentReturn.mapOrderId}`)
-      .then((res) => res.json() as Promise<{ scheduling_released?: boolean; payment_status?: string; error?: string }>)
-      .then((data) => {
-        if (cancelled) return
-        if (data.error) {
-          setMapPaymentReturn((prev) => prev ? { ...prev, verifying: false, error: data.error ?? "Payment verification failed." } : null)
-          return
-        }
-        setMapPaymentReturn((prev) =>
-          prev ? { ...prev, verifying: false, schedulingReleased: data.scheduling_released === true, error: null } : null,
-        )
-        if (data.scheduling_released) {
-          navigate("map_integrity_governance")
-        }
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setMapPaymentReturn((prev) =>
-            prev ? { ...prev, verifying: false, error: "Payment verification could not complete." } : null,
-          )
-        }
-      })
-
-    return () => { cancelled = true }
-  }, [mapPaymentReturn?.verifying, mapPaymentReturn?.mapOrderId])
 
   // --- epigraph video ---
 
@@ -445,8 +352,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
   }, [])
 
   // Assessment surfaces must always render questions, never a completion carry-over.
-  // evalSubmitted persists across SPA surface changes via browser back/forward navigation.
-  // Resetting it here ensures measures_assessment always starts in question mode.
   useEffect(() => {
     if (activeSurface === "measures_assessment") {
       setEvalSubmitted(false)
@@ -509,18 +414,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         }
       : null
 
-  const structuralDriftPublication = publicationRows.find((row) => row.publication_key === "structural_drift") ?? null
-  const undriftedPublication = publicationRows.find((row) => row.publication_key === "undrifted") ?? null
-  const structuralDriftDispatches = publicationDispatchRows.filter((row) => row.publication_key === "undrifted")
-  const selectedDispatchKey = window.location.pathname.startsWith(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`)
-    ? window.location.pathname.slice(`${STRUCTURAL_DRIFT_DISPATCHES_ROUTE}/`.length)
-    : null
-  const selectedPublicationDispatch =
-    structuralDriftDispatches.find((row) => row.dispatch_key === selectedDispatchKey) ??
-    structuralDriftDispatches[0] ??
-    null
-
-  // --- media URLs ---
+  // --- media URLs (Crystal + Obsidian + Marble only) ---
 
   const epigraphVideoUrl = mediaUrl(mediaMap.get("intro_hook_video"))
   const explainerVideoUrl = mediaUrl(mediaMap.get("explainer_video"))
@@ -533,22 +427,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const registryWatermarkUrl = mediaUrl(mediaMap.get("watermark")) ?? mediaUrl(mediaMap.get("registry_watermark"))
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const marbleAccentReferenceUrl = mediaUrl(mediaMap.get("marble_accent_reference"))
-  const structuralDriftFeatureImageUrl =
-    mediaUrl(mediaMap.get("structural_drift_cover")) ??
-    mediaUrl(mediaMap.get("structural_drift_cover_photo")) ??
-    mediaUrl(mediaMap.get("structural_drift_publication_cover")) ??
-    mediaUrl(mediaMap.get("publication_structural_drift_cover")) ??
-    mediaUrl(mediaMap.get("structural_drift_feature_image")) ??
-    mediaUrl(mediaMap.get("structural_drift_featured_image"))
-  const questionsUngovernedSystemsVideoUrl = mediaUrl(mediaMap.get("questions_ungoverned_systems_cannot_answer_video"))
-  const questionsUngovernedImageUrl = mediaUrl(mediaMap.get("questions_ungoverned_systems_cannot_answer"))
-  const registryLogoUrl = mediaUrl(mediaMap.get("measures_registry_logo"))
-  const aiIsntBrokenLandingUrl = mediaUrl(mediaMap.get("ai_isnt_broken_landing"))
-  const undriftedFillUrl = mediaUrl(mediaMap.get("undrifted_fill"))
   const aboutMeasuresRegistryVideoUrl = mediaUrl(mediaMap.get("about_measures_registry_video"))
   const officialCodexstoneSealUrl = mediaUrl(mediaMap.get("official_codexstone_seal"))
-  const agentsWithKeysCoverUrl = mediaUrl(mediaMap.get("agents_with_keys_cover"))
-  const fablesAndMythsCoverUrl = mediaUrl(mediaMap.get("fables_and_myths_cover"))
   const beforeThePathwayVideoUrl = mediaUrl(mediaMap.get("before_the_pathway_obsidian_to_marble_passage_video"))
   const structuredEnvironmentPassageVideoUrl =
     mediaUrl(mediaMap.get("structured_environment_passage_video")) ??
@@ -811,82 +691,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
     setEvalStep("contact_capture")
   }
 
-  // --- publication subscription ---
-
-  async function submitPublicationSubscription(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setPublicationStatus(null)
-    setPublicationError(null)
-
-    const email = publicationEmail.trim().toLowerCase()
-    if (!email) {
-      setPublicationError("Email is required.")
-      return
-    }
-
-    setPublicationSubmitting(true)
-    const { error } = await supabase.from("measures_publication_subscription_capture").insert({
-      publication_key: undriftedPublication?.publication_key ?? "undrifted",
-      dispatch_key: selectedPublicationDispatch?.dispatch_key ?? null,
-      email,
-      organization: publicationOrganization.trim() || null,
-      capture_source: asString(selectedPublicationDispatch?.metadata?.capture_source) ?? "structural_drift_dispatch",
-      metadata: {
-        source: "publication_dispatch_renderer",
-        internal_route: selectedPublicationDispatch?.internal_route ?? STRUCTURAL_DRIFT_DISPATCHES_ROUTE,
-      },
-    })
-    setPublicationSubmitting(false)
-
-    if (error) {
-      setPublicationError("Subscription could not be recorded.")
-      return
-    }
-
-    setPublicationEmail("")
-    setPublicationOrganization("")
-    setPublicationStatus("Registry dispatch subscription recorded.")
-  }
-
-  // --- MAP payment ---
-
-  async function handleProceedToMapPayment(paymentOption: MapC2CircuitRow) {
-    setMapCheckoutLoading(true)
-    setMapCheckoutError(null)
-
-    try {
-      const origin = window.location.origin
-      const successUrl = `${origin}/map-integrity-governance`
-      const cancelUrl = `${origin}/map-integrity-governance`
-
-      const response = await fetch("/api/map/create-checkout-session", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          evaluation_result_id: evalReport?.standing_key ?? null,
-          map_standing: evalReport?.standing_key ?? paymentOption.evaluation_standing,
-          map_pathway: paymentOption.map_pathway,
-          contact_email: evalFields.contact_email ?? "",
-          success_url: successUrl,
-          cancel_url: cancelUrl,
-        }),
-      })
-
-      const data = (await response.json()) as { checkout_url?: string; error?: string }
-
-      if (!response.ok || !data.checkout_url) {
-        setMapCheckoutError(data.error ?? "Payment could not be initiated.")
-        setMapCheckoutLoading(false)
-        return
-      }
-
-      window.location.href = data.checkout_url
-    } catch {
-      setMapCheckoutError("Payment could not be initiated. Please try again.")
-      setMapCheckoutLoading(false)
-    }
-  }
-
   // --- shared header (Measures Registry branding only) ---
 
   function renderHeader(headerOverride?: Record<string, unknown> | null) {
@@ -1052,6 +856,9 @@ export default function MeasuresRegistryRuntimeRegistered() {
         {renderSystemFooter()}
       </main>
     )
+
+  // --- [CRYSTAL] entry + connective surfaces ---
+
   } else if (activeSurface === "intro_hook" || activeSurface === "intro") {
     activeSurfaceElement = (
       <RegisteredIntro
@@ -1112,6 +919,20 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onAssessEnvironment={() => navigate(governedSurface(activeRouteUnit, "cta_surface") ?? "eval_passage")}
       />
     )
+  } else if (activeSurface === "about_measures_registry") {
+    activeSurfaceElement = (
+      <RegisteredAboutMeasuresRegistry
+        registryTokenStyle={launchMediaStyle}
+        aboutCopy={aboutMeasuresRegistryCopy}
+        videoUrl={aboutMeasuresRegistryVideoUrl}
+        sealUrl={officialCodexstoneSealUrl}
+        renderHeader={() => renderHeader(aboutMeasuresRegistryCopy.header)}
+        renderSystemFooter={renderSystemFooter}
+      />
+    )
+
+  // --- [OBSIDIAN] assessment + contact capture ---
+
   } else if (activeSurface === "structural_coherence_explainer" || activeSurface === "eval_passage") {
     activeSurfaceElement = (
       <RegisteredPassage
@@ -1148,17 +969,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
           if (next) navigate(next)
         }}
         onToggleMuted={() => setPassageMuted((current) => !current)}
-      />
-    )
-  } else if (activeSurface === "about_measures_registry") {
-    activeSurfaceElement = (
-      <RegisteredAboutMeasuresRegistry
-        registryTokenStyle={launchMediaStyle}
-        aboutCopy={aboutMeasuresRegistryCopy}
-        videoUrl={aboutMeasuresRegistryVideoUrl}
-        sealUrl={officialCodexstoneSealUrl}
-        renderHeader={() => renderHeader(aboutMeasuresRegistryCopy.header)}
-        renderSystemFooter={renderSystemFooter}
       />
     )
   } else if (activeSurface === "measures_assessment") {
@@ -1230,58 +1040,45 @@ export default function MeasuresRegistryRuntimeRegistered() {
         {renderSystemFooter()}
       </main>
     )
+
+  // --- [MARBLE] MAP + payment ---
+
   } else if (activeSurface === "map_integrity_governance") {
     activeSurfaceElement = (
-      <MarbleCommerceDirectory
+      <MarbleChamberRuntime
         registryTokenStyle={launchMediaStyle}
         evalReport={evalReport}
         organizationName={evalFields.institution_name?.trim() || null}
         currentAiUsage={evalFields.ai_deployment_status?.trim() || null}
         conditionTraces={conditionTraces}
         environmentScore={evalScore}
-        mapC2Circuit={mapC2Circuit}
-        checkoutLoading={mapCheckoutLoading}
-        checkoutError={mapCheckoutError}
-        paymentReturn={mapPaymentReturn}
         marbleAccentReferenceUrl={marbleAccentReferenceUrl}
+        contactEmail={evalFields.contact_email ?? ""}
         renderHeader={() => renderHeader({ title: "Measures Registry" })}
         renderSystemFooter={renderSystemFooter}
-        onProceedToPayment={handleProceedToMapPayment}
+        onNavigateToMap={() => navigate("map_integrity_governance")}
       />
     )
+
+  // --- [LAPIS] publication + /undrifted ---
+
   } else if (activeSurface === "structural_drift_dispatches" || activeSurface === "publication_dispatch") {
     activeSurfaceElement = (
-      <RegisteredStructuralDrift
+      <LapisChamberRuntime
         registryTokenStyle={launchMediaStyle}
-        variant={activeSurface === "publication_dispatch" ? "article" : "index"}
-        routePath={window.location.pathname}
+        activeSurface={activeSurface}
+        undriftedLandingUnit={
+          activeRouteUnitKey === "undrifted_publication_landing" || activeRouteUnitKey === "structural_drift_landing"
+            ? undriftedLandingUnit
+            : null
+        }
         structuralDriftCopy={structuralDriftCopy}
-        publicationLandingUnit={activeRouteUnitKey === "undrifted_publication_landing" || activeRouteUnitKey === "structural_drift_landing" ? undriftedLandingUnit : null}
-        undriftedPublication={undriftedPublication}
-        structuralDriftPublication={structuralDriftPublication}
-        structuralDriftDispatches={structuralDriftDispatches}
-        selectedPublicationDispatch={selectedPublicationDispatch}
         evalReport={evalReport}
-        publicationEmail={publicationEmail}
-        publicationOrganization={publicationOrganization}
-        publicationSubmitting={publicationSubmitting}
-        publicationStatus={publicationStatus}
-        publicationError={publicationError}
+        renderSystemFooter={renderSystemFooter}
         onBeginEvaluation={() => navigate(routeCtaSurface ?? "measures_assessment")}
         onContinueToAssessmentPackage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onGoToEvalPassage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onAboutMeasuresRegistry={() => navigate("about_measures_registry")}
-        questionsUngovernedVideoUrl={questionsUngovernedSystemsVideoUrl}
-        questionsUngovernedImageUrl={questionsUngovernedImageUrl}
-        registryLogoUrl={registryLogoUrl}
-        aiIsntBrokenLandingUrl={aiIsntBrokenLandingUrl}
-        undriftedFillUrl={undriftedFillUrl}
-        agentsWithKeysCoverUrl={agentsWithKeysCoverUrl}
-        fablesAndMythsCoverUrl={fablesAndMythsCoverUrl}
-        onPublicationEmailChange={setPublicationEmail}
-        onPublicationOrganizationChange={setPublicationOrganization}
-        onSubmitSubscription={submitPublicationSubscription}
-        renderSystemFooter={renderSystemFooter}
       />
     )
   } else {
