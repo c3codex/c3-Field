@@ -11,6 +11,8 @@
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] {
   --undrifted-cover-gold: #d5a51d;
   --undrifted-cover-paper: #090c11;
+  min-height: 100svh;
+  padding-top: max(0.75rem, env(safe-area-inset-top));
   background:
     radial-gradient(circle at 50% 0%, rgba(31, 140, 255, 0.12), transparent 34rem),
     #030508;
@@ -21,7 +23,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   width: min(76rem, calc(100% - 2rem));
   max-width: none;
-  margin: clamp(1rem, 3vw, 3rem) auto;
+  margin: clamp(0.5rem, 2vw, 2rem) auto clamp(1rem, 3vw, 3rem);
   padding: clamp(1rem, 2.2vw, 2rem);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.018), transparent 38%),
@@ -126,18 +128,18 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent 25%, rgba(3, 5, 8, 0.2) 55%, rgba(3, 5, 8, 0.92) 100%);
+  background: linear-gradient(270deg, transparent 28%, rgba(3, 5, 8, 0.18) 54%, rgba(3, 5, 8, 0.94) 100%);
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-editorial {
   position: absolute;
   z-index: 1;
-  right: clamp(1rem, 4vw, 3.5rem);
+  left: clamp(1rem, 4vw, 3.5rem);
   bottom: clamp(1.4rem, 5vw, 4rem);
   width: min(46%, 31rem);
   padding: clamp(1rem, 2.5vw, 2rem);
   border-left: 3px solid var(--undrifted-cover-gold);
-  background: linear-gradient(90deg, rgba(9, 12, 17, 0.72), rgba(9, 12, 17, 0.96));
+  background: linear-gradient(90deg, rgba(9, 12, 17, 0.96), rgba(9, 12, 17, 0.72));
   backdrop-filter: blur(8px);
 }
 
@@ -200,8 +202,9 @@
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-card {
-  position: relative;
-  min-height: 25rem;
+  display: grid;
+  grid-template-rows: minmax(15rem, 1fr) auto;
+  min-height: 28rem;
   border: 0;
   border-radius: 0;
   background: #06080c;
@@ -213,17 +216,10 @@
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-cover {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  aspect-ratio: auto;
-}
-
-.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-cover::after {
-  content: "";
-  position: absolute;
-  inset: 36% 0 0;
-  background: linear-gradient(transparent, rgba(4, 6, 9, 0.98));
+  position: relative;
+  min-height: 15rem;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-cover img {
@@ -233,11 +229,12 @@
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-body {
-  position: relative;
-  z-index: 1;
-  justify-content: flex-end;
-  min-height: 25rem;
+  position: static;
+  justify-content: flex-start;
+  min-height: 10.5rem;
   padding: 1.25rem;
+  border-top: 1px solid rgba(213, 165, 29, 0.45);
+  background: #06080c;
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-body h3 {
@@ -260,13 +257,19 @@
   padding: clamp(1.15rem, 2.5vw, 2rem);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 30%, transparent 0 2.5rem, rgba(31, 140, 255, 0.55) 2.58rem 2.68rem, transparent 2.75rem 4.7rem, rgba(213, 165, 29, 0.5) 4.78rem 4.88rem, transparent 4.95rem),
-    linear-gradient(160deg, rgba(31, 140, 255, 0.16), rgba(9, 12, 17, 0.94) 68%);
+  background: linear-gradient(160deg, rgba(31, 140, 255, 0.16), rgba(9, 12, 17, 0.94) 68%);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-editor-feature-mark {
+  display: block;
+  width: min(9rem, 54%);
+  max-height: 8rem;
+  margin: 1rem auto 2rem;
+  object-fit: contain;
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-editor-feature h2 {
-  margin-top: clamp(8rem, 15vw, 12rem);
+  margin-top: 1rem;
   font-size: clamp(1.55rem, 3vw, 2.6rem);
   text-transform: uppercase;
 }
@@ -292,12 +295,27 @@
   text-transform: uppercase;
 }
 
-.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call-positions {
-  margin-bottom: 1rem;
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call-body {
+  max-width: 44rem;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  line-height: 1.6;
 }
 
-.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call-positions li {
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call-destination {
+  margin: 0.6rem 0 1rem;
   color: var(--undrifted-cover-gold);
+  font-family: var(--registry-font-display);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-style: italic;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call-story {
+  max-width: 28rem;
+  margin-bottom: 1.2rem;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.5;
+  white-space: pre-line;
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-next-issue {
@@ -389,7 +407,7 @@
   }
 
   .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-editorial {
-    right: 0;
+    left: 0;
     bottom: 0;
     width: 100%;
     padding: 1rem;

@@ -3,7 +3,6 @@ import {
   asRecord,
   asRecordArray,
   asString,
-  asStringArray,
   dispatchIssueLabel,
   dispatchThesis,
   dispatchTypeLabel,
@@ -319,7 +318,9 @@ export default function RegisteredStructuralDrift({
   const roleCallLabel = asString(roleCallFeature?.feature_label)
   const roleCallTitle = asString(roleCallFeature?.feature_title)
   const roleCallTagline = asString(roleCallFeature?.feature_tagline)
-  const roleCallPositions = asStringArray(roleCallFeature?.positions)
+  const roleCallBody = asString(roleCallFeature?.feature_body)
+  const roleCallDestinationLabel = asString(roleCallFeature?.destination_label)
+  const roleCallStoryBody = asString(roleCallFeature?.story_body)
   const roleCallCtaLabel = asString(roleCallFeature?.cta_label)
 
   // Next Issue teaser
@@ -410,6 +411,9 @@ export default function RegisteredStructuralDrift({
         {/* SECTION 4 — EDITOR'S FEATURE */}
         {(assessmentFeatureLabel || assessmentFeatureTitle) ? (
           <section className="undrifted-editor-feature" aria-label={assessmentFeatureTitle ?? "Editor's Feature"}>
+            {registryLogoUrl ? (
+              <img className="undrifted-editor-feature-mark" src={registryLogoUrl} alt="Measures Registry" />
+            ) : null}
             {assessmentFeatureLabel ? <span className="undrifted-eyebrow">{assessmentFeatureLabel}</span> : null}
             {assessmentFeatureTitle ? <h2>{assessmentFeatureTitle}</h2> : null}
             {assessmentFeatureBody ? <p>{assessmentFeatureBody}</p> : null}
@@ -471,11 +475,9 @@ export default function RegisteredStructuralDrift({
             {roleCallLabel ? <span className="undrifted-eyebrow">{roleCallLabel}</span> : null}
             {roleCallTitle ? <h2>{roleCallTitle}</h2> : null}
             {roleCallTagline ? <p className="undrifted-role-call-tagline">{roleCallTagline}</p> : null}
-            {roleCallPositions.length > 0 ? (
-              <ul className="undrifted-role-call-positions">
-                {roleCallPositions.map((pos) => <li key={pos}>{pos}</li>)}
-              </ul>
-            ) : null}
+            {roleCallBody ? <p className="undrifted-role-call-body">{roleCallBody}</p> : null}
+            {roleCallDestinationLabel ? <p className="undrifted-role-call-destination">{roleCallDestinationLabel}</p> : null}
+            {roleCallStoryBody ? <p className="undrifted-role-call-story">{roleCallStoryBody}</p> : null}
             {roleCallUrl && roleCallCtaLabel ? (
               <a className="undrifted-cta-primary" href={roleCallUrl} target="_blank" rel="noreferrer">
                 {roleCallCtaLabel}
