@@ -37,6 +37,10 @@ type Props = {
   onGoToEvalPassage: () => void
   onAboutMeasuresRegistry: () => void
   questionsUngovernedVideoUrl: string | null
+  questionsUngovernedImageUrl: string | null
+  registryLogoUrl: string | null
+  aiIsntBrokenLandingUrl: string | null
+  undriftedFillUrl: string | null
   agentsWithKeysCoverUrl: string | null
   fablesAndMythsCoverUrl: string | null
   onPublicationEmailChange: (value: string) => void
@@ -82,6 +86,10 @@ export default function RegisteredStructuralDrift({
   onGoToEvalPassage,
   onAboutMeasuresRegistry,
   questionsUngovernedVideoUrl,
+  questionsUngovernedImageUrl,
+  registryLogoUrl,
+  aiIsntBrokenLandingUrl,
+  undriftedFillUrl,
   agentsWithKeysCoverUrl,
   fablesAndMythsCoverUrl,
   onPublicationEmailChange,
@@ -335,9 +343,13 @@ export default function RegisteredStructuralDrift({
         {/* 1. Top bar */}
         <header className="undrifted-topbar" aria-label="unDrifted publication header">
           <div className="undrifted-topbar-brand">
-            <span className="undrifted-wordmark" aria-label={brandTitle}>
-              <span>un</span><strong>Drifted</strong>
-            </span>
+            {registryLogoUrl ? (
+              <img className="undrifted-topbar-logo" src={registryLogoUrl} alt={brandTitle} />
+            ) : (
+              <span className="undrifted-wordmark" aria-label={brandTitle}>
+                <span>un</span><strong>Drifted</strong>
+              </span>
+            )}
             <span className="undrifted-topbar-sep" aria-hidden="true" />
             <span className="undrifted-topbar-label">{parentAuthority ? `${parentAuthority} Publication` : "Measures Registry Publication"}</span>
           </div>
@@ -367,9 +379,21 @@ export default function RegisteredStructuralDrift({
           <div className="undrifted-dispatch-left">
             <span className="undrifted-eyebrow">Dispatch</span>
             <h1>AI Isn&apos;t Broken. Systems Are.</h1>
-            {questionsUngovernedVideoUrl ? (
+            {(questionsUngovernedVideoUrl || aiIsntBrokenLandingUrl || questionsUngovernedImageUrl) ? (
               <div className="undrifted-dispatch-media">
-                <video src={questionsUngovernedVideoUrl} playsInline controls preload="metadata" />
+                {questionsUngovernedVideoUrl ? (
+                  <video
+                    src={questionsUngovernedVideoUrl}
+                    poster={aiIsntBrokenLandingUrl ?? undefined}
+                    playsInline
+                    controls
+                    preload="metadata"
+                  />
+                ) : aiIsntBrokenLandingUrl ? (
+                  <img src={aiIsntBrokenLandingUrl} alt="AI Isn't Broken. Systems Are." />
+                ) : questionsUngovernedImageUrl ? (
+                  <img src={questionsUngovernedImageUrl} alt="" />
+                ) : null}
               </div>
             ) : null}
             <p>Dispatches from Measures Registry on structural drift, AI operations, and governed environments.</p>
@@ -440,6 +464,9 @@ export default function RegisteredStructuralDrift({
         {/* 4. Lower dispatch cards */}
         <section className="undrifted-dispatch-cards" aria-label="Dispatch destinations">
           <article className="undrifted-dispatch-card">
+            {registryLogoUrl ? (
+              <img className="undrifted-dispatch-logo" src={registryLogoUrl} alt="Measures Registry" />
+            ) : null}
             <span className="undrifted-eyebrow">About</span>
             <h2>About Measures Registry</h2>
             <p>{aboutBody ?? "Measures Registry provides the structure, standards, and governance pathways needed to convert AI potential into measurable, reliable outcomes."}</p>
@@ -452,6 +479,9 @@ export default function RegisteredStructuralDrift({
             <a href="https://c3field.online" target="_blank" rel="noreferrer">c3 Field / Our Story →</a>
           </article>
           <article className="undrifted-dispatch-card undrifted-dispatch-card--visual">
+            {undriftedFillUrl ? (
+              <img className="undrifted-dispatch-card-fill" src={undriftedFillUrl} alt="" aria-hidden="true" />
+            ) : null}
             <h2>Leadership for Governed Environments.</h2>
             <a href="https://c3field.online" target="_blank" rel="noreferrer">Explore c3 Field →</a>
           </article>

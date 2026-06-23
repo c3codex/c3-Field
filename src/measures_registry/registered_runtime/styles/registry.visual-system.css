@@ -788,6 +788,13 @@
   gap: 0.75rem;
 }
 
+.measures-registry-runtime .undrifted-topbar-logo {
+  height: 1.75rem;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
 .measures-registry-runtime .undrifted-wordmark {
   font-family: var(--registry-font-heading);
   font-size: 1.15rem;
@@ -880,7 +887,8 @@
   margin-bottom: 1rem;
 }
 
-.measures-registry-runtime .undrifted-dispatch-media video {
+.measures-registry-runtime .undrifted-dispatch-media video,
+.measures-registry-runtime .undrifted-dispatch-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1143,6 +1151,14 @@
   transform: translateY(-1px);
 }
 
+.measures-registry-runtime .undrifted-dispatch-logo {
+  width: auto;
+  height: 2.5rem;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
 .measures-registry-runtime .undrifted-dispatch-card--visual {
   justify-content: flex-end;
   min-height: 12rem;
@@ -1151,6 +1167,25 @@
     linear-gradient(135deg, rgba(89, 199, 255, 0.055), transparent 42%),
     color-mix(in srgb, var(--undrifted-panel) 86%, transparent);
   border-color: rgba(70, 145, 255, 0.38);
+  position: relative;
+  overflow: hidden;
+}
+
+.measures-registry-runtime .undrifted-dispatch-card-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.measures-registry-runtime .undrifted-dispatch-card--visual h2,
+.measures-registry-runtime .undrifted-dispatch-card--visual a {
+  position: relative;
+  z-index: 1;
 }
 
 .measures-registry-runtime .undrifted-dispatch-card--visual h2 {

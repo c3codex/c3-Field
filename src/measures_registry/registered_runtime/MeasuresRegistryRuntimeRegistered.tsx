@@ -87,6 +87,10 @@ const REGISTERED_MEDIA_ROLES = [
   "structural_drift_publication_cover",
   "publication_structural_drift_cover",
   "questions_ungoverned_systems_cannot_answer_video",
+  "questions_ungoverned_systems_cannot_answer",
+  "measures_registry_logo",
+  "ai_isnt_broken_landing",
+  "undrifted_fill",
   "about_measures_registry_video",
   "official_codexstone_seal",
   "agents_with_keys_cover",
@@ -535,6 +539,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
     mediaUrl(mediaMap.get("structural_drift_feature_image")) ??
     mediaUrl(mediaMap.get("structural_drift_featured_image"))
   const questionsUngovernedSystemsVideoUrl = mediaUrl(mediaMap.get("questions_ungoverned_systems_cannot_answer_video"))
+  const questionsUngovernedImageUrl = mediaUrl(mediaMap.get("questions_ungoverned_systems_cannot_answer"))
+  const registryLogoUrl = mediaUrl(mediaMap.get("measures_registry_logo"))
+  const aiIsntBrokenLandingUrl = mediaUrl(mediaMap.get("ai_isnt_broken_landing"))
+  const undriftedFillUrl = mediaUrl(mediaMap.get("undrifted_fill"))
   const aboutMeasuresRegistryVideoUrl = mediaUrl(mediaMap.get("about_measures_registry_video"))
   const officialCodexstoneSealUrl = mediaUrl(mediaMap.get("official_codexstone_seal"))
   const agentsWithKeysCoverUrl = mediaUrl(mediaMap.get("agents_with_keys_cover"))
@@ -1262,6 +1270,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onGoToEvalPassage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onAboutMeasuresRegistry={() => navigate("about_measures_registry")}
         questionsUngovernedVideoUrl={questionsUngovernedSystemsVideoUrl}
+        questionsUngovernedImageUrl={questionsUngovernedImageUrl}
+        registryLogoUrl={registryLogoUrl}
+        aiIsntBrokenLandingUrl={aiIsntBrokenLandingUrl}
+        undriftedFillUrl={undriftedFillUrl}
         agentsWithKeysCoverUrl={agentsWithKeysCoverUrl}
         fablesAndMythsCoverUrl={fablesAndMythsCoverUrl}
         onPublicationEmailChange={setPublicationEmail}
