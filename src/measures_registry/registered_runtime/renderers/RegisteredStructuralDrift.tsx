@@ -473,17 +473,18 @@ export default function RegisteredStructuralDrift({
             <a href="/about-measures-registry">About Measures Registry →</a>
           </article>
           <article className="undrifted-dispatch-card">
-            <span className="undrifted-eyebrow">Leadership</span>
             <h2>c3 Field</h2>
-            <p>Operational leadership and transformation support for AI environments that require measurable outcomes and governed continuity.</p>
-            <a href="https://c3field.online" target="_blank" rel="noreferrer">c3 Field / Our Story →</a>
+            <p>Nothing exists in isolation. The c3 Field provides the governance framework through which Measures Registry, unDrifted, Measures of Inanna, and future registered systems maintain continuity across environments.</p>
+            <a href="https://c3field.online" target="_blank" rel="noreferrer">Explore Our Story →</a>
           </article>
           <article className="undrifted-dispatch-card undrifted-dispatch-card--visual">
             {undriftedFillUrl ? (
               <img className="undrifted-dispatch-card-fill" src={undriftedFillUrl} alt="" aria-hidden="true" />
             ) : null}
-            <h2>Leadership for Governed Environments.</h2>
-            <a href="https://c3field.online" target="_blank" rel="noreferrer">Explore c3 Field →</a>
+            <span className="undrifted-eyebrow">Assessment</span>
+            <h2>Structural Drift Is Detectable.</h2>
+            <p>AI isn&apos;t broken. Systems are. Assess operational standing, identify structural drift, and discover the next governed pathway.</p>
+            <a href="/ai-operations-assessment">Assess the Environment →</a>
           </article>
         </section>
 

@@ -1182,7 +1182,9 @@
   pointer-events: none;
 }
 
+.measures-registry-runtime .undrifted-dispatch-card--visual span,
 .measures-registry-runtime .undrifted-dispatch-card--visual h2,
+.measures-registry-runtime .undrifted-dispatch-card--visual p,
 .measures-registry-runtime .undrifted-dispatch-card--visual a {
   position: relative;
   z-index: 1;
