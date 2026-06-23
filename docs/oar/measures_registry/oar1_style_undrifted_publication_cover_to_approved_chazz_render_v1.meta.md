@@ -3,12 +3,12 @@ document_type: oar1
 authority_level: closeout
 document_scope: undrifted_publication_cover_style_contract
 title: OAR1 — Style unDrifted Publication Cover to Approved Chazz Render
-status: media_map_insert_ready
+status: browser_qa_pending
 version: v1
 operator: op044
 system: measures_registry
 source_oar2: docs/oar/measures_registry/oar2_style_undrifted_publication_cover_to_approved_chazz_render_v1.meta.md
-final_seat_standing: held_media_map_insert
+final_seat_standing: held_browser_qa
 ---
 
 # OAR1 — Style unDrifted Publication Cover to Approved Chazz Render v1
@@ -17,13 +17,15 @@ final_seat_standing: held_media_map_insert
 
 ```yaml
 closeout:
-  status: media_map_insert_ready
+  status: browser_qa_pending
   layout_deployed: true
   layout_browser_qa: approved
   media_map_audit: complete
-  media_map_insert_required: true
+  media_map_inserted: true
   media_wiring_deployed: true
-  final_seat_standing: held_media_map_insert
+  loaddata_isolation_deployed: true
+  map_c2_circuit_rls_required: true
+  final_seat_standing: held_browser_qa
 ```
 
 ## Phase 1 — Layout (Deployed, Browser QA Approved)
@@ -35,7 +37,7 @@ layout:
   browser_qa: operator confirmed layout approved
 ```
 
-Five-section Chazz layout deployed and browser-verified as approved. See initial OAR1 for full layout record.
+Five-section Chazz layout deployed and browser-verified as approved.
 
 ## Phase 2 — Media Map Audit
 
@@ -43,7 +45,7 @@ Five-section Chazz layout deployed and browser-verified as approved. See initial
 
 ```yaml
 table: measures_media_map
-total_rows: 2
+total_rows_at_audit: 2
 rows:
   - campaign_key: agents_of_chaos_integrity_governance
     media_role: hero_poster
@@ -57,7 +59,7 @@ rows:
     is_active: true
 ```
 
-No other campaign keys present. All required publication-cover media roles absent from registry mapping.
+No other campaign keys present at audit time. All required publication-cover media roles absent.
 
 ### Storage audit — confirmed assets
 
@@ -102,74 +104,37 @@ exists_in_r2_not_in_db:
 
 not_in_storage:
   - role: questions_ungoverned_systems_cannot_answer
-    surface: hero media box (still fallback — video is primary; fallback is ai_isnt_broken_landing)
-    storage_status: not found in any probed bucket
-    action_required: none — video role is primary; ai_isnt_broken_landing covers still fallback
+    note: video role is primary; ai_isnt_broken_landing covers still fallback — no action required
 
   - role: undrifted_fill
     surface: leadership visual card background
-    storage_status: not found in any probed bucket
     action_required: operator uploads if visual card fill is desired
 ```
 
-## Required Operator Action — DB INSERT
+## Phase 2 — Media Map INSERT (Executed 2026-06-23)
 
-Five assets confirmed in storage without registry mapping. All five are required before media loads on the publication cover.
-
-```sql
-INSERT INTO measures_media_map (campaign_key, media_role, storage_bucket, storage_path, mime_type, is_active)
-VALUES
-  (
-    'agents_of_chaos_integrity_governance',
-    'measures_registry_logo',
-    'measures-registry',
-    'measures_registry_logo.webp',
-    'image/webp',
-    true
-  ),
-  (
-    'agents_of_chaos_integrity_governance',
-    'ai_isnt_broken_landing',
-    'measures-registry',
-    'ai_isnt_broken_landing.webp',
-    'image/webp',
-    true
-  ),
-  (
-    'agents_of_chaos_integrity_governance',
-    'agents_with_keys_cover',
-    'measures-registry',
-    'agents_with_keys.webp',
-    'image/webp',
-    true
-  ),
-  (
-    'agents_of_chaos_integrity_governance',
-    'fables_and_myths_cover',
-    'measures-registry',
-    'fables_and_myths.webp',
-    'image/webp',
-    true
-  ),
-  (
-    'agents_of_chaos_integrity_governance',
-    'questions_ungoverned_systems_cannot_answer_video',
-    'measures-media',
-    'questions_ungoverned_systems_cannot_answer.mp4',
-    'video/mp4',
-    true
-  );
+```yaml
+insert_executed: true
+insert_date: 2026-06-23
+rows_inserted: 5
+campaign_key: agents_of_chaos_integrity_governance
+registry_key: undrifted_publication_landing
+encounter_key: undrifted_publication_cover
 ```
 
-After INSERT, the runtime resolves all five roles on next load. No rebuild required.
+All five rows confirmed inserted and validated via REST:
 
-### R2 routing note
+| media_role | bucket | path | mime | active |
+|---|---|---|---|---|
+| `measures_registry_logo` | measures-registry | measures_registry_logo.webp | image/webp | true |
+| `ai_isnt_broken_landing` | measures-registry | ai_isnt_broken_landing.webp | image/webp | true |
+| `agents_with_keys_cover` | measures-registry | agents_with_keys.webp | image/webp | true |
+| `fables_and_myths_cover` | measures-registry | fables_and_myths.webp | image/webp | true |
+| `questions_ungoverned_systems_cannot_answer_video` | measures-media (R2) | questions_ungoverned_systems_cannot_answer.mp4 | video/mp4 | true |
 
-`questions_ungoverned_systems_cannot_answer_video` uses bucket `measures-media`. The runtime `resolveRuntimeMediaUrl` detects this bucket via `R2_PUBLIC_BASE_URL_ENV_BY_BUCKET` and constructs the URL from `VITE_R2_PUBLIC_BASE_URL` (`https://media.c3field.online`). No code change required.
+Anon read access for `measures_media_map` confirmed OK. All public storage URLs return 200.
 
 ## Phase 2 — Media Wiring Deployed
-
-### Code changes
 
 ```yaml
 commit: 9295ed7
@@ -208,12 +173,12 @@ const fablesAndMythsCoverUrl = mediaUrl(mediaMap.get("fables_and_myths_cover"))
 
 | Media role | Surface target | Behavior |
 |---|---|---|
-| `measures_registry_logo` | Topbar wordmark | Renders as `<img>` replacing text wordmark; text fallback if not seated |
+| `measures_registry_logo` | Topbar wordmark | `<img>` replacing text wordmark; text fallback if not seated |
 | `measures_registry_logo` | About dispatch card | `<img>` above eyebrow; absent if not seated |
-| `ai_isnt_broken_landing` | Hero media box | `<img>` fill when no video; also set as `poster` attr on `<video>` |
+| `ai_isnt_broken_landing` | Hero media box | `<img>` fill when no video; poster on `<video>` |
 | `questions_ungoverned_systems_cannot_answer` | Hero media box | `<img>` fallback after ai_isnt_broken_landing |
-| `questions_ungoverned_systems_cannot_answer_video` | Hero media box | `<video controls>` primary; uses ai_isnt_broken_landing as poster |
-| `undrifted_fill` | Leadership visual card | Absolutely positioned `<img>` at 28% opacity behind gradient overlay |
+| `questions_ungoverned_systems_cannot_answer_video` | Hero media box | `<video controls>` primary |
+| `undrifted_fill` | Leadership visual card | Absolutely positioned `<img>` at 28% opacity |
 | `agents_with_keys_cover` | Insights — Agents With Keys card | Cover image in article card |
 | `fables_and_myths_cover` | Insights — Fables and Myths card | Cover image in article card |
 
@@ -226,52 +191,94 @@ ELSE IF questionsUngovernedImageUrl: <img src={questionsUngovernedImageUrl} />
 ELSE: media box hidden
 ```
 
-No invented content. No hardcoded fallback URLs. No direct bucket references.
+## Phase 3 — QA Failure and Root Cause (2026-06-23)
+
+### QA attempt 1 — does not resolve
+
+After DB INSERT, browser QA attempted on `/undrifted`. Page did not resolve — stuck at "Resolving registry authority."
+
+Browser console showed:
+```
+GET /rest/v1/map_c2_circuit?...&release_state=eq.active 401 (Unauthorized)
+```
+
+No other Supabase errors. `measures_media_map` anon access confirmed OK in parallel probe.
+
+### Root cause diagnosis
+
+```yaml
+table: map_c2_circuit
+issue: no RLS SELECT policy for anon role
+behavior: Supabase client rejects Promise on 401 (not return { error })
+cascade: Promise.all() in loadData() rejects → setLandingUnitsLoaded(true) never called
+result: page permanently stuck at "Resolving registry authority." — no render, no media
+```
+
+The `loadData()` function used a single `Promise.all()` for all 7 queries including `map_c2_circuit`. No try-catch. `void loadData()` silently discards the rejection. `setLandingUnitsLoaded(true)` was never reached.
+
+### Fix applied — commit 5b0deb9
+
+`map_c2_circuit` removed from core `Promise.all()` and queried sequentially after `setLandingUnitsLoaded(true)` is called. The 6 core queries (encounter defs, registry units, media map, design tokens, publications, dispatches) still run in parallel. `map_c2_circuit` runs after — its failure cannot block page render or media loading.
+
+```yaml
+commit: 5b0deb9
+branch: measures
+pushed: true
+cloudflare_build: triggered
+file: src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx
+```
 
 ## Remaining Operator Actions
 
 ```yaml
-required_db_inserts:
-  all_assets_confirmed_in_storage: true
-  ready_to_insert:
-    - role: measures_registry_logo
-      bucket: measures-registry
-      path: measures_registry_logo.webp
-    - role: ai_isnt_broken_landing
-      bucket: measures-registry
-      path: ai_isnt_broken_landing.webp
-    - role: agents_with_keys_cover
-      bucket: measures-registry
-      path: agents_with_keys.webp
-    - role: fables_and_myths_cover
-      bucket: measures-registry
-      path: fables_and_myths.webp
-    - role: questions_ungoverned_systems_cannot_answer_video
-      bucket: measures-media (Cloudflare R2)
-      path: questions_ungoverned_systems_cannot_answer.mp4
+required:
+  - action: apply RLS SELECT policy on map_c2_circuit for anon role
+    scope: Supabase dashboard → SQL Editor
+    sql: |
+      CREATE POLICY "anon_read_active_circuits"
+      ON map_c2_circuit
+      FOR SELECT
+      TO anon
+      USING (release_state = 'active');
+    impact: MAP circuit data (payment tiers) will load in assessment surface
+    note: does not affect undrifted rendering — that is now isolated from map_c2_circuit
 
-pending_upload:
-  - role: undrifted_fill (not in storage — upload optional)
+  - action: browser QA after Cloudflare Pages build completes (commit 5b0deb9)
+    surface: /undrifted
+    verify:
+      - logo appears in topbar
+      - hero video loads (questions_ungoverned_systems_cannot_answer.mp4 from R2)
+      - ai_isnt_broken_landing.webp as video poster
+      - agents_with_keys.webp in Agents With Keys card
+      - fables_and_myths.webp in Fables and Myths card
+      - no Facebook in social links
+      - LinkedIn present if seated
+      - /ai-operations-assessment CTA routes correctly
+      - /about-measures-registry link routes correctly
 
-no_rebuild_required_after_insert: true
+optional:
+  - role: undrifted_fill
+    surface: leadership visual card background
+    action: upload image asset if visual fill is desired
 ```
 
 ## Final Standing
 
 ```yaml
-repair_standing: media_map_insert_ready
+repair_standing: browser_qa_pending
 layout_deployed: true
 layout_browser_qa: approved
+media_map_inserted: true
 media_wiring_deployed: true
-all_available_assets_confirmed: true
-db_inserts_required: true
-final_seat_standing: held_media_map_insert
+loaddata_isolation_deployed: true
+final_seat_standing: held_browser_qa
 
 seat_advancement:
-  current: held
-  next: media_visible
-  requires: operator executes 5-row INSERT payload above
-  browser_qa_required_after_insert: true
+  current: held_browser_qa
+  requires:
+    - Cloudflare Pages build completes (commit 5b0deb9)
+    - browser QA passes on /undrifted media
+  map_circuit_rls_separate_action: true
 ```
 
-Layout approved. Media wiring deployed. All five available assets confirmed in storage. DB INSERT ready — operator executes, no rebuild required. Browser QA required after INSERT.
+Layout approved. Media inserted. QA failure diagnosed — `map_c2_circuit` 401 blocked render. Fix deployed (`5b0deb9`). Browser QA required after build completes.
