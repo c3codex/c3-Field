@@ -273,16 +273,41 @@ feature_teaser:     >
 
 ---
 
-## Route 9 — Leadership Feature Standing: HELD
+## Route 9 — Role Call Feature Standing
 
-No leadership route seated in DB. Operator must seat leadership route before this route can execute.
+Resolved via SEND.CARD — Role Call Standing Seated (2026-06-23).
+
+Leadership Briefing deprecated. Leadership Call superseded. Role Call is the canonical Issue 001 publication feature.
 
 ```yaml
-status: held
-reason: no_leadership_route_in_db
-mutation_applied: false
-required_before_execution: operator seats leadership/contact route
+status: seated
+resolution_source: SEND.CARD — Role Call Standing Seated — Issue 001 Launch Edition
+migration: supabase/migrations/202606240002_seat_undrifted_issue_001_role_call_feature_standing.sql
+commit: 445b439
+feature_key: role_call_issue_001
+feature_label: ROLE CALL
+feature_title: ALL POSITIONS AVAILABLE
+feature_tagline: WHAT IS YOURS?
+positions: [Connect, Contribute, Create]
+cta_label: Connect · Contribute · Create →
+destination_key: c3_field_our_story
+destination_label: Our Story
+implies_conversion: false
+implies_certification: false
+implies_membership: false
+implies_assessment: false
+implies_map: false
+implies_seat: false
+participation_standing: undetermined_until_encountered
+supersedes: [leadership_briefing, leadership_call]
 ```
+
+**DB readback confirmed:**
+- `role_call_feature.feature_key: role_call_issue_001` ✓
+- `role_call_feature.cta_label: Connect · Contribute · Create →` ✓
+- `role_call_feature.destination_key: c3_field_our_story` ✓
+- `role_call_feature.implies_conversion: false` ✓
+- `issue_record.section_sequence: cover_story → assessment_feature → agents_with_keys → fables_and_myths → role_call → next_issue` ✓
 
 ---
 
@@ -337,6 +362,7 @@ Applied migrations in this session:
 ```yaml
 new_files:
   - supabase/migrations/202606240001_seat_canonical_undrifted_issue_001_publication_record.sql
+  - supabase/migrations/202606240002_seat_undrifted_issue_001_role_call_feature_standing.sql
   - docs/oar/measures_registry/oar1_seat_canonical_undrifted_issue_001_publication_record_v1.meta.md
 renamed_files:
   - supabase/migrations/202606230005_restore_assessment_sequence_and_correct_contact_capture.sql
@@ -359,7 +385,7 @@ routes_seated:
   route_6_assessment_feature: seated
   route_7_agents_with_keys: seated (publication_state preserved as published)
   route_8_fables_and_myths: seated
-  route_9_leadership: held (no route in DB)
+  route_9_role_call: seated (resolved via SEND.CARD 2026-06-23, commit 445b439)
   route_10_next_issue: seated
   route_11_footer: seated
 
