@@ -289,6 +289,8 @@ export default function RegisteredStructuralDrift({
   const editionMarker = asString(landingContract?.edition_marker)
   const coverLinesLabel = asString(landingContract?.cover_lines_label)
   const assessmentBody = asString(heroContract?.assessment_body)
+  const insightsEyebrow = asString(landingContract?.insights_eyebrow)
+  const insightsHeading = asString(landingContract?.insights_heading)
   const styleKey =
     asString(landingContract?.style_contract_key) ??
     asString(styleContract?.key) ??
@@ -417,43 +419,52 @@ export default function RegisteredStructuralDrift({
               ) : null}
             </div>
 
-            {featuredArticleSet.length > 0 ? (
-              <div className="undrifted-cover-lines">
-                {coverLinesLabel ? <span className="undrifted-eyebrow">{coverLinesLabel}</span> : null}
-                {featuredArticleSet.map((article) => {
-                  const title = asString(article.title)
-                  const desc = asString(article.description) ?? asString(article.subtitle)
-                  const articleUrl = asString(article.article_url) ?? asString(article.external_url) ?? null
-                  if (!title) return null
-                  const coverUrl = manifestCover(asString(article.media_role))
-                  return (
-                    <article key={title} className="undrifted-cover-line" data-media-role={asString(article.media_role) ?? undefined}>
-                      {coverUrl ? (
-                        <div className="undrifted-cover-line-media">
-                          <img src={coverUrl} alt="" />
-                        </div>
-                      ) : null}
-                      <span className="undrifted-cover-line-rule" aria-hidden="true" />
-                      <div className="undrifted-cover-line-content">
-                        <strong>{title}</strong>
-                        {desc ? <p>{desc}</p> : null}
-                      </div>
-                      {articleUrl ? (
-                        <a href={articleUrl} target="_blank" rel="noreferrer">Read →</a>
-                      ) : (
-                        <button type="button" onClick={() => { setSelectedManifestArticle(title); window.scrollTo({ top: 0, behavior: "smooth" }) }}>
-                          Standing
-                        </button>
-                      )}
-                    </article>
-                  )
-                })}
-              </div>
-            ) : null}
           </div>
         </section>
 
-        {/* 3. HERALD — REGISTRY DESTINATIONS */}
+        {/* 3. INSIGHTS */}
+        {featuredArticleSet.length > 0 ? (
+          <section className="undrifted-insights" aria-label="Insights">
+            {(insightsEyebrow || insightsHeading) ? (
+              <div className="undrifted-insights-header">
+                {insightsEyebrow ? <span className="undrifted-eyebrow">{insightsEyebrow}</span> : null}
+                {insightsHeading ? <h2>{insightsHeading}</h2> : null}
+              </div>
+            ) : null}
+            <div className="undrifted-insights-grid">
+              {featuredArticleSet.map((article) => {
+                const title = asString(article.title)
+                const coverUrl = manifestCover(asString(article.media_role))
+                const desc = asString(article.description) ?? asString(article.subtitle)
+                const articleUrl = asString(article.article_url) ?? asString(article.external_url) ?? null
+                const pubState = asString(article.publication_state)
+                if (!title) return null
+                return (
+                  <article key={title} className="undrifted-insight-card" data-publish-state={pubState ?? "held"} data-media-role={asString(article.media_role) ?? undefined}>
+                    {coverUrl ? (
+                      <div className="undrifted-insight-cover">
+                        <img src={coverUrl} alt="" />
+                      </div>
+                    ) : null}
+                    <div className="undrifted-insight-body">
+                      <h3>{title}</h3>
+                      {desc ? <p>{desc}</p> : null}
+                      {articleUrl ? (
+                        <a href={articleUrl} target="_blank" rel="noreferrer">Read Article →</a>
+                      ) : (
+                        <button type="button" onClick={() => { setSelectedManifestArticle(title); window.scrollTo({ top: 0, behavior: "smooth" }) }}>
+                          Open Article Standing
+                        </button>
+                      )}
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          </section>
+        ) : null}
+
+        {/* 4. HERALD — REGISTRY DESTINATIONS */}
         <section className="undrifted-herald" aria-label="Registry destinations">
           <div className="undrifted-herald-header">
             <span className="undrifted-eyebrow">Registry</span>
