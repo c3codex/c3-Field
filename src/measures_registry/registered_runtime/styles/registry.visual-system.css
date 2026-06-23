@@ -1045,6 +1045,11 @@
   display: block;
 }
 
+.measures-registry-runtime .undrifted-insight-card[data-media-role="fables_and_myths_cover"] .undrifted-insight-cover img {
+  object-fit: cover;
+  object-position: top center;
+}
+
 .measures-registry-runtime .undrifted-insight-body {
   display: flex;
   flex-direction: column;

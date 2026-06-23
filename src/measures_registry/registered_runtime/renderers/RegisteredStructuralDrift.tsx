@@ -435,7 +435,7 @@ export default function RegisteredStructuralDrift({
               const pubState = asString(article.publication_state)
               if (!title) return null
               return (
-                <article key={title} className="undrifted-insight-card" data-publish-state={pubState ?? "held"}>
+                <article key={title} className="undrifted-insight-card" data-publish-state={pubState ?? "held"} data-media-role={asString(article.media_role) ?? undefined}>
                   {coverUrl ? (
                     <div className="undrifted-insight-cover">
                       <img src={coverUrl} alt="" />
