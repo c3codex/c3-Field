@@ -340,18 +340,29 @@ export default function RegisteredStructuralDrift({
           </section>
         ) : null}
 
-        {/* 1. Top bar */}
-        <header className="undrifted-topbar" aria-label="unDrifted publication header">
-          <div className="undrifted-topbar-brand">
+        {isLegacyStructuralDriftRoute ? (
+          <section className="undrifted-legacy-route" aria-label="Legacy route standing">
+            <span>Legacy Inbound Route</span>
+            <h2>Continue to unDrifted</h2>
+            <p>Structural Drift is now part of unDrifted.</p>
+            <a href="/undrifted">Continue to unDrifted</a>
+          </section>
+        ) : null}
+
+        {/* 1. MASTHEAD */}
+        <header className="undrifted-masthead" aria-label="unDrifted publication masthead">
+          <div className="undrifted-masthead-nameplate">
             {registryLogoUrl ? (
-              <img className="undrifted-topbar-logo" src={registryLogoUrl} alt={brandTitle} />
+              <img className="undrifted-masthead-logo" src={registryLogoUrl} alt={brandTitle} />
             ) : (
               <span className="undrifted-wordmark" aria-label={brandTitle}>
                 <span>un</span><strong>Drifted</strong>
               </span>
             )}
-            <span className="undrifted-topbar-sep" aria-hidden="true" />
-            <span className="undrifted-topbar-label">{parentAuthority ? `${parentAuthority} Publication` : "Measures Registry Publication"}</span>
+            <div className="undrifted-masthead-text">
+              <span className="undrifted-masthead-principles">Measure · Detect · Correct · Govern</span>
+              <span className="undrifted-masthead-edition">Issue 001 · Launch Edition · Published by Measures Registry</span>
+            </div>
           </div>
           <nav className="undrifted-topbar-social" aria-label="Publication social profiles">
             {socialLinks
@@ -364,131 +375,109 @@ export default function RegisteredStructuralDrift({
               })}
           </nav>
         </header>
+        <hr className="undrifted-masthead-rule" aria-hidden="true" />
 
-        {isLegacyStructuralDriftRoute ? (
-          <section className="undrifted-legacy-route" aria-label="Legacy route standing">
-            <span>Legacy Inbound Route</span>
-            <h2>Continue to unDrifted</h2>
-            <p>Structural Drift is now part of unDrifted.</p>
-            <a href="/undrifted">Continue to unDrifted</a>
-          </section>
-        ) : null}
+        {/* 2. COVER STORY */}
+        <section className="undrifted-cover" aria-label="Cover story">
+          <div className="undrifted-cover-visual">
+            {questionsUngovernedVideoUrl ? (
+              <video
+                src={questionsUngovernedVideoUrl}
+                poster={aiIsntBrokenLandingUrl ?? undefined}
+                playsInline
+                controls
+                preload="metadata"
+              />
+            ) : aiIsntBrokenLandingUrl ? (
+              <img src={aiIsntBrokenLandingUrl} alt="unDrifted — Launch Edition" />
+            ) : questionsUngovernedImageUrl ? (
+              <img src={questionsUngovernedImageUrl} alt="" />
+            ) : null}
+          </div>
+          <div className="undrifted-cover-editorial">
+            <span className="undrifted-eyebrow">Structural Drift · Launch Edition</span>
+            <h1>Structural drift is detectable.<br />Collapse is not the default.</h1>
+            <p className="undrifted-cover-deck">{publicationRule ?? "Measures Registry is now seated — providing the operational governance framework for AI environments that require measurable outcomes and governed continuity."}</p>
 
-        {/* 2. Hero / Diagnostic Intake */}
-        <section className="undrifted-hero-dispatch" aria-label="Dispatch and diagnostic intake">
-          <div className="undrifted-dispatch-left">
-            <span className="undrifted-eyebrow">Dispatch</span>
-            <h1>AI Isn&apos;t Broken. Systems Are.</h1>
-            {(questionsUngovernedVideoUrl || aiIsntBrokenLandingUrl || questionsUngovernedImageUrl) ? (
-              <div className="undrifted-dispatch-media">
-                {questionsUngovernedVideoUrl ? (
-                  <video
-                    src={questionsUngovernedVideoUrl}
-                    poster={aiIsntBrokenLandingUrl ?? undefined}
-                    playsInline
-                    controls
-                    preload="metadata"
-                  />
-                ) : aiIsntBrokenLandingUrl ? (
-                  <img src={aiIsntBrokenLandingUrl} alt="AI Isn't Broken. Systems Are." />
-                ) : questionsUngovernedImageUrl ? (
-                  <img src={questionsUngovernedImageUrl} alt="" />
-                ) : null}
+            <div className="undrifted-cover-assessment">
+              <span className="undrifted-eyebrow">Assessment</span>
+              <p>Begin where drift becomes visible. This assessment reveals structural gaps, operational misalignments, and governance risks across your AI environment.</p>
+              {evalReport ? (
+                <button type="button" className="undrifted-cta-primary" onClick={onContinueToAssessmentPackage}>
+                  Continue to Assessment Package →
+                </button>
+              ) : (
+                <a className="undrifted-cta-primary" href="/ai-operations-assessment">
+                  Assess the Environment →
+                </a>
+              )}
+            </div>
+
+            {featuredArticleSet.length > 0 ? (
+              <div className="undrifted-cover-lines">
+                <span className="undrifted-eyebrow">In This Issue</span>
+                {featuredArticleSet.map((article) => {
+                  const title = asString(article.title)
+                  const desc = asString(article.description) ?? asString(article.subtitle)
+                  const articleUrl = asString(article.article_url) ?? asString(article.external_url) ?? null
+                  if (!title) return null
+                  return (
+                    <article key={title} className="undrifted-cover-line" data-media-role={asString(article.media_role) ?? undefined}>
+                      <span className="undrifted-cover-line-rule" aria-hidden="true" />
+                      <div className="undrifted-cover-line-content">
+                        <strong>{title}</strong>
+                        {desc ? <p>{desc}</p> : null}
+                      </div>
+                      {articleUrl ? (
+                        <a href={articleUrl} target="_blank" rel="noreferrer">Read →</a>
+                      ) : (
+                        <button type="button" onClick={() => { setSelectedManifestArticle(title); window.scrollTo({ top: 0, behavior: "smooth" }) }}>
+                          Standing
+                        </button>
+                      )}
+                    </article>
+                  )
+                })}
               </div>
             ) : null}
-            <p>Dispatches from Measures Registry on structural drift, AI operations, and governed environments.</p>
-          </div>
-          <div className="undrifted-dispatch-right">
-            <span className="undrifted-eyebrow">Diagnostic Intake</span>
-            <h2>Assess the Environment</h2>
-            <p>Begin where drift becomes visible. This assessment reveals structural gaps, operational misalignments, and governance risks across your AI environment.</p>
-            {evalReport ? (
-              <button type="button" className="undrifted-cta-primary" onClick={onContinueToAssessmentPackage}>
-                Continue to Assessment Package →
-              </button>
-            ) : (
-              <a className="undrifted-cta-primary" href="/ai-operations-assessment">
-                Assess the Environment →
-              </a>
-            )}
-            <ul className="undrifted-dispatch-bullets">
-              <li>Detect drift</li>
-              <li>Measure condition</li>
-              <li>Correct authority path</li>
-              <li>Govern continuity</li>
-            </ul>
           </div>
         </section>
 
-        {/* 3. Insights / Articles */}
-        <section className="undrifted-insights" aria-label="Insights">
-          <div className="undrifted-insights-header">
-            <span className="undrifted-eyebrow">Insights</span>
-            <h2>Read unDrifted</h2>
+        {/* 3. HERALD — REGISTRY DESTINATIONS */}
+        <section className="undrifted-herald" aria-label="Registry destinations">
+          <div className="undrifted-herald-header">
+            <span className="undrifted-eyebrow">Registry</span>
+            <h2>Measures Registry</h2>
+            {aboutBody ? <p>{aboutBody}</p> : null}
           </div>
-          <div className="undrifted-insights-grid">
-            {featuredArticleSet.map((article) => {
-              const title = asString(article.title)
-              const coverUrl = manifestCover(asString(article.media_role))
-              const desc = asString(article.description) ?? asString(article.subtitle)
-              const articleUrl = asString(article.article_url) ?? asString(article.external_url) ?? null
-              const pubState = asString(article.publication_state)
-              if (!title) return null
-              return (
-                <article key={title} className="undrifted-insight-card" data-publish-state={pubState ?? "held"} data-media-role={asString(article.media_role) ?? undefined}>
-                  {coverUrl ? (
-                    <div className="undrifted-insight-cover">
-                      <img src={coverUrl} alt="" />
-                    </div>
-                  ) : null}
-                  <div className="undrifted-insight-body">
-                    <h3>{title}</h3>
-                    {desc ? <p>{desc}</p> : null}
-                    {articleUrl ? (
-                      <a href={articleUrl} target="_blank" rel="noreferrer">Read Article →</a>
-                    ) : (
-                      <button type="button" onClick={() => { setSelectedManifestArticle(title); window.scrollTo({ top: 0, behavior: "smooth" }) }}>
-                        Open Article Standing
-                      </button>
-                    )}
-                  </div>
-                </article>
-              )
-            })}
-            {featuredArticleSet.length === 0 ? (
-              <section className="undrifted-empty"><p>Featured article registry state is not seated.</p></section>
-            ) : null}
+          <div className="undrifted-dispatch-cards">
+            <article className="undrifted-dispatch-card">
+              {registryLogoUrl ? (
+                <img className="undrifted-dispatch-logo" src={registryLogoUrl} alt="Measures Registry" />
+              ) : null}
+              <span className="undrifted-eyebrow">About</span>
+              <h2>About Measures Registry</h2>
+              <p>{aboutBody ?? "Measures Registry provides the structure, standards, and governance pathways needed to convert AI potential into measurable, reliable outcomes."}</p>
+              <a href="/about-measures-registry">About Measures Registry →</a>
+            </article>
+            <article className="undrifted-dispatch-card">
+              <h2>c3 Field</h2>
+              <p>Nothing exists in isolation. The c3 Field provides the governance framework through which Measures Registry, unDrifted, Measures of Inanna, and future registered systems maintain continuity across environments.</p>
+              <a href="https://c3field.online" target="_blank" rel="noreferrer">Explore Our Story →</a>
+            </article>
+            <article className="undrifted-dispatch-card undrifted-dispatch-card--visual">
+              {undriftedFillUrl ? (
+                <img className="undrifted-dispatch-card-fill" src={undriftedFillUrl} alt="" aria-hidden="true" />
+              ) : null}
+              <span className="undrifted-eyebrow">Assessment</span>
+              <h2>Structural Drift Is Detectable.</h2>
+              <p>AI isn&apos;t broken. Systems are. Assess operational standing, identify structural drift, and discover the next governed pathway.</p>
+              <a href="/ai-operations-assessment">Assess the Environment →</a>
+            </article>
           </div>
         </section>
 
-        {/* 4. Lower dispatch cards */}
-        <section className="undrifted-dispatch-cards" aria-label="Dispatch destinations">
-          <article className="undrifted-dispatch-card">
-            {registryLogoUrl ? (
-              <img className="undrifted-dispatch-logo" src={registryLogoUrl} alt="Measures Registry" />
-            ) : null}
-            <span className="undrifted-eyebrow">About</span>
-            <h2>About Measures Registry</h2>
-            <p>{aboutBody ?? "Measures Registry provides the structure, standards, and governance pathways needed to convert AI potential into measurable, reliable outcomes."}</p>
-            <a href="/about-measures-registry">About Measures Registry →</a>
-          </article>
-          <article className="undrifted-dispatch-card">
-            <h2>c3 Field</h2>
-            <p>Nothing exists in isolation. The c3 Field provides the governance framework through which Measures Registry, unDrifted, Measures of Inanna, and future registered systems maintain continuity across environments.</p>
-            <a href="https://c3field.online" target="_blank" rel="noreferrer">Explore Our Story →</a>
-          </article>
-          <article className="undrifted-dispatch-card undrifted-dispatch-card--visual">
-            {undriftedFillUrl ? (
-              <img className="undrifted-dispatch-card-fill" src={undriftedFillUrl} alt="" aria-hidden="true" />
-            ) : null}
-            <span className="undrifted-eyebrow">Assessment</span>
-            <h2>Structural Drift Is Detectable.</h2>
-            <p>AI isn&apos;t broken. Systems are. Assess operational standing, identify structural drift, and discover the next governed pathway.</p>
-            <a href="/ai-operations-assessment">Assess the Environment →</a>
-          </article>
-        </section>
-
-        {/* 5. Footer / Connect */}
+        {/* 4. CONNECT FOOTER */}
         <footer className="undrifted-connect-footer" aria-label="Connect">
           <span>Connect</span>
           <nav aria-label="Social profiles">
