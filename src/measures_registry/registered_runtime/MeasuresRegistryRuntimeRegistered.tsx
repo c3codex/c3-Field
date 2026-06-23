@@ -246,7 +246,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
     async function loadData() {
       if (supabaseConfigError) return
 
-      const [sectionResult, landingUnitResult, mediaResult, tokenResult, publicationResult, dispatchResult, mapC2CircuitResult] =
+      const [sectionResult, landingUnitResult, mediaResult, tokenResult, publicationResult, dispatchResult] =
         await Promise.all([
           supabase
             .from("measures_encounter_def")
@@ -280,11 +280,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
             .eq("publication_key", "undrifted")
             .eq("status", "published")
             .order("issue_number", { ascending: true }),
-          supabase
-            .from("map_c2_circuit")
-            .select("map_circuit_key, map_pathway, evaluation_standing, applicable_standing_keys, product_name, amount_usd, currency, stripe_product_id, release_state, map_boundary, access_boundary, public_map_boundary, public_access_boundary, public_payment_boundary, deliverables")
-            .eq("release_state", "active")
-            .order("amount_usd", { ascending: true }),
         ])
 
       if (cancelled) return
@@ -296,7 +291,14 @@ export default function MeasuresRegistryRuntimeRegistered() {
       if (!tokenResult.error) setDesignTokens((tokenResult.data ?? []) as DesignTokenRow[])
       if (!publicationResult.error) setPublicationRows((publicationResult.data ?? []) as PublicationRegistryRow[])
       if (!dispatchResult.error) setPublicationDispatchRows((dispatchResult.data ?? []) as PublicationDispatchRow[])
-      if (!mapC2CircuitResult.error) setMapC2Circuit((mapC2CircuitResult.data ?? []) as MapC2CircuitRow[])
+
+      // map_c2_circuit queried separately — RLS requires anon SELECT policy before this resolves
+      const mapC2CircuitResult = await supabase
+        .from("map_c2_circuit")
+        .select("map_circuit_key, map_pathway, evaluation_standing, applicable_standing_keys, product_name, amount_usd, currency, stripe_product_id, release_state, map_boundary, access_boundary, public_map_boundary, public_access_boundary, public_payment_boundary, deliverables")
+        .eq("release_state", "active")
+        .order("amount_usd", { ascending: true })
+      if (!cancelled && !mapC2CircuitResult.error) setMapC2Circuit((mapC2CircuitResult.data ?? []) as MapC2CircuitRow[])
     }
 
     void loadData()
