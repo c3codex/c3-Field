@@ -1011,13 +1011,14 @@
 }
 
 .measures-registry-runtime .undrifted-insight-card {
-  display: grid;
-  grid-template-columns: minmax(7rem, 0.42fr) minmax(0, 1fr);
-  gap: 1rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
   border: 1px solid var(--undrifted-line);
   border-radius: 8px;
-  padding: clamp(0.85rem, 1.5vw, 1.2rem);
+  padding: 0;
+  overflow: hidden;
   background:
     linear-gradient(135deg, rgba(89, 199, 255, 0.04), transparent 50%),
     color-mix(in srgb, var(--undrifted-panel) 86%, transparent);
@@ -1030,9 +1031,10 @@
 }
 
 .measures-registry-runtime .undrifted-insight-cover {
-  border-radius: 6px;
+  border-radius: 0;
   overflow: hidden;
-  aspect-ratio: 1;
+  aspect-ratio: 3 / 2;
+  flex-shrink: 0;
   background: var(--undrifted-graphite);
 }
 
@@ -1047,6 +1049,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: clamp(0.85rem, 1.5vw, 1.2rem);
 }
 
 .measures-registry-runtime .undrifted-insight-body h3 {
@@ -1253,10 +1256,6 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.65rem;
-  }
-
-  .measures-registry-runtime .undrifted-insight-card {
-    grid-template-columns: 1fr;
   }
 
   .measures-registry-runtime .undrifted-dispatch-left h1 {
