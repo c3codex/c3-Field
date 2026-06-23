@@ -361,6 +361,26 @@
   opacity: 0.6;
 }
 
+/* ── CONTACT CAPTURE — contained scroll ──────────────────────────────────── */
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval.registry-assessment-chamber {
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form.registry-contact-capture {
+  max-height: calc(100svh - var(--registry-header-height, 3rem) - clamp(1rem, 3vw, 2rem));
+  overflow-y: auto;
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+/* ── PASSAGE MEDIA — contained video ────────────────────────────────────── */
+.measures-registry-runtime .registry-diagnostic-passage > video {
+  display: block;
+  width: 100%;
+  max-height: calc(100svh - var(--registry-header-height, 3rem) - 6rem);
+  object-fit: contain;
+}
+
 @media (max-width: 620px) {
   .measures-registry-runtime .registry-iis-eval.registry-assessment-chamber {
     padding: clamp(0.75rem, 3vw, 1.5rem) var(--registry-page-padding-active);

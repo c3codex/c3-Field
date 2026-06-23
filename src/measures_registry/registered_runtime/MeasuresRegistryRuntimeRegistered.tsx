@@ -105,7 +105,7 @@ const SURFACE_QUERY: Record<RegisteredSurface, string> = {
 }
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
-const PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT = 7
+const PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT = 8
 
 const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
   "/ai-operations-assessment": "measures_assessment",
@@ -644,7 +644,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
       if (captureData?.id) setEvalCaptureId(captureData.id)
       setEvalSubmitted(true)
-      navigate("obsidian_to_marble_passage_video")
       return
     }
 
@@ -903,7 +902,9 @@ export default function MeasuresRegistryRuntimeRegistered() {
         pathChoiceCopy={pathChoiceCopy}
         pathChoiceBackgroundUrl={pathChoiceBackgroundUrl}
         leftHeroUrl={thresholdLeftStillUrl}
+        leftMotionUrl={thresholdLeftMotionUrl}
         rightHeroUrl={thresholdRightStillUrl}
+        rightMotionUrl={thresholdRightMotionUrl}
         registryMarkUrl={registryMarkUrl}
         onLeftChoice={() => { const next = governedNodeSurface(leftChoiceNode, "next_surface"); if (next) navigate(next) }}
         onRightChoice={() => { const next = governedNodeSurface(rightChoiceNode, "next_surface"); if (next) navigate(next) }}

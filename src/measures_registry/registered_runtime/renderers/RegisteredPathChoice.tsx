@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { CSSProperties } from "react"
 import { asString } from "../registeredRuntimeUtils"
 import type { SectionCopy } from "../registeredRuntimeUtils"
@@ -7,7 +8,9 @@ type Props = {
   pathChoiceCopy: SectionCopy
   pathChoiceBackgroundUrl: string | null
   leftHeroUrl: string | null
+  leftMotionUrl: string | null
   rightHeroUrl: string | null
+  rightMotionUrl: string | null
   registryMarkUrl: string | null
   onLeftChoice: () => void
   onRightChoice: () => void
@@ -18,11 +21,15 @@ export default function RegisteredPathChoice({
   pathChoiceCopy,
   pathChoiceBackgroundUrl,
   leftHeroUrl,
+  leftMotionUrl,
   rightHeroUrl,
+  rightMotionUrl,
   registryMarkUrl,
   onLeftChoice,
   onRightChoice,
 }: Props) {
+  const [leftSettled, setLeftSettled] = useState(false)
+  const [rightSettled, setRightSettled] = useState(false)
   // plaques → heroPaths → [more] fallback chain
   const plaques =
     pathChoiceCopy.plaques.length > 0
@@ -81,15 +88,33 @@ export default function RegisteredPathChoice({
             const side = asString(plaque.side) ?? (index === 0 ? "left" : "right")
             const heroUrl = side === "left" ? leftHeroUrl : rightHeroUrl
 
+            const motionUrl = side === "left" ? leftMotionUrl : rightMotionUrl
+            const settled = side === "left" ? leftSettled : rightSettled
+            const onSettled = side === "left"
+              ? () => setLeftSettled(true)
+              : () => setRightSettled(true)
+
             return (
               <button
                 key={side}
                 type="button"
                 className="registry-route-plate"
                 data-choice={side}
+                data-motion-settled={settled ? "true" : undefined}
                 onClick={choiceHandler(plaque, index)}
               >
-                {heroUrl ? (
+                {motionUrl && !settled ? (
+                  <video
+                    className="registry-route-plate-image"
+                    src={motionUrl}
+                    autoPlay
+                    muted
+                    playsInline
+                    preload="auto"
+                    aria-hidden="true"
+                    onEnded={onSettled}
+                  />
+                ) : heroUrl ? (
                   <img className="registry-route-plate-image" src={heroUrl} alt="" aria-hidden="true" />
                 ) : null}
                 {title ? <span>{title}</span> : null}

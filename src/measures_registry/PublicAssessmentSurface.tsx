@@ -55,7 +55,6 @@ type PublicAssessmentSurfaceProps = {
   registryWatermarkUrl: string | null
   registryTokenStyle: CSSProperties
   layoutContract?: Record<string, unknown>
-  srcIntakeContract?: Record<string, unknown>
   stylingContract?: Record<string, unknown>
   resolutionText?: string
   governedStatus?: ReactNode
@@ -106,7 +105,6 @@ export function PublicAssessmentSurface({
   registryMarkUrl,
   registryTokenStyle,
   layoutContract,
-  srcIntakeContract,
   stylingContract,
   resolutionText,
   governedStatus,
@@ -158,21 +156,6 @@ export function PublicAssessmentSurface({
     assessmentEyebrow && assessmentEyebrow.trim().toLowerCase() !== "measures registry"
       ? assessmentEyebrow
       : null
-  const visibleSrcFields = Array.isArray(srcIntakeContract?.visible_fields)
-    ? srcIntakeContract.visible_fields.filter((field): field is string => typeof field === "string")
-    : ["institution_name", "institution_type", "contact_name", "contact_email"]
-  const srcFieldLabels = {
-    institution_name: "Company / Organization Name",
-    institution_type: "Type of Business / Organization",
-    contact_name: "Contact Name",
-    contact_email: "Contact Email",
-  } as Record<string, string>
-  const srcFieldTypes = {
-    institution_name: "text",
-    institution_type: "text",
-    contact_name: "text",
-    contact_email: "email",
-  } as Record<string, string>
   const chamberStyle = {
     ...registryTokenStyle,
     ...(registryBackgroundUrl ? { "--registry-assessment-background-image": `url("${registryBackgroundUrl}")` } : {}),
@@ -379,41 +362,6 @@ export function PublicAssessmentSurface({
               <button type="submit" disabled={evalSubmitting || contactFields.length === 0}>
                 {evalSubmitting ? "Submitting" : "Receive Evaluation"}
               </button>
-              <button type="button" onClick={onTogglePassageMuted}>
-                {passageMuted ? "Audio" : "Mute"}
-              </button>
-            </div>
-          </form>
-        ) : evalStep === "src_capture" ? (
-          <form
-            className="registry-iis-eval-form registry-src-capture"
-            onSubmit={(event) => {
-              event.preventDefault()
-              onContinueToDiagnostic()
-            }}
-          >
-            <div className="registry-chamber-copy">
-              <span>Environment Identity</span>
-              <h2>Before the evaluation begins, identify the environment being assessed.</h2>
-              <p className="registry-assessment-support">{assessmentSubSupportLine}</p>
-            </div>
-            <fieldset>
-              <legend>Institutional Contact</legend>
-              {visibleSrcFields.map((key) => (
-                <label key={key}>
-                  <span>{srcFieldLabels[key] ?? key.replaceAll("_", " ")}</span>
-                  <input
-                    type={srcFieldTypes[key] ?? "text"}
-                    value={evalFields[key] ?? ""}
-                    onChange={(event) => onSetEvalField(key, event.target.value)}
-                    required
-                  />
-                </label>
-              ))}
-            </fieldset>
-            {evalError ? <p className="registry-form-error">{evalError}</p> : null}
-            <div className="registry-diagnostic-passage-controls">
-              <button type="submit">Begin Evaluation</button>
               <button type="button" onClick={onTogglePassageMuted}>
                 {passageMuted ? "Audio" : "Mute"}
               </button>

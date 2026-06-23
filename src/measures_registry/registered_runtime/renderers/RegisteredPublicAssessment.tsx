@@ -149,7 +149,6 @@ export default function RegisteredPublicAssessment({
       assessmentContactCaptureContract={encounterCopy.assessmentContactCaptureBindingContract}
       assessmentEvaluationReportContract={encounterCopy.assessmentEvaluationReportContract}
       layoutContract={encounterCopy.layoutContract ?? undefined}
-      srcIntakeContract={encounterCopy.srcIntakeContract ?? undefined}
       stylingContract={encounterCopy.stylingContract ?? undefined}
       resolutionText={encounterCopy.resolutionText ?? undefined}
       governedStatus={<RegisteredGovernedStatus status={encounterCopy.governedStatus} />}
