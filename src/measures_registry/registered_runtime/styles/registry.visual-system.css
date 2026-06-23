@@ -945,11 +945,32 @@
 
 .measures-registry-runtime .undrifted-cover-line {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 4rem auto 1fr auto;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.75rem;
   padding: 0.8rem 0;
   border-top: 1px solid var(--undrifted-line);
+}
+
+.measures-registry-runtime .undrifted-cover-line-media {
+  width: 4rem;
+  aspect-ratio: 3 / 2;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--undrifted-graphite);
+}
+
+.measures-registry-runtime .undrifted-cover-line-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.measures-registry-runtime .undrifted-cover-line[data-media-role="fables_and_myths_cover"] .undrifted-cover-line-media img {
+  object-position: top center;
 }
 
 .measures-registry-runtime .undrifted-cover-line-rule {

@@ -425,8 +425,14 @@ export default function RegisteredStructuralDrift({
                   const desc = asString(article.description) ?? asString(article.subtitle)
                   const articleUrl = asString(article.article_url) ?? asString(article.external_url) ?? null
                   if (!title) return null
+                  const coverUrl = manifestCover(asString(article.media_role))
                   return (
                     <article key={title} className="undrifted-cover-line" data-media-role={asString(article.media_role) ?? undefined}>
+                      {coverUrl ? (
+                        <div className="undrifted-cover-line-media">
+                          <img src={coverUrl} alt="" />
+                        </div>
+                      ) : null}
                       <span className="undrifted-cover-line-rule" aria-hidden="true" />
                       <div className="undrifted-cover-line-content">
                         <strong>{title}</strong>
