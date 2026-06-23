@@ -279,24 +279,26 @@ export default function RegisteredStructuralDrift({
   const heroContract = asRecord(landingContract?.hero)
   const aboutContract = asRecord(landingContract?.about)
   const ctaContract = asRecord(landingContract?.cta_footer)
-  const brandTitle = asString(brandCopy?.header) ?? undriftedPublication?.title ?? "unDrifted"
+  const brandTitle = asString(brandCopy?.header) ?? undriftedPublication?.title ?? null
   const subtitleLines = asStringArray(brandCopy?.subtitle_lines)
   const principles = asStringArray(landingContract?.principles)
   const publicationRule = asString(brandCopy?.publication_rule)
+  const coverHeadline = asString(brandCopy?.primary_line)
+  const coverEyebrow = asString(heroContract?.cover_eyebrow)
+  const mastHeadPrinciples = asString(brandCopy?.principles_line)
+  const editionMarker = asString(landingContract?.edition_marker)
+  const coverLinesLabel = asString(landingContract?.cover_lines_label)
+  const assessmentBody = asString(heroContract?.assessment_body)
   const styleKey =
     asString(landingContract?.style_contract_key) ??
     asString(styleContract?.key) ??
     asString(undriftedPublication?.metadata?.style_contract_key)
   const landingKey = asString(landingContract?.landing_contract_key)
-  const parentAuthority = asString(heroContract?.parent_authority)
   const description = asString(heroContract?.description)
-  const primaryCta = asString(heroContract?.primary_cta_label) ?? "Read the Dispatches"
-  const secondaryCta = asString(heroContract?.secondary_cta_label) ?? "Assess the Environment"
+  const secondaryCta = asString(heroContract?.secondary_cta_label)
   const secondaryCtaRoute = asString(heroContract?.secondary_cta_route)
-  const aboutTitle = asString(aboutContract?.title)
   const aboutBody = asString(aboutContract?.body)
-  const footerCtaLabel = asString(ctaContract?.label) ?? "Assess the Environment"
-  const footerCtaSubline = asString(ctaContract?.subline) ?? "Begin where drift becomes visible."
+  const footerCtaSubline = asString(ctaContract?.subline)
   const footerCtaRoute = asString(ctaContract?.target_route)
   const primaryLogoPath = asString(brandAssets?.primary_full_lockup_path)
   const selectedArticle = featuredArticleSet.find((article) => asString(article.title) === selectedManifestArticle) ?? null
@@ -359,10 +361,12 @@ export default function RegisteredStructuralDrift({
                 <span>un</span><strong>Drifted</strong>
               </span>
             )}
-            <div className="undrifted-masthead-text">
-              <span className="undrifted-masthead-principles">Measure · Detect · Correct · Govern</span>
-              <span className="undrifted-masthead-edition">Issue 001 · Launch Edition · Published by Measures Registry</span>
-            </div>
+            {(mastHeadPrinciples || editionMarker) ? (
+              <div className="undrifted-masthead-text">
+                {mastHeadPrinciples ? <span className="undrifted-masthead-principles">{mastHeadPrinciples}</span> : null}
+                {editionMarker ? <span className="undrifted-masthead-edition">{editionMarker}</span> : null}
+              </div>
+            ) : null}
           </div>
           <nav className="undrifted-topbar-social" aria-label="Publication social profiles">
             {socialLinks
@@ -395,27 +399,27 @@ export default function RegisteredStructuralDrift({
             ) : null}
           </div>
           <div className="undrifted-cover-editorial">
-            <span className="undrifted-eyebrow">Structural Drift · Launch Edition</span>
-            <h1>Structural drift is detectable.<br />Collapse is not the default.</h1>
-            <p className="undrifted-cover-deck">{publicationRule ?? "Measures Registry is now seated — providing the operational governance framework for AI environments that require measurable outcomes and governed continuity."}</p>
+            {coverEyebrow ? <span className="undrifted-eyebrow">{coverEyebrow}</span> : null}
+            {coverHeadline ? <h1>{coverHeadline}</h1> : null}
+            {description ? <p className="undrifted-cover-deck">{description}</p> : null}
 
             <div className="undrifted-cover-assessment">
-              <span className="undrifted-eyebrow">Assessment</span>
-              <p>Begin where drift becomes visible. This assessment reveals structural gaps, operational misalignments, and governance risks across your AI environment.</p>
+              <span className="undrifted-eyebrow">{secondaryCta ?? null}</span>
+              {assessmentBody ? <p>{assessmentBody}</p> : null}
               {evalReport ? (
                 <button type="button" className="undrifted-cta-primary" onClick={onContinueToAssessmentPackage}>
                   Continue to Assessment Package →
                 </button>
-              ) : (
-                <a className="undrifted-cta-primary" href="/ai-operations-assessment">
-                  Assess the Environment →
+              ) : secondaryCtaRoute ? (
+                <a className="undrifted-cta-primary" href={secondaryCtaRoute}>
+                  {secondaryCta ?? null} →
                 </a>
-              )}
+              ) : null}
             </div>
 
             {featuredArticleSet.length > 0 ? (
               <div className="undrifted-cover-lines">
-                <span className="undrifted-eyebrow">In This Issue</span>
+                {coverLinesLabel ? <span className="undrifted-eyebrow">{coverLinesLabel}</span> : null}
                 {featuredArticleSet.map((article) => {
                   const title = asString(article.title)
                   const desc = asString(article.description) ?? asString(article.subtitle)
@@ -457,7 +461,7 @@ export default function RegisteredStructuralDrift({
               ) : null}
               <span className="undrifted-eyebrow">About</span>
               <h2>About Measures Registry</h2>
-              <p>{aboutBody ?? "Measures Registry provides the structure, standards, and governance pathways needed to convert AI potential into measurable, reliable outcomes."}</p>
+              {aboutBody ? <p>{aboutBody}</p> : null}
               <a href="/about-measures-registry">About Measures Registry →</a>
             </article>
             <article className="undrifted-dispatch-card">
