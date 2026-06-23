@@ -3,12 +3,12 @@ document_type: oar1
 authority_level: closeout
 document_scope: undrifted_publication_cover_style_contract
 title: OAR1 — Style unDrifted Publication Cover to Approved Chazz Render
-status: deployed_browser_qa_pending
+status: media_map_insert_required
 version: v1
 operator: op044
 system: measures_registry
 source_oar2: docs/oar/measures_registry/oar2_style_undrifted_publication_cover_to_approved_chazz_render_v1.meta.md
-final_seat_standing: held_browser_verification
+final_seat_standing: held_media_map_insert
 ---
 
 # OAR1 — Style unDrifted Publication Cover to Approved Chazz Render v1
@@ -17,254 +17,205 @@ final_seat_standing: held_browser_verification
 
 ```yaml
 closeout:
-  status: deployed_browser_qa_pending
-  execution_started: true
-  layout_implemented: true
-  style_contract_applied: true
-  facebook_absent: true
-  responsive_contract_applied: true
-  root_encounter_unaltered: true
-  assessment_logic_unaltered: true
-  map_payment_unaltered: true
-  build_deployed: true
-  browser_qa: not_verified
-  final_seat_standing: held_browser_verification
+  status: media_map_insert_required
+  layout_deployed: true
+  layout_browser_qa: approved
+  media_map_audit: complete
+  media_map_insert_required: true
+  media_wiring_deployed: true
+  final_seat_standing: held_media_map_insert
 ```
 
-## Files Changed
+## Phase 1 — Layout (Deployed, Browser QA Approved)
 
 ```yaml
+layout:
+  status: approved
+  commit: 6c6ab17 (renderer + CSS) / b8ea5f2 (OAR1)
+  browser_qa: operator confirmed layout approved
+```
+
+Five-section Chazz layout deployed and browser-verified as approved. See initial OAR1 for full layout record.
+
+## Phase 2 — Media Map Audit
+
+### DB audit result
+
+```yaml
+table: measures_media_map
+total_rows: 2
+rows:
+  - campaign_key: agents_of_chaos_integrity_governance
+    media_role: hero_poster
+    storage_bucket: measures-registry
+    storage_path: measures_registry_poster.webp
+    is_active: true
+  - campaign_key: agents_of_chaos_integrity_governance
+    media_role: registry_mark
+    storage_bucket: measures-registry
+    storage_path: measures_registry_mark.webp
+    is_active: true
+```
+
+No other campaign keys present. All required publication-cover media roles are absent from the registry mapping.
+
+### Storage bucket audit
+
+Storage bucket: `measures-registry` (Supabase public storage)
+
+```yaml
+exists_in_storage_not_in_db:
+  - path: measures_registry_logo.webp
+    size: 131KB
+    mime: image/webp
+    required_role: measures_registry_logo
+    surface_assignment: "publication masthead (topbar), About dispatch card"
+
+  - path: ai_isnt_broken_landing.webp
+    size: 195KB
+    mime: image/webp
+    required_role: ai_isnt_broken_landing
+    surface_assignment: "hero media box — image when video absent, video poster when video seated"
+
+not_in_storage_not_in_db:
+  - role: questions_ungoverned_systems_cannot_answer_video
+    surface: hero media box (primary — video)
+    storage_status: not found in bucket
+    action_required: operator uploads video asset
+
+  - role: questions_ungoverned_systems_cannot_answer
+    surface: hero media box (still fallback)
+    storage_status: not found in bucket
+    action_required: operator uploads image asset
+
+  - role: undrifted_fill
+    surface: leadership visual card background
+    storage_status: not found in bucket
+    action_required: operator uploads image asset
+
+  - role: agents_with_keys_cover
+    surface: Agents With Keys article card cover
+    storage_status: not found in bucket
+    action_required: operator uploads image asset
+
+  - role: fables_and_myths_cover
+    surface: Fables and Myths article card cover
+    storage_status: not found in bucket
+    action_required: operator uploads image asset
+```
+
+## Required Operator Action — DB INSERT
+
+Two assets exist in storage without registry mapping. INSERT required before media loads.
+
+```sql
+INSERT INTO measures_media_map (campaign_key, media_role, storage_bucket, storage_path, mime_type, is_active)
+VALUES
+  (
+    'agents_of_chaos_integrity_governance',
+    'measures_registry_logo',
+    'measures-registry',
+    'measures_registry_logo.webp',
+    'image/webp',
+    true
+  ),
+  (
+    'agents_of_chaos_integrity_governance',
+    'ai_isnt_broken_landing',
+    'measures-registry',
+    'ai_isnt_broken_landing.webp',
+    'image/webp',
+    true
+  );
+```
+
+After INSERT, the runtime will resolve these on next load without any further code change. No rebuild required.
+
+## Phase 2 — Media Wiring Deployed
+
+### Code changes
+
+```yaml
+commit: 9295ed7
+branch: measures
 files_changed:
+  - src/measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered.tsx
   - src/measures_registry/registered_runtime/renderers/RegisteredStructuralDrift.tsx
   - src/measures_registry/registered_runtime/styles/registry.visual-system.css
-  - dist-registry/ (rebuilt — new asset hashes BJOLQRKr.js, BNy-LR1b.css)
 ```
 
-## Layout Implementation
+### REGISTERED_MEDIA_ROLES additions
 
-### Surface contract
-
-```yaml
-route: /undrifted
-type: publication_cover
-sequence_member: false
-pillar: Measures Registry
-header_nav: false
-footer: system footer inside undrifted-connect-footer
-facebook: absent
+```
++ "questions_ungoverned_systems_cannot_answer"
++ "measures_registry_logo"
++ "ai_isnt_broken_landing"
++ "undrifted_fill"
 ```
 
-### Five-section structure
+### URL derivations added
 
-#### Section 1 — Top bar (`undrifted-topbar`)
-
-- Left: unDrifted wordmark (serif, `un` light + `Drifted` bold) + separator + "Measures Registry Publication" label
-- Right: X, Instagram, LinkedIn social icons (filtered — Facebook absent)
-- Social links sourced from DB `publicationLandingUnit.metadata.social_links`
-- Top bar replaces previous hero top padding — `undrifted-shell` `padding-top` overridden to `0` for undrifted layout contract
-
-#### Section 2 — Hero Dispatch (`undrifted-hero-dispatch`)
-
-Two-column desktop grid (1.1fr / 0.9fr):
-
-Left column (`undrifted-dispatch-left`):
-- Eyebrow: "Dispatch" (cyan, uppercase, 0.68rem)
-- Headline: "AI Isn't Broken. Systems Are." (serif, clamp 2.2–3.6rem)
-- Media box (`undrifted-dispatch-media`): 16:9 video, `questions_ungoverned_systems_cannot_answer_video` if seated, `controls playsInline preload="metadata"` (not autoplay)
-- Paragraph: "Dispatches from Measures Registry on structural drift, AI operations, and governed environments."
-
-Right column (`undrifted-dispatch-right`):
-- Eyebrow: "Diagnostic Intake" (cyan)
-- Headline: "Assess the Environment" (serif, clamp 1.6–2.4rem)
-- Paragraph: "Begin where drift becomes visible…"
-- CTA: solid blue button (`undrifted-cta-primary`) → `/ai-operations-assessment`
-  - If `evalReport` present: shows "Continue to Assessment Package" button instead
-- Bullets (`undrifted-dispatch-bullets`): Detect drift / Measure condition / Correct authority path / Govern continuity
-
-#### Section 3 — Insights (`undrifted-insights`)
-
-- Eyebrow: "Insights"
-- Headline: "Read unDrifted"
-- 2-column article grid (`undrifted-insights-grid`)
-- Each card (`undrifted-insight-card`): cover image (left, 1:1) + body (right: h3 title, description if seated, "Read Article →" or "Open Article Standing" button if no URL)
-- Article data sourced from DB `publicationLandingUnit.metadata.featured_article_set`
-- Article covers from `agentsWithKeysCoverUrl` / `fablesAndMythsCoverUrl` via `manifestCover()`
-
-#### Section 4 — Lower Dispatch Cards (`undrifted-dispatch-cards`)
-
-Three-column desktop grid:
-
-Card 1 — About:
-- Eyebrow: "About"
-- Headline: "About Measures Registry"
-- Body: `aboutBody` from DB, or fallback: "Measures Registry provides the structure…"
-- CTA: "About Measures Registry →" → `/about-measures-registry`
-
-Card 2 — c3 Field:
-- Eyebrow: "Leadership"
-- Headline: "c3 Field"
-- Body: "Operational leadership and transformation support…"
-- CTA: "c3 Field / Our Story →" → `https://c3field.online`
-
-Card 3 — Visual (`undrifted-dispatch-card--visual`):
-- Headline: "Leadership for Governed Environments."
-- CTA: "Explore c3 Field →" → `https://c3field.online`
-- Background: cyan gradient emphasis, blue border tint
-
-#### Section 5 — Connect Footer (`undrifted-connect-footer`)
-
-- "Connect" label (cyan, uppercase)
-- Social nav: X, Instagram, LinkedIn (Facebook absent)
-- `renderSystemFooter()` appended
-
-### Route dispatch verification
-
-```yaml
-dispatch_routes:
-  assess_the_environment: /ai-operations-assessment
-  about_measures_registry: /about-measures-registry
-  c3_field_our_story: https://c3field.online
-  explore_c3_field: https://c3field.online
-  facebook: absent
+```typescript
+const questionsUngovernedImageUrl = mediaUrl(mediaMap.get("questions_ungoverned_systems_cannot_answer"))
+const registryLogoUrl = mediaUrl(mediaMap.get("measures_registry_logo"))
+const aiIsntBrokenLandingUrl = mediaUrl(mediaMap.get("ai_isnt_broken_landing"))
+const undriftedFillUrl = mediaUrl(mediaMap.get("undrifted_fill"))
 ```
 
-## Visual System
+### Renderer surface assignments
 
-```yaml
-palette:
-  --undrifted-bg: "#030608"
-  --undrifted-panel: "#070b0f"
-  --undrifted-graphite: "#111820"
-  --undrifted-text: "#e8edf2"
-  --undrifted-muted: "#aab4bf"
-  --undrifted-blue: "#1f8cff"
-  --undrifted-cyan: "#59c7ff"
-  --undrifted-line: "rgba(180, 210, 255, 0.18)"
-  --undrifted-line-strong: "rgba(70, 145, 255, 0.55)"
+| Media role | Surface target | Behavior |
+|---|---|---|
+| `measures_registry_logo` | Topbar wordmark | Renders as `<img>` replacing text wordmark; text fallback if not seated |
+| `measures_registry_logo` | About dispatch card | `<img>` above eyebrow; absent if not seated |
+| `ai_isnt_broken_landing` | Hero media box | `<img>` fill when no video; also set as `poster` attr on `<video>` |
+| `questions_ungoverned_systems_cannot_answer` | Hero media box | `<img>` fallback after ai_isnt_broken_landing |
+| `questions_ungoverned_systems_cannot_answer_video` | Hero media box | `<video controls>` primary; uses ai_isnt_broken_landing as poster |
+| `undrifted_fill` | Leadership visual card | Absolutely positioned `<img>` at 28% opacity behind gradient overlay |
 
-typography:
-  headings: Cormorant Garamond, Georgia, serif
-  body: Inter, system-ui, sans-serif
+### Media box fallback chain (dispatch left)
 
-cta_button:
-  type: solid
-  background: --undrifted-blue
-  hover: --undrifted-cyan with dark text
-
-card_style:
-  border: 1px --undrifted-line
-  border-radius: 8px
-  background: cyan tint gradient + panel surface
-  box-shadow: 0 1rem 2.6rem rgba(0,0,0,0.22)
+```
+IF questionsUngovernedVideoUrl:   <video poster={aiIsntBrokenLandingUrl} controls />
+ELSE IF aiIsntBrokenLandingUrl:   <img src={aiIsntBrokenLandingUrl} />
+ELSE IF questionsUngovernedImageUrl: <img src={questionsUngovernedImageUrl} />
+ELSE: media box hidden
 ```
 
-## Responsive Contract
+No invented content. No hardcoded fallback URLs. No direct bucket references.
+
+## Remaining Operator Actions
 
 ```yaml
-desktop:
-  hero: two columns (1.1fr / 0.9fr)
-  insights: two columns
-  dispatch_cards: three columns
+required_db_inserts:
+  immediate:
+    - role: measures_registry_logo (asset exists in storage)
+    - role: ai_isnt_broken_landing (asset exists in storage)
+  pending_upload:
+    - role: questions_ungoverned_systems_cannot_answer_video (upload + insert required)
+    - role: questions_ungoverned_systems_cannot_answer (upload + insert required)
+    - role: undrifted_fill (upload + insert required)
+    - role: agents_with_keys_cover (upload + insert required)
+    - role: fables_and_myths_cover (upload + insert required)
 
-tablet_860px:
-  hero: one column (stacked)
-  insights: one column
-  dispatch_cards: one column
-
-mobile_620px:
-  topbar: flex-column
-  insight_card: single column
-  hero_h1: 2rem
-```
-
-## Mutation Confirmation
-
-```yaml
-mutation_confirmation:
-  renderer_mutation: true
-  renderer_mutation_scope: >
-    RegisteredStructuralDrift index variant fully replaced with Chazz render:
-    undrifted-topbar, undrifted-hero-dispatch, undrifted-insights, undrifted-dispatch-cards,
-    undrifted-connect-footer. Old undrifted-hero, undrifted-principles, undrifted-grid,
-    undrifted-social-strip, undrifted-evaluation sections removed.
-    Article overlay logic preserved. evalReport CTA conditional preserved.
-    Legacy structural-drift route notice preserved.
-  css_mutation: true
-  css_mutation_scope: >
-    registry.visual-system.css: ~350 lines of Chazz render CSS added.
-    New classes: undrifted-topbar, undrifted-topbar-brand, undrifted-wordmark,
-    undrifted-topbar-sep, undrifted-topbar-label, undrifted-topbar-social,
-    undrifted-eyebrow, undrifted-hero-dispatch, undrifted-dispatch-left,
-    undrifted-dispatch-media, undrifted-dispatch-right, undrifted-cta-primary,
-    undrifted-dispatch-bullets, undrifted-insights, undrifted-insights-header,
-    undrifted-insights-grid, undrifted-insight-card, undrifted-insight-cover,
-    undrifted-insight-body, undrifted-dispatch-cards, undrifted-dispatch-card,
-    undrifted-dispatch-card--visual, undrifted-connect-footer.
-    Responsive breakpoints at 860px and 620px.
-  db_mutation: false
-  content_mutation: false
-  map_mutation: false
-  payment_mutation: false
-  social_campaign_mutation: false
-  publication_mutation: false
-  root_encounter_mutation: false
-  assessment_logic_mutation: false
-```
-
-## Deployment
-
-```yaml
-deployment:
-  commit: 6c6ab17
-  branch: measures
-  remote: https://github.com/c3codex/c3-Field.git
-  push_confirmed: true
-  deploy_target: measuresregistry.com (Cloudflare Pages)
-  asset_hash_js: index-BJOLQRKr.js
-  asset_hash_css: index-BNy-LR1b.css
-```
-
-## Browser QA
-
-```yaml
-browser_qa:
-  status: not_verified
-  reason: Browser verification tooling unavailable in this execution context.
-  gate_rule: "If browser verification tooling is unavailable: STOP. Do not mark verification complete."
-  required_proof:
-    - /undrifted renders topbar (wordmark, Measures Registry Publication, social icons)
-    - hero two-column layout on desktop
-    - video present (not autoplay) in dispatch left
-    - Assess the Environment button routes to /ai-operations-assessment
-    - insights section shows 2 article cards with covers
-    - dispatch cards section shows 3 cards
-    - About card routes to /about-measures-registry
-    - Leadership cards route to https://c3field.online
-    - connect footer shows social icons
-    - Facebook absent in topbar, footer, and anywhere else
-    - LinkedIn present if seated in DB
-    - mobile stack at 860px
-    - laptop screenshot
-    - mobile screenshot if available
-    - console/network findings
+no_rebuild_required_after_insert: true
 ```
 
 ## Final Standing
 
 ```yaml
-repair_standing: deployed_browser_qa_pending
-layout_implemented: true
-style_contract_applied: true
-facebook_absent: true
-responsive_contract_applied: true
-build_deployed: true
-browser_qa: not_verified
-final_seat_standing: held_browser_verification
+repair_standing: media_map_insert_required
+layout_deployed: true
+layout_browser_qa: approved
+media_wiring_deployed: true
+db_inserts_required: true
+final_seat_standing: held_media_map_insert
 
 seat_advancement:
   current: held
-  next: VERIFIED
-  requires: browser QA screenshots confirming Chazz render across desktop and mobile
+  next: media_visible
+  requires: operator executes INSERT payload for measures_registry_logo and ai_isnt_broken_landing
+  full_media_requires: all five additional roles uploaded and inserted
 ```
 
-SEAT remains HELD pending browser verification. Chazz render deployed. No DB mutations. No encounter/assessment/payment mutations.
+Layout approved. Media wiring deployed. DB INSERT required for two immediately available assets. Five additional assets require operator upload before mapping.
