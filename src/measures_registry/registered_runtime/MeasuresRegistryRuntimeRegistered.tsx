@@ -1064,6 +1064,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
   // --- [LAPIS] publication + /undrifted ---
 
   } else if (activeSurface === "structural_drift_dispatches" || activeSurface === "publication_dispatch") {
+    const roleCallUrl = asString(asRecord(rootRouteUnit?.metadata?.footer_contract)?.link_url)
     activeSurfaceElement = (
       <LapisChamberRuntime
         registryTokenStyle={launchMediaStyle}
@@ -1080,7 +1081,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onContinueToAssessmentPackage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onGoToEvalPassage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onAboutMeasuresRegistry={() => navigate("about_measures_registry")}
-        onOurStory={() => window.open("https://c3field.online", "_blank", "noreferrer")}
+        roleCallUrl={roleCallUrl}
       />
     )
   } else {

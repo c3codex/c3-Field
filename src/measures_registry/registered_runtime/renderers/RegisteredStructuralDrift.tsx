@@ -35,7 +35,7 @@ type Props = {
   onContinueToAssessmentPackage: () => void
   onGoToEvalPassage: () => void
   onAboutMeasuresRegistry: () => void
-  onOurStory: () => void
+  roleCallUrl: string | null
   questionsUngovernedVideoUrl: string | null
   questionsUngovernedImageUrl: string | null
   registryLogoUrl: string | null
@@ -85,7 +85,7 @@ export default function RegisteredStructuralDrift({
   onContinueToAssessmentPackage,
   onGoToEvalPassage,
   onAboutMeasuresRegistry,
-  onOurStory,
+  roleCallUrl,
   questionsUngovernedVideoUrl,
   questionsUngovernedImageUrl,
   registryLogoUrl,
@@ -267,7 +267,6 @@ export default function RegisteredStructuralDrift({
   // index variant — Issue 001 render from seated publication profiles
 
   const featuredArticleSet = asRecordArray(publicationLandingUnit?.metadata?.featured_article_set)
-  const socialLinks = asRecordArray(publicationLandingUnit?.metadata?.social_links)
   const isLegacyStructuralDriftRoute = routePath === "/structural-drift"
   const routeShell =
     routePath === "/undrifted"
@@ -277,8 +276,9 @@ export default function RegisteredStructuralDrift({
   // Seated publication profiles
   const contentProfile = landingRecord(publicationLandingUnit, "content_profile")
   const coverStory = metadataRecord(undriftedPublication, "cover_story")
+  const issueRecord = metadataRecord(undriftedPublication, "issue_record")
   const assessmentFeature = landingRecord(publicationLandingUnit, "assessment_feature")
-  const roleCallFeature = landingRecord(publicationLandingUnit, "role_call_feature")
+  const roleCallFeature = metadataRecord(undriftedPublication, "role_call_feature") ?? landingRecord(publicationLandingUnit, "role_call_feature")
   const nextIssueTeaserFeature = metadataRecord(undriftedPublication, "next_issue_teaser")
   const footerRecord = metadataRecord(undriftedPublication, "footer_record")
 
@@ -288,8 +288,10 @@ export default function RegisteredStructuralDrift({
   const landingContract = landingRecord(publicationLandingUnit, "landing_design_contract")
 
   const brandTitle = asString(brandCopy?.header) ?? undriftedPublication?.title ?? null
-  const mastHeadPrinciples = asString(contentProfile?.tagline) ?? asString(brandCopy?.principles_line)
-  const editionMarker = asString(landingContract?.edition_marker)
+  const mastHeadPrinciples = undriftedPublication?.subtitle ?? asString(contentProfile?.tagline) ?? asString(brandCopy?.principles_line)
+  const issueNumber = asString(issueRecord?.issue_number)
+  const issueDate = asString(issueRecord?.issue_date)
+  const issueEdition = asString(issueRecord?.edition)
   const coverEyebrow = asString(asRecord(landingContract?.hero)?.cover_eyebrow)
   const insightsEyebrow = asString(landingContract?.insights_eyebrow)
   const insightsHeading = asString(landingContract?.insights_heading)
@@ -336,13 +338,6 @@ export default function RegisteredStructuralDrift({
     return null
   }
 
-  function socialGlyph(platform: string) {
-    if (platform === "X") return "𝕏"
-    if (platform === "Instagram") return "◎"
-    if (platform === "LinkedIn") return "in"
-    return platform.slice(0, 1)
-  }
-
   return (
     <main
       className="measures-registry-runtime"
@@ -355,7 +350,7 @@ export default function RegisteredStructuralDrift({
       data-release-standing="published"
       style={registryTokenStyle}
     >
-      <section className="undrifted-shell" aria-label={brandTitle ?? "unDrifted"}>
+      <section className="undrifted-shell undrifted-cover-canvas" aria-label={brandTitle ?? "unDrifted"}>
 
         {isLegacyStructuralDriftRoute ? (
           <section className="undrifted-legacy-route" aria-label="Legacy route standing">
@@ -369,32 +364,28 @@ export default function RegisteredStructuralDrift({
         {/* SECTION 1 — MASTHEAD */}
         <header className="undrifted-masthead" aria-label="unDrifted publication masthead">
           <div className="undrifted-masthead-nameplate">
-            {registryLogoUrl ? (
-              <img className="undrifted-masthead-logo" src={registryLogoUrl} alt={brandTitle ?? "unDrifted"} />
+            {primaryLogoPath ? (
+              <img className="undrifted-masthead-logo" src={primaryLogoPath} alt={brandTitle ?? "unDrifted"} />
             ) : (
               <span className="undrifted-wordmark" aria-label={brandTitle ?? "unDrifted"}>
                 <span>un</span><strong>Drifted</strong>
               </span>
             )}
-            {(mastHeadPrinciples || editionMarker) ? (
+            {mastHeadPrinciples ? (
               <div className="undrifted-masthead-text">
                 {mastHeadPrinciples ? <span className="undrifted-masthead-principles">{mastHeadPrinciples}</span> : null}
-                {editionMarker ? <span className="undrifted-masthead-edition">{editionMarker}</span> : null}
               </div>
             ) : null}
           </div>
-          <nav className="undrifted-topbar-social" aria-label="Publication social profiles">
-            {socialLinks
-              .filter((social) => asString(social.platform) !== "Facebook")
-              .map((social) => {
-                const platform = asString(social.platform)
-                const url = asString(social.url)
-                if (!platform || !url) return null
-                return <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
-              })}
-          </nav>
         </header>
         <hr className="undrifted-masthead-rule" aria-hidden="true" />
+        {(issueNumber || issueDate || issueEdition) ? (
+          <div className="undrifted-issue-rail" aria-label="Issue information">
+            {issueNumber ? <span>ISSUE {issueNumber}</span> : null}
+            {issueDate ? <span>{issueDate}</span> : null}
+            {issueEdition ? <span>{issueEdition}</span> : null}
+          </div>
+        ) : null}
 
         {/* SECTION 2 + 3 — HERO COVER + COVER STORY */}
         <section className="undrifted-cover" aria-label="Cover story">
@@ -485,10 +476,10 @@ export default function RegisteredStructuralDrift({
                 {roleCallPositions.map((pos) => <li key={pos}>{pos}</li>)}
               </ul>
             ) : null}
-            {roleCallCtaLabel ? (
-              <button type="button" className="undrifted-cta-primary" onClick={onOurStory}>
+            {roleCallUrl && roleCallCtaLabel ? (
+              <a className="undrifted-cta-primary" href={roleCallUrl} target="_blank" rel="noreferrer">
                 {roleCallCtaLabel}
-              </button>
+              </a>
             ) : null}
           </section>
         ) : null}
@@ -507,17 +498,6 @@ export default function RegisteredStructuralDrift({
         <footer className="undrifted-connect-footer" aria-label="Publication footer">
           {footerLine1 ? <p className="undrifted-footer-line">{footerLine1}</p> : null}
           {footerLine2 ? <p className="undrifted-footer-line">{footerLine2}</p> : null}
-          <nav aria-label="Social profiles">
-            {socialLinks
-              .filter((social) => asString(social.platform) !== "Facebook")
-              .map((social) => {
-                const platform = asString(social.platform)
-                const url = asString(social.url)
-                if (!platform || !url) return null
-                return <a key={platform} href={url} aria-label={platform} target="_blank" rel="noreferrer">{socialGlyph(platform)}</a>
-              })}
-          </nav>
-          {renderSystemFooter()}
         </footer>
 
       </section>

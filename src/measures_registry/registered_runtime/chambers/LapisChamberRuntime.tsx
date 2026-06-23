@@ -37,7 +37,7 @@ type LapisChamberRuntimeProps = {
   onContinueToAssessmentPackage: () => void
   onGoToEvalPassage: () => void
   onAboutMeasuresRegistry: () => void
-  onOurStory: () => void
+  roleCallUrl: string | null
 }
 
 export default function LapisChamberRuntime({
@@ -51,7 +51,7 @@ export default function LapisChamberRuntime({
   onContinueToAssessmentPackage,
   onGoToEvalPassage,
   onAboutMeasuresRegistry,
-  onOurStory,
+  roleCallUrl,
 }: LapisChamberRuntimeProps) {
   const [mediaRows, setMediaRows] = useState<MediaRow[]>([])
   const [publicationRows, setPublicationRows] = useState<PublicationRegistryRow[]>([])
@@ -178,7 +178,7 @@ export default function LapisChamberRuntime({
       onContinueToAssessmentPackage={onContinueToAssessmentPackage}
       onGoToEvalPassage={onGoToEvalPassage}
       onAboutMeasuresRegistry={onAboutMeasuresRegistry}
-      onOurStory={onOurStory}
+      roleCallUrl={roleCallUrl}
       questionsUngovernedVideoUrl={questionsUngovernedSystemsVideoUrl}
       questionsUngovernedImageUrl={questionsUngovernedImageUrl}
       registryLogoUrl={registryLogoUrl}

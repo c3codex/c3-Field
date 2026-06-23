@@ -6,6 +6,426 @@
   isolation: isolate;
 }
 
+/* unDrifted Issue 001 governed cover composition */
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] {
+  --undrifted-cover-gold: #d5a51d;
+  --undrifted-cover-paper: #090c11;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(31, 140, 255, 0.12), transparent 34rem),
+    #030508;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-canvas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(76rem, calc(100% - 2rem));
+  max-width: none;
+  margin: clamp(1rem, 3vw, 3rem) auto;
+  padding: clamp(1rem, 2.2vw, 2rem);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.018), transparent 38%),
+    var(--undrifted-cover-paper);
+  border: 1px solid rgba(213, 165, 29, 0.32);
+  box-shadow: 0 2rem 6rem rgba(0, 0, 0, 0.58);
+  color: var(--undrifted-text);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-legacy-route,
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead,
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-rule,
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-issue-rail,
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover,
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-connect-footer {
+  grid-column: 1 / -1;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead {
+  min-height: clamp(7rem, 16vw, 11.5rem);
+  padding: 0;
+  align-items: center;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-nameplate {
+  width: 100%;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-logo {
+  width: min(72%, 48rem);
+  height: auto;
+  max-height: 10rem;
+  object-position: left center;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-wordmark {
+  font-size: clamp(4.4rem, 12vw, 10rem);
+  line-height: 0.8;
+  letter-spacing: -0.075em;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-text {
+  max-width: 19rem;
+  margin-bottom: 0.8rem;
+  border-left-color: var(--undrifted-cover-gold);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-principles {
+  color: var(--undrifted-cover-gold);
+  line-height: 1.45;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-rule {
+  width: 100%;
+  border-top-color: var(--undrifted-cover-gold);
+  opacity: 1;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-issue-rail {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-issue-rail span {
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(0.62rem, 1vw, 0.76rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-issue-rail span + span {
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover {
+  position: relative;
+  display: block;
+  min-height: clamp(28rem, 62vw, 47rem);
+  padding: 0;
+  border-bottom: 4px solid var(--undrifted-cover-gold);
+  overflow: hidden;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-visual {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 25%, rgba(3, 5, 8, 0.2) 55%, rgba(3, 5, 8, 0.92) 100%);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-editorial {
+  position: absolute;
+  z-index: 1;
+  right: clamp(1rem, 4vw, 3.5rem);
+  bottom: clamp(1.4rem, 5vw, 4rem);
+  width: min(46%, 31rem);
+  padding: clamp(1rem, 2.5vw, 2rem);
+  border-left: 3px solid var(--undrifted-cover-gold);
+  background: linear-gradient(90deg, rgba(9, 12, 17, 0.72), rgba(9, 12, 17, 0.96));
+  backdrop-filter: blur(8px);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-editorial h1 {
+  margin-bottom: 1rem;
+  font-family: var(--registry-font-body);
+  font-size: clamp(2.2rem, 5.2vw, 5rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-deck {
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(0.78rem, 1.3vw, 1rem);
+  line-height: 1.45;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-assessment {
+  margin: 0;
+  padding: 0.75rem 0 0;
+  border: 0;
+  border-top: 1px solid rgba(213, 165, 29, 0.55);
+  border-radius: 0;
+  background: none;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-assessment > p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insights {
+  grid-column: 1 / span 2;
+  grid-row: 5;
+  padding: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insights-header {
+  min-height: 4.1rem;
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insights-header h2 {
+  color: var(--undrifted-cover-gold);
+  font-size: clamp(1.3rem, 2.5vw, 2.1rem);
+  font-style: italic;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insights-grid {
+  height: calc(100% - 4.1rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-card {
+  position: relative;
+  min-height: 25rem;
+  border: 0;
+  border-radius: 0;
+  background: #06080c;
+  box-shadow: none;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-card + .undrifted-insight-card {
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-cover {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  aspect-ratio: auto;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-cover::after {
+  content: "";
+  position: absolute;
+  inset: 36% 0 0;
+  background: linear-gradient(transparent, rgba(4, 6, 9, 0.98));
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-body {
+  position: relative;
+  z-index: 1;
+  justify-content: flex-end;
+  min-height: 25rem;
+  padding: 1.25rem;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-body h3 {
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-body a {
+  padding: 0;
+  border: 0;
+  color: var(--undrifted-cover-gold);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-editor-feature {
+  position: relative;
+  grid-column: 3;
+  grid-row: 5;
+  min-height: 29.1rem;
+  padding: clamp(1.15rem, 2.5vw, 2rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 30%, transparent 0 2.5rem, rgba(31, 140, 255, 0.55) 2.58rem 2.68rem, transparent 2.75rem 4.7rem, rgba(213, 165, 29, 0.5) 4.78rem 4.88rem, transparent 4.95rem),
+    linear-gradient(160deg, rgba(31, 140, 255, 0.16), rgba(9, 12, 17, 0.94) 68%);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-editor-feature h2 {
+  margin-top: clamp(8rem, 15vw, 12rem);
+  font-size: clamp(1.55rem, 3vw, 2.6rem);
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cta-primary {
+  border-radius: 0;
+  background: var(--undrifted-cover-gold);
+  color: #080a0e;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call {
+  grid-column: 1 / span 2;
+  grid-row: 6;
+  padding: clamp(1.3rem, 3vw, 2.4rem);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call h2 {
+  font-size: clamp(2rem, 4vw, 4rem);
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call-positions {
+  margin-bottom: 1rem;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call-positions li {
+  color: var(--undrifted-cover-gold);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-next-issue {
+  grid-column: 3;
+  grid-row: 6;
+  padding: clamp(1.3rem, 3vw, 2.4rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(145deg, rgba(213, 165, 29, 0.12), transparent 65%);
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-next-issue h2 {
+  font-size: clamp(1.5rem, 2.7vw, 2.4rem);
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-connect-footer {
+  justify-content: space-between;
+  padding: 1rem 0 0;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-footer-line {
+  max-width: 48%;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+@media (max-width: 860px) {
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-canvas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insights {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    border-right: 0;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-editor-feature {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    min-height: 24rem;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-next-issue {
+    grid-column: 2;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-canvas {
+    grid-template-columns: 1fr;
+    width: calc(100% - 1rem);
+    margin: 0.5rem auto;
+    padding: 0.75rem;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-nameplate {
+    align-items: flex-start;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-logo {
+    width: min(76vw, 30rem);
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-text {
+    display: none;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-issue-rail span {
+    padding-inline: 0.35rem;
+    letter-spacing: 0.08em;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover {
+    min-height: 38rem;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-visual {
+    height: 56%;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-visual::after {
+    background: linear-gradient(transparent 50%, var(--undrifted-cover-paper));
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-editorial {
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    border-left: 0;
+    border-top: 2px solid var(--undrifted-cover-gold);
+    background: linear-gradient(transparent, var(--undrifted-cover-paper) 12%);
+    backdrop-filter: none;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insights,
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-editor-feature,
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-role-call,
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-next-issue {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    border-right: 0;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-card + .undrifted-insight-card {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-connect-footer {
+    display: block;
+  }
+
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-footer-line {
+    max-width: none;
+  }
+}
+
 .measures-registry-runtime::before,
 .measures-registry-runtime::after {
   content: "";
