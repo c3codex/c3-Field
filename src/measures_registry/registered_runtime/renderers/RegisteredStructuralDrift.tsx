@@ -1,4 +1,3 @@
-import { useState } from "react"
 import type { CSSProperties, FormEvent, ReactNode } from "react"
 import {
   asRecord,
@@ -36,6 +35,7 @@ type Props = {
   onContinueToAssessmentPackage: () => void
   onGoToEvalPassage: () => void
   onAboutMeasuresRegistry: () => void
+  onOurStory: () => void
   questionsUngovernedVideoUrl: string | null
   questionsUngovernedImageUrl: string | null
   registryLogoUrl: string | null
@@ -85,6 +85,7 @@ export default function RegisteredStructuralDrift({
   onContinueToAssessmentPackage,
   onGoToEvalPassage,
   onAboutMeasuresRegistry,
+  onOurStory,
   questionsUngovernedVideoUrl,
   questionsUngovernedImageUrl,
   registryLogoUrl,
@@ -97,7 +98,6 @@ export default function RegisteredStructuralDrift({
   onSubmitSubscription,
   renderSystemFooter,
 }: Props) {
-  const [selectedManifestArticle, setSelectedManifestArticle] = useState<string | null>(null)
   if (variant === "article") {
     const publicationAuthority = undriftedPublication ?? structuralDriftPublication
 
@@ -264,7 +264,8 @@ export default function RegisteredStructuralDrift({
     )
   }
 
-  // index variant
+  // index variant — Issue 001 render from seated publication profiles
+
   const featuredArticleSet = asRecordArray(publicationLandingUnit?.metadata?.featured_article_set)
   const socialLinks = asRecordArray(publicationLandingUnit?.metadata?.social_links)
   const isLegacyStructuralDriftRoute = routePath === "/structural-drift"
@@ -272,23 +273,24 @@ export default function RegisteredStructuralDrift({
     routePath === "/undrifted"
       ? "undrifted_publication_landing"
       : isLegacyStructuralDriftRoute ? "structural_drift_legacy_inbound" : null
+
+  // Seated publication profiles
+  const contentProfile = landingRecord(publicationLandingUnit, "content_profile")
+  const coverStory = metadataRecord(undriftedPublication, "cover_story")
+  const assessmentFeature = landingRecord(publicationLandingUnit, "assessment_feature")
+  const roleCallFeature = landingRecord(publicationLandingUnit, "role_call_feature")
+  const nextIssueTeaserFeature = metadataRecord(undriftedPublication, "next_issue_teaser")
+  const footerRecord = metadataRecord(undriftedPublication, "footer_record")
+
   const brandCopy = metadataRecord(undriftedPublication, "brand_copy")
   const brandAssets = metadataRecord(undriftedPublication, "brand_assets")
   const styleContract = metadataRecord(undriftedPublication, "style_contract")
   const landingContract = landingRecord(publicationLandingUnit, "landing_design_contract")
-  const heroContract = asRecord(landingContract?.hero)
-  const aboutContract = asRecord(landingContract?.about)
-  const ctaContract = asRecord(landingContract?.cta_footer)
+
   const brandTitle = asString(brandCopy?.header) ?? undriftedPublication?.title ?? null
-  const subtitleLines = asStringArray(brandCopy?.subtitle_lines)
-  const principles = asStringArray(landingContract?.principles)
-  const publicationRule = asString(brandCopy?.publication_rule)
-  const coverHeadline = asString(brandCopy?.primary_line)
-  const coverEyebrow = asString(heroContract?.cover_eyebrow)
-  const mastHeadPrinciples = asString(brandCopy?.principles_line)
+  const mastHeadPrinciples = asString(contentProfile?.tagline) ?? asString(brandCopy?.principles_line)
   const editionMarker = asString(landingContract?.edition_marker)
-  const coverLinesLabel = asString(landingContract?.cover_lines_label)
-  const assessmentBody = asString(heroContract?.assessment_body)
+  const coverEyebrow = asString(asRecord(landingContract?.hero)?.cover_eyebrow)
   const insightsEyebrow = asString(landingContract?.insights_eyebrow)
   const insightsHeading = asString(landingContract?.insights_heading)
   const styleKey =
@@ -296,14 +298,37 @@ export default function RegisteredStructuralDrift({
     asString(styleContract?.key) ??
     asString(undriftedPublication?.metadata?.style_contract_key)
   const landingKey = asString(landingContract?.landing_contract_key)
-  const description = asString(heroContract?.description)
-  const secondaryCta = asString(heroContract?.secondary_cta_label)
-  const secondaryCtaRoute = asString(heroContract?.secondary_cta_route)
-  const aboutBody = asString(aboutContract?.body)
-  const footerCtaSubline = asString(ctaContract?.subline)
-  const footerCtaRoute = asString(ctaContract?.target_route)
   const primaryLogoPath = asString(brandAssets?.primary_full_lockup_path)
-  const selectedArticle = featuredArticleSet.find((article) => asString(article.title) === selectedManifestArticle) ?? null
+
+  // Cover story from seated cover_story feature
+  const coverHeadline = asString(coverStory?.feature_headline) ?? asString(contentProfile?.primary_headline)
+  const coverDeck = asString(coverStory?.feature_deck)
+  const coverPositioning = asString(coverStory?.feature_positioning)
+  const coreDistinction = asString(coverStory?.core_distinction)
+
+  // Assessment editor's feature
+  const assessmentFeatureLabel = asString(assessmentFeature?.feature_label)
+  const assessmentFeatureTitle = asString(assessmentFeature?.feature_title)
+  const assessmentFeatureBody = asString(assessmentFeature?.feature_body)
+  const assessmentCtaLabel = asString(assessmentFeature?.cta_label)
+  const assessmentRoute = asString(assessmentFeature?.route_path)
+
+  // Role Call feature
+  const roleCallLabel = asString(roleCallFeature?.feature_label)
+  const roleCallTitle = asString(roleCallFeature?.feature_title)
+  const roleCallTagline = asString(roleCallFeature?.feature_tagline)
+  const roleCallPositions = asStringArray(roleCallFeature?.positions)
+  const roleCallCtaLabel = asString(roleCallFeature?.cta_label)
+
+  // Next Issue teaser
+  const nextIssueLabel = asString(nextIssueTeaserFeature?.feature_label)
+  const nextIssueTitle = asString(nextIssueTeaserFeature?.feature_title)
+  const nextIssueBody = asString(nextIssueTeaserFeature?.feature_body)
+  const nextIssueHint = asString(nextIssueTeaserFeature?.release_hint)
+
+  // Footer record
+  const footerLine1 = asString(footerRecord?.footer_line_1)
+  const footerLine2 = asString(footerRecord?.footer_line_2)
 
   function manifestCover(mediaRole: string | null) {
     if (mediaRole === "agents_with_keys_cover") return agentsWithKeysCoverUrl
@@ -330,19 +355,7 @@ export default function RegisteredStructuralDrift({
       data-release-standing="published"
       style={registryTokenStyle}
     >
-      <section className="undrifted-shell" aria-label={brandTitle}>
-        {selectedArticle ? (
-          <section className="undrifted-article-overlay" role="dialog" aria-modal="true" aria-label={asString(selectedArticle.title) ?? "Article standing"}>
-            <button type="button" onClick={() => setSelectedManifestArticle(null)}>Close</button>
-            {manifestCover(asString(selectedArticle.media_role)) ? <img src={manifestCover(asString(selectedArticle.media_role)) ?? ""} alt="" /> : null}
-            <h2>{asString(selectedArticle.title)}</h2>
-            <p>{asString(selectedArticle.publication_state) === "published"
-              ? asString(selectedArticle.article_route)
-                ? "Article content is available through its seated publication route."
-                : "Published standing is seated, but the article route and content are not. Opening remains held."
-              : "This article is not yet published. Its registry position and media are seated without inventing publication standing."}</p>
-          </section>
-        ) : null}
+      <section className="undrifted-shell" aria-label={brandTitle ?? "unDrifted"}>
 
         {isLegacyStructuralDriftRoute ? (
           <section className="undrifted-legacy-route" aria-label="Legacy route standing">
@@ -353,13 +366,13 @@ export default function RegisteredStructuralDrift({
           </section>
         ) : null}
 
-        {/* 1. MASTHEAD */}
+        {/* SECTION 1 — MASTHEAD */}
         <header className="undrifted-masthead" aria-label="unDrifted publication masthead">
           <div className="undrifted-masthead-nameplate">
             {registryLogoUrl ? (
-              <img className="undrifted-masthead-logo" src={registryLogoUrl} alt={brandTitle} />
+              <img className="undrifted-masthead-logo" src={registryLogoUrl} alt={brandTitle ?? "unDrifted"} />
             ) : (
-              <span className="undrifted-wordmark" aria-label={brandTitle}>
+              <span className="undrifted-wordmark" aria-label={brandTitle ?? "unDrifted"}>
                 <span>un</span><strong>Drifted</strong>
               </span>
             )}
@@ -383,48 +396,49 @@ export default function RegisteredStructuralDrift({
         </header>
         <hr className="undrifted-masthead-rule" aria-hidden="true" />
 
-        {/* 2. COVER STORY */}
+        {/* SECTION 2 + 3 — HERO COVER + COVER STORY */}
         <section className="undrifted-cover" aria-label="Cover story">
           <div className="undrifted-cover-visual">
-            {questionsUngovernedVideoUrl ? (
-              <video
-                src={questionsUngovernedVideoUrl}
-                poster={aiIsntBrokenLandingUrl ?? undefined}
-                playsInline
-                controls
-                preload="metadata"
-              />
-            ) : aiIsntBrokenLandingUrl ? (
-              <img src={aiIsntBrokenLandingUrl} alt="unDrifted — Launch Edition" />
-            ) : questionsUngovernedImageUrl ? (
-              <img src={questionsUngovernedImageUrl} alt="" />
+            {aiIsntBrokenLandingUrl ? (
+              <img src={aiIsntBrokenLandingUrl} alt="unDrifted — Issue 001 Launch Edition" />
             ) : null}
           </div>
           <div className="undrifted-cover-editorial">
             {coverEyebrow ? <span className="undrifted-eyebrow">{coverEyebrow}</span> : null}
             {coverHeadline ? <h1>{coverHeadline}</h1> : null}
-            {description ? <p className="undrifted-cover-deck">{description}</p> : null}
-
-            <div className="undrifted-cover-assessment">
-              <span className="undrifted-eyebrow">{secondaryCta ?? null}</span>
-              {assessmentBody ? <p>{assessmentBody}</p> : null}
-              {evalReport ? (
-                <button type="button" className="undrifted-cta-primary" onClick={onContinueToAssessmentPackage}>
-                  Continue to Assessment Package →
-                </button>
-              ) : secondaryCtaRoute ? (
-                <a className="undrifted-cta-primary" href={secondaryCtaRoute}>
-                  {secondaryCta ?? null} →
-                </a>
-              ) : null}
-            </div>
-
+            {coverDeck ? <p className="undrifted-cover-deck">{coverDeck}</p> : null}
+            {coverPositioning ? <p className="undrifted-cover-deck"><strong>{coverPositioning}</strong></p> : null}
+            {coreDistinction ? (
+              <div className="undrifted-cover-assessment">
+                <p>{coreDistinction}</p>
+              </div>
+            ) : null}
           </div>
         </section>
 
-        {/* 3. INSIGHTS */}
+        {/* SECTION 4 — EDITOR'S FEATURE */}
+        {(assessmentFeatureLabel || assessmentFeatureTitle) ? (
+          <section className="undrifted-editor-feature" aria-label={assessmentFeatureTitle ?? "Editor's Feature"}>
+            {assessmentFeatureLabel ? <span className="undrifted-eyebrow">{assessmentFeatureLabel}</span> : null}
+            {assessmentFeatureTitle ? <h2>{assessmentFeatureTitle}</h2> : null}
+            {assessmentFeatureBody ? <p>{assessmentFeatureBody}</p> : null}
+            {assessmentRoute ? (
+              evalReport ? (
+                <button type="button" className="undrifted-cta-primary" onClick={onContinueToAssessmentPackage}>
+                  {assessmentCtaLabel ?? "Begin Assessment →"}
+                </button>
+              ) : (
+                <a className="undrifted-cta-primary" href={assessmentRoute}>
+                  {assessmentCtaLabel ?? "Begin Assessment →"}
+                </a>
+              )
+            ) : null}
+          </section>
+        ) : null}
+
+        {/* SECTION 5 — FEATURE ARTICLES */}
         {featuredArticleSet.length > 0 ? (
-          <section className="undrifted-insights" aria-label="Insights">
+          <section className="undrifted-insights" aria-label="Feature articles">
             {(insightsEyebrow || insightsHeading) ? (
               <div className="undrifted-insights-header">
                 {insightsEyebrow ? <span className="undrifted-eyebrow">{insightsEyebrow}</span> : null}
@@ -450,12 +464,8 @@ export default function RegisteredStructuralDrift({
                       <h3>{title}</h3>
                       {desc ? <p>{desc}</p> : null}
                       {articleUrl ? (
-                        <a href={articleUrl} target="_blank" rel="noreferrer">Read Article →</a>
-                      ) : (
-                        <button type="button" onClick={() => { setSelectedManifestArticle(title); window.scrollTo({ top: 0, behavior: "smooth" }) }}>
-                          Open Article Standing
-                        </button>
-                      )}
+                        <a href={articleUrl} target="_blank" rel="noreferrer">Read the Dispatch →</a>
+                      ) : null}
                     </div>
                   </article>
                 )
@@ -464,43 +474,39 @@ export default function RegisteredStructuralDrift({
           </section>
         ) : null}
 
-        {/* 4. HERALD — REGISTRY DESTINATIONS */}
-        <section className="undrifted-herald" aria-label="Registry destinations">
-          <div className="undrifted-herald-header">
-            <span className="undrifted-eyebrow">Registry</span>
-            <h2>Measures Registry</h2>
-            {aboutBody ? <p>{aboutBody}</p> : null}
-          </div>
-          <div className="undrifted-dispatch-cards">
-            <article className="undrifted-dispatch-card">
-              {registryLogoUrl ? (
-                <img className="undrifted-dispatch-logo" src={registryLogoUrl} alt="Measures Registry" />
-              ) : null}
-              <span className="undrifted-eyebrow">About</span>
-              <h2>About Measures Registry</h2>
-              {aboutBody ? <p>{aboutBody}</p> : null}
-              <a href="/about-measures-registry">About Measures Registry →</a>
-            </article>
-            <article className="undrifted-dispatch-card">
-              <h2>c3 Field</h2>
-              <p>Nothing exists in isolation. The c3 Field provides the governance framework through which Measures Registry, unDrifted, Measures of Inanna, and future registered systems maintain continuity across environments.</p>
-              <a href="https://c3field.online" target="_blank" rel="noreferrer">Explore Our Story →</a>
-            </article>
-            <article className="undrifted-dispatch-card undrifted-dispatch-card--visual">
-              {undriftedFillUrl ? (
-                <img className="undrifted-dispatch-card-fill" src={undriftedFillUrl} alt="" aria-hidden="true" />
-              ) : null}
-              <span className="undrifted-eyebrow">Assessment</span>
-              <h2>Structural Drift Is Detectable.</h2>
-              <p>AI isn&apos;t broken. Systems are. Assess operational standing, identify structural drift, and discover the next governed pathway.</p>
-              <a href="/ai-operations-assessment">Assess the Environment →</a>
-            </article>
-          </div>
-        </section>
+        {/* SECTION 6 — ROLE CALL */}
+        {(roleCallLabel || roleCallTitle) ? (
+          <section className="undrifted-role-call" aria-label={roleCallTitle ?? "Role Call"}>
+            {roleCallLabel ? <span className="undrifted-eyebrow">{roleCallLabel}</span> : null}
+            {roleCallTitle ? <h2>{roleCallTitle}</h2> : null}
+            {roleCallTagline ? <p className="undrifted-role-call-tagline">{roleCallTagline}</p> : null}
+            {roleCallPositions.length > 0 ? (
+              <ul className="undrifted-role-call-positions">
+                {roleCallPositions.map((pos) => <li key={pos}>{pos}</li>)}
+              </ul>
+            ) : null}
+            {roleCallCtaLabel ? (
+              <button type="button" className="undrifted-cta-primary" onClick={onOurStory}>
+                {roleCallCtaLabel}
+              </button>
+            ) : null}
+          </section>
+        ) : null}
 
-        {/* 4. CONNECT FOOTER */}
-        <footer className="undrifted-connect-footer" aria-label="Connect">
-          <span>Connect</span>
+        {/* SECTION 7 — NEXT ISSUE */}
+        {(nextIssueLabel || nextIssueTitle) ? (
+          <section className="undrifted-next-issue" aria-label={nextIssueTitle ?? "Next Issue"}>
+            {nextIssueLabel ? <span className="undrifted-eyebrow">{nextIssueLabel}</span> : null}
+            {nextIssueTitle ? <h2>{nextIssueTitle}</h2> : null}
+            {nextIssueBody ? <p>{nextIssueBody}</p> : null}
+            {nextIssueHint ? <span className="undrifted-masthead-edition">{nextIssueHint}</span> : null}
+          </section>
+        ) : null}
+
+        {/* SECTION 8 — FOOTER */}
+        <footer className="undrifted-connect-footer" aria-label="Publication footer">
+          {footerLine1 ? <p className="undrifted-footer-line">{footerLine1}</p> : null}
+          {footerLine2 ? <p className="undrifted-footer-line">{footerLine2}</p> : null}
           <nav aria-label="Social profiles">
             {socialLinks
               .filter((social) => asString(social.platform) !== "Facebook")
@@ -513,6 +519,7 @@ export default function RegisteredStructuralDrift({
           </nav>
           {renderSystemFooter()}
         </footer>
+
       </section>
     </main>
   )

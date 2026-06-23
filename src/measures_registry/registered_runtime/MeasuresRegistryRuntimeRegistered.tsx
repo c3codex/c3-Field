@@ -105,7 +105,7 @@ const SURFACE_QUERY: Record<RegisteredSurface, string> = {
 }
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
-const PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT = 8
+const PUBLIC_ASSESSMENT_EXPECTED_QUESTION_COUNT = 7
 
 const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
   "/ai-operations-assessment": "measures_assessment",
@@ -1080,6 +1080,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onContinueToAssessmentPackage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onGoToEvalPassage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onAboutMeasuresRegistry={() => navigate("about_measures_registry")}
+        onOurStory={() => window.open("https://c3field.online", "_blank", "noreferrer")}
       />
     )
   } else {
