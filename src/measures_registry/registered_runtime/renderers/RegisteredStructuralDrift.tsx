@@ -314,6 +314,7 @@ export default function RegisteredStructuralDrift({
   const assessmentFeatureBody = asString(assessmentFeature?.feature_body)
   const assessmentCtaLabel = asString(assessmentFeature?.cta_label)
   const assessmentRoute = asString(assessmentFeature?.route_path)
+  const assessmentRatingDisplay = asString(assessmentFeature?.rating_display)
 
   // Role Call feature
   const roleCallLabel = asString(roleCallFeature?.feature_label)
@@ -423,6 +424,7 @@ export default function RegisteredStructuralDrift({
             ) : null}
             {assessmentFeatureLabel ? <span className="undrifted-eyebrow">{assessmentFeatureLabel}</span> : null}
             {assessmentFeatureTitle ? <h2>{assessmentFeatureTitle}</h2> : null}
+            {assessmentRatingDisplay ? <div className="undrifted-assessment-rating">{assessmentRatingDisplay}</div> : null}
             {assessmentFeatureBody ? <p>{assessmentFeatureBody}</p> : null}
             {assessmentRoute ? (
               evalReport ? (
@@ -451,6 +453,8 @@ export default function RegisteredStructuralDrift({
               {featuredArticleSet.map((article) => {
                 const title = asString(article.title)
                 const coverUrl = manifestCover(asString(article.media_role))
+                const eyebrow = asString(article.feature_label) ?? asString(article.section_label)
+                const teaser = asString(article.teaser) ?? asString(article.excerpt)
                 const desc = asString(article.description) ?? asString(article.subtitle)
                 const articleUrl = asString(article.article_url) ?? asString(article.external_url) ?? null
                 const pubState = asString(article.publication_state)
@@ -463,7 +467,9 @@ export default function RegisteredStructuralDrift({
                       </div>
                     ) : null}
                     <div className="undrifted-insight-body">
+                      {eyebrow ? <span className="undrifted-eyebrow">{eyebrow}</span> : null}
                       <h3>{title}</h3>
+                      {teaser ? <p className="undrifted-insight-teaser">{teaser}</p> : null}
                       {desc ? <p>{desc}</p> : null}
                       {articleUrl ? (
                         <a href={articleUrl} target="_blank" rel="noreferrer">Read the Dispatch →</a>
