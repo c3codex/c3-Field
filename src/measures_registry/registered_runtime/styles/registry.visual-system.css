@@ -43,7 +43,7 @@
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead {
-  min-height: clamp(7rem, 16vw, 11.5rem);
+  min-height: clamp(4.75rem, 10vw, 7.5rem);
   padding: 0;
   align-items: center;
 }
@@ -56,9 +56,9 @@
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-logo {
-  width: min(72%, 48rem);
+  width: min(62%, 40rem);
   height: auto;
-  max-height: 10rem;
+  max-height: 6.5rem;
   object-position: left center;
 }
 
@@ -122,6 +122,12 @@
   aspect-ratio: auto;
   border: 0;
   border-radius: 0;
+  background: #030508;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-visual img {
+  object-fit: contain;
+  object-position: center;
 }
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-cover-visual::after {
@@ -382,7 +388,7 @@
   }
 
   .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-logo {
-    width: min(76vw, 30rem);
+    width: min(72vw, 27rem);
   }
 
   .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-text {

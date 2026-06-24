@@ -294,6 +294,7 @@ export default function RegisteredStructuralDrift({
   const coverEyebrow = asString(asRecord(landingContract?.hero)?.cover_eyebrow)
   const insightsEyebrow = asString(landingContract?.insights_eyebrow)
   const insightsHeading = asString(landingContract?.insights_heading)
+  const insideIssueHeading = asString(landingContract?.cover_lines_label) ?? insightsHeading
   const styleKey =
     asString(landingContract?.style_contract_key) ??
     asString(styleContract?.key) ??
@@ -434,10 +435,10 @@ export default function RegisteredStructuralDrift({
         {/* SECTION 5 — FEATURE ARTICLES */}
         {featuredArticleSet.length > 0 ? (
           <section className="undrifted-insights" aria-label="Feature articles">
-            {(insightsEyebrow || insightsHeading) ? (
+            {(insightsEyebrow || insideIssueHeading) ? (
               <div className="undrifted-insights-header">
                 {insightsEyebrow ? <span className="undrifted-eyebrow">{insightsEyebrow}</span> : null}
-                {insightsHeading ? <h2>{insightsHeading}</h2> : null}
+                {insideIssueHeading ? <h2>{insideIssueHeading}</h2> : null}
               </div>
             ) : null}
             <div className="undrifted-insights-grid">
