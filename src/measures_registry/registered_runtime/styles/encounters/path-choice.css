@@ -22,6 +22,7 @@
 .measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate {
   min-height: 100svh;
   padding: clamp(2rem, 6vw, 6rem);
+  padding-bottom: clamp(5rem, 11vh, 10rem);
   align-content: end;
   opacity: 1;
   transform: none;
@@ -34,7 +35,13 @@
 }
 
 .measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate-image {
-  opacity: 0.72;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.88;
 }
 
 .measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate > span,
@@ -42,8 +49,8 @@
   z-index: 2;
   max-width: 25rem;
   padding: 0.5rem 0.7rem;
-  background: rgba(5, 6, 9, 0.72);
-  backdrop-filter: blur(8px);
+  background: rgba(5, 6, 9, 0.84);
+  backdrop-filter: blur(10px);
 }
 
 .measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate > span {
