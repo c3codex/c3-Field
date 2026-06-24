@@ -613,6 +613,7 @@ export function sectionCopy(row?: LandingSectionRow) {
     obsidianAssessmentReportStyleContract: asRecord(metadata.obsidian_assessment_report_style_contract_v1),
     routeCards: asRecordArray(metadata.route_cards),
     governedStatus: governedStatusCopy(metadata),
+    approvedContentContract: asRecord(metadata.approved_content_contract),
   }
 }
 

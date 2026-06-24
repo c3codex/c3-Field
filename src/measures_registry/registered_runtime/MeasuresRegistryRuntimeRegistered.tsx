@@ -925,8 +925,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
       <RegisteredAboutMeasuresRegistry
         registryTokenStyle={launchMediaStyle}
         aboutCopy={aboutMeasuresRegistryCopy}
+        encounterCopy={structurePassageCopy}
         videoUrl={aboutMeasuresRegistryVideoUrl}
-        sealUrl={officialCodexstoneSealUrl}
+        passageMuted={passageMuted}
+        onToggleMuted={() => setPassageMuted((current) => !current)}
         renderHeader={() => renderHeader(aboutMeasuresRegistryCopy.header)}
         renderSystemFooter={renderSystemFooter}
       />

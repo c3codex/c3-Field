@@ -1,0 +1,174 @@
+/* About Measures Registry — encounter + supporting surface styles */
+
+/* ── ENCOUNTER STATE ─────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-public-path="about_encounter"] {
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--registry-brand-highlight) 10%, transparent), transparent 34rem),
+    var(--registry-brand-field, #0b0c11);
+  color: var(--registry-brand-primary-text);
+}
+
+.measures-registry-runtime[data-public-path="about_encounter"] .registry-structure-passage {
+  width: min(var(--registry-content-max-width, 72rem), 100%);
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height, 3rem) + clamp(1.25rem, 3vw, 2rem))
+    var(--registry-page-padding-active)
+    clamp(1.1rem, 2vw, 1.6rem);
+  box-sizing: border-box;
+}
+
+/* ── SUPPORTING STATE ────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-public-path="about_supporting"] {
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--registry-brand-highlight) 8%, transparent), transparent 32rem),
+    var(--registry-brand-field, #0b0c11);
+  color: var(--registry-brand-primary-text);
+}
+
+.measures-registry-runtime[data-public-path="about_supporting"] .registry-about-supporting {
+  width: min(var(--registry-content-max-width, 72rem), 100%);
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 3.5rem))
+    var(--registry-page-padding-active)
+    clamp(2rem, 5vw, 4rem);
+  box-sizing: border-box;
+}
+
+.measures-registry-runtime .registry-about-supporting-title {
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--registry-brand-primary-text);
+  margin: 0 0 1.1rem;
+  max-width: 44rem;
+}
+
+.measures-registry-runtime .registry-about-primary-statement {
+  font-size: clamp(0.88rem, 1.2vw, 1rem);
+  color: var(--registry-brand-secondary-text);
+  line-height: 1.72;
+  max-width: 44rem;
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.measures-registry-runtime .registry-about-support-points {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 44rem;
+}
+
+.measures-registry-runtime .registry-about-support-points li {
+  font-size: clamp(0.82rem, 1.1vw, 0.94rem);
+  color: var(--registry-brand-secondary-text);
+  line-height: 1.6;
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.measures-registry-runtime .registry-about-support-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--registry-brand-highlight, #2d7fff);
+}
+
+/* ── CARDS ───────────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime .registry-about-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+
+.measures-registry-runtime .registry-about-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.028), transparent 60%),
+    rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.1));
+  border-radius: 4px;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.measures-registry-runtime .registry-about-card > span {
+  display: block;
+  font-size: clamp(0.63rem, 0.9vw, 0.72rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--registry-brand-muted-text);
+  margin-bottom: 0.2rem;
+}
+
+.measures-registry-runtime .registry-about-card > h2 {
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--registry-brand-primary-text);
+  margin: 0 0 0.3rem;
+}
+
+.measures-registry-runtime .registry-about-card > p {
+  font-size: clamp(0.8rem, 1.05vw, 0.9rem);
+  color: var(--registry-brand-secondary-text);
+  line-height: 1.65;
+  margin: 0 0 0.8rem;
+}
+
+.measures-registry-runtime .registry-about-card-cta {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0.55rem 1.1rem;
+  font-size: clamp(0.75rem, 1vw, 0.84rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--registry-brand-primary-text);
+  background: transparent;
+  border: 1px solid var(--registry-brand-highlight, #2d7fff);
+  border-radius: 3px;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.measures-registry-runtime .registry-about-card-cta:hover {
+  background: var(--registry-brand-highlight, #2d7fff);
+  color: #fff;
+}
+
+.measures-registry-runtime .registry-about-card-cta:focus-visible {
+  outline: 2px solid var(--registry-brand-highlight, #2d7fff);
+  outline-offset: 2px;
+}
+
+/* ── MOBILE ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .measures-registry-runtime[data-public-path="about_encounter"] .registry-structure-passage-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .measures-registry-runtime[data-public-path="about_encounter"] .registry-structure-passage-copy,
+  .measures-registry-runtime[data-public-path="about_encounter"] .registry-public-understand-video {
+    max-width: 100%;
+  }
+
+  .measures-registry-runtime .registry-about-cards {
+    grid-template-columns: 1fr;
+  }
+}
