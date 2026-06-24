@@ -48,9 +48,9 @@
 .measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate > p {
   z-index: 2;
   max-width: 25rem;
-  padding: 0.5rem 0.7rem;
-  background: rgba(5, 6, 9, 0.84);
-  backdrop-filter: blur(10px);
+  background: none;
+  backdrop-filter: none;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9), 0 3px 22px rgba(0, 0, 0, 0.7);
 }
 
 .measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate > span {
@@ -94,6 +94,7 @@
   font-weight: 400;
   letter-spacing: 0.04em;
   margin-top: 0.5rem;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
