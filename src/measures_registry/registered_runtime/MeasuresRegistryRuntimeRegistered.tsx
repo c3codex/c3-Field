@@ -636,7 +636,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
         },
         campaign_tag: "measures_assessment_contact_gated_delivery",
         notification_state: "queued",
-        confirmation_email_state: "queued",
         metadata: {
           encounter_key: "measures_ai_operational_evaluation",
           organization_type: evalFields.organization_type?.trim() ?? "",
