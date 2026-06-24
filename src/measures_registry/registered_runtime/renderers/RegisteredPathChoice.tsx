@@ -6,12 +6,10 @@ import type { SectionCopy } from "../registeredRuntimeUtils"
 type Props = {
   registryTokenStyle: CSSProperties
   pathChoiceCopy: SectionCopy
-  pathChoiceBackgroundUrl: string | null
   leftHeroUrl: string | null
   leftMotionUrl: string | null
   rightHeroUrl: string | null
   rightMotionUrl: string | null
-  registryMarkUrl: string | null
   onLeftChoice: () => void
   onRightChoice: () => void
 }
@@ -19,12 +17,10 @@ type Props = {
 export default function RegisteredPathChoice({
   registryTokenStyle,
   pathChoiceCopy,
-  pathChoiceBackgroundUrl,
   leftHeroUrl,
   leftMotionUrl,
   rightHeroUrl,
   rightMotionUrl,
-  registryMarkUrl,
   onLeftChoice,
   onRightChoice,
 }: Props) {
@@ -39,10 +35,6 @@ export default function RegisteredPathChoice({
       : [pathChoiceCopy.more].filter(
           (item): item is Record<string, unknown> => Boolean(item),
         )
-
-  const backgroundStyle = pathChoiceBackgroundUrl
-    ? ({ "--path-choice-background": `url(${pathChoiceBackgroundUrl})` } as CSSProperties)
-    : undefined
 
   function choiceHandler(plaque: Record<string, unknown>, index: number) {
     const side = asString(plaque.side)
@@ -60,27 +52,7 @@ export default function RegisteredPathChoice({
       data-release-standing="public"
       style={registryTokenStyle}
     >
-      <header className="registry-public-header">
-        <div className="registry-public-brand">
-          {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
-        </div>
-        <nav className="registry-public-nav" aria-label="Measures Registry navigation" />
-      </header>
-
-      <section className="registry-path-choice" style={backgroundStyle}>
-        <div className="registry-path-choice-copy">
-          {pathChoiceCopy.eyebrow ? <span>{pathChoiceCopy.eyebrow}</span> : null}
-          {pathChoiceCopy.title ? <h1>{pathChoiceCopy.title}</h1> : null}
-          {pathChoiceCopy.subtitle ? <p>{pathChoiceCopy.subtitle}</p> : null}
-          {pathChoiceCopy.breakdownBlocks.length > 0 ? (
-            <div className="registry-path-signal" aria-label="System signal">
-              {pathChoiceCopy.breakdownBlocks.map((block) => (
-                <p key={block}>{block}</p>
-              ))}
-            </div>
-          ) : null}
-        </div>
-
+      <section className="registry-path-choice" aria-label="Choose a Measures Registry path">
         <div className="registry-path-choice-contrast">
           {plaques.map((plaque, index) => {
             const title = asString(plaque.title) ?? asString(plaque.cta) ?? asString(plaque.label)
@@ -119,6 +91,7 @@ export default function RegisteredPathChoice({
                 ) : null}
                 {title ? <span>{title}</span> : null}
                 {body ? <p>{body}</p> : null}
+                <span className="registry-route-plate-cta" aria-hidden="true">→</span>
               </button>
             )
           })}
