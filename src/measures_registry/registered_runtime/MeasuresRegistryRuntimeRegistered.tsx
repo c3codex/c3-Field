@@ -80,6 +80,7 @@ const REGISTERED_MEDIA_ROLES = [
   "installation_tone_marble",
   "installation_tone_marble_rise_return_v1",
   "about_measures_registry_video",
+  "agents_with_keys_cover",
   "official_codexstone_seal",
   "before_the_pathway_obsidian_to_marble_passage_video",
   "obsidian_contact_surface_visual",
@@ -289,6 +290,12 @@ export default function MeasuresRegistryRuntimeRegistered() {
 
   useEffect(() => {
     if (governedRouteSurfaceAppliedRef.current) return
+    // Root route: restore intro_hook sequence when encounter_structure has it seated
+    if (activeRouteUnitKey === "measures_registry_root" && introHookNode && asString(introHookNode.content_encounter_key)) {
+      governedRouteSurfaceAppliedRef.current = true
+      navigate("intro_hook")
+      return
+    }
     const surface = governedSurface(activeRouteUnit, "runtime_surface")
     if (surface && activeSurface !== surface) {
       governedRouteSurfaceAppliedRef.current = true
@@ -428,6 +435,11 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const registryMarkUrl = mediaUrl(mediaMap.get("registry_mark"))
   const marbleAccentReferenceUrl = mediaUrl(mediaMap.get("marble_accent_reference"))
   const aboutMeasuresRegistryVideoUrl = mediaUrl(mediaMap.get("about_measures_registry_video"))
+  const aboutFeaturedArticle = asRecordArray(undriftedLandingUnit?.metadata?.featured_article_set)
+    .find((article) => asString(article.publication_state) === "published" && Boolean(asString(article.article_url))) ?? null
+  const aboutFeaturedArticleImageUrl = aboutFeaturedArticle
+    ? mediaUrl(mediaMap.get(asString(aboutFeaturedArticle.media_role) ?? ""))
+    : null
   const officialCodexstoneSealUrl = mediaUrl(mediaMap.get("official_codexstone_seal"))
   const beforeThePathwayVideoUrl = mediaUrl(mediaMap.get("before_the_pathway_obsidian_to_marble_passage_video"))
   const structuredEnvironmentPassageVideoUrl =
@@ -900,12 +912,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
       <RegisteredPathChoice
         registryTokenStyle={launchMediaStyle}
         pathChoiceCopy={pathChoiceCopy}
-        pathChoiceBackgroundUrl={pathChoiceBackgroundUrl}
         leftHeroUrl={thresholdLeftStillUrl}
         leftMotionUrl={thresholdLeftMotionUrl}
         rightHeroUrl={thresholdRightStillUrl}
         rightMotionUrl={thresholdRightMotionUrl}
-        registryMarkUrl={registryMarkUrl}
         onLeftChoice={() => { const next = governedNodeSurface(leftChoiceNode, "next_surface"); if (next) navigate(next) }}
         onRightChoice={() => { const next = governedNodeSurface(rightChoiceNode, "next_surface"); if (next) navigate(next) }}
       />
@@ -925,10 +935,9 @@ export default function MeasuresRegistryRuntimeRegistered() {
       <RegisteredAboutMeasuresRegistry
         registryTokenStyle={launchMediaStyle}
         aboutCopy={aboutMeasuresRegistryCopy}
-        encounterCopy={structurePassageCopy}
         videoUrl={aboutMeasuresRegistryVideoUrl}
-        passageMuted={passageMuted}
-        onToggleMuted={() => setPassageMuted((current) => !current)}
+        featuredArticle={aboutFeaturedArticle}
+        featuredArticleImageUrl={aboutFeaturedArticleImageUrl}
         renderHeader={() => renderHeader(aboutMeasuresRegistryCopy.header)}
         renderSystemFooter={renderSystemFooter}
       />

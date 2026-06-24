@@ -1,27 +1,6 @@
-/* About Measures Registry — encounter + supporting surface styles */
+/* About Measures Registry — single-page surface */
 
-/* ── ENCOUNTER STATE ─────────────────────────────────────────────────────── */
-
-.measures-registry-runtime[data-public-path="about_encounter"] {
-  min-height: 100svh;
-  background:
-    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--registry-brand-highlight) 10%, transparent), transparent 34rem),
-    var(--registry-brand-field, #0b0c11);
-  color: var(--registry-brand-primary-text);
-}
-
-.measures-registry-runtime[data-public-path="about_encounter"] .registry-structure-passage {
-  width: min(var(--registry-content-max-width, 72rem), 100%);
-  margin: 0 auto;
-  padding: calc(var(--registry-header-height, 3rem) + clamp(1.25rem, 3vw, 2rem))
-    var(--registry-page-padding-active)
-    clamp(1.1rem, 2vw, 1.6rem);
-  box-sizing: border-box;
-}
-
-/* ── SUPPORTING STATE ────────────────────────────────────────────────────── */
-
-.measures-registry-runtime[data-public-path="about_supporting"] {
+.measures-registry-runtime[data-public-path="about_measures_registry"] {
   min-height: 100svh;
   background:
     radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--registry-brand-highlight) 8%, transparent), transparent 32rem),
@@ -29,60 +8,57 @@
   color: var(--registry-brand-primary-text);
 }
 
-.measures-registry-runtime[data-public-path="about_supporting"] .registry-about-supporting {
-  width: min(var(--registry-content-max-width, 72rem), 100%);
+.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-surface {
+  width: min(var(--registry-content-max-width, 68rem), 100%);
   margin: 0 auto;
   padding: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 3.5rem))
     var(--registry-page-padding-active)
-    clamp(2rem, 5vw, 4rem);
+    clamp(3rem, 6vw, 5rem);
   box-sizing: border-box;
 }
 
-.measures-registry-runtime .registry-about-supporting-title {
+.measures-registry-runtime .registry-about-headline {
   font-family: var(--registry-font-heading);
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
   font-weight: 500;
-  line-height: 1.1;
+  line-height: 1.08;
   color: var(--registry-brand-primary-text);
-  margin: 0 0 1.1rem;
-  max-width: 44rem;
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 38rem;
 }
 
-.measures-registry-runtime .registry-about-primary-statement {
+/* ── VIDEO ───────────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime .registry-about-video-frame {
+  width: 100%;
+  max-width: 52rem;
+  margin: 0 0 clamp(2rem, 4vw, 3.5rem);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+}
+
+.measures-registry-runtime .registry-about-video-frame video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── BODY ────────────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime .registry-about-body {
+  max-width: 44rem;
+  margin: 0 0 clamp(2rem, 4vw, 3.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.measures-registry-runtime .registry-about-body p {
   font-size: clamp(0.88rem, 1.2vw, 1rem);
   color: var(--registry-brand-secondary-text);
   line-height: 1.72;
-  max-width: 44rem;
-  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
-}
-
-.measures-registry-runtime .registry-about-support-points {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 clamp(2rem, 4vw, 3rem);
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  max-width: 44rem;
-}
-
-.measures-registry-runtime .registry-about-support-points li {
-  font-size: clamp(0.82rem, 1.1vw, 0.94rem);
-  color: var(--registry-brand-secondary-text);
-  line-height: 1.6;
-  padding-left: 1.1rem;
-  position: relative;
-}
-
-.measures-registry-runtime .registry-about-support-points li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.55em;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--registry-brand-highlight, #2d7fff);
+  margin: 0;
 }
 
 /* ── CARDS ───────────────────────────────────────────────────────────────── */
@@ -103,6 +79,13 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.measures-registry-runtime .registry-about-card-cover {
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  margin-bottom: 0.4rem;
 }
 
 .measures-registry-runtime .registry-about-card > span {
@@ -159,15 +142,6 @@
 /* ── MOBILE ──────────────────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
-  .measures-registry-runtime[data-public-path="about_encounter"] .registry-structure-passage-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .measures-registry-runtime[data-public-path="about_encounter"] .registry-structure-passage-copy,
-  .measures-registry-runtime[data-public-path="about_encounter"] .registry-public-understand-video {
-    max-width: 100%;
-  }
-
   .measures-registry-runtime .registry-about-cards {
     grid-template-columns: 1fr;
   }

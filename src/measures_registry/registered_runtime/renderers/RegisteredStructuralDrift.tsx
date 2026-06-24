@@ -334,6 +334,8 @@ export default function RegisteredStructuralDrift({
   const footerLine1 = asString(footerRecord?.footer_line_1)
   const footerLine2 = asString(footerRecord?.footer_line_2)
 
+  const undriftedBannerUrl = undriftedFillUrl ?? publicationAssetUrl("undrifted_banner_website_social.webp")
+
   function manifestCover(mediaRole: string | null) {
     if (mediaRole === "agents_with_keys_cover") return agentsWithKeysCoverUrl
     if (mediaRole === "fables_and_myths_cover") return fablesAndMythsCoverUrl
@@ -365,20 +367,24 @@ export default function RegisteredStructuralDrift({
 
         {/* SECTION 1 — MASTHEAD */}
         <header className="undrifted-masthead" aria-label="unDrifted publication masthead">
-          <div className="undrifted-masthead-nameplate">
-            {primaryLogoPath ? (
-              <img className="undrifted-masthead-logo" src={primaryLogoPath} alt={brandTitle ?? "unDrifted"} />
-            ) : (
-              <span className="undrifted-wordmark" aria-label={brandTitle ?? "unDrifted"}>
-                <span>un</span><strong>Drifted</strong>
-              </span>
-            )}
-            {mastHeadPrinciples ? (
-              <div className="undrifted-masthead-text">
-                {mastHeadPrinciples ? <span className="undrifted-masthead-principles">{mastHeadPrinciples}</span> : null}
-              </div>
-            ) : null}
-          </div>
+          {undriftedBannerUrl ? (
+            <img className="undrifted-banner" src={undriftedBannerUrl} alt={brandTitle ?? "unDrifted"} />
+          ) : (
+            <div className="undrifted-masthead-nameplate">
+              {primaryLogoPath ? (
+                <img className="undrifted-masthead-logo" src={primaryLogoPath} alt={brandTitle ?? "unDrifted"} />
+              ) : (
+                <span className="undrifted-wordmark" aria-label={brandTitle ?? "unDrifted"}>
+                  <span>un</span><strong>Drifted</strong>
+                </span>
+              )}
+              {mastHeadPrinciples ? (
+                <div className="undrifted-masthead-text">
+                  <span className="undrifted-masthead-principles">{mastHeadPrinciples}</span>
+                </div>
+              ) : null}
+            </div>
+          )}
         </header>
         <hr className="undrifted-masthead-rule" aria-hidden="true" />
         {(issueNumber || issueDate || issueEdition) ? (

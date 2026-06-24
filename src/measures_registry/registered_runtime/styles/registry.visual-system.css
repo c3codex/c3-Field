@@ -55,6 +55,18 @@
   gap: 2rem;
 }
 
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-banner {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead:has(.undrifted-banner) {
+  min-height: auto;
+  padding: 0;
+  display: block;
+}
+
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-masthead-logo {
   width: min(62%, 40rem);
   height: auto;
