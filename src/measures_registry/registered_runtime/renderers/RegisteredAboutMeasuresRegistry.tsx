@@ -6,7 +6,6 @@ type Props = {
   registryTokenStyle: CSSProperties
   aboutCopy: SectionCopy
   videoUrl: string | null
-  officialCodexstoneSealUrl: string | null
   featuredArticle: Record<string, unknown> | null
   connectFields: Record<string, string>
   connectSubmitting: boolean
@@ -22,7 +21,6 @@ export default function RegisteredAboutMeasuresRegistry({
   registryTokenStyle,
   aboutCopy,
   videoUrl,
-  officialCodexstoneSealUrl,
   featuredArticle,
   connectFields,
   connectSubmitting,
@@ -34,10 +32,6 @@ export default function RegisteredAboutMeasuresRegistry({
   onSubmitConnect,
 }: Props) {
   const approved = aboutCopy.approvedContentContract
-
-  const sealSection = asRecord(approved?.codexstone_seal_section)
-  const sealTitle = asString(sealSection?.title) ?? "Measures Registry"
-  const sealSubtitle = asString(sealSection?.subtitle)
 
   const pageTitle = asString(approved?.title) ?? aboutCopy.title ?? "About Measures Registry"
   const orientationSections = asRecordArray(approved?.orientation_sections)
@@ -92,22 +86,7 @@ export default function RegisteredAboutMeasuresRegistry({
     >
       {renderHeader()}
 
-      {/* ── SECTION 1: Codexstone Seal ─────────────────────────────────── */}
-      <section className="registry-about-seal" aria-label={sealTitle}>
-        {officialCodexstoneSealUrl ? (
-          <img
-            className="registry-about-seal-mark"
-            src={officialCodexstoneSealUrl}
-            alt="Measures Registry seal"
-          />
-        ) : null}
-        <h1 className="registry-about-seal-title">{sealTitle}</h1>
-        {sealSubtitle ? (
-          <p className="registry-about-seal-subtitle">{sealSubtitle}</p>
-        ) : null}
-      </section>
-
-      {/* ── SECTION 2: About Orientation ───────────────────────────────── */}
+      {/* ── SECTION 1: About Orientation ───────────────────────────────── */}
       <section className="registry-about-orientation" aria-label={pageTitle}>
         <div className="registry-about-orientation-copy">
           <h2 className="registry-about-orientation-title">{pageTitle}</h2>

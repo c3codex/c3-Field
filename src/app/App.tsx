@@ -47,6 +47,22 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
   },
+  "/about": {
+    title: "About Measures Registry",
+    description: "Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result.",
+    url: "https://measuresregistry.com/about",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
+  "/about-measures-registry": {
+    title: "About Measures Registry",
+    description: "Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result.",
+    url: "https://measuresregistry.com/about",
+    canonicalUrl: "https://measuresregistry.com/about",
+    ogUrl: "https://measuresregistry.com/about-measures-registry",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
 }
 
 const REGISTRY_ROUTE_UNITS: Record<string, string> = {

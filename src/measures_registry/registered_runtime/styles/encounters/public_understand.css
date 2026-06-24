@@ -41,6 +41,14 @@
   max-width: 32rem;
 }
 
+.measures-registry-runtime .registry-structure-passage-seal {
+  display: block;
+  width: clamp(2.5rem, 4.5vw, 3.75rem);
+  height: auto;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  opacity: 0.88;
+}
+
 .measures-registry-runtime .registry-public-understand .registry-encounter-entry > span,
 .measures-registry-runtime .registry-structure-passage-copy > span,
 .measures-registry-runtime .registry-crystal-chamber-entry > span,

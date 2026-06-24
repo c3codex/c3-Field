@@ -6,6 +6,7 @@ type Props = {
   registryTokenStyle: CSSProperties
   structurePassageCopy: SectionCopy
   talkingHeadVideoUrl: string | null
+  officialCodexstoneSealUrl: string | null
   passageMuted: boolean
   renderHeader: () => ReactNode
   renderSystemFooter: () => ReactNode
@@ -42,6 +43,7 @@ export default function RegisteredPublicUnderstand({
   registryTokenStyle,
   structurePassageCopy,
   talkingHeadVideoUrl,
+  officialCodexstoneSealUrl,
   passageMuted,
   renderHeader,
   renderSystemFooter,
@@ -95,6 +97,13 @@ export default function RegisteredPublicUnderstand({
       <section className="registry-public-understand registry-structure-passage" aria-label={title}>
         <div className="registry-structure-passage-layout">
           <div className="registry-structure-passage-copy">
+            {officialCodexstoneSealUrl ? (
+              <img
+                className="registry-structure-passage-seal"
+                src={officialCodexstoneSealUrl}
+                alt="Measures Registry"
+              />
+            ) : null}
             <span>{eyebrow}</span>
             <h1>{title}</h1>
             {positionParagraph ? <p>{positionParagraph}</p> : null}

@@ -18,52 +18,14 @@
   box-sizing: border-box;
 }
 
-/* ── SECTION 1: CODEXSTONE SEAL ──────────────────────────────────────── */
-
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-seal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding-top: calc(var(--registry-header-height, 3rem) + clamp(3rem, 6vw, 5rem));
-  padding-bottom: clamp(3.5rem, 7vw, 6rem);
-  border-bottom: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.08));
-}
-
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-seal-mark {
-  width: clamp(3rem, 6vw, 4.5rem);
-  height: auto;
-  display: block;
-  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
-  opacity: 0.9;
-}
-
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-seal-title {
-  font-family: var(--registry-font-heading);
-  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
-  font-weight: 500;
-  line-height: 1.06;
-  letter-spacing: -0.02em;
-  color: var(--registry-brand-primary-text);
-  margin: 0 0 clamp(0.75rem, 1.5vw, 1.1rem);
-}
-
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-seal-subtitle {
-  font-size: clamp(0.88rem, 1.25vw, 1.05rem);
-  color: var(--registry-brand-secondary-text);
-  line-height: 1.6;
-  margin: 0;
-  max-width: 36rem;
-}
-
-/* ── SECTION 2: ABOUT ORIENTATION ───────────────────────────────────── */
+/* ── SECTION 1: ABOUT ORIENTATION ───────────────────────────────────── */
 
 .measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2.5rem, 5vw, 5rem);
   align-items: start;
-  padding-top: clamp(3rem, 6vw, 5rem);
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 3.5rem));
   padding-bottom: clamp(3rem, 6vw, 5rem);
   border-bottom: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.08));
 }

@@ -112,12 +112,13 @@ const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
   "/structural-drift": "structural_drift_dispatches",
   "/undrifted": "structural_drift_dispatches",
   "/map-integrity-governance": "map_integrity_governance",
+  "/about": "about_measures_registry",
   "/about-measures-registry": "about_measures_registry",
 }
 
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<RegisteredSurface, string>> = {
   measures_assessment: "/ai-operations-assessment",
-  about_measures_registry: "/about-measures-registry",
+  about_measures_registry: "/about",
   map_integrity_governance: "/map-integrity-governance",
   structural_drift_dispatches: "/undrifted",
   publication_dispatch: STRUCTURAL_DRIFT_DISPATCHES_ROUTE,
@@ -981,7 +982,6 @@ export default function MeasuresRegistryRuntimeRegistered() {
         registryTokenStyle={launchMediaStyle}
         aboutCopy={aboutMeasuresRegistryCopy}
         videoUrl={aboutMeasuresRegistryVideoUrl}
-        officialCodexstoneSealUrl={officialCodexstoneSealUrl}
         featuredArticle={aboutFeaturedArticle}
         connectFields={connectFields}
         connectSubmitting={connectSubmitting}
@@ -1022,6 +1022,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         registryTokenStyle={launchMediaStyle}
         structurePassageCopy={structurePassageCopy}
         talkingHeadVideoUrl={structuredEnvironmentPassageVideoUrl}
+        officialCodexstoneSealUrl={officialCodexstoneSealUrl}
         passageMuted={passageMuted}
         renderHeader={() => renderHeader(structurePassageCopy.header)}
         renderSystemFooter={renderSystemFooter}
