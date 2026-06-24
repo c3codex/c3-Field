@@ -67,6 +67,7 @@ export default function RegisteredAboutMeasuresRegistry({
       <main
         className="measures-registry-runtime"
         data-surface="about_measures_registry"
+        data-material-family="crystal"
         data-public-path="about_measures_registry"
         data-release-standing="held_missing_registry_content"
         style={registryTokenStyle}
@@ -84,6 +85,7 @@ export default function RegisteredAboutMeasuresRegistry({
     <main
       className="measures-registry-runtime"
       data-surface="about_measures_registry"
+      data-material-family="crystal"
       data-public-path="about_measures_registry"
       data-release-standing="public"
       style={registryTokenStyle}

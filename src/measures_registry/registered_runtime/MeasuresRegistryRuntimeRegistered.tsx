@@ -50,7 +50,6 @@ const REGISTERED_ENCOUNTER_KEYS = [
   "eval_passage",
   "measures_assessment",
   "obsidian_to_marble_passage_video",
-  "marble_pathway_reveal",
   "map_integrity_governance",
   "structure_passage",
   "about_measures_registry",
@@ -885,6 +884,8 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const rightChoiceNode = asRecord(pathChoiceNode?.right)
   const explainerNode = rootStructureNode("structural_coherence_explainer")
   const structuredEnvironmentNode = rootStructureNode("measures_structured_environments")
+  const evalPassageNode = rootStructureNode("eval_passage")
+  const structurePassageNode = rootStructureNode("structure_passage")
 
   if (activeRouteUnitKey && !landingUnitsLoaded) {
     activeSurfaceElement = (
@@ -1009,7 +1010,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onContinue={() => {
           const next = activeSurface === "structural_coherence_explainer"
             ? governedNodeSurface(explainerNode, "next_surface")
-            : routeCtaSurface
+            : routeCtaSurface ?? governedNodeSurface(evalPassageNode, "next_surface")
           if (next) navigate(next)
         }}
         onToggleMuted={() => setPassageMuted((current) => !current)}
@@ -1027,7 +1028,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onContinue={() => {
           const next = activeSurface === "measures_structured_environments"
             ? governedNodeSurface(structuredEnvironmentNode, "next_surface")
-            : null
+            : governedNodeSurface(structurePassageNode, "next_surface")
           if (next) navigate(next)
         }}
         onToggleMuted={() => setPassageMuted((current) => !current)}
