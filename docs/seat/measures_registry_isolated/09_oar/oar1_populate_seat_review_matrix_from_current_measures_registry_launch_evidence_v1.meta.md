@@ -179,7 +179,7 @@ evidence_paths_per_component:
     - docs/seat/measures_registry_isolated/site_design_review/ai_operations_assessment_surface_review.meta.md
   payment_of_scope:
     - docs/seat/measures_registry_isolated/payment_boundary_contract.meta.md
-    - supabase/migrations/202606080004_map_commerce_payment_contracts_obsidian_media_bindings.sql
+    - supabase/migrations/202606080004_map_c2_circuit_payment_events_obsidian_media_bindings.sql
     - docs/seat/measures_registry_isolated/exact_row_reconciliation_evidence_index.meta.md
   survey_intake:
     - docs/seat/measures_registry_isolated/site_design_review/ai_operations_assessment_surface_review.meta.md

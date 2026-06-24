@@ -1,0 +1,31 @@
+---
+document_type: env_key_bound_transfer_payload_companion
+authority_level: local_documentation
+system_scope: measures_codex
+title: Expanded seo_metadata_records Transfer Payload v1
+status: expansion_blocked_unresolved_transfer_fields
+version: v1
+source_oar2: docs/seat/measures_registry_isolated/09_oar/oar2_expand_measures_registry_seat_upload_records_and_media_meta_to_env_key_bound_transfer_ready_payload_shape_v1.meta.md
+---
+
+# Expanded seo_metadata_records Transfer Payload v1
+
+env_key: measures_registry_seat_upload_env_key
+record_key: seo_metadata_records
+source_path: docs/seat/measures_registry_isolated/12_directory_set_components/seo_metadata_records.meta.md
+bucket_path: seat/current/12_directory_set_components/seo_metadata_records.meta.md
+placement_group: seat/current/12_directory_set_components/
+package_folder_class: 12_directory_set_components
+authority_source: docs/seat/measures_registry_isolated/12_directory_set_components/seo_metadata_records.meta.md
+current_or_held: current
+upload_allowed: false
+exclusion_status: included_candidate
+runtime_use: documentation_package_only
+dependencies:
+  - unresolved
+release_state: required_before_SEAT_bucket_upload
+surface_or_directory_scope: directory_set_components
+evidence_class: package_record_companion
+created_by_oar: docs/seat/measures_registry_isolated/09_oar/oar2_expand_measures_registry_seat_upload_records_and_media_meta_to_env_key_bound_transfer_ready_payload_shape_v1.meta.md
+validated_by_oar1: docs/seat/measures_registry_isolated/09_oar/oar1_resolve_measures_registry_payload_records_under_approved_operator_dispositions_v1.meta.md
+notes: bucket path resolved by approved package folder class policy; dependencies still require exact authority before upload eligibility

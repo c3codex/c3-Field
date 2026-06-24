@@ -1,0 +1,26 @@
+---
+document_type: internal_process_report
+authority_level: closeout_evidence
+system_scope: measures_codex
+title: Internal Process Report send_card Rerun Held Excluded Media v1
+status: internal_process_report
+version: v1
+source_oar2: docs/seat/measures_registry_isolated/09_oar/oar2_rerun_send_card_creation_for_held_and_excluded_media_before_manifest_build_v1.meta.md
+visibility: internal_only
+---
+
+standing:
+  status: internal_process_report
+  send_card_created: true
+  held_or_excluded_media_requires_operator_resolution: true
+  exact_manifest_build_allowed: false
+  Cody_should_block_manifest_build_until_send_card_resolution: true
+
+internal_trace:
+  source_row_level_exclusion_oar1: docs/seat/measures_registry_isolated/09_oar/oar1_add_row_level_exclusion_reasons_to_held_and_excluded_measures_registry_media_rows_v1.meta.md
+  source_blocked_send_card_oar1: docs/seat/measures_registry_isolated/09_oar/oar1_create_send_card_for_held_and_excluded_media_before_manifest_build_v1.meta.md
+  source_media_resolution_oar1: docs/seat/measures_registry_isolated/09_oar/oar1_resolve_measures_registry_unresolved_media_rows_before_exact_manifest_build_v1.meta.md
+  held_media_count: 3
+  excluded_media_count: 3
+  send_card_type: constraint_agreement_resolution_delivery
+  send_card_path: docs/seat/measures_registry_isolated/10_validation/send_card_held_excluded_media_before_manifest_build_v1.meta.md

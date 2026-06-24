@@ -1,16 +1,15 @@
--- MAP Commerce Contracts, Payment Events, and Obsidian Media Bindings — Migration v1
+-- MAP C2 Circuit, Payment Events, and Obsidian Media Bindings — Migration v1
 -- Source OAR2: docs/oar/measures_registry/oar2_complete_obsidian_marble_launch_chambers_governed_map_payment_boundary_v1.meta.md
--- Routes: 1 (Obsidian media bindings), 5 (MAP commerce contracts), 6 (MAP payment event logging)
+-- Routes: 1 (Obsidian media bindings), 5 (MAP C2 circuit), 6 (MAP payment event logging)
 
 -- ============================================================
--- TABLE: map_commerce_contracts
--- MAP the Environment product contracts — server-side authority.
+-- TABLE: map_c2_circuit
+-- MAP review products and payment options — server-side authority.
 -- Frontend must not hardcode prices, product IDs, or descriptions.
 -- stripe_price_id: populate from Stripe dashboard after products confirmed.
 -- ============================================================
-create table if not exists public.map_commerce_contracts (
-  contract_key              text primary key,
-  map_circuit_key           text not null
+create table if not exists public.map_c2_circuit (
+  map_circuit_key           text primary key
     check (map_circuit_key in ('pre_deployment', 'optimization', 'remediation')),
   evaluation_standing       text not null,
   applicable_standing_keys  jsonb not null default '[]'::jsonb,
@@ -26,19 +25,15 @@ create table if not exists public.map_commerce_contracts (
     check (payment_scope = 'map_the_environment'),
   c3_key_required           boolean not null default false,
   wallet_required           boolean not null default false,
-  seat_contract_generated   boolean not null default false,
-  seat_contract_state       text not null default 'held_until_map_complete',
   map_boundary              text not null,
   access_boundary           text not null,
   deliverables              jsonb not null default '[]'::jsonb,
-  seat_hold_notice          text not null default 'A full SEAT Contract may be generated only after MAP the Environment is complete.',
   created_at                timestamptz not null default now(),
   updated_at                timestamptz not null default now()
 );
 
--- Seed MAP commerce contracts
-insert into public.map_commerce_contracts (
-  contract_key,
+-- Seed MAP C2 circuit payment options
+insert into public.map_c2_circuit (
   map_circuit_key,
   evaluation_standing,
   applicable_standing_keys,
@@ -51,15 +46,11 @@ insert into public.map_commerce_contracts (
   payment_scope,
   c3_key_required,
   wallet_required,
-  seat_contract_generated,
-  seat_contract_state,
   map_boundary,
   access_boundary,
-  deliverables,
-  seat_hold_notice
+  deliverables
 ) values
 (
-  'map_contract_pre_deployment',
   'pre_deployment',
   'eval_result_01',
   '["eval_result_01"]'::jsonb,
@@ -72,15 +63,11 @@ insert into public.map_commerce_contracts (
   'map_the_environment',
   false,
   false,
-  false,
-  'held_until_map_complete',
-  'MAP the Environment reviews, identifies, and recommends. MAP does not implement system changes, issue Registry Certification, establish SEAT standing, activate c3 Field Optics, or determine the final SEAT Contract before the audit is complete. A full SEAT Contract may be generated only after MAP the Environment is complete.',
+  'MAP the Environment reviews, identifies, and recommends. It does not implement system changes or create certification, registration, governance standing, or system authority.',
   'Full MAP evaluation requires sufficient access to the runtime and AI-influenced surfaces being reviewed. Access may be read-only, guided, screen-shared, exported, documented, or AI-assisted. Sensitive credentials, confidential contents, regulated records, or private client data are not transferred unless separately authorized and governed.',
-  '["Environmental inventory and authority surface review","AI deployment readiness assessment","Structural alignment recommendations","Governed pre-deployment pathway definition"]'::jsonb,
-  'A full SEAT Contract may be generated only after MAP the Environment is complete.'
+  '["Environmental inventory and authority surface review","AI deployment readiness assessment","Structural alignment recommendations","Governed pre-deployment pathway definition"]'::jsonb
 ),
 (
-  'map_contract_optimization',
   'optimization',
   'eval_result_02',
   '["eval_result_02"]'::jsonb,
@@ -93,15 +80,11 @@ insert into public.map_commerce_contracts (
   'map_the_environment',
   false,
   false,
-  false,
-  'held_until_map_complete',
-  'MAP the Environment reviews, identifies, and recommends. MAP does not implement system changes, issue Registry Certification, establish SEAT standing, activate c3 Field Optics, or determine the final SEAT Contract before the audit is complete. A full SEAT Contract may be generated only after MAP the Environment is complete.',
+  'MAP the Environment reviews, identifies, and recommends. It does not implement system changes or create certification, registration, governance standing, or system authority.',
   'Full MAP evaluation requires sufficient access to the runtime and AI-influenced surfaces being reviewed. Access may be read-only, guided, screen-shared, exported, documented, or AI-assisted. Sensitive credentials, confidential contents, regulated records, or private client data are not transferred unless separately authorized and governed.',
-  '["Operational fragmentation analysis","Role and process clarity review","AI governance gap identification","Structured optimization pathway recommendations"]'::jsonb,
-  'A full SEAT Contract may be generated only after MAP the Environment is complete.'
+  '["Operational fragmentation analysis","Role and process clarity review","AI governance gap identification","Structured optimization pathway recommendations"]'::jsonb
 ),
 (
-  'map_contract_remediation',
   'remediation',
   'eval_result_03',
   '["eval_result_03","eval_result_04"]'::jsonb,
@@ -114,14 +97,11 @@ insert into public.map_commerce_contracts (
   'map_the_environment',
   false,
   false,
-  false,
-  'held_until_map_complete',
-  'MAP the Environment reviews, identifies, and recommends. MAP does not implement system changes, issue Registry Certification, establish SEAT standing, activate c3 Field Optics, or determine the final SEAT Contract before the audit is complete. A full SEAT Contract may be generated only after MAP the Environment is complete.',
+  'MAP the Environment reviews, identifies, and recommends. It does not implement system changes or create certification, registration, governance standing, or system authority.',
   'Full MAP evaluation requires sufficient access to the runtime and AI-influenced surfaces being reviewed. Access may be read-only, guided, screen-shared, exported, documented, or AI-assisted. Sensitive credentials, confidential contents, regulated records, or private client data are not transferred unless separately authorized and governed.',
-  '["Multi-condition structural drift analysis","Authority map reconstruction","Runtime governance boundary review","Remediation pathway definition and prioritization","Post-audit SEAT Contract preparation scope"]'::jsonb,
-  'A full SEAT Contract may be generated only after MAP the Environment is complete.'
+  '["Multi-condition structural drift analysis","Authority map reconstruction","Runtime governance boundary review","Remediation pathway definition and prioritization","Post-audit next-step recommendation scope"]'::jsonb
 )
-on conflict (contract_key) do nothing;
+on conflict (map_circuit_key) do nothing;
 
 -- ============================================================
 -- TABLE: map_payment_events
@@ -133,8 +113,7 @@ create table if not exists public.map_payment_events (
   map_order_id                uuid primary key default gen_random_uuid(),
   evaluation_result_id        text,
   map_standing                text not null,
-  map_circuit_key             text not null,
-  contract_key                text references public.map_commerce_contracts(contract_key),
+  map_circuit_key             text not null references public.map_c2_circuit(map_circuit_key),
   contact_email               text not null,
   stripe_checkout_session_id  text,
   stripe_payment_intent_id    text,
@@ -171,9 +150,9 @@ begin
 end;
 $$;
 
-drop trigger if exists map_commerce_contracts_updated_at on public.map_commerce_contracts;
-create trigger map_commerce_contracts_updated_at
-before update on public.map_commerce_contracts
+drop trigger if exists map_c2_circuit_updated_at on public.map_c2_circuit;
+create trigger map_c2_circuit_updated_at
+before update on public.map_c2_circuit
 for each row execute function public.map_set_updated_at();
 
 drop trigger if exists map_payment_events_updated_at on public.map_payment_events;
@@ -184,12 +163,12 @@ for each row execute function public.map_set_updated_at();
 -- ============================================================
 -- RLS
 -- ============================================================
-alter table public.map_commerce_contracts enable row level security;
+alter table public.map_c2_circuit enable row level security;
 alter table public.map_payment_events     enable row level security;
 
-drop policy if exists "map_commerce_contracts_public_read" on public.map_commerce_contracts;
-create policy "map_commerce_contracts_public_read"
-on public.map_commerce_contracts for select
+drop policy if exists "map_c2_circuit_public_read" on public.map_c2_circuit;
+create policy "map_c2_circuit_public_read"
+on public.map_c2_circuit for select
 to anon, authenticated
 using (release_state = 'active');
 
