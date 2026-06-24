@@ -424,8 +424,8 @@ components:
       - path: docs/seat/measures_registry_isolated/payment_boundary_contract.meta.md
         evidence_type: payment_boundary
         reason: states payment is MAP access threshold and does not equal registration, certification, c3 Key, Field access, SEAT, or Crystal Seat
-      - path: supabase/migrations/202606080004_map_c2_circuit_payment_events_obsidian_media_bindings.sql
-        evidence_type: map_c2_circuit_schema
+      - path: supabase/migrations/202606080004_map_commerce_payment_contracts_obsidian_media_bindings.sql
+        evidence_type: payment_contract_schema
         reason: records Stripe processor/product/amount structures and payment event table shape
       - path: docs/seat/measures_registry_isolated/exact_row_reconciliation_evidence_index.meta.md
         evidence_type: exact_row_conflict

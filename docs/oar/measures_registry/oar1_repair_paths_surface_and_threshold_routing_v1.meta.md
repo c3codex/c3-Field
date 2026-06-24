@@ -154,5 +154,5 @@ Files modified:
 - `src/measures_registry/registered_runtime/styles/encounters/path-choice.css` (CTA styles)
 - `docs/oar/measures_registry/oar1_repair_paths_surface_and_threshold_routing_v1.meta.md` (this file)
 
-Commit: `9b29216` — "Fix: repair Paths surface threshold routing and CTA visibility"
-Push: pushed to `origin/measures`
+Commit: pending
+Push: pending
