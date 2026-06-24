@@ -182,6 +182,11 @@ export default function MeasuresRegistryRuntimeRegistered() {
   const [passageMuted, setPassageMuted] = useState(true)
   const [thresholdMotionSettled, setThresholdMotionSettled] = useState({ left: false, right: false })
 
+  const [connectFields, setConnectFields] = useState<Record<string, string>>({})
+  const [connectSubmitting, setConnectSubmitting] = useState(false)
+  const [connectSubmitted, setConnectSubmitted] = useState(false)
+  const [connectError, setConnectError] = useState<string | null>(null)
+
   const [evalFields, setEvalFields] = useState<Record<string, string>>({})
   const [evalAnswers, setEvalAnswers] = useState<Record<string, StructuredEvalAnswer>>({})
   const [evalStep, setEvalStep] = useState<EvalStep>("diagnostic")
@@ -531,6 +536,46 @@ export default function MeasuresRegistryRuntimeRegistered() {
   function normalizeAssessmentWebsite(value: string | undefined): string {
     const trimmed = value?.trim() ?? ""
     return /^www\./i.test(trimmed) ? `https://${trimmed}` : trimmed
+  }
+
+  function setConnectField(key: string, value: string) {
+    setConnectFields((current) => ({ ...current, [key]: value }))
+  }
+
+  async function submitConnect(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setConnectSubmitting(true)
+    setConnectError(null)
+
+    const requiredFields = ["name", "organization", "email"]
+    const missing = requiredFields.filter((f) => !connectFields[f]?.trim())
+    if (missing.length > 0) {
+      setConnectSubmitting(false)
+      setConnectError("Please complete all required fields.")
+      return
+    }
+
+    const { error } = await supabase.from("measures_registry_connect_capture").insert({
+      name: connectFields.name?.trim() ?? "",
+      organization: connectFields.organization?.trim() ?? "",
+      email: connectFields.email?.trim() ?? "",
+      message: connectFields.message?.trim() || null,
+      capture_context: "about_measures_registry_connect",
+      notification_state: "queued",
+      metadata: {
+        source_surface: "about_measures_registry",
+        source_oar2: "docs/oar/measures_registry/oar2_fix_about_measures_registry_encounter_v1.meta.md",
+      },
+    })
+
+    setConnectSubmitting(false)
+
+    if (error) {
+      setConnectError("Request could not be submitted. Please try again.")
+      return
+    }
+
+    setConnectSubmitted(true)
   }
 
   function continueToDiagnostic() {
@@ -936,10 +981,16 @@ export default function MeasuresRegistryRuntimeRegistered() {
         registryTokenStyle={launchMediaStyle}
         aboutCopy={aboutMeasuresRegistryCopy}
         videoUrl={aboutMeasuresRegistryVideoUrl}
+        officialCodexstoneSealUrl={officialCodexstoneSealUrl}
         featuredArticle={aboutFeaturedArticle}
-        featuredArticleImageUrl={aboutFeaturedArticleImageUrl}
+        connectFields={connectFields}
+        connectSubmitting={connectSubmitting}
+        connectSubmitted={connectSubmitted}
+        connectError={connectError}
         renderHeader={() => renderHeader(aboutMeasuresRegistryCopy.header)}
         renderSystemFooter={renderSystemFooter}
+        onSetConnectField={setConnectField}
+        onSubmitConnect={submitConnect}
       />
     )
 
