@@ -70,6 +70,16 @@
   transform: none;
 }
 
+/* Right panel — label upper-right, leaving the full visual field visible */
+.measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate[data-choice="right"],
+.measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate[data-choice="right"]:hover {
+  align-content: start;
+  justify-items: end;
+  padding-top: clamp(5rem, 11vh, 10rem);
+  padding-bottom: clamp(2rem, 6vw, 6rem);
+  text-align: right;
+}
+
 .measures-registry-runtime[data-surface="landing_path_choice"] .registry-route-plate:focus-visible {
   outline: 2px solid #fff;
   outline-offset: -4px;
