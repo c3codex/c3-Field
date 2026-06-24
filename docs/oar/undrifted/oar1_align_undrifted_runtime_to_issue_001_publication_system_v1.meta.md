@@ -91,5 +91,5 @@ Files modified:
 - `src/measures_registry/registered_runtime/styles/registry.visual-system.css`
 - `src/measures_registry/registered_runtime/renderers/RegisteredStructuralDrift.tsx`
 
-Commit: pending
-Push: pending — not authorized in OAR2
+Commit: `853d252` — "Feat: align /undrifted runtime to Issue 001 publication system"
+Push: pushed to `origin/measures`
