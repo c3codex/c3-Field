@@ -2,8 +2,8 @@
 
 Version: 1.0  
 Source authority: `oar2_undrifted_launch_surface_editorial_reconstruction_v1.md`  
-Execution date: 2026-06-23  
-Disposition: COMPLETED WITH RENDERED QA HELD  
+Execution date: 2026-06-24  
+Disposition: DEPLOYED WITH RENDERED QA HELD  
 Operator: op044  
 Target: `/undrifted`
 
@@ -85,8 +85,8 @@ Result:
 ```yaml
 status: passed
 modules_transformed: 105
-javascript_asset: dist-registry/assets/index-CwgGUdIe.js
-css_asset: dist-registry/assets/index-CpzyBq1S.css
+javascript_asset: dist-registry/assets/index-BDDqOPFx.js
+css_asset: dist-registry/assets/index-ByzwHrrz.css
 governed_route_heads:
   - /ai-operations-assessment
   - /structural-drift
@@ -101,11 +101,33 @@ Vite emitted its existing main-chunk size advisory. It did not fail the build.
 source_contract_qa: passed
 production_build_qa: passed
 rendered_browser_qa: held_missing_sandboxPolicy
-deployment: not_performed
-production_truth: unchanged_by_this_oar
+deployment: confirmed
+production_http_status: 200
+production_javascript: assets/index-BDDqOPFx.js
+production_css: assets/index-ByzwHrrz.css
+production_asset_match: true
 ```
 
 Browser bootstrap again returned `missing field sandboxPolicy`. No screenshot or viewport acceptance is claimed.
+
+## Commit and push evidence
+
+```yaml
+commit: 2304f49ecbdf08dcf5ad8be524015b1f13cd1015
+commit_message: Deploy unDrifted editorial reconstruction
+branch: measures
+remote: origin/measures
+push_range: b86e946..2304f49
+remote_ref_match: true
+staged_paths:
+  - oar1_undrifted_launch_surface_editorial_reconstruction_v1.md
+  - oar2_undrifted_launch_surface_editorial_reconstruction_v1.md
+  - src/measures_registry/registered_runtime/renderers/RegisteredStructuralDrift.tsx
+  - src/measures_registry/registered_runtime/styles/registry.visual-system.css
+unauthorized_staged_paths: 0
+```
+
+The exact four-path package was committed while 311 unrelated or prior dirty paths remained uncommitted and unstaged.
 
 ## Mutation boundary
 
@@ -117,10 +139,11 @@ map_mutation: false
 payment_mutation: false
 assessment_flow_mutation: false
 seat_mutation: false
-commit: not_performed
-push: not_performed
+commit: performed_exact_path
+push: performed_origin_measures
+held_drift_mutation: false
 ```
 
 ## Close
 
-The launch surface now has a tighter Issue 001 arrival frame, a full uncropped governed cover encounter, and a seated editorial issue heading. Rendered viewport QA remains the only held implementation gate.
+The launch surface is deployed with a tighter Issue 001 arrival frame, a full uncropped governed cover encounter, and a seated editorial issue heading. Rendered viewport QA remains the only held acceptance gate.
