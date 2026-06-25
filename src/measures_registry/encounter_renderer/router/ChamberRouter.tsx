@@ -4,6 +4,8 @@ import type { AssessmentCapturePayload } from "../chambers/ObsidianChamberRender
 import LapisChamberRenderer from "../chambers/LapisChamberRenderer"
 import type { SubscriptionCapturePayload } from "../chambers/LapisChamberRenderer"
 import MarbleChamberRenderer from "../chambers/MarbleChamberRenderer"
+import CrystalSeatRenderer from "../chambers/CrystalSeatRenderer"
+import type { ConnectCapturePayload } from "../chambers/CrystalSeatRenderer"
 import type { EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
 
 export type ChamberRouterProps = {
@@ -13,6 +15,7 @@ export type ChamberRouterProps = {
   // Shell provides these in Phase 4. Omitting disables capture persistence.
   onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<{ error: string | null }>
   onCaptureSubscription?: (payload: SubscriptionCapturePayload) => Promise<{ error: string | null }>
+  onCaptureConnect?: (payload: ConnectCapturePayload) => Promise<{ error: string | null }>
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode
 }
@@ -36,27 +39,12 @@ export default function ChamberRouter(props: ChamberRouterProps) {
     return <MarbleChamberRenderer {...props} />
   }
 
-  // Known environment — renderer gap (Crystal Seat not yet implemented)
   if (chamberAssignment === "crystal_seat") {
-    return (
-      <main
-        className="measures-registry-runtime"
-        data-surface={encounter.surface}
-        data-material-family={encounter.materialIdentity}
-        data-layout-contract="renderer_gap"
-        data-release-standing="renderer_gap"
-        style={props.registryTokenStyle}
-      >
-        {props.renderHeader({ title: encounter.encounterDef?.display_title ?? "Measures Registry" })}
-        <section className="registry-held-state" role="status">
-          <span>Registry</span>
-          <p>This surface is not yet available.</p>
-        </section>
-        {props.renderSystemFooter()}
-      </main>
-    )
+    return <CrystalSeatRenderer {...props} />
   }
 
+  // All 4 EncounterEnvironmentAssignment members handled above.
+  // TypeScript narrows chamberAssignment to never here — exhaustiveness confirmed.
   // Unknown chamber assignment — public-safe unavailable state, no fallback to Obsidian
   const _exhaustive: never = chamberAssignment
   void _exhaustive
