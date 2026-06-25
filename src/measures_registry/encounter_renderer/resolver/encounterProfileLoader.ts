@@ -1,16 +1,23 @@
 import type {
+  ChamberAssignment,
   EncounterProfile,
   EncounterProfileResult,
   EncounterSurface,
+  MaterialIdentity,
   RegistryResolverData,
   TransitionNode,
 } from "../types/encounterRendererTypes"
-import {
-  REGISTRY_KEY_CHAMBER,
-  REGISTRY_KEY_MATERIAL,
-  SURFACE_REGISTRY_KEY,
-} from "../types/encounterRendererTypes"
 import { checkReleaseGate } from "./releaseGate"
+
+// Type guards — validate DB values against compile-time unions.
+// These catch malformed data; they do not carry assignment authority.
+const VALID_MATERIAL_IDENTITIES = new Set<string>(["obsidian", "crystal", "lapis", "marble"])
+const VALID_CHAMBER_ASSIGNMENTS = new Set<string>([
+  "ObsidianChamberRenderer",
+  "CrystalSeatRenderer",
+  "LapisChamberRenderer",
+  "MarbleChamberRenderer",
+])
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (value !== null && typeof value === "object" && !Array.isArray(value)) {
@@ -36,10 +43,22 @@ export function loadEncounterProfile(
   surface: EncounterSurface,
   resolverData: RegistryResolverData,
 ): EncounterProfileResult {
-  const registryKey = SURFACE_REGISTRY_KEY[surface]
-  if (!registryKey) {
-    return { loaded: false, reason: "unknown_surface" }
+  const assignment = resolverData.surfaceAssignmentRows.find((r) => r.surface_key === surface)
+  if (!assignment) {
+    return { loaded: false, reason: "missing_surface_assignment" }
   }
+
+  const { registry_key: registryKey, material_identity, chamber_assignment } = assignment
+
+  if (!VALID_MATERIAL_IDENTITIES.has(material_identity)) {
+    return { loaded: false, reason: `invalid_material_identity:${material_identity}` }
+  }
+  if (!VALID_CHAMBER_ASSIGNMENTS.has(chamber_assignment)) {
+    return { loaded: false, reason: `invalid_chamber_assignment:${chamber_assignment}` }
+  }
+
+  const materialIdentity = material_identity as MaterialIdentity
+  const chamberAssignment = chamber_assignment as ChamberAssignment
 
   const registryRow = resolverData.registryRows.find((r) => r.registry_key === registryKey)
   if (!registryRow) {
@@ -49,16 +68,6 @@ export function loadEncounterProfile(
   const gateResult = checkReleaseGate(registryRow)
   if (gateResult.status !== "released") {
     return { loaded: false, reason: `gate_held:${gateResult.reason}` }
-  }
-
-  const materialIdentity = REGISTRY_KEY_MATERIAL[registryKey]
-  if (!materialIdentity) {
-    return { loaded: false, reason: "unknown_material_identity" }
-  }
-
-  const chamberAssignment = REGISTRY_KEY_CHAMBER[registryKey]
-  if (!chamberAssignment) {
-    return { loaded: false, reason: "unknown_chamber_assignment" }
   }
 
   const encounterDef =

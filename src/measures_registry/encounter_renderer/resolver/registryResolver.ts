@@ -4,6 +4,7 @@ import type {
   EncounterDefRow,
   EncounterDesignTokenRow,
   EncounterMediaRow,
+  EncounterSurfaceAssignmentRow,
   RegistryResolverData,
   RegistryRow,
 } from "../types/encounterRendererTypes"
@@ -72,6 +73,7 @@ const EMPTY_DATA: RegistryResolverData = {
   encounterDefRows: [],
   mediaRows: [],
   designTokenRows: [],
+  surfaceAssignmentRows: [],
   loading: true,
   error: null,
 }
@@ -88,28 +90,34 @@ export function useRegistryResolver(): RegistryResolverData {
     let cancelled = false
 
     async function load() {
-      const [registryResult, defResult, mediaResult, tokenResult] = await Promise.all([
-        supabase
-          .from("measures_registry")
-          .select("registry_key, is_active, release_state, access_state, metadata")
-          .in("registry_key", [...ENCOUNTER_REGISTRY_KEYS]),
-        supabase
-          .from("measures_encounter_def")
-          .select("encounter_key, display_title, metadata")
-          .in("encounter_key", [...ENCOUNTER_DEF_KEYS])
-          .order("sequence_order", { ascending: true }),
-        supabase
-          .from("measures_media_map")
-          .select("media_role, storage_bucket, storage_path, mime_type, is_active, metadata")
-          .in("campaign_key", [...MEDIA_CAMPAIGN_KEYS])
-          .in("media_role", [...MEDIA_ROLES])
-          .order("sort_order", { ascending: true }),
-        supabase
-          .from("measures_design_token")
-          .select("token_key, token_value, media_query, is_active")
-          .eq("registry_key", DESIGN_REGISTRY_KEY)
-          .eq("is_active", true),
-      ])
+      const [registryResult, defResult, mediaResult, tokenResult, assignmentResult] =
+        await Promise.all([
+          supabase
+            .from("measures_registry")
+            .select("registry_key, is_active, release_state, access_state, metadata")
+            .in("registry_key", [...ENCOUNTER_REGISTRY_KEYS]),
+          supabase
+            .from("measures_encounter_def")
+            .select("encounter_key, display_title, metadata")
+            .in("encounter_key", [...ENCOUNTER_DEF_KEYS])
+            .order("sequence_order", { ascending: true }),
+          supabase
+            .from("measures_media_map")
+            .select("media_role, storage_bucket, storage_path, mime_type, is_active, metadata")
+            .in("campaign_key", [...MEDIA_CAMPAIGN_KEYS])
+            .in("media_role", [...MEDIA_ROLES])
+            .order("sort_order", { ascending: true }),
+          supabase
+            .from("measures_design_token")
+            .select("token_key, token_value, media_query, is_active")
+            .eq("registry_key", DESIGN_REGISTRY_KEY)
+            .eq("is_active", true),
+          supabase
+            .from("measures_encounter_surface_assignment")
+            .select(
+              "surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes, is_active, release_state, access_state",
+            ),
+        ])
 
       if (cancelled) return
 
@@ -118,6 +126,7 @@ export function useRegistryResolver(): RegistryResolverData {
         defResult.error?.message ??
         mediaResult.error?.message ??
         tokenResult.error?.message ??
+        assignmentResult.error?.message ??
         null
 
       setData({
@@ -125,6 +134,7 @@ export function useRegistryResolver(): RegistryResolverData {
         encounterDefRows: (defResult.data ?? []) as EncounterDefRow[],
         mediaRows: (mediaResult.data ?? []) as EncounterMediaRow[],
         designTokenRows: (tokenResult.data ?? []) as EncounterDesignTokenRow[],
+        surfaceAssignmentRows: (assignmentResult.data ?? []) as EncounterSurfaceAssignmentRow[],
         loading: false,
         error,
       })

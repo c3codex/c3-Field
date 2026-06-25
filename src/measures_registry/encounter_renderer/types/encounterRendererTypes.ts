@@ -1,5 +1,8 @@
 import type { ReactNode, CSSProperties } from "react"
 
+// Compile-time type unions — not assignment authority.
+// Assignment authority is seated in measures_encounter_surface_assignment.
+
 export type MaterialIdentity = "obsidian" | "crystal" | "lapis" | "marble"
 
 export type ChamberAssignment =
@@ -22,6 +25,8 @@ export type EncounterSurface =
   | "structure_passage"
   | "structural_drift_dispatches"
   | "publication_dispatch"
+
+// DB row types
 
 export type RegistryRow = {
   registry_key: string
@@ -53,9 +58,37 @@ export type EncounterDesignTokenRow = {
   is_active: boolean | null
 }
 
+export type EncounterSurfaceAssignmentRow = {
+  surface_key: string
+  registry_key: string
+  encounter_key: string | null
+  material_identity: string
+  chamber_assignment: string
+  public_routes: string[]
+  is_active: boolean
+  release_state: string
+  access_state: string | null
+}
+
+// Resolver output — all raw DB rows; no authority decisions
+
+export type RegistryResolverData = {
+  registryRows: RegistryRow[]
+  encounterDefRows: EncounterDefRow[]
+  mediaRows: EncounterMediaRow[]
+  designTokenRows: EncounterDesignTokenRow[]
+  surfaceAssignmentRows: EncounterSurfaceAssignmentRow[]
+  loading: boolean
+  error: string | null
+}
+
+// Gate result
+
 export type GateResult =
   | { status: "released" }
   | { status: "held"; reason: string }
+
+// Transition node — from measures_registry_root.metadata.encounter_structure
 
 export type TransitionNode = {
   content_encounter_key?: string | null
@@ -64,6 +97,8 @@ export type TransitionNode = {
   right?: TransitionNode | null
   [key: string]: unknown
 }
+
+// Encounter profile — loaded rendering state for a single surface
 
 export type EncounterProfile = {
   surface: EncounterSurface
@@ -81,14 +116,7 @@ export type EncounterProfileResult =
   | { loaded: true; profile: EncounterProfile }
   | { loaded: false; reason: string }
 
-export type RegistryResolverData = {
-  registryRows: RegistryRow[]
-  encounterDefRows: EncounterDefRow[]
-  mediaRows: EncounterMediaRow[]
-  designTokenRows: EncounterDesignTokenRow[]
-  loading: boolean
-  error: string | null
-}
+// Chamber renderer props contract
 
 export type EncounterRendererProps = {
   activeSurface: EncounterSurface
@@ -98,46 +126,3 @@ export type EncounterRendererProps = {
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode
 }
-
-// Surface → registry key. Authority: registry standing.
-export const SURFACE_REGISTRY_KEY: Record<EncounterSurface, string> = {
-  intro: "ai_isnt_broken_intro",
-  intro_hook: "ai_isnt_broken_intro",
-  path_choice: "evaluate_structure_path",
-  structural_coherence_explainer: "eval_passage",
-  measures_structured_environments: "structure_passage",
-  about_measures_registry: "about_measures_registry",
-  eval_passage: "eval_passage",
-  measures_assessment: "measures_assessment",
-  obsidian_to_marble_passage_video: "obsidian_to_marble_passage_video",
-  map_integrity_governance: "map_integrity_governance",
-  structure_passage: "structure_passage",
-  structural_drift_dispatches: "structural_drift_publication",
-  publication_dispatch: "structural_drift_publication",
-}
-
-export const REGISTRY_KEY_MATERIAL: Record<string, MaterialIdentity> = {
-  ai_isnt_broken_intro: "crystal",
-  evaluate_structure_path: "crystal",
-  eval_passage: "obsidian",
-  measures_assessment: "obsidian",
-  obsidian_to_marble_passage_video: "obsidian",
-  map_integrity_governance: "marble",
-  structure_passage: "crystal",
-  about_measures_registry: "crystal",
-  structural_drift_publication: "lapis",
-}
-
-export const REGISTRY_KEY_CHAMBER: Record<string, ChamberAssignment> = {
-  ai_isnt_broken_intro: "CrystalSeatRenderer",
-  evaluate_structure_path: "CrystalSeatRenderer",
-  eval_passage: "ObsidianChamberRenderer",
-  measures_assessment: "ObsidianChamberRenderer",
-  obsidian_to_marble_passage_video: "ObsidianChamberRenderer",
-  map_integrity_governance: "MarbleChamberRenderer",
-  structure_passage: "CrystalSeatRenderer",
-  about_measures_registry: "CrystalSeatRenderer",
-  structural_drift_publication: "LapisChamberRenderer",
-}
-
-export const ENCOUNTER_SURFACE_SET = new Set<string>(Object.keys(SURFACE_REGISTRY_KEY))
