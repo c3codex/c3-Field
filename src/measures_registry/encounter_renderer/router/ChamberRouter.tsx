@@ -20,15 +20,15 @@ export default function ChamberRouter(props: ChamberRouterProps) {
   const { encounter } = props
   const { chamberAssignment } = encounter
 
-  if (chamberAssignment === "ObsidianChamberRenderer") {
+  if (chamberAssignment === "obsidian") {
     return <ObsidianChamberRenderer {...props} />
   }
 
-  // Known future chambers — renderer gap (not yet implemented)
+  // Known environments — renderer gap (not yet implemented)
   if (
-    chamberAssignment === "CrystalSeatRenderer" ||
-    chamberAssignment === "LapisChamberRenderer" ||
-    chamberAssignment === "MarbleChamberRenderer"
+    chamberAssignment === "crystal_seat" ||
+    chamberAssignment === "lapis" ||
+    chamberAssignment === "marble"
   ) {
     return (
       <main

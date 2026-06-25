@@ -1,5 +1,5 @@
 import type {
-  ChamberAssignment,
+  EncounterEnvironmentAssignment,
   ComposedEncounter,
   EncounterSurface,
   EncounterSurfaceAssignmentRow,
@@ -37,7 +37,7 @@ export function composeEncounter(
   assignment: EncounterSurfaceAssignmentRow,
   registryRow: RegistryRow,
   materialIdentity: MaterialIdentity,
-  chamberAssignment: ChamberAssignment,
+  chamberAssignment: EncounterEnvironmentAssignment,
   resolverData: RegistryResolverData,
 ): ComposedEncounter {
   const encounterDef =

@@ -1,5 +1,5 @@
 import type {
-  ChamberAssignment,
+  EncounterEnvironmentAssignment,
   EncounterSurface,
   MaterialIdentity,
   RegistryResolverData,
@@ -13,10 +13,10 @@ import { checkReleaseGate } from "./releaseGate"
 // Catch malformed DB data; they do not carry assignment authority.
 const VALID_MATERIAL_IDENTITIES = new Set<string>(["obsidian", "crystal", "lapis", "marble"])
 const VALID_CHAMBER_ASSIGNMENTS = new Set<string>([
-  "ObsidianChamberRenderer",
-  "CrystalSeatRenderer",
-  "LapisChamberRenderer",
-  "MarbleChamberRenderer",
+  "obsidian",
+  "crystal_seat",
+  "lapis",
+  "marble",
 ])
 
 // Orchestration only. Finds seated data, delegates assembly to composition
@@ -41,7 +41,7 @@ export function loadEncounterProfile(
   }
 
   const materialIdentity = material_identity as MaterialIdentity
-  const chamberAssignment = chamber_assignment as ChamberAssignment
+  const chamberAssignment = chamber_assignment as EncounterEnvironmentAssignment
 
   // 3. Registry standing
   const registryRow = resolverData.registryRows.find(

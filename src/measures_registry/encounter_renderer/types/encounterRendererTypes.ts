@@ -5,11 +5,11 @@ import type { ReactNode, CSSProperties } from "react"
 
 export type MaterialIdentity = "obsidian" | "crystal" | "lapis" | "marble"
 
-export type ChamberAssignment =
-  | "ObsidianChamberRenderer"
-  | "CrystalSeatRenderer"
-  | "LapisChamberRenderer"
-  | "MarbleChamberRenderer"
+export type EncounterEnvironmentAssignment =
+  | "obsidian"
+  | "crystal_seat"
+  | "lapis"
+  | "marble"
 
 export type EncounterSurface =
   | "intro"
@@ -105,7 +105,7 @@ export type ComposedEncounter = {
   mediaByRole: Map<string, EncounterMediaRow>
   transitionNodes: Record<string, TransitionNode>
   materialIdentity: MaterialIdentity
-  chamberAssignment: ChamberAssignment
+  chamberAssignment: EncounterEnvironmentAssignment
 }
 
 // Renderable encounter — composed encounter after release gate passes.
@@ -120,7 +120,7 @@ export type RenderableEncounter = {
   mediaByRole: Map<string, EncounterMediaRow>
   transitionNodes: Record<string, TransitionNode>
   materialIdentity: MaterialIdentity
-  chamberAssignment: ChamberAssignment
+  chamberAssignment: EncounterEnvironmentAssignment
   gateResult: { status: "released" }
 }
 
