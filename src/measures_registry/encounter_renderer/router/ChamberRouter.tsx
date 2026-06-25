@@ -3,6 +3,7 @@ import ObsidianChamberRenderer from "../chambers/ObsidianChamberRenderer"
 import type { AssessmentCapturePayload } from "../chambers/ObsidianChamberRenderer"
 import LapisChamberRenderer from "../chambers/LapisChamberRenderer"
 import type { SubscriptionCapturePayload } from "../chambers/LapisChamberRenderer"
+import MarbleChamberRenderer from "../chambers/MarbleChamberRenderer"
 import type { EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
 
 export type ChamberRouterProps = {
@@ -31,8 +32,12 @@ export default function ChamberRouter(props: ChamberRouterProps) {
     return <LapisChamberRenderer {...props} />
   }
 
-  // Known environments — renderer gap (not yet implemented)
-  if (chamberAssignment === "crystal_seat" || chamberAssignment === "marble") {
+  if (chamberAssignment === "marble") {
+    return <MarbleChamberRenderer {...props} />
+  }
+
+  // Known environment — renderer gap (Crystal Seat not yet implemented)
+  if (chamberAssignment === "crystal_seat") {
     return (
       <main
         className="measures-registry-runtime"
