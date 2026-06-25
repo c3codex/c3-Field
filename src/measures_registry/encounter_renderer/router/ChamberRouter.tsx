@@ -1,14 +1,17 @@
 import type { CSSProperties, ReactNode } from "react"
 import ObsidianChamberRenderer from "../chambers/ObsidianChamberRenderer"
 import type { AssessmentCapturePayload } from "../chambers/ObsidianChamberRenderer"
+import LapisChamberRenderer from "../chambers/LapisChamberRenderer"
+import type { SubscriptionCapturePayload } from "../chambers/LapisChamberRenderer"
 import type { EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
 
 export type ChamberRouterProps = {
   encounter: RenderableEncounter
   registryTokenStyle: CSSProperties
   onNavigate: (surface: EncounterSurface) => void
-  // Shell provides this in Phase 4. Omitting disables assessment capture persistence.
+  // Shell provides these in Phase 4. Omitting disables capture persistence.
   onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<{ error: string | null }>
+  onCaptureSubscription?: (payload: SubscriptionCapturePayload) => Promise<{ error: string | null }>
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode
 }
@@ -24,12 +27,12 @@ export default function ChamberRouter(props: ChamberRouterProps) {
     return <ObsidianChamberRenderer {...props} />
   }
 
+  if (chamberAssignment === "lapis") {
+    return <LapisChamberRenderer {...props} />
+  }
+
   // Known environments — renderer gap (not yet implemented)
-  if (
-    chamberAssignment === "crystal_seat" ||
-    chamberAssignment === "lapis" ||
-    chamberAssignment === "marble"
-  ) {
+  if (chamberAssignment === "crystal_seat" || chamberAssignment === "marble") {
     return (
       <main
         className="measures-registry-runtime"
