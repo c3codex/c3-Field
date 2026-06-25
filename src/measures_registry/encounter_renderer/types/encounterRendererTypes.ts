@@ -95,7 +95,20 @@ export type TransitionNode = {
   [key: string]: unknown
 }
 
-// Encounter profile — loaded rendering state for a single surface
+// Composed encounter — fully assembled state before gate evaluation
+
+export type ComposedEncounter = {
+  surface: EncounterSurface
+  registryKey: string
+  registryRow: RegistryRow
+  encounterDef: EncounterDefRow | null
+  mediaByRole: Map<string, EncounterMediaRow>
+  transitionNodes: Record<string, TransitionNode>
+  materialIdentity: MaterialIdentity
+  chamberAssignment: ChamberAssignment
+}
+
+// Encounter profile — composed encounter with gate result attached
 
 export type EncounterProfile = {
   surface: EncounterSurface
