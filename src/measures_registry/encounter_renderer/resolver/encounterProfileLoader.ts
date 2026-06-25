@@ -1,10 +1,10 @@
 import type {
   ChamberAssignment,
-  EncounterProfile,
-  EncounterProfileResult,
   EncounterSurface,
   MaterialIdentity,
   RegistryResolverData,
+  RenderableEncounter,
+  RenderableEncounterResult,
 } from "../types/encounterRendererTypes"
 import { composeEncounter } from "../composition/encounterComposition"
 import { checkReleaseGate } from "./releaseGate"
@@ -20,24 +20,24 @@ const VALID_CHAMBER_ASSIGNMENTS = new Set<string>([
 ])
 
 // Orchestration only. Finds seated data, delegates assembly to composition
-// layer, applies release gate, returns loaded profile or fail-closed result.
+// layer, applies release gate, returns renderable encounter or fail-closed result.
 export function loadEncounterProfile(
   surface: EncounterSurface,
   resolverData: RegistryResolverData,
-): EncounterProfileResult {
+): RenderableEncounterResult {
   // 1. Surface assignment
   const assignment = resolverData.surfaceAssignmentRows.find((r) => r.surface_key === surface)
   if (!assignment) {
-    return { loaded: false, reason: "missing_surface_assignment" }
+    return { renderable: false, reason: "missing_surface_assignment" }
   }
 
   // 2. Validate DB-carried type values
   const { material_identity, chamber_assignment } = assignment
   if (!VALID_MATERIAL_IDENTITIES.has(material_identity)) {
-    return { loaded: false, reason: `invalid_material_identity:${material_identity}` }
+    return { renderable: false, reason: `invalid_material_identity:${material_identity}` }
   }
   if (!VALID_CHAMBER_ASSIGNMENTS.has(chamber_assignment)) {
-    return { loaded: false, reason: `invalid_chamber_assignment:${chamber_assignment}` }
+    return { renderable: false, reason: `invalid_chamber_assignment:${chamber_assignment}` }
   }
 
   const materialIdentity = material_identity as MaterialIdentity
@@ -48,7 +48,7 @@ export function loadEncounterProfile(
     (r) => r.registry_key === assignment.registry_key,
   )
   if (!registryRow) {
-    return { loaded: false, reason: "missing_registry_record" }
+    return { renderable: false, reason: "missing_registry_record" }
   }
 
   // 4. Encounter composition
@@ -61,12 +61,13 @@ export function loadEncounterProfile(
     resolverData,
   )
 
-  // 5. Release gate — evaluated against registry standing after composition
+  // 5. Release gate — evaluated against registry standing after composition.
+  // Gate failure returns renderable:false; held state never reaches a chamber renderer.
   const gateResult = checkReleaseGate(registryRow)
   if (gateResult.status !== "released") {
-    return { loaded: false, reason: `gate_held:${gateResult.reason}` }
+    return { renderable: false, reason: `gate_held:${gateResult.reason}` }
   }
 
-  const profile: EncounterProfile = { ...composed, gateResult }
-  return { loaded: true, profile }
+  const encounter: RenderableEncounter = { ...composed, gateResult }
+  return { renderable: true, encounter }
 }

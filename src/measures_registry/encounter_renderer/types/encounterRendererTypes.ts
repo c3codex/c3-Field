@@ -108,23 +108,33 @@ export type ComposedEncounter = {
   chamberAssignment: ChamberAssignment
 }
 
-// Encounter profile — composed encounter with gate result attached
+// Renderable encounter — composed encounter after release gate passes.
+// gateResult is narrowed to released only; held state cannot reach this type.
+// Chamber renderers and chamber router accept only RenderableEncounter.
 
-export type EncounterProfile = {
+export type RenderableEncounter = {
   surface: EncounterSurface
   registryKey: string
   registryRow: RegistryRow
-  gateResult: GateResult
   encounterDef: EncounterDefRow | null
   mediaByRole: Map<string, EncounterMediaRow>
   transitionNodes: Record<string, TransitionNode>
   materialIdentity: MaterialIdentity
   chamberAssignment: ChamberAssignment
+  gateResult: { status: "released" }
 }
 
-export type EncounterProfileResult =
-  | { loaded: true; profile: EncounterProfile }
-  | { loaded: false; reason: string }
+// Held encounter state — surface key and sanitized reason only.
+// Must not expose internal registry standing or gate internals.
+
+export type HeldEncounterState = {
+  surface: EncounterSurface
+  reason: string
+}
+
+export type RenderableEncounterResult =
+  | { renderable: true; encounter: RenderableEncounter }
+  | { renderable: false; reason: string }
 
 // Chamber renderer props contract
 
