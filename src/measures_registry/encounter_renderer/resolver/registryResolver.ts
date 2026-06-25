@@ -115,7 +115,7 @@ export function useRegistryResolver(): RegistryResolverData {
           supabase
             .from("measures_encounter_surface_assignment")
             .select(
-              "surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes, is_active, release_state, access_state",
+              "surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes",
             ),
         ])
 

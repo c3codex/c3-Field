@@ -65,9 +65,6 @@ export type EncounterSurfaceAssignmentRow = {
   material_identity: string
   chamber_assignment: string
   public_routes: string[]
-  is_active: boolean
-  release_state: string
-  access_state: string | null
 }
 
 // Resolver output — all raw DB rows; no authority decisions
