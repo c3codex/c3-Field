@@ -68,7 +68,7 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
 // Renders the governance encounter environment from encounter data.
 // Assessment context (evaluation result, condition traces, organization)
 // is not in the encounter data model — those are session-held values.
-// When the shell wires governance context in Phase 4, this surface renders
+// When Encounter Boundary wires governance context, this surface renders
 // the full MAP pathway framing. Until then, renders what the encounter has.
 function MapIntegrityGovernance({
   encounter,

@@ -12,7 +12,7 @@ export type ChamberRouterProps = {
   encounter: RenderableEncounter
   registryTokenStyle: CSSProperties
   onNavigate: (surface: EncounterSurface) => void
-  // Shell provides these in Phase 4. Omitting disables capture persistence.
+  // Encounter Boundary provides these. Omitting disables capture persistence.
   onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<{ error: string | null }>
   onCaptureSubscription?: (payload: SubscriptionCapturePayload) => Promise<{ error: string | null }>
   onCaptureConnect?: (payload: ConnectCapturePayload) => Promise<{ error: string | null }>

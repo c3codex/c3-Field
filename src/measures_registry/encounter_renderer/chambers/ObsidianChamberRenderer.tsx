@@ -21,8 +21,8 @@ import {
   selectedConditionTraces,
 } from "../../registered_runtime/registeredRuntimeUtils"
 
-// Payload passed to the shell for contact capture persistence.
-// Shell owns the DB write; chamber owns the form state and presentation.
+// Payload passed to Encounter Boundary for contact capture persistence.
+// Encounter Boundary owns the DB write; chamber owns the form state and presentation.
 export type AssessmentCapturePayload = {
   institutionName: string
   contactName: string
@@ -35,7 +35,7 @@ export type ObsidianChamberProps = {
   encounter: RenderableEncounter
   registryTokenStyle: CSSProperties
   onNavigate: (surface: EncounterSurface) => void
-  // Optional until shell integration (Phase 4). Omitting disables DB capture.
+  // Optional until Encounter Boundary wires the callback. Omitting disables DB capture.
   onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<{ error: string | null }>
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode

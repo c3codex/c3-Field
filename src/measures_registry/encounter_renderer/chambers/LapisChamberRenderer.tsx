@@ -8,8 +8,8 @@ import {
   asString,
 } from "../../registered_runtime/registeredRuntimeUtils"
 
-// Payload for shell-owned subscription capture write.
-// Shell provides onCaptureSubscription in Phase 4. Omitting disables capture persistence.
+// Payload for Encounter Boundary subscription capture write.
+// Encounter Boundary provides onCaptureSubscription. Omitting disables capture persistence.
 export type SubscriptionCapturePayload = {
   email: string
   organization: string | null
@@ -387,7 +387,7 @@ function UnDriftedIndex({
           </section>
         ) : null}
 
-        {/* SUBSCRIPTION — only rendered when shell provides the capture callback */}
+        {/* SUBSCRIPTION — only rendered when Encounter Boundary provides the capture callback */}
         {onCaptureSubscription ? (
           <section
             className="registry-publication-subscribe-capture"

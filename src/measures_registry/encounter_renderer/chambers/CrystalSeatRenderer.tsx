@@ -9,8 +9,8 @@ import {
   asStringArray,
 } from "../../registered_runtime/registeredRuntimeUtils"
 
-// Payload for shell-owned connect capture write.
-// Shell provides onCaptureConnect in Phase 4. Omitting disables capture persistence.
+// Payload for Encounter Boundary connect capture write.
+// Encounter Boundary provides onCaptureConnect. Omitting disables capture persistence.
 export type ConnectCapturePayload = {
   fields: Record<string, string>
 }
