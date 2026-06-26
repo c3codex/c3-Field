@@ -20,6 +20,9 @@ const ENCOUNTER_REGISTRY_KEYS = [
   "about_measures_registry",
   "structural_drift_publication",
   "measures_registry_root",
+  "crystal_seat_orientation_passage",
+  "obsidian_chamber_orientation_passage",
+  "marble_chamber_orientation_passage",
 ] as const
 
 const ENCOUNTER_DEF_KEYS = [
@@ -32,6 +35,9 @@ const ENCOUNTER_DEF_KEYS = [
   "structure_passage",
   "about_measures_registry",
   "structural_drift_publication",
+  "crystal_seat_orientation_passage",
+  "obsidian_chamber_orientation_passage",
+  "marble_chamber_orientation_passage",
 ] as const
 
 const MEDIA_CAMPAIGN_KEYS = [

@@ -65,7 +65,7 @@ export default function ObsidianChamberRenderer(props: ObsidianChamberProps) {
   const { encounter } = props
   const { surface } = encounter
 
-  if (surface === "eval_passage" || surface === "structural_coherence_explainer") {
+  if (surface === "eval_passage" || surface === "structural_coherence_explainer" || surface === "obsidian_chamber_orientation_passage") {
     return <EvalPassage {...props} />
   }
   if (surface === "measures_assessment") {

@@ -25,6 +25,9 @@ export type EncounterSurface =
   | "structure_passage"
   | "structural_drift_dispatches"
   | "publication_dispatch"
+  | "crystal_seat_orientation_passage"
+  | "obsidian_chamber_orientation_passage"
+  | "marble_chamber_orientation_passage"
 
 // DB row types
 

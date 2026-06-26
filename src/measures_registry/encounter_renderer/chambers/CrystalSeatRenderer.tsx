@@ -61,7 +61,7 @@ export default function CrystalSeatRenderer(props: CrystalSeatProps) {
   if (surface === "path_choice") {
     return <PathChoiceSeat {...props} />
   }
-  if (surface === "structure_passage") {
+  if (surface === "structure_passage" || surface === "crystal_seat_orientation_passage") {
     return <StructurePassageSeat {...props} />
   }
   if (surface === "about_measures_registry") {
