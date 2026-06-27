@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import Temple from "../measures_of_inanna/Temple"
-import MeasuresRegistryRuntime from "../measures_registry/registered_runtime/MeasuresRegistryRuntimeRegistered"
+import MeasuresRegistryRuntime from "../measures_registry/encounter_renderer/MeasuresRegistryOrchestrator"
 
 type PageMetadata = {
   title: string

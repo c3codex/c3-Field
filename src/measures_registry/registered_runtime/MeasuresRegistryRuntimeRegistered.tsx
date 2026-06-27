@@ -1,3 +1,7 @@
+// ROLLBACK_ONLY — not_active_route_authority
+// Active public path is MeasuresRegistryOrchestrator (FREE encounter renderer).
+// This file is preserved as rollback target and audit trace only.
+// OAR: docs/oar/measures_registry/oar2_complete_free_cutover_and_decommission_registered_runtime_active_path_v1.meta.md
 import "./styles/registry.encounter.css"
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties, FormEvent } from "react"

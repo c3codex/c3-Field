@@ -29,6 +29,10 @@ export type AssessmentCapturePayload = {
   contactEmail: string
   evaluationAnswers: Record<string, unknown>
   conditionTraces: AssessmentConditionTrace[]
+  // Full form state — orchestrator uses for consent flags, role, website, etc.
+  allFields: Record<string, string>
+  emailArtifact: AssessmentEmailArtifact | null
+  report: EnvironmentalStandingReport | null
 }
 
 export type ObsidianChamberProps = {
@@ -320,6 +324,9 @@ function MeasuresAssessment({
           Object.entries(evalAnswers).filter(([, a]) => a.selected),
         ),
         conditionTraces: traces,
+        allFields: evalFields,
+        emailArtifact: evalEmailArtifact,
+        report: evalReport,
       }
       const { error } = await onCaptureAssessment(payload)
       setEvalSubmitting(false)
