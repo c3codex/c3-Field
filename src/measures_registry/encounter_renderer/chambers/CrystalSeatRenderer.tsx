@@ -437,8 +437,10 @@ function StructurePassageSeat({
   const [muted, setMuted] = useState(true)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
-  const title =
-    asString(meta?.title) ?? encounter.encounterDef?.display_title ?? "Measures Registry"
+  const unseeded = asString(meta?.status_note)?.includes("Seated without final public copy") ?? false
+  const title = asString(meta?.title)
+    ?? (unseeded ? null : encounter.encounterDef?.display_title)
+    ?? "Measures Registry"
   const passageVideoUrl = mediaUrl(encounter.mediaByRole.get("structured_environment_passage_video"))
   const next = resolveNextSurface(encounter)
 

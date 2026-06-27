@@ -109,7 +109,10 @@ function EvalPassage({
 }: ObsidianChamberProps) {
   const [muted, setMuted] = useState(true)
 
-  const title = encounter.encounterDef?.display_title ?? "Before evaluation, recognize the environment."
+  const meta = asRecord(encounter.encounterDef?.metadata)
+  const unseeded = asString(meta?.status_note)?.includes("Seated without final public copy") ?? false
+  const title = (unseeded ? null : encounter.encounterDef?.display_title)
+    ?? "Before evaluation, recognize the environment."
   const videoUrl = mediaUrl(encounter.mediaByRole.get("explainer_video"))
   const next = resolveNextSurface(encounter)
 
@@ -339,7 +342,6 @@ function MeasuresAssessment({
     }
 
     setEvalSubmitted(true)
-    if (next) onNavigate(next as EncounterSurface)
   }
 
   function handleEnterStructuredEnvironment() {
