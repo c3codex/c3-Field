@@ -1,4 +1,4 @@
-import "./styles/registry.runtime.css"
+import "./styles/registry.encounter.css"
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties, FormEvent } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
