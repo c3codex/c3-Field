@@ -617,8 +617,10 @@ export default function MeasuresRegistryRuntimeRegistered() {
       }
 
       const normalizedWebsite = normalizeAssessmentWebsite(evalFields.website)
+      const captureId = crypto.randomUUID()
 
-      const { data: captureData, error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
+      const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
+        id: captureId,
         institution_name: evalFields.institution_name?.trim() ?? "",
         institution_address: normalizedWebsite,
         institution_phone: "",
@@ -695,7 +697,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
           contact_gated_result_delivery: true,
           passage_autoloads_after_submit: true,
         },
-      }).select("id").single()
+      })
 
       setEvalSubmitting(false)
 
@@ -704,7 +706,7 @@ export default function MeasuresRegistryRuntimeRegistered() {
         return
       }
 
-      if (captureData?.id) setEvalCaptureId(captureData.id)
+      setEvalCaptureId(captureId)
       setEvalSubmitted(true)
       return
     }
