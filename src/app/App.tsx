@@ -63,6 +63,20 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
   },
+  "/privacy": {
+    title: "Privacy Policy | Measures Registry",
+    description: "How Measures Registry collects, uses, and protects your information.",
+    url: "https://measuresregistry.com/privacy",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
+  "/terms": {
+    title: "Terms of Use | Measures Registry",
+    description: "Terms governing use of Measures Registry and the services of C3 COMMUNITY PARTNERS DAO LLC.",
+    url: "https://measuresregistry.com/terms",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
 }
 
 const REGISTRY_ROUTE_UNITS: Record<string, string> = {

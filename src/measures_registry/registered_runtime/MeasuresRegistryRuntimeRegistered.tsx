@@ -36,6 +36,8 @@ import RegisteredPublicAssessment from "./renderers/RegisteredPublicAssessment"
 import RegisteredPublicUnderstand from "./renderers/RegisteredPublicUnderstand"
 import RegisteredAssessmentLanding from "./renderers/RegisteredAssessmentLanding"
 import RegisteredAboutMeasuresRegistry from "./renderers/RegisteredAboutMeasuresRegistry"
+import RegisteredPrivacy from "./renderers/RegisteredPrivacy"
+import RegisteredTerms from "./renderers/RegisteredTerms"
 import LapisChamberRuntime from "./chambers/LapisChamberRuntime"
 import MarbleChamberRuntime from "./chambers/MarbleChamberRuntime"
 
@@ -100,6 +102,8 @@ const SURFACE_QUERY: Record<RegisteredSurface, string> = {
   structure_passage: "structure_passage",
   structural_drift_dispatches: "structural_drift_publication",
   publication_dispatch: "publication_dispatch",
+  privacy: "privacy",
+  terms: "terms",
 }
 
 const STRUCTURAL_DRIFT_DISPATCHES_ROUTE = "/publication/structural_drift"
@@ -112,6 +116,8 @@ const ROUTE_SURFACE_ALIASES: Record<string, RegisteredSurface> = {
   "/map-integrity-governance": "map_integrity_governance",
   "/about": "about_measures_registry",
   "/about-measures-registry": "about_measures_registry",
+  "/privacy": "privacy",
+  "/terms": "terms",
 }
 
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<RegisteredSurface, string>> = {
@@ -120,6 +126,8 @@ const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<RegisteredSurface, string>> = {
   map_integrity_governance: "/map-integrity-governance",
   structural_drift_dispatches: "/undrifted",
   publication_dispatch: STRUCTURAL_DRIFT_DISPATCHES_ROUTE,
+  privacy: "/privacy",
+  terms: "/terms",
 }
 
 const ROUTE_UNIT_KEYS: Record<string, string> = {
@@ -798,6 +806,13 @@ export default function MeasuresRegistryRuntimeRegistered() {
             {branchUrl ? <a href={branchUrl}>{branchLabel}</a> : <span>{branchLabel}</span>}
           </p>
         ) : null}
+        <nav className="registry-footer-legal-links" aria-label="Legal">
+          <a href="/privacy" onClick={(e) => { e.preventDefault(); navigate("privacy") }}>Privacy</a>
+          <span aria-hidden="true">·</span>
+          <a href="/terms" onClick={(e) => { e.preventDefault(); navigate("terms") }}>Terms</a>
+          <span aria-hidden="true">·</span>
+          <a href="/about" onClick={(e) => { e.preventDefault(); navigate("about_measures_registry") }}>Contact</a>
+        </nav>
       </footer>
     )
   }
@@ -1143,6 +1158,22 @@ export default function MeasuresRegistryRuntimeRegistered() {
         onGoToEvalPassage={() => navigate(routeCtaSurface ?? "eval_passage")}
         onAboutMeasuresRegistry={() => navigate("about_measures_registry")}
         roleCallUrl={roleCallUrl}
+      />
+    )
+  } else if (activeSurface === "privacy") {
+    activeSurfaceElement = (
+      <RegisteredPrivacy
+        registryTokenStyle={launchMediaStyle}
+        renderHeader={() => renderHeader({ title: "Measures Registry" })}
+        renderSystemFooter={renderSystemFooter}
+      />
+    )
+  } else if (activeSurface === "terms") {
+    activeSurfaceElement = (
+      <RegisteredTerms
+        registryTokenStyle={launchMediaStyle}
+        renderHeader={() => renderHeader({ title: "Measures Registry" })}
+        renderSystemFooter={renderSystemFooter}
       />
     )
   } else {

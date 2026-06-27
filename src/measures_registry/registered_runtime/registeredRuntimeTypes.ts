@@ -13,6 +13,8 @@ export type RegisteredSurface =
   | "structure_passage"
   | "structural_drift_dispatches"
   | "publication_dispatch"
+  | "privacy"
+  | "terms"
 
 export type LandingSectionRow = {
   encounter_key: string
