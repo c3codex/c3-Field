@@ -187,6 +187,9 @@ export function PublicAssessmentSurface({
     asString(assessmentContactCaptureContract?.public_helper_copy) ??
     asString(contactForm?.public_helper_copy) ??
     "Enter your information to receive the assessment evaluation and recommended actions."
+  const assessmentSubmissionNotice = asString(assessmentContactCaptureContract?.assessment_submission_notice)
+  const privacyNotice = asString(assessmentContactCaptureContract?.privacy_notice)
+  const termsNotice = asString(assessmentContactCaptureContract?.terms_notice)
   const renderContactField = (field: Record<string, unknown>) => {
     const key = asString(field.field_key)
     const label = asString(field.public_label)
@@ -349,6 +352,9 @@ export function PublicAssessmentSurface({
                asString(contactForm?.standing_boundary_note) ??
                "This assessment does not create approval, enrollment, implementation, or verified registry status. It provides an operational evaluation and a recommended next step."}
             </p>
+            {assessmentSubmissionNotice ? (
+              <p className="registry-consent-submission-notice">{assessmentSubmissionNotice}</p>
+            ) : null}
             <fieldset>
               <legend>Contact and Consent</legend>
               {contactFields.length > 0 ? (
@@ -357,6 +363,12 @@ export function PublicAssessmentSurface({
                 <p className="registry-media-absence">Contact capture contract is not seated.</p>
               )}
             </fieldset>
+            {(privacyNotice || termsNotice) ? (
+              <div className="registry-consent-legal-notices">
+                {privacyNotice ? <p>{privacyNotice}</p> : null}
+                {termsNotice ? <p>{termsNotice}</p> : null}
+              </div>
+            ) : null}
             {evalError ? <p className="registry-form-error">{evalError}</p> : null}
             <div className="registry-diagnostic-passage-controls">
               <button type="submit" disabled={evalSubmitting || contactFields.length === 0}>
