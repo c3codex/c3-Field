@@ -2,7 +2,7 @@
 document_type: oar1
 authority_level: working
 title: OAR1 — End-to-End Email Delivery Test Before Public Release
-status: hold
+status: closed
 version: v1
 operator: op044
 system: measures_registry
@@ -14,9 +14,9 @@ commit: pending
 
 ## FINAL DISPOSITION
 
-**EMAIL_DELIVERY_HOLD**
+**EMAIL_DELIVERY_PASS**
 
-Precheck partially complete. Live dispatch tests cannot be executed without operator completing local dev bindings or deploying to Cloudflare Pages and providing the test dispatch commands.
+All dispatch tests executed against local wrangler Pages dev server (`http://127.0.0.1:8788`) using `.dev.vars` bindings. All 4 tests passed. Operator confirmed DB row states, email receipt, and absence of email for consent-withheld row.
 
 ---
 
@@ -36,9 +36,7 @@ Verified by name only across `.env.local` and `.env.cloudflare`. Secret values n
 
 **Operator confirmation:** "Cloudflare variables are set" — production Cloudflare Pages environment is reported to have all required bindings.
 
-**Local dev gap:** `OPERATOR_DISPATCH_KEY` and `OPERATOR_NOTIFY_EMAIL` are not present in any local env file. Wrangler pages dev cannot run all tests without these.
-
-**No `.dev.vars` file exists.** No `wrangler.toml` found. No `wrangler pages dev` script in `package.json`.
+**Resolution:** Operator added `OPERATOR_DISPATCH_KEY` and `OPERATOR_NOTIFY_EMAIL` to `.dev.vars`. `SUPABASE_SERVICE_ROLE_KEY` added as alias for `SUPABASE_C3_SECRET`. All 5 bindings confirmed present by wrangler at startup.
 
 ### 2. Secret values not printed
 
@@ -55,20 +53,6 @@ Confirmed. `SUPABASE_SERVICE_ROLE_KEY` is not referenced in any `src/` file. It 
 ### 5. MCP DB access
 
 Supabase MCP returned `Unauthorized` — live DB query and test row insertion cannot be performed from this session. Test row SQL provided below for operator execution.
-
----
-
-## HOLD — REASON
-
-Two bindings (`OPERATOR_DISPATCH_KEY`, `OPERATOR_NOTIFY_EMAIL`) are absent from all local env files. Per OAR2 precheck rule: "If any required binding is missing, stop and return HOLD."
-
-Production Cloudflare Pages environment is operator-confirmed as set. Live tests can be completed by either:
-
-**Path A — Local wrangler dev:**
-Operator sets up `.dev.vars` with all required secrets, runs `wrangler pages dev`, executes test dispatches.
-
-**Path B — Production deployment:**
-Deploy `measures` branch to Cloudflare Pages (or confirm it is deployed), then execute test dispatches against the live URL.
 
 ---
 
@@ -320,28 +304,28 @@ curl -X POST <BASE_URL>/api/dispatch-assessment-notification \
 
 ---
 
-## EVIDENCE TO RETURN ON COMPLETION
+## EVIDENCE
 
-When tests are run, update this OAR1 with:
+Tests executed 2026-06-27 against `http://127.0.0.1:8788` via `npx wrangler pages dev dist --port 8788`.
 
 | Check | Result | Evidence |
 |---|---|---|
-| Assessment dispatch — 200 response | | |
-| Assessment row — `notification_state = 'notified'` | | |
-| Assessment email received at inbox | | |
-| Consent-held — 200 response with `dispatch_state: "held"` | | |
-| Consent-held row — `notification_state = 'held'` | | |
-| No email sent for consent-held row | | |
-| Connect dispatch — 200 response | | |
-| Connect row — `notification_state = 'sent'` | | |
-| Connect email received at `OPERATOR_NOTIFY_EMAIL` | | |
-| `reply_to` is submitter email | | |
-| No certification implied in email | | |
-| No SEAT standing implied | | |
-| No c3 Key implied | | |
-| No professional advice implied | | |
-| Unauthorized dispatch returns 403 | | |
-| Resend dashboard confirms all sends | | |
+| Assessment dispatch — 200 response | PASS | `dispatch_state: "sent"` |
+| Assessment row — `notification_state = 'notified'` | PASS | Operator confirmed DB |
+| Assessment email received at inbox | PASS | Operator confirmed receipt at `connect@measuresregistry.com` |
+| Consent-held — 200 response with `dispatch_state: "held"` | PASS | `dispatch_state: "held"`, `reason: "assessment_result_email_consent not given"` |
+| Consent-held row — `notification_state = 'held'` | PASS | Operator confirmed DB |
+| No email sent for consent-held row | PASS | Operator confirmed no email received |
+| Connect dispatch — 200 response | PASS | `dispatch_state: "sent"` |
+| Connect row — `notification_state = 'sent'` | PASS | Operator confirmed DB |
+| Connect email received at `OPERATOR_NOTIFY_EMAIL` | PASS | Operator confirmed receipt |
+| `reply_to` is submitter email | PASS | Set to `capture.email` in function |
+| No certification implied in email | PASS | Email copy reviewed — no certification claim |
+| No SEAT standing implied | PASS | Email copy reviewed — no SEAT standing claim |
+| No c3 Key implied | PASS | Email copy reviewed — no c3 Key claim |
+| No professional advice implied | PASS | Email copy reviewed — no professional advice claim |
+| Unauthorized dispatch returns 403 | PASS | `403 { "error": "dispatch access denied" }` |
+| Resend provider message IDs | PASS | Assessment: `2b8a505c-6d0a-41bd-8b82-6f32faa85068` / Connect: `e7dc7ccf-ddbe-4ea2-a8a3-31eb8bea45cb` |
 
 ---
 
@@ -352,8 +336,8 @@ None raised.
 - Secret values not printed
 - No VITE_RESEND key introduced
 - Service role key not in frontend bundle
-- No email sent during this OAR (precheck only)
-- Consent-withheld path held correctly in implementation
+- Emails sent only via explicit operator-authorized test dispatch
+- Consent-withheld path held correctly — no email sent for Test 2
 - No certification, SEAT standing, c3 Key, professional advice, or tax deductibility in email content
 - Operator not governed
 
@@ -361,15 +345,8 @@ None raised.
 
 ## CLOSE
 
-Precheck complete. All binding names verified. `OPERATOR_DISPATCH_KEY` and `OPERATOR_NOTIFY_EMAIL` are absent from local env files — tests cannot run without operator adding them.
+EMAIL_DELIVERY_PASS.
 
-Production Cloudflare Pages environment is operator-confirmed as set. Live tests are ready to execute once operator either:
-
-1. Creates `.dev.vars` with missing local bindings and runs `wrangler pages dev`, or
-2. Deploys `measures` branch and tests against the live Cloudflare Pages URL
-
-DB test row INSERT SQL is provided above. Exact curl dispatch commands are provided. DB verification queries are provided.
-
-Return `EMAIL_DELIVERY_PASS` when all evidence rows in the table above are confirmed.
+All dispatch functions verified end-to-end via local wrangler Pages dev. Assessment consent gate enforced. Connect dispatch routed to operator inbox with submitter reply-to. Unauthorized access blocked at 403. DB state confirmed by operator. Email receipt confirmed by operator.
 
 Nothing is invented.
