@@ -106,3 +106,23 @@ Required order registered:
 `EncounterBoundary → role_call → Chamber assembles → Role authorizes → Passage moves → Renderer manifests → Optics proves`
 
 FREE currently renders by chamber assignment (steps 1 + 3 + 6). role_call (step 2) and role authorization (step 4) are not yet wired. FREE repair OAR defines that repair.
+
+---
+
+## WHAT THIS DOES NOT FIX
+
+This OAR registers authority. It does not wire it.
+
+FREE does not read `native_role_registry` or `role_call_standing`. No reader exists in the renderer. Chamber assignment alone still governs dispatch.
+
+Unresolved gaps in FREE role resolution:
+
+| Gap | Current FREE behavior | Required |
+|---|---|---|
+| `sectionCopy()` equivalent absent | Required field lists, consent field binding, contract reconciliation gate not DB-driven | Parse from encounter def metadata via native field names |
+| Metadata key mismatch | `assessment_contact_capture_contract` (FREE) vs `assessment_contact_capture_oar1_binding_contract_v1` (DB) | Align key names or migrate DB fields to native keys |
+| `activeContractKeyReconciliation` gate absent | FREE uses `mechanics.length > 0` as the only readiness check | Resolve active agreement reconciliation before rendering assessment |
+| `publicRuntimeBoundary` not passed | `PublicAssessmentSurface` does not receive public encounter boundary | Pass resolved boundary from encounter def metadata |
+| `routeCtaSurface` absent | No per-route CTA surface override | Evaluate whether DB-governed CTA override is required in FREE or transition nodes are sufficient |
+
+These gaps are not raised as NotChazz. They are carry-forward items for the FREE repair OAR.
