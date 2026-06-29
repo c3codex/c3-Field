@@ -395,8 +395,8 @@ function MeasuresAssessment({
           : undefined
       }
       assessmentCompletion={asRecord(meta?.assessment_completion)}
-      assessmentContactCaptureContract={asRecord(meta?.assessment_contact_capture_contract)}
-      assessmentEvaluationReportContract={asRecord(meta?.assessment_evaluation_report_contract)}
+      assessmentContactCaptureContract={asRecord(meta?.assessment_contact_capture_oar1_binding_contract_v1)}
+      assessmentEvaluationReportContract={asRecord(meta?.assessment_evaluation_report_contract_v1)}
       renderSystemFooter={renderSystemFooter}
       onBackQuestion={() => setEvalSectionIndex((i) => Math.max(0, i - 1))}
       onBeginPathwayReview={() => {

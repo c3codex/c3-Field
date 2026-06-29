@@ -6,6 +6,7 @@ import type {
   MaterialIdentity,
   RegistryResolverData,
   RegistryRow,
+  RoleCallStanding,
   TransitionNode,
 } from "../types/encounterRendererTypes"
 
@@ -54,6 +55,15 @@ export function composeEncounter(
   )
   const transitionNodes = extractTransitionNodes(rootRow?.metadata ?? null)
 
+  const rootMeta = asRecord(rootRow?.metadata ?? null)
+  const standing = asRecord(rootMeta?.role_call_standing) ?? null
+  const roleCallStanding: RoleCallStanding = {
+    standing,
+    nativeRoleRegistry: asRecord(rootMeta?.native_role_registry) ?? null,
+    passageModes: asRecord(standing?.passage_modes) ?? null,
+    legacyFieldMapping: asRecord(rootMeta?.legacy_implementation_field_mapping) ?? null,
+  }
+
   return {
     surface,
     registryKey: assignment.registry_key,
@@ -63,5 +73,6 @@ export function composeEncounter(
     transitionNodes,
     materialIdentity,
     chamberAssignment,
+    roleCallStanding,
   }
 }

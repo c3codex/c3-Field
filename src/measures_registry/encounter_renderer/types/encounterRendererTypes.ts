@@ -98,6 +98,16 @@ export type TransitionNode = {
   [key: string]: unknown
 }
 
+// role_call standing read from measures_registry_root.
+// Structural encounter authorities only — not login, gating, or access control.
+
+export type RoleCallStanding = {
+  standing: Record<string, unknown> | null
+  nativeRoleRegistry: Record<string, unknown> | null
+  passageModes: Record<string, unknown> | null
+  legacyFieldMapping: Record<string, unknown> | null
+}
+
 // Composed encounter — fully assembled state before gate evaluation
 
 export type ComposedEncounter = {
@@ -109,6 +119,7 @@ export type ComposedEncounter = {
   transitionNodes: Record<string, TransitionNode>
   materialIdentity: MaterialIdentity
   chamberAssignment: EncounterEnvironmentAssignment
+  roleCallStanding: RoleCallStanding
 }
 
 // Renderable encounter — composed encounter after release gate passes.
@@ -124,6 +135,7 @@ export type RenderableEncounter = {
   transitionNodes: Record<string, TransitionNode>
   materialIdentity: MaterialIdentity
   chamberAssignment: EncounterEnvironmentAssignment
+  roleCallStanding: RoleCallStanding
   gateResult: { status: "released" }
 }
 
