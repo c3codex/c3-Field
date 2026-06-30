@@ -197,7 +197,7 @@ function IntroHookSeat({
               aria-label={epigraphFailed ? "Continue" : "Enter"}
               onClick={handleEnter}
             >
-              {epigraphFailed || !epigraphVideoUrl ? "Continue" : null}
+              {epigraphFailed ? "Continue" : "Enter"}
             </button>
           ) : null}
           {epigraphEntered && !epigraphFailed && epigraphVideoUrl && epigraphMuted ? (

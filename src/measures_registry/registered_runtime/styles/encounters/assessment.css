@@ -4,7 +4,7 @@
 .measures-registry-runtime .registry-iis-eval.registry-assessment-chamber {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: calc(100svh - clamp(3rem, 5.4vw, 3.65rem));
   padding: calc(var(--registry-header-height, 3rem) + clamp(0.45rem, 1.2vw, 0.8rem))
     var(--registry-page-padding-active)
@@ -361,15 +361,12 @@
   opacity: 0.6;
 }
 
-/* ── CONTACT CAPTURE — contained scroll ──────────────────────────────────── */
+/* ── CONTACT CAPTURE — page scrolls, no inner containment ───────────────── */
 .measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval.registry-assessment-chamber {
   justify-content: flex-start;
-  overflow-y: auto;
 }
 
 .measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form.registry-contact-capture {
-  max-height: calc(100svh - var(--registry-header-height, 3rem) - clamp(1rem, 3vw, 2rem));
-  overflow-y: auto;
   padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
 }
 
