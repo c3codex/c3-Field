@@ -1,6 +1,7 @@
 import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
 import { useState } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
+import { PublicAssessmentResult } from "../../PublicAssessmentResult"
 import { PublicAssessmentSurface } from "../../PublicAssessmentSurface"
 import type { EncounterMediaRow, EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
 import type {
@@ -163,6 +164,14 @@ function EvalPassage({
 
 // --- obsidian_to_marble_passage_video ---------------------------------------
 
+type PendingReport = {
+  report: EnvironmentalStandingReport | null
+  emailArtifact: AssessmentEmailArtifact | null
+  fields: Record<string, string>
+  assessmentCompletion: Record<string, unknown> | null
+  reportContract: Record<string, unknown> | null
+}
+
 function ObsidianToMarblePassage({
   encounter,
   registryTokenStyle,
@@ -171,6 +180,15 @@ function ObsidianToMarblePassage({
   renderSystemFooter,
 }: ObsidianChamberProps) {
   const [muted, setMuted] = useState(false)
+  const [passageComplete, setPassageComplete] = useState(false)
+  const [pendingReport] = useState<PendingReport | null>(() => {
+    try {
+      const raw = sessionStorage.getItem("__mreg_pending_report")
+      return raw ? (JSON.parse(raw) as PendingReport) : null
+    } catch {
+      return null
+    }
+  })
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const title = encounter.encounterDef?.display_title ?? asString(meta?.title) ?? "Before the Pathway"
@@ -179,8 +197,43 @@ function ObsidianToMarblePassage({
   const transcriptLines = asStringArray(meta?.passage_transcript)
   const ctaLabel = asString(asRecord(meta?.cta)?.label) ?? "Continue"
 
-  function handleContinue() {
+  function handlePassageComplete() {
+    setPassageComplete(true)
+  }
+
+  function handleBeginPathwayReview() {
     if (next) onNavigate(next as EncounterSurface)
+  }
+
+  if (passageComplete && pendingReport) {
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="obsidian_to_marble_passage_video"
+        data-material-family="obsidian"
+        data-layout-contract="result_gate"
+        data-release-standing="public"
+        style={registryTokenStyle}
+      >
+        {renderHeader({ title: "Measures Registry" })}
+        <section className="registry-iis-eval registry-assessment-chamber" aria-label="Assessment Evaluation Report">
+          <PublicAssessmentResult
+            assessmentCompletion={pendingReport.assessmentCompletion}
+            emailArtifact={pendingReport.emailArtifact}
+            passageMuted={muted}
+            report={pendingReport.report}
+            reportContract={pendingReport.reportContract}
+            reportFields={pendingReport.fields}
+            structuredEnvironmentPassageVideoUrl={null}
+            onBeginPathwayReview={handleBeginPathwayReview}
+            onEnterStructuredEnvironment={handleBeginPathwayReview}
+            onStructuredEnvironmentVideoEnded={handleBeginPathwayReview}
+            onTogglePassageMuted={() => setMuted((m) => !m)}
+          />
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
   }
 
   return (
@@ -209,7 +262,7 @@ function ObsidianToMarblePassage({
               playsInline
               preload="auto"
               aria-label="Before the Pathway"
-              onEnded={handleContinue}
+              onEnded={handlePassageComplete}
             />
           </div>
         ) : (
@@ -223,7 +276,7 @@ function ObsidianToMarblePassage({
           </div>
         ) : null}
         <div className="registry-diagnostic-passage-controls registry-report-controls">
-          <button type="button" onClick={handleContinue}>
+          <button type="button" onClick={handlePassageComplete}>
             {ctaLabel}
           </button>
           <button type="button" onClick={() => setMuted((m) => !m)}>
@@ -251,7 +304,6 @@ function MeasuresAssessment({
   const [evalAnswers, setEvalAnswers] = useState<Record<string, StructuredEvalAnswer>>({})
   const [evalError, setEvalError] = useState<string | null>(null)
   const [evalSubmitting, setEvalSubmitting] = useState(false)
-  const [evalSubmitted, setEvalSubmitted] = useState(false)
   const [evalSectionIndex, setEvalSectionIndex] = useState(0)
   const [evalReport, setEvalReport] = useState<EnvironmentalStandingReport | null>(null)
   const [evalEmailArtifact, setEvalEmailArtifact] = useState<AssessmentEmailArtifact | null>(null)
@@ -341,7 +393,7 @@ function MeasuresAssessment({
       setEvalSubmitting(false)
     }
 
-    // Store report for MAP session (standing_key + email read after passage).
+    // Store report for passage and MAP session (report read after passage, standing_key + email read by MAP).
     try {
       sessionStorage.setItem("__mreg_pending_report", JSON.stringify({
         report: evalReport,
@@ -352,7 +404,7 @@ function MeasuresAssessment({
       }))
     } catch { /* ignore */ }
 
-    setEvalSubmitted(true)
+    if (next) onNavigate(next as EncounterSurface)
   }
 
   function handleEnterStructuredEnvironment() {
@@ -378,7 +430,7 @@ function MeasuresAssessment({
       evalReport={evalReport}
       evalSectionIndex={evalSectionIndex}
       evalStep={evalStep}
-      evalSubmitted={evalSubmitted}
+      evalSubmitted={false}
       evalSubmitting={evalSubmitting}
       passageMuted={passageMuted}
       marbleAccentReferenceUrl={marbleAccentReferenceUrl}
