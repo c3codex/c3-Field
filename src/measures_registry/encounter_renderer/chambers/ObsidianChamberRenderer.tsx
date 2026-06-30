@@ -2,7 +2,6 @@ import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
 import { useState } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import { PublicAssessmentSurface } from "../../PublicAssessmentSurface"
-import { PublicAssessmentResult } from "../../PublicAssessmentResult"
 import type { EncounterMediaRow, EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
 import type {
   AssessmentConditionTrace,
@@ -164,14 +163,6 @@ function EvalPassage({
 
 // --- obsidian_to_marble_passage_video ---------------------------------------
 
-type PendingReport = {
-  report: EnvironmentalStandingReport | null
-  emailArtifact: AssessmentEmailArtifact | null
-  fields: Record<string, string>
-  assessmentCompletion: Record<string, unknown> | null
-  reportContract: Record<string, unknown> | null
-}
-
 function ObsidianToMarblePassage({
   encounter,
   registryTokenStyle,
@@ -180,62 +171,16 @@ function ObsidianToMarblePassage({
   renderSystemFooter,
 }: ObsidianChamberProps) {
   const [muted, setMuted] = useState(false)
-  const [passageComplete, setPassageComplete] = useState(false)
-  const [pendingReport] = useState<PendingReport | null>(() => {
-    try {
-      const raw = sessionStorage.getItem("__mreg_pending_report")
-      return raw ? (JSON.parse(raw) as PendingReport) : null
-    } catch { return null }
-  })
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const title = encounter.encounterDef?.display_title ?? asString(meta?.title) ?? "Before the Pathway"
   const videoUrl = mediaUrl(encounter.mediaByRole.get("before_the_pathway_obsidian_to_marble_passage_video"))
   const next = resolveNextSurface(encounter)
   const transcriptLines = asStringArray(meta?.passage_transcript)
-  const ctaLabel = asString(asRecord(meta?.cta)?.label) ?? "Begin Pathway Review"
+  const ctaLabel = asString(asRecord(meta?.cta)?.label) ?? "Continue"
 
   function handleContinue() {
-    if (pendingReport && !passageComplete) {
-      setPassageComplete(true)
-      return
-    }
     if (next) onNavigate(next as EncounterSurface)
-  }
-
-  // Correct encounter order: passage video → report → MAP.
-  if (passageComplete && pendingReport) {
-    return (
-      <main
-        className="measures-registry-runtime"
-        data-surface="obsidian_to_marble_passage_video"
-        data-material-family="obsidian"
-        data-layout-contract="assessment"
-        data-chamber-state="result_gate"
-        data-release-standing="public"
-        style={registryTokenStyle}
-      >
-        {renderHeader({ title: "Measures Registry" })}
-        <section className="registry-iis-eval registry-assessment-chamber" aria-label="Assessment Evaluation Report">
-          <PublicAssessmentResult
-            assessmentCompletion={pendingReport.assessmentCompletion ?? undefined}
-            emailArtifact={pendingReport.emailArtifact}
-            passageMuted={muted}
-            report={pendingReport.report}
-            reportContract={pendingReport.reportContract ?? undefined}
-            reportFields={pendingReport.fields}
-            structuredEnvironmentPassageVideoUrl={null}
-            onBeginPathwayReview={() => {
-              if (next) onNavigate(next as EncounterSurface)
-            }}
-            onEnterStructuredEnvironment={() => {}}
-            onStructuredEnvironmentVideoEnded={() => {}}
-            onTogglePassageMuted={() => setMuted((m) => !m)}
-          />
-        </section>
-        {renderSystemFooter()}
-      </main>
-    )
   }
 
   return (
@@ -396,8 +341,7 @@ function MeasuresAssessment({
       setEvalSubmitting(false)
     }
 
-    // Store report in session for display after marble passage.
-    // Correct order: contact capture → passage video → report → MAP.
+    // Store report for MAP session (standing_key + email read after passage).
     try {
       sessionStorage.setItem("__mreg_pending_report", JSON.stringify({
         report: evalReport,
@@ -408,10 +352,6 @@ function MeasuresAssessment({
       }))
     } catch { /* ignore */ }
 
-    if (next) {
-      onNavigate(next as EncounterSurface)
-      return
-    }
     setEvalSubmitted(true)
   }
 
