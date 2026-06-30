@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { CSSProperties, ReactNode } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type { EncounterMediaRow, EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
@@ -8,10 +9,17 @@ import {
   asStringArray,
 } from "../../registered_runtime/registeredRuntimeUtils"
 
+export type MapPaymentParams = {
+  mapPathway: string
+  mapStanding: string
+  contactEmail: string
+}
+
 export type MarbleChamberProps = {
   encounter: RenderableEncounter
   registryTokenStyle: CSSProperties
   onNavigate: (surface: EncounterSurface) => void
+  onInitiateMapPayment?: (params: MapPaymentParams) => Promise<{ error: string | null }>
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode
 }
@@ -41,7 +49,7 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
   const { surface } = props.encounter
 
   if (surface === "map_integrity_governance" || surface === "marble_chamber_orientation_passage") {
-    return <MapIntegrityGovernance {...props} />
+    return <MapIntegrityGovernance {...props} onInitiateMapPayment={props.onInitiateMapPayment} />
   }
 
   // Renderer gap: surface is marble-assigned but presentation not yet seated
@@ -65,18 +73,35 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
 
 // --- map_integrity_governance -----------------------------------------------
 
-// Renders the governance encounter environment from encounter data.
-// Assessment context (evaluation result, condition traces, organization)
-// is not in the encounter data model — those are session-held values.
-// When Encounter Boundary wires governance context, this surface renders
-// the full MAP pathway framing. Until then, renders what the encounter has.
+type MapSession = {
+  report: { standing_key?: string } | null
+  fields: Record<string, string>
+} | null
+
 function MapIntegrityGovernance({
   encounter,
   registryTokenStyle,
   onNavigate,
+  onInitiateMapPayment,
   renderHeader,
   renderSystemFooter,
 }: MarbleChamberProps) {
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const [emailInput, setEmailInput] = useState("")
+
+  // Read assessment session for standing key and contact email.
+  // Written by handleSubmitEvaluation after assessment contact capture.
+  const [mapSession] = useState<MapSession>(() => {
+    try {
+      const raw = sessionStorage.getItem("__mreg_pending_report")
+      return raw ? (JSON.parse(raw) as MapSession) : null
+    } catch { return null }
+  })
+
+  const standingKey = asString((mapSession?.report as Record<string, unknown> | null | undefined)?.standing_key) ?? ""
+  const contactEmail = asString(mapSession?.fields?.contact_email)?.trim() ?? ""
+
   const meta = asRecord(encounter.encounterDef?.metadata)
   const governanceHeader = asRecord(meta?.governance_header)
   const mapFraming = asRecord(meta?.map_framing)
@@ -106,6 +131,18 @@ function MapIntegrityGovernance({
   const marbleRiseUrl = mediaUrl(encounter.mediaByRole.get("installation_tone_marble_rise_return_v1"))
 
   const next = resolveNextSurface(encounter)
+
+  async function handlePayment(mapPathway: string) {
+    if (!onInitiateMapPayment) return
+    const email = contactEmail || emailInput.trim()
+    if (!email) { setCheckoutError("Email address is required."); return }
+    if (!standingKey) { setCheckoutError("Complete the AI Operations Assessment to begin MAP checkout."); return }
+    setCheckoutLoading(true)
+    setCheckoutError(null)
+    const { error } = await onInitiateMapPayment({ mapPathway, mapStanding: standingKey, contactEmail: email })
+    setCheckoutLoading(false)
+    if (error) setCheckoutError(error)
+  }
 
   return (
     <main
@@ -143,16 +180,47 @@ function MapIntegrityGovernance({
           </section>
         ) : null}
 
-        {/* PATHWAY CARDS — from seated encounter metadata */}
+        {/* PAYMENT STATE */}
+        {onInitiateMapPayment ? (
+          <>
+            {!standingKey ? (
+              <p className="registry-map-assessment-required">
+                Complete the AI Operations Assessment to receive your recommended MAP pathway and begin checkout.
+              </p>
+            ) : !contactEmail ? (
+              <div className="registry-map-email-entry">
+                <label htmlFor="map-checkout-email">Email for checkout</label>
+                <input
+                  id="map-checkout-email"
+                  type="email"
+                  value={emailInput}
+                  placeholder="email@organization.com"
+                  onChange={(e) => setEmailInput(e.target.value)}
+                />
+              </div>
+            ) : null}
+            {checkoutError ? (
+              <p className="registry-marble-checkout-error" role="alert">{checkoutError}</p>
+            ) : null}
+          </>
+        ) : null}
+
+        {/* PATHWAY CARDS */}
         {pathwayCards.length > 0 ? (
           <div className="registry-marble-circuit-list">
             {pathwayCards.map((card) => {
               const cardTitle = asString(card.title)
+              const cardMapPathway = asString(card.map_pathway)
+              const priceLabel = asString(card.price_label)
               const boundary = asString(card.map_boundary)
               const accessBoundary = asString(card.access_boundary)
               const deliverables = asStringArray(card.deliverables)
               const paymentBoundary = asString(card.payment_boundary)
-              const isRecommended = card.recommended === true
+              const seatHoldNotice = asString(card.seat_hold_notice)
+              const applicableKeys = asStringArray(card.applicable_standing_keys)
+              const isRecommended = standingKey
+                ? applicableKeys.includes(standingKey)
+                : card.recommended === true
               if (!cardTitle) return null
               return (
                 <article
@@ -166,6 +234,12 @@ function MapIntegrityGovernance({
                     </span>
                   ) : null}
                   <h3>{cardTitle}</h3>
+                  {priceLabel ? (
+                    <div className="registry-marble-circuit-price">
+                      <strong className="registry-marble-circuit-price-label">{priceLabel}</strong>
+                      <span>MAP the Environment</span>
+                    </div>
+                  ) : null}
                   {boundary ? (
                     <div className="registry-marble-circuit-description">
                       <strong>MAP Boundary</strong>
@@ -190,6 +264,21 @@ function MapIntegrityGovernance({
                     <div className="registry-marble-circuit-seat-hold">
                       <p>{paymentBoundary}</p>
                     </div>
+                  ) : null}
+                  {onInitiateMapPayment && cardMapPathway ? (
+                    <div className="registry-marble-circuit-payment-action">
+                      <button
+                        type="button"
+                        className="registry-marble-circuit-payment-cta"
+                        disabled={checkoutLoading || !standingKey}
+                        onClick={() => void handlePayment(cardMapPathway)}
+                      >
+                        {checkoutLoading ? "Processing..." : (asString(card.cta) ?? `Select ${cardTitle}`)}
+                      </button>
+                    </div>
+                  ) : null}
+                  {seatHoldNotice ? (
+                    <p className="registry-marble-seat-hold-notice">{seatHoldNotice}</p>
                   ) : null}
                 </article>
               )
@@ -223,7 +312,7 @@ function MapIntegrityGovernance({
           <p className="registry-map-seat-hold">{seatHoldStatement}</p>
         ) : null}
 
-        {/* TRANSITION — navigation to next if no action CTA already covers it */}
+        {/* TRANSITION */}
         {next && !actionCtaLabel ? (
           <section className="registry-marble-navigation">
             <button

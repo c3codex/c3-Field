@@ -117,7 +117,7 @@ function IntroHookSeat({
   renderSystemFooter,
 }: CrystalSeatProps) {
   const [epigraphEntered, setEpigraphEntered] = useState(false)
-  const [epigraphMuted, setEpigraphMuted] = useState(true)
+  const [epigraphMuted, setEpigraphMuted] = useState(false)
   const [epigraphFailed, setEpigraphFailed] = useState(false)
   const [landingHeroReady, setLandingHeroReady] = useState(false)
   const [leftSettled, setLeftSettled] = useState(false)
@@ -434,7 +434,7 @@ function StructurePassageSeat({
   renderHeader,
   renderSystemFooter,
 }: CrystalSeatProps) {
-  const [muted, setMuted] = useState(true)
+  const [muted, setMuted] = useState(false)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const unseeded = asString(meta?.status_note)?.includes("Seated without final public copy") ?? false

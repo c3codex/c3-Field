@@ -7,6 +7,7 @@ import EncounterEntry from "./EncounterEntry"
 import type { AssessmentCapturePayload } from "./chambers/ObsidianChamberRenderer"
 import type { ConnectCapturePayload } from "./chambers/CrystalSeatRenderer"
 import type { SubscriptionCapturePayload } from "./chambers/LapisChamberRenderer"
+import type { MapPaymentParams } from "./chambers/MarbleChamberRenderer"
 import type { EncounterSurface } from "./types/encounterRendererTypes"
 import { cssTokenName } from "../registered_runtime/registeredRuntimeUtils"
 import RegisteredPrivacy from "../registered_runtime/renderers/RegisteredPrivacy"
@@ -270,6 +271,32 @@ export default function MeasuresRegistryOrchestrator() {
     return { error: error?.message ?? null }
   }
 
+  async function onInitiateMapPayment({ mapPathway, mapStanding, contactEmail }: MapPaymentParams): Promise<{ error: string | null }> {
+    const origin = window.location.origin
+    try {
+      const response = await fetch("/api/map/create-checkout-session", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          evaluation_result_id: null,
+          map_standing: mapStanding,
+          map_pathway: mapPathway,
+          contact_email: contactEmail,
+          success_url: `${origin}/map-integrity-governance`,
+          cancel_url: `${origin}/map-integrity-governance`,
+        }),
+      })
+      const data = (await response.json()) as { checkout_url?: string; error?: string }
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url
+        return { error: null }
+      }
+      return { error: data.error ?? "Payment could not be initiated." }
+    } catch {
+      return { error: "Payment could not be initiated. Please try again." }
+    }
+  }
+
   async function onCaptureSubscription(payload: SubscriptionCapturePayload): Promise<{ error: string | null }> {
     const { error } = await supabase.from("measures_registry_connect_capture").insert({
       email: payload.email,
@@ -314,6 +341,7 @@ export default function MeasuresRegistryOrchestrator() {
       onCaptureAssessment={onCaptureAssessment}
       onCaptureConnect={onCaptureConnect}
       onCaptureSubscription={onCaptureSubscription}
+      onInitiateMapPayment={onInitiateMapPayment}
       renderHeader={renderHeader}
       renderSystemFooter={renderSystemFooter}
     />

@@ -4,6 +4,7 @@ import type { AssessmentCapturePayload } from "../chambers/ObsidianChamberRender
 import LapisChamberRenderer from "../chambers/LapisChamberRenderer"
 import type { SubscriptionCapturePayload } from "../chambers/LapisChamberRenderer"
 import MarbleChamberRenderer from "../chambers/MarbleChamberRenderer"
+import type { MapPaymentParams } from "../chambers/MarbleChamberRenderer"
 import CrystalSeatRenderer from "../chambers/CrystalSeatRenderer"
 import type { ConnectCapturePayload } from "../chambers/CrystalSeatRenderer"
 import type { EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
@@ -16,6 +17,7 @@ export type ChamberRouterProps = {
   onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<{ error: string | null }>
   onCaptureSubscription?: (payload: SubscriptionCapturePayload) => Promise<{ error: string | null }>
   onCaptureConnect?: (payload: ConnectCapturePayload) => Promise<{ error: string | null }>
+  onInitiateMapPayment?: (params: MapPaymentParams) => Promise<{ error: string | null }>
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode
 }

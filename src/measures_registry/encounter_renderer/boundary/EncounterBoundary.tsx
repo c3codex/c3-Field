@@ -4,6 +4,7 @@ import type { AssessmentCapturePayload } from "../chambers/ObsidianChamberRender
 import type { SubscriptionCapturePayload } from "../chambers/LapisChamberRenderer"
 import type { ConnectCapturePayload } from "../chambers/CrystalSeatRenderer"
 import type { EncounterSurface, RenderableEncounterResult } from "../types/encounterRendererTypes"
+import type { MapPaymentParams } from "../chambers/MarbleChamberRenderer"
 
 // Encounter Boundary — the constitutional threshold between determination and manifestation.
 // Receives the output of the determination pipeline (RenderableEncounterResult).
@@ -21,6 +22,7 @@ export type EncounterBoundaryProps = {
   onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<{ error: string | null }>
   onCaptureSubscription?: (payload: SubscriptionCapturePayload) => Promise<{ error: string | null }>
   onCaptureConnect?: (payload: ConnectCapturePayload) => Promise<{ error: string | null }>
+  onInitiateMapPayment?: (params: MapPaymentParams) => Promise<{ error: string | null }>
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode
 }
@@ -32,6 +34,7 @@ export default function EncounterBoundary({
   onCaptureAssessment,
   onCaptureSubscription,
   onCaptureConnect,
+  onInitiateMapPayment,
   renderHeader,
   renderSystemFooter,
 }: EncounterBoundaryProps) {
@@ -61,6 +64,7 @@ export default function EncounterBoundary({
       onCaptureAssessment={onCaptureAssessment}
       onCaptureSubscription={onCaptureSubscription}
       onCaptureConnect={onCaptureConnect}
+      onInitiateMapPayment={onInitiateMapPayment}
       renderHeader={renderHeader}
       renderSystemFooter={renderSystemFooter}
     />
