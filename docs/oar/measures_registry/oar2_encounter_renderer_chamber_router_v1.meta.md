@@ -112,6 +112,23 @@ Do not infer chamber from:
 - registry key
 - component availability
 
+
+### Crystal Seat Boundary
+
+Crystal is not a chamber.
+
+Crystal must be referenced as:
+
+- Crystal Seat
+- CrystalSeatRenderer
+
+Do not use:
+
+- Crystal Chamber
+- CrystalChamberRenderer
+
+The router may dispatch to CrystalSeatRenderer where seated, but it must not classify Crystal as a chamber.
+
 ### 4. Supported Dispatch
 
 Current dispatch:
@@ -124,7 +141,7 @@ Future dispatch placeholders may return governed renderer-gap state for:
 - MarbleChamberRenderer
 - CrystalSeatRenderer
 
-Do not implement Lapis, Marble, or Crystal renderers in this OAR.
+Do not implement Lapis, Marble, or Crystal Seat renderers in this OAR.
 
 ### 5. Renderer Gap
 
@@ -200,7 +217,7 @@ Raise NotChazz flag if:
 - router infers chamber from surface name
 - router falls back to Obsidian
 - router mutates encounter
-- router implements Lapis/Marble/Crystal early
+- router implements Lapis/Marble/Crystal Seat early
 
 ## VALIDATION
 
@@ -229,3 +246,4 @@ Chamber Router separates routing from rendering.
 Renderers render.
 Router routes.
 Registry governs.
+
