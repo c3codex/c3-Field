@@ -1,18 +1,7 @@
 import type { AssessmentEmailArtifact, EnvironmentalStandingReport } from "./measuresAssessmentTypes"
-import { ASSESSMENT_SUB_SUPPORT_LINE, ASSESSMENT_TITLE } from "./measuresAssessmentCopy"
+import { ASSESSMENT_TITLE } from "./measuresAssessmentCopy"
+import { asString, asStringArray } from "./registered_runtime/registeredRuntimeUtils"
 
-type RecommendedOperatingProtocolProps = {
-  report: EnvironmentalStandingReport
-}
-
-function RecommendedOperatingProtocol({ report }: RecommendedOperatingProtocolProps) {
-  return (
-    <div>
-      <strong>{report.recommended_response_label}</strong>
-      <p>{report.recommended_structured_action}</p>
-    </div>
-  )
-}
 
 type PublicAssessmentResultProps = {
   assessmentCompletion?: Record<string, unknown> | null
@@ -111,10 +100,34 @@ export function PublicAssessmentResult({
   const recommendedActions = Array.isArray(reportTemplate?.recommended_actions)
     ? reportTemplate.recommended_actions.filter((item): item is string => typeof item === "string")
     : []
-  const recommendedStructuredAction =
-    typeof reportTemplate?.recommended_structured_action === "string"
-      ? reportTemplate.recommended_structured_action
-      : report?.recommended_structured_action
+  const informationalNoticeLines =
+    Array.isArray(reportContract?.informational_notice)
+      ? (reportContract.informational_notice as unknown[]).filter((l): l is string => typeof l === "string")
+      : typeof reportContract?.informational_notice === "string"
+        ? [reportContract.informational_notice as string]
+        : []
+  const recommendation =
+    typeof reportContract?.recommendation === "string" ? reportContract.recommendation as string : null
+  const indicatorsLabel =
+    typeof reportContract?.key_environmental_indicators_label === "string"
+      ? reportContract.key_environmental_indicators_label as string
+      : "Key Environmental Indicators"
+  const conditionIndicatorMap =
+    reportContract?.condition_indicator_map && typeof reportContract.condition_indicator_map === "object"
+      ? reportContract.condition_indicator_map as Record<string, unknown>
+      : null
+
+  // Derive indicators: prefer findings already returned (capped at 3),
+  // fall back to condition_tag lookup via condition_indicator_map.
+  const indicators: string[] = (() => {
+    if (findings.length > 0) return findings.slice(0, 3)
+    if (!conditionIndicatorMap || !report?.explainability?.condition_tags) return []
+    return [...new Set(
+      report.explainability.condition_tags
+        .map((tag) => asString(conditionIndicatorMap[tag]))
+        .filter((s): s is string => Boolean(s)),
+    )].slice(0, 3)
+  })()
 
   return (
     <div className="registry-eval-resolution registry-assessment-complete">
@@ -131,48 +144,41 @@ export function PublicAssessmentResult({
             {organizationType ? <p>Organization type: {organizationType.replaceAll("_", " ")}</p> : null}
             <p>Report generated: {reportTimestamp}</p>
           </div>
+          {/* 1. Informational Notice */}
+          {informationalNoticeLines.length > 0 ? (
+            <section className="registry-report-informational-notice" aria-label="Measures Registry Informational Notice">
+              {informationalNoticeLines.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </section>
+          ) : null}
+
+          {/* 2. Environment Finding */}
           <div className="registry-report-result">
             <span>{report.assessment_title ?? ASSESSMENT_TITLE}</span>
             <h3>{reportTemplate?.report_title as string ?? report.assessment_result}</h3>
             <p>{templateSummary ?? report.operational_exposure_summary}</p>
             <strong>{report.environmental_standing}</strong>
           </div>
-          {detectedConditions.length > 0 ? (
-            <div className="registry-report-group">
-              <strong>Detected Conditions</strong>
+
+          {/* 3. Key Environmental Indicators */}
+          {indicators.length > 0 ? (
+            <div className="registry-report-group registry-report-key-indicators">
+              <strong>{indicatorsLabel}</strong>
               <ul>
-                {detectedConditions.map((condition) => (
-                  <li key={condition}>{condition}</li>
+                {indicators.map((indicator) => (
+                  <li key={indicator}>{indicator}</li>
                 ))}
               </ul>
             </div>
           ) : null}
-          {findings.length > 0 ? (
-            <div className="registry-report-group">
-              <strong>Findings</strong>
-              <ul>
-                {findings.map((finding) => (
-                  <li key={finding}>{finding}</li>
-                ))}
-              </ul>
+
+          {/* 4. Recommendation */}
+          {recommendation ? (
+            <div className="registry-report-recommendation">
+              <p>{recommendation}</p>
             </div>
           ) : null}
-          <div className="registry-report-group">
-            <strong>Recommended Actions</strong>
-            {recommendedActions.length > 0 ? (
-              <ul>
-                {recommendedActions.map((action) => (
-                  <li key={action}>{action}</li>
-                ))}
-              </ul>
-            ) : (
-              <RecommendedOperatingProtocol report={report} />
-            )}
-          </div>
-          <div className="registry-report-action">
-            <strong>Recommended Structured Action</strong>
-            <p>{recommendedStructuredAction}</p>
-          </div>
           {clarificationTitle || clarificationBody ? (
             <section className="registry-standing-clarification">
               {clarificationTitle ? <strong>{clarificationTitle}</strong> : null}
