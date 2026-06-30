@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: launch_repair
 document_scope: assessment_report_wording
 title: OAR1 - Align Assessment Report Wording to Scored Results
-status: hold
+status: closed
 version: v1
 operator: op044
 system: measures_registry
