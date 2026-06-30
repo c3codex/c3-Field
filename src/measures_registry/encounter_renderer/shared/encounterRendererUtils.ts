@@ -7,7 +7,6 @@ import type {
   EnvironmentalStandingReport,
   StructuredEvalAnswer,
 } from "../../measuresAssessmentTypes"
-import type { LandingSectionRow, MediaRow } from "../../registered_runtime/registeredRuntimeTypes"
 
 export type { AssessmentMechanicQuestion, AssessmentMechanicOption, StructuredEvalAnswer, EnvironmentalStandingReport, AssessmentEmailArtifact, AssessmentConditionTrace }
 
@@ -518,106 +517,10 @@ export function resolveEnvironmentalReportByScore(
   }
 }
 
-export function mediaUrl(row?: MediaRow): string | null {
-  const metadata = asRecord(row?.metadata)
-  return resolveRuntimeMediaUrl({
-    publicUrl: asString(metadata?.public_url) ?? asString(metadata?.exact_url_seated),
-    bucketName: row?.storage_bucket,
-    storagePath: row?.storage_path,
-    storageProvider: asString(metadata?.storage_provider),
-  })
-}
-
 export function cssTokenName(tokenKey: string, mediaQuery: string | null): string {
   const suffix = mediaQuery ? "-mobile" : ""
   return `--registry-${tokenKey.replaceAll("_", "-")}${suffix}`
 }
-
-export function sectionCopy(row?: LandingSectionRow) {
-  const metadata = asRecord(row?.metadata) ?? {}
-  return {
-    functionLayer: asString(metadata.function_layer),
-    stateExpression: asString(metadata.state_expression),
-    renderer: asString(metadata.renderer),
-    header: asRecord(metadata.header),
-    eyebrow: asString(metadata.eyebrow),
-    title: asString(metadata.title) ?? row?.display_title ?? null,
-    subtitle: asString(metadata.subtitle),
-    informationalParagraph: asString(metadata.informational_paragraph),
-    plaques: asRecordArray(metadata.plaques),
-    entryLabel: asString(metadata.entry_label),
-    entryHeadline: asString(metadata.entry_headline),
-    entrySub: asString(metadata.entry_sub),
-    breakdownBlocks: Array.isArray(metadata.breakdown_blocks)
-      ? metadata.breakdown_blocks.filter((item): item is string => typeof item === "string")
-      : [],
-    resolutionShift: asString(metadata.resolution_shift),
-    transitionStatement: asString(metadata.transition_statement),
-    coreStatement: asString(metadata.core_statement),
-    paragraphs: Array.isArray(metadata.paragraphs)
-      ? metadata.paragraphs.filter((item): item is string => typeof item === "string")
-      : [],
-    sections: asRecordArray(metadata.sections),
-    diagnosticText: asString(metadata.diagnostic_text),
-    evaluationEntry: asRecord(metadata.evaluation_entry),
-    assessmentMechanics: asRecord(metadata.assessment_mechanics),
-    assessmentInterpretation: asRecord(metadata.assessment_interpretation),
-    assessmentChamber: asRecord(metadata.assessment_chamber),
-    assessmentCompletion: asRecord(metadata.assessment_completion),
-    encounterContract: asRecord(metadata.encounter_contract),
-    layoutContract: asRecord(metadata.layout_contract),
-    stylingContract: asRecordFromPaths(
-      metadata.styling_contract,
-      asRecord(metadata.encounter_contract)?.styling_contract,
-    ),
-    srcIntakeContract: asRecordFromPaths(
-      metadata.src_intake_contract,
-      asRecord(metadata.encounter_contract)?.src_intake_contract,
-    ),
-    featuredPublication: asRecord(metadata.featured_publication),
-    subscriptionEntry: asRecord(metadata.subscription_entry),
-    heroPaths: asRecordArray(metadata.hero_paths),
-    evaluationSections: asRecordArray(metadata.evaluation_sections),
-    resolutionText: asString(metadata.resolution_text),
-    outcomeStatement: asString(metadata.outcome_statement),
-    closingStatement: asString(metadata.closing_statement),
-    entityReference: asString(metadata.entity_reference),
-    fields: asRecordArray(metadata.fields),
-    ctaPrimary: asString(metadata.cta_primary),
-    ctaSecondary: asString(metadata.cta_secondary),
-    cta: asRecord(metadata.cta),
-    passageTranscript: asStringArray(metadata.passage_transcript),
-    heldCopy: asRecord(metadata.held_copy),
-    successMessage: asString(metadata.success_message),
-    successSubtext: asString(metadata.success_subtext),
-    offeringKey: asString(metadata.offering_key),
-    dataSource: asString(metadata.data_source),
-    allowedTransitions: asRecord(metadata.allowed_transitions),
-    capture: asRecord(metadata.capture),
-    activeContractKeyReconciliation: asRecord(metadata.active_contract_key_reconciliation),
-    mediaRenderMode: asString(metadata.media_render_mode),
-    videoMode: asString(metadata.video_mode),
-    options: asRecordArray(metadata.options),
-    more: asRecord(metadata.more),
-    actions: asActionArray(metadata.actions),
-    mediaBehaviorContract: asRecord(metadata.media_behavior_contract),
-    brandingContract: asRecord(metadata.branding_contract),
-    contentContract: asRecord(metadata.content_contract),
-    crystalContentContracts: asRecord(metadata.crystal_chamber_content_contracts),
-    footerContract: asRecord(metadata.footer_contract),
-    publicRuntimeBoundary: asRecord(metadata.measures_registry_public_runtime_boundary_v1),
-    assessmentContactCaptureBindingContract: asRecord(
-      metadata.assessment_contact_capture_oar1_binding_contract_v1,
-    ),
-    assessmentEvaluationReportContract: asRecord(metadata.assessment_evaluation_report_contract_v1),
-    obsidianAssessmentReportStyleContract: asRecord(metadata.obsidian_assessment_report_style_contract_v1),
-    routeCards: asRecordArray(metadata.route_cards),
-    governedStatus: governedStatusCopy(metadata),
-    approvedContentContract: asRecord(metadata.approved_content_contract),
-  }
-}
-
-export type SectionCopy = ReturnType<typeof sectionCopy>
 
 export function dispatchIssueLabel(dispatch: { issue_number?: string | null; metadata?: Record<string, unknown> | null }): string {
   const metadata = dispatch.metadata ?? {}

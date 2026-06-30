@@ -1,15 +1,15 @@
 /* FREE encounter renderer CSS entry point — scoped to .measures-registry-runtime */
 /* Consumes DB-injected CSS variables. Does not replace src/index.css. */
 
-@import "../../registered_runtime/styles/registry.tokens.css";
-@import "../../registered_runtime/styles/registry.layout.css";
-@import "../../registered_runtime/styles/registry.materials.css";
-@import "../../registered_runtime/styles/registry.buttons.css";
-@import "../../registered_runtime/styles/registry.footer.css";
-@import "../../registered_runtime/styles/encounters/path-choice.css";
-@import "../../registered_runtime/styles/encounters/passage.css";
-@import "../../registered_runtime/styles/encounters/assessment.css";
-@import "../../registered_runtime/styles/encounters/public_understand.css";
-@import "../../registered_runtime/styles/encounters/about.css";
-@import "../../registered_runtime/styles/encounters/legal.css";
-@import "../../registered_runtime/styles/registry.visual-system.css";
+@import "./registry.tokens.css";
+@import "./registry.layout.css";
+@import "./registry.materials.css";
+@import "./registry.buttons.css";
+@import "./registry.footer.css";
+@import "./encounters/path-choice.css";
+@import "./encounters/passage.css";
+@import "./encounters/assessment.css";
+@import "./encounters/public_understand.css";
+@import "./encounters/about.css";
+@import "./encounters/legal.css";
+@import "./registry.visual-system.css";

@@ -1,15 +1,2 @@
-/* Registered runtime CSS layer — contract-native, scoped to .measures-registry-runtime */
-/* Consumes DB-injected CSS variables. Does not replace src/index.css. */
-
-@import "./registry.tokens.css";
-@import "./registry.layout.css";
-@import "./registry.materials.css";
-@import "./registry.buttons.css";
-@import "./registry.footer.css";
-@import "./encounters/path-choice.css";
-@import "./encounters/passage.css";
-@import "./encounters/assessment.css";
-@import "./encounters/public_understand.css";
-@import "./encounters/about.css";
-@import "./encounters/legal.css";
-@import "./registry.visual-system.css";
+/* Redirect stub — style authority moved to encounter_renderer/styles/ */
+@import "../../encounter_renderer/styles/registry.encounter.css";
