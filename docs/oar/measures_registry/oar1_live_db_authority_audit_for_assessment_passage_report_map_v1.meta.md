@@ -225,6 +225,98 @@ Migration required: Update `measures_media_map` WHERE `registry_key = 'measures_
 
 ---
 
+## 7. SEAT Authority Sweep — Full Site Classification
+
+Source sweep of all active FREE encounter renderer files to classify what reads from SEAT authority vs. what is stale, duplicated, misplaced, or hardcoded.
+
+SEAT authority defined as:
+- Active FREE encounter renderer path: `src/measures_registry/encounter_renderer/`
+- DB-seated registry: `measures_encounter_def`, `measures_registry_root.metadata`, `measures_encounter_surface_assignment`, `measures_media_map`
+- Approved OAR-seated updates only
+
+---
+
+### ACTIVE — SEAT authority confirmed
+
+All display copy and media reads from DB-seated contracts:
+
+| Source | Read path |
+|---|---|
+| Encounter copy, titles, sections | `encounterDef.metadata.*` |
+| Assessment questions | `meta?.assessment_mechanics` |
+| Report templates, header, CTA, boundary note | `meta?.assessment_evaluation_report_contract_v1` |
+| MAP pathway cards, applicable_standing_keys | `meta?.pathway_cards` |
+| Contact form fields, consent fields | `meta?.assessment_contact_capture_oar1_binding_contract_v1` |
+| Assessment completion copy | `meta?.assessment_completion` |
+| Footer copy | `meta?.footer_contract` |
+| Scoring threshold path | `meta?.assessment_interpretation.scoring_thresholds` — logic correct; mismatch is in DB values |
+| Transition targets | `encounter.transitionNodes` (DB-seated) |
+| Media URLs | `encounter.mediaByRole.get(role)` (DB rows) |
+| Design tokens (CSS vars) | `resolverData.designTokenRows` |
+| Registry mark | `resolverData.mediaRows.find(media_role === "registry_mark")` |
+
+---
+
+### STALE — Legacy registered_runtime dependency in active FREE source
+
+| File | Stale item | Impact |
+|---|---|---|
+| `encounter_renderer/shared/encounterRendererUtils.ts:10` | `import type { LandingSectionRow, MediaRow } from "../../registered_runtime/registeredRuntimeTypes"` | Type dependency on registered_runtime; carries `sectionCopy()` and exported `mediaUrl()` which use these types |
+| `encounter_renderer/styles/registry.encounter.css:4–15` | All 11 `@import` paths point to `../../registered_runtime/styles/` | CSS entry point depends on registered_runtime; styles not yet moved to SEAT boundary |
+| `registered_runtime/renderers/RegisteredPrivacy.tsx` | Stale copy; no FREE source imports it | Duplicate — active copy at `encounter_renderer/legal/` |
+| `registered_runtime/renderers/RegisteredTerms.tsx` | Same | Same |
+
+---
+
+### DUPLICATED — Conflicting authority
+
+| Item | Row A | Row B | Impact |
+|---|---|---|---|
+| `measures_media_map` for `before_the_pathway_obsidian_to_marble_passage_video` | `registry_key: "measures_registry"` — `public_url` = old filename without `1` prefix | `registry_key: "obsidian_to_marble_passage_video"` — `exact_url_seated` = correct filename | Renderer reads `public_url` first → Row A resolves to wrong URL. Primary Repair 2 target. |
+| `RegisteredPrivacy.tsx` | `registered_runtime/renderers/` (stale, not imported) | `encounter_renderer/legal/` (active) | No functional conflict; stale copy is dead |
+| `RegisteredTerms.tsx` | Same | Same | Same |
+
+---
+
+### MISPLACED — Dead exports inside active SEAT file
+
+| File | Dead item | Why misplaced |
+|---|---|---|
+| `encounterRendererUtils.ts:521–529` | Exported `mediaUrl(row?: MediaRow)` | Uses `MediaRow` from registered_runtime; no FREE chamber calls it — each defines its own local `mediaUrl` using `EncounterMediaRow` |
+| `encounterRendererUtils.ts:536–618` | Exported `sectionCopy(row?: LandingSectionRow)` + `SectionCopy` type | Uses `LandingSectionRow` from registered_runtime; no FREE chamber calls it |
+| `MeasuresAssessmentBrandLayer.tsx` | Entire file | Not imported anywhere in active FREE source; contains hardcoded `"MEASURES REGISTRY"` and `"Integrity Governance for AI Accelerated Systems"` |
+
+---
+
+### HARDCODED — Active render path, not from DB
+
+| File | Hardcoded value | Render location | DB path available? |
+|---|---|---|---|
+| `measuresAssessmentCopy.ts:1` | `"MEASURES AI OPERATIONAL EVALUATION"` | `<h1>` in assessment surface | No — not passed from DB; default prop always active |
+| `measuresAssessmentCopy.ts:2` | `"AI reflects the structure of the environment it operates within."` | `<p>` in assessment surface | No |
+| `measuresAssessmentCopy.ts:3` | `"Structure enables acceleration. Ambiguity creates drift."` | `<p>` in assessment surface | No |
+| `PublicAssessmentSurface.tsx:185` | `"Your assessment evaluation is ready. Enter your information to receive the evaluation and recommended actions."` | Result-withheld copy | Fallback for `assessmentContactCaptureContract.result_withheld_transition_copy` |
+| `PublicAssessmentSurface.tsx:188` | `"Enter your information to receive the assessment evaluation and recommended actions."` | Contact helper copy | Fallback for `post_assessment_contact_form.public_helper_copy` |
+| `PublicAssessmentResult.tsx:72–86` | Report header, subtitle, descriptor, boundary note, CTA label | Report surface | Fallbacks only — active if `reportContract` is absent |
+
+The three `measuresAssessmentCopy.ts` strings are the only actively-rendered hardcoded content with no DB fallback path currently wired. `ObsidianChamberRenderer` calls `PublicAssessmentSurface` without passing these props; the constants are always the active values.
+
+---
+
+### SWEEP SUMMARY
+
+No active FREE chamber renderer imports from or depends on `registered_runtime` for display content or data authority.
+
+Remaining registered_runtime ties in active source:
+1. Two unused type-exports in `encounterRendererUtils.ts` (`sectionCopy`, exported `mediaUrl`) pulling `LandingSectionRow`/`MediaRow` types — dead for content authority
+2. CSS entry point re-exporting styles still living in `registered_runtime/styles/` — style dependency only
+
+Three assessment surface strings (`ASSESSMENT_PROCESS_TITLE`, `ASSESSMENT_SUPPORT_LINE`, `ASSESSMENT_SUB_SUPPORT_LINE`) are hardcoded and active — not DB-seated.
+
+Production bugs remain the two DB-level mismatches from sections 1 and 4 above (RENDERER_DB_KEY_MISMATCH + LIVE_DB_MEDIA_ROW_MISMATCH).
+
+---
+
 ## NO MUTATIONS APPLIED
 
 Audit-only. No source changes. No migrations. No repairs.

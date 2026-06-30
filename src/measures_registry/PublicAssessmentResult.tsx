@@ -228,9 +228,9 @@ export function PublicAssessmentResult({
           ) : null}
           {publicResultBoundary.heldCopy ? <p>{publicResultBoundary.heldCopy}</p> : null}
         </section>
-      ) : (
+      ) : !reportContract ? (
         <p>Continue into the Structured Environment.</p>
-      )}
+      ) : null}
       {!reportContract && !publicResultBoundary && structuredEnvironmentPassageVideoUrl ? (
         <video
           src={structuredEnvironmentPassageVideoUrl}

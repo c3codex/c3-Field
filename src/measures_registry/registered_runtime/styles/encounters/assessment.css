@@ -378,6 +378,22 @@
   object-fit: contain;
 }
 
+/* ── RESULT GATE — desktop scroll and control authority ─────────────────── */
+.measures-registry-runtime[data-layout-contract="result_gate"] {
+  overflow-y: auto;
+}
+
+.measures-registry-runtime[data-layout-contract="result_gate"] .registry-iis-eval.registry-assessment-chamber {
+  height: auto;
+  overflow: visible;
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+}
+
+.measures-registry-runtime[data-layout-contract="result_gate"] .registry-diagnostic-passage-controls.registry-report-controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
 @media (max-width: 620px) {
   .measures-registry-runtime .registry-iis-eval.registry-assessment-chamber {
     padding: clamp(0.75rem, 3vw, 1.5rem) var(--registry-page-padding-active);

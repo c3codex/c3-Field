@@ -1,5 +1,5 @@
 import type { CSSProperties, FormEvent, ReactNode } from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type { EncounterMediaRow, EncounterSurface, RenderableEncounter, TransitionNode } from "../types/encounterRendererTypes"
 import {
@@ -116,7 +116,7 @@ function IntroHookSeat({
   renderHeader,
   renderSystemFooter,
 }: CrystalSeatProps) {
-  const [epigraphEntered, setEpigraphEntered] = useState(false)
+  const [epigraphEntered, setEpigraphEntered] = useState(true)
   const [epigraphMuted, setEpigraphMuted] = useState(false)
   const [epigraphFailed, setEpigraphFailed] = useState(false)
   const [landingHeroReady, setLandingHeroReady] = useState(false)
@@ -138,6 +138,11 @@ function IntroHookSeat({
   const nextSurface = resolveNextSurface(encounter)
 
   const epigraphVideoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
+
+  useEffect(() => {
+    if (!epigraphVideoUrl && !epigraphFailed) setLandingHeroReady(true)
+  }, [epigraphVideoUrl, epigraphFailed])
+
   const leftStillUrl = mediaUrl(encounter.mediaByRole.get("left_hero_fracture"))
   const leftMotionUrl = mediaUrl(encounter.mediaByRole.get("left_hero_fracture_motion"))
   const rightStillUrl = mediaUrl(encounter.mediaByRole.get("right_measured_hero"))
@@ -190,14 +195,14 @@ function IntroHookSeat({
               aria-label="Measures Registry epigraph"
             />
           ) : null}
-          {!epigraphEntered || epigraphFailed || !epigraphVideoUrl ? (
+          {epigraphFailed ? (
             <button
               type="button"
               className="registry-epigraph-enter"
-              aria-label={epigraphFailed ? "Continue" : "Enter"}
+              aria-label="Continue"
               onClick={handleEnter}
             >
-              {epigraphFailed ? "Continue" : "Enter"}
+              Continue
             </button>
           ) : null}
           {epigraphEntered && !epigraphFailed && epigraphVideoUrl && epigraphMuted ? (
