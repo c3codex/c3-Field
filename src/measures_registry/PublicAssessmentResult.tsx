@@ -1,6 +1,6 @@
 import type { AssessmentEmailArtifact, EnvironmentalStandingReport } from "./measuresAssessmentTypes"
 import { ASSESSMENT_TITLE } from "./measuresAssessmentCopy"
-import { asString, asStringArray } from "./registered_runtime/registeredRuntimeUtils"
+import { asString, asStringArray } from "./encounter_renderer/shared/encounterRendererUtils"
 
 
 type PublicAssessmentResultProps = {

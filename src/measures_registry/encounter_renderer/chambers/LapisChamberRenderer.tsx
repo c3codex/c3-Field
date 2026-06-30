@@ -6,7 +6,7 @@ import {
   asRecord,
   asRecordArray,
   asString,
-} from "../../registered_runtime/registeredRuntimeUtils"
+} from "../shared/encounterRendererUtils"
 
 // Payload for Encounter Boundary subscription capture write.
 // Encounter Boundary provides onCaptureSubscription. Omitting disables capture persistence.

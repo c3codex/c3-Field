@@ -7,7 +7,7 @@ import {
   asRecordArray,
   asString,
   asStringArray,
-} from "../../registered_runtime/registeredRuntimeUtils"
+} from "../shared/encounterRendererUtils"
 
 export type MapPaymentParams = {
   mapPathway: string

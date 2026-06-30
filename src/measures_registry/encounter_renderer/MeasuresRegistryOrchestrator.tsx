@@ -1,4 +1,4 @@
-import "../registered_runtime/styles/registry.encounter.css"
+import "./styles/registry.encounter.css"
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties } from "react"
 import { supabase } from "@/integrations/supabase/client"
@@ -9,9 +9,9 @@ import type { ConnectCapturePayload } from "./chambers/CrystalSeatRenderer"
 import type { SubscriptionCapturePayload } from "./chambers/LapisChamberRenderer"
 import type { MapPaymentParams } from "./chambers/MarbleChamberRenderer"
 import type { EncounterSurface } from "./types/encounterRendererTypes"
-import { cssTokenName } from "../registered_runtime/registeredRuntimeUtils"
-import RegisteredPrivacy from "../registered_runtime/renderers/RegisteredPrivacy"
-import RegisteredTerms from "../registered_runtime/renderers/RegisteredTerms"
+import { cssTokenName } from "./shared/encounterRendererUtils"
+import RegisteredPrivacy from "./legal/RegisteredPrivacy"
+import RegisteredTerms from "./legal/RegisteredTerms"
 
 // FREE — Frontend Replacement Encounter Environment.
 // Top-level orchestrator. Owns navigation, URL sync, token style, and DB capture callbacks.

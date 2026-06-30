@@ -20,7 +20,7 @@ import {
   asStringArray,
   resolveEnvironmentalReportByScore,
   selectedConditionTraces,
-} from "../../registered_runtime/registeredRuntimeUtils"
+} from "../shared/encounterRendererUtils"
 
 // Payload passed to Encounter Boundary for contact capture persistence.
 // Encounter Boundary owns the DB write; chamber owns the form state and presentation.
