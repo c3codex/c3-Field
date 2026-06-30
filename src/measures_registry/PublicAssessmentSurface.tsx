@@ -434,19 +434,15 @@ export function PublicAssessmentSurface({
                   Back
                 </button>
               ) : null}
-              {!finalDiagnosticQuestion && currentQuestion ? (
-                <button type="button" disabled={!currentQuestionAnswered} onClick={() => onContinueQuestion(currentQuestion)}>
+              {currentQuestion ? (
+                <button
+                  type="button"
+                  disabled={!currentQuestionAnswered}
+                  onClick={() => onContinueQuestion(currentQuestion)}
+                >
                   Continue
                 </button>
-              ) : (
-                <button
-                  type="submit"
-                  disabled={evalSubmitting || !currentQuestionAnswered}
-                  onClick={(event) => onCompleteQuestionClick(event, currentQuestion)}
-                >
-                  {evalSubmitting ? "Resolving Assessment" : "Complete Evaluation"}
-                </button>
-              )}
+              ) : null}
               <button type="button" onClick={onTogglePassageMuted}>
                 {passageMuted ? "Audio" : "Mute"}
               </button>
