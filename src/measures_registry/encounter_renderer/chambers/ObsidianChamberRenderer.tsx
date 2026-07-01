@@ -70,11 +70,14 @@ export default function ObsidianChamberRenderer(props: ObsidianChamberProps) {
   const { encounter } = props
   const { surface } = encounter
 
-  if (surface === "eval_passage" || surface === "structural_coherence_explainer" || surface === "obsidian_chamber_orientation_passage") {
+  if (surface === "obsidian_chamber_orientation" || surface === "eval_passage" || surface === "obsidian_chamber_orientation_passage") {
     return <EvalPassage {...props} />
   }
-  if (surface === "measures_assessment") {
+  if (surface === "obsidian_chamber_encounter_surface") {
     return <MeasuresAssessment {...props} />
+  }
+  if (surface === "obsidian_chamber_C1_compact") {
+    return <ObsidianC1Compact {...props} />
   }
   if (surface === "obsidian_to_marble_passage_video") {
     return <ObsidianToMarblePassage {...props} />
@@ -128,6 +131,8 @@ function EvalPassage({
       data-material-family="obsidian"
       data-layout-contract="passage"
       data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >
       {renderHeader({ title })}
@@ -310,6 +315,8 @@ function MeasuresAssessment({
   const [passageMuted, setPassageMuted] = useState(true)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
+  const styleProfile = asString(encounter.surfaceAssignmentMetadata?.style_profile)
+  const directoryKey = asString(meta?.directory_key)
   const mechanics = allAssessmentMechanics(meta?.assessment_mechanics)
   const traces: AssessmentConditionTrace[] = selectedConditionTraces(mechanics, evalAnswers)
   const next = resolveNextSurface(encounter)
@@ -347,12 +354,24 @@ function MeasuresAssessment({
       setEvalError(null)
     } else {
       const resolved = resolveEnvironmentalReportByScore(mechanics, traces, meta?.assessment_interpretation)
-      if (resolved) {
-        setEvalReport(resolved.report)
-        setEvalEmailArtifact(resolved.emailArtifact)
-      }
-      setEvalStep("contact_capture")
+      const finalReport = resolved?.report ?? null
+      const finalEmailArtifact = resolved?.emailArtifact ?? null
+      try {
+        sessionStorage.setItem("__mreg_c1_pending", JSON.stringify({
+          evaluationAnswers: Object.fromEntries(
+            Object.entries(evalAnswers).filter(([, a]) => a.selected),
+          ),
+          conditionTraces: traces,
+          evalReport: finalReport,
+          evalEmailArtifact: finalEmailArtifact,
+          evalFields,
+          assessmentContactCaptureContract: asRecord(meta?.assessment_contact_capture_oar1_binding_contract_v1),
+          assessmentEvaluationReportContract: asRecord(meta?.assessment_evaluation_report_contract_v1),
+          assessmentCompletion: asRecord(meta?.assessment_completion),
+        }))
+      } catch { /* ignore */ }
       setEvalError(null)
+      onNavigate("obsidian_chamber_C1_compact")
     }
   }
 
@@ -423,6 +442,8 @@ function MeasuresAssessment({
   return (
     <PublicAssessmentSurface
       encounterKey={encounter.registryKey}
+      styleProfile={styleProfile}
+      directoryKey={directoryKey}
       evalAnswers={evalAnswers}
       evalEmailArtifact={evalEmailArtifact}
       evalError={evalError}
@@ -498,5 +519,252 @@ function MeasuresAssessment({
       onStructuredEnvironmentVideoEnded={handleStructuredEnvironmentVideoEnded}
       onTogglePassageMuted={() => setPassageMuted((m) => !m)}
     />
+  )
+}
+
+// --- obsidian_chamber_C1_compact --------------------------------------------
+// Contact/consent capture surface. Receives eval state from sessionStorage
+// (__mreg_c1_pending) written by MeasuresAssessment on question completion.
+// Calls onCaptureAssessment, writes __mreg_pending_report, navigates to marble_chamber_orientation.
+
+type C1Pending = {
+  evaluationAnswers: Record<string, unknown>
+  conditionTraces: AssessmentConditionTrace[]
+  evalReport: EnvironmentalStandingReport | null
+  evalEmailArtifact: AssessmentEmailArtifact | null
+  evalFields: Record<string, string>
+  assessmentContactCaptureContract: Record<string, unknown> | null
+  assessmentEvaluationReportContract: Record<string, unknown> | null
+  assessmentCompletion: Record<string, unknown> | null
+}
+
+function ObsidianC1Compact({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  onCaptureAssessment,
+  renderHeader,
+  renderSystemFooter,
+}: ObsidianChamberProps) {
+  const [pending] = useState<C1Pending | null>(() => {
+    try {
+      const raw = sessionStorage.getItem("__mreg_c1_pending")
+      return raw ? (JSON.parse(raw) as C1Pending) : null
+    } catch { return null }
+  })
+
+  const [fields, setFields] = useState<Record<string, string>>(pending?.evalFields ?? {})
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const next = resolveNextSurface(encounter)
+  const contract = pending?.assessmentContactCaptureContract ?? null
+  const contactForm = asRecord(contract?.post_assessment_contact_form)
+  const consentFields = Array.isArray(contract?.consent_fields)
+    ? (contract.consent_fields as unknown[]).filter((f): f is Record<string, unknown> => Boolean(asRecord(f)))
+    : []
+  const optionalFields = Array.isArray(contract?.optional_opt_in_fields)
+    ? (contract.optional_opt_in_fields as unknown[]).filter((f): f is Record<string, unknown> => Boolean(asRecord(f)))
+    : []
+  const formFields = [
+    ...(Array.isArray(contactForm?.fields)
+      ? (contactForm.fields as unknown[]).filter((f): f is Record<string, unknown> => Boolean(asRecord(f)))
+      : []),
+    ...consentFields,
+    ...optionalFields,
+  ]
+
+  const resultWithheldCopy =
+    asString(contract?.result_withheld_transition_copy) ??
+    "Your assessment evaluation is ready. Enter your information to receive the evaluation and recommended actions."
+  const contactHelperCopy =
+    asString(contract?.public_helper_copy) ??
+    asString(contactForm?.public_helper_copy) ??
+    "Enter your contact information to receive your assessment evaluation."
+  const privacyNotice = asString(contract?.privacy_notice)
+  const termsNotice = asString(contract?.terms_notice)
+  const submissionNotice = asString(contract?.assessment_submission_notice)
+  const standingBoundaryNote =
+    asString(contract?.standing_boundary_note) ??
+    asString(contactForm?.standing_boundary_note) ??
+    "This assessment does not create approval, enrollment, implementation, or verified registry status."
+
+  function renderField(field: Record<string, unknown>) {
+    const key = asString(field.field_key)
+    const label = asString(field.public_label)
+    if (!key || !label) return null
+    const type = asString(field.type) ?? "text"
+    const required = field.required === true
+    const value = fields[key] ?? ""
+    if (type === "checkbox") {
+      return (
+        <label key={key} className="registry-consent-field">
+          <input
+            type="checkbox"
+            checked={value === "true"}
+            required={required}
+            onChange={(e) => {
+              setFields((f) => ({ ...f, [key]: e.target.checked ? "true" : "" }))
+            }}
+          />
+          <span>{label}</span>
+        </label>
+      )
+    }
+    if (type === "select" || type === "text_or_select") {
+      const options = Array.isArray(field.options)
+        ? (field.options as unknown[]).filter((o): o is string => typeof o === "string")
+        : []
+      if (type === "text_or_select" && options.length === 0) {
+        return (
+          <label key={key}>
+            <span>{label}</span>
+            <input
+              type="text"
+              value={value}
+              required={required}
+              onChange={(e) => setFields((f) => ({ ...f, [key]: e.target.value }))}
+            />
+          </label>
+        )
+      }
+      return (
+        <label key={key}>
+          <span>{label}</span>
+          <select
+            value={value}
+            required={required}
+            onChange={(e) => setFields((f) => ({ ...f, [key]: e.target.value }))}
+          >
+            <option value="">Select</option>
+            {options.map((o) => (
+              <option key={o} value={o}>{o.replaceAll("_", " ")}</option>
+            ))}
+          </select>
+        </label>
+      )
+    }
+    return (
+      <label key={key}>
+        <span>{label}</span>
+        <input
+          type={type === "email" ? "email" : "text"}
+          value={value}
+          required={required}
+          onChange={(e) => setFields((f) => ({ ...f, [key]: e.target.value }))}
+        />
+      </label>
+    )
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (submitting) return
+    setSubmitting(true)
+    setError(null)
+
+    if (onCaptureAssessment && pending) {
+      const payload: AssessmentCapturePayload = {
+        institutionName: fields.institution_name?.trim() ?? "",
+        contactName: fields.contact_name?.trim() ?? "",
+        contactEmail: fields.contact_email?.trim() ?? "",
+        evaluationAnswers: pending.evaluationAnswers,
+        conditionTraces: pending.conditionTraces,
+        allFields: fields,
+        emailArtifact: pending.evalEmailArtifact,
+        report: pending.evalReport,
+      }
+      const { error: captureError } = await onCaptureAssessment(payload)
+      setSubmitting(false)
+      if (captureError) {
+        setError(captureError)
+        return
+      }
+    } else {
+      setSubmitting(false)
+    }
+
+    if (pending) {
+      try {
+        sessionStorage.setItem("__mreg_pending_report", JSON.stringify({
+          report: pending.evalReport,
+          emailArtifact: pending.evalEmailArtifact,
+          fields,
+          assessmentCompletion: pending.assessmentCompletion,
+          reportContract: pending.assessmentEvaluationReportContract,
+        }))
+        sessionStorage.removeItem("__mreg_c1_pending")
+      } catch { /* ignore */ }
+    }
+
+    if (next) onNavigate(next as EncounterSurface)
+  }
+
+  if (!pending) {
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="obsidian_chamber_C1_compact"
+        data-material-family="obsidian"
+        data-release-standing="held_missing_session"
+        style={registryTokenStyle}
+      >
+        {renderHeader({ title: "Measures Registry" })}
+        <section className="registry-held-state" role="status">
+          <span>Obsidian Chamber</span>
+          <p>Complete the AI Operations Assessment to continue.</p>
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
+  }
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="obsidian_chamber_C1_compact"
+      data-material-family="obsidian"
+      data-layout-contract="contact_compact"
+      data-release-standing="public_contact_gated"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title: "Measures Registry" })}
+      <section className="registry-iis-eval registry-assessment-chamber" aria-label="Contact and Consent">
+        <div className="registry-chamber-heading">
+          <span>Assessment evaluation ready</span>
+          <h2>{resultWithheldCopy}</h2>
+          <p className="registry-assessment-support">{contactHelperCopy}</p>
+        </div>
+        <form className="registry-iis-eval-form registry-contact-capture" onSubmit={(e) => void handleSubmit(e)}>
+          <p className="registry-contact-standing-note">{standingBoundaryNote}</p>
+          {submissionNotice ? (
+            <p className="registry-consent-submission-notice">{submissionNotice}</p>
+          ) : null}
+          <fieldset>
+            <legend>Contact and Consent</legend>
+            {formFields.length > 0 ? (
+              formFields.map(renderField)
+            ) : (
+              <p className="registry-media-absence">Contact capture contract is not seated.</p>
+            )}
+          </fieldset>
+          {(privacyNotice || termsNotice) ? (
+            <div className="registry-consent-legal-notices">
+              {privacyNotice ? <p>{privacyNotice}</p> : null}
+              {termsNotice ? <p>{termsNotice}</p> : null}
+            </div>
+          ) : null}
+          {error ? <p className="registry-form-error">{error}</p> : null}
+          <div className="registry-diagnostic-passage-controls">
+            <button type="submit" disabled={submitting || formFields.length === 0}>
+              {submitting ? "Submitting" : "Receive Evaluation"}
+            </button>
+          </div>
+        </form>
+      </section>
+      {renderSystemFooter()}
+    </main>
   )
 }

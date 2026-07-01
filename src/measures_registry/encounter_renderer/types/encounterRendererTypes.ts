@@ -12,22 +12,30 @@ export type EncounterEnvironmentAssignment =
   | "marble"
 
 export type EncounterSurface =
-  | "intro"
-  | "intro_hook"
-  | "path_choice"
-  | "structural_coherence_explainer"
-  | "measures_structured_environments"
-  | "about_measures_registry"
-  | "eval_passage"
-  | "measures_assessment"
+  // Active SEAT surfaces — final canonical 13-term structure
+  | "crystal_seat_intro"
+  | "crystal_seat_threshold"
+  | "crystal_seat_orientation"
+  | "crystal_seat_encounter"
+  | "lapis_chamber_encounter"
+  | "obsidian_chamber_orientation"
+  | "obsidian_chamber_encounter_surface"
+  | "obsidian_chamber_C1_compact"
+  | "marble_chamber_orientation"
+  | "marble_chamber_encounter"
+  | "marble_chamber_C2_compact"
+  | "marble_chamber_C2_agreement"
+  | "marble_chamber_C2_resolution"
+  // Active passage transition (not in 13 SEAT terms; held for secured/scale)
   | "obsidian_to_marble_passage_video"
-  | "map_integrity_governance"
-  | "structure_passage"
-  | "structural_drift_dispatches"
+  // Audit-trace / held — DB rows retained, not active public launch surfaces
   | "publication_dispatch"
+  | "eval_passage"
+  | "structure_passage"
   | "crystal_seat_orientation_passage"
   | "obsidian_chamber_orientation_passage"
   | "marble_chamber_orientation_passage"
+  | "measures_structured_environments"
 
 // DB row types
 
@@ -68,6 +76,7 @@ export type EncounterSurfaceAssignmentRow = {
   material_identity: string
   chamber_assignment: string
   public_routes: string[]
+  metadata: Record<string, unknown> | null
 }
 
 // Resolver output — all raw DB rows; no authority decisions
@@ -120,6 +129,9 @@ export type ComposedEncounter = {
   materialIdentity: MaterialIdentity
   chamberAssignment: EncounterEnvironmentAssignment
   roleCallStanding: RoleCallStanding
+  // Surface assignment metadata — carries style_profile, directory_key, registered_surface.
+  // Threaded from measures_encounter_surface_assignment.metadata for FREE consumption.
+  surfaceAssignmentMetadata: Record<string, unknown> | null
 }
 
 // Renderable encounter — composed encounter after release gate passes.
@@ -136,6 +148,7 @@ export type RenderableEncounter = {
   materialIdentity: MaterialIdentity
   chamberAssignment: EncounterEnvironmentAssignment
   roleCallStanding: RoleCallStanding
+  surfaceAssignmentMetadata: Record<string, unknown> | null
   gateResult: { status: "released" }
 }
 

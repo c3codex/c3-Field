@@ -48,7 +48,7 @@ function resolveNextSurface(encounter: RenderableEncounter): string | null {
 export default function LapisChamberRenderer(props: LapisChamberProps) {
   const { surface } = props.encounter
 
-  if (surface === "structural_drift_dispatches") {
+  if (surface === "lapis_chamber_encounter") {
     return <UnDriftedIndex {...props} />
   }
   if (surface === "publication_dispatch") {
@@ -186,12 +186,14 @@ function UnDriftedIndex({
   return (
     <main
       className="measures-registry-runtime"
-      data-surface="structural_drift_dispatches"
+      data-surface={encounter.surface}
       data-material-family="lapis"
       data-layout-contract="undrifted_publication"
       data-landing-contract={landingKey ?? "missing_landing_contract"}
       data-style-contract={styleKey ?? "missing_style_contract"}
       data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >
       {renderHeader({ title })}

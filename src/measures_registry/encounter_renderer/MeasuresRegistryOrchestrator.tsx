@@ -23,26 +23,26 @@ type OrchestratorSurface = EncounterSurface | "privacy" | "terms"
 const HISTORY_SOURCE = "measures_registry_free"
 
 const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
-  "/ai-operations-assessment": "measures_assessment",
-  "/structural-drift": "structural_drift_dispatches",
-  "/undrifted": "structural_drift_dispatches",
-  "/map-integrity-governance": "map_integrity_governance",
-  "/about": "about_measures_registry",
-  "/about-measures-registry": "about_measures_registry",
+  "/ai-operations-assessment": "obsidian_chamber_encounter_surface",
+  "/structural-drift": "lapis_chamber_encounter",
+  "/undrifted": "lapis_chamber_encounter",
+  "/map-integrity-governance": "marble_chamber_C2_compact",
+  "/about": "crystal_seat_encounter",
+  "/about-measures-registry": "crystal_seat_encounter",
   "/privacy": "privacy",
   "/terms": "terms",
 }
 
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
-  measures_assessment: "/ai-operations-assessment",
-  about_measures_registry: "/about",
-  map_integrity_governance: "/map-integrity-governance",
-  structural_drift_dispatches: "/undrifted",
+  obsidian_chamber_encounter_surface: "/ai-operations-assessment",
+  crystal_seat_encounter: "/about",
+  marble_chamber_C2_compact: "/map-integrity-governance",
+  lapis_chamber_encounter: "/undrifted",
   publication_dispatch: "/publication/structural_drift",
   privacy: "/privacy",
   terms: "/terms",
-  intro_hook: "/",
-  intro: "/",
+  crystal_seat_threshold: "/",
+  crystal_seat_orientation: "/",
 }
 
 function normalizePathname(pathname: string): string {
@@ -50,12 +50,14 @@ function normalizePathname(pathname: string): string {
 }
 
 function initialSurface(): OrchestratorSurface {
-  const pathname = normalizePathname(window.location.pathname)
+  const url = new URL(window.location.href)
+  const pathname = normalizePathname(url.pathname)
+  if (url.searchParams.get("payment") === "success") return "marble_chamber_C2_resolution"
   const mapped = ROUTE_SURFACE_MAP[pathname]
   if (mapped) return mapped
   if (pathname.startsWith("/publication/structural_drift/")) return "publication_dispatch"
-  if (pathname === "/publication/structural_drift") return "structural_drift_dispatches"
-  return "intro_hook"
+  if (pathname === "/publication/structural_drift") return "lapis_chamber_encounter"
+  return "crystal_seat_threshold"
 }
 
 function historyUrl(surface: OrchestratorSurface): string {
@@ -177,7 +179,7 @@ export default function MeasuresRegistryOrchestrator() {
           <span aria-hidden="true">·</span>
           <a href="/terms" onClick={(e) => { e.preventDefault(); navigate("terms") }}>Terms</a>
           <span aria-hidden="true">·</span>
-          <a href="/about" onClick={(e) => { e.preventDefault(); navigate("about_measures_registry") }}>Contact</a>
+          <a href="/about" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Contact</a>
         </nav>
       </footer>
     )
@@ -282,7 +284,7 @@ export default function MeasuresRegistryOrchestrator() {
           map_standing: mapStanding,
           map_pathway: mapPathway,
           contact_email: contactEmail,
-          success_url: `${origin}/map-integrity-governance`,
+          success_url: `${origin}/map-integrity-governance?payment=success`,
           cancel_url: `${origin}/map-integrity-governance`,
         }),
       })

@@ -8,6 +8,8 @@ import {
   asString,
   asStringArray,
 } from "../shared/encounterRendererUtils"
+import { PublicAssessmentResult } from "../../PublicAssessmentResult"
+import type { AssessmentEmailArtifact, EnvironmentalStandingReport } from "../../measuresAssessmentTypes"
 
 export type MapPaymentParams = {
   mapPathway: string
@@ -48,8 +50,20 @@ function resolveNextSurface(encounter: RenderableEncounter): string | null {
 export default function MarbleChamberRenderer(props: MarbleChamberProps) {
   const { surface } = props.encounter
 
-  if (surface === "map_integrity_governance" || surface === "marble_chamber_orientation_passage") {
-    return <MapIntegrityGovernance {...props} onInitiateMapPayment={props.onInitiateMapPayment} />
+  if (surface === "marble_chamber_C2_compact" || surface === "marble_chamber_orientation_passage") {
+    return <MapIntegrityGovernance {...props} />
+  }
+  if (surface === "marble_chamber_orientation") {
+    return <MarbleOrientationSeat {...props} />
+  }
+  if (surface === "marble_chamber_encounter") {
+    return <MarbleChamberEncounter {...props} />
+  }
+  if (surface === "marble_chamber_C2_agreement") {
+    return <MarbleC2Agreement {...props} />
+  }
+  if (surface === "marble_chamber_C2_resolution") {
+    return <MarbleC2Resolution {...props} />
   }
 
   // Renderer gap: surface is marble-assigned but presentation not yet seated
@@ -82,16 +96,11 @@ function MapIntegrityGovernance({
   encounter,
   registryTokenStyle,
   onNavigate,
-  onInitiateMapPayment,
   renderHeader,
   renderSystemFooter,
 }: MarbleChamberProps) {
-  const [checkoutLoading, setCheckoutLoading] = useState(false)
-  const [checkoutError, setCheckoutError] = useState<string | null>(null)
-  const [emailInput, setEmailInput] = useState("")
-
-  // Read assessment session for standing key and contact email.
-  // Written by handleSubmitEvaluation after assessment contact capture.
+  // Read assessment session for standing key (used to identify recommended pathway).
+  // Written by ObsidianC1Compact after contact capture.
   const [mapSession] = useState<MapSession>(() => {
     try {
       const raw = sessionStorage.getItem("__mreg_pending_report")
@@ -100,7 +109,6 @@ function MapIntegrityGovernance({
   })
 
   const standingKey = asString((mapSession?.report as Record<string, unknown> | null | undefined)?.standing_key) ?? ""
-  const contactEmail = asString(mapSession?.fields?.contact_email)?.trim() ?? ""
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const governanceHeader = asRecord(meta?.governance_header)
@@ -132,16 +140,14 @@ function MapIntegrityGovernance({
 
   const next = resolveNextSurface(encounter)
 
-  async function handlePayment(mapPathway: string) {
-    if (!onInitiateMapPayment) return
-    const email = contactEmail || emailInput.trim()
-    if (!email) { setCheckoutError("Email address is required."); return }
-    if (!standingKey) { setCheckoutError("Complete the AI Operations Assessment to begin MAP checkout."); return }
-    setCheckoutLoading(true)
-    setCheckoutError(null)
-    const { error } = await onInitiateMapPayment({ mapPathway, mapStanding: standingKey, contactEmail: email })
-    setCheckoutLoading(false)
-    if (error) setCheckoutError(error)
+  function handleSelectPathway(mapPathway: string) {
+    try {
+      sessionStorage.setItem("__mreg_c2_pending", JSON.stringify({
+        mapPathway,
+        mapStanding: standingKey,
+      }))
+    } catch { /* ignore */ }
+    if (next) onNavigate(next as EncounterSurface)
   }
 
   return (
@@ -151,6 +157,8 @@ function MapIntegrityGovernance({
       data-material-family="marble"
       data-layout-contract="marble_chamber_directory"
       data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >
       {renderHeader({ title })}
@@ -180,29 +188,11 @@ function MapIntegrityGovernance({
           </section>
         ) : null}
 
-        {/* PAYMENT STATE */}
-        {onInitiateMapPayment ? (
-          <>
-            {!standingKey ? (
-              <p className="registry-map-assessment-required">
-                Complete the AI Operations Assessment to receive your recommended MAP pathway and begin checkout.
-              </p>
-            ) : !contactEmail ? (
-              <div className="registry-map-email-entry">
-                <label htmlFor="map-checkout-email">Email for checkout</label>
-                <input
-                  id="map-checkout-email"
-                  type="email"
-                  value={emailInput}
-                  placeholder="email@organization.com"
-                  onChange={(e) => setEmailInput(e.target.value)}
-                />
-              </div>
-            ) : null}
-            {checkoutError ? (
-              <p className="registry-marble-checkout-error" role="alert">{checkoutError}</p>
-            ) : null}
-          </>
+        {/* ASSESSMENT STANDING */}
+        {!standingKey ? (
+          <p className="registry-map-assessment-required">
+            Complete the AI Operations Assessment to receive your recommended MAP pathway.
+          </p>
         ) : null}
 
         {/* PATHWAY CARDS */}
@@ -265,15 +255,15 @@ function MapIntegrityGovernance({
                       <p>{paymentBoundary}</p>
                     </div>
                   ) : null}
-                  {onInitiateMapPayment && cardMapPathway ? (
+                  {cardMapPathway ? (
                     <div className="registry-marble-circuit-payment-action">
                       <button
                         type="button"
                         className="registry-marble-circuit-payment-cta"
-                        disabled={checkoutLoading || !standingKey}
-                        onClick={() => void handlePayment(cardMapPathway)}
+                        disabled={!standingKey}
+                        onClick={() => handleSelectPathway(cardMapPathway)}
                       >
-                        {checkoutLoading ? "Processing..." : (asString(card.cta) ?? `Select ${cardTitle}`)}
+                        {asString(card.cta) ?? `Select ${cardTitle}`}
                       </button>
                     </div>
                   ) : null}
@@ -331,6 +321,330 @@ function MapIntegrityGovernance({
           </div>
         ) : null}
 
+      </section>
+      {renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- marble_chamber_orientation ---------------------------------------------
+// Media explainer before assessment findings report.
+// Media role: assessment_report_orientation. Navigate to marble_chamber_encounter on continue.
+
+function MarbleOrientationSeat({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  renderHeader,
+  renderSystemFooter,
+}: MarbleChamberProps) {
+  const [muted, setMuted] = useState(false)
+
+  const meta = asRecord(encounter.encounterDef?.metadata)
+  const contentProfile = asRecord(meta?.content_profile)
+  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Pathway Review"
+  const next = resolveNextSurface(encounter)
+  const videoUrl = mediaUrl(encounter.mediaByRole.get("assessment_report_orientation"))
+
+  function handleContinue() {
+    if (next) onNavigate(next as EncounterSurface)
+  }
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="marble_chamber_orientation"
+      data-material-family="marble"
+      data-layout-contract="orientation_media"
+      data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(meta?.directory_key) ?? undefined}
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title })}
+      <section className="registry-marble-chamber registry-marble-orientation" aria-label={title}>
+        {videoUrl ? (
+          <video
+            src={videoUrl}
+            autoPlay
+            muted={muted}
+            playsInline
+            preload="auto"
+            onEnded={handleContinue}
+            aria-label={title}
+          />
+        ) : (
+          <p className="registry-media-absence">Marble orientation media is not seated.</p>
+        )}
+        <div className="registry-diagnostic-passage-controls">
+          <button type="button" onClick={handleContinue}>
+            Continue
+          </button>
+          {videoUrl ? (
+            <button type="button" onClick={() => setMuted((m) => !m)}>
+              {muted ? "Audio" : "Mute"}
+            </button>
+          ) : null}
+        </div>
+      </section>
+      {renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- marble_chamber_encounter -----------------------------------------------
+// Assessment findings report surface. Reads __mreg_pending_report from sessionStorage.
+// Renders PublicAssessmentResult. Navigate to marble_chamber_C2_compact on continue.
+
+type PendingReport = {
+  report: EnvironmentalStandingReport | null
+  emailArtifact: AssessmentEmailArtifact | null
+  fields: Record<string, string>
+  assessmentCompletion: Record<string, unknown> | null
+  reportContract: Record<string, unknown> | null
+}
+
+function MarbleChamberEncounter({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  renderHeader,
+  renderSystemFooter,
+}: MarbleChamberProps) {
+  const [muted, setMuted] = useState(false)
+  const [pendingReport] = useState<PendingReport | null>(() => {
+    try {
+      const raw = sessionStorage.getItem("__mreg_pending_report")
+      return raw ? (JSON.parse(raw) as PendingReport) : null
+    } catch { return null }
+  })
+
+  const next = resolveNextSurface(encounter)
+
+  function handleBeginPathwayReview() {
+    if (next) onNavigate(next as EncounterSurface)
+  }
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="marble_chamber_encounter"
+      data-material-family="marble"
+      data-layout-contract="findings_report"
+      data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title: "Measures Registry" })}
+      <section className="registry-iis-eval registry-assessment-chamber" aria-label="Assessment Evaluation Report">
+        {pendingReport ? (
+          <PublicAssessmentResult
+            assessmentCompletion={pendingReport.assessmentCompletion}
+            emailArtifact={pendingReport.emailArtifact}
+            passageMuted={muted}
+            report={pendingReport.report}
+            reportContract={pendingReport.reportContract}
+            reportFields={pendingReport.fields}
+            structuredEnvironmentPassageVideoUrl={null}
+            onBeginPathwayReview={handleBeginPathwayReview}
+            onEnterStructuredEnvironment={handleBeginPathwayReview}
+            onStructuredEnvironmentVideoEnded={handleBeginPathwayReview}
+            onTogglePassageMuted={() => setMuted((m) => !m)}
+          />
+        ) : (
+          <div className="registry-held-state" role="status">
+            <p>Assessment report is not ready. Complete the AI Operations Assessment to continue.</p>
+          </div>
+        )}
+      </section>
+      {renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- marble_chamber_C2_agreement --------------------------------------------
+// Payment agreement surface. Reads selected pathway from __mreg_c2_pending.
+// Calls onInitiateMapPayment with existing callback (no Stripe logic rewrite).
+
+type C2Pending = {
+  mapPathway: string
+  mapStanding: string
+}
+
+function MarbleC2Agreement({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  onInitiateMapPayment,
+  renderHeader,
+  renderSystemFooter,
+}: MarbleChamberProps) {
+  const [c2Pending] = useState<C2Pending | null>(() => {
+    try {
+      const raw = sessionStorage.getItem("__mreg_c2_pending")
+      return raw ? (JSON.parse(raw) as C2Pending) : null
+    } catch { return null }
+  })
+  const [contactEmail, setContactEmail] = useState(() => {
+    try {
+      const raw = sessionStorage.getItem("__mreg_pending_report")
+      if (!raw) return ""
+      const parsed = JSON.parse(raw) as { fields?: Record<string, string> }
+      return parsed.fields?.contact_email?.trim() ?? ""
+    } catch { return "" }
+  })
+  const [emailInput, setEmailInput] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const next = resolveNextSurface(encounter)
+  const contentProfile = asRecord(encounter.encounterDef?.metadata?.content_profile)
+  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Payment Agreement"
+  const heldBody = asString(contentProfile?.held_body) ?? "Select a MAP pathway to continue to payment."
+  const heldCtaLabel = asString(contentProfile?.held_cta_label) ?? "Return to MAP"
+  const pathwayPrefix = asString(contentProfile?.pathway_prefix) ?? "Selected pathway:"
+  const emailLabel = asString(contentProfile?.email_label) ?? "Email for checkout"
+  const emailPlaceholder = asString(contentProfile?.email_placeholder) ?? "email@organization.com"
+  const ctaLabel = asString(contentProfile?.cta_label) ?? "Proceed to Payment"
+  const ctaLoadingLabel = asString(contentProfile?.cta_loading) ?? "Processing..."
+  const effectiveEmail = contactEmail || emailInput.trim()
+
+  async function handleInitiatePayment() {
+    if (!onInitiateMapPayment || !c2Pending) return
+    if (!effectiveEmail) { setError("Email address is required."); return }
+    setLoading(true)
+    setError(null)
+    const { error: payError } = await onInitiateMapPayment({
+      mapPathway: c2Pending.mapPathway,
+      mapStanding: c2Pending.mapStanding,
+      contactEmail: effectiveEmail,
+    })
+    setLoading(false)
+    if (payError) setError(payError)
+  }
+
+  if (!c2Pending) {
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="marble_chamber_C2_agreement"
+        data-material-family="marble"
+        data-release-standing="held_missing_session"
+        data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+        data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
+        style={registryTokenStyle}
+      >
+        {renderHeader({ title })}
+        <section className="registry-held-state" role="status">
+          <span>Marble</span>
+          <p>{heldBody}</p>
+          {next ? (
+            <button type="button" onClick={() => onNavigate(next as EncounterSurface)}>
+              {heldCtaLabel}
+            </button>
+          ) : null}
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
+  }
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="marble_chamber_C2_agreement"
+      data-material-family="marble"
+      data-layout-contract="payment_agreement"
+      data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title })}
+      <section className="registry-marble-chamber registry-marble-payment-agreement" aria-label={title}>
+        <header className="registry-marble-directory-header">
+          <h2>{title}</h2>
+          <p>{pathwayPrefix} {c2Pending.mapPathway.replaceAll("_", " ")}</p>
+        </header>
+        {!contactEmail ? (
+          <div className="registry-map-email-entry">
+            <label htmlFor="c2-checkout-email">{emailLabel}</label>
+            <input
+              id="c2-checkout-email"
+              type="email"
+              value={emailInput}
+              placeholder={emailPlaceholder}
+              onChange={(e) => setEmailInput(e.target.value)}
+            />
+          </div>
+        ) : null}
+        {error ? <p className="registry-marble-checkout-error" role="alert">{error}</p> : null}
+        {onInitiateMapPayment ? (
+          <div className="registry-marble-circuit-payment-action">
+            <button
+              type="button"
+              className="registry-marble-circuit-payment-cta"
+              disabled={loading || !effectiveEmail}
+              onClick={() => void handleInitiatePayment()}
+            >
+              {loading ? ctaLoadingLabel : ctaLabel}
+            </button>
+          </div>
+        ) : (
+          <p className="registry-media-absence">Payment initiation is not available.</p>
+        )}
+      </section>
+      {renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- marble_chamber_C2_resolution -------------------------------------------
+// Payment confirmation surface. Reached via Stripe success_url redirect.
+// Terminal surface — no next_surface in encounter_structure.
+
+function MarbleC2Resolution({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  renderHeader,
+  renderSystemFooter,
+}: MarbleChamberProps) {
+  const meta = asRecord(encounter.encounterDef?.metadata)
+  const contentProfile = asRecord(meta?.content_profile)
+  const eyebrow = asString(contentProfile?.eyebrow) ?? "MAP Registration"
+  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Registration Received"
+  const body = asString(contentProfile?.body) ?? "Your MAP the Environment registration has been received."
+  const ctaLabel = asString(contentProfile?.cta_label) ?? "Return to Measures Registry"
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="marble_chamber_C2_resolution"
+      data-material-family="marble"
+      data-layout-contract="confirmation_resolution"
+      data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(meta?.directory_key) ?? undefined}
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title })}
+      <section className="registry-marble-chamber registry-marble-resolution" aria-label={title}>
+        <header className="registry-marble-directory-header">
+          <span>{eyebrow}</span>
+          <h2>{title}</h2>
+          <p>{body}</p>
+        </header>
+        <div className="registry-marble-resolution-actions">
+          <button
+            type="button"
+            className="registry-marble-cta"
+            onClick={() => onNavigate("crystal_seat_encounter")}
+          >
+            {ctaLabel}
+          </button>
+        </div>
       </section>
       {renderSystemFooter()}
     </main>

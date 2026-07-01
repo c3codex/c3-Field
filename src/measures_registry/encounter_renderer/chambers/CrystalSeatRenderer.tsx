@@ -55,16 +55,13 @@ function resolveBranchSurface(
 export default function CrystalSeatRenderer(props: CrystalSeatProps) {
   const { surface } = props.encounter
 
-  if (surface === "intro_hook" || surface === "intro") {
+  if (surface === "crystal_seat_intro" || surface === "crystal_seat_threshold" || surface === "crystal_seat_orientation") {
     return <IntroHookSeat {...props} />
-  }
-  if (surface === "path_choice") {
-    return <PathChoiceSeat {...props} />
   }
   if (surface === "structure_passage" || surface === "crystal_seat_orientation_passage") {
     return <StructurePassageSeat {...props} />
   }
-  if (surface === "about_measures_registry") {
+  if (surface === "crystal_seat_encounter") {
     return <AboutMeasuresRegistry {...props} />
   }
   if (surface === "measures_structured_environments") {
@@ -174,6 +171,8 @@ function IntroHookSeat({
       data-material-family="crystal"
       data-layout-contract="intro"
       data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >
       {!landingHeroReady ? (
@@ -376,7 +375,7 @@ function PathChoiceSeat({
   return (
     <main
       className="measures-registry-runtime"
-      data-surface="path_choice"
+      data-surface={encounter.surface}
       data-material-family="crystal"
       data-layout-contract="transition_choice"
       data-release-standing="public"
@@ -519,7 +518,7 @@ function AboutMeasuresRegistry({
     return (
       <main
         className="measures-registry-runtime"
-        data-surface="about_measures_registry"
+        data-surface={encounter.surface}
         data-material-family="crystal"
         data-release-standing="held_missing_registry_content"
         style={registryTokenStyle}
@@ -568,6 +567,8 @@ function AboutMeasuresRegistry({
       data-surface="about_measures_registry"
       data-material-family="crystal"
       data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >
       {renderHeader({ title })}

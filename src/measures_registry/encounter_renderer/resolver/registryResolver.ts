@@ -11,33 +11,36 @@ import type {
 
 const ENCOUNTER_REGISTRY_KEYS = [
   "ai_isnt_broken_intro",
-  "evaluate_structure_path",
-  "eval_passage",
+  "obsidian_chamber_orientation",
   "measures_assessment",
   "obsidian_to_marble_passage_video",
   "map_integrity_governance",
-  "structure_passage",
   "about_measures_registry",
-  "structural_drift_publication",
+  "undrifted",
   "measures_registry_root",
-  "crystal_seat_orientation_passage",
-  "obsidian_chamber_orientation_passage",
-  "marble_chamber_orientation_passage",
+  "crystal_seat_intro",
+  "obsidian_chamber_C1_compact",
+  "marble_chamber_orientation",
+  "marble_chamber_encounter",
+  "marble_chamber_C2_agreement",
+  "marble_chamber_C2_resolution",
 ] as const
 
 const ENCOUNTER_DEF_KEYS = [
   "ai_isnt_broken_intro",
-  "evaluate_structure_path",
-  "eval_passage",
+  "obsidian_chamber_orientation",
   "measures_assessment",
   "obsidian_to_marble_passage_video",
   "map_integrity_governance",
-  "structure_passage",
   "about_measures_registry",
-  "structural_drift_publication",
-  "crystal_seat_orientation_passage",
-  "obsidian_chamber_orientation_passage",
-  "marble_chamber_orientation_passage",
+  "undrifted",
+  "structure_passage",
+  "crystal_seat_intro",
+  "obsidian_chamber_C1_compact",
+  "marble_chamber_orientation",
+  "marble_chamber_encounter",
+  "marble_chamber_C2_agreement",
+  "marble_chamber_C2_resolution",
 ] as const
 
 const MEDIA_CAMPAIGN_KEYS = [
@@ -70,6 +73,7 @@ const MEDIA_ROLES = [
   "obsidian_contact_surface_visual",
   "obsidian_assessment_surface_visual",
   "obsidian_eval_result_surface_visual",
+  "assessment_report_orientation",
 ] as const
 
 const DESIGN_REGISTRY_KEY = "measures_registry"
@@ -121,7 +125,7 @@ export function useRegistryResolver(): RegistryResolverData {
           supabase
             .from("measures_encounter_surface_assignment")
             .select(
-              "surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes",
+              "surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes, metadata",
             ),
         ])
 

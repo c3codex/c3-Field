@@ -74,5 +74,6 @@ export function composeEncounter(
     materialIdentity,
     chamberAssignment,
     roleCallStanding,
+    surfaceAssignmentMetadata: asRecord(assignment.metadata),
   }
 }

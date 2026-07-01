@@ -16,6 +16,8 @@ import type {
 
 type PublicAssessmentSurfaceProps = {
   encounterKey: string
+  styleProfile?: string | null
+  directoryKey?: string | null
   assessmentEyebrow?: string
   assessmentProcessTitle?: string
   assessmentSupportLine?: string
@@ -78,6 +80,8 @@ type PublicAssessmentSurfaceProps = {
 
 export function PublicAssessmentSurface({
   encounterKey,
+  styleProfile,
+  directoryKey,
   assessmentEyebrow,
   assessmentProcessTitle = ASSESSMENT_PROCESS_TITLE,
   assessmentSupportLine = ASSESSMENT_SUPPORT_LINE,
@@ -281,6 +285,8 @@ export function PublicAssessmentSurface({
       data-layout-fit={layoutViewportFit}
       data-material-family={materialFamily}
       data-release-standing="public_contact_gated"
+      data-style-profile={styleProfile ?? undefined}
+      data-directory-key={directoryKey ?? undefined}
       style={chamberStyle}
     >
       <header className="registry-public-header">
