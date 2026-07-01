@@ -71,6 +71,7 @@ const MEDIA_ROLES = [
   "fables_and_myths_cover",
   "ai_isnt_broken_landing",
   "measures_registry_logo",
+  "measures_position",
   "official_codexstone_seal",
   "before_the_pathway_obsidian_to_marble_passage_video",
   "obsidian_contact_surface_visual",

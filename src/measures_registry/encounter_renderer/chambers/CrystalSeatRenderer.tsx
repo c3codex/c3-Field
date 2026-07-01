@@ -134,7 +134,11 @@ function IntroHookSeat({
   const rightSurface = resolveBranchSurface(node, "right")
   const nextSurface = resolveNextSurface(encounter)
 
-  const epigraphVideoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
+  const isOrientationSurface = encounter.surface === "crystal_seat_orientation"
+  const orientationVideoUrl = mediaUrl(encounter.mediaByRole.get("measures_position"))
+  const epigraphVideoUrl = isOrientationSurface && orientationVideoUrl
+    ? orientationVideoUrl
+    : mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
 
   useEffect(() => {
     if (!epigraphVideoUrl && !epigraphFailed) setLandingHeroReady(true)
@@ -154,6 +158,10 @@ function IntroHookSeat({
   }
 
   function handleSkip() {
+    if (isOrientationSurface && nextSurface) {
+      onNavigate(nextSurface as EncounterSurface)
+      return
+    }
     setLandingHeroReady(true)
   }
 
