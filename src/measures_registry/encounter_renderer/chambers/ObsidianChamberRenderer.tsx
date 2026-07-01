@@ -73,7 +73,7 @@ export default function ObsidianChamberRenderer(props: ObsidianChamberProps) {
   if (surface === "obsidian_chamber_orientation") {
     return <ObsidianOrientationThreshold {...props} />
   }
-  if (surface === "eval_passage" || surface === "obsidian_chamber_orientation_passage") {
+  if (surface === "obsidian_chamber_orientation_passage") {
     return <EvalPassage {...props} />
   }
   if (surface === "obsidian_chamber_encounter_surface") {
