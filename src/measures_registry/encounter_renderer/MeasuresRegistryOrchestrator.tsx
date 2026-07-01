@@ -1,5 +1,6 @@
 import "./styles/registry.encounter.css"
 import { useEffect, useMemo, useRef, useState } from "react"
+import type { MaterialIdentity } from "./types/encounterRendererTypes"
 import type { CSSProperties } from "react"
 import { supabase } from "@/integrations/supabase/client"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
@@ -20,6 +21,36 @@ import RegisteredTerms from "./legal/RegisteredTerms"
 // Does not infer authority. Does not bypass EncounterBoundary.
 
 type OrchestratorSurface = EncounterSurface | "privacy" | "terms"
+
+const SURFACE_MATERIAL: Partial<Record<OrchestratorSurface, MaterialIdentity>> = {
+  crystal_seat_intro: "crystal",
+  crystal_seat_threshold: "crystal",
+  crystal_seat_orientation: "crystal",
+  crystal_seat_encounter: "crystal",
+  lapis_chamber_encounter: "lapis",
+  obsidian_chamber_orientation: "obsidian",
+  obsidian_chamber_encounter_surface: "obsidian",
+  obsidian_chamber_C1_compact: "obsidian",
+  marble_chamber_orientation: "marble",
+  marble_chamber_encounter: "marble",
+  marble_chamber_C2_compact: "marble",
+  marble_chamber_C2_agreement: "marble",
+  marble_chamber_C2_resolution: "marble",
+}
+
+const MATERIAL_TONE_ROLE: Record<MaterialIdentity, string> = {
+  crystal: "crystal_tone",
+  lapis: "lapis_tone",
+  obsidian: "obsidian_tone",
+  marble: "marble_tone",
+}
+
+const MATERIAL_TONE_VOLUME: Record<MaterialIdentity, number> = {
+  crystal: 0.10,
+  lapis: 0.08,
+  obsidian: 0.08,
+  marble: 0.06,
+}
 
 const HISTORY_SOURCE = "measures_registry_free"
 
@@ -84,7 +115,9 @@ function normalizeWebsite(value: string | undefined): string {
 export default function MeasuresRegistryOrchestrator() {
   const resolverData = useRegistryResolver()
   const [activeSurface, setActiveSurface] = useState<OrchestratorSurface>(initialSurface)
-  const marbleToneRef = useRef<HTMLAudioElement>(null)
+  const ambientAudioRef = useRef<HTMLAudioElement>(null)
+  const fadeRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [toneBlocked, setToneBlocked] = useState(false)
 
   const navigationSourceRef = useRef<"app" | "history">("app")
   const activeRouteDefaultSurface = ROUTE_SURFACE_MAP[normalizePathname(window.location.pathname)] ?? null
@@ -140,24 +173,78 @@ export default function MeasuresRegistryOrchestrator() {
     return publicUrl ?? exactUrl ?? null
   }, [resolverData.mediaRows])
 
-  const marbleToneUrl = useMemo(() => {
-    const row = resolverData.mediaRows.find(
-      (r) => r.media_role === "marble_tone" && r.is_active !== false,
-    )
-    if (!row) return null
-    const meta = row.metadata as Record<string, unknown> | null
-    return resolveRuntimeMediaUrl({
-      publicUrl: typeof meta?.exact_url_seated === "string" ? meta.exact_url_seated : null,
-      bucketName: row.storage_bucket,
-      storagePath: row.storage_path,
-    })
+  const toneUrlByMaterial = useMemo(() => {
+    const map = {} as Record<MaterialIdentity, string | null>
+    for (const material of ["crystal", "lapis", "obsidian", "marble"] as MaterialIdentity[]) {
+      const role = MATERIAL_TONE_ROLE[material]
+      const row = resolverData.mediaRows.find((r) => r.media_role === role && r.is_active !== false)
+      if (!row) { map[material] = null; continue }
+      const meta = row.metadata as Record<string, unknown> | null
+      map[material] = resolveRuntimeMediaUrl({
+        publicUrl: typeof meta?.exact_url_seated === "string" ? meta.exact_url_seated : null,
+        bucketName: row.storage_bucket,
+        storagePath: row.storage_path,
+      })
+    }
+    return map
   }, [resolverData.mediaRows])
 
+  const activeMaterial = SURFACE_MATERIAL[activeSurface] ?? null
+  const activeToneUrl = activeMaterial ? (toneUrlByMaterial[activeMaterial] ?? null) : null
+  const activeToneVolume = activeMaterial ? MATERIAL_TONE_VOLUME[activeMaterial] : 0.08
+
   useEffect(() => {
-    if (marbleToneRef.current) {
-      marbleToneRef.current.volume = 0.12
+    const el = ambientAudioRef.current
+    if (!el) return
+
+    if (fadeRef.current) {
+      clearInterval(fadeRef.current)
+      fadeRef.current = null
     }
-  }, [marbleToneUrl])
+
+    if (!activeToneUrl) {
+      if (!el.paused) {
+        fadeRef.current = setInterval(() => {
+          if (!ambientAudioRef.current) return
+          const v = Math.max(0, ambientAudioRef.current.volume - 0.005)
+          ambientAudioRef.current.volume = v
+          if (v === 0) {
+            clearInterval(fadeRef.current!)
+            fadeRef.current = null
+            ambientAudioRef.current.pause()
+          }
+        }, 50)
+      }
+      return () => {
+        if (fadeRef.current) { clearInterval(fadeRef.current); fadeRef.current = null }
+      }
+    }
+
+    const target = activeToneVolume
+    el.pause()
+    el.src = activeToneUrl
+    el.volume = 0
+    el.loop = true
+    el.load()
+    void el.play().then(() => {
+      setToneBlocked(false)
+      fadeRef.current = setInterval(() => {
+        if (!ambientAudioRef.current) return
+        const v = Math.min(target, ambientAudioRef.current.volume + 0.005)
+        ambientAudioRef.current.volume = v
+        if (v >= target) {
+          clearInterval(fadeRef.current!)
+          fadeRef.current = null
+        }
+      }, 50)
+    }).catch(() => {
+      setToneBlocked(true)
+    })
+
+    return () => {
+      if (fadeRef.current) { clearInterval(fadeRef.current); fadeRef.current = null }
+    }
+  }, [activeToneUrl, activeToneVolume])
 
   function navigate(surface: OrchestratorSurface) {
     navigationSourceRef.current = "app"
@@ -355,17 +442,55 @@ export default function MeasuresRegistryOrchestrator() {
     )
   }
 
+  function handleEnableTone() {
+    const el = ambientAudioRef.current
+    if (!el || !activeToneUrl) return
+    el.volume = 0
+    void el.play().then(() => {
+      setToneBlocked(false)
+      if (fadeRef.current) { clearInterval(fadeRef.current); fadeRef.current = null }
+      const target = activeToneVolume
+      fadeRef.current = setInterval(() => {
+        if (!ambientAudioRef.current) return
+        const v = Math.min(target, ambientAudioRef.current.volume + 0.005)
+        ambientAudioRef.current.volume = v
+        if (v >= target) {
+          clearInterval(fadeRef.current!)
+          fadeRef.current = null
+        }
+      }, 50)
+    })
+  }
+
   return (
     <>
-      {marbleToneUrl ? (
-        <audio
-          ref={marbleToneRef}
-          src={marbleToneUrl}
-          autoPlay
-          loop
-          aria-hidden="true"
-          style={{ position: "fixed", width: 0, height: 0, opacity: 0, pointerEvents: "none" }}
-        />
+      <audio
+        ref={ambientAudioRef}
+        aria-hidden="true"
+        style={{ position: "fixed", width: 0, height: 0, opacity: 0, pointerEvents: "none" }}
+      />
+      {toneBlocked && activeToneUrl ? (
+        <button
+          onClick={handleEnableTone}
+          aria-label="Enable ambient tone"
+          style={{
+            position: "fixed",
+            bottom: "4.5rem",
+            right: "1rem",
+            zIndex: 50,
+            background: "transparent",
+            border: "1px solid currentColor",
+            borderRadius: "2rem",
+            padding: "0.3rem 0.7rem",
+            fontSize: "0.65rem",
+            letterSpacing: "0.08em",
+            cursor: "pointer",
+            opacity: 0.4,
+            color: "inherit",
+          }}
+        >
+          Enable Tone
+        </button>
       ) : null}
       <EncounterEntry
         activeSurface={activeSurface}
