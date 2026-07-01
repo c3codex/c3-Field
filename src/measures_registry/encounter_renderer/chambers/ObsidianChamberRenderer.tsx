@@ -70,7 +70,10 @@ export default function ObsidianChamberRenderer(props: ObsidianChamberProps) {
   const { encounter } = props
   const { surface } = encounter
 
-  if (surface === "obsidian_chamber_orientation" || surface === "eval_passage" || surface === "obsidian_chamber_orientation_passage") {
+  if (surface === "obsidian_chamber_orientation") {
+    return <ObsidianOrientationThreshold {...props} />
+  }
+  if (surface === "eval_passage" || surface === "obsidian_chamber_orientation_passage") {
     return <EvalPassage {...props} />
   }
   if (surface === "obsidian_chamber_encounter_surface") {
@@ -98,6 +101,103 @@ export default function ObsidianChamberRenderer(props: ObsidianChamberProps) {
         <p>Presentation for obsidian surface <code>{surface}</code> is not yet seated.</p>
       </section>
       {props.renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- obsidian_chamber_orientation -------------------------------------------
+// L/R motion-to-still threshold. Both sides navigate to obsidian_chamber_encounter_surface.
+// Uses shared crystal threshold media roles (left_hero_fracture_motion, measured_hero_motion_graphic,
+// left_hero_fracture, right_measured_hero). No passage video.
+
+function ObsidianOrientationThreshold({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  renderHeader,
+  renderSystemFooter,
+}: ObsidianChamberProps) {
+  const [leftSettled, setLeftSettled] = useState(false)
+  const [rightSettled, setRightSettled] = useState(false)
+
+  const meta = asRecord(encounter.encounterDef?.metadata)
+  const contentProfile = asRecord(meta?.content_profile)
+  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Structural Coherence"
+  const next = resolveNextSurface(encounter)
+
+  const leftStillUrl = mediaUrl(encounter.mediaByRole.get("left_hero_fracture"))
+  const leftMotionUrl = mediaUrl(encounter.mediaByRole.get("left_hero_fracture_motion"))
+  const rightStillUrl = mediaUrl(encounter.mediaByRole.get("right_measured_hero"))
+  const rightMotionUrl = mediaUrl(encounter.mediaByRole.get("measured_hero_motion_graphic"))
+
+  function handleContinue() {
+    if (next) onNavigate(next as EncounterSurface)
+  }
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface={encounter.surface}
+      data-material-family="obsidian"
+      data-layout-contract="orientation_threshold"
+      data-release-standing="public"
+      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-directory-key={asString(meta?.directory_key) ?? undefined}
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title })}
+      <section className="registry-threshold-hero" aria-label={title}>
+        <button
+          type="button"
+          className="registry-threshold-seat"
+          data-side="left"
+          onClick={handleContinue}
+        >
+          {leftStillUrl ? (
+            <img className="registry-threshold-still" src={leftStillUrl} alt="" aria-hidden="true" />
+          ) : null}
+          {leftMotionUrl && !leftSettled ? (
+            <video
+              className="registry-threshold-motion"
+              src={leftMotionUrl}
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              aria-label="Fractured environment"
+              onEnded={() => setLeftSettled(true)}
+              onError={() => setLeftSettled(true)}
+            />
+          ) : null}
+        </button>
+
+        <div className="registry-threshold-divide" aria-hidden="true" />
+
+        <button
+          type="button"
+          className="registry-threshold-seat"
+          data-side="right"
+          onClick={handleContinue}
+        >
+          {rightStillUrl ? (
+            <img className="registry-threshold-still" src={rightStillUrl} alt="" aria-hidden="true" />
+          ) : null}
+          {rightMotionUrl && !rightSettled ? (
+            <video
+              className="registry-threshold-motion"
+              src={rightMotionUrl}
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              aria-label="Measured environment"
+              onEnded={() => setRightSettled(true)}
+              onError={() => setRightSettled(true)}
+            />
+          ) : null}
+        </button>
+      </section>
+      {renderSystemFooter()}
     </main>
   )
 }
