@@ -111,11 +111,12 @@ function EvalPassage({
   renderHeader,
   renderSystemFooter,
 }: ObsidianChamberProps) {
-  const [muted, setMuted] = useState(false)
+  const [muted, setMuted] = useState(true)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
+  const contentProfile = asRecord(meta?.content_profile)
   const unseeded = asString(meta?.status_note)?.includes("Seated without final public copy") ?? false
-  const title = (unseeded ? null : encounter.encounterDef?.display_title)
+  const title = (unseeded ? null : asString(contentProfile?.title) ?? encounter.encounterDef?.display_title)
     ?? "Before evaluation, recognize the environment."
   const videoUrl = mediaUrl(encounter.mediaByRole.get("explainer_video"))
   const next = resolveNextSurface(encounter)

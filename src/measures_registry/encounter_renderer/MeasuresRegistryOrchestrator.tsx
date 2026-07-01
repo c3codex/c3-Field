@@ -2,6 +2,7 @@ import "./styles/registry.encounter.css"
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties } from "react"
 import { supabase } from "@/integrations/supabase/client"
+import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import { useRegistryResolver } from "./resolver/registryResolver"
 import EncounterEntry from "./EncounterEntry"
 import type { AssessmentCapturePayload } from "./chambers/ObsidianChamberRenderer"
@@ -83,6 +84,7 @@ function normalizeWebsite(value: string | undefined): string {
 export default function MeasuresRegistryOrchestrator() {
   const resolverData = useRegistryResolver()
   const [activeSurface, setActiveSurface] = useState<OrchestratorSurface>(initialSurface)
+  const marbleToneRef = useRef<HTMLAudioElement>(null)
 
   const navigationSourceRef = useRef<"app" | "history">("app")
   const activeRouteDefaultSurface = ROUTE_SURFACE_MAP[normalizePathname(window.location.pathname)] ?? null
@@ -137,6 +139,25 @@ export default function MeasuresRegistryOrchestrator() {
     const exactUrl = typeof meta?.exact_url_seated === "string" ? meta.exact_url_seated : null
     return publicUrl ?? exactUrl ?? null
   }, [resolverData.mediaRows])
+
+  const marbleToneUrl = useMemo(() => {
+    const row = resolverData.mediaRows.find(
+      (r) => r.media_role === "marble_tone" && r.is_active !== false,
+    )
+    if (!row) return null
+    const meta = row.metadata as Record<string, unknown> | null
+    return resolveRuntimeMediaUrl({
+      publicUrl: typeof meta?.exact_url_seated === "string" ? meta.exact_url_seated : null,
+      bucketName: row.storage_bucket,
+      storagePath: row.storage_path,
+    })
+  }, [resolverData.mediaRows])
+
+  useEffect(() => {
+    if (marbleToneRef.current) {
+      marbleToneRef.current.volume = 0.12
+    }
+  }, [marbleToneUrl])
 
   function navigate(surface: OrchestratorSurface) {
     navigationSourceRef.current = "app"
@@ -335,17 +356,29 @@ export default function MeasuresRegistryOrchestrator() {
   }
 
   return (
-    <EncounterEntry
-      activeSurface={activeSurface}
-      resolverData={resolverData}
-      registryTokenStyle={registryTokenStyle}
-      onNavigate={navigate}
-      onCaptureAssessment={onCaptureAssessment}
-      onCaptureConnect={onCaptureConnect}
-      onCaptureSubscription={onCaptureSubscription}
-      onInitiateMapPayment={onInitiateMapPayment}
-      renderHeader={renderHeader}
-      renderSystemFooter={renderSystemFooter}
-    />
+    <>
+      {marbleToneUrl ? (
+        <audio
+          ref={marbleToneRef}
+          src={marbleToneUrl}
+          autoPlay
+          loop
+          aria-hidden="true"
+          style={{ position: "fixed", width: 0, height: 0, opacity: 0, pointerEvents: "none" }}
+        />
+      ) : null}
+      <EncounterEntry
+        activeSurface={activeSurface}
+        resolverData={resolverData}
+        registryTokenStyle={registryTokenStyle}
+        onNavigate={navigate}
+        onCaptureAssessment={onCaptureAssessment}
+        onCaptureConnect={onCaptureConnect}
+        onCaptureSubscription={onCaptureSubscription}
+        onInitiateMapPayment={onInitiateMapPayment}
+        renderHeader={renderHeader}
+        renderSystemFooter={renderSystemFooter}
+      />
+    </>
   )
 }

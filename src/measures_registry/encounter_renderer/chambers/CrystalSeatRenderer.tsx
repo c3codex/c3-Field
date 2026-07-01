@@ -114,7 +114,7 @@ function IntroHookSeat({
   renderSystemFooter,
 }: CrystalSeatProps) {
   const [epigraphEntered, setEpigraphEntered] = useState(true)
-  const [epigraphMuted, setEpigraphMuted] = useState(false)
+  const [epigraphMuted, setEpigraphMuted] = useState(true)
   const [epigraphFailed, setEpigraphFailed] = useState(false)
   const [landingHeroReady, setLandingHeroReady] = useState(false)
   const [leftSettled, setLeftSettled] = useState(false)

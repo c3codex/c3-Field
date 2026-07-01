@@ -327,8 +327,17 @@
 }
 
 .measures-registry-runtime .registry-report-controls {
+  display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 0.65rem;
   margin-top: 1rem;
+  position: sticky;
+  bottom: 0;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  background: var(--registry-brand-field);
+  z-index: 2;
 }
 
 .measures-registry-runtime .registry-pathway-passage {

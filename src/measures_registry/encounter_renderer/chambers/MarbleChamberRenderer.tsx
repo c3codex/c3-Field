@@ -338,7 +338,7 @@ function MarbleOrientationSeat({
   renderHeader,
   renderSystemFooter,
 }: MarbleChamberProps) {
-  const [muted, setMuted] = useState(false)
+  const [muted, setMuted] = useState(true)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const contentProfile = asRecord(meta?.content_profile)
