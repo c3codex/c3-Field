@@ -46,10 +46,10 @@ const MATERIAL_TONE_ROLE: Record<MaterialIdentity, string> = {
 }
 
 const MATERIAL_TONE_VOLUME: Record<MaterialIdentity, number> = {
-  crystal: 0.10,
-  lapis: 0.08,
-  obsidian: 0.08,
-  marble: 0.06,
+  crystal: 0.035,
+  lapis: 0.03,
+  obsidian: 0.025,
+  marble: 0.02,
 }
 
 const HISTORY_SOURCE = "measures_registry_free"

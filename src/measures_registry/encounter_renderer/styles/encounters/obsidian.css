@@ -1,0 +1,147 @@
+/* Obsidian Chamber Orientation — assessment entry surface */
+/* Applies to obsidian_chamber_orientation. Public-facing orientation video + copy + CTA. */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── ORIENTATION BODY ─────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+  width: min(var(--registry-content-max-width, 72rem), 100%);
+  margin: 0 auto;
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 3.5rem));
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  box-sizing: border-box;
+}
+
+/* ── VIDEO COLUMN ────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-media {
+  position: relative;
+  width: 100%;
+  max-height: 62svh;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--registry-brand-border, rgba(230, 237, 247, 0.1));
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-media-absent {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ── CONTENT COLUMN ──────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.65rem, 1.2vw, 0.9rem);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-title {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  line-height: 1.2;
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-subtitle {
+  margin: 0;
+  font-size: clamp(0.82rem, 1.1vw, 0.95rem);
+  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.72));
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-body {
+  margin: 0;
+  font-size: clamp(0.8rem, 1vw, 0.88rem);
+  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.55));
+  line-height: 1.75;
+}
+
+/* ── CONTROLS ─────────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  align-items: flex-start;
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-cta {
+  padding: 0.65rem 1.75rem;
+  font-size: clamp(0.78rem, 1vw, 0.88rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  background: transparent;
+  border: 1px solid rgba(230, 237, 247, 0.38);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-cta:hover {
+  background: rgba(230, 237, 247, 0.06);
+  border-color: rgba(230, 237, 247, 0.6);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-audio {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.5));
+  background: transparent;
+  border: 1px solid rgba(230, 237, 247, 0.18);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-audio:hover {
+  color: var(--registry-brand-primary-text, #edf2f8);
+  border-color: rgba(230, 237, 247, 0.38);
+}
+
+/* ── MOBILE ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation {
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 4vw, 2rem);
+    align-items: start;
+  }
+
+  .measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-media {
+    max-height: 48svh;
+  }
+}

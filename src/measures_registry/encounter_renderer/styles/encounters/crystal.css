@@ -83,9 +83,9 @@
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-codexstone-seal {
-  width: clamp(2.5rem, 4vw, 3.5rem);
+  width: clamp(4.5rem, 7vw, 7rem);
   height: auto;
-  opacity: 0.88;
+  opacity: 0.92;
   display: block;
 }
 

@@ -47,7 +47,7 @@ const MEDIA_CAMPAIGN_KEYS = [
 
 const MEDIA_ROLES = [
   "intro_hook_video",
-  "explainer_video",
+  "obsidian",
   "left_hero_fracture",
   "left_hero_fracture_motion",
   "right_measured_hero",

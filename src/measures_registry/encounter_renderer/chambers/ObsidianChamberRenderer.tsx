@@ -99,9 +99,8 @@ export default function ObsidianChamberRenderer(props: ObsidianChamberProps) {
 }
 
 // --- obsidian_chamber_orientation -------------------------------------------
-// L/R motion-to-still threshold. Both sides navigate to obsidian_chamber_encounter_surface.
-// Uses shared crystal threshold media roles (left_hero_fracture_motion, measured_hero_motion_graphic,
-// left_hero_fracture, right_measured_hero). No passage video.
+// Assessment orientation surface. Shows obsidian video + content profile copy + Begin Assessment CTA.
+// Media role: "obsidian". No passage. No L/R split. Single CTA → assessment surface.
 
 function ObsidianOrientationThreshold({
   encounter,
@@ -110,18 +109,16 @@ function ObsidianOrientationThreshold({
   renderHeader,
   renderSystemFooter,
 }: ObsidianChamberProps) {
-  const [leftSettled, setLeftSettled] = useState(false)
-  const [rightSettled, setRightSettled] = useState(false)
+  const [muted, setMuted] = useState(true)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const contentProfile = asRecord(meta?.content_profile)
-  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Structural Coherence"
+  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Assessment Orientation"
+  const subtitle = asString(contentProfile?.subtitle)
+  const body = asString(contentProfile?.body)
   const next = resolveNextSurface(encounter)
 
-  const leftStillUrl = mediaUrl(encounter.mediaByRole.get("left_hero_fracture"))
-  const leftMotionUrl = mediaUrl(encounter.mediaByRole.get("left_hero_fracture_motion"))
-  const rightStillUrl = mediaUrl(encounter.mediaByRole.get("right_measured_hero"))
-  const rightMotionUrl = mediaUrl(encounter.mediaByRole.get("measured_hero_motion_graphic"))
+  const videoUrl = mediaUrl(encounter.mediaByRole.get("obsidian"))
 
   function handleContinue() {
     if (next) onNavigate(next as EncounterSurface)
@@ -132,63 +129,53 @@ function ObsidianOrientationThreshold({
       className="measures-registry-runtime"
       data-surface={encounter.surface}
       data-material-family="obsidian"
-      data-layout-contract="orientation_threshold"
+      data-layout-contract="obsidian_orientation"
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >
       {renderHeader({ title })}
-      <section className="registry-threshold-hero" aria-label={title}>
-        <button
-          type="button"
-          className="registry-threshold-seat"
-          data-side="left"
-          onClick={handleContinue}
-        >
-          {leftStillUrl ? (
-            <img className="registry-threshold-still" src={leftStillUrl} alt="" aria-hidden="true" />
-          ) : null}
-          {leftMotionUrl && !leftSettled ? (
+      <section className="registry-obsidian-orientation" aria-label={title}>
+        <div className="registry-obsidian-orientation-media">
+          {videoUrl ? (
             <video
-              className="registry-threshold-motion"
-              src={leftMotionUrl}
+              src={videoUrl}
               autoPlay
-              muted
+              muted={muted}
               playsInline
               preload="auto"
-              aria-label="Fractured environment"
-              onEnded={() => setLeftSettled(true)}
-              onError={() => setLeftSettled(true)}
+              aria-label={title}
             />
-          ) : null}
-        </button>
-
-        <div className="registry-threshold-divide" aria-hidden="true" />
-
-        <button
-          type="button"
-          className="registry-threshold-seat"
-          data-side="right"
-          onClick={handleContinue}
-        >
-          {rightStillUrl ? (
-            <img className="registry-threshold-still" src={rightStillUrl} alt="" aria-hidden="true" />
-          ) : null}
-          {rightMotionUrl && !rightSettled ? (
-            <video
-              className="registry-threshold-motion"
-              src={rightMotionUrl}
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              aria-label="Measured environment"
-              onEnded={() => setRightSettled(true)}
-              onError={() => setRightSettled(true)}
-            />
-          ) : null}
-        </button>
+          ) : (
+            <div className="registry-obsidian-orientation-media-absent" role="presentation" />
+          )}
+        </div>
+        <div className="registry-obsidian-orientation-content">
+          <div className="registry-obsidian-orientation-copy">
+            <h2 className="registry-obsidian-orientation-title">{title}</h2>
+            {subtitle ? <p className="registry-obsidian-orientation-subtitle">{subtitle}</p> : null}
+            {body ? <p className="registry-obsidian-orientation-body">{body}</p> : null}
+          </div>
+          <div className="registry-obsidian-orientation-controls">
+            {videoUrl ? (
+              <button
+                type="button"
+                className="registry-obsidian-orientation-audio"
+                onClick={() => setMuted((m) => !m)}
+              >
+                {muted ? "Audio" : "Mute"}
+              </button>
+            ) : null}
+            <button
+              type="button"
+              className="registry-obsidian-orientation-cta"
+              onClick={handleContinue}
+            >
+              Begin Assessment
+            </button>
+          </div>
+        </div>
       </section>
       {renderSystemFooter()}
     </main>
