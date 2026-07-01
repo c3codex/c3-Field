@@ -55,8 +55,11 @@ function resolveBranchSurface(
 export default function CrystalSeatRenderer(props: CrystalSeatProps) {
   const { surface } = props.encounter
 
-  if (surface === "crystal_seat_intro" || surface === "crystal_seat_threshold" || surface === "crystal_seat_orientation") {
+  if (surface === "crystal_seat_intro" || surface === "crystal_seat_threshold") {
     return <IntroHookSeat {...props} />
+  }
+  if (surface === "crystal_seat_orientation") {
+    return <CrystalOrientationSeat {...props} />
   }
   if (surface === "crystal_seat_encounter") {
     return <AboutMeasuresRegistry {...props} />
@@ -97,6 +100,86 @@ export default function CrystalSeatRenderer(props: CrystalSeatProps) {
         <p>Presentation for crystal seat surface <code>{surface}</code> is not yet seated.</p>
       </section>
       {props.renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- crystal_seat_orientation ------------------------------------------------
+// Crystal branded surface. Governed site copy + Codexstone seal + 9:16 measures_position video.
+// Intro and threshold remain media-fill (IntroHookSeat). Orientation begins governed frame.
+
+function CrystalOrientationSeat({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  renderHeader,
+  renderSystemFooter,
+}: CrystalSeatProps) {
+  const assignmentMeta = encounter.surfaceAssignmentMetadata ?? {}
+  const governedParagraphs = asStringArray(assignmentMeta.governed_site_paragraphs)
+  const codexstoneCaptions = asStringArray(assignmentMeta.codexstone_captions)
+  const nextSurface = resolveNextSurface(encounter)
+
+  const videoUrl = mediaUrl(encounter.mediaByRole.get("measures_position"))
+  const sealUrl = mediaUrl(encounter.mediaByRole.get("official_codexstone_seal"))
+
+  function handleContinue() {
+    if (nextSurface) onNavigate(nextSurface as EncounterSurface)
+  }
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="crystal_seat_orientation"
+      data-material-family="crystal"
+      data-layout-contract="crystal_orientation"
+      data-release-standing="public"
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title: "Measures Registry" })}
+      <section className="registry-crystal-orientation" aria-label="Crystal Orientation">
+        {videoUrl ? (
+          <div className="registry-crystal-orientation-media">
+            <video
+              src={videoUrl}
+              autoPlay
+              muted
+              playsInline
+              loop
+              aria-label="Measures Position"
+            />
+          </div>
+        ) : null}
+        <div className="registry-crystal-orientation-content">
+          {governedParagraphs.length > 0 ? (
+            <div className="registry-crystal-orientation-copy">
+              {governedParagraphs.map((para, i) => <p key={i}>{para}</p>)}
+            </div>
+          ) : null}
+          {sealUrl || codexstoneCaptions.length > 0 ? (
+            <div className="registry-crystal-codexstone">
+              {sealUrl ? (
+                <img
+                  src={sealUrl}
+                  alt="Codexstone — Official Seal"
+                  className="registry-crystal-codexstone-seal"
+                />
+              ) : null}
+              {codexstoneCaptions.map((caption, i) => (
+                <p key={i} className="registry-crystal-codexstone-caption">{caption}</p>
+              ))}
+            </div>
+          ) : null}
+          <button
+            type="button"
+            className="registry-crystal-orientation-cta"
+            onClick={handleContinue}
+          >
+            Continue
+          </button>
+        </div>
+      </section>
+      {renderSystemFooter()}
     </main>
   )
 }
@@ -474,8 +557,11 @@ function AboutMeasuresRegistry({
     )
   }
 
+  const codexstoneSealSection = asRecord(approved.codexstone_seal_section)
   const orientationSections = asRecordArray(approved.orientation_sections)
   const bridgeSection = asRecord(approved.undrifted_bridge_section)
+  const c3fieldLinksSection = asRecord(approved.c3field_links_section)
+  const c3fieldLinks = asRecordArray(c3fieldLinksSection?.links)
   const connectSection = asRecord(approved.connect_section)
   const connectTitle = asString(connectSection?.title) ?? "Connect"
   const connectBody = asString(connectSection?.body)
@@ -489,6 +575,7 @@ function AboutMeasuresRegistry({
   const articleUrl =
     asString(featuredArticle?.article_url) ?? asString(featuredArticle?.external_url) ?? null
   const videoUrl = mediaUrl(encounter.mediaByRole.get("about_measures_registry_video"))
+  const sealUrl = mediaUrl(encounter.mediaByRole.get("official_codexstone_seal"))
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -505,7 +592,7 @@ function AboutMeasuresRegistry({
   return (
     <main
       className="measures-registry-runtime"
-      data-surface="about_measures_registry"
+      data-surface={encounter.surface}
       data-material-family="crystal"
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
@@ -513,6 +600,20 @@ function AboutMeasuresRegistry({
       style={registryTokenStyle}
     >
       {renderHeader({ title })}
+
+      {codexstoneSealSection ? (
+        <section className="registry-about-seal" aria-label="Codexstone">
+          {sealUrl ? (
+            <img src={sealUrl} alt="Codexstone — Official Seal" className="registry-about-seal-image" />
+          ) : null}
+          {asString(codexstoneSealSection.title) ? (
+            <h2 className="registry-about-seal-title">{asString(codexstoneSealSection.title)}</h2>
+          ) : null}
+          {asString(codexstoneSealSection.subtitle) ? (
+            <p className="registry-about-seal-subtitle">{asString(codexstoneSealSection.subtitle)}</p>
+          ) : null}
+        </section>
+      ) : null}
 
       <section className="registry-about-orientation" aria-label={title}>
         <div className="registry-about-orientation-copy">
@@ -563,6 +664,32 @@ function AboutMeasuresRegistry({
               {asString(bridgeSection.cta_label) ?? "Read Issue →"}
             </span>
           </a>
+        </section>
+      ) : null}
+
+      {c3fieldLinks.length > 0 ? (
+        <section className="registry-about-c3field" aria-label="c3 Field">
+          {asString(c3fieldLinksSection?.label) ? (
+            <span className="registry-about-c3field-label">{asString(c3fieldLinksSection?.label)}</span>
+          ) : null}
+          <div className="registry-about-c3field-links">
+            {c3fieldLinks.map((link) => {
+              const label = asString(link.label)
+              const url = asString(link.url)
+              if (!label || !url) return null
+              return (
+                <a
+                  key={label}
+                  href={url}
+                  className="registry-about-c3field-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {label}
+                </a>
+              )
+            })}
+          </div>
         </section>
       ) : null}
 

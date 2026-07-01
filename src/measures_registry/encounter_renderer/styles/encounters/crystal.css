@@ -1,0 +1,137 @@
+/* Crystal Seat Orientation — governed site surface */
+/* Applies only to crystal_seat_orientation. Intro and threshold remain media-fill. */
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--registry-brand-field, #0b0c11);
+  color: var(--registry-brand-primary-text, #edf2f8);
+}
+
+/* ── ORIENTATION BODY ─────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+  width: min(var(--registry-content-max-width, 72rem), 100%);
+  margin: 0 auto;
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 3.5rem));
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  box-sizing: border-box;
+}
+
+/* ── 9:16 VIDEO COLUMN ───────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media {
+  position: sticky;
+  top: calc(var(--registry-header-height, 3rem) + 1.25rem);
+  aspect-ratio: 9 / 16;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--registry-brand-border, rgba(230, 237, 247, 0.1));
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── CONTENT COLUMN ──────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 3vw, 2.5rem);
+  padding-top: 0.25rem;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.5vw, 1.1rem);
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-copy p {
+  font-size: clamp(0.84rem, 1.1vw, 0.98rem);
+  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.72));
+  line-height: 1.78;
+  margin: 0;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-copy p:first-child {
+  font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+  color: var(--registry-brand-primary-text, #edf2f8);
+  font-weight: 500;
+}
+
+/* ── CODEXSTONE SEAL ─────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-codexstone {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: clamp(0.75rem, 1.5vw, 1.25rem);
+  border-top: 1px solid rgba(210, 190, 140, 0.18);
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-codexstone-seal {
+  width: clamp(2.5rem, 4vw, 3.5rem);
+  height: auto;
+  opacity: 0.88;
+  display: block;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-codexstone-caption {
+  font-size: clamp(0.6rem, 0.78vw, 0.68rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(210, 190, 140, 0.72);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── CTA ─────────────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-cta {
+  align-self: flex-start;
+  padding: 0.65rem 1.75rem;
+  font-size: clamp(0.78rem, 1vw, 0.86rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  background: transparent;
+  border: 1px solid rgba(230, 237, 247, 0.38);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  margin-top: 0.25rem;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-cta:hover {
+  background: rgba(230, 237, 247, 0.06);
+  border-color: rgba(230, 237, 247, 0.6);
+}
+
+/* ── MOBILE ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation {
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media {
+    position: static;
+    max-width: 22rem;
+    margin: 0 auto;
+  }
+}

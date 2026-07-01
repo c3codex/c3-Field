@@ -1,6 +1,6 @@
-/* About Measures Registry — four-section governed encounter */
+/* About Measures Registry / crystal_seat_encounter — governed encounter */
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] {
   min-height: 100svh;
   background: var(--registry-brand-field, #050609);
   color: var(--registry-brand-primary-text);
@@ -8,10 +8,11 @@
 
 /* ── SHARED SECTION SHELL ────────────────────────────────────────────── */
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-seal,
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation,
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge,
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-seal,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-c3field,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect {
   width: min(var(--registry-content-max-width, 68rem), 100%);
   margin: 0 auto;
   padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
@@ -20,7 +21,7 @@
 
 /* ── SECTION 1: ABOUT ORIENTATION ───────────────────────────────────── */
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2.5rem, 5vw, 5rem);
@@ -30,7 +31,7 @@
   border-bottom: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.08));
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation-title {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-title {
   font-family: var(--registry-font-heading);
   font-size: clamp(1.1rem, 1.7vw, 1.35rem);
   font-weight: 500;
@@ -39,19 +40,19 @@
   margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation-blocks {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-blocks {
   display: flex;
   flex-direction: column;
   gap: clamp(1.25rem, 2.5vw, 2rem);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation-block {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-block {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation-block-label {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-block-label {
   display: block;
   font-size: clamp(0.63rem, 0.85vw, 0.7rem);
   font-weight: 600;
@@ -61,14 +62,14 @@
   opacity: 0.8;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation-block-copy {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-block-copy {
   font-size: clamp(0.84rem, 1.1vw, 0.96rem);
   color: var(--registry-brand-secondary-text);
   line-height: 1.74;
   margin: 0;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation-video {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video {
   position: sticky;
   top: calc(var(--registry-header-height, 3rem) + 1.5rem);
   border-radius: 4px;
@@ -76,7 +77,7 @@
   background: #000;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation-video video {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video video {
   width: 100%;
   height: auto;
   display: block;
@@ -84,13 +85,13 @@
 
 /* ── SECTION 3: UNDRIFTED BRIDGE ─────────────────────────────────────── */
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge {
   padding-top: clamp(2.5rem, 5vw, 4.5rem);
   padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
   border-bottom: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.08));
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge-panel {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-panel {
   display: block;
   text-decoration: none;
   max-width: 44rem;
@@ -101,12 +102,12 @@
   transition: border-color 0.18s ease, background 0.18s ease;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge-panel:hover {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-panel:hover {
   border-color: rgba(255, 255, 255, 0.22);
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent 60%), rgba(255, 255, 255, 0.035);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge-label {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-label {
   display: block;
   font-size: clamp(0.63rem, 0.85vw, 0.7rem);
   font-weight: 600;
@@ -116,14 +117,14 @@
   margin-bottom: 0.4rem;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge-subtitle {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-subtitle {
   font-size: clamp(0.78rem, 1vw, 0.86rem);
   color: var(--registry-brand-secondary-text, rgba(255, 255, 255, 0.54));
   line-height: 1.5;
   margin: 0 0 clamp(0.9rem, 1.5vw, 1.25rem);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge-issue {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-issue {
   display: block;
   font-size: clamp(0.63rem, 0.85vw, 0.7rem);
   letter-spacing: 0.12em;
@@ -132,7 +133,7 @@
   margin-bottom: 0.5rem;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge-headline {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-headline {
   font-family: var(--registry-font-heading);
   font-size: clamp(1.2rem, 2vw, 1.7rem);
   font-weight: 500;
@@ -142,7 +143,7 @@
   margin: 0 0 clamp(1rem, 2vw, 1.5rem);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge-cta {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-cta {
   display: block;
   font-size: clamp(0.78rem, 1vw, 0.86rem);
   color: var(--registry-brand-secondary-text, rgba(255, 255, 255, 0.54));
@@ -150,25 +151,25 @@
   transition: color 0.18s ease;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-bridge-panel:hover .registry-about-bridge-cta {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-panel:hover .registry-about-bridge-cta {
   color: var(--registry-brand-primary-text);
 }
 
 /* ── SECTION 4: CONNECT ──────────────────────────────────────────────── */
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect {
   padding-top: clamp(3rem, 6vw, 5rem);
   padding-bottom: clamp(4rem, 8vw, 6rem);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-content {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2.5rem, 5vw, 5rem);
   align-items: start;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-title {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-title {
   font-family: var(--registry-font-heading);
   font-size: clamp(1.1rem, 1.7vw, 1.35rem);
   font-weight: 500;
@@ -176,7 +177,7 @@
   margin: 0 0 clamp(0.75rem, 1.5vw, 1.1rem);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-body {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-body {
   font-size: clamp(0.84rem, 1.1vw, 0.96rem);
   color: var(--registry-brand-secondary-text);
   line-height: 1.72;
@@ -184,7 +185,7 @@
   font-weight: 500;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-supporting {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-supporting {
   font-size: clamp(0.82rem, 1.05vw, 0.92rem);
   color: var(--registry-brand-secondary-text);
   line-height: 1.72;
@@ -193,27 +194,27 @@
 
 /* Form */
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-form {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-form {
   display: flex;
   flex-direction: column;
   gap: clamp(1rem, 1.8vw, 1.35rem);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-field {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-field label {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field label {
   font-size: clamp(0.72rem, 0.95vw, 0.8rem);
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--registry-brand-secondary-text, rgba(255, 255, 255, 0.54));
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-field input,
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-field textarea {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field input,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field textarea {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.12));
   border-radius: 3px;
@@ -228,19 +229,19 @@
   resize: vertical;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-field input:focus,
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-field textarea:focus {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field input:focus,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field textarea:focus {
   outline: none;
   border-color: rgba(255, 255, 255, 0.28);
   background: rgba(255, 255, 255, 0.06);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-field input::placeholder,
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-field textarea::placeholder {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field input::placeholder,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field textarea::placeholder {
   color: rgba(255, 255, 255, 0.2);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-submit {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-submit {
   align-self: flex-start;
   padding: 0.65rem 1.5rem;
   font-size: clamp(0.78rem, 1vw, 0.86rem);
@@ -254,17 +255,17 @@
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-submit:hover:not(:disabled) {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-submit:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.52);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-submit:disabled {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-error {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-error {
   font-size: clamp(0.78rem, 1vw, 0.86rem);
   color: rgba(255, 88, 88, 0.9);
   margin: 0;
@@ -272,7 +273,7 @@
 
 /* Success state */
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-success {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-success {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -282,7 +283,7 @@
   background: rgba(255, 255, 255, 0.025);
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-success h3 {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-success h3 {
   font-family: var(--registry-font-heading);
   font-size: clamp(1rem, 1.4vw, 1.15rem);
   font-weight: 500;
@@ -290,25 +291,108 @@
   margin: 0;
 }
 
-.measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-success p {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-success p {
   font-size: clamp(0.82rem, 1.05vw, 0.92rem);
   color: var(--registry-brand-secondary-text);
   line-height: 1.68;
   margin: 0;
 }
 
+/* ── SECTION 0: CODEXSTONE SEAL ──────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-seal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(1.5rem, 3vw, 2.5rem));
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  border-bottom: 1px solid var(--registry-brand-border, rgba(230, 237, 247, 0.08));
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-seal-image {
+  width: clamp(2rem, 3.5vw, 3rem);
+  height: auto;
+  opacity: 0.86;
+  display: block;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-seal-title {
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 500;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0 0 0.15rem;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-seal-subtitle {
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.62));
+  line-height: 1.62;
+  margin: 0;
+}
+
+/* ── SECTION 5: C3 FIELD LINKS ───────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-c3field {
+  padding-top: clamp(2.5rem, 5vw, 4.5rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  border-bottom: 1px solid var(--registry-brand-border, rgba(230, 237, 247, 0.08));
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-c3field-label {
+  display: block;
+  font-size: clamp(0.63rem, 0.85vw, 0.7rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(210, 190, 140, 0.62);
+  margin-bottom: clamp(0.75rem, 1.5vw, 1.1rem);
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-c3field-links {
+  display: flex;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  flex-wrap: wrap;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-c3field-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.62));
+  text-decoration: none;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--registry-brand-border, rgba(230, 237, 247, 0.14));
+  border-radius: 2rem;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-c3field-link:hover {
+  color: var(--registry-brand-primary-text, #edf2f8);
+  border-color: rgba(230, 237, 247, 0.32);
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-c3field-link::after {
+  content: "→";
+  opacity: 0.5;
+  font-size: 0.85em;
+}
+
 /* ── MOBILE ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 860px) {
-  .measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation {
+  .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation {
     grid-template-columns: 1fr;
   }
 
-  .measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-orientation-video {
+  .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video {
     position: static;
   }
 
-  .measures-registry-runtime[data-public-path="about_measures_registry"] .registry-about-connect-content {
+  .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-content {
     grid-template-columns: 1fr;
   }
 }
