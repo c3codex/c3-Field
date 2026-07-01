@@ -50,7 +50,7 @@ function resolveNextSurface(encounter: RenderableEncounter): string | null {
 export default function MarbleChamberRenderer(props: MarbleChamberProps) {
   const { surface } = props.encounter
 
-  if (surface === "marble_chamber_C2_compact" || surface === "marble_chamber_orientation_passage") {
+  if (surface === "marble_chamber_C2_compact") {
     return <MapIntegrityGovernance {...props} />
   }
   if (surface === "marble_chamber_orientation") {

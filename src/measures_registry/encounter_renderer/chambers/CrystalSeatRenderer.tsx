@@ -58,9 +58,6 @@ export default function CrystalSeatRenderer(props: CrystalSeatProps) {
   if (surface === "crystal_seat_intro" || surface === "crystal_seat_threshold" || surface === "crystal_seat_orientation") {
     return <IntroHookSeat {...props} />
   }
-  if (surface === "structure_passage" || surface === "crystal_seat_orientation_passage") {
-    return <StructurePassageSeat {...props} />
-  }
   if (surface === "crystal_seat_encounter") {
     return <AboutMeasuresRegistry {...props} />
   }
@@ -430,70 +427,6 @@ function PathChoiceSeat({
               </button>
             )
           })}
-        </div>
-      </section>
-      {renderSystemFooter()}
-    </main>
-  )
-}
-
-// --- structure_passage ------------------------------------------------------
-
-function StructurePassageSeat({
-  encounter,
-  registryTokenStyle,
-  onNavigate,
-  renderHeader,
-  renderSystemFooter,
-}: CrystalSeatProps) {
-  const [muted, setMuted] = useState(false)
-
-  const meta = asRecord(encounter.encounterDef?.metadata)
-  const unseeded = asString(meta?.status_note)?.includes("Seated without final public copy") ?? false
-  const title = asString(meta?.title)
-    ?? (unseeded ? null : encounter.encounterDef?.display_title)
-    ?? "Measures Registry"
-  const passageVideoUrl = mediaUrl(encounter.mediaByRole.get("structured_environment_passage_video"))
-  const next = resolveNextSurface(encounter)
-
-  function handleContinue() {
-    if (next) onNavigate(next as EncounterSurface)
-  }
-
-  return (
-    <main
-      className="measures-registry-runtime"
-      data-surface="structure_passage"
-      data-material-family="crystal"
-      data-layout-contract="passage"
-      data-release-standing="public"
-      style={registryTokenStyle}
-    >
-      {renderHeader({ title })}
-      <section className="registry-diagnostic-passage" aria-label={title}>
-        {passageVideoUrl ? (
-          <video
-            src={passageVideoUrl}
-            autoPlay
-            muted={muted}
-            playsInline
-            preload="auto"
-            onEnded={handleContinue}
-            aria-label={title}
-          />
-        ) : null}
-        <div className="registry-diagnostic-passage-controls" aria-label="Passage controls">
-          <button type="button" onClick={handleContinue}>
-            Continue
-          </button>
-          {passageVideoUrl ? (
-            <button type="button" onClick={() => setMuted((m) => !m)}>
-              {muted ? "Audio" : "Mute"}
-            </button>
-          ) : null}
-        </div>
-        <div>
-          <h1>{title}</h1>
         </div>
       </section>
       {renderSystemFooter()}
