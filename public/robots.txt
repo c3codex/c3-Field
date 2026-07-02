@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://measuresregistry.com/sitemap.xml
