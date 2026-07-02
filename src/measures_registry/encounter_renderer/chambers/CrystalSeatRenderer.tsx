@@ -254,7 +254,6 @@ function CrystalIntroSeat({
           <h1>{headline}</h1>
         </div>
       </section>
-      {renderSystemFooter()}
     </main>
   )
 }

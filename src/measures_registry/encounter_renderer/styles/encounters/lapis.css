@@ -566,44 +566,44 @@
 
 .undrifted-persistent-mark {
   position: fixed;
-  bottom: clamp(0.85rem, 2vw, 1.25rem);
-  right: clamp(0.85rem, 2vw, 1.25rem);
+  bottom: clamp(1rem, 2.5vw, 1.5rem);
+  right: clamp(1rem, 2.5vw, 1.5rem);
   z-index: 20;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.15rem;
-  padding: 0.5rem 0.75rem;
+  gap: 0.25rem;
+  padding: 0.75rem 1.1rem;
   text-decoration: none;
-  border: 1px solid rgba(237, 242, 248, 0.1);
-  border-radius: 3px;
-  background: rgba(6, 7, 9, 0.72);
+  border: 1px solid rgba(237, 242, 248, 0.15);
+  border-radius: 4px;
+  background: rgba(6, 7, 9, 0.78);
   backdrop-filter: blur(10px);
   transition: border-color 0.18s ease, background 0.18s ease;
 }
 
 .undrifted-persistent-mark:hover {
-  border-color: rgba(237, 242, 248, 0.22);
-  background: rgba(6, 7, 9, 0.88);
+  border-color: rgba(237, 242, 248, 0.3);
+  background: rgba(6, 7, 9, 0.92);
 }
 
 .undrifted-persistent-mark-label {
   display: block;
-  font-size: clamp(0.62rem, 0.82vw, 0.7rem);
+  font-size: clamp(0.8rem, 1vw, 0.88rem);
   font-weight: 600;
-  letter-spacing: 0.04em;
-  color: rgba(237, 242, 248, 0.6);
+  letter-spacing: 0.03em;
+  color: rgba(237, 242, 248, 0.75);
   font-style: italic;
   font-family: var(--registry-font-heading, Georgia, serif);
 }
 
 .undrifted-persistent-mark-issue {
   display: block;
-  font-size: clamp(0.54rem, 0.7vw, 0.6rem);
+  font-size: clamp(0.68rem, 0.85vw, 0.74rem);
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: rgba(237, 242, 248, 0.3);
+  color: rgba(237, 242, 248, 0.42);
 }
 
 /* ── MOBILE ──────────────────────────────────────────────────────────────── */

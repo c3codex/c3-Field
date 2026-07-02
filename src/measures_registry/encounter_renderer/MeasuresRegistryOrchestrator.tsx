@@ -480,7 +480,7 @@ export default function MeasuresRegistryOrchestrator() {
       {toneBlocked && activeToneUrl ? (
         <button
           onClick={handleEnableTone}
-          aria-label="Enable ambient tone"
+          aria-label="About site tones"
           style={{
             position: "fixed",
             bottom: "4.5rem",
@@ -497,7 +497,7 @@ export default function MeasuresRegistryOrchestrator() {
             color: "inherit",
           }}
         >
-          Enable Tone
+          About Site Tones
         </button>
       ) : null}
       <EncounterEntry
