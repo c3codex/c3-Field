@@ -362,6 +362,7 @@ function MarbleOrientationSeat({
   const next = resolveNextSurface(encounter)
 
   const bgUrl = mediaUrl(encounter.mediaByRole.get("marble_orientation_surface"))
+  const videoUrl = mediaUrl(encounter.mediaByRole.get("assessment_report_orientation"))
 
   function handleContinue() {
     if (next) onNavigate(next as EncounterSurface)
@@ -378,6 +379,18 @@ function MarbleOrientationSeat({
       data-directory-key={asString(meta?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
+      {videoUrl ? (
+        <video
+          className="registry-marble-orientation-video"
+          src={videoUrl}
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={bgUrl ?? undefined}
+          aria-hidden="true"
+        />
+      ) : null}
       {renderHeader({ title })}
       <section className="registry-marble-chamber registry-marble-orientation-content" aria-label={title}>
         <div className="registry-marble-orientation-card">
