@@ -1,5 +1,5 @@
 import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import { PublicAssessmentResult } from "../../PublicAssessmentResult"
 import { PublicAssessmentSurface } from "../../PublicAssessmentSurface"
@@ -119,13 +119,22 @@ function ObsidianOrientationThreshold({
   renderHeader,
   renderSystemFooter,
 }: ObsidianChamberProps) {
-  const [muted, setMuted] = useState(true)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoAudioEnabled, setVideoAudioEnabled] = useState(false)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const contentProfile = asRecord(meta?.content_profile)
-  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Assessment Orientation"
-  const subtitle = asString(contentProfile?.subtitle)
-  const body = asString(contentProfile?.body)
+  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Before You Begin"
+  // Lead: prefer new `lead` field, fall back to legacy subtitle/body
+  const lead = asString(contentProfile?.lead) ?? asString(contentProfile?.subtitle) ?? asString(contentProfile?.body)
+  const reviewSections = Array.isArray(contentProfile?.review_sections)
+    ? (contentProfile.review_sections as unknown[]).filter((s): s is Record<string, unknown> => Boolean(asRecord(s)))
+    : []
+  const assessmentDetails = Array.isArray(contentProfile?.assessment_details)
+    ? (contentProfile.assessment_details as unknown[]).filter((d): d is string => typeof d === "string")
+    : []
+  const privacyNote = asString(contentProfile?.privacy_note)
+  const ctaLabel = asString(contentProfile?.cta_label) ?? "Begin Assessment"
   const next = resolveNextSurface(encounter)
 
   const videoUrl = mediaUrl(encounter.mediaByRole.get("obsidian"))
@@ -133,6 +142,23 @@ function ObsidianOrientationThreshold({
 
   function handleContinue() {
     if (next) onNavigate(next as EncounterSurface)
+  }
+
+  function handleVideoAudio() {
+    const video = videoRef.current
+    if (!video) return
+    if (!videoAudioEnabled) {
+      video.muted = false
+      video.volume = 1
+      void video.play().catch(() => {
+        video.muted = true
+        setVideoAudioEnabled(false)
+      })
+      setVideoAudioEnabled(true)
+    } else {
+      video.muted = true
+      setVideoAudioEnabled(false)
+    }
   }
 
   return (
@@ -151,9 +177,10 @@ function ObsidianOrientationThreshold({
         <div className="registry-obsidian-orientation-media">
           {videoUrl ? (
             <video
+              ref={videoRef}
               src={videoUrl}
               autoPlay
-              muted={muted}
+              muted
               playsInline
               preload="auto"
               aria-label={title}
@@ -165,26 +192,70 @@ function ObsidianOrientationThreshold({
         <div className="registry-obsidian-orientation-content">
           <div className="registry-obsidian-orientation-copy">
             <h2 className="registry-obsidian-orientation-title">{title}</h2>
-            {subtitle ? <p className="registry-obsidian-orientation-subtitle">{subtitle}</p> : null}
-            {body ? <p className="registry-obsidian-orientation-body">{body}</p> : null}
+            {lead ? <p className="registry-obsidian-orientation-lead">{lead}</p> : null}
+            {reviewSections.length > 0 ? (
+              <div className="registry-obsidian-orientation-sections">
+                {reviewSections.map((section, si) => {
+                  const heading = asString(section.heading)
+                  const items = Array.isArray(section.items)
+                    ? (section.items as unknown[]).filter((it): it is Record<string, unknown> => Boolean(asRecord(it)))
+                    : []
+                  return (
+                    <div key={si} className="registry-obsidian-orientation-section">
+                      {heading ? (
+                        <h3 className="registry-obsidian-orientation-section-heading">{heading}</h3>
+                      ) : null}
+                      {items.length > 0 ? (
+                        <ul className="registry-obsidian-orientation-items">
+                          {items.map((item, ii) => (
+                            <li key={ii} className="registry-obsidian-orientation-item">
+                              {asString(item.label) ? (
+                                <span className="registry-obsidian-orientation-item-label">
+                                  {asString(item.label)}
+                                </span>
+                              ) : null}
+                              {asString(item.copy) ? (
+                                <p className="registry-obsidian-orientation-item-copy">
+                                  {asString(item.copy)}
+                                </p>
+                              ) : null}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </div>
+                  )
+                })}
+              </div>
+            ) : null}
+            {assessmentDetails.length > 0 ? (
+              <ul className="registry-obsidian-orientation-details">
+                {assessmentDetails.map((detail, i) => (
+                  <li key={i} className="registry-obsidian-orientation-detail">{detail}</li>
+                ))}
+              </ul>
+            ) : null}
+            {privacyNote ? (
+              <p className="registry-obsidian-orientation-privacy">{privacyNote}</p>
+            ) : null}
           </div>
           <div className="registry-obsidian-orientation-controls">
-            {videoUrl ? (
-              <button
-                type="button"
-                className="registry-obsidian-orientation-audio"
-                onClick={() => setMuted((m) => !m)}
-              >
-                {muted ? "Audio" : "Mute"}
-              </button>
-            ) : null}
             <button
               type="button"
               className="registry-obsidian-orientation-cta"
               onClick={handleContinue}
             >
-              Begin Assessment
+              {ctaLabel}
             </button>
+            {videoUrl ? (
+              <button
+                type="button"
+                className="registry-obsidian-orientation-audio"
+                onClick={handleVideoAudio}
+              >
+                {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
+              </button>
+            ) : null}
           </div>
         </div>
       </section>

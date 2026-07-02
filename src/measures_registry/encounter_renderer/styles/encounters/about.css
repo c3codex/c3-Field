@@ -1,9 +1,15 @@
 /* About Measures Registry / crystal_seat_encounter — governed encounter */
+/* crystal_longform_surface (crystal_about_surface.webp) is a light image — dark text required */
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] {
   min-height: 100svh;
   background: var(--registry-brand-field, #050609);
-  color: var(--registry-brand-primary-text);
+  --registry-brand-primary-text: #1F3260;
+  --registry-brand-secondary-text: #31415F;
+  --registry-brand-muted-text: #5F6777;
+  --registry-brand-highlight: #8A6A2F;
+  --registry-brand-border: rgba(31, 50, 96, 0.16);
+  color: #1F3260;
 }
 
 /* ── SHARED SECTION SHELL ────────────────────────────────────────────── */
@@ -96,15 +102,15 @@
   text-decoration: none;
   max-width: 44rem;
   padding: clamp(1.5rem, 3vw, 2.5rem);
-  border: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.1));
+  border: 1px solid var(--registry-brand-border, rgba(31, 50, 96, 0.16));
   border-radius: 4px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 60%), rgba(255, 255, 255, 0.02);
+  background: linear-gradient(145deg, rgba(31, 50, 96, 0.04), transparent 60%), rgba(31, 50, 96, 0.02);
   transition: border-color 0.18s ease, background 0.18s ease;
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-panel:hover {
-  border-color: rgba(255, 255, 255, 0.22);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent 60%), rgba(255, 255, 255, 0.035);
+  border-color: rgba(31, 50, 96, 0.28);
+  background: linear-gradient(145deg, rgba(31, 50, 96, 0.06), transparent 60%), rgba(31, 50, 96, 0.04);
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge-label {
@@ -215,8 +221,8 @@
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field input,
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field textarea {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.12));
+  background: rgba(31, 50, 96, 0.05);
+  border: 1px solid rgba(31, 50, 96, 0.18);
   border-radius: 3px;
   padding: 0.65rem 0.85rem;
   font-size: clamp(0.84rem, 1.05vw, 0.92rem);
@@ -232,13 +238,13 @@
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field input:focus,
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field textarea:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.28);
-  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(31, 50, 96, 0.36);
+  background: rgba(31, 50, 96, 0.08);
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field input::placeholder,
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-field textarea::placeholder {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(31, 50, 96, 0.32);
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-submit {
@@ -249,15 +255,15 @@
   letter-spacing: 0.05em;
   color: var(--registry-brand-primary-text);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(31, 50, 96, 0.36);
   border-radius: 3px;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-submit:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.52);
+  background: rgba(31, 50, 96, 0.06);
+  border-color: rgba(31, 50, 96, 0.56);
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-submit:disabled {
@@ -278,9 +284,9 @@
   flex-direction: column;
   gap: 0.6rem;
   padding: clamp(1.25rem, 2.5vw, 2rem);
-  border: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.1));
+  border: 1px solid var(--registry-brand-border, rgba(31, 50, 96, 0.16));
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.025);
+  background: rgba(31, 50, 96, 0.04);
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect-success h3 {

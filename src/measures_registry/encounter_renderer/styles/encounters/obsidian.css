@@ -132,6 +132,101 @@
   border-color: rgba(230, 237, 247, 0.38);
 }
 
+/* ── LEAD ─────────────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-lead {
+  margin: 0;
+  font-size: clamp(0.82rem, 1.05vw, 0.94rem);
+  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.68));
+  line-height: 1.72;
+  font-weight: 400;
+}
+
+/* ── REVIEW SECTIONS ─────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-sections {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.4rem);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-section-heading {
+  margin: 0 0 0.5rem;
+  font-size: clamp(0.62rem, 0.82vw, 0.68rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.38);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.55rem 0.7rem;
+  border-left: 2px solid rgba(237, 242, 248, 0.14);
+  background: rgba(237, 242, 248, 0.025);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-item-label {
+  font-size: clamp(0.72rem, 0.9vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-item-copy {
+  font-size: clamp(0.72rem, 0.88vw, 0.78rem);
+  color: rgba(237, 242, 248, 0.48);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── ASSESSMENT DETAILS ──────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.7rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-top: clamp(0.5rem, 1vw, 0.75rem);
+  border-top: 1px solid rgba(237, 242, 248, 0.08);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-detail {
+  font-size: clamp(0.68rem, 0.84vw, 0.74rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(237, 242, 248, 0.42);
+}
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-detail:not(:last-child)::after {
+  content: "·";
+  margin-left: 0.7rem;
+  opacity: 0.4;
+}
+
+/* ── PRIVACY NOTE ────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-privacy {
+  margin: 0;
+  font-size: clamp(0.66rem, 0.82vw, 0.72rem);
+  color: rgba(237, 242, 248, 0.3);
+  line-height: 1.5;
+  font-style: italic;
+}
+
 /* ── MOBILE ──────────────────────────────────────────────────────────────── */
 
 @media (max-width: 720px) {

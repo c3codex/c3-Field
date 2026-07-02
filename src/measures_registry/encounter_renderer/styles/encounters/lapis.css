@@ -7,7 +7,9 @@
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] {
   background: var(--registry-brand-field, #060709);
   color: var(--registry-brand-primary-text, #edf2f8);
-  min-height: 100svh;
+  min-height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .undrifted-shell {

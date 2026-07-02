@@ -190,3 +190,24 @@
     margin: 0 auto;
   }
 }
+
+/* ── CRYSTAL DARK TEXT TOKENS (light surface background image) ───────────── */
+/* crystal_orientation_surface.png is a light image — dark text required */
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] {
+  --registry-brand-primary-text: #1F3260;
+  --registry-brand-secondary-text: #31415F;
+  --registry-brand-muted-text: #5F6777;
+  --registry-brand-highlight: #8A6A2F;
+  color: #1F3260;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-cta {
+  color: #1F3260;
+  border-color: rgba(31, 50, 96, 0.38);
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-cta:hover {
+  background: rgba(31, 50, 96, 0.07);
+  border-color: rgba(31, 50, 96, 0.62);
+}

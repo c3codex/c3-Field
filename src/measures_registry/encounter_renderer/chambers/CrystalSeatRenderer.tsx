@@ -638,7 +638,7 @@ function AboutMeasuresRegistry({
         data-surface={encounter.surface}
         data-material-family="crystal"
         data-release-standing="held_missing_registry_content"
-        style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
+        style={registryTokenStyle}
       >
         {renderHeader({ title })}
         <section className="registry-held-state" role="status">
