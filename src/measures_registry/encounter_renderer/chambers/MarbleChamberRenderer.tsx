@@ -66,7 +66,12 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
   if (surface === "marble_chamber_orientation") {
     return <MarbleOrientationSeat {...props} />
   }
-  if (surface === "marble_chamber_encounter" || surface === "marble_chamber_results") {
+  if (surface === "marble_chamber_encounter") {
+    // legacy_alias_for_marble_chamber_results — forward immediately
+    props.onNavigate("marble_chamber_results")
+    return null
+  }
+  if (surface === "marble_chamber_results") {
     return <MarbleChamberEncounter {...props} />
   }
   if (surface === "marble_chamber_C2_agreement") {
