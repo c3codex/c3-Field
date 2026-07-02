@@ -153,6 +153,45 @@ function writeAboutRouteHead(outDir, template) {
   fs.writeFileSync(path.join(routeDir, "index.html"), html)
 }
 
+function writeAboutCanonicalHead(outDir, template) {
+  const routeDir = path.join(outDir, "about")
+  fs.mkdirSync(routeDir, { recursive: true })
+  let html = template
+  html = html.replace(/<title>.*?<\/title>/s, "<title>About Measures Registry</title>")
+  html = replaceTag(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/>/s, `<meta name="description" content="Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result." />`)
+  html = replaceTag(html, /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/s, `<meta property="og:title" content="About Measures Registry" />`)
+  html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result." />`)
+  html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/about" />`)
+  html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="${REGISTRY_BASE_URL}/about" />`)
+  fs.writeFileSync(path.join(routeDir, "index.html"), html)
+}
+
+function writePrivacyRouteHead(outDir, template) {
+  const routeDir = path.join(outDir, "privacy")
+  fs.mkdirSync(routeDir, { recursive: true })
+  let html = template
+  html = html.replace(/<title>.*?<\/title>/s, "<title>Privacy Policy | Measures Registry</title>")
+  html = replaceTag(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/>/s, `<meta name="description" content="How Measures Registry collects, uses, and protects your information." />`)
+  html = replaceTag(html, /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/s, `<meta property="og:title" content="Privacy Policy | Measures Registry" />`)
+  html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="How Measures Registry collects, uses, and protects your information." />`)
+  html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/privacy" />`)
+  html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="${REGISTRY_BASE_URL}/privacy" />`)
+  fs.writeFileSync(path.join(routeDir, "index.html"), html)
+}
+
+function writeTermsRouteHead(outDir, template) {
+  const routeDir = path.join(outDir, "terms")
+  fs.mkdirSync(routeDir, { recursive: true })
+  let html = template
+  html = html.replace(/<title>.*?<\/title>/s, "<title>Terms of Use | Measures Registry</title>")
+  html = replaceTag(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/>/s, `<meta name="description" content="Terms governing use of Measures Registry and the services of C3 COMMUNITY PARTNERS DAO LLC." />`)
+  html = replaceTag(html, /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/s, `<meta property="og:title" content="Terms of Use | Measures Registry" />`)
+  html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="Terms governing use of Measures Registry and the services of C3 COMMUNITY PARTNERS DAO LLC." />`)
+  html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/terms" />`)
+  html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="${REGISTRY_BASE_URL}/terms" />`)
+  fs.writeFileSync(path.join(routeDir, "index.html"), html)
+}
+
 async function main() {
   if (!supabaseUrl || !supabaseKey) throw new Error("Supabase URL/key missing for registry route head generation")
 
@@ -165,6 +204,9 @@ async function main() {
 
   writeC3FieldRouteHead(outDir, template)
   writeAboutRouteHead(outDir, template)
+  writeAboutCanonicalHead(outDir, template)
+  writePrivacyRouteHead(outDir, template)
+  writeTermsRouteHead(outDir, template)
 
   const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } })
 
