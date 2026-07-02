@@ -550,11 +550,32 @@
   max-width: 28rem;
 }
 
+.registry-marble-resolution-receipt,
+.registry-marble-resolution-access {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  opacity: 0.6;
+  margin: 0;
+}
+
 .registry-marble-resolution-actions {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.registry-marble-resolution-survey {
+  font-size: 0.8125rem;
+  opacity: 0.5;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.15s;
+}
+
+.registry-marble-resolution-survey:hover {
+  opacity: 0.75;
 }
 
 .registry-marble-cta {

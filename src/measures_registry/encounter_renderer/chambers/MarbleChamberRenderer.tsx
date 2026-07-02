@@ -575,7 +575,7 @@ function MarbleC2Agreement({
       className="measures-registry-runtime"
       data-surface="marble_chamber_C2_agreement"
       data-material-family="marble"
-      data-layout-contract="payment_agreement"
+      data-layout-contract="centered_exchange_panel"
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
@@ -636,7 +636,11 @@ function MarbleC2Resolution({
   const eyebrow = asString(contentProfile?.eyebrow) ?? "MAP Registration"
   const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Registration Received"
   const body = asString(contentProfile?.body) ?? "Your MAP the Environment registration has been received."
-  const ctaLabel = asString(contentProfile?.cta_label) ?? "Return to Measures Registry"
+  const receiptCopy = asString(contentProfile?.receipt_copy)
+  const accessCopy = asString(contentProfile?.access_copy)
+  const surveyLabel = asString(contentProfile?.survey_label)
+  const surveyUrl = asString(contentProfile?.survey_url)
+  const ctaLabel = asString(contentProfile?.cta_label) ?? "Finish"
 
   const bgUrl =
     mediaUrl(encounter.mediaByRole.get("marble_orientation_surface")) ??
@@ -647,7 +651,7 @@ function MarbleC2Resolution({
       className="measures-registry-runtime"
       data-surface="marble_chamber_C2_resolution"
       data-material-family="marble"
-      data-layout-contract="confirmation_resolution"
+      data-layout-contract="centered_confirmation_panel"
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
@@ -659,6 +663,8 @@ function MarbleC2Resolution({
           <span>{eyebrow}</span>
           <h2>{title}</h2>
           <p>{body}</p>
+          {receiptCopy ? <p className="registry-marble-resolution-receipt">{receiptCopy}</p> : null}
+          {accessCopy ? <p className="registry-marble-resolution-access">{accessCopy}</p> : null}
         </header>
         <div className="registry-marble-resolution-actions">
           <button
@@ -668,6 +674,16 @@ function MarbleC2Resolution({
           >
             {ctaLabel}
           </button>
+          {surveyUrl && surveyLabel ? (
+            <a
+              className="registry-marble-resolution-survey"
+              href={surveyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {surveyLabel}
+            </a>
+          ) : null}
         </div>
       </section>
       {renderSystemFooter()}
