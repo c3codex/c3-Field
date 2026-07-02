@@ -423,6 +423,9 @@ function IntroHookSeat({
                 {asString(leftPlaque?.body) ? (
                   <span>{asString(leftPlaque.body)}</span>
                 ) : null}
+                {asString(leftPlaque?.context) ? (
+                  <span className="registry-threshold-context">{asString(leftPlaque.context)}</span>
+                ) : null}
                 {asString(leftPlaque?.title) ?? asString(leftPlaque?.cta) ?? asString(leftPlaque?.label) ? (
                   <strong>
                     {asString(leftPlaque?.title) ?? asString(leftPlaque?.cta) ?? asString(leftPlaque?.label)}
@@ -461,6 +464,9 @@ function IntroHookSeat({
               <span className="registry-threshold-copy">
                 {asString(rightPlaque?.body) ? (
                   <span>{asString(rightPlaque.body)}</span>
+                ) : null}
+                {asString(rightPlaque?.context) ? (
+                  <span className="registry-threshold-context">{asString(rightPlaque.context)}</span>
                 ) : null}
                 {asString(rightPlaque?.title) ?? asString(rightPlaque?.cta) ?? asString(rightPlaque?.label) ? (
                   <strong>

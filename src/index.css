@@ -3276,6 +3276,13 @@ body,
   line-height: 1.28;
 }
 
+.registry-threshold-context {
+  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+  line-height: 1.5;
+  color: rgba(248, 250, 252, 0.62);
+  font-weight: 400;
+}
+
 .registry-threshold-copy strong {
   width: fit-content;
   display: inline-flex;
@@ -6432,6 +6439,10 @@ body,
   .registry-threshold-copy span {
     font-size: clamp(0.92rem, 4.4vw, 1.08rem);
     line-height: 1.22;
+  }
+
+  .registry-threshold-context {
+    font-size: clamp(0.7rem, 3.2vw, 0.8rem);
   }
 
   .registry-threshold-copy strong {
