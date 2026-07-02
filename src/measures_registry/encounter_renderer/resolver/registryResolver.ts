@@ -21,6 +21,7 @@ const ENCOUNTER_REGISTRY_KEYS = [
   "obsidian_chamber_C1_compact",
   "marble_chamber_orientation",
   "marble_chamber_encounter",
+  "marble_chamber_results",
   "marble_chamber_C2_agreement",
   "marble_chamber_C2_resolution",
 ] as const
@@ -36,6 +37,7 @@ const ENCOUNTER_DEF_KEYS = [
   "obsidian_chamber_C1_compact",
   "marble_chamber_orientation",
   "marble_chamber_encounter",
+  "marble_chamber_results",
   "marble_chamber_C2_agreement",
   "marble_chamber_C2_resolution",
 ] as const
@@ -76,6 +78,10 @@ const MEDIA_ROLES = [
   "obsidian_assessment_surface_visual",
   "obsidian_eval_result_surface_visual",
   "assessment_report_orientation",
+  "undrifted_publication_masthead",
+  "marble_orientation_surface",
+  "marble_results_surface",
+  "marble_map_surface",
 ] as const
 
 const DESIGN_REGISTRY_KEY = "measures_registry"

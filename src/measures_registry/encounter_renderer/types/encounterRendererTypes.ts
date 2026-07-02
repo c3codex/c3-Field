@@ -23,6 +23,7 @@ export type EncounterSurface =
   | "obsidian_chamber_C1_compact"
   | "marble_chamber_orientation"
   | "marble_chamber_encounter"
+  | "marble_chamber_results"
   | "marble_chamber_C2_compact"
   | "marble_chamber_C2_agreement"
   | "marble_chamber_C2_resolution"

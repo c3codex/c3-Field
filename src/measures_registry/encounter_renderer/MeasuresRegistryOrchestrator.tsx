@@ -14,13 +14,14 @@ import type { EncounterSurface } from "./types/encounterRendererTypes"
 import { cssTokenName } from "./shared/encounterRendererUtils"
 import RegisteredPrivacy from "./legal/RegisteredPrivacy"
 import RegisteredTerms from "./legal/RegisteredTerms"
+import GovernanceAuditSurface from "../governance/GovernanceAuditSurface"
 
 // FREE — Frontend Replacement Encounter Environment.
 // Top-level orchestrator. Owns navigation, URL sync, token style, and DB capture callbacks.
 // Delegates determination and rendering to EncounterEntry → EncounterBoundary → ChamberRouter.
 // Does not infer authority. Does not bypass EncounterBoundary.
 
-type OrchestratorSurface = EncounterSurface | "privacy" | "terms"
+type OrchestratorSurface = EncounterSurface | "privacy" | "terms" | "governance_audit"
 
 const SURFACE_MATERIAL: Partial<Record<OrchestratorSurface, MaterialIdentity>> = {
   crystal_seat_intro: "crystal",
@@ -33,6 +34,7 @@ const SURFACE_MATERIAL: Partial<Record<OrchestratorSurface, MaterialIdentity>> =
   obsidian_chamber_C1_compact: "obsidian",
   marble_chamber_orientation: "marble",
   marble_chamber_encounter: "marble",
+  marble_chamber_results: "marble",
   marble_chamber_C2_compact: "marble",
   marble_chamber_C2_agreement: "marble",
   marble_chamber_C2_resolution: "marble",
@@ -58,11 +60,12 @@ const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
   "/ai-operations-assessment": "obsidian_chamber_encounter_surface",
   "/structural-drift": "lapis_chamber_encounter",
   "/undrifted": "lapis_chamber_encounter",
-  "/map-integrity-governance": "marble_chamber_C2_compact",
+  "/map-integrity-governance": "marble_chamber_C2_compact", // legacy_route_alias — retained for Stripe cancel_url dependency
   "/about": "crystal_seat_encounter",
   "/about-measures-registry": "crystal_seat_encounter",
   "/privacy": "privacy",
   "/terms": "terms",
+  "/governance-audit": "governance_audit",
 }
 
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
@@ -73,6 +76,7 @@ const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
   publication_dispatch: "/publication/structural_drift",
   privacy: "/privacy",
   terms: "/terms",
+  governance_audit: "/governance-audit",
   crystal_seat_threshold: "/",
   crystal_seat_orientation: "/",
 }
@@ -440,6 +444,10 @@ export default function MeasuresRegistryOrchestrator() {
         renderSystemFooter={renderSystemFooter}
       />
     )
+  }
+
+  if (activeSurface === "governance_audit") {
+    return <GovernanceAuditSurface />
   }
 
   function handleEnableTone() {

@@ -1,0 +1,605 @@
+/* Marble chamber surfaces — marble_chamber_orientation, marble_chamber_results, */
+/* marble_chamber_C2_compact (map_integrity_governance), marble_chamber_C2_agreement, marble_chamber_C2_resolution */
+
+/* ── BASE ─────────────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-material-family="marble"] {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  color: var(--registry-foreground, #f0ede8);
+}
+
+/* ── ORIENTATION ──────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="marble_chamber_orientation"] {
+  background-color: var(--registry-marble-base, #1a1814);
+}
+
+.registry-marble-orientation-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 4rem));
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+}
+
+.registry-marble-orientation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 32rem;
+  width: 100%;
+  text-align: center;
+}
+
+.registry-marble-orientation-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--registry-brand-accent, #b8a98e);
+  opacity: 0.85;
+}
+
+.registry-marble-orientation-title {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.registry-marble-orientation-body,
+.registry-marble-orientation-supporting {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  opacity: 0.75;
+  margin: 0;
+}
+
+.registry-marble-orientation-status {
+  font-size: 0.8125rem;
+  opacity: 0.55;
+  font-style: italic;
+  margin: 0.5rem 0 0;
+}
+
+.registry-marble-orientation-cta {
+  margin-top: 0.5rem;
+}
+
+.registry-marble-orientation-cta button {
+  padding: 0.6875rem 2rem;
+  border-radius: 4px;
+  background: var(--registry-brand-accent, #b8a98e);
+  color: var(--registry-foreground-inverse, #0f0e0c);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.registry-marble-orientation-cta button:hover {
+  opacity: 0.88;
+}
+
+/* ── RESULTS (marble_chamber_results / marble_chamber_encounter) ───────────── */
+
+.measures-registry-runtime[data-surface="marble_chamber_results"],
+.measures-registry-runtime[data-surface="marble_chamber_encounter"] {
+  background-color: var(--registry-marble-base, #1a1814);
+}
+
+.measures-registry-runtime[data-surface="marble_chamber_results"] .registry-assessment-chamber,
+.measures-registry-runtime[data-surface="marble_chamber_encounter"] .registry-assessment-chamber {
+  flex: 1;
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(1rem, 2vw, 2rem));
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+}
+
+/* ── MAP THREE-PANEL LAYOUT ───────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] {
+  background-color: var(--registry-marble-map-base, #16140f);
+}
+
+.registry-marble-map-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 22rem minmax(0, 1fr) 20rem;
+  gap: 0;
+  width: 100%;
+  max-width: var(--registry-map-max-width, 1400px);
+  margin: 0 auto;
+  padding-top: calc(var(--registry-header-height, 3rem));
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+/* LEFT PANEL — CAR acknowledgments */
+
+.registry-marble-map-car-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  padding: clamp(1.5rem, 2.5vw, 2.5rem) clamp(1rem, 1.5vw, 1.5rem);
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.registry-marble-car-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--registry-brand-accent, #b8a98e);
+  margin: 0 0 0.375rem;
+}
+
+.registry-marble-car-instruction {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  opacity: 0.55;
+  margin: 0 0 1.25rem;
+}
+
+.registry-marble-car-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* CAR UNIT */
+
+.registry-marble-car-unit {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.025);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.registry-marble-car-unit--confirmed {
+  border-color: rgba(184, 169, 142, 0.35);
+  background: rgba(184, 169, 142, 0.06);
+}
+
+.registry-marble-car-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  text-align: left;
+  gap: 0.5rem;
+}
+
+.registry-marble-car-unit--confirmed .registry-marble-car-header {
+  cursor: default;
+}
+
+.registry-marble-car-title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 0.85;
+}
+
+.registry-marble-car-indicator {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.45;
+  flex-shrink: 0;
+}
+
+.registry-marble-car-status {
+  font-size: 0.75rem;
+  color: var(--registry-brand-accent, #b8a98e);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.registry-marble-car-body {
+  padding: 0 0.875rem 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.registry-marble-car-body p {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  opacity: 0.65;
+  margin: 0;
+}
+
+.registry-marble-car-confirm {
+  align-self: flex-start;
+  padding: 0.4375rem 1rem;
+  border-radius: 3px;
+  background: var(--registry-brand-accent, #b8a98e);
+  color: var(--registry-foreground-inverse, #0f0e0c);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.registry-marble-car-confirm:hover {
+  opacity: 0.85;
+}
+
+/* CENTER PANEL — MAP overview */
+
+.registry-marble-map-center-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 3vw, 4rem) clamp(1.5rem, 3vw, 3rem);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  text-align: center;
+  overflow-y: auto;
+}
+
+.registry-marble-map-center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 36rem;
+  width: 100%;
+}
+
+.registry-marble-map-heading {
+  font-size: clamp(1.625rem, 2.5vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.registry-marble-map-subheading {
+  font-size: 0.9375rem;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.registry-marble-map-visual {
+  width: 100%;
+  max-width: 18rem;
+  margin-top: 1rem;
+}
+
+.registry-marble-map-visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.65;
+}
+
+.registry-map-assessment-required {
+  font-size: 0.875rem;
+  opacity: 0.45;
+  font-style: italic;
+  margin: 0;
+}
+
+/* RIGHT PANEL — Exchange summary + CTA */
+
+.registry-marble-map-exchange-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.5rem, 2.5vw, 2.5rem) clamp(1rem, 1.5vw, 1.5rem);
+  overflow-y: auto;
+}
+
+.registry-marble-map-exchange-panel--empty {
+  justify-content: flex-start;
+}
+
+.registry-marble-map-exchange-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.registry-marble-map-exchange-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin: 0;
+  font-family: var(--registry-mono-font, ui-monospace, monospace);
+}
+
+.registry-marble-map-exchange-title {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  display: block;
+}
+
+.registry-marble-map-exchange-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.registry-marble-map-exchange-standing-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  font-family: var(--registry-mono-font, ui-monospace, monospace);
+}
+
+.registry-marble-map-exchange-amount strong {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--registry-brand-accent, #b8a98e);
+}
+
+.registry-marble-map-exchange-scope {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  opacity: 0.6;
+  margin: 0;
+}
+
+.registry-marble-map-exchange-deliverables {
+  margin: 0;
+  padding: 0 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.registry-marble-map-exchange-deliverables li {
+  font-size: 0.8125rem;
+  opacity: 0.65;
+  line-height: 1.45;
+}
+
+.registry-marble-map-seat-hold {
+  font-size: 0.75rem;
+  opacity: 0.45;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.registry-marble-map-cta-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.registry-marble-map-cta-hold {
+  font-size: 0.75rem;
+  opacity: 0.45;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── PAYMENT CTA — shared across marble_chamber_C2_compact and C2_agreement ── */
+
+.registry-marble-circuit-payment-cta {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border-radius: 4px;
+  background: var(--registry-brand-accent, #b8a98e);
+  color: var(--registry-foreground-inverse, #0f0e0c);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  text-align: center;
+}
+
+.registry-marble-circuit-payment-cta:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.registry-marble-circuit-payment-cta:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+/* ── C2 AGREEMENT ─────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="marble_chamber_C2_agreement"] {
+  background-color: var(--registry-marble-map-base, #16140f);
+}
+
+.registry-marble-payment-agreement {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 36rem;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 3.5rem));
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+  box-sizing: border-box;
+}
+
+.registry-marble-directory-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.registry-marble-directory-header span {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--registry-brand-accent, #b8a98e);
+  opacity: 0.8;
+}
+
+.registry-marble-directory-header h2 {
+  font-size: clamp(1.375rem, 2.5vw, 2rem);
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.registry-marble-directory-header p {
+  font-size: 0.875rem;
+  opacity: 0.55;
+  margin: 0;
+}
+
+.registry-map-email-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.registry-map-email-entry label {
+  font-size: 0.8125rem;
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+.registry-map-email-entry input {
+  padding: 0.6875rem 0.875rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font-size: 0.9375rem;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.registry-map-email-entry input:focus {
+  border-color: rgba(184, 169, 142, 0.5);
+}
+
+.registry-map-email-entry input::placeholder {
+  opacity: 0.35;
+}
+
+.registry-marble-checkout-error {
+  font-size: 0.8125rem;
+  color: var(--registry-error, #e07070);
+  margin: 0;
+}
+
+.registry-marble-circuit-payment-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ── C2 RESOLUTION ────────────────────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="marble_chamber_C2_resolution"] {
+  background-color: var(--registry-marble-base, #1a1814);
+}
+
+.registry-marble-resolution {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(2rem, 4vw, 4rem));
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+  text-align: center;
+}
+
+.registry-marble-resolution .registry-marble-directory-header {
+  align-items: center;
+  max-width: 28rem;
+}
+
+.registry-marble-resolution-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.registry-marble-cta {
+  padding: 0.6875rem 2rem;
+  border-radius: 4px;
+  background: var(--registry-brand-accent, #b8a98e);
+  color: var(--registry-foreground-inverse, #0f0e0c);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.registry-marble-cta:hover {
+  opacity: 0.88;
+}
+
+/* ── MOBILE RESPONSIVE ────────────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .registry-marble-map-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    overflow-y: auto;
+    padding-top: var(--registry-header-height, 3rem);
+  }
+
+  .registry-marble-map-car-panel,
+  .registry-marble-map-center-panel,
+  .registry-marble-map-exchange-panel {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    overflow-y: visible;
+    height: auto;
+    padding: clamp(1.5rem, 4vw, 2.5rem) var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+  }
+
+  .registry-marble-map-exchange-panel {
+    border-bottom: none;
+    justify-content: flex-start;
+    gap: 1.5rem;
+  }
+
+  .registry-marble-map-center-panel {
+    justify-content: flex-start;
+  }
+}

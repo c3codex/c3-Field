@@ -42,6 +42,16 @@ function resolveNextSurface(encounter: RenderableEncounter): string | null {
   return asString(encounter.transitionNodes[encounter.surface]?.next_surface)
 }
 
+function marbleBgStyle(url: string | null): CSSProperties {
+  if (!url) return {}
+  return {
+    backgroundImage: `url(${url})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }
+}
+
 // --- Entry point ------------------------------------------------------------
 
 // Receives only RenderableEncounter. No DB access. No authority decisions.
@@ -56,7 +66,7 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
   if (surface === "marble_chamber_orientation") {
     return <MarbleOrientationSeat {...props} />
   }
-  if (surface === "marble_chamber_encounter") {
+  if (surface === "marble_chamber_encounter" || surface === "marble_chamber_results") {
     return <MarbleChamberEncounter {...props} />
   }
   if (surface === "marble_chamber_C2_agreement") {
@@ -85,6 +95,59 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
   )
 }
 
+// --- MapCARUnit -------------------------------------------------------------
+// Single expandable Contractual Acknowledgment Record unit.
+// open → read → confirm → collapsed with confirmed badge.
+
+function MapCARUnit({
+  unit,
+  confirmed,
+  onConfirm,
+}: {
+  unit: Record<string, unknown>
+  confirmed: boolean
+  onConfirm: (key: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const key = asString(unit.key) ?? ""
+  const title = asString(unit.title) ?? ""
+  const body = asString(unit.body) ?? ""
+
+  return (
+    <div
+      className={`registry-marble-car-unit${confirmed ? " registry-marble-car-unit--confirmed" : ""}`}
+      data-key={key}
+    >
+      <button
+        type="button"
+        className="registry-marble-car-header"
+        onClick={() => { if (!confirmed) setOpen((o) => !o) }}
+        aria-expanded={open && !confirmed}
+        disabled={confirmed}
+      >
+        <span className="registry-marble-car-title">{title}</span>
+        {confirmed ? (
+          <span className="registry-marble-car-status" aria-label="Confirmed">✓</span>
+        ) : (
+          <span className="registry-marble-car-indicator" aria-hidden="true">{open ? "−" : "+"}</span>
+        )}
+      </button>
+      {open && !confirmed ? (
+        <div className="registry-marble-car-body">
+          <p>{body}</p>
+          <button
+            type="button"
+            className="registry-marble-car-confirm"
+            onClick={() => { onConfirm(key); setOpen(false) }}
+          >
+            I acknowledge
+          </button>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 // --- map_integrity_governance -----------------------------------------------
 
 type MapSession = {
@@ -99,8 +162,6 @@ function MapIntegrityGovernance({
   renderHeader,
   renderSystemFooter,
 }: MarbleChamberProps) {
-  // Read assessment session for standing key (used to identify recommended pathway).
-  // Written by ObsidianC1Compact after contact capture.
   const [mapSession] = useState<MapSession>(() => {
     try {
       const raw = sessionStorage.getItem("__mreg_pending_report")
@@ -110,37 +171,42 @@ function MapIntegrityGovernance({
 
   const standingKey = asString((mapSession?.report as Record<string, unknown> | null | undefined)?.standing_key) ?? ""
 
+  const [confirmedCARs, setConfirmedCARs] = useState<Record<string, boolean>>({})
+
   const meta = asRecord(encounter.encounterDef?.metadata)
-  const governanceHeader = asRecord(meta?.governance_header)
+  const centerPanel = asRecord(meta?.center_panel)
   const mapFraming = asRecord(meta?.map_framing)
-  const actionReadiness = asRecord(meta?.action_readiness)
+  const carAck = asRecord(meta?.c3_7_acknowledgment)
+  const carUnits = asRecordArray(carAck?.units)
   const pathwayCards = asRecordArray(meta?.pathway_cards)
   const seatHold = asRecord(meta?.seat_hold)
 
-  const title =
-    asString(governanceHeader?.title) ??
-    encounter.encounterDef?.display_title ??
-    "MAP Integrity Governance"
-  const governanceDescription = asString(governanceHeader?.description)
-  const governancePrinciple = asString(governanceHeader?.principle)
+  const centerHeading = asString(centerPanel?.heading) ?? asString(mapFraming?.title) ?? "MAP the Environment"
+  const centerSubheading = asString(centerPanel?.subheading) ?? ""
+  const carLabel = asString(carAck?.label) ?? "Acknowledgments"
+  const carInstruction = asString(carAck?.instruction) ?? "Open, read, and confirm each acknowledgment to continue."
+  const seatHoldBody = asString(seatHold?.body)
 
-  const mapFramingTitle = asString(mapFraming?.title)
-  const mapFramingBody = asString(mapFraming?.body)
-
-  const actionReadinessTitle = asString(actionReadiness?.title)
-  const actionReadinessBody = asString(actionReadiness?.body)
-  const actionCtaLabel = asString(actionReadiness?.cta_label)
-  const actionCtaRoute = asString(actionReadiness?.cta_route)
-
-  const seatHoldStatement = asString(seatHold?.statement)
-
-  const marbleAccentUrl = mediaUrl(encounter.mediaByRole.get("right_measured_hero"))
-    ?? mediaUrl(encounter.mediaByRole.get("installation_tone_marble"))
+  const mapBgUrl = mediaUrl(encounter.mediaByRole.get("marble_map_surface"))
   const marbleRiseUrl = mediaUrl(encounter.mediaByRole.get("installation_tone_marble_rise_return_v1"))
 
   const next = resolveNextSurface(encounter)
 
-  function handleSelectPathway(mapPathway: string) {
+  // Recommended pathway from assessment standing
+  const recommendedCard = pathwayCards.find((card) => {
+    const applicableKeys = asStringArray(card.applicable_standing_keys)
+    return standingKey ? applicableKeys.includes(standingKey) : card.recommended === true
+  }) ?? pathwayCards[0]
+
+  const allCARsConfirmed = carUnits.length > 0 && carUnits.every((u) => confirmedCARs[asString(u.key) ?? ""] === true)
+
+  function handleConfirmCAR(key: string) {
+    setConfirmedCARs((prev) => ({ ...prev, [key]: true }))
+  }
+
+  function handleContinueToPayment() {
+    if (!allCARsConfirmed) return
+    const mapPathway = asString(recommendedCard?.map_pathway) ?? ""
     try {
       sessionStorage.setItem("__mreg_c2_pending", JSON.stringify({
         mapPathway,
@@ -155,181 +221,123 @@ function MapIntegrityGovernance({
       className="measures-registry-runtime"
       data-surface="map_integrity_governance"
       data-material-family="marble"
-      data-layout-contract="marble_chamber_directory"
+      data-layout-contract="marble_map_three_panel"
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...marbleBgStyle(mapBgUrl) }}
     >
-      {renderHeader({ title })}
-      <section className="registry-marble-chamber registry-marble-directory" aria-label={title}>
+      {renderHeader({ title: centerHeading })}
 
-        {marbleAccentUrl ? (
-          <img
-            src={marbleAccentUrl}
-            alt=""
-            className="registry-marble-accent"
-            aria-hidden="true"
-          />
-        ) : null}
+      <div className="registry-marble-map-layout">
 
-        {/* GOVERNANCE HEADER */}
-        <header className="registry-marble-directory-header">
-          <h2>{title}</h2>
-          {governanceDescription ? <p>{governanceDescription}</p> : null}
-          {governancePrinciple ? <p>{governancePrinciple}</p> : null}
-        </header>
+        {/* LEFT — CAR Acknowledgments */}
+        <aside className="registry-marble-map-car-panel" aria-label={carLabel}>
+          <p className="registry-marble-car-label">{carLabel}</p>
+          {carInstruction ? (
+            <p className="registry-marble-car-instruction">{carInstruction}</p>
+          ) : null}
+          {carUnits.length > 0 ? (
+            <div className="registry-marble-car-list">
+              {carUnits.map((unit) => {
+                const key = asString(unit.key) ?? ""
+                return (
+                  <MapCARUnit
+                    key={key}
+                    unit={unit}
+                    confirmed={confirmedCARs[key] === true}
+                    onConfirm={handleConfirmCAR}
+                  />
+                )
+              })}
+            </div>
+          ) : (
+            <p className="registry-map-assessment-required">
+              Acknowledgment content is not yet seated.
+            </p>
+          )}
+        </aside>
 
-        {/* MAP FRAMING */}
-        {mapFramingTitle || mapFramingBody ? (
-          <section className="registry-marble-map-framing" aria-label={mapFramingTitle ?? "MAP framing"}>
-            {mapFramingTitle ? <strong>{mapFramingTitle}</strong> : null}
-            {mapFramingBody ? <p>{mapFramingBody}</p> : null}
-          </section>
-        ) : null}
-
-        {/* ASSESSMENT STANDING */}
-        {!standingKey ? (
-          <p className="registry-map-assessment-required">
-            Complete the AI Operations Assessment to receive your recommended MAP pathway.
-          </p>
-        ) : null}
-
-        {/* PATHWAY CARDS */}
-        {pathwayCards.length > 0 ? (
-          <div className="registry-marble-circuit-list">
-            {pathwayCards.map((card) => {
-              const cardTitle = asString(card.title)
-              const cardMapPathway = asString(card.map_pathway)
-              const priceLabel = asString(card.price_label)
-              const boundary = asString(card.map_boundary)
-              const accessBoundary = asString(card.access_boundary)
-              const deliverables = asStringArray(card.deliverables)
-              const paymentBoundary = asString(card.payment_boundary)
-              const seatHoldNotice = asString(card.seat_hold_notice)
-              const applicableKeys = asStringArray(card.applicable_standing_keys)
-              const isRecommended = standingKey
-                ? applicableKeys.includes(standingKey)
-                : card.recommended === true
-              if (!cardTitle) return null
-              return (
-                <article
-                  key={cardTitle}
-                  className={`registry-marble-circuit-card${isRecommended ? " registry-marble-circuit-card--recommended" : ""}`}
-                  aria-label={cardTitle}
-                >
-                  {isRecommended ? (
-                    <span className="registry-marble-circuit-recommendation">
-                      Evaluation-Determined Recommendation
-                    </span>
-                  ) : null}
-                  <h3>{cardTitle}</h3>
-                  {priceLabel ? (
-                    <div className="registry-marble-circuit-price">
-                      <strong className="registry-marble-circuit-price-label">{priceLabel}</strong>
-                      <span>MAP the Environment</span>
-                    </div>
-                  ) : null}
-                  {boundary ? (
-                    <div className="registry-marble-circuit-description">
-                      <strong>MAP Boundary</strong>
-                      <p>{boundary}</p>
-                    </div>
-                  ) : null}
-                  {accessBoundary ? (
-                    <div className="registry-marble-circuit-access">
-                      <strong>Access Requirement</strong>
-                      <p>{accessBoundary}</p>
-                    </div>
-                  ) : null}
-                  {deliverables.length > 0 ? (
-                    <div className="registry-marble-circuit-deliverables">
-                      <strong>Deliverables</strong>
-                      <ul>
-                        {deliverables.map((item) => <li key={item}>{item}</li>)}
-                      </ul>
-                    </div>
-                  ) : null}
-                  {paymentBoundary ? (
-                    <div className="registry-marble-circuit-seat-hold">
-                      <p>{paymentBoundary}</p>
-                    </div>
-                  ) : null}
-                  {cardMapPathway ? (
-                    <div className="registry-marble-circuit-payment-action">
-                      <button
-                        type="button"
-                        className="registry-marble-circuit-payment-cta"
-                        disabled={!standingKey}
-                        onClick={() => handleSelectPathway(cardMapPathway)}
-                      >
-                        {asString(card.cta) ?? `Select ${cardTitle}`}
-                      </button>
-                    </div>
-                  ) : null}
-                  {seatHoldNotice ? (
-                    <p className="registry-marble-seat-hold-notice">{seatHoldNotice}</p>
-                  ) : null}
-                </article>
-              )
-            })}
+        {/* CENTER — MAP Overview */}
+        <section className="registry-marble-map-center-panel" aria-label={centerHeading}>
+          <div className="registry-marble-map-center-content">
+            <h2 className="registry-marble-map-heading">{centerHeading}</h2>
+            {centerSubheading ? (
+              <p className="registry-marble-map-subheading">{centerSubheading}</p>
+            ) : null}
+            {!standingKey ? (
+              <p className="registry-map-assessment-required">
+                Complete the AI Operations Assessment to receive your MAP pathway determination.
+              </p>
+            ) : null}
+            {marbleRiseUrl ? (
+              <div className="registry-marble-map-visual" aria-hidden="true">
+                <img src={marbleRiseUrl} alt="" />
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </section>
 
-        {/* ACTION READINESS */}
-        {actionReadinessTitle || actionReadinessBody ? (
-          <section className="registry-marble-action-readiness" aria-label={actionReadinessTitle ?? "Action readiness"}>
-            {actionReadinessTitle ? <strong>{actionReadinessTitle}</strong> : null}
-            {actionReadinessBody ? <p>{actionReadinessBody}</p> : null}
-            {actionCtaRoute && actionCtaLabel ? (
-              <a className="registry-marble-cta" href={actionCtaRoute}>
-                {actionCtaLabel}
-              </a>
-            ) : next && actionCtaLabel ? (
+        {/* RIGHT — MAP Summary & Exchange */}
+        {recommendedCard ? (
+          <aside className="registry-marble-map-exchange-panel" aria-label="MAP Exchange">
+            <div className="registry-marble-map-exchange-content">
+              <p className="registry-marble-map-exchange-label">map_pathway_standing</p>
+              <strong className="registry-marble-map-exchange-title">{asString(recommendedCard.title)}</strong>
+              {asString(recommendedCard.price_label) ? (
+                <div className="registry-marble-map-exchange-amount">
+                  <span className="registry-marble-map-exchange-standing-label">map_exchange_standing</span>
+                  <strong>{asString(recommendedCard.price_label)}</strong>
+                </div>
+              ) : null}
+              {asString(recommendedCard.map_boundary) ? (
+                <p className="registry-marble-map-exchange-scope">{asString(recommendedCard.map_boundary)}</p>
+              ) : null}
+              {asStringArray(recommendedCard.deliverables).length > 0 ? (
+                <ul className="registry-marble-map-exchange-deliverables">
+                  {asStringArray(recommendedCard.deliverables).map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+              ) : null}
+              {seatHoldBody ? (
+                <p className="registry-marble-map-seat-hold">{seatHoldBody}</p>
+              ) : null}
+            </div>
+            <div className="registry-marble-map-cta-zone">
+              {!allCARsConfirmed ? (
+                <p className="registry-marble-map-cta-hold">
+                  Confirm all acknowledgments to continue.
+                </p>
+              ) : null}
               <button
                 type="button"
-                className="registry-marble-cta"
-                onClick={() => onNavigate(next as EncounterSurface)}
+                className="registry-marble-circuit-payment-cta"
+                disabled={!allCARsConfirmed || !standingKey}
+                onClick={handleContinueToPayment}
               >
-                {actionCtaLabel}
+                Continue to Payment
               </button>
-            ) : null}
-          </section>
-        ) : null}
+            </div>
+          </aside>
+        ) : (
+          <aside className="registry-marble-map-exchange-panel registry-marble-map-exchange-panel--empty" aria-label="MAP Exchange">
+            <p className="registry-map-assessment-required">
+              Complete the AI Operations Assessment to receive your MAP pathway.
+            </p>
+          </aside>
+        )}
 
-        {/* SEAT HOLD */}
-        {seatHoldStatement ? (
-          <p className="registry-map-seat-hold">{seatHoldStatement}</p>
-        ) : null}
+      </div>
 
-        {/* TRANSITION */}
-        {next && !actionCtaLabel ? (
-          <section className="registry-marble-navigation">
-            <button
-              type="button"
-              onClick={() => onNavigate(next as EncounterSurface)}
-            >
-              Continue
-            </button>
-          </section>
-        ) : null}
-
-        {/* Marble tone media */}
-        {marbleRiseUrl ? (
-          <div className="registry-marble-tone" aria-hidden="true">
-            <img src={marbleRiseUrl} alt="" />
-          </div>
-        ) : null}
-
-      </section>
       {renderSystemFooter()}
     </main>
   )
 }
 
 // --- marble_chamber_orientation ---------------------------------------------
-// Media explainer before assessment findings report.
-// Media role: assessment_report_orientation. Navigate to marble_chamber_encounter on continue.
+// ASSESSMENT COMPLETE surface. Reads content_profile from encounter_def.
+// Background: marble_orientation_surface. Navigate to marble_chamber_results on continue.
 
 function MarbleOrientationSeat({
   encounter,
@@ -338,13 +346,17 @@ function MarbleOrientationSeat({
   renderHeader,
   renderSystemFooter,
 }: MarbleChamberProps) {
-  const [muted, setMuted] = useState(true)
-
   const meta = asRecord(encounter.encounterDef?.metadata)
   const contentProfile = asRecord(meta?.content_profile)
-  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Pathway Review"
+  const eyebrow = asString(contentProfile?.eyebrow) ?? "ASSESSMENT COMPLETE"
+  const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Assessment Complete"
+  const body = asString(contentProfile?.body)
+  const supporting = asString(contentProfile?.supporting)
+  const statusLabel = asString(contentProfile?.status_label)
+  const ctaLabel = asString(contentProfile?.cta_label) ?? "Continue"
   const next = resolveNextSurface(encounter)
-  const videoUrl = mediaUrl(encounter.mediaByRole.get("assessment_report_orientation"))
+
+  const bgUrl = mediaUrl(encounter.mediaByRole.get("marble_orientation_surface"))
 
   function handleContinue() {
     if (next) onNavigate(next as EncounterSurface)
@@ -355,36 +367,31 @@ function MarbleOrientationSeat({
       className="measures-registry-runtime"
       data-surface="marble_chamber_orientation"
       data-material-family="marble"
-      data-layout-contract="orientation_media"
+      data-layout-contract="marble_orientation"
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
       {renderHeader({ title })}
-      <section className="registry-marble-chamber registry-marble-orientation" aria-label={title}>
-        {videoUrl ? (
-          <video
-            src={videoUrl}
-            autoPlay
-            muted={muted}
-            playsInline
-            preload="auto"
-            onEnded={handleContinue}
-            aria-label={title}
-          />
-        ) : (
-          <p className="registry-media-absence">Marble orientation media is not seated.</p>
-        )}
-        <div className="registry-diagnostic-passage-controls">
-          <button type="button" onClick={handleContinue}>
-            Continue
-          </button>
-          {videoUrl ? (
-            <button type="button" onClick={() => setMuted((m) => !m)}>
-              {muted ? "Audio" : "Mute"}
-            </button>
+      <section className="registry-marble-chamber registry-marble-orientation-content" aria-label={title}>
+        <div className="registry-marble-orientation-card">
+          {eyebrow ? (
+            <span className="registry-marble-orientation-eyebrow">{eyebrow}</span>
           ) : null}
+          <h2 className="registry-marble-orientation-title">{title}</h2>
+          {body ? <p className="registry-marble-orientation-body">{body}</p> : null}
+          {supporting ? <p className="registry-marble-orientation-supporting">{supporting}</p> : null}
+          {statusLabel ? (
+            <p className="registry-marble-orientation-status" role="status" aria-live="polite">
+              {statusLabel}
+            </p>
+          ) : null}
+          <div className="registry-marble-orientation-cta">
+            <button type="button" onClick={handleContinue}>
+              {ctaLabel}
+            </button>
+          </div>
         </div>
       </section>
       {renderSystemFooter()}
@@ -392,7 +399,7 @@ function MarbleOrientationSeat({
   )
 }
 
-// --- marble_chamber_encounter -----------------------------------------------
+// --- marble_chamber_encounter / marble_chamber_results ----------------------
 // Assessment findings report surface. Reads __mreg_pending_report from sessionStorage.
 // Renders PublicAssessmentResult. Navigate to marble_chamber_C2_compact on continue.
 
@@ -421,6 +428,10 @@ function MarbleChamberEncounter({
 
   const next = resolveNextSurface(encounter)
 
+  const bgUrl =
+    mediaUrl(encounter.mediaByRole.get("marble_results_surface")) ??
+    null
+
   function handleBeginPathwayReview() {
     if (next) onNavigate(next as EncounterSurface)
   }
@@ -428,13 +439,13 @@ function MarbleChamberEncounter({
   return (
     <main
       className="measures-registry-runtime"
-      data-surface="marble_chamber_encounter"
+      data-surface={encounter.surface}
       data-material-family="marble"
       data-layout-contract="findings_report"
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
       {renderHeader({ title: "Measures Registry" })}
       <section className="registry-iis-eval registry-assessment-chamber" aria-label="Assessment Evaluation Report">
@@ -506,9 +517,13 @@ function MarbleC2Agreement({
   const pathwayPrefix = asString(contentProfile?.pathway_prefix) ?? "Selected pathway:"
   const emailLabel = asString(contentProfile?.email_label) ?? "Email for checkout"
   const emailPlaceholder = asString(contentProfile?.email_placeholder) ?? "email@organization.com"
-  const ctaLabel = asString(contentProfile?.cta_label) ?? "Proceed to Payment"
+  const ctaLabel = asString(contentProfile?.cta_label) ?? "Continue to Payment"
   const ctaLoadingLabel = asString(contentProfile?.cta_loading) ?? "Processing..."
   const effectiveEmail = contactEmail || emailInput.trim()
+
+  const bgUrl =
+    mediaUrl(encounter.mediaByRole.get("marble_map_surface")) ??
+    null
 
   async function handleInitiatePayment() {
     if (!onInitiateMapPayment || !c2Pending) return
@@ -533,7 +548,7 @@ function MarbleC2Agreement({
         data-release-standing="held_missing_session"
         data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
         data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
-        style={registryTokenStyle}
+        style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
       >
         {renderHeader({ title })}
         <section className="registry-held-state" role="status">
@@ -559,7 +574,7 @@ function MarbleC2Agreement({
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
       {renderHeader({ title })}
       <section className="registry-marble-chamber registry-marble-payment-agreement" aria-label={title}>
@@ -618,6 +633,10 @@ function MarbleC2Resolution({
   const body = asString(contentProfile?.body) ?? "Your MAP the Environment registration has been received."
   const ctaLabel = asString(contentProfile?.cta_label) ?? "Return to Measures Registry"
 
+  const bgUrl =
+    mediaUrl(encounter.mediaByRole.get("marble_orientation_surface")) ??
+    null
+
   return (
     <main
       className="measures-registry-runtime"
@@ -627,7 +646,7 @@ function MarbleC2Resolution({
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
       {renderHeader({ title })}
       <section className="registry-marble-chamber registry-marble-resolution" aria-label={title}>
