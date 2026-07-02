@@ -77,6 +77,7 @@ const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
   privacy: "/privacy",
   terms: "/terms",
   governance_audit: "/governance-audit",
+  crystal_seat_intro: "/",
   crystal_seat_threshold: "/",
   crystal_seat_orientation: "/",
 }
@@ -93,7 +94,7 @@ function initialSurface(): OrchestratorSurface {
   if (mapped) return mapped
   if (pathname.startsWith("/publication/structural_drift/")) return "publication_dispatch"
   if (pathname === "/publication/structural_drift") return "lapis_chamber_encounter"
-  return "crystal_seat_threshold"
+  return "crystal_seat_intro"
 }
 
 function historyUrl(surface: OrchestratorSurface): string {

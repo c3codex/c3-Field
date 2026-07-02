@@ -268,9 +268,10 @@ function IntroHookSeat({
   renderSystemFooter,
 }: CrystalSeatProps) {
   const [epigraphEntered, setEpigraphEntered] = useState(true)
-  const [epigraphMuted, setEpigraphMuted] = useState(true)
+  const [epigraphMuted, setEpigraphMuted] = useState(false)
   const [epigraphFailed, setEpigraphFailed] = useState(false)
-  const [landingHeroReady, setLandingHeroReady] = useState(false)
+  // crystal_seat_threshold: video runs on crystal_seat_intro; threshold shows cards directly
+  const [landingHeroReady, setLandingHeroReady] = useState(encounter.surface === "crystal_seat_threshold")
   const [leftSettled, setLeftSettled] = useState(false)
   const [rightSettled, setRightSettled] = useState(false)
 
@@ -496,7 +497,6 @@ function IntroHookSeat({
         )
       )}
       {encounter.surface === "crystal_seat_threshold" ? <UnDriftedMark encounter={encounter} /> : null}
-      {renderSystemFooter()}
     </main>
   )
 }
