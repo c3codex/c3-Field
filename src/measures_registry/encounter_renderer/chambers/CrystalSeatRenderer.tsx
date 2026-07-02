@@ -47,6 +47,25 @@ function resolveBranchSurface(
   return asString(node?.[branch]?.next_surface ?? node?.next_surface)
 }
 
+// --- Persistent unDrifted mark -----------------------------------------------
+
+// Renders a small publication-return mark on selected Crystal surfaces.
+// Copy and route authority come from surface assignment metadata (persistent_mark).
+// Do not add to assessment, contact capture, Marble, or payment surfaces.
+function UnDriftedMark({ encounter }: { encounter: RenderableEncounter }) {
+  const mark = asRecord(encounter.surfaceAssignmentMetadata?.persistent_mark)
+  const label = asString(mark?.label)
+  const issueLabel = asString(mark?.issue_label)
+  const routePath = asString(mark?.route_path)
+  if (!label || !routePath) return null
+  return (
+    <a className="undrifted-persistent-mark" href={routePath} aria-label={`${label} — return to publication`}>
+      <span className="undrifted-persistent-mark-label">{label}</span>
+      {issueLabel ? <span className="undrifted-persistent-mark-issue">{issueLabel}</span> : null}
+    </a>
+  )
+}
+
 // --- Entry point ------------------------------------------------------------
 
 // Crystal Seat is not a chamber. It establishes identity and entry.
@@ -179,6 +198,7 @@ function CrystalOrientationSeat({
           </button>
         </div>
       </section>
+      <UnDriftedMark encounter={encounter} />
       {renderSystemFooter()}
     </main>
   )
@@ -415,6 +435,7 @@ function IntroHookSeat({
           </section>
         )
       )}
+      {encounter.surface === "crystal_seat_threshold" ? <UnDriftedMark encounter={encounter} /> : null}
       {renderSystemFooter()}
     </main>
   )
@@ -780,6 +801,7 @@ function AboutMeasuresRegistry({
         </section>
       ) : null}
 
+      <UnDriftedMark encounter={encounter} />
       {renderSystemFooter()}
     </main>
   )

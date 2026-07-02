@@ -113,6 +113,9 @@ function UnDriftedIndex({
   const issueNumber = asString(issueRecord?.issue_number)
   const issueDate = asString(issueRecord?.issue_date)
   const issueEdition = asString(issueRecord?.edition)
+  const issuePublisher = asString(issueRecord?.publisher)
+  const issueBranchStanding = asString(issueRecord?.branch_standing)
+  const descriptorLine = asString(brandCopy?.descriptor_line)
 
   const coverEyebrow = asString(asRecord(landingContract?.hero)?.cover_eyebrow)
   const coverHeadline = asString(coverStory?.feature_headline)
@@ -149,6 +152,7 @@ function UnDriftedIndex({
   const footerLine2 = asString(footerRecord?.footer_line_2)
 
   const undriftedBannerUrl =
+    mediaUrl(encounter.mediaByRole.get("undrifted_publication_masthead")) ??
     mediaUrl(encounter.mediaByRole.get("undrifted_fill")) ??
     mediaUrl(encounter.mediaByRole.get("ai_isnt_broken_landing"))
   const registryLogoUrl = mediaUrl(encounter.mediaByRole.get("measures_registry_logo"))
@@ -213,20 +217,33 @@ function UnDriftedIndex({
                   <strong>Drifted</strong>
                 </span>
               )}
-              {mastHeadPrinciples ? (
+              {mastHeadPrinciples || descriptorLine ? (
                 <div className="undrifted-masthead-text">
-                  <span className="undrifted-masthead-principles">{mastHeadPrinciples}</span>
+                  {mastHeadPrinciples ? (
+                    <span className="undrifted-masthead-principles">{mastHeadPrinciples}</span>
+                  ) : null}
+                  {descriptorLine ? (
+                    <span className="undrifted-masthead-descriptor">{descriptorLine}</span>
+                  ) : null}
                 </div>
               ) : null}
             </div>
           )}
         </header>
         <hr className="undrifted-masthead-rule" aria-hidden="true" />
-        {issueNumber || issueDate || issueEdition ? (
+        {issueNumber || issueDate || issueEdition || issuePublisher || issueBranchStanding ? (
           <div className="undrifted-issue-rail" aria-label="Issue information">
-            {issueNumber ? <span>ISSUE {issueNumber}</span> : null}
-            {issueDate ? <span>{issueDate}</span> : null}
-            {issueEdition ? <span>{issueEdition}</span> : null}
+            <div className="undrifted-issue-rail-left">
+              {issueNumber ? <span>ISSUE {issueNumber}</span> : null}
+              {issueDate ? <span>{issueDate}</span> : null}
+              {issueEdition ? <span>{issueEdition}</span> : null}
+            </div>
+            {issuePublisher || issueBranchStanding ? (
+              <div className="undrifted-issue-rail-right">
+                {issuePublisher ? <span>{issuePublisher}</span> : null}
+                {issueBranchStanding ? <span>{issueBranchStanding}</span> : null}
+              </div>
+            ) : null}
           </div>
         ) : null}
 
