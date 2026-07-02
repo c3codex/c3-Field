@@ -36,6 +36,16 @@ function mediaUrl(row: EncounterMediaRow | undefined): string | null {
   })
 }
 
+function surfaceBgStyle(url: string | null): CSSProperties {
+  if (!url) return {}
+  return {
+    backgroundImage: `url(${url})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }
+}
+
 function resolveNextSurface(encounter: RenderableEncounter): string | null {
   return asString(encounter.transitionNodes[encounter.surface]?.next_surface)
 }
@@ -144,6 +154,7 @@ function CrystalOrientationSeat({
 
   const videoUrl = mediaUrl(encounter.mediaByRole.get("measures_position"))
   const sealUrl = mediaUrl(encounter.mediaByRole.get("official_codexstone_seal"))
+  const bgUrl = mediaUrl(encounter.mediaByRole.get("crystal_orientation_surface"))
 
   function handleContinue() {
     if (nextSurface) onNavigate(nextSurface as EncounterSurface)
@@ -156,7 +167,7 @@ function CrystalOrientationSeat({
       data-material-family="crystal"
       data-layout-contract="crystal_orientation"
       data-release-standing="public"
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
       {renderHeader({ title: "Measures Registry" })}
       <section className="registry-crystal-orientation" aria-label="Crystal Orientation">
@@ -627,7 +638,7 @@ function AboutMeasuresRegistry({
         data-surface={encounter.surface}
         data-material-family="crystal"
         data-release-standing="held_missing_registry_content"
-        style={registryTokenStyle}
+        style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
       >
         {renderHeader({ title })}
         <section className="registry-held-state" role="status">
@@ -658,6 +669,7 @@ function AboutMeasuresRegistry({
     asString(featuredArticle?.article_url) ?? asString(featuredArticle?.external_url) ?? null
   const videoUrl = mediaUrl(encounter.mediaByRole.get("about_measures_registry_video"))
   const sealUrl = mediaUrl(encounter.mediaByRole.get("official_codexstone_seal"))
+  const bgUrl = mediaUrl(encounter.mediaByRole.get("crystal_longform_surface"))
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -679,7 +691,7 @@ function AboutMeasuresRegistry({
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
       {renderHeader({ title })}
 

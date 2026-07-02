@@ -62,6 +62,16 @@ function resolveNextSurface(encounter: RenderableEncounter): string | null {
   return asString(encounter.transitionNodes[encounter.surface]?.next_surface)
 }
 
+function surfaceBgStyle(url: string | null): CSSProperties {
+  if (!url) return {}
+  return {
+    backgroundImage: `url(${url})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }
+}
+
 // --- Entry point ------------------------------------------------------------
 
 // Receives only RenderableEncounter. No DB access. No authority decisions.
@@ -119,6 +129,7 @@ function ObsidianOrientationThreshold({
   const next = resolveNextSurface(encounter)
 
   const videoUrl = mediaUrl(encounter.mediaByRole.get("obsidian"))
+  const bgUrl = mediaUrl(encounter.mediaByRole.get("obsidian_orientation_surface"))
 
   function handleContinue() {
     if (next) onNavigate(next as EncounterSurface)
@@ -133,7 +144,7 @@ function ObsidianOrientationThreshold({
       data-release-standing="public"
       data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
       {renderHeader({ title })}
       <section className="registry-obsidian-orientation" aria-label={title}>

@@ -82,6 +82,9 @@ const MEDIA_ROLES = [
   "marble_orientation_surface",
   "marble_results_surface",
   "marble_map_surface",
+  "crystal_orientation_surface",
+  "crystal_longform_surface",
+  "obsidian_orientation_surface",
 ] as const
 
 const DESIGN_REGISTRY_KEY = "measures_registry"
