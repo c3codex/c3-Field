@@ -250,6 +250,25 @@ export default function MeasuresRegistryOrchestrator() {
     }
   }, [activeToneUrl, activeToneVolume])
 
+  // Document title — resolved from surface assignment → encounter_def → display_title.
+  // Never falls back to static index.html title.
+  useEffect(() => {
+    if (resolverData.loading) return
+    const LEGAL_TITLES: Partial<Record<OrchestratorSurface, string>> = {
+      privacy: "Privacy Policy — Measures Registry",
+      terms: "Terms of Use — Measures Registry",
+      governance_audit: "Measures Registry Governance Audit",
+    }
+    if (activeSurface in LEGAL_TITLES) {
+      document.title = LEGAL_TITLES[activeSurface as keyof typeof LEGAL_TITLES]!
+      return
+    }
+    const assignment = resolverData.surfaceAssignmentRows.find((r) => r.surface_key === activeSurface)
+    if (!assignment?.encounter_key) return
+    const def = resolverData.encounterDefRows.find((r) => r.encounter_key === assignment.encounter_key)
+    if (def?.display_title) document.title = def.display_title
+  }, [activeSurface, resolverData.loading, resolverData.surfaceAssignmentRows, resolverData.encounterDefRows])
+
   function navigate(surface: OrchestratorSurface) {
     navigationSourceRef.current = "app"
     setActiveSurface(surface)
