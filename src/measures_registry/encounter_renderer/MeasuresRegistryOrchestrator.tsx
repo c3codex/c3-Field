@@ -24,7 +24,6 @@ import GovernanceAuditSurface from "../governance/GovernanceAuditSurface"
 type OrchestratorSurface = EncounterSurface | "privacy" | "terms" | "governance_audit"
 
 const SURFACE_MATERIAL: Partial<Record<OrchestratorSurface, MaterialIdentity>> = {
-  crystal_seat_intro: "crystal",
   crystal_seat_threshold: "crystal",
   crystal_seat_orientation: "crystal",
   crystal_seat_encounter: "crystal",

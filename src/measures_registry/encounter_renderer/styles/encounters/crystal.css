@@ -2,24 +2,35 @@
 /* crystal_seat_intro: full-viewport video, headline left, auto-advance, no controls */
 
 .measures-registry-runtime[data-layout-contract="crystal_intro"] {
-  position: relative;
-  min-height: 100svh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: #000;
   overflow: hidden;
+  z-index: 0;
 }
 
 .registry-crystal-intro {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: flex;
   align-items: flex-end;
   padding: clamp(2rem, 5vw, 4rem);
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .registry-crystal-intro-video {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;

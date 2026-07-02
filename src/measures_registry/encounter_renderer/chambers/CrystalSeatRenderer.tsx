@@ -237,12 +237,13 @@ function CrystalIntroSeat({
       data-release-standing="public"
       style={registryTokenStyle}
     >
-      <section className="registry-crystal-intro" aria-label="Introduction">
+      <section className="registry-crystal-intro" aria-label="Introduction" onClick={handleAdvance}>
         {videoUrl ? (
           <video
             className="registry-crystal-intro-video"
             src={videoUrl}
             autoPlay
+            muted
             playsInline
             preload="auto"
             onEnded={handleAdvance}
