@@ -1,3 +1,47 @@
+/* ── CRYSTAL INTRO ────────────────────────────────────────────────────────── */
+/* crystal_seat_intro: full-viewport video, headline left, auto-advance, no controls */
+
+.measures-registry-runtime[data-layout-contract="crystal_intro"] {
+  position: relative;
+  min-height: 100svh;
+  background: #000;
+  overflow: hidden;
+}
+
+.registry-crystal-intro {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(2rem, 5vw, 4rem);
+  box-sizing: border-box;
+}
+
+.registry-crystal-intro-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.registry-crystal-intro-headline {
+  position: relative;
+  z-index: 1;
+  max-width: 28rem;
+}
+
+.registry-crystal-intro-headline h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #edf2f8;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+}
+
 /* Crystal Seat Orientation — governed site surface */
 /* Applies only to crystal_seat_orientation. Intro and threshold remain media-fill. */
 

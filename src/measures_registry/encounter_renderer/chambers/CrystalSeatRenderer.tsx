@@ -74,7 +74,10 @@ function UnDriftedMark({ encounter }: { encounter: RenderableEncounter }) {
 export default function CrystalSeatRenderer(props: CrystalSeatProps) {
   const { surface } = props.encounter
 
-  if (surface === "crystal_seat_intro" || surface === "crystal_seat_threshold") {
+  if (surface === "crystal_seat_intro") {
+    return <CrystalIntroSeat {...props} />
+  }
+  if (surface === "crystal_seat_threshold") {
     return <IntroHookSeat {...props} />
   }
   if (surface === "crystal_seat_orientation") {
@@ -199,6 +202,58 @@ function CrystalOrientationSeat({
         </div>
       </section>
       <UnDriftedMark encounter={encounter} />
+      {renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- crystal_seat_intro -----------------------------------------------------
+// Full-viewport video. Auto-play, NOT muted. Auto-advance on end.
+// Headline "AI Isn't Broken... Systems Are" left-seated. No mute controls.
+
+function CrystalIntroSeat({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  renderSystemFooter,
+}: CrystalSeatProps) {
+  const meta = asRecord(encounter.encounterDef?.metadata)
+  const introCopy = asRecord(meta?.intro_copy)
+  const headline = asString(introCopy?.headline) ?? "AI Isn't Broken... Systems Are"
+  const nextSurface = resolveNextSurface(encounter)
+
+  const videoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
+
+  function handleAdvance() {
+    if (nextSurface) onNavigate(nextSurface as EncounterSurface)
+  }
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="crystal_seat_intro"
+      data-material-family="crystal"
+      data-layout-contract="crystal_intro"
+      data-release-standing="public"
+      style={registryTokenStyle}
+    >
+      <section className="registry-crystal-intro" aria-label="Introduction">
+        {videoUrl ? (
+          <video
+            className="registry-crystal-intro-video"
+            src={videoUrl}
+            autoPlay
+            playsInline
+            preload="auto"
+            onEnded={handleAdvance}
+            onError={handleAdvance}
+            aria-label={headline}
+          />
+        ) : null}
+        <div className="registry-crystal-intro-headline">
+          <h1>{headline}</h1>
+        </div>
+      </section>
       {renderSystemFooter()}
     </main>
   )
