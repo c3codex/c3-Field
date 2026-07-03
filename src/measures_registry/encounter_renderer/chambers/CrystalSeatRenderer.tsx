@@ -719,8 +719,6 @@ function AboutMeasuresRegistry({
   const codexstoneSealSection = asRecord(approved.codexstone_seal_section)
   const orientationSections = asRecordArray(approved.orientation_sections)
   const bridgeSection = asRecord(approved.undrifted_bridge_section)
-  const c3fieldLinksSection = asRecord(approved.c3field_links_section)
-  const c3fieldLinks = asRecordArray(c3fieldLinksSection?.links)
   const connectSection = asRecord(approved.connect_section)
   const connectTitle = asString(connectSection?.title) ?? "Connect"
   const connectBody = asString(connectSection?.body)
@@ -824,32 +822,6 @@ function AboutMeasuresRegistry({
               {asString(bridgeSection.cta_label) ?? "Read Issue →"}
             </span>
           </a>
-        </section>
-      ) : null}
-
-      {c3fieldLinks.length > 0 ? (
-        <section className="registry-about-c3field" aria-label="c3 Field">
-          {asString(c3fieldLinksSection?.label) ? (
-            <span className="registry-about-c3field-label">{asString(c3fieldLinksSection?.label)}</span>
-          ) : null}
-          <div className="registry-about-c3field-links">
-            {c3fieldLinks.map((link) => {
-              const label = asString(link.label)
-              const url = asString(link.url)
-              if (!label || !url) return null
-              return (
-                <a
-                  key={label}
-                  href={url}
-                  className="registry-about-c3field-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {label}
-                </a>
-              )
-            })}
-          </div>
         </section>
       ) : null}
 
