@@ -65,11 +65,11 @@
 
 .measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-title {
   margin: 0;
-  font-size: clamp(1.4rem, 2.2vw, 2rem);
-  font-weight: 600;
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-weight: 500;
   letter-spacing: -0.01em;
-  color: var(--registry-brand-primary-text, #edf2f8);
-  line-height: 1.2;
+  color: var(--registry-brand-primary-text, #ffffff);
+  line-height: 1.1;
 }
 
 .measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-subtitle {
@@ -136,10 +136,11 @@
 
 .measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-lead {
   margin: 0;
-  font-size: clamp(0.82rem, 1.05vw, 0.94rem);
-  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.68));
-  line-height: 1.72;
+  font-size: 1.125rem;
+  color: var(--registry-brand-secondary-text, rgba(255, 255, 255, 0.82));
+  line-height: 1.7;
   font-weight: 400;
+  max-width: 68ch;
 }
 
 /* ── REVIEW SECTIONS ─────────────────────────────────────────────────────── */

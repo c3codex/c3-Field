@@ -92,7 +92,9 @@
   position: sticky;
   top: calc(var(--registry-header-height, 3rem) + 1.25rem);
   aspect-ratio: 9 / 16;
-  border-radius: 4px;
+  width: min(32vw, 420px);
+  max-height: calc(100dvh - 220px);
+  border-radius: 18px;
   overflow: hidden;
   background: #000;
   border: 1px solid var(--registry-brand-border, rgba(230, 237, 247, 0.1));
@@ -162,6 +164,14 @@
 
 /* ── CTA ─────────────────────────────────────────────────────────────────── */
 
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-top: 0.25rem;
+}
+
 .measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-cta {
   align-self: flex-start;
   padding: 0.65rem 1.75rem;
@@ -174,12 +184,29 @@
   border-radius: 3px;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease;
-  margin-top: 0.25rem;
 }
 
 .measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-cta:hover {
   background: rgba(230, 237, 247, 0.06);
   border-color: rgba(230, 237, 247, 0.6);
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-audio {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--registry-brand-secondary-text, rgba(31, 50, 96, 0.5));
+  background: transparent;
+  border: 1px solid rgba(31, 50, 96, 0.18);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-audio:hover {
+  color: var(--registry-brand-primary-text, #1F3260);
+  border-color: rgba(31, 50, 96, 0.38);
 }
 
 /* ── MOBILE ──────────────────────────────────────────────────────────────── */

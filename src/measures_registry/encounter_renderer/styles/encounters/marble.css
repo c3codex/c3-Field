@@ -14,6 +14,11 @@
 
 .measures-registry-runtime[data-surface="marble_chamber_orientation"] {
   background-color: var(--registry-marble-base, #1a1814);
+  --registry-brand-primary-text: #1E2C48;
+  --registry-brand-secondary-text: #3E485B;
+  --registry-brand-muted-text: #667185;
+  --registry-brand-accent: #A67C38;
+  color: #1E2C48;
 }
 
 .registry-marble-orientation-video-frame {
@@ -61,18 +66,18 @@
 }
 
 .registry-marble-orientation-title {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.1;
   letter-spacing: -0.01em;
   margin: 0;
 }
 
 .registry-marble-orientation-body,
 .registry-marble-orientation-supporting {
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  opacity: 0.75;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--registry-brand-secondary-text, #3E485B);
   margin: 0;
 }
 
@@ -101,6 +106,24 @@
 
 .registry-marble-orientation-cta button:hover {
   opacity: 0.88;
+}
+
+.registry-marble-orientation-audio {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--registry-brand-muted-text, #667185);
+  background: transparent;
+  border: 1px solid rgba(30, 44, 72, 0.2);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.registry-marble-orientation-audio:hover {
+  color: var(--registry-brand-primary-text, #1E2C48);
+  border-color: rgba(30, 44, 72, 0.4);
 }
 
 /* ── RESULTS (marble_chamber_results / marble_chamber_encounter) ───────────── */

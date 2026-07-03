@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import type { CSSProperties, ReactNode } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type { EncounterMediaRow, EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
@@ -351,6 +351,9 @@ function MarbleOrientationSeat({
   renderHeader,
   renderSystemFooter,
 }: MarbleChamberProps) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoAudioEnabled, setVideoAudioEnabled] = useState(false)
+
   const meta = asRecord(encounter.encounterDef?.metadata)
   const contentProfile = asRecord(meta?.content_profile)
   const eyebrow = asString(contentProfile?.eyebrow) ?? "ASSESSMENT COMPLETE"
@@ -366,6 +369,23 @@ function MarbleOrientationSeat({
 
   function handleContinue() {
     if (next) onNavigate(next as EncounterSurface)
+  }
+
+  function handleVideoAudio() {
+    const video = videoRef.current
+    if (!video) return
+    if (!videoAudioEnabled) {
+      video.muted = false
+      video.volume = 1
+      void video.play().catch(() => {
+        video.muted = true
+        setVideoAudioEnabled(false)
+      })
+      setVideoAudioEnabled(true)
+    } else {
+      video.muted = true
+      setVideoAudioEnabled(false)
+    }
   }
 
   return (
@@ -385,6 +405,7 @@ function MarbleOrientationSeat({
           {videoUrl ? (
             <div className="registry-marble-orientation-video-frame">
               <video
+                ref={videoRef}
                 className="registry-marble-orientation-video"
                 src={videoUrl}
                 autoPlay
@@ -392,7 +413,7 @@ function MarbleOrientationSeat({
                 muted
                 playsInline
                 preload="auto"
-                aria-hidden="true"
+                aria-label={title}
               />
             </div>
           ) : null}
@@ -411,6 +432,15 @@ function MarbleOrientationSeat({
             <button type="button" onClick={handleContinue}>
               {ctaLabel}
             </button>
+            {videoUrl ? (
+              <button
+                type="button"
+                className="registry-marble-orientation-audio"
+                onClick={handleVideoAudio}
+              >
+                {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
+              </button>
+            ) : null}
           </div>
         </div>
       </section>

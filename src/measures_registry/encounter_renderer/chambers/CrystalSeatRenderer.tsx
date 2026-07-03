@@ -1,5 +1,5 @@
 import type { CSSProperties, FormEvent, ReactNode } from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type { EncounterMediaRow, EncounterSurface, RenderableEncounter, TransitionNode } from "../types/encounterRendererTypes"
 import {
@@ -147,6 +147,9 @@ function CrystalOrientationSeat({
   renderHeader,
   renderSystemFooter,
 }: CrystalSeatProps) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoAudioEnabled, setVideoAudioEnabled] = useState(false)
+
   const assignmentMeta = encounter.surfaceAssignmentMetadata ?? {}
   const governedParagraphs = asStringArray(assignmentMeta.governed_site_paragraphs)
   const codexstoneCaptions = asStringArray(assignmentMeta.codexstone_captions)
@@ -158,6 +161,23 @@ function CrystalOrientationSeat({
 
   function handleContinue() {
     if (nextSurface) onNavigate(nextSurface as EncounterSurface)
+  }
+
+  function handleVideoAudio() {
+    const video = videoRef.current
+    if (!video) return
+    if (!videoAudioEnabled) {
+      video.muted = false
+      video.volume = 1
+      void video.play().catch(() => {
+        video.muted = true
+        setVideoAudioEnabled(false)
+      })
+      setVideoAudioEnabled(true)
+    } else {
+      video.muted = true
+      setVideoAudioEnabled(false)
+    }
   }
 
   return (
@@ -174,6 +194,7 @@ function CrystalOrientationSeat({
         {videoUrl ? (
           <div className="registry-crystal-orientation-media">
             <video
+              ref={videoRef}
               src={videoUrl}
               autoPlay
               muted
@@ -204,13 +225,24 @@ function CrystalOrientationSeat({
               ))}
             </div>
           ) : null}
-          <button
-            type="button"
-            className="registry-crystal-orientation-cta"
-            onClick={handleContinue}
-          >
-            Continue
-          </button>
+          <div className="registry-crystal-orientation-actions">
+            <button
+              type="button"
+              className="registry-crystal-orientation-cta"
+              onClick={handleContinue}
+            >
+              Continue
+            </button>
+            {videoUrl ? (
+              <button
+                type="button"
+                className="registry-crystal-orientation-audio"
+                onClick={handleVideoAudio}
+              >
+                {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
+              </button>
+            ) : null}
+          </div>
         </div>
       </section>
       <UnDriftedMark encounter={encounter} />

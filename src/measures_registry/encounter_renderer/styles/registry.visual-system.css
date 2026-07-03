@@ -1,6 +1,20 @@
 /* Launch-grade visual system overrides.
    Contract-native: driven by material/layout data attributes already seated by runtime. */
 
+/* Governed typography scale — shared across Crystal, Obsidian, Marble, and About */
+.measures-registry-runtime {
+  --enc-eyebrow-size: 0.75rem;         /* 12px */
+  --enc-eyebrow-tracking: 0.24em;
+  --enc-title-size: clamp(2.25rem, 4vw, 3.5rem);  /* 36–56px */
+  --enc-title-weight: 500;
+  --enc-title-lh: 1.1;
+  --enc-context-size: 1.125rem;        /* 18px */
+  --enc-context-lh: 1.7;
+  --enc-context-maxw: 68ch;
+  --enc-body-size: 1rem;               /* 16px */
+  --enc-body-lh: 1.7;
+}
+
 .measures-registry-runtime {
   overflow-x: clip;
   isolation: isolate;
