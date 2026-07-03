@@ -417,6 +417,15 @@ function MarbleOrientationSeat({
               />
             </div>
           ) : null}
+          {videoUrl ? (
+            <button
+              type="button"
+              className="registry-marble-orientation-audio"
+              onClick={handleVideoAudio}
+            >
+              {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
+            </button>
+          ) : null}
           {eyebrow ? (
             <span className="registry-marble-orientation-eyebrow">{eyebrow}</span>
           ) : null}
@@ -432,15 +441,6 @@ function MarbleOrientationSeat({
             <button type="button" onClick={handleContinue}>
               {ctaLabel}
             </button>
-            {videoUrl ? (
-              <button
-                type="button"
-                className="registry-marble-orientation-audio"
-                onClick={handleVideoAudio}
-              >
-                {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
-              </button>
-            ) : null}
           </div>
         </div>
       </section>

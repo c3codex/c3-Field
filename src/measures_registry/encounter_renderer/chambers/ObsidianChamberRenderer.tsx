@@ -174,20 +174,31 @@ function ObsidianOrientationThreshold({
     >
       {renderHeader({ title })}
       <section className="registry-obsidian-orientation" aria-label={title}>
-        <div className="registry-obsidian-orientation-media">
+        <div className="registry-obsidian-orientation-media-zone">
+          <div className="registry-obsidian-orientation-media">
+            {videoUrl ? (
+              <video
+                ref={videoRef}
+                src={videoUrl}
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                aria-label={title}
+              />
+            ) : (
+              <div className="registry-obsidian-orientation-media-absent" role="presentation" />
+            )}
+          </div>
           {videoUrl ? (
-            <video
-              ref={videoRef}
-              src={videoUrl}
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              aria-label={title}
-            />
-          ) : (
-            <div className="registry-obsidian-orientation-media-absent" role="presentation" />
-          )}
+            <button
+              type="button"
+              className="registry-obsidian-orientation-audio"
+              onClick={handleVideoAudio}
+            >
+              {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
+            </button>
+          ) : null}
         </div>
         <div className="registry-obsidian-orientation-content">
           <div className="registry-obsidian-orientation-copy">
@@ -247,15 +258,6 @@ function ObsidianOrientationThreshold({
             >
               {ctaLabel}
             </button>
-            {videoUrl ? (
-              <button
-                type="button"
-                className="registry-obsidian-orientation-audio"
-                onClick={handleVideoAudio}
-              >
-                {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
-              </button>
-            ) : null}
           </div>
         </div>
       </section>

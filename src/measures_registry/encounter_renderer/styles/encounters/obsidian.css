@@ -25,6 +25,13 @@
 
 /* ── VIDEO COLUMN ────────────────────────────────────────────────────────── */
 
+.measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-media-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
 .measures-registry-runtime[data-surface="obsidian_chamber_orientation"] .registry-obsidian-orientation-media {
   position: relative;
   width: 100%;

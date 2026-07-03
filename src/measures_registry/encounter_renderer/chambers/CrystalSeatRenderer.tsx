@@ -1,4 +1,4 @@
-import type { CSSProperties, FormEvent, ReactNode } from "react"
+import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
 import { useEffect, useRef, useState } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type { EncounterMediaRow, EncounterSurface, RenderableEncounter, TransitionNode } from "../types/encounterRendererTypes"
@@ -191,20 +191,31 @@ function CrystalOrientationSeat({
     >
       {renderHeader({ title: "Measures Registry" })}
       <section className="registry-crystal-orientation" aria-label="Crystal Orientation">
-        {videoUrl ? (
-          <div className="registry-crystal-orientation-media">
-            <video
-              ref={videoRef}
-              src={videoUrl}
-              autoPlay
-              muted
-              playsInline
-              loop
-              preload="auto"
-              aria-label="Measures Position"
-            />
-          </div>
-        ) : null}
+        <div className="registry-crystal-orientation-media-zone">
+          {videoUrl ? (
+            <div className="registry-crystal-orientation-media">
+              <video
+                ref={videoRef}
+                src={videoUrl}
+                autoPlay
+                muted
+                playsInline
+                loop
+                preload="auto"
+                aria-label="Measures Position"
+              />
+            </div>
+          ) : null}
+          {videoUrl ? (
+            <button
+              type="button"
+              className="registry-crystal-orientation-audio"
+              onClick={handleVideoAudio}
+            >
+              {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
+            </button>
+          ) : null}
+        </div>
         <div className="registry-crystal-orientation-content">
           {governedParagraphs.length > 0 ? (
             <div className="registry-crystal-orientation-copy">
@@ -233,15 +244,6 @@ function CrystalOrientationSeat({
             >
               Continue
             </button>
-            {videoUrl ? (
-              <button
-                type="button"
-                className="registry-crystal-orientation-audio"
-                onClick={handleVideoAudio}
-              >
-                {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
-              </button>
-            ) : null}
           </div>
         </div>
       </section>
@@ -261,6 +263,9 @@ function CrystalIntroSeat({
   onNavigate,
   renderSystemFooter,
 }: CrystalSeatProps) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [introAudioEnabled, setIntroAudioEnabled] = useState(false)
+
   const meta = asRecord(encounter.encounterDef?.metadata)
   const introCopy = asRecord(meta?.intro_copy)
   const headline = asString(introCopy?.headline) ?? "AI Isn't Broken... Systems Are"
@@ -270,6 +275,24 @@ function CrystalIntroSeat({
 
   function handleAdvance() {
     if (nextSurface) onNavigate(nextSurface as EncounterSurface)
+  }
+
+  function handleIntroAudio(e: MouseEvent) {
+    e.stopPropagation()
+    const video = videoRef.current
+    if (!video) return
+    if (!introAudioEnabled) {
+      video.muted = false
+      video.volume = 1
+      void video.play().catch(() => {
+        video.muted = true
+        setIntroAudioEnabled(false)
+      })
+      setIntroAudioEnabled(true)
+    } else {
+      video.muted = true
+      setIntroAudioEnabled(false)
+    }
   }
 
   return (
@@ -284,6 +307,7 @@ function CrystalIntroSeat({
       <section className="registry-crystal-intro" aria-label="Introduction" onClick={handleAdvance}>
         {videoUrl ? (
           <video
+            ref={videoRef}
             className="registry-crystal-intro-video"
             src={videoUrl}
             autoPlay
@@ -298,6 +322,15 @@ function CrystalIntroSeat({
         <div className="registry-crystal-intro-headline">
           <h1>{headline}</h1>
         </div>
+        {videoUrl ? (
+          <button
+            type="button"
+            className="registry-crystal-intro-audio"
+            onClick={handleIntroAudio}
+          >
+            {introAudioEnabled ? "Audio On" : "Enable Audio"}
+          </button>
+        ) : null}
       </section>
     </main>
   )

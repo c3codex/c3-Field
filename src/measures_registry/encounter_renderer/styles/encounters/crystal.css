@@ -49,6 +49,30 @@
   max-width: 28rem;
 }
 
+.registry-crystal-intro-audio {
+  position: absolute;
+  bottom: clamp(2rem, 5vw, 4rem);
+  right: clamp(2rem, 5vw, 4rem);
+  padding: 0.3rem 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(237, 242, 248, 0.55);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(237, 242, 248, 0.22);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+.registry-crystal-intro-audio:hover {
+  color: rgba(237, 242, 248, 0.9);
+  border-color: rgba(237, 242, 248, 0.5);
+  background: rgba(0, 0, 0, 0.5);
+}
+
 .registry-crystal-intro-headline h1 {
   margin: 0;
   font-size: clamp(1.6rem, 3.5vw, 2.6rem);
@@ -88,9 +112,16 @@
 
 /* ── 9:16 VIDEO COLUMN ───────────────────────────────────────────────────── */
 
-.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media {
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media-zone {
   position: sticky;
   top: calc(var(--registry-header-height, 3rem) + 1.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media {
   aspect-ratio: 9 / 16;
   width: min(32vw, 420px);
   max-height: calc(100dvh - 220px);
@@ -217,8 +248,13 @@
     gap: clamp(1.5rem, 4vw, 2.5rem);
   }
 
-  .measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media {
+  .measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media-zone {
     position: static;
+    align-items: center;
+    width: 100%;
+  }
+
+  .measures-registry-runtime[data-surface="crystal_seat_orientation"] .registry-crystal-orientation-media {
     max-width: 22rem;
     margin: 0 auto;
   }
