@@ -25,6 +25,12 @@
   cursor: pointer;
 }
 
+/* registry.visual-system.css sets position:relative on all > * children.
+   This higher-specificity rule restores the intro section to fill its fixed container. */
+.measures-registry-runtime[data-layout-contract="crystal_intro"] .registry-crystal-intro {
+  height: 100%;
+}
+
 .registry-crystal-intro-video {
   position: absolute;
   top: 0;

@@ -221,6 +221,7 @@
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-insight-card {
   display: grid;
+  grid-template-columns: 1fr;
   grid-template-rows: minmax(15rem, 1fr) auto;
   min-height: 28rem;
   border: 0;

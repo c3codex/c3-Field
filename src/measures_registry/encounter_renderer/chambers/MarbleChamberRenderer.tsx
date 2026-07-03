@@ -379,21 +379,23 @@ function MarbleOrientationSeat({
       data-directory-key={asString(meta?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
-      {videoUrl ? (
-        <video
-          className="registry-marble-orientation-video"
-          src={videoUrl}
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster={bgUrl ?? undefined}
-          aria-hidden="true"
-        />
-      ) : null}
       {renderHeader({ title })}
       <section className="registry-marble-chamber registry-marble-orientation-content" aria-label={title}>
         <div className="registry-marble-orientation-card">
+          {videoUrl ? (
+            <div className="registry-marble-orientation-video-frame">
+              <video
+                className="registry-marble-orientation-video"
+                src={videoUrl}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+              />
+            </div>
+          ) : null}
           {eyebrow ? (
             <span className="registry-marble-orientation-eyebrow">{eyebrow}</span>
           ) : null}

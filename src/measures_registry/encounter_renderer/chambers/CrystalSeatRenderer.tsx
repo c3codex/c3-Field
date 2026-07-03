@@ -179,6 +179,7 @@ function CrystalOrientationSeat({
               muted
               playsInline
               loop
+              preload="auto"
               aria-label="Measures Position"
             />
           </div>
