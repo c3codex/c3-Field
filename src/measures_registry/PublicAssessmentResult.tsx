@@ -144,16 +144,7 @@ export function PublicAssessmentResult({
             {organizationType ? <p>Organization type: {organizationType.replaceAll("_", " ")}</p> : null}
             <p>Report generated: {reportTimestamp}</p>
           </div>
-          {/* 1. Informational Notice */}
-          {informationalNoticeLines.length > 0 ? (
-            <section className="registry-report-informational-notice" aria-label="Measures Registry Informational Notice">
-              {informationalNoticeLines.map((line) => (
-                <p key={line}>{line}</p>
-              ))}
-            </section>
-          ) : null}
-
-          {/* 2. Environment Finding */}
+          {/* Environment Finding */}
           <div className="registry-report-result">
             <span>{report.assessment_title ?? ASSESSMENT_TITLE}</span>
             <h3>{reportTemplate?.report_title as string ?? report.assessment_result}</h3>

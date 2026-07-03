@@ -178,89 +178,93 @@ function ObsidianOrientationThreshold({
           <h2 className="registry-obsidian-orientation-title">{title}</h2>
           {lead ? <p className="registry-obsidian-orientation-lead">{lead}</p> : null}
         </div>
-        <div className="registry-obsidian-orientation-media-zone">
-          <div className="registry-obsidian-orientation-media">
+        <div className="registry-obsidian-orientation-lower">
+          <div className="registry-obsidian-orientation-media-zone">
+            <div className="registry-obsidian-orientation-media">
+              {videoUrl ? (
+                <video
+                  ref={videoRef}
+                  src={videoUrl}
+                  autoPlay
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-label={title}
+                />
+              ) : (
+                <div className="registry-obsidian-orientation-media-absent" role="presentation" />
+              )}
+            </div>
             {videoUrl ? (
-              <video
-                ref={videoRef}
-                src={videoUrl}
-                autoPlay
-                muted
-                playsInline
-                preload="auto"
-                aria-label={title}
-              />
-            ) : (
-              <div className="registry-obsidian-orientation-media-absent" role="presentation" />
-            )}
+              <button
+                type="button"
+                className="registry-obsidian-orientation-audio"
+                onClick={handleVideoAudio}
+              >
+                {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
+              </button>
+            ) : null}
           </div>
-          {videoUrl ? (
-            <button
-              type="button"
-              className="registry-obsidian-orientation-audio"
-              onClick={handleVideoAudio}
-            >
-              {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
-            </button>
-          ) : null}
-        </div>
-        {(reviewSections.length > 0 || assessmentDetails.length > 0 || privacyNote) ? (
-          <div className="registry-obsidian-orientation-context">
-            {reviewSections.length > 0 ? (
-              <div className="registry-obsidian-orientation-sections">
-                {reviewSections.map((section, si) => {
-                  const heading = asString(section.heading)
-                  const items = Array.isArray(section.items)
-                    ? (section.items as unknown[]).filter((it): it is Record<string, unknown> => Boolean(asRecord(it)))
-                    : []
-                  return (
-                    <div key={si} className="registry-obsidian-orientation-section">
-                      {heading ? (
-                        <h3 className="registry-obsidian-orientation-section-heading">{heading}</h3>
-                      ) : null}
-                      {items.length > 0 ? (
-                        <ul className="registry-obsidian-orientation-items">
-                          {items.map((item, ii) => (
-                            <li key={ii} className="registry-obsidian-orientation-item">
-                              {asString(item.label) ? (
-                                <span className="registry-obsidian-orientation-item-label">
-                                  {asString(item.label)}
-                                </span>
-                              ) : null}
-                              {asString(item.copy) ? (
-                                <p className="registry-obsidian-orientation-item-copy">
-                                  {asString(item.copy)}
-                                </p>
-                              ) : null}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </div>
-                  )
-                })}
+          <div className="registry-obsidian-orientation-column">
+            {(reviewSections.length > 0 || assessmentDetails.length > 0 || privacyNote) ? (
+              <div className="registry-obsidian-orientation-context">
+                {reviewSections.length > 0 ? (
+                  <div className="registry-obsidian-orientation-sections">
+                    {reviewSections.map((section, si) => {
+                      const heading = asString(section.heading)
+                      const items = Array.isArray(section.items)
+                        ? (section.items as unknown[]).filter((it): it is Record<string, unknown> => Boolean(asRecord(it)))
+                        : []
+                      return (
+                        <div key={si} className="registry-obsidian-orientation-section">
+                          {heading ? (
+                            <h3 className="registry-obsidian-orientation-section-heading">{heading}</h3>
+                          ) : null}
+                          {items.length > 0 ? (
+                            <ul className="registry-obsidian-orientation-items">
+                              {items.map((item, ii) => (
+                                <li key={ii} className="registry-obsidian-orientation-item">
+                                  {asString(item.label) ? (
+                                    <span className="registry-obsidian-orientation-item-label">
+                                      {asString(item.label)}
+                                    </span>
+                                  ) : null}
+                                  {asString(item.copy) ? (
+                                    <p className="registry-obsidian-orientation-item-copy">
+                                      {asString(item.copy)}
+                                    </p>
+                                  ) : null}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : null}
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : null}
+                {assessmentDetails.length > 0 ? (
+                  <ul className="registry-obsidian-orientation-details">
+                    {assessmentDetails.map((detail, i) => (
+                      <li key={i} className="registry-obsidian-orientation-detail">{detail}</li>
+                    ))}
+                  </ul>
+                ) : null}
+                {privacyNote ? (
+                  <p className="registry-obsidian-orientation-privacy">{privacyNote}</p>
+                ) : null}
               </div>
             ) : null}
-            {assessmentDetails.length > 0 ? (
-              <ul className="registry-obsidian-orientation-details">
-                {assessmentDetails.map((detail, i) => (
-                  <li key={i} className="registry-obsidian-orientation-detail">{detail}</li>
-                ))}
-              </ul>
-            ) : null}
-            {privacyNote ? (
-              <p className="registry-obsidian-orientation-privacy">{privacyNote}</p>
-            ) : null}
+            <div className="registry-obsidian-orientation-controls">
+              <button
+                type="button"
+                className="registry-obsidian-orientation-cta"
+                onClick={handleContinue}
+              >
+                {ctaLabel}
+              </button>
+            </div>
           </div>
-        ) : null}
-        <div className="registry-obsidian-orientation-controls">
-          <button
-            type="button"
-            className="registry-obsidian-orientation-cta"
-            onClick={handleContinue}
-          >
-            {ctaLabel}
-          </button>
         </div>
       </section>
       {renderSystemFooter()}
