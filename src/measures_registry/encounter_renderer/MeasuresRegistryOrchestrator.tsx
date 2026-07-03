@@ -53,6 +53,10 @@ const MATERIAL_TONE_VOLUME: Record<MaterialIdentity, number> = {
   marble: 0.02,
 }
 
+// Tones held — ambient audio competes with video audio unlock on mobile browsers.
+// Re-enable by setting to false once video audio and tone coexistence is verified.
+const TONES_HELD = true
+
 const HISTORY_SOURCE = "measures_registry_free"
 
 const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
@@ -194,7 +198,7 @@ export default function MeasuresRegistryOrchestrator() {
   }, [resolverData.mediaRows])
 
   const activeMaterial = SURFACE_MATERIAL[activeSurface] ?? null
-  const activeToneUrl = activeMaterial ? (toneUrlByMaterial[activeMaterial] ?? null) : null
+  const activeToneUrl = TONES_HELD ? null : (activeMaterial ? (toneUrlByMaterial[activeMaterial] ?? null) : null)
   const activeToneVolume = activeMaterial ? MATERIAL_TONE_VOLUME[activeMaterial] : 0.08
 
   useEffect(() => {
