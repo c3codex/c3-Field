@@ -402,6 +402,10 @@ function MarbleOrientationSeat({
       {renderHeader({ title })}
       <section className="registry-marble-chamber registry-marble-orientation-content" aria-label={title}>
         <div className="registry-marble-orientation-card">
+          {eyebrow ? (
+            <span className="registry-marble-orientation-eyebrow">{eyebrow}</span>
+          ) : null}
+          <h2 className="registry-marble-orientation-title">{title}</h2>
           {videoUrl ? (
             <div className="registry-marble-orientation-video-frame">
               <video
@@ -426,10 +430,6 @@ function MarbleOrientationSeat({
               {videoAudioEnabled ? "Video Audio On" : "Enable Video Audio"}
             </button>
           ) : null}
-          {eyebrow ? (
-            <span className="registry-marble-orientation-eyebrow">{eyebrow}</span>
-          ) : null}
-          <h2 className="registry-marble-orientation-title">{title}</h2>
           {body ? <p className="registry-marble-orientation-body">{body}</p> : null}
           {supporting ? <p className="registry-marble-orientation-supporting">{supporting}</p> : null}
           {statusLabel ? (

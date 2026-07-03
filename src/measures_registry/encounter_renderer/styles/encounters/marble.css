@@ -134,6 +134,24 @@
   background-color: var(--registry-marble-base, #1a1814);
 }
 
+/* ── RESULTS SURFACE: light marble treatment ─────────────────────────────── */
+
+.measures-registry-runtime[data-surface="marble_chamber_results"] {
+  --registry-foreground: #1E2C48;
+  --registry-brand-primary-text: #1E2C48;
+  --registry-brand-secondary-text: #3E485B;
+  --registry-brand-muted-text: #667185;
+  color: #1E2C48;
+}
+
+.measures-registry-runtime[data-surface="marble_chamber_results"] .registry-branded-assessment-report {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 0.5rem 2rem rgba(30, 44, 72, 0.06);
+  border-color: rgba(30, 44, 72, 0.12);
+}
+
 .measures-registry-runtime[data-surface="marble_chamber_results"] .registry-assessment-chamber,
 .measures-registry-runtime[data-surface="marble_chamber_encounter"] .registry-assessment-chamber {
   flex: 1;
@@ -146,6 +164,52 @@
 
 .measures-registry-runtime[data-surface="map_integrity_governance"] {
   background-color: var(--registry-marble-map-base, #16140f);
+  --registry-brand-primary-text: #1E2C48;
+  --registry-brand-secondary-text: #3E485B;
+  --registry-brand-muted-text: #667185;
+  --registry-brand-accent: #A67C38;
+  --registry-brand-border: rgba(30, 44, 72, 0.15);
+  color: #1E2C48;
+}
+
+/* ── MAP: light surface overrides ─────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-car-panel {
+  padding-top: clamp(3rem, 5vw, 5rem);
+  padding-inline-start: 0.75rem;
+  border-right-color: rgba(30, 44, 72, 0.1);
+}
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-center-panel {
+  border-right-color: rgba(30, 44, 72, 0.1);
+}
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-panel {
+  padding-top: 1rem;
+  padding-inline-end: 0.75rem;
+}
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-heading {
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-car-unit {
+  border-color: rgba(30, 44, 72, 0.12);
+  background: rgba(30, 44, 72, 0.03);
+}
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-car-unit--confirmed {
+  border-color: rgba(166, 124, 56, 0.3);
+  background: rgba(166, 124, 56, 0.05);
+}
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-amount {
+  border-color: rgba(30, 44, 72, 0.12);
+  background: rgba(30, 44, 72, 0.03);
+}
+
+.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-cta-zone {
+  border-top-color: rgba(30, 44, 72, 0.1);
 }
 
 .registry-marble-map-layout {

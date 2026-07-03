@@ -174,6 +174,10 @@ function ObsidianOrientationThreshold({
     >
       {renderHeader({ title })}
       <section className="registry-obsidian-orientation" aria-label={title}>
+        <div className="registry-obsidian-orientation-copy">
+          <h2 className="registry-obsidian-orientation-title">{title}</h2>
+          {lead ? <p className="registry-obsidian-orientation-lead">{lead}</p> : null}
+        </div>
         <div className="registry-obsidian-orientation-media-zone">
           <div className="registry-obsidian-orientation-media">
             {videoUrl ? (
@@ -200,10 +204,8 @@ function ObsidianOrientationThreshold({
             </button>
           ) : null}
         </div>
-        <div className="registry-obsidian-orientation-content">
-          <div className="registry-obsidian-orientation-copy">
-            <h2 className="registry-obsidian-orientation-title">{title}</h2>
-            {lead ? <p className="registry-obsidian-orientation-lead">{lead}</p> : null}
+        {(reviewSections.length > 0 || assessmentDetails.length > 0 || privacyNote) ? (
+          <div className="registry-obsidian-orientation-context">
             {reviewSections.length > 0 ? (
               <div className="registry-obsidian-orientation-sections">
                 {reviewSections.map((section, si) => {
@@ -250,15 +252,15 @@ function ObsidianOrientationThreshold({
               <p className="registry-obsidian-orientation-privacy">{privacyNote}</p>
             ) : null}
           </div>
-          <div className="registry-obsidian-orientation-controls">
-            <button
-              type="button"
-              className="registry-obsidian-orientation-cta"
-              onClick={handleContinue}
-            >
-              {ctaLabel}
-            </button>
-          </div>
+        ) : null}
+        <div className="registry-obsidian-orientation-controls">
+          <button
+            type="button"
+            className="registry-obsidian-orientation-cta"
+            onClick={handleContinue}
+          >
+            {ctaLabel}
+          </button>
         </div>
       </section>
       {renderSystemFooter()}
