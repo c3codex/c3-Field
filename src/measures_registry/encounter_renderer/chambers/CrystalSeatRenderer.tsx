@@ -489,11 +489,11 @@ function IntroHookSeat({
                 className="registry-threshold-motion"
                 src={leftMotionUrl}
                 autoPlay
+                loop
                 muted
                 playsInline
                 preload="auto"
                 aria-label="Fractured environment"
-                onEnded={() => setLeftSettled(true)}
                 onError={() => setLeftSettled(true)}
               />
             ) : null}
@@ -531,11 +531,11 @@ function IntroHookSeat({
                 className="registry-threshold-motion"
                 src={rightMotionUrl}
                 autoPlay
+                loop
                 muted
                 playsInline
                 preload="auto"
                 aria-label="Measured environment"
-                onEnded={() => setRightSettled(true)}
                 onError={() => setRightSettled(true)}
               />
             ) : null}
