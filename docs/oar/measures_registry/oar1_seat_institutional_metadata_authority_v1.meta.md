@@ -69,9 +69,11 @@ Rebuilt via `npm run build:registry`; verified directly in the output: sameAs no
 
 ---
 
-## GAP — NOT INVENTED
+## GAP — NOT INVENTED (CLOSED post-closeout)
 
-**Paragraph/unDrifted is not seated as an active social link.** OAR2 §2 asks to seat it "where already publicly active," but a direct query of `social_links` shows no Paragraph entry exists at all (only X, Instagram, LinkedIn as `active`, Facebook as `held_not_in_launch_scope`). Adding it here would have meant inventing a `standing: "active"` claim that isn't backed by a seated record — exactly what this OAR2 forbids. **Unblocks when**: Field/Measures add a Paragraph row to `undrifted_publication_landing.metadata.social_links` with `standing: "active"`; no frontend change will then be needed since both Organization and Person already resolve `sameAs` from that same list.
+**Paragraph/unDrifted was not seated as an active social link at the time this OAR1 closed.** OAR2 §2 asks to seat it "where already publicly active," but a direct query of `social_links` showed no Paragraph entry existed at all (only X, Instagram, LinkedIn as `active`, Facebook as `held_not_in_launch_scope`). Adding it at the time would have meant inventing a `standing: "active"` claim that wasn't backed by a seated record — exactly what this OAR2 forbids.
+
+**Update:** the operator subsequently provided the Paragraph record directly (`{"platform": "Paragraph", "name": "unDrifted", "url": "https://paragraph.com/@undrifted", "standing": "active"}`), seated via migration `correct_publication_dispatch_and_seat_paragraph_social_link`. No frontend change was needed — `activeSameAsUrls()` already reads this same list, so Paragraph now appears in both Organization's and the founder's `sameAs` automatically on rebuild (verified in `dist-registry/index.html`).
 
 This also means the Organization JSON-LD `sameAs` list from the prior "Restore AI Visibility" OAR (which had hardcoded Paragraph) is now corrected — that was drift from before this stricter DB-first rule existed, not something newly introduced here.
 
