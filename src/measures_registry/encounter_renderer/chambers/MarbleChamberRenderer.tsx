@@ -278,7 +278,7 @@ function MapIntegrityGovernance({
             ) : null}
             {marbleRiseUrl ? (
               <div className="registry-marble-map-visual" aria-hidden="true">
-                <img src={marbleRiseUrl} alt="" />
+                <img src={marbleRiseUrl} alt="" loading="lazy" />
               </div>
             ) : null}
           </div>

@@ -218,11 +218,11 @@ function UnDriftedIndex({
         {/* MASTHEAD */}
         <header className="undrifted-masthead" aria-label="unDrifted publication masthead">
           {undriftedBannerUrl ? (
-            <img className="undrifted-banner" src={undriftedBannerUrl} alt={title} />
+            <img className="undrifted-banner" src={undriftedBannerUrl} alt={title} loading="eager" />
           ) : (
             <div className="undrifted-masthead-nameplate">
               {primaryLogoPath ? (
-                <img className="undrifted-masthead-logo" src={primaryLogoPath} alt={title} />
+                <img className="undrifted-masthead-logo" src={primaryLogoPath} alt={title} loading="eager" />
               ) : (
                 <span className="undrifted-wordmark" aria-label={title}>
                   <span>un</span>
@@ -263,7 +263,7 @@ function UnDriftedIndex({
         <section className="undrifted-cover" aria-label="Cover story">
           <div className="undrifted-cover-visual">
             {aiIsntBrokenLandingUrl ? (
-              <img src={aiIsntBrokenLandingUrl} alt="unDrifted — Issue 001 Launch Edition" />
+              <img src={aiIsntBrokenLandingUrl} alt="unDrifted — Issue 001 Launch Edition" loading="eager" />
             ) : null}
           </div>
           <div className="undrifted-cover-editorial">
@@ -294,6 +294,7 @@ function UnDriftedIndex({
                 className="undrifted-editor-feature-mark"
                 src={registryLogoUrl}
                 alt="Measures Registry"
+                loading="lazy"
               />
             ) : null}
             {assessmentFeatureLabel ? (
@@ -344,7 +345,7 @@ function UnDriftedIndex({
                   >
                     {coverUrl ? (
                       <div className="undrifted-insight-cover">
-                        <img src={coverUrl} alt="" />
+                        <img src={coverUrl} alt="" loading="lazy" />
                       </div>
                     ) : null}
                     <div className="undrifted-insight-body">

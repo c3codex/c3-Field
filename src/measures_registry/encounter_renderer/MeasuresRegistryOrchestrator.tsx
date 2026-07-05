@@ -1,5 +1,5 @@
 import "./styles/registry.encounter.css"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react"
 import type { MaterialIdentity } from "./types/encounterRendererTypes"
 import type { CSSProperties } from "react"
 import { supabase } from "@/integrations/supabase/client"
@@ -14,7 +14,8 @@ import type { EncounterSurface } from "./types/encounterRendererTypes"
 import { cssTokenName } from "./shared/encounterRendererUtils"
 import RegisteredPrivacy from "./legal/RegisteredPrivacy"
 import RegisteredTerms from "./legal/RegisteredTerms"
-import GovernanceAuditSurface from "../governance/GovernanceAuditSurface"
+// Lazy — internal diagnostic surface (899 lines), not part of any typical visitor path.
+const GovernanceAuditSurface = lazy(() => import("../governance/GovernanceAuditSurface"))
 
 // FREE — Frontend Replacement Encounter Environment.
 // Top-level orchestrator. Owns navigation, URL sync, token style, and DB capture callbacks.
@@ -282,7 +283,7 @@ export default function MeasuresRegistryOrchestrator() {
     return (
       <header className="registry-public-header" aria-label={title}>
         <div className="registry-public-brand">
-          {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
+          {registryMarkUrl ? <img src={registryMarkUrl} alt="" loading="eager" /> : null}
           {title ? <span>{title}</span> : null}
         </div>
         <nav className="registry-public-nav" aria-label="Measures Registry navigation">
@@ -488,7 +489,11 @@ export default function MeasuresRegistryOrchestrator() {
   }
 
   if (activeSurface === "governance_audit") {
-    return <GovernanceAuditSurface />
+    return (
+      <Suspense fallback={null}>
+        <GovernanceAuditSurface />
+      </Suspense>
+    )
   }
 
   function handleEnableTone() {

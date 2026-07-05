@@ -231,6 +231,7 @@ function CrystalOrientationSeat({
                   src={sealUrl}
                   alt="Codexstone — Official Seal"
                   className="registry-crystal-codexstone-seal"
+                  loading="eager"
                 />
               ) : null}
               {codexstoneCaptions.map((caption, i) => (
@@ -575,7 +576,7 @@ function IntroHookSeat({
             onClick={() => handleChoice("left")}
           >
             {leftStillUrl ? (
-              <img className="registry-threshold-still" src={leftStillUrl} alt="" aria-hidden="true" />
+              <img className="registry-threshold-still" src={leftStillUrl} alt="" aria-hidden="true" loading="eager" />
             ) : null}
             {leftMotionUrl && !leftSettled ? (
               <video
@@ -617,7 +618,7 @@ function IntroHookSeat({
             onClick={() => handleChoice("right")}
           >
             {rightStillUrl ? (
-              <img className="registry-threshold-still" src={rightStillUrl} alt="" aria-hidden="true" />
+              <img className="registry-threshold-still" src={rightStillUrl} alt="" aria-hidden="true" loading="eager" />
             ) : null}
             {rightMotionUrl && !rightSettled ? (
               <video
@@ -654,11 +655,11 @@ function IntroHookSeat({
         leftStillUrl || leftMotionUrl ? (
           <section className="registry-threshold-hero" aria-label="Measures Registry threshold">
             <button type="button" className="registry-threshold-seat" data-side="left" onClick={() => handleChoice("left")}>
-              {leftStillUrl ? <img className="registry-threshold-still" src={leftStillUrl} alt="" aria-hidden="true" /> : null}
+              {leftStillUrl ? <img className="registry-threshold-still" src={leftStillUrl} alt="" aria-hidden="true" loading="eager" /> : null}
             </button>
             <div className="registry-threshold-divide" aria-hidden="true" />
             <button type="button" className="registry-threshold-seat" data-side="right" onClick={() => handleChoice("right")}>
-              {rightStillUrl ? <img className="registry-threshold-still" src={rightStillUrl} alt="" aria-hidden="true" /> : null}
+              {rightStillUrl ? <img className="registry-threshold-still" src={rightStillUrl} alt="" aria-hidden="true" loading="eager" /> : null}
             </button>
           </section>
         ) : (
@@ -755,7 +756,7 @@ function PathChoiceSeat({
                     onEnded={onSettled}
                   />
                 ) : heroUrl ? (
-                  <img className="registry-route-plate-image" src={heroUrl} alt="" aria-hidden="true" />
+                  <img className="registry-route-plate-image" src={heroUrl} alt="" aria-hidden="true" loading="eager" />
                 ) : null}
                 {title ? <span>{title}</span> : null}
                 {body ? <p>{body}</p> : null}
@@ -869,7 +870,7 @@ function AboutMeasuresRegistry({
       {codexstoneSealSection ? (
         <section className="registry-about-seal" aria-label="Codexstone">
           {sealUrl ? (
-            <img src={sealUrl} alt="Codexstone — Official Seal" className="registry-about-seal-image" />
+            <img src={sealUrl} alt="Codexstone — Official Seal" className="registry-about-seal-image" loading="eager" />
           ) : null}
           {asString(codexstoneSealSection.title) ? (
             <h2 className="registry-about-seal-title">{asString(codexstoneSealSection.title)}</h2>

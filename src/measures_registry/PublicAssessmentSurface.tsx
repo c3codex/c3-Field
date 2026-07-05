@@ -291,7 +291,7 @@ export function PublicAssessmentSurface({
     >
       <header className="registry-public-header">
         <div className="registry-public-brand">
-          {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
+          {registryMarkUrl ? <img src={registryMarkUrl} alt="" loading="eager" /> : null}
           <span>Measures Registry</span>
         </div>
       </header>
