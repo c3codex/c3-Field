@@ -331,6 +331,60 @@ function CrystalIntroSeat({
             {introAudioEnabled ? "Audio On" : "Enable Audio"}
           </button>
         ) : null}
+        <div className="c3-visually-hidden">
+          <nav aria-label="Measures Registry navigation">
+            <a href="/" onClick={(e) => e.stopPropagation()}>Home</a>
+            <a
+              href="/about"
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("crystal_seat_encounter") }}
+            >
+              About
+            </a>
+            <a
+              href="/ai-operations-assessment"
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("obsidian_chamber_encounter_surface") }}
+            >
+              Assess the Environment
+            </a>
+            <a
+              href="/undrifted"
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("lapis_chamber_encounter") }}
+            >
+              Understand the Environment
+            </a>
+          </nav>
+          <h2>AI isn&rsquo;t broken. Systems are.</h2>
+          <p>
+            Measures Registry helps institutions detect structural drift — the gap between how an AI
+            system is intended to operate and how it actually behaves once deployed.
+          </p>
+          <h2>Institutional Accountability for AI Deployment</h2>
+          <p>
+            AI outcomes are shaped by the systems AI operates within. Measures Registry supports the
+            design of governable environments where deployment stays accountable to intent.
+          </p>
+          <h2>Assess the Environment</h2>
+          <p>
+            The public{" "}
+            <a
+              href="/ai-operations-assessment"
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("obsidian_chamber_encounter_surface") }}
+            >
+              operations assessment
+            </a>{" "}
+            is a baseline only — a first read on where structural drift may already be present.
+          </p>
+          <h2>Understand the Environment</h2>
+          <p>
+            <a
+              href="/undrifted"
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("lapis_chamber_encounter") }}
+            >
+              unDrifted
+            </a>{" "}
+            is the public record of structural drift findings and governed environment design.
+          </p>
+        </div>
       </section>
     </main>
   )

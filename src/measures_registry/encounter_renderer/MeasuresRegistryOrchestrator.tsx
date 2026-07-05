@@ -285,7 +285,19 @@ export default function MeasuresRegistryOrchestrator() {
           {registryMarkUrl ? <img src={registryMarkUrl} alt="" /> : null}
           {title ? <span>{title}</span> : null}
         </div>
-        <nav className="registry-public-nav" aria-label="Measures Registry navigation" />
+        <nav className="registry-public-nav" aria-label="Measures Registry navigation">
+          <a href="/" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_intro") }}>Home</a>
+          <a href="/about" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>About</a>
+          <a
+            href="/ai-operations-assessment"
+            onClick={(e) => { e.preventDefault(); navigate("obsidian_chamber_encounter_surface") }}
+          >
+            Assess the Environment
+          </a>
+          <a href="/undrifted" onClick={(e) => { e.preventDefault(); navigate("lapis_chamber_encounter") }}>
+            Understand the Environment
+          </a>
+        </nav>
       </header>
     )
   }
@@ -315,6 +327,12 @@ export default function MeasuresRegistryOrchestrator() {
           <a href="/terms" onClick={(e) => { e.preventDefault(); navigate("terms") }}>Terms</a>
           <span aria-hidden="true">·</span>
           <a href="/about" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Contact</a>
+        </nav>
+        <nav className="registry-footer-social-links" aria-label="Measures Registry public profiles">
+          <a href="https://twitter.com/measures_c3" target="_blank" rel="me noreferrer">X</a>
+          <a href="https://instagram.com/measures_registry" target="_blank" rel="me noreferrer">Instagram</a>
+          <a href="https://www.linkedin.com/in/measures-registry" target="_blank" rel="me noreferrer">LinkedIn</a>
+          <a href="https://paragraph.com/@undrifted" target="_blank" rel="me noreferrer">unDrifted / Paragraph</a>
         </nav>
       </footer>
     )

@@ -3362,18 +3362,22 @@ body,
   letter-spacing: 0.02em;
 }
 
-.registry-public-nav button {
+.registry-public-nav button,
+.registry-public-nav a {
   border: 0;
   background: transparent;
   color: var(--registry-brand-secondary-text);
   padding: 0.18rem 0.28rem;
   font: inherit;
   font-size: 0.72rem;
+  text-decoration: none;
   cursor: pointer;
 }
 
 .registry-public-nav button:hover,
-.registry-public-nav button:focus-visible {
+.registry-public-nav button:focus-visible,
+.registry-public-nav a:hover,
+.registry-public-nav a:focus-visible {
   color: var(--registry-brand-primary-text);
   outline: none;
 }

@@ -106,6 +106,63 @@ function routeSeo(row, routePath) {
   return seo
 }
 
+const REGISTRY_ORGANIZATION_ID = `${REGISTRY_BASE_URL}/#organization`
+const REGISTRY_WEBSITE_ID = `${REGISTRY_BASE_URL}/#website`
+const REGISTRY_FOUNDER_ID = `${REGISTRY_BASE_URL}/#founder`
+
+function injectJsonLd(html, graph) {
+  const script = `<script type="application/ld+json">${JSON.stringify(graph)}</script>`
+  return html.replace("</head>", `    ${script}\n  </head>`)
+}
+
+function buildRootJsonLdGraph() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": REGISTRY_ORGANIZATION_ID,
+        name: "Measures Registry",
+        url: `${REGISTRY_BASE_URL}/`,
+        description:
+          "Institutional governance framework for AI deployment, structural drift detection, and governable environments.",
+        sameAs: [
+          "https://twitter.com/measures_c3",
+          "https://instagram.com/measures_registry",
+          "https://paragraph.com/@undrifted",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": REGISTRY_WEBSITE_ID,
+        name: "Measures Registry",
+        url: `${REGISTRY_BASE_URL}/`,
+        publisher: { "@id": REGISTRY_ORGANIZATION_ID },
+      },
+      {
+        "@type": "Person",
+        "@id": REGISTRY_FOUNDER_ID,
+        name: "Stephanie Joanne Gaffney",
+        jobTitle: "Measures Registry Instructor",
+        affiliation: { "@id": REGISTRY_ORGANIZATION_ID },
+        sameAs: ["https://www.linkedin.com/in/measures-registry"],
+      },
+    ],
+  }
+}
+
+function buildAboutPageJsonLd(url, name, description) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name,
+    description,
+    url,
+    isPartOf: { "@id": REGISTRY_WEBSITE_ID },
+    about: { "@id": REGISTRY_ORGANIZATION_ID },
+  }
+}
+
 function patchRootHead(html) {
   let out = html
   out = replaceTag(out, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/" />`)
@@ -114,6 +171,7 @@ function patchRootHead(html) {
   if (!/<link\s+rel="canonical"/.test(out)) {
     out = out.replace("</head>", `    <link rel="canonical" href="${REGISTRY_BASE_URL}/" />\n  </head>`)
   }
+  out = injectJsonLd(out, buildRootJsonLdGraph())
   return out
 }
 
@@ -150,6 +208,14 @@ function writeAboutRouteHead(outDir, template) {
   html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="Measures Registry is a media-first guided encounter for AI operations governance." />`)
   html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/about-measures-registry" />`)
   html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="${REGISTRY_BASE_URL}/about-measures-registry" />`)
+  html = injectJsonLd(
+    html,
+    buildAboutPageJsonLd(
+      `${REGISTRY_BASE_URL}/about-measures-registry`,
+      "About Measures Registry",
+      "Measures Registry is a media-first guided encounter for AI operations governance.",
+    ),
+  )
   fs.writeFileSync(path.join(routeDir, "index.html"), html)
 }
 
@@ -163,6 +229,14 @@ function writeAboutCanonicalHead(outDir, template) {
   html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result." />`)
   html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/about" />`)
   html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="${REGISTRY_BASE_URL}/about" />`)
+  html = injectJsonLd(
+    html,
+    buildAboutPageJsonLd(
+      `${REGISTRY_BASE_URL}/about`,
+      "About Measures Registry",
+      "Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result.",
+    ),
+  )
   fs.writeFileSync(path.join(routeDir, "index.html"), html)
 }
 
