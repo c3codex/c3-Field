@@ -144,6 +144,7 @@ function buildRootJsonLdGraph() {
         "@id": REGISTRY_FOUNDER_ID,
         name: "Stephanie Joanne Gaffney",
         jobTitle: "Measures Registry Instructor",
+        description: "Artist and Measures Registry Instructor; founder of c3 Community Partners DAO, LLC.",
         affiliation: { "@id": REGISTRY_ORGANIZATION_ID },
         sameAs: ["https://www.linkedin.com/in/measures-registry"],
       },

@@ -358,13 +358,32 @@ function CrystalIntroSeat({
           </nav>
           <h2>AI isn&rsquo;t broken. Systems are.</h2>
           <p>
-            Measures Registry helps institutions detect structural drift — the gap between how an AI
-            system is intended to operate and how it actually behaves once deployed.
+            Measures Registry is an institutional governance and education platform. AI systems do not
+            fail in isolation — they fail inside institutions that have not defined authority, review
+            pathways, or operating boundaries. Measures Registry treats AI outcomes as a product of the
+            environment an AI system operates within, not solely a property of the model itself.
           </p>
           <h2>Institutional Accountability for AI Deployment</h2>
           <p>
-            AI outcomes are shaped by the systems AI operates within. Measures Registry supports the
-            design of governable environments where deployment stays accountable to intent.
+            AI outcomes are shaped by the systems AI operates within. When responsibility, oversight, and
+            escalation paths are undefined, deployments drift away from their original intent quietly,
+            before anyone notices. Measures Registry supports institutions in designing governable
+            environments — systems where AI use remains accountable to the people and processes
+            responsible for it.
+          </p>
+          <h2>What is Structural Drift?</h2>
+          <p>
+            Structural drift is the measurable gap between how an AI system is intended to behave and how
+            it actually behaves once deployed inside a real institution. Drift is not a defect in the
+            model — it is a symptom of missing structure: undefined roles, absent review pathways, and
+            ungoverned runtime surfaces. Structural drift can be observed, named, and addressed.
+          </p>
+          <h2>What is a Governable Environment?</h2>
+          <p>
+            A governable environment is an institutional system designed so that AI use remains
+            reviewable, accountable, and less prone to drift, through defined authority and oversight —
+            not through changes to the AI model itself. Governable environments can be designed and
+            maintained; they are not an accident of good intentions.
           </p>
           <h2>Assess the Environment</h2>
           <p>
@@ -375,7 +394,16 @@ function CrystalIntroSeat({
             >
               operations assessment
             </a>{" "}
-            is a baseline only — a first read on where structural drift may already be present.
+            is a baseline awareness tool — a first read on where structural drift may already be present
+            in an institution&rsquo;s AI deployment. It does not constitute certification, enrollment, or
+            verified registry standing.
+          </p>
+          <h2>The Measures Alignment Protocol</h2>
+          <p>
+            The Measures Alignment Protocol (MAP) is a later, governed pathway for institutions that have
+            completed the public assessment and are ready to move toward structured alignment. MAP
+            standing and scope are established directly with Measures Registry — they are not
+            self-service claims and are not detailed on this page.
           </p>
           <h2>Understand the Environment</h2>
           <p>
@@ -385,7 +413,15 @@ function CrystalIntroSeat({
             >
               unDrifted
             </a>{" "}
-            is the public record of structural drift findings and governed environment design.
+            is the public record of Measures Registry&rsquo;s structural drift findings and governed
+            environment design work, publishing across institutional AI governance, system integrity, and
+            operational outcomes.
+          </p>
+          <h2>Foundational Leadership</h2>
+          <p>
+            Measures Registry is founded by Stephanie Joanne Gaffney, an artist and Measures Registry
+            Instructor, and founder of c3 Community Partners DAO, LLC, the governance framework under
+            which Measures Registry operates.
           </p>
         </div>
       </section>
