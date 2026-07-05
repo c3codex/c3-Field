@@ -1,6 +1,7 @@
 // OAR2 "Seat Registry-Governed Encounter Style Profiles" +
-// OAR2 "Seat Encounter Style Concordance Language" — canonical profile shape
-// and bounded visual vocabulary for Measures Registry encounter rendering.
+// OAR2 "Seat Encounter Style Concordance Language" +
+// OAR2 "Seat Remaining Encounter Style Authority Terms" — canonical profile
+// shape and bounded visual vocabulary for Measures Registry encounter rendering.
 //
 // TEMPORARY, NON-AUTHORITATIVE frontend contract. Only `style_profile` is DB-seeded
 // today (supabase/migrations/202606300019_seat_style_profiles_for_13_registered_surfaces.sql
@@ -72,6 +73,70 @@ export type VisualTension =
   | "ceremonial_tension"
   | "transformative_tension"
 
+// Media Ratio — the expected media frame relationship.
+export type MediaRatio =
+  | "portrait_9_16"
+  | "portrait_4_5"
+  | "landscape_16_9"
+  | "square_1_1"
+  | "fluid_media"
+
+// Content Width — the readable or visual measure of text/content.
+export type ContentWidth =
+  | "narrow_measure"
+  | "reading_measure"
+  | "institutional_measure"
+  | "immersive_measure"
+  | "full_bleed_measure"
+
+// Button Position — where action authority appears.
+export type ButtonPosition =
+  | "right_cta"
+  | "left_cta"
+  | "center_cta"
+  | "floating_cta"
+  | "hidden_cta"
+
+// Overlay Treatment — how visual atmosphere or readability is supported over media/background.
+export type OverlayTreatment =
+  | "none_overlay"
+  | "soft_overlay"
+  | "cinematic_overlay"
+  | "threshold_overlay"
+  | "ceremonial_overlay"
+
+// Watermark Treatment — registry mark visibility.
+export type WatermarkTreatment =
+  | "hidden_mark"
+  | "subtle_mark"
+  | "institutional_mark"
+  | "ceremonial_mark"
+  | "persistent_mark"
+
+// Audio Control Treatment — visibility and behavior of audio/media controls.
+export type AudioControlTreatment =
+  | "always_visible_audio"
+  | "hover_audio"
+  | "minimal_audio"
+  | "ambient_audio"
+  | "hidden_audio"
+
+// Mobile Behavior — how the encounter responds on mobile viewport.
+export type MobileBehavior =
+  | "preserve_frame"
+  | "stack_content"
+  | "collapse_media"
+  | "mobile_specific"
+  | "locked_orientation"
+
+// Release State Behavior — how visual rendering responds to state.
+export type ReleaseStateBehavior =
+  | "visible_state"
+  | "held_state"
+  | "sealed_state"
+  | "dependent_state"
+  | "unavailable_state"
+
 export type EncounterStyleProfile = {
   profile_key: string
   material_family: MaterialFamily | null
@@ -82,14 +147,14 @@ export type EncounterStyleProfile = {
   motion_profile: MotionProfile | null
   surface_density: SurfaceDensity | null
   visual_tension: VisualTension | null
-  media_ratio: string | null
-  content_width: string | null
-  button_position: string | null
-  overlay_treatment: string | null
-  watermark_treatment: string | null
-  audio_control_treatment: string | null
-  mobile_behavior: string | null
-  release_state_behavior: string | null
+  media_ratio: MediaRatio | null
+  content_width: ContentWidth | null
+  button_position: ButtonPosition | null
+  overlay_treatment: OverlayTreatment | null
+  watermark_treatment: WatermarkTreatment | null
+  audio_control_treatment: AudioControlTreatment | null
+  mobile_behavior: MobileBehavior | null
+  release_state_behavior: ReleaseStateBehavior | null
 }
 
 const GAP_FIELDS: Omit<EncounterStyleProfile, "profile_key"> = {
