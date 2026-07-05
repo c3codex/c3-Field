@@ -8,6 +8,7 @@ import {
   asString,
   asStringArray,
 } from "../shared/encounterRendererUtils"
+import { resolveEncounterStyleProfile } from "../styles/encounterStyleProfile"
 import { PublicAssessmentResult } from "../../PublicAssessmentResult"
 import type { AssessmentEmailArtifact, EnvironmentalStandingReport } from "../../measuresAssessmentTypes"
 
@@ -228,7 +229,7 @@ function MapIntegrityGovernance({
       data-material-family="marble"
       data-layout-contract="marble_map_three_panel"
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(mapBgUrl) }}
     >
@@ -395,7 +396,7 @@ function MarbleOrientationSeat({
       data-material-family="marble"
       data-layout-contract="marble_orientation"
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
@@ -493,7 +494,7 @@ function MarbleChamberEncounter({
       data-material-family="marble"
       data-layout-contract="findings_report"
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
@@ -596,7 +597,7 @@ function MarbleC2Agreement({
         data-surface="marble_chamber_C2_agreement"
         data-material-family="marble"
         data-release-standing="held_missing_session"
-        data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+        data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
         data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
         style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
       >
@@ -622,7 +623,7 @@ function MarbleC2Agreement({
       data-material-family="marble"
       data-layout-contract="centered_exchange_panel"
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
@@ -698,7 +699,7 @@ function MarbleC2Resolution({
       data-material-family="marble"
       data-layout-contract="centered_confirmation_panel"
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >

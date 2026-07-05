@@ -21,6 +21,7 @@ import {
   resolveEnvironmentalReportByScore,
   selectedConditionTraces,
 } from "../shared/encounterRendererUtils"
+import { resolveEncounterStyleProfile } from "../styles/encounterStyleProfile"
 
 // Payload passed to Encounter Boundary for contact capture persistence.
 // Encounter Boundary owns the DB write; chamber owns the form state and presentation.
@@ -168,7 +169,7 @@ function ObsidianOrientationThreshold({
       data-material-family="obsidian"
       data-layout-contract="obsidian_orientation"
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
@@ -293,7 +294,7 @@ function MeasuresAssessment({
   const [passageMuted, setPassageMuted] = useState(true)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
-  const styleProfile = asString(encounter.surfaceAssignmentMetadata?.style_profile)
+  const styleProfile = resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? null
   const directoryKey = asString(meta?.directory_key)
   const mechanics = allAssessmentMechanics(meta?.assessment_mechanics)
   const traces: AssessmentConditionTrace[] = selectedConditionTraces(mechanics, evalAnswers)
@@ -704,7 +705,7 @@ function ObsidianC1Compact({
       data-material-family="obsidian"
       data-layout-contract="contact_compact"
       data-release-standing="public_contact_gated"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >

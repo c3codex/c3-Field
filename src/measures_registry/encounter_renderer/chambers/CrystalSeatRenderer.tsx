@@ -8,6 +8,7 @@ import {
   asString,
   asStringArray,
 } from "../shared/encounterRendererUtils"
+import { resolveEncounterStyleProfile } from "../styles/encounterStyleProfile"
 
 // Payload for Encounter Boundary connect capture write.
 // Encounter Boundary provides onCaptureConnect. Omitting disables capture persistence.
@@ -187,6 +188,7 @@ function CrystalOrientationSeat({
       data-material-family="crystal"
       data-layout-contract="crystal_orientation"
       data-release-standing="public"
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
       {renderHeader({ title: "Measures Registry" })}
@@ -302,6 +304,7 @@ function CrystalIntroSeat({
       data-material-family="crystal"
       data-layout-contract="crystal_intro"
       data-release-standing="public"
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       style={registryTokenStyle}
     >
       <section className="registry-crystal-intro" aria-label="Introduction" onClick={handleAdvance}>
@@ -466,7 +469,7 @@ function IntroHookSeat({
       data-material-family="crystal"
       data-layout-contract="intro"
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >
@@ -680,6 +683,7 @@ function PathChoiceSeat({
       data-material-family="crystal"
       data-layout-contract="transition_choice"
       data-release-standing="public"
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       style={registryTokenStyle}
     >
       {renderHeader({ title: encounter.encounterDef?.display_title ?? "Measures Registry" })}
@@ -807,7 +811,7 @@ function AboutMeasuresRegistry({
       data-surface={encounter.surface}
       data-material-family="crystal"
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >

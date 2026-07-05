@@ -7,6 +7,7 @@ import {
   asRecordArray,
   asString,
 } from "../shared/encounterRendererUtils"
+import { resolveEncounterStyleProfile } from "../styles/encounterStyleProfile"
 
 // Payload for Encounter Boundary subscription capture write.
 // Encounter Boundary provides onCaptureSubscription. Omitting disables capture persistence.
@@ -207,7 +208,7 @@ function UnDriftedIndex({
       data-landing-contract={landingKey ?? "missing_landing_contract"}
       data-style-contract={styleKey ?? "missing_style_contract"}
       data-release-standing="public"
-      data-style-profile={asString(encounter.surfaceAssignmentMetadata?.style_profile) ?? undefined}
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
@@ -482,6 +483,7 @@ function PublicationDispatch({
       data-material-family="lapis"
       data-layout-contract="publication_encounter"
       data-release-standing="public"
+      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
       style={registryTokenStyle}
     >
       {renderHeader({ title })}

@@ -1,4 +1,7 @@
 /* Button governance for registered downstream surfaces — sitewide contract */
+/* background/border for this selector list are governed by registry.visual-system.css
+   (loaded after this file) — declaring them here as well was dead code, removed under
+   OAR2 "Seat Registry-Governed Encounter Style Profiles" CSS-authority normalization. */
 
 .measures-registry-runtime .registry-encounter-actions > button,
 .measures-registry-runtime .registry-diagnostic-passage-controls > button,
@@ -14,8 +17,6 @@
 .measures-registry-runtime .registry-field-guide-cta button,
 .measures-registry-runtime .registry-publication-cta button,
 .measures-registry-runtime .registry-publication-cta a {
-  background: transparent;
-  border: 1px solid var(--registry-brand-border);
   color: var(--registry-brand-primary-text);
   font-family: var(--registry-font-body);
   font-size: clamp(0.82rem, 1.2vw, 0.95rem);
