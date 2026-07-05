@@ -115,40 +115,84 @@ function injectJsonLd(html, graph) {
   return html.replace("</head>", `    ${script}\n  </head>`)
 }
 
-function buildRootJsonLdGraph() {
+// OAR2 "Seat Institutional Metadata Authority": sameAs now resolves only from
+// measures_registry.undrifted_publication_landing.metadata.social_links entries with
+// standing === "active" — DB-seeded, not hardcoded. Paragraph/unDrifted is not in that
+// list (no active social_links row exists for it yet), so it is intentionally omitted
+// from both Organization and Person sameAs rather than assumed, per the OAR2 rule that
+// public profile links must be seated before being rendered into JSON-LD.
+function activeSameAsUrls(socialLinks) {
+  if (!Array.isArray(socialLinks)) return []
+  return socialLinks
+    .filter((link) => link && link.standing === "active" && typeof link.url === "string" && link.url)
+    .map((link) => link.url)
+}
+
+function buildRootJsonLdGraph({ founder, sameAs }) {
+  const founderName = typeof founder?.founder_name === "string" ? founder.founder_name : null
+  const founderTitle = typeof founder?.founder_title === "string" ? founder.founder_title : null
+  const founderDescription = typeof founder?.founder_description === "string" ? founder.founder_description : null
+
+  const graph = [
+    {
+      "@type": "Organization",
+      "@id": REGISTRY_ORGANIZATION_ID,
+      name: "Measures Registry",
+      url: `${REGISTRY_BASE_URL}/`,
+      description:
+        "Institutional governance framework for AI deployment, structural drift detection, and governable environments.",
+      sameAs,
+    },
+    {
+      "@type": "WebSite",
+      "@id": REGISTRY_WEBSITE_ID,
+      name: "Measures Registry",
+      url: `${REGISTRY_BASE_URL}/`,
+      publisher: { "@id": REGISTRY_ORGANIZATION_ID },
+    },
+  ]
+
+  // Founder Person entity only emitted once seated — no invented name/title fallback.
+  if (founderName) {
+    graph.push({
+      "@type": "Person",
+      "@id": REGISTRY_FOUNDER_ID,
+      name: founderName,
+      ...(founderTitle ? { jobTitle: founderTitle } : {}),
+      ...(founderDescription ? { description: founderDescription } : {}),
+      affiliation: { "@id": REGISTRY_ORGANIZATION_ID },
+      sameAs,
+    })
+  }
+
+  return { "@context": "https://schema.org", "@graph": graph }
+}
+
+// OAR2 "Seat Institutional Metadata Authority" §5/§8: BlogPosting schema per unDrifted
+// article, generated only from seated fields. No Article schema is emitted for an entry
+// missing date_published or author_name — no invented dates or authors.
+function buildUndriftedArticleJsonLd(articles) {
+  const eligible = (Array.isArray(articles) ? articles : []).filter(
+    (article) =>
+      article &&
+      typeof article.title === "string" &&
+      typeof article.article_url === "string" &&
+      typeof article.date_published === "string" &&
+      typeof article.author_name === "string",
+  )
+  if (eligible.length === 0) return null
   return {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": REGISTRY_ORGANIZATION_ID,
-        name: "Measures Registry",
-        url: `${REGISTRY_BASE_URL}/`,
-        description:
-          "Institutional governance framework for AI deployment, structural drift detection, and governable environments.",
-        sameAs: [
-          "https://twitter.com/measures_c3",
-          "https://instagram.com/measures_registry",
-          "https://paragraph.com/@undrifted",
-        ],
-      },
-      {
-        "@type": "WebSite",
-        "@id": REGISTRY_WEBSITE_ID,
-        name: "Measures Registry",
-        url: `${REGISTRY_BASE_URL}/`,
-        publisher: { "@id": REGISTRY_ORGANIZATION_ID },
-      },
-      {
-        "@type": "Person",
-        "@id": REGISTRY_FOUNDER_ID,
-        name: "Stephanie Joanne Gaffney",
-        jobTitle: "Measures Registry Instructor",
-        description: "Artist and Measures Registry Instructor; founder of c3 Community Partners DAO, LLC.",
-        affiliation: { "@id": REGISTRY_ORGANIZATION_ID },
-        sameAs: ["https://www.linkedin.com/in/measures-registry"],
-      },
-    ],
+    "@graph": eligible.map((article) => ({
+      "@type": "BlogPosting",
+      headline: article.title,
+      url: article.article_url,
+      datePublished: article.date_published,
+      ...(typeof article.date_modified === "string" ? { dateModified: article.date_modified } : {}),
+      ...(typeof article.description === "string" ? { description: article.description } : {}),
+      author: { "@type": "Organization", name: article.author_name },
+      publisher: { "@id": REGISTRY_ORGANIZATION_ID },
+    })),
   }
 }
 
@@ -164,7 +208,7 @@ function buildAboutPageJsonLd(url, name, description) {
   }
 }
 
-function patchRootHead(html) {
+function patchRootHead(html, { founder, sameAs }) {
   let out = html
   out = replaceTag(out, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/" />`)
   out = replaceTag(out, /<meta\s+property="og:image"\s+content="[^"]*"\s*\/>/s, `<meta property="og:image" content="${REGISTRY_OG_IMAGE}" />`)
@@ -172,7 +216,7 @@ function patchRootHead(html) {
   if (!/<link\s+rel="canonical"/.test(out)) {
     out = out.replace("</head>", `    <link rel="canonical" href="${REGISTRY_BASE_URL}/" />\n  </head>`)
   }
-  out = injectJsonLd(out, buildRootJsonLdGraph())
+  out = injectJsonLd(out, buildRootJsonLdGraph({ founder, sameAs }))
   return out
 }
 
@@ -270,11 +314,28 @@ function writeTermsRouteHead(outDir, template) {
 async function main() {
   if (!supabaseUrl || !supabaseKey) throw new Error("Supabase URL/key missing for registry route head generation")
 
+  const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } })
+
+  const registryKeys = [...routeUnits.map((unit) => unit.unitKey), "founder_authority"]
+  const { data, error } = await supabase
+    .from("measures_registry")
+    .select("registry_key, metadata")
+    .in("registry_key", registryKeys)
+    .eq("is_active", true)
+
+  if (error) throw error
+
+  const founderRow = data.find((item) => item.registry_key === "founder_authority")
+  const undriftedRow = data.find((item) => item.registry_key === "undrifted_publication_landing")
+  const founder = founderRow?.metadata ?? null
+  const sameAs = activeSameAsUrls(undriftedRow?.metadata?.social_links)
+  const articles = undriftedRow?.metadata?.featured_article_set ?? []
+
   patchRedirects(outDir)
 
   const templatePath = path.join(outDir, "index.html")
   const rawTemplate = fs.readFileSync(templatePath, "utf8")
-  const template = patchRootHead(rawTemplate)
+  const template = patchRootHead(rawTemplate, { founder, sameAs })
   fs.writeFileSync(templatePath, template)
 
   writeC3FieldRouteHead(outDir, template)
@@ -283,22 +344,17 @@ async function main() {
   writePrivacyRouteHead(outDir, template)
   writeTermsRouteHead(outDir, template)
 
-  const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } })
-
-  const { data, error } = await supabase
-    .from("measures_registry")
-    .select("registry_key, metadata")
-    .in("registry_key", routeUnits.map((unit) => unit.unitKey))
-    .eq("is_active", true)
-
-  if (error) throw error
-
   for (const unit of routeUnits) {
     const row = data.find((item) => item.registry_key === unit.unitKey)
     const seo = routeSeo(row, unit.routePath)
     const routeDir = path.join(outDir, unit.routePath.replace(/^\//, ""))
     fs.mkdirSync(routeDir, { recursive: true })
-    fs.writeFileSync(path.join(routeDir, "index.html"), applyRouteHead(template, seo))
+    let html = applyRouteHead(template, seo)
+    if (unit.unitKey === "undrifted_publication_landing") {
+      const articleGraph = buildUndriftedArticleJsonLd(articles)
+      if (articleGraph) html = injectJsonLd(html, articleGraph)
+    }
+    fs.writeFileSync(path.join(routeDir, "index.html"), html)
   }
 
   console.log(`Generated governed registry route heads: ${routeUnits.map((unit) => unit.routePath).join(", ")}`)

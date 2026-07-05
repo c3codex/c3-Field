@@ -16,6 +16,7 @@
 
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-seal,
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-our-story,
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-bridge,
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-c3field,
 .measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-connect {
@@ -88,6 +89,42 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* ── SECTION 2B: OUR STORY ───────────────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-our-story {
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  border-bottom: 1px solid var(--registry-brand-border, rgba(255, 255, 255, 0.08));
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-our-story-title {
+  font-family: var(--registry-font-heading);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--registry-brand-primary-text);
+  margin: 0 0 0.85rem;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-our-story-body {
+  font-size: 1rem;
+  color: var(--registry-brand-secondary-text);
+  line-height: 1.7;
+  max-width: 48rem;
+  margin: 0;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-legal-identity {
+  width: min(var(--registry-content-max-width, 68rem), 100%);
+  margin: 0 auto;
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+  padding-block: clamp(1rem, 2vw, 1.5rem) 0;
+  box-sizing: border-box;
+  font-size: 0.78rem;
+  color: var(--registry-brand-muted-text);
+  opacity: 0.8;
 }
 
 /* ── SECTION 3: UNDRIFTED BRIDGE ─────────────────────────────────────── */

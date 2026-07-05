@@ -813,6 +813,19 @@ function AboutMeasuresRegistry({
   const codexstoneSealSection = asRecord(approved.codexstone_seal_section)
   const orientationSections = asRecordArray(approved.orientation_sections)
   const bridgeSection = asRecord(approved.undrifted_bridge_section)
+  // OAR2 "Seat Institutional Metadata Authority" — both gated on explicit content_standing
+  // flags seated alongside the copy; render nothing until standing says "public"/
+  // "public_as_our_story". Our Story renders as conceptual copy only — it does not
+  // restore the previously-removed outbound c3field.online links.
+  const contentStanding = asRecord(approved.content_standing)
+  const legalIdentityStatement =
+    asString(contentStanding?.legal_identity_statement) === "public"
+      ? asString(approved.legal_identity_statement)
+      : null
+  const ourStorySection =
+    asString(contentStanding?.c3field_links_section) === "public_as_our_story"
+      ? asRecord(approved.our_story_section)
+      : null
   const connectSection = asRecord(approved.connect_section)
   const connectTitle = asString(connectSection?.title) ?? "Connect"
   const connectBody = asString(connectSection?.body)
@@ -892,6 +905,15 @@ function AboutMeasuresRegistry({
           </div>
         ) : null}
       </section>
+
+      {ourStorySection ? (
+        <section className="registry-about-our-story" aria-label={asString(ourStorySection.title) ?? "Our Story"}>
+          <h2 className="registry-about-our-story-title">{asString(ourStorySection.title) ?? "Our Story"}</h2>
+          {asString(ourStorySection.body) ? (
+            <p className="registry-about-our-story-body">{asString(ourStorySection.body)}</p>
+          ) : null}
+        </section>
+      ) : null}
 
       {bridgeSection ? (
         <section className="registry-about-bridge" aria-label="unDrifted publication">
@@ -1004,6 +1026,10 @@ function AboutMeasuresRegistry({
             )}
           </div>
         </section>
+      ) : null}
+
+      {legalIdentityStatement ? (
+        <p className="registry-about-legal-identity">{legalIdentityStatement}</p>
       ) : null}
 
       <UnDriftedMark encounter={encounter} />
