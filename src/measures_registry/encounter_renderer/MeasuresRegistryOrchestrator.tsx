@@ -336,7 +336,9 @@ export default function MeasuresRegistryOrchestrator() {
         <nav className="registry-footer-social-links" aria-label="Measures Registry public profiles">
           <a href="https://twitter.com/measures_c3" target="_blank" rel="me noreferrer">X</a>
           <a href="https://instagram.com/measures_registry" target="_blank" rel="me noreferrer">Instagram</a>
-          <a href="https://www.linkedin.com/in/measures-registry" target="_blank" rel="me noreferrer">LinkedIn</a>
+          {/* LinkedIn removed per OAR2 "Resolve Final Launch Blockers" — prior link did not
+              resolve to a valid business profile. Restore only once a real profile is seated;
+              do not substitute a personal LinkedIn without explicit operator approval. */}
           <a href="https://paragraph.com/@undrifted" target="_blank" rel="me noreferrer">unDrifted / Paragraph</a>
         </nav>
       </footer>

@@ -33,6 +33,13 @@
   pointer-events: auto;
 }
 
+/* .registry-public-header sets pointer-events:none above so it never blocks click-through
+   on cinematic/full-bleed surfaces; .registry-public-nav must opt back in explicitly or its
+   links inherit none and become unclickable sitewide (OAR2 "Resolve Final Launch Blockers"). */
+.measures-registry-runtime .registry-public-nav {
+  pointer-events: auto;
+}
+
 .measures-registry-runtime .registry-public-brand img {
   height: auto;
   min-width: 40px;

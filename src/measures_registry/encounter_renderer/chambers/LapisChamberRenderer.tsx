@@ -42,16 +42,6 @@ function resolveNextSurface(encounter: RenderableEncounter): string | null {
   return asString(encounter.transitionNodes[encounter.surface]?.next_surface)
 }
 
-function surfaceBgStyle(url: string | null): CSSProperties {
-  if (!url) return {}
-  return {
-    backgroundImage: `url(${url})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  }
-}
-
 // --- Entry point ------------------------------------------------------------
 
 // Receives only RenderableEncounter. No DB access. No authority decisions.
@@ -167,7 +157,6 @@ function UnDriftedIndex({
     mediaUrl(encounter.mediaByRole.get("undrifted_fill")) ??
     mediaUrl(encounter.mediaByRole.get("ai_isnt_broken_landing"))
   const registryLogoUrl = mediaUrl(encounter.mediaByRole.get("measures_registry_logo"))
-  const bgUrl = mediaUrl(encounter.mediaByRole.get("crystal_longform_surface"))
   const aiIsntBrokenLandingUrl = mediaUrl(encounter.mediaByRole.get("ai_isnt_broken_landing"))
   const agentsWithKeysCoverUrl = mediaUrl(encounter.mediaByRole.get("agents_with_keys_cover"))
   const fablesAndMythsCoverUrl = mediaUrl(encounter.mediaByRole.get("fables_and_myths_cover"))
@@ -210,7 +199,7 @@ function UnDriftedIndex({
       data-release-standing="public"
       {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
-      style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
+      style={registryTokenStyle}
     >
       {renderHeader({ title })}
       <section className="undrifted-shell undrifted-cover-canvas" aria-label={title}>
@@ -242,6 +231,9 @@ function UnDriftedIndex({
             </div>
           )}
         </header>
+        <p className="undrifted-masthead-slogan">
+          Structural drift is detectable. Collapse is not the default.
+        </p>
         <hr className="undrifted-masthead-rule" aria-hidden="true" />
         {issueNumber || issueDate || issueEdition || issuePublisher || issueBranchStanding ? (
           <div className="undrifted-issue-rail" aria-label="Issue information">
@@ -268,7 +260,13 @@ function UnDriftedIndex({
           </div>
           <div className="undrifted-cover-editorial">
             {coverEyebrow ? <span className="undrifted-eyebrow">{coverEyebrow}</span> : null}
-            {coverHeadline ? <h1>{coverHeadline}</h1> : null}
+            {coverHeadline ? (
+              <h1>
+                <a className="undrifted-cover-headline-link" href="/ai-operations-assessment">
+                  {coverHeadline}
+                </a>
+              </h1>
+            ) : null}
             {coverDeck ? <p className="undrifted-cover-deck">{coverDeck}</p> : null}
             {coverPositioning ? (
               <p className="undrifted-cover-deck">
