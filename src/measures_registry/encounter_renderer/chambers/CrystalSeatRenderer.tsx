@@ -8,7 +8,7 @@ import {
   asString,
   asStringArray,
 } from "../shared/encounterRendererUtils"
-import { resolveEncounterStyleProfile } from "../styles/encounterStyleProfile"
+import { encounterStyleDataAttributes } from "../styles/encounterStyleProfile"
 
 // Payload for Encounter Boundary connect capture write.
 // Encounter Boundary provides onCaptureConnect. Omitting disables capture persistence.
@@ -188,7 +188,7 @@ function CrystalOrientationSeat({
       data-material-family="crystal"
       data-layout-contract="crystal_orientation"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
       {renderHeader({ title: "Measures Registry" })}
@@ -268,6 +268,7 @@ function CrystalIntroSeat({
 }: CrystalSeatProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [introAudioEnabled, setIntroAudioEnabled] = useState(false)
+  const [videoActivated, setVideoActivated] = useState(false)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const introCopy = asRecord(meta?.intro_copy)
@@ -275,6 +276,34 @@ function CrystalIntroSeat({
   const nextSurface = resolveNextSurface(encounter)
 
   const videoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
+  const posterUrl = mediaUrl(encounter.mediaByRole.get("hero_poster"))
+
+  // OAR2 "Replace Initial Hero Video Load With Poster-First Media Delivery" —
+  // poster paints immediately; the 14MB video is not requested until the page
+  // has settled (load event + idle), so it never competes with initial LCP.
+  useEffect(() => {
+    if (!videoUrl) return
+    let idleId: number | undefined
+    function scheduleActivate() {
+      if (typeof window.requestIdleCallback === "function") {
+        idleId = window.requestIdleCallback(() => setVideoActivated(true), { timeout: 1500 })
+      } else {
+        idleId = window.setTimeout(() => setVideoActivated(true), 200)
+      }
+    }
+    if (document.readyState === "complete") {
+      scheduleActivate()
+    } else {
+      window.addEventListener("load", scheduleActivate, { once: true })
+    }
+    return () => {
+      window.removeEventListener("load", scheduleActivate)
+      if (idleId !== undefined) {
+        if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId)
+        else window.clearTimeout(idleId)
+      }
+    }
+  }, [videoUrl])
 
   function handleAdvance() {
     if (nextSurface) onNavigate(nextSurface as EncounterSurface)
@@ -305,15 +334,16 @@ function CrystalIntroSeat({
       data-material-family="crystal"
       data-layout-contract="crystal_intro"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       style={registryTokenStyle}
     >
       <section className="registry-crystal-intro" aria-label="Introduction" onClick={handleAdvance}>
-        {videoUrl ? (
+        {videoActivated && videoUrl ? (
           <video
             ref={videoRef}
             className="registry-crystal-intro-video"
             src={videoUrl}
+            poster={posterUrl ?? undefined}
             autoPlay
             muted
             playsInline
@@ -322,11 +352,20 @@ function CrystalIntroSeat({
             onError={handleAdvance}
             aria-label={headline}
           />
+        ) : posterUrl ? (
+          <img
+            className="registry-crystal-intro-video"
+            src={posterUrl}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            fetchPriority="high"
+          />
         ) : null}
         <div className="registry-crystal-intro-headline">
           <h1>{headline}</h1>
         </div>
-        {videoUrl ? (
+        {videoActivated && videoUrl ? (
           <button
             type="button"
             className="registry-crystal-intro-audio"
@@ -506,7 +545,7 @@ function IntroHookSeat({
       data-material-family="crystal"
       data-layout-contract="intro"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={registryTokenStyle}
     >
@@ -720,7 +759,7 @@ function PathChoiceSeat({
       data-material-family="crystal"
       data-layout-contract="transition_choice"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       style={registryTokenStyle}
     >
       {renderHeader({ title: encounter.encounterDef?.display_title ?? "Measures Registry" })}
@@ -784,6 +823,36 @@ function AboutMeasuresRegistry({
   const [connectSubmitting, setConnectSubmitting] = useState(false)
   const [connectSubmitted, setConnectSubmitted] = useState(false)
   const [connectError, setConnectError] = useState<string | null>(null)
+  // OAR2 "Replace Initial Hero Video Load With Poster-First Media Delivery" —
+  // seated `about_hero_poster` paints immediately; the video is not requested until
+  // the page has settled (load event + idle), matching the crystal_seat_intro pattern.
+  const [aboutVideoActivated, setAboutVideoActivated] = useState(false)
+  const videoUrl = mediaUrl(encounter.mediaByRole.get("about_measures_registry_video"))
+  const posterUrl = mediaUrl(encounter.mediaByRole.get("about_hero_poster"))
+
+  useEffect(() => {
+    if (!videoUrl) return
+    let idleId: number | undefined
+    function scheduleActivate() {
+      if (typeof window.requestIdleCallback === "function") {
+        idleId = window.requestIdleCallback(() => setAboutVideoActivated(true), { timeout: 1500 })
+      } else {
+        idleId = window.setTimeout(() => setAboutVideoActivated(true), 200)
+      }
+    }
+    if (document.readyState === "complete") {
+      scheduleActivate()
+    } else {
+      window.addEventListener("load", scheduleActivate, { once: true })
+    }
+    return () => {
+      window.removeEventListener("load", scheduleActivate)
+      if (idleId !== undefined) {
+        if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId)
+        else window.clearTimeout(idleId)
+      }
+    }
+  }, [videoUrl])
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const approved = asRecord(meta?.approved_content_contract)
@@ -839,7 +908,6 @@ function AboutMeasuresRegistry({
   const featuredArticle = asRecord(approved.featured_article)
   const articleUrl =
     asString(featuredArticle?.article_url) ?? asString(featuredArticle?.external_url) ?? null
-  const videoUrl = mediaUrl(encounter.mediaByRole.get("about_measures_registry_video"))
   const sealUrl = mediaUrl(encounter.mediaByRole.get("official_codexstone_seal"))
   const bgUrl = mediaUrl(encounter.mediaByRole.get("crystal_longform_surface"))
 
@@ -861,7 +929,7 @@ function AboutMeasuresRegistry({
       data-surface={encounter.surface}
       data-material-family="crystal"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
@@ -902,7 +970,30 @@ function AboutMeasuresRegistry({
         </div>
         {videoUrl ? (
           <div className="registry-about-orientation-video">
-            <video src={videoUrl} controls autoPlay muted playsInline preload="auto" aria-label={title} />
+            {aboutVideoActivated ? (
+              <video
+                src={videoUrl}
+                poster={posterUrl ?? undefined}
+                controls
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                aria-label={title}
+              />
+            ) : posterUrl ? (
+              <img src={posterUrl} alt="" aria-hidden="true" loading="eager" fetchPriority="high" />
+            ) : (
+              <button
+                type="button"
+                className="registry-about-orientation-video-activate"
+                onClick={() => setAboutVideoActivated(true)}
+                aria-label={`Play video — ${title}`}
+              >
+                <span aria-hidden="true">▶</span>
+                <span>Play video</span>
+              </button>
+            )}
           </div>
         ) : null}
       </section>

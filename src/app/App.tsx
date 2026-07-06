@@ -113,6 +113,14 @@ function isC3FieldHost(hostname: string) {
   return hostname === "c3field.online" || hostname === "www.c3field.online"
 }
 
+// Cloudflare issues a 308 redirect adding a trailing slash to every non-root route
+// (e.g. /about -> /about/), so window.location.pathname never matches the bare keys in
+// REGISTRY_ROUTE_UNITS/REGISTRY_ROUTE_METADATA in production. Strip it before lookup,
+// mirroring MeasuresRegistryOrchestrator's own normalizePathname().
+function normalizePathname(pathname: string): string {
+  return pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname
+}
+
 function setMeta(selector: string, content: string) {
   const element = document.head.querySelector<HTMLMetaElement>(selector)
   if (element) element.content = content
@@ -199,7 +207,7 @@ export default function App() {
       return () => { cancelled = true }
     }
 
-    const pathname = window.location.pathname
+    const pathname = normalizePathname(window.location.pathname)
     const routeUnit = REGISTRY_ROUTE_UNITS[pathname]
 
     if (!routeUnit) {

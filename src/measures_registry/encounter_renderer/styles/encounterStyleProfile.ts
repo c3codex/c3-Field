@@ -137,6 +137,62 @@ export type ReleaseStateBehavior =
   | "dependent_state"
   | "unavailable_state"
 
+// Layout Profile — structural arrangement of the encounter. Distinct from frame_profile
+// (viewport occupation) and content_width (measure) — this is the arrangement of panels,
+// cards, and sections relative to one another. OAR2 "Seat Encounter Layout and Composition
+// Authority".
+export const LAYOUT_PROFILE_VALUES = [
+  "hero_layout",
+  "split_layout",
+  "stacked_layout",
+  "editorial_layout",
+  "report_layout",
+  "assessment_layout",
+  "form_layout",
+  "three_panel_layout",
+  "single_card_layout",
+  "chamber_layout",
+] as const
+export type LayoutProfile = (typeof LAYOUT_PROFILE_VALUES)[number]
+
+// Composition Profile — how the encounter holds attention, weight, and visual meaning.
+// Distinct from layout_profile (arrangement) and space_profile (spatial density/character).
+export const COMPOSITION_PROFILE_VALUES = [
+  "cinematic_composition",
+  "threshold_composition",
+  "institutional_composition",
+  "assessment_composition",
+  "document_composition",
+  "exchange_composition",
+  "ceremonial_composition",
+  "publication_composition",
+  "confirmation_composition",
+] as const
+export type CompositionProfile = (typeof COMPOSITION_PROFILE_VALUES)[number]
+
+// Render Status — whether browser-observed current rendering matches seated target
+// authority (layout_profile/composition_profile). OAR2 "Seat Render Intent Authority for
+// Layout Composition Drift".
+export const RENDER_STATUS_VALUES = [
+  "matched",
+  "target_registered",
+  "drift_detected",
+  "held",
+  "unavailable",
+] as const
+export type RenderStatus = (typeof RENDER_STATUS_VALUES)[number]
+
+// Render Intent — what should happen next given render_status. Distinct from render_status
+// (a diagnosis) — this is the registered next action, still implemented by a later OAR.
+export const RENDER_INTENT_VALUES = [
+  "preserve",
+  "transform",
+  "suppress",
+  "resolve",
+  "hold",
+] as const
+export type RenderIntent = (typeof RENDER_INTENT_VALUES)[number]
+
 export type EncounterStyleProfile = {
   profile_key: string
   material_family: MaterialFamily | null
@@ -155,6 +211,13 @@ export type EncounterStyleProfile = {
   audio_control_treatment: AudioControlTreatment | null
   mobile_behavior: MobileBehavior | null
   release_state_behavior: ReleaseStateBehavior | null
+  layout_profile: LayoutProfile | null
+  mobile_layout_profile: LayoutProfile | null
+  composition_profile: CompositionProfile | null
+  mobile_composition_profile: CompositionProfile | null
+  render_status: RenderStatus | null
+  render_intent: RenderIntent | null
+  render_drift_note: string | null
 }
 
 const GAP_FIELDS: Omit<EncounterStyleProfile, "profile_key"> = {
@@ -174,17 +237,71 @@ const GAP_FIELDS: Omit<EncounterStyleProfile, "profile_key"> = {
   audio_control_treatment: null,
   mobile_behavior: null,
   release_state_behavior: null,
+  layout_profile: null,
+  mobile_layout_profile: null,
+  composition_profile: null,
+  mobile_composition_profile: null,
+  render_status: null,
+  render_intent: null,
+  render_drift_note: null,
 }
 
-// Resolves the DB-seeded `style_profile` key from surface assignment metadata.
-// Returns null ("gap") when unseeded — never a synthetic default profile_key.
-// Every field beyond profile_key is a documented gap until Field/Measures seat it.
+// Returns `value` narrowed to `T` when it is one of `allowed`, else `null`. Never invents
+// a fallback — an unrecognized or missing DB value is a documented gap, not a guess.
+function asEnum<T extends string>(value: unknown, allowed: readonly T[]): T | null {
+  return typeof value === "string" && (allowed as readonly string[]).includes(value) ? (value as T) : null
+}
+
+// Resolves the DB-seeded `style_profile` key from surface assignment metadata, plus the
+// layout/composition/render-intent fields seated by OAR2 "Seat Encounter Layout and
+// Composition Authority" and OAR2 "Seat Render Intent Authority for Layout Composition
+// Drift". Returns null ("gap") when unseeded — never a synthetic default profile_key.
+// Every field not explicitly read below remains a documented gap until Field/Measures
+// seat it (see GAP_FIELDS) — this function must not invent fallbacks for them either.
 export function resolveEncounterStyleProfile(
   surfaceAssignmentMetadata: Record<string, unknown> | null | undefined,
 ): EncounterStyleProfile | null {
   const key = surfaceAssignmentMetadata?.style_profile
   if (typeof key !== "string" || !key) return null
-  return { profile_key: key, ...GAP_FIELDS }
+  const meta = surfaceAssignmentMetadata
+  return {
+    profile_key: key,
+    ...GAP_FIELDS,
+    layout_profile: asEnum(meta.layout_profile, LAYOUT_PROFILE_VALUES),
+    mobile_layout_profile: asEnum(meta.mobile_layout_profile, LAYOUT_PROFILE_VALUES),
+    composition_profile: asEnum(meta.composition_profile, COMPOSITION_PROFILE_VALUES),
+    mobile_composition_profile: asEnum(meta.mobile_composition_profile, COMPOSITION_PROFILE_VALUES),
+    render_status: asEnum(meta.render_status, RENDER_STATUS_VALUES),
+    render_intent: asEnum(meta.render_intent, RENDER_INTENT_VALUES),
+    render_drift_note: typeof meta.render_drift_note === "string" ? meta.render_drift_note : null,
+  }
+}
+
+// Exposes the registered layout/composition/render-status/render-intent authority as
+// data attributes on an encounter root, per OAR2 "Implement Render Intent Corrections for
+// Layout Composition Drift" §2. `render_drift_note` is deliberately not exposed publicly —
+// it may remain internal.
+export function encounterStyleDataAttributes(
+  surfaceAssignmentMetadata: Record<string, unknown> | null | undefined,
+): {
+  "data-style-profile": string | undefined
+  "data-layout-profile": string | undefined
+  "data-mobile-layout-profile": string | undefined
+  "data-composition-profile": string | undefined
+  "data-mobile-composition-profile": string | undefined
+  "data-render-status": string | undefined
+  "data-render-intent": string | undefined
+} {
+  const profile = resolveEncounterStyleProfile(surfaceAssignmentMetadata)
+  return {
+    "data-style-profile": profile?.profile_key ?? undefined,
+    "data-layout-profile": profile?.layout_profile ?? undefined,
+    "data-mobile-layout-profile": profile?.mobile_layout_profile ?? undefined,
+    "data-composition-profile": profile?.composition_profile ?? undefined,
+    "data-mobile-composition-profile": profile?.mobile_composition_profile ?? undefined,
+    "data-render-status": profile?.render_status ?? undefined,
+    "data-render-intent": profile?.render_intent ?? undefined,
+  }
 }
 
 // --- Provisional material defaults (OAR2 "Seat Encounter Style Concordance Language") ---

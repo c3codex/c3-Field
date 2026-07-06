@@ -1,5 +1,6 @@
 import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
 import { PublicAssessmentResult } from "./PublicAssessmentResult"
+import { encounterStyleDataAttributes } from "./encounter_renderer/styles/encounterStyleProfile"
 import {
   ASSESSMENT_PROCESS_TITLE,
   ASSESSMENT_SUB_SUPPORT_LINE,
@@ -16,7 +17,7 @@ import type {
 
 type PublicAssessmentSurfaceProps = {
   encounterKey: string
-  styleProfile?: string | null
+  encounterStyleAttrs?: ReturnType<typeof encounterStyleDataAttributes>
   directoryKey?: string | null
   assessmentEyebrow?: string
   assessmentProcessTitle?: string
@@ -80,7 +81,7 @@ type PublicAssessmentSurfaceProps = {
 
 export function PublicAssessmentSurface({
   encounterKey,
-  styleProfile,
+  encounterStyleAttrs,
   directoryKey,
   assessmentEyebrow,
   assessmentProcessTitle = ASSESSMENT_PROCESS_TITLE,
@@ -285,7 +286,7 @@ export function PublicAssessmentSurface({
       data-layout-fit={layoutViewportFit}
       data-material-family={materialFamily}
       data-release-standing="public_contact_gated"
-      data-style-profile={styleProfile ?? undefined}
+      {...encounterStyleAttrs}
       data-directory-key={directoryKey ?? undefined}
       style={chamberStyle}
     >

@@ -96,8 +96,12 @@ function initialSurface(): OrchestratorSurface {
   if (url.searchParams.get("payment") === "success") return "marble_chamber_C2_resolution"
   const mapped = ROUTE_SURFACE_MAP[pathname]
   if (mapped) return mapped
-  if (pathname.startsWith("/publication/structural_drift/")) return "publication_dispatch"
-  if (pathname === "/publication/structural_drift") return "lapis_chamber_encounter"
+  // publication_dispatch deprecated (OAR2 "Deprecate Stale Publication Dispatch Surface") —
+  // /undrifted is the active governed publication index; route all /publication/structural_drift*
+  // paths there rather than to the unprofiled publication_dispatch surface.
+  if (pathname === "/publication/structural_drift" || pathname.startsWith("/publication/structural_drift/")) {
+    return "lapis_chamber_encounter"
+  }
   return "crystal_seat_intro"
 }
 

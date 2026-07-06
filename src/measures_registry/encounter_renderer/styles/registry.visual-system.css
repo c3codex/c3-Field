@@ -616,20 +616,7 @@
   border-radius: 6px;
 }
 
-.measures-registry-runtime .registry-diagnostic-passage-controls > button,
-.measures-registry-runtime .registry-encounter-actions > button,
-.measures-registry-runtime .registry-crystal-chamber-section > button,
-.measures-registry-runtime .registry-crystal-publication-encounter > button,
-.measures-registry-runtime .registry-crystal-chamber-video-controls > button,
-.measures-registry-runtime .registry-public-understand-video-controls > button,
-.measures-registry-runtime .registry-public-understand-panel > button,
-.measures-registry-runtime .registry-public-understand-assess > button,
-.measures-registry-runtime .registry-public-understand-contact > button,
-.measures-registry-runtime .registry-field-guide-featured a,
-.measures-registry-runtime .registry-field-guide-grid a,
-.measures-registry-runtime .registry-field-guide-cta button,
-.measures-registry-runtime .registry-publication-cta button,
-.measures-registry-runtime .registry-publication-cta a {
+.measures-registry-runtime .registry-diagnostic-passage-controls > button {
   min-height: 2.25rem;
   border-left: 0;
   border-right: 0;
@@ -642,206 +629,19 @@
   color: var(--registry-brand-primary-text);
 }
 
-/* Structure passage */
-.measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage-layout {
-  width: min(68rem, 100%);
-  margin: 0 auto;
-  padding: clamp(1rem, 2vw, 1.4rem);
-  box-sizing: border-box;
-  border: 1px solid var(--registry-chamber-border);
-  border-radius: 8px;
-  background:
-    linear-gradient(90deg, color-mix(in srgb, #02050a 68%, transparent), color-mix(in srgb, var(--registry-brand-field) 44%, transparent)),
-    var(--registry-crystal-source-image, none),
-    linear-gradient(135deg, color-mix(in srgb, var(--registry-chamber-panel) 86%, transparent), color-mix(in srgb, var(--registry-brand-field) 68%, transparent));
-  background-size: cover, cover, auto;
-  background-position: center, 74% 50%, center;
-  background-blend-mode: normal, luminosity, normal;
-  box-shadow: var(--registry-chamber-shadow);
-}
-
-.measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage-copy,
-.measures-registry-runtime[data-public-path="understand_environment"] .registry-public-understand-video {
-  min-width: 0;
-}
-
-.measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage-copy > p {
-  overflow-wrap: anywhere;
-}
-
-.measures-registry-runtime[data-public-path="understand_environment"] .registry-public-understand-video video {
-  border-radius: 8px;
-  border-color: var(--registry-chamber-border);
-  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.24);
-}
-
-/* Crystal chamber */
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber {
-  width: min(76rem, 100%);
-  min-height: auto;
-  padding-top: calc(var(--registry-header-height, 3rem) + 1.15rem);
-  padding-bottom: 1.25rem;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--registry-header-height, 3rem) + 0.3rem) var(--registry-page-padding-active) 0;
-  border: 1px solid color-mix(in srgb, var(--registry-brand-highlight) 12%, transparent);
-  border-radius: 8px;
-  background:
-    linear-gradient(90deg, rgba(3, 8, 15, 0.74), rgba(3, 8, 15, 0.28), rgba(3, 8, 15, 0.72)),
-    var(--registry-crystal-source-image, none),
-    linear-gradient(140deg, color-mix(in srgb, var(--registry-chamber-panel) 78%, transparent), transparent 72%),
-    radial-gradient(circle at 78% 18%, color-mix(in srgb, var(--registry-brand-highlight) 11%, transparent), transparent 20rem);
-  background-size: cover, cover, auto, auto;
-  background-position: center, 78% 45%, center, center;
-  background-blend-mode: normal, luminosity, normal, screen;
-  box-shadow: var(--registry-chamber-shadow);
-  z-index: -1;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-entry {
-  max-width: 54rem;
-  margin: 0 auto 1rem;
-  text-align: center;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-entry > h1 {
-  font-size: clamp(2.05rem, 2.8rem, 2.8rem);
-  letter-spacing: 0;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-entry > p {
-  max-width: 44rem;
-  margin: 0 auto;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-video {
-  width: min(48rem, 100%);
-  margin-bottom: 1rem;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-video video {
-  max-height: min(34svh, 18rem);
-  border-radius: 8px;
-  border-color: var(--registry-chamber-border);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent),
-    #05070a;
-  box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.28);
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-sections {
-  grid-template-columns: minmax(20rem, 1.18fr) minmax(14rem, 0.82fr);
-  grid-template-areas:
-    "publication leadership"
-    "publication assess";
-  width: min(68rem, 100%);
-  margin: 0 auto;
-  gap: 0.9rem;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-publication-encounter {
-  grid-area: publication;
-  grid-template-columns: minmax(0, 1.04fr) minmax(10rem, 0.82fr);
-  align-items: center;
-  padding: 0.85rem;
-  border-radius: 8px;
-  border-color: var(--registry-chamber-border);
-  background:
-    linear-gradient(90deg, transparent, color-mix(in srgb, var(--registry-brand-highlight) 5%, transparent), transparent),
-    linear-gradient(145deg, color-mix(in srgb, var(--registry-brand-panel-surface) 72%, transparent), color-mix(in srgb, var(--registry-brand-field) 76%, transparent));
-  box-shadow: 0 0.8rem 2.2rem rgba(0, 0, 0, 0.2);
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-publication-copy {
-  gap: 0.42rem;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-publication-copy > h2 {
-  font-size: 1.34rem;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-publication-cover {
-  height: auto;
-  min-height: 0;
-  max-height: 16rem;
-  aspect-ratio: 4 / 5;
-  object-fit: contain;
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--registry-brand-field) 82%, black);
-  padding: 0.35rem;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-section {
-  border: 1px solid var(--registry-chamber-border);
-  border-radius: 8px;
-  padding: 0.9rem;
-  background: color-mix(in srgb, var(--registry-chamber-panel) 78%, transparent);
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-section:nth-of-type(2) {
-  grid-area: leadership;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-section--primary {
-  grid-area: assess;
-}
-
-.measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-section > p:nth-of-type(n + 2) {
-  display: block;
-}
-
-/* Publication surfaces */
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide,
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-publication-dispatch {
-  width: min(74rem, 100%);
-  margin: 0 auto;
-  padding: calc(var(--registry-header-height, 3rem) + 1.25rem) var(--registry-page-padding-active) 1.5rem;
-}
-
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide-masthead {
-  max-width: 62rem;
-}
-
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide-masthead h1 {
-  font-size: 3.45rem;
-  line-height: 1.02;
-  letter-spacing: 0;
-}
-
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide-empty {
-  border: 1px solid var(--registry-chamber-border);
-  border-radius: 8px;
-  padding: 1rem;
-  background: color-mix(in srgb, var(--registry-chamber-panel) 70%, transparent);
-}
-
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide-featured,
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide-grid article,
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-publication-cta,
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-publication-subscribe-capture {
-  border-radius: 8px;
-  border: 1px solid var(--registry-chamber-border);
-  background: color-mix(in srgb, var(--registry-chamber-panel) 76%, transparent);
-  box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.18);
-}
-
-.measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-publication-banner {
-  width: 100%;
-  max-height: 34rem;
-  object-fit: contain;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--registry-brand-field) 86%, black);
-  padding: 0.5rem;
-  border: 1px solid var(--registry-chamber-border);
-}
+/* OAR2 "Inventory and Reduce Legacy CSS After Render Authority Seating" removed the
+   "Structure passage" (`[data-public-path="understand_environment"]`), "Crystal chamber"
+   (`[data-public-path="crystal_chamber"]`), and "Publication surfaces"
+   (`[data-layout-contract="publication_encounter"]`) blocks that previously lived here (~225
+   lines). Verified dead: `data-public-path` is never set by any component in src/ (confirmed by
+   a project-wide grep), and `data-layout-contract="publication_encounter"` is set only by the
+   already-deprecated, unreachable `PublicationDispatch` component in LapisChamberRenderer.tsx
+   (publication_dispatch routes to /undrifted since the prior OAR in this sequence). The bare
+   `.registry-field-guide-featured a` / `.registry-field-guide-grid a` / `.registry-field-guide-cta
+   button` rules folded into the button rule above were also removed — same zero-usage evidence.
+   `.registry-publication-subscribe-capture` (used live on lapis_chamber_encounter) and
+   `.registry-public-header`/`.registry-public-brand` overrides below were preserved unchanged;
+   only the dead `publication_encounter`-scoped compound selectors referencing them were removed. */
 
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] {
   --undrifted-bg: #030608;
@@ -2356,37 +2156,6 @@
     font-size: 0.76rem;
   }
 
-  /* Crystal chamber compact — laptop 768px frame */
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber {
-    padding-top: calc(var(--registry-header-height, 3rem) + 0.5rem);
-    padding-bottom: 0.65rem;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-entry {
-    margin: 0 auto 0.5rem;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-entry > h1 {
-    font-size: 1.72rem;
-    margin-bottom: 0.45rem;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-entry > p {
-    display: none;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-video {
-    margin-bottom: 0.5rem;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-video video {
-    max-height: min(24svh, 11rem);
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-sections {
-    gap: 0.55rem;
-  }
-
   /* Contact gate compact at laptop height */
   .measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval.registry-assessment-chamber {
     padding-top: calc(var(--registry-header-height, 3rem) + 0.3rem);
@@ -2398,47 +2167,6 @@
 }
 
 @media (max-width: 860px) {
-  .measures-registry-runtime[data-public-path="understand_environment"] .registry-public-understand {
-    width: 100%;
-    max-width: 100vw;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-
-  .measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage,
-  .measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage-copy,
-  .measures-registry-runtime[data-public-path="understand_environment"] .registry-public-understand-video {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage-layout {
-    grid-template-columns: minmax(0, 1fr);
-    width: 100%;
-    max-width: 100%;
-    padding: 1rem;
-    overflow: hidden;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-sections {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "publication"
-      "leadership"
-      "assess";
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-publication-encounter {
-    grid-template-columns: 1fr;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-publication-cover {
-    width: min(18rem, 100%);
-    justify-self: center;
-  }
-
   .measures-registry-runtime .undrifted-hero,
   .measures-registry-runtime .undrifted-grid {
     grid-template-columns: 1fr;
@@ -2475,40 +2203,6 @@
 
   .measures-registry-runtime .registry-public-brand > span {
     display: none;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber,
-  .measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide,
-  .measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-publication-dispatch {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber::before {
-    inset-inline: 0.65rem;
-  }
-
-  .measures-registry-runtime[data-public-path="crystal_chamber"] .registry-crystal-chamber-entry {
-    text-align: left;
-  }
-
-  .measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage-copy > h1 {
-    font-size: 1.62rem;
-    line-height: 1.12;
-    max-width: 16ch;
-    overflow-wrap: anywhere;
-  }
-
-  .measures-registry-runtime[data-public-path="understand_environment"] .registry-structure-passage-copy > p,
-  .measures-registry-runtime[data-public-path="understand_environment"] .registry-media-absence {
-    font-size: 0.84rem;
-    max-width: 31ch;
-    overflow-wrap: anywhere;
-    word-break: normal;
-  }
-
-  .measures-registry-runtime[data-layout-contract="publication_encounter"] .registry-field-guide-masthead h1 {
-    font-size: 2.2rem;
   }
 
   .measures-registry-runtime .undrifted-shell {

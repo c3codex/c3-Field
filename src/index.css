@@ -4060,6 +4060,16 @@ body,
   max-width: var(--registry-text-max-width);
 }
 
+/* OAR2 "Implement Render Intent Corrections for Layout Composition Drift" —
+   marble_chamber_results: registered composition_profile is document_composition, but the
+   report card was capped at the shared --registry-text-max-width (680px, seated for general
+   prose measure and used by many other surfaces — not changed here). Widen only this
+   surface's card for document gravity; still well short of the shared
+   --registry-content-max-width (1120px) that bounds its parent, so this is not full-bleed. */
+.measures-registry-runtime[data-layout-contract="findings_report"] .registry-eval-resolution {
+  max-width: 56rem;
+}
+
 .registry-eval-intro span,
 .registry-cohort-conversion > span,
 .registry-iis-eval > span {
@@ -4701,20 +4711,13 @@ body,
   border-bottom: 1px solid currentColor;
 }
 
-.registry-publication-dispatch {
-  width: min(62rem, calc(100% - 2 * var(--registry-page-padding-active)));
-  margin: 0 auto;
-  padding: clamp(2rem, 6vw, 5rem) 0;
-  display: grid;
-  gap: clamp(1.4rem, 3vw, 2.4rem);
-}
-
-.registry-publication-dispatch-header {
-  display: grid;
-  gap: 0.8rem;
-}
-
-.registry-publication-dispatch-header > span,
+/* OAR2 "Inventory and Reduce Legacy CSS After Render Authority Seating" removed
+   `.registry-publication-dispatch`/`-header`/`-tags`/`-video`/`-body`/`-emphasis`/`-references`/
+   `-cta`/`-banner` from this section — confirmed zero usage across every .tsx file in
+   src/measures_registry (the only live consumer of any `.registry-publication-*` class,
+   PublicationDispatch, is itself deprecated/unreachable; see LapisChamberRenderer.tsx).
+   `.registry-publication-subscribe-capture` is kept, unchanged — it is live on
+   lapis_chamber_encounter (the /undrifted subscribe form). */
 .registry-publication-subscribe-capture span {
   color: var(--registry-brand-muted-text);
   font-size: var(--registry-entry-label);
@@ -4722,66 +4725,6 @@ body,
   text-transform: uppercase;
 }
 
-.registry-publication-dispatch-header h1 {
-  margin: 0;
-  max-width: min(52rem, 100%);
-  color: var(--registry-brand-primary-text);
-  font-size: clamp(2.35rem, 7vw, 5.5rem);
-  line-height: 0.96;
-}
-
-.registry-publication-dispatch-header p {
-  margin: 0;
-  max-width: var(--registry-text-max-width);
-  color: var(--registry-brand-secondary-text);
-  font-size: clamp(1rem, 1.8vw, 1.25rem);
-  line-height: 1.48;
-}
-
-.registry-publication-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  max-width: min(48rem, 100%);
-}
-
-.registry-publication-tags span {
-  border: 1px solid var(--registry-brand-border);
-  color: var(--registry-brand-muted-text);
-  padding: 0.28rem 0.46rem;
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.registry-publication-banner {
-  width: 100%;
-  max-height: 32rem;
-  object-fit: cover;
-  background: var(--registry-brand-field);
-}
-
-.registry-publication-video {
-  aspect-ratio: 16 / 9;
-  background: var(--registry-brand-field);
-}
-
-.registry-publication-video iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.registry-publication-body {
-  width: min(44rem, 100%);
-  display: grid;
-  gap: 1rem;
-}
-
-.registry-publication-body h2,
-.registry-publication-body h3,
-.registry-publication-references h2,
-.registry-publication-cta h2,
 .registry-publication-subscribe-capture h2 {
   margin: 0;
   color: var(--registry-brand-primary-text);
@@ -4789,10 +4732,6 @@ body,
   line-height: 1.14;
 }
 
-.registry-publication-body p,
-.registry-publication-body li,
-.registry-publication-references p,
-.registry-publication-cta p,
 .registry-publication-subscribe-capture p {
   margin: 0;
   color: var(--registry-brand-secondary-text);
@@ -4800,52 +4739,6 @@ body,
   line-height: 1.64;
 }
 
-.registry-publication-body ul {
-  margin: 0;
-  padding-left: 1.1rem;
-  display: grid;
-  gap: 0.45rem;
-}
-
-.registry-publication-emphasis {
-  color: var(--registry-brand-primary-text) !important;
-  font-style: italic;
-}
-
-.registry-publication-references {
-  display: grid;
-  gap: 0.85rem;
-  border-top: 1px solid var(--registry-brand-border);
-  padding-top: 1.2rem;
-}
-
-.registry-publication-references article {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.registry-publication-references h3 {
-  margin: 0;
-  color: var(--registry-brand-primary-text);
-  font-size: var(--registry-plaque-title-active);
-}
-
-.registry-publication-cta {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 1rem;
-  align-items: end;
-  border-block: 1px solid var(--registry-brand-border);
-  padding: clamp(1.1rem, 3vw, 2rem) 0;
-}
-
-.registry-publication-cta > div {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.registry-publication-cta button,
-.registry-publication-cta a,
 .registry-publication-subscribe-capture button {
   border: 1px solid var(--registry-brand-border);
   border-radius: 0;
@@ -4859,12 +4752,6 @@ body,
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-}
-
-.registry-publication-cta a {
-  background: transparent;
-  color: var(--registry-brand-secondary-text);
-  border-color: var(--registry-brand-border);
 }
 
 .registry-publication-subscribe-capture {
@@ -6411,48 +6298,68 @@ body,
     transform: none;
   }
 
-  .registry-threshold-hero {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* OAR2 "Implement Render Intent Corrections for Layout Composition Drift" —
+     crystal_seat_threshold: registered mobile_layout_profile is stacked_layout. Desktop
+     split_layout (side-by-side, grid-template-columns above) is preserved unchanged;
+     this block only applies when the seated authority requests a stacked mobile
+     composition, so a surface without that registration keeps the default split rules. */
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .registry-threshold-seat {
-    min-height: 100svh;
-    padding: clamp(1rem, 5vw, 1.35rem);
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-seat {
+    min-height: 50svh;
+    padding: clamp(1.1rem, 5vw, 1.5rem);
   }
 
-  .registry-threshold-seat[data-side="left"] {
-    align-items: start;
-    padding-top: clamp(3rem, 12svh, 5rem);
-  }
-
-  .registry-threshold-seat[data-side="right"] {
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-seat[data-side="left"],
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-seat[data-side="right"] {
+    justify-items: start;
     align-items: end;
-    padding-bottom: clamp(3rem, 12svh, 5rem);
+    padding-inline: clamp(1.1rem, 5vw, 1.5rem);
+    text-align: left;
   }
 
-  .registry-threshold-still,
-  .registry-threshold-motion {
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-seat[data-side="right"] .registry-threshold-copy strong {
+    justify-self: start;
+  }
+
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-still,
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-motion {
     object-position: center;
   }
 
-  .registry-threshold-copy {
-    width: min(11.25rem, 92%);
-    gap: 0.8rem;
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-copy {
+    width: min(22rem, 88%);
+    gap: 0.7rem;
   }
 
-  .registry-threshold-copy span {
-    font-size: clamp(0.92rem, 4.4vw, 1.08rem);
-    line-height: 1.22;
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-copy span {
+    font-size: clamp(0.92rem, 4vw, 1.05rem);
+    line-height: 1.28;
   }
 
-  .registry-threshold-context {
-    font-size: clamp(0.7rem, 3.2vw, 0.8rem);
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-context {
+    font-size: clamp(0.7rem, 3vw, 0.8rem);
   }
 
-  .registry-threshold-copy strong {
-    min-height: 2.3rem;
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-copy strong {
+    min-height: 2.2rem;
     font-size: 0.68rem;
     letter-spacing: 0.06em;
+  }
+
+  /* Divide line rotates from a vertical split-seam to a horizontal one when stacked. */
+  .measures-registry-runtime[data-mobile-layout-profile="stacked_layout"] .registry-threshold-divide {
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 100%;
+    height: clamp(0.22rem, 0.5vw, 0.42rem);
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.82) 16%, rgba(255, 255, 255, 0.98) 50%, rgba(255, 255, 255, 0.82) 84%, transparent 100%);
   }
 
   .registry-path-choice {
@@ -6565,10 +6472,6 @@ body,
     align-items: start;
   }
 
-  .registry-publication-dispatch {
-    width: min(100%, calc(100% - 2 * var(--registry-page-padding-active)));
-  }
-
   .registry-field-guide {
     width: min(100%, calc(100% - 2 * var(--registry-page-padding-active)));
     padding-top: calc(var(--registry-header-height) + 1rem);
@@ -6589,7 +6492,6 @@ body,
     align-items: start;
   }
 
-  .registry-publication-cta,
   .registry-publication-subscribe-capture {
     grid-template-columns: 1fr;
   }

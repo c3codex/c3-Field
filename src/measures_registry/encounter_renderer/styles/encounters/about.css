@@ -83,12 +83,45 @@
   border-radius: 4px;
   overflow: hidden;
   background: #000;
+  aspect-ratio: 16 / 9;
 }
 
-.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video video {
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video video,
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
+}
+
+/* Fallback only — used if about_hero_poster is ever unseated again (OAR2 "Replace
+   Initial Hero Video Load With Poster-First Media Delivery"). Poster-first is the
+   default path now that about_hero_poster is seated. */
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video-activate {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: none;
+  color: var(--registry-brand-secondary-text, #cbd5e1);
+  cursor: pointer;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 0.15s ease;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video-activate:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_encounter"] .registry-about-orientation-video-activate span:first-child {
+  font-size: 1.9rem;
+  line-height: 1;
 }
 
 /* ── SECTION 2B: OUR STORY ───────────────────────────────────────────── */

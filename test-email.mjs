@@ -1,9 +1,9 @@
 import { Resend } from 'resend';
 
-const apiKey = 're_2b5Z4Y6p_DRFnwRj3b6XP1Zs33Biix8Lw';
+const apiKey = process.env.RESEND_API_KEY;
 
-if (!apiKey || apiKey.includes('YOUR_API_KEY')) {
-  console.error('Missing API key. Replace YOUR_API_KEY_HERE first.');
+if (!apiKey) {
+  console.error('Missing API key. Set RESEND_API_KEY in the environment before running this script.');
   process.exit(1);
 }
 

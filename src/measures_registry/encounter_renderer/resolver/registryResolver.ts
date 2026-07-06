@@ -85,6 +85,10 @@ const MEDIA_ROLES = [
   "crystal_orientation_surface",
   "crystal_longform_surface",
   "obsidian_orientation_surface",
+  "marble_payment_confirmation_background",
+  "marble_payment_confirmation_seal",
+  "hero_poster",
+  "about_hero_poster",
 ] as const
 
 const DESIGN_REGISTRY_KEY = "measures_registry"

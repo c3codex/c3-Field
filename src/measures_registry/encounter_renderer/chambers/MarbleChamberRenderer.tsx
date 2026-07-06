@@ -8,7 +8,7 @@ import {
   asString,
   asStringArray,
 } from "../shared/encounterRendererUtils"
-import { resolveEncounterStyleProfile } from "../styles/encounterStyleProfile"
+import { encounterStyleDataAttributes } from "../styles/encounterStyleProfile"
 import { PublicAssessmentResult } from "../../PublicAssessmentResult"
 import type { AssessmentEmailArtifact, EnvironmentalStandingReport } from "../../measuresAssessmentTypes"
 
@@ -217,6 +217,19 @@ function MapIntegrityGovernance({
       sessionStorage.setItem("__mreg_c2_pending", JSON.stringify({
         mapPathway,
         mapStanding: standingKey,
+        // OAR2 "Seat MAP Payment Confirmation Content and Background Authority" — carries the
+        // already-resolved pathway card forward so marble_chamber_C2_agreement can display
+        // pathway name/price/scope/deliverables without re-deriving or duplicating this
+        // authority. No new pricing/deliverables data is created here — this is the same
+        // recommendedCard already computed above from pathwayCards.
+        mapPathwayCard: recommendedCard
+          ? {
+              title: asString(recommendedCard.title) ?? null,
+              price_label: asString(recommendedCard.price_label) ?? null,
+              map_boundary: asString(recommendedCard.map_boundary) ?? null,
+              deliverables: asStringArray(recommendedCard.deliverables),
+            }
+          : null,
       }))
     } catch { /* ignore */ }
     if (next) onNavigate(next as EncounterSurface)
@@ -229,7 +242,7 @@ function MapIntegrityGovernance({
       data-material-family="marble"
       data-layout-contract="marble_map_three_panel"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(mapBgUrl) }}
     >
@@ -396,7 +409,7 @@ function MarbleOrientationSeat({
       data-material-family="marble"
       data-layout-contract="marble_orientation"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
@@ -494,7 +507,7 @@ function MarbleChamberEncounter({
       data-material-family="marble"
       data-layout-contract="findings_report"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
@@ -529,9 +542,17 @@ function MarbleChamberEncounter({
 // Payment agreement surface. Reads selected pathway from __mreg_c2_pending.
 // Calls onInitiateMapPayment with existing callback (no Stripe logic rewrite).
 
+type C2PendingPathwayCard = {
+  title: string | null
+  price_label: string | null
+  map_boundary: string | null
+  deliverables: string[]
+}
+
 type C2Pending = {
   mapPathway: string
   mapStanding: string
+  mapPathwayCard?: C2PendingPathwayCard | null
 }
 
 function MarbleC2Agreement({
@@ -562,6 +583,7 @@ function MarbleC2Agreement({
 
   const next = resolveNextSurface(encounter)
   const contentProfile = asRecord(encounter.encounterDef?.metadata?.content_profile)
+  const paymentConfirmation = asRecord(encounter.encounterDef?.metadata?.payment_confirmation)
   const title = asString(contentProfile?.title) ?? encounter.encounterDef?.display_title ?? "Payment Agreement"
   const heldBody = asString(contentProfile?.held_body) ?? "Select a MAP pathway to continue to payment."
   const heldCtaLabel = asString(contentProfile?.held_cta_label) ?? "Return to MAP"
@@ -572,9 +594,27 @@ function MarbleC2Agreement({
   const ctaLoadingLabel = asString(contentProfile?.cta_loading) ?? "Processing..."
   const effectiveEmail = contactEmail || emailInput.trim()
 
+  // Resolved from the MAP pathway card carried forward from marble_chamber_C2_compact
+  // (measures_encounter_def.map_integrity_governance.pathway_cards) — not duplicated or
+  // re-authored here. Falls back to the bare pathway key only if the card wasn't captured
+  // (e.g. a session begun before this OAR shipped).
+  const pathwayCard = c2Pending?.mapPathwayCard ?? null
+  const pathwayName = pathwayCard?.title ?? null
+  const pathwayPrice = pathwayCard?.price_label ?? null
+  const pathwayScopeSummary = pathwayCard?.map_boundary ?? null
+  const pathwayDeliverables = pathwayCard?.deliverables ?? []
+
+  const exchangeStatement = asString(paymentConfirmation?.exchange_statement)
+  const paymentConfirmationStatement = asString(paymentConfirmation?.payment_confirmation_statement)
+  const postPaymentExpectation = asString(paymentConfirmation?.post_payment_expectation)
+
+  const backgroundAuthority = asRecord(encounter.surfaceAssignmentMetadata?.background_authority)
+  const backgroundTreatment = asString(backgroundAuthority?.background_treatment)
   const bgUrl =
+    mediaUrl(encounter.mediaByRole.get("marble_payment_confirmation_background")) ??
     mediaUrl(encounter.mediaByRole.get("marble_map_surface")) ??
     null
+  const sealUrl = mediaUrl(encounter.mediaByRole.get("marble_payment_confirmation_seal"))
 
   async function handleInitiatePayment() {
     if (!onInitiateMapPayment || !c2Pending) return
@@ -597,7 +637,7 @@ function MarbleC2Agreement({
         data-surface="marble_chamber_C2_agreement"
         data-material-family="marble"
         data-release-standing="held_missing_session"
-        data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+        {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
         data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
         style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
       >
@@ -623,16 +663,45 @@ function MarbleC2Agreement({
       data-material-family="marble"
       data-layout-contract="centered_exchange_panel"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      data-background-treatment={backgroundTreatment ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
       {renderHeader({ title })}
       <section className="registry-marble-chamber registry-marble-payment-agreement" aria-label={title}>
+        {sealUrl ? (
+          <img
+            src={sealUrl}
+            alt="Codexstone — Official Seal"
+            className="registry-marble-payment-seal"
+            loading="eager"
+          />
+        ) : null}
         <header className="registry-marble-directory-header">
           <h2>{title}</h2>
-          <p>{pathwayPrefix} {c2Pending.mapPathway.replaceAll("_", " ")}</p>
+          {pathwayName ? (
+            <div className="registry-marble-payment-pathway-badge">
+              <span>{pathwayName}</span>
+              {pathwayPrice ? <strong>{pathwayPrice}</strong> : null}
+            </div>
+          ) : (
+            <p>{pathwayPrefix} {c2Pending.mapPathway.replaceAll("_", " ")}</p>
+          )}
         </header>
+        {pathwayScopeSummary ? (
+          <p className="registry-marble-payment-scope">{pathwayScopeSummary}</p>
+        ) : null}
+        {pathwayDeliverables.length > 0 ? (
+          <ul className="registry-marble-payment-deliverables">
+            {pathwayDeliverables.map((deliverable) => (
+              <li key={deliverable}>{deliverable}</li>
+            ))}
+          </ul>
+        ) : null}
+        {exchangeStatement ? (
+          <p className="registry-marble-payment-exchange-statement">{exchangeStatement}</p>
+        ) : null}
         {!contactEmail ? (
           <div className="registry-map-email-entry">
             <label htmlFor="c2-checkout-email">{emailLabel}</label>
@@ -660,6 +729,12 @@ function MarbleC2Agreement({
         ) : (
           <p className="registry-media-absence">Payment initiation is not available.</p>
         )}
+        {paymentConfirmationStatement || postPaymentExpectation ? (
+          <div className="registry-marble-payment-next-steps">
+            {paymentConfirmationStatement ? <p>{paymentConfirmationStatement}</p> : null}
+            {postPaymentExpectation ? <p>{postPaymentExpectation}</p> : null}
+          </div>
+        ) : null}
       </section>
       {renderSystemFooter()}
     </main>
@@ -699,7 +774,7 @@ function MarbleC2Resolution({
       data-material-family="marble"
       data-layout-contract="centered_confirmation_panel"
       data-release-standing="public"
-      data-style-profile={resolveEncounterStyleProfile(encounter.surfaceAssignmentMetadata)?.profile_key ?? undefined}
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(meta?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...marbleBgStyle(bgUrl) }}
     >
