@@ -61,12 +61,12 @@ This convention applies uniformly to: articles, banners, campaign assets, resear
 
 | asset_id | asset_type | status | issue_or_campaign | related_oar2 | file_path |
 |---|---|---|---|---|---|
-| `undrifted_issue01_measures_registry_launch_article_v1` | article | draft | unDrifted/Issue01 | oar2_establish_registered_asset_file_structure_v1 | Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_measures_registry_launch_article_v1.md |
-| `undrifted_issue01_computational_systems_governance_nsf_project_pitch_article_v1` | article | draft | unDrifted/Issue01 | oar2_establish_registered_asset_file_structure_v1 | Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_computational_systems_governance_nsf_project_pitch_article_v1.md |
-| `undrifted_issue01_measures_registry_launch_banner_v1` | banner | draft | unDrifted/Issue01 | oar2_establish_registered_asset_file_structure_v1 | Assets/Banners/unDrifted/Issue01/undrifted_issue01_measures_registry_launch_banner_v1.webp |
-| `undrifted_issue01_computational_systems_governance_nsf_pitch_banner_v1` | banner | draft | unDrifted/Issue01 | oar2_establish_registered_asset_file_structure_v1 | Assets/Banners/unDrifted/Issue01/undrifted_issue01_computational_systems_governance_nsf_pitch_banner_v1.webp |
+| `undrifted_issue01_measures_registry_launch_article_v1` | article | registered | unDrifted/Issue01 | oar2_register_undrifted_issue01_launch_assets_v1 | Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_measures_registry_launch_article_v1.md |
+| `undrifted_issue01_computational_systems_governance_nsf_project_pitch_article_v1` | article | registered | unDrifted/Issue01 | oar2_register_undrifted_issue01_launch_assets_v1 | Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_computational_systems_governance_nsf_project_pitch_article_v1.md |
+| `undrifted_issue01_measures_registry_launch_banner_v1` | banner | registered | unDrifted/Issue01 | oar2_register_undrifted_issue01_launch_assets_v1 | Supabase Storage: `measures-registry/undrifted_issue01_measures_registry_launch_banner_v1.webp` |
+| `undrifted_issue01_computational_systems_governance_nsf_pitch_banner_v1` | banner | registered | unDrifted/Issue01 | oar2_register_undrifted_issue01_launch_assets_v1 | Supabase Storage: `measures-registry/undrifted_issue01_computational_systems_governance_nsf_pitch_banner_v1.webp` |
 
-These four are placeholder records only — the underlying content files and sidecars do not yet exist. `status: draft` reflects that no content has been authored; the record exists so the asset is trackable from first mention. Creating the actual files is out of scope for this OAR2 and will be executed under a future OAR2/OAR1 pair.
+The two article assets are fully authored and registered (frontmatter + body complete) at their local repo paths. The two banner assets are registered as well — their `.webp` binaries live in the Supabase Storage bucket `measures-registry` (not in the local repo tree); each sidecar's `storage_bucket`/`storage_object_path` fields point to the canonical binary location, confirmed present via `storage.objects` query on 2026-07-07.
 
 ## Relationship to OAR Authority
 
