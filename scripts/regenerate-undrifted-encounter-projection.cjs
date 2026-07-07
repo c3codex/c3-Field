@@ -9,6 +9,10 @@
 // article/dispatch records), and preserves the small set of encounter_def-only fields that
 // currently have no canonical source upstream (documented below) rather than deleting them.
 //
+// Extended by oar2_finalize_undrifted_launch_projection_and_encounter_profile_v1 to also
+// project assessment_feature, section_labels, and encounter_profile — all now seated
+// canonically under measures_publication_registry.metadata.
+//
 // Usage:
 //   node scripts/regenerate-undrifted-encounter-projection.cjs           (dry run — prints diff only)
 //   node scripts/regenerate-undrifted-encounter-projection.cjs --apply   (writes the correction)
@@ -108,14 +112,13 @@ async function run() {
     })
   }
 
-  // Fields with NO canonical source in measures_publication_registry today. These are
-  // preserved as-is from the existing projection rather than deleted — deleting them would
-  // remove live-rendered content this OAR2 has no authority to invent or destroy. Flagged
-  // in the OAR1 as a standing gap for a future decision (backfill into Publication Registry,
-  // or formally accept as projection-owned).
+  // Fields with NO canonical source in measures_publication_registry — FREE-technical only,
+  // correctly projection-owned by design (not drift). assessment_feature and
+  // landing_design_contract were preserved here until
+  // oar2_finalize_undrifted_launch_projection_and_encounter_profile_v1 seated their canonical
+  // sources (metadata.assessment_feature, metadata.section_labels, metadata.encounter_profile)
+  // — both are now projected from Publication Registry below instead.
   const preserved = {
-    assessment_feature: existingProjection.assessment_feature ?? null,
-    landing_design_contract: existingProjection.landing_design_contract ?? null,
     media_locator: existingProjection.media_locator ?? null,
     content_profile: existingProjection.content_profile ?? null,
     directory_key: existingProjection.directory_key ?? null,
@@ -144,12 +147,16 @@ async function run() {
     hierarchy: publication.hierarchy ?? null,
     parent_authority: publication.parent_authority ?? null,
     primary_series: publication.primary_series ?? null,
+    assessment_feature: publication.assessment_feature ?? existingProjection.assessment_feature,
+    section_labels: publication.section_labels ?? null,
+    landing_design_contract: publication.landing_design_contract ?? existingProjection.landing_design_contract,
+    encounter_profile: publication.encounter_profile ?? null,
     featured_article_set: featuredArticleSet,
     content_source: "measures_publication_registry + measures_publication_dispatch",
-    source_oar2: "OAR/OAR2/publication/oar2_seat_undrifted_publication_synchronization_and_launch_ready_encounter_projection_v1.meta.md",
+    source_oar2: "OAR/OAR2/publication/oar2_finalize_undrifted_launch_projection_and_encounter_profile_v1.meta.md",
     projection_meta: {
       regenerated_at: new Date().toISOString(),
-      regenerated_by_oar2: "oar2_seat_undrifted_publication_synchronization_and_launch_ready_encounter_projection_v1",
+      regenerated_by_oar2: "oar2_finalize_undrifted_launch_projection_and_encounter_profile_v1",
       regeneration_script: "scripts/regenerate-undrifted-encounter-projection.cjs",
       canonical_sources: ["measures_publication_registry", "measures_publication_dispatch"],
       preserved_no_canonical_source: Object.keys(preserved).filter((k) => preserved[k] !== null),
@@ -162,11 +169,21 @@ async function run() {
     style_contract: { before: existingProjection.style_contract, after: nextMetadata.style_contract },
     role_call_feature: { before: existingProjection.role_call_feature, after: nextMetadata.role_call_feature },
     brand_copy: { before: existingProjection.brand_copy, after: nextMetadata.brand_copy },
+    assessment_feature_now_canonical: nextMetadata.assessment_feature != null,
+    encounter_profile_seated: nextMetadata.encounter_profile != null,
+    landing_design_contract_standing: nextMetadata.landing_design_contract?.standing ?? "unchanged",
     featured_article_set_count: {
       before: (existingProjection.featured_article_set || []).length,
       after: featuredArticleSet.length,
     },
-    new_fields_added: ["hierarchy", "parent_authority", "primary_series", "projection_meta"],
+    new_fields_added: [
+      "hierarchy",
+      "parent_authority",
+      "primary_series",
+      "section_labels",
+      "encounter_profile",
+      "projection_meta",
+    ],
     unresolved_section_sequence_entries: unresolvedSequenceEntries,
   }
 

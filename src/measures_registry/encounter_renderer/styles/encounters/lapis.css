@@ -30,6 +30,17 @@
   box-sizing: border-box;
 }
 
+/* Desktop viewport usage — from Publication Encounter Profile
+   (undrifted_publication_encounter_profile_v1.viewport_contract), per OAR2 "Finalize unDrifted
+   Launch Projection and Encounter Profile" Routed §4 "use more of desktop viewport". Scoped to
+   the profile's own desktop_breakpoint and only overrides width — mobile/tablet keep the
+   standard readable measure above, preserving mobile readability per responsive_rules. */
+@media (min-width: 1024px) {
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-shell {
+    width: var(--undrifted-desktop-max-width, min(94vw, 96rem));
+  }
+}
+
 /* ── MASTHEAD ────────────────────────────────────────────────────────────── */
 
 .undrifted-masthead {
@@ -135,6 +146,20 @@
   margin-bottom: clamp(1.5rem, 3.5vw, 2.5rem);
 }
 
+/* Masthead + issue identity unification — from Publication Encounter Profile
+   masthead_behavior. Ties the masthead rule and issue rail together with the canonical
+   accent line color instead of a generic hairline, and tightens the gap between them, so
+   the banner and "ISSUE 001 / JUNE 2026 / LAUNCH EDITION" rail read as one cover unit
+   rather than a banner sitting above an unrelated info strip. */
+.measures-registry-runtime[data-masthead-behavior="unified_with_issue_rail"] .undrifted-masthead-rule {
+  border-top-color: var(--undrifted-line-strong, rgba(70, 145, 255, 0.55));
+}
+
+.measures-registry-runtime[data-masthead-behavior="unified_with_issue_rail"] .undrifted-issue-rail {
+  margin-top: -0.15rem;
+  border-bottom-color: var(--undrifted-line, rgba(180, 210, 255, 0.18));
+}
+
 .undrifted-issue-rail-left {
   display: flex;
   align-items: baseline;
@@ -215,6 +240,20 @@
   margin: 0;
 }
 
+/* Cover story dominance — from Publication Encounter Profile cover_story_behavior, per OAR2
+   "Finalize unDrifted Launch Projection and Encounter Profile" Routed §4 "make cover story
+   dominant". Desktop-only (matches the profile's own desktop_breakpoint) so mobile/tablet
+   sizing is untouched. */
+@media (min-width: 1024px) {
+  .measures-registry-runtime[data-cover-story-behavior="dominant_full_width_on_desktop"] .undrifted-cover {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .measures-registry-runtime[data-cover-story-behavior="dominant_full_width_on_desktop"] .undrifted-cover-editorial h1 {
+    font-size: clamp(1.8rem, 5.4vw, 4.6rem);
+  }
+}
+
 /* Cover headline is now the primary "Assess the Environment" entry point
    (OAR2 "Resolve Final Launch Blockers" ROUTED §2) — reads as editorial text,
    not a conventional underlined link, until interacted with. */
@@ -265,6 +304,22 @@
   background: rgba(237, 242, 248, 0.025);
   margin-bottom: clamp(1.75rem, 4vw, 3rem);
   border-radius: 2px;
+}
+
+/* Assessment as launch center — from Publication Encounter Profile
+   assessment_feature_behavior, per OAR2 "Finalize unDrifted Launch Projection and Encounter
+   Profile" Routed §4 "make assessment CTA visually primary". Replaces the neutral top border
+   with the canonical accent color and a faint accent wash, so this block reads as the page's
+   primary destination rather than a callout matching every other section's generic border. */
+.measures-registry-runtime[data-assessment-behavior="elevated_accent_primary_cta"] .undrifted-editor-feature {
+  border-top-color: var(--undrifted-cyan, #59c7ff);
+  border-top-width: 3px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--undrifted-blue, #1f8cff) 6%, transparent),
+    rgba(237, 242, 248, 0.025) 60%
+  );
+  padding: clamp(1.75rem, 4vw, 3rem);
 }
 
 .undrifted-editor-feature-mark {
@@ -375,6 +430,18 @@
   object-fit: cover;
 }
 
+/* Editorial spread, not blog cards — from Publication Encounter Profile
+   featured_article_behavior, per OAR2 "Finalize unDrifted Launch Projection and Encounter
+   Profile" Routed §4. Desktop-only: gives each article's cover art materially more room
+   relative to its text column, closer to a magazine spread than a thumbnail+teaser blog list.
+   Forbidden_patterns in the same profile names "uniform_bordered_card_stack" — this is why
+   the cover art grows instead of adding another border/box treatment. */
+@media (min-width: 1024px) {
+  .measures-registry-runtime[data-featured-article-behavior="editorial_spread_large_cover"] .undrifted-insight-card {
+    grid-template-columns: clamp(9rem, 18vw, 13rem) 1fr;
+  }
+}
+
 .undrifted-insight-body {
   display: flex;
   flex-direction: column;
@@ -431,6 +498,20 @@
   background: rgba(237, 242, 248, 0.018);
   border-radius: 2px;
   margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+
+/* Borderless editorial pull-quote — from Publication Encounter Profile role_call_behavior,
+   per OAR2 "Finalize unDrifted Launch Projection and Encounter Profile" Routed §4 "reduce
+   generic SaaS/card-stack feel". Role Call is a secondary-weight region per the profile's
+   region_weights, so it drops the bordered-box treatment shared with every other section
+   (the literal card-stack pattern the profile's forbidden_patterns names) in favor of a
+   quieter, borderless treatment set off only by an accent rule on the leading edge. */
+.measures-registry-runtime[data-role-call-behavior="borderless_editorial_pullquote"] .undrifted-role-call {
+  border: none;
+  border-left: 2px solid var(--undrifted-line-strong, rgba(70, 145, 255, 0.55));
+  background: transparent;
+  padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.5rem, 3.5vw, 2.5rem);
+  border-radius: 0;
 }
 
 .undrifted-role-call h2 {

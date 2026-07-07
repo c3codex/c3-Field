@@ -99,7 +99,23 @@ function UnDriftedIndex({
   // Reconnected here rather than hardcoded so future Publication Registry edits flow through
   // without a renderer change.
   const styleContractTokens = asRecord(styleContract?.tokens) as CSSProperties | undefined
+  // landing_design_contract is retained only for historical trace — its copy fields moved to
+  // section_labels and its composition authority moved to encounter_profile, per OAR2 "Finalize
+  // unDrifted Launch Projection and Encounter Profile" §3. Both new fields are canonical under
+  // Publication Registry; landingContract is read below only as a fallback.
   const landingContract = asRecord(meta?.landing_design_contract)
+  const sectionLabels = asRecord(meta?.section_labels)
+  const encounterProfile = asRecord(meta?.encounter_profile)
+  const viewportContract = asRecord(encounterProfile?.viewport_contract)
+  // Composition viewport tokens from the Publication Encounter Profile — consumed by lapis.css
+  // scoped under [data-layout-contract="undrifted_publication"], never redeclared inline.
+  const profileStyleVars = viewportContract
+    ? ({
+        "--undrifted-desktop-max-width": asString(viewportContract.desktop_content_max_width) ?? undefined,
+        "--undrifted-tablet-max-width": asString(viewportContract.tablet_content_max_width) ?? undefined,
+        "--undrifted-mobile-max-width": asString(viewportContract.mobile_content_max_width) ?? undefined,
+      } as CSSProperties)
+    : undefined
   const issueRecord = asRecord(meta?.issue_record)
   const coverStory = asRecord(meta?.cover_story)
   const assessmentFeature = asRecord(meta?.assessment_feature)
@@ -114,7 +130,9 @@ function UnDriftedIndex({
   const primaryLogoPath = asString(brandAssets?.primary_full_lockup_path)
   const styleKey =
     asString(landingContract?.style_contract_key) ?? asString(styleContract?.key)
-  const landingKey = asString(landingContract?.landing_contract_key)
+  // Prefer the Publication Encounter Profile as the authoritative composition pointer now
+  // that landing_design_contract is superseded — falls back only if the profile is absent.
+  const landingKey = asString(encounterProfile?.profile_key) ?? asString(landingContract?.landing_contract_key)
 
   const issueNumber = asString(issueRecord?.issue_number)
   const issueDate = asString(issueRecord?.issue_date)
@@ -123,15 +141,18 @@ function UnDriftedIndex({
   const issueBranchStanding = asString(issueRecord?.branch_standing)
   const descriptorLine = asString(brandCopy?.descriptor_line)
 
-  const coverEyebrow = asString(asRecord(landingContract?.hero)?.cover_eyebrow)
+  const coverEyebrow =
+    asString(sectionLabels?.cover_eyebrow) ?? asString(asRecord(landingContract?.hero)?.cover_eyebrow)
   const coverHeadline = asString(coverStory?.feature_headline)
   const coverDeck = asString(coverStory?.feature_deck)
   const coverPositioning = asString(coverStory?.feature_positioning)
   const coreDistinction = asString(coverStory?.core_distinction)
 
-  const insightsEyebrow = asString(landingContract?.insights_eyebrow)
+  const insightsEyebrow = asString(sectionLabels?.insights_eyebrow) ?? asString(landingContract?.insights_eyebrow)
   const insightsHeading =
-    asString(landingContract?.cover_lines_label) ?? asString(landingContract?.insights_heading)
+    asString(sectionLabels?.insights_heading) ??
+    asString(landingContract?.cover_lines_label) ??
+    asString(landingContract?.insights_heading)
 
   const assessmentFeatureLabel = asString(assessmentFeature?.feature_label)
   const assessmentFeatureTitle = asString(assessmentFeature?.feature_title)
@@ -204,7 +225,12 @@ function UnDriftedIndex({
       data-release-standing="public"
       {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
-      style={{ ...registryTokenStyle, ...styleContractTokens }}
+      data-masthead-behavior={asString(encounterProfile?.masthead_behavior) ?? undefined}
+      data-cover-story-behavior={asString(encounterProfile?.cover_story_behavior) ?? undefined}
+      data-assessment-behavior={asString(encounterProfile?.assessment_feature_behavior) ?? undefined}
+      data-featured-article-behavior={asString(encounterProfile?.featured_article_behavior) ?? undefined}
+      data-role-call-behavior={asString(encounterProfile?.role_call_behavior) ?? undefined}
+      style={{ ...registryTokenStyle, ...styleContractTokens, ...profileStyleVars }}
     >
       {renderHeader({ title })}
       <section className="undrifted-shell undrifted-cover-canvas" aria-label={title}>
