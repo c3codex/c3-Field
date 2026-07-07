@@ -4,9 +4,16 @@
 
 /* ── SHELL ───────────────────────────────────────────────────────────────── */
 
+/* Background/text reconnected to unDrifted's own canonical style_contract (obsidian-family,
+   dark_editorial) per OAR2 "Seat unDrifted Publication Synchronization and Launch-Ready
+   Encounter Projection" — previously fell through to the sitewide lapis material tokens
+   (--registry-brand-field/--registry-brand-primary-text), which is why the page rendered in
+   the generic lapis navy rather than unDrifted's own specified palette. Fallbacks below match
+   measures_publication_registry.metadata.style_contract.tokens exactly, for when the DB value
+   is unavailable (e.g. resolver still loading). */
 .measures-registry-runtime[data-layout-contract="undrifted_publication"] {
-  background: var(--registry-brand-field, #060709);
-  color: var(--registry-brand-primary-text, #edf2f8);
+  background: var(--undrifted-bg, #030608);
+  color: var(--undrifted-text, #e8edf2);
   min-height: 100dvh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -219,7 +226,7 @@
 
 .undrifted-cover-headline-link:hover,
 .undrifted-cover-headline-link:focus-visible {
-  color: var(--undrifted-cover-headline-hover, #7fb8ff);
+  color: var(--undrifted-cover-headline-hover, var(--undrifted-cyan, #59c7ff));
 }
 
 .undrifted-cover-deck {

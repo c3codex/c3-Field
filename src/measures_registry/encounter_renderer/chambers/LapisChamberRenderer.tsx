@@ -94,6 +94,11 @@ function UnDriftedIndex({
   const brandCopy = asRecord(meta?.brand_copy)
   const brandAssets = asRecord(meta?.brand_assets)
   const styleContract = asRecord(meta?.style_contract)
+  // Publication Registry's canonical style_contract.tokens (--undrifted-*), regenerated into
+  // this projection by oar2_seat_undrifted_publication_synchronization_and_launch_ready_encounter_projection_v1.
+  // Reconnected here rather than hardcoded so future Publication Registry edits flow through
+  // without a renderer change.
+  const styleContractTokens = asRecord(styleContract?.tokens) as CSSProperties | undefined
   const landingContract = asRecord(meta?.landing_design_contract)
   const issueRecord = asRecord(meta?.issue_record)
   const coverStory = asRecord(meta?.cover_story)
@@ -199,7 +204,7 @@ function UnDriftedIndex({
       data-release-standing="public"
       {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
-      style={registryTokenStyle}
+      style={{ ...registryTokenStyle, ...styleContractTokens }}
     >
       {renderHeader({ title })}
       <section className="undrifted-shell undrifted-cover-canvas" aria-label={title}>
