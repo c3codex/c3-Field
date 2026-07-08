@@ -120,6 +120,16 @@ No renderer, Buffer automation, scheduling, or UI work was touched by this OAR2 
 
 The reel script derivative (Issue Promotion) remains script-only — it was not grounded in any single real narrated source the way the assessment video was, so no corresponding cut was produced for it.
 
+## Campaign Derivative Approval and Issue Plate Reclassification
+
+`oar2_approve_issue001_campaign_derivatives_and_prepare_release_v1` recorded the first operator approval pass over the editorial derivative library. 14 derivatives moved `approval_status: pending → approved`, `release_state: held → released` — 6 approved as-registered, 5 approved with a specific requested revision applied (dispatch carousel CTAs, the launch digest trimmed ~17%, the reel script re-paced to an operator-approved cadence), and 3 more resolved through the mismatch/reclassification work below. Full detail (before/after copy for every changed item) lives in `Assets/Registry/undrifted_issue001_campaign_derivatives_review.md`.
+
+**Mismatch caught and resolved**: the approval OAR2's wording edit for "Assessment Short Video Narration" ("Few organizations assess..." replacing "Almost none assess...") targeted the *original fabricated script* — text already overwritten with the real video transcript by the correction pass directly above. Rather than silently apply an edit to real, accurate transcript content (which would have re-introduced a fabrication), the approved script was registered as its own new derivative (`undrifted_issue01_page06_launch_encounter_narration_script_v1`, `audio_narration`), reserved as source material for a future produced video, per the same OAR2's own instruction not to overwrite script assets. The real video cut was approved separately, on its own merits.
+
+**Issue Plate reclassification**: the Codexstone banner mismatch flagged earlier in this file is resolved — the operator confirmed the artwork is correct and stays, it was only misclassified. Reclassified from "Editor's Letter Banner" (`media_role: editorial_banner`) to **Issue Plate** (`media_role: editorial_plate`), a title/frontispiece plate introducing Issue 001 before the Editor's Letter. No visual replacement; alt text was already accurate and unchanged; caption text updated to match the new framing.
+
+**Blocked, not approved**: the Cover Story X Thread revision required an "operator-approved conversational version" that wasn't supplied in the OAR2 text — left `pending` rather than fabricated. Two more derivatives (the editor's letter newsletter excerpt, and the assessment video's full transcript) simply weren't addressed by this approval round and also remain `pending`. Distribution Assets remain `status: draft` throughout — no scheduling, no publishing, no Buffer automation.
+
 ## Relationship to OAR Authority
 
 OAR2 files never appear as rows' content — only as `related_oar2` references. This registry is additive: new rows are appended as assets are registered; existing rows are updated in place as `status` advances, with `related_oar1` filled in once an OAR1 proves the transition.
