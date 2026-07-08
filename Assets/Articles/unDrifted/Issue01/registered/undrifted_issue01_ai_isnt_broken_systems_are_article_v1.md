@@ -5,7 +5,9 @@ title: "AI Isn't Broken. Systems Are."
 subtitle: "Responsible AI deployment requires governable systems."
 slug: ai-isnt-broken-systems-are
 version: v1
-status: ready_for_publication
+status: published
+published_url: https://paragraph.com/@undrifted/ai-isnt-broken-systems-are
+published_at: "2026-07-08T03:23:15.714Z"
 issue_or_campaign: unDrifted Issue 01
 issue_id: undrifted_issue01
 issue_role: cover_story

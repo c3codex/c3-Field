@@ -68,22 +68,22 @@ Queried `measures_publication_dispatch` fresh for every `dispatch_key` under `pu
 
 Per the same reasoning applied to the Editor's Letter (irreversible, externally-visible action; stopped and got explicit operator confirmation before attempting it — confirmed "Yes, publish it now"), ran `scripts/publish-undrifted-dispatch-to-paragraph.cjs ai_isnt_broken_systems_are_dispatch_v1`, extending its `DISPATCHES` map with this article's title, subtitle, slug (`ai-isnt-broken-systems-are`), and banner URL (`ai_isnt_broken_landing.webp`).
 
-**Result: not published.** All three attempts failed at the script's own safety check — the `GET /api/v1/me` call (which verifies the API key resolves to the `undrifted` publication *before* any post is attempted) was itself rejected with `429 Too many requests, please try again later`:
+**First three attempts failed** at the script's own safety check — the `GET /api/v1/me` call (which verifies the API key resolves to the `undrifted` publication *before* any post is attempted) was itself rejected with `429 Too many requests, please try again later`:
 
 | Attempt | Wait beforehand | Result |
 |---|---|---|
 | 1 | — | 429 |
 | 2 | 75s | 429 |
 | 3 | 300s | 429 |
+| 4 (later retry, operator-requested) | — | **Published** |
 
-Stopped after the third attempt per explicit instruction not to loop indefinitely. **No partial or malformed publish occurred** — the script aborts before the `POST /posts` call whenever `/me` fails, so nothing was sent to Paragraph. This is very likely resolvable by waiting longer (the Editor's Letter publish + verification calls earlier in this session may have consumed most of a shared rate-driven budget); it is not a code or content problem.
+**Update 2026-07-08 (later same day): published on retry.** Paragraph post id `BPiFclLZstWOxVtNTeSm`, live at `https://paragraph.com/@undrifted/ai-isnt-broken-systems-are`, confirmed reachable with correct title/subtitle/date. Synced into `measures_publication_dispatch` (`status: published`, `article_url` set, `published_at` from Paragraph's own timestamp), `measures_publication_registry.metadata.cover_story_publication` (new namespaced field, same pattern as the Editor's Letter), and `measures_publication_issue_page` row `undrifted_issue01_page04_cover_story` (`release_state: 'held' → 'released'`) via migration `20260708030430`. Article asset frontmatter and `Assets/Registry/asset_registry.md` updated to `status: published`.
 
 ## Blockers
 
-1. **Not published to Paragraph** (primary, see §7) — three attempts rate-limited. Retry later, either by re-running the same command or asking for another attempt.
-2. **No route exists for the cover story yet** (§5) — expected and correctly left alone per the original OAR2's Routed §5; a follow-up OAR2 should wire it up once it's actually published.
-3. **Two stub dispatch rows** (`measures_registry_dispatch_v1`, `undrifted_dispatch_v1`) — unchanged, still flagged only for awareness, not touched.
+1. **No route exists for the cover story yet** (§5) — expected and correctly left alone per the original OAR2's Routed §5; a follow-up OAR2 should wire it up now that the content is actually published.
+2. **Two stub dispatch rows** (`measures_registry_dispatch_v1`, `undrifted_dispatch_v1`) — unchanged, still flagged only for awareness, not touched.
 
 ## Next Recommended OAR2
 
-Retry the Paragraph publish once rate limiting has cleared (`node scripts/publish-undrifted-dispatch-to-paragraph.cjs ai_isnt_broken_systems_are_dispatch_v1`), then sync the result into `measures_publication_dispatch`/`measures_publication_registry` exactly as done for the Editor's Letter (migration `20260708003402` is the template). After that, a follow-up OAR2 can wire the cover region to the real route and decide whether `featured_article_set` should include it — a content-authority decision, same category as the still-open Issue 01 decision from the earlier Publication Release OAR2, not resolved here.
+Both Issue 001 articles (Editor's Letter, cover story) are now published. A follow-up OAR2 can wire the cover region to the real route and decide whether `featured_article_set` should include either piece — a content-authority decision, same category as the still-open Issue 01 decision from the earlier Publication Release OAR2, not resolved here.
