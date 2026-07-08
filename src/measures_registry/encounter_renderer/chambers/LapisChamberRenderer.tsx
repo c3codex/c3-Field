@@ -1,7 +1,12 @@
 import type { CSSProperties, FormEvent, ReactNode } from "react"
 import { useState } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
-import type { EncounterMediaRow, EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
+import type {
+  EncounterIssuePageRow,
+  EncounterMediaRow,
+  EncounterSurface,
+  RenderableEncounter,
+} from "../types/encounterRendererTypes"
 import {
   asRecord,
   asRecordArray,
@@ -36,6 +41,22 @@ function mediaUrl(row: EncounterMediaRow | undefined): string | null {
     bucketName: row.storage_bucket,
     storagePath: row.storage_path,
   })
+}
+
+// Issue Page helpers — read only seated state (measures_publication_issue_page via
+// encounter.issuePages), never invent a route or mark a held page as available.
+// route_path is only used when metadata.route_state marks it genuinely live; otherwise the
+// only usable link is the page's own external_url (Paragraph), if present.
+function issuePageHref(page: EncounterIssuePageRow | null): string | null {
+  if (!page) return null
+  const metadata = asRecord(page.metadata)
+  const routeState = asString(metadata?.route_state)
+  if (routeState === "live_but_not_wired_as_issue_page" && page.route_path) return page.route_path
+  return asString(metadata?.external_url)
+}
+
+function issuePageIsHeld(page: EncounterIssuePageRow | null): boolean {
+  return !page || page.release_state !== "released"
 }
 
 function resolveNextSurface(encounter: RenderableEncounter): string | null {
@@ -178,6 +199,17 @@ function UnDriftedIndex({
   const footerLine1 = asString(footerRecord?.footer_line_1)
   const footerLine2 = asString(footerRecord?.footer_line_2)
 
+  // Issue Page sequence — seated by oar2_seat_undrifted_issue_page_model_and_launch_layout_sequence_v1,
+  // consumed here by oar2_render_issue001_through_issue_page_model_v1. Renders only seated
+  // state; page_number order and release_state come from the DB, never inferred from
+  // component order. Empty when no issue-page model is seated for this registry — every
+  // section below is optional and the existing DB-metadata-driven sections above/below are
+  // untouched, so nothing regresses when issuePages is [].
+  const issuePages = encounter.issuePages
+  const editorsLetterPage = issuePages.find((p) => p.page_role === "editors_letter") ?? null
+  const coverStoryPage = issuePages.find((p) => p.page_role === "cover_story") ?? null
+  const contentsPages = issuePages.filter((p) => p.page_role !== "cover" && p.page_role !== "contents")
+
   const undriftedBannerUrl =
     mediaUrl(encounter.mediaByRole.get("undrifted_publication_masthead")) ??
     mediaUrl(encounter.mediaByRole.get("undrifted_fill")) ??
@@ -282,6 +314,55 @@ function UnDriftedIndex({
           </div>
         ) : null}
 
+        {/* EDITOR'S LETTER — Issue Page model, page_role: editors_letter */}
+        {editorsLetterPage ? (
+          <section className="undrifted-editors-letter" aria-label={editorsLetterPage.title}>
+            <h2>{editorsLetterPage.title}</h2>
+            {editorsLetterPage.subtitle ? (
+              <p className="undrifted-editors-letter-subtitle">{editorsLetterPage.subtitle}</p>
+            ) : null}
+            {issuePageIsHeld(editorsLetterPage) ? (
+              <span className="undrifted-issue-page-held">Coming soon</span>
+            ) : issuePageHref(editorsLetterPage) ? (
+              <a
+                className="undrifted-issue-page-link"
+                href={issuePageHref(editorsLetterPage) as string}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Read →
+              </a>
+            ) : null}
+          </section>
+        ) : null}
+
+        {/* CONTENTS — Issue Page model, page_role: contents. Lists every other seated page in
+            page_number order; never infers order from component/render order. */}
+        {contentsPages.length > 0 ? (
+          <nav className="undrifted-contents" aria-label="Issue Contents">
+            <h2>Contents</h2>
+            <ol className="undrifted-contents-list">
+              {contentsPages.map((page) => {
+                const href = issuePageHref(page)
+                const held = issuePageIsHeld(page)
+                const external = href?.startsWith("http") ?? false
+                return (
+                  <li key={page.page_key} data-page-role={page.page_role} data-release-state={page.release_state}>
+                    {href && !held ? (
+                      <a href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
+                        {page.title}
+                      </a>
+                    ) : (
+                      <span>{page.title}</span>
+                    )}
+                    {held ? <span className="undrifted-issue-page-held"> · Coming soon</span> : null}
+                  </li>
+                )
+              })}
+            </ol>
+          </nav>
+        ) : null}
+
         {/* COVER */}
         <section className="undrifted-cover" aria-label="Cover story">
           <div className="undrifted-cover-visual">
@@ -308,6 +389,25 @@ function UnDriftedIndex({
               <div className="undrifted-cover-assessment">
                 <p>{coreDistinction}</p>
               </div>
+            ) : null}
+            {/* Cover Story article link — Issue Page model, page_role: cover_story.
+                Held pages never get a link (Routed §4: must not expose an unpublished cover
+                story as clickable); released pages link to their real, seated URL only. */}
+            {coverStoryPage ? (
+              issuePageIsHeld(coverStoryPage) ? (
+                <span className="undrifted-issue-page-held undrifted-cover-story-status">
+                  Full article coming soon
+                </span>
+              ) : issuePageHref(coverStoryPage) ? (
+                <a
+                  className="undrifted-cover-story-link"
+                  href={issuePageHref(coverStoryPage) as string}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Read the full article →
+                </a>
+              ) : null
             ) : null}
           </div>
         </section>

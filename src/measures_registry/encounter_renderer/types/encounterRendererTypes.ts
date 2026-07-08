@@ -80,6 +80,27 @@ export type EncounterSurfaceAssignmentRow = {
   metadata: Record<string, unknown> | null
 }
 
+// Issue Page row — from measures_publication_issue_page, seated by
+// oar2_seat_undrifted_issue_page_model_and_launch_layout_sequence_v1. page_key/page_role/
+// page_number are authority; route_path is a routing surface only (may be held/unwired).
+export type EncounterIssuePageRow = {
+  page_key: string
+  publication_key: string
+  issue_id: string
+  page_number: number
+  page_role: string
+  title: string
+  subtitle: string | null
+  asset_id: string | null
+  dispatch_key: string | null
+  banner_asset_id: string | null
+  route_path: string | null
+  layout_profile_key: string
+  release_state: string
+  visibility_state: string
+  metadata: Record<string, unknown> | null
+}
+
 // Resolver output — all raw DB rows; no authority decisions
 
 export type RegistryResolverData = {
@@ -88,6 +109,7 @@ export type RegistryResolverData = {
   mediaRows: EncounterMediaRow[]
   designTokenRows: EncounterDesignTokenRow[]
   surfaceAssignmentRows: EncounterSurfaceAssignmentRow[]
+  issuePageRows: EncounterIssuePageRow[]
   loading: boolean
   error: string | null
 }
@@ -133,6 +155,9 @@ export type ComposedEncounter = {
   // Surface assignment metadata — carries style_profile, directory_key, registered_surface.
   // Threaded from measures_encounter_surface_assignment.metadata for FREE consumption.
   surfaceAssignmentMetadata: Record<string, unknown> | null
+  // Issue Page rows for this registry_key (publication_key), ordered by page_number.
+  // Empty for surfaces with no seated issue-page model — renderers must fall back gracefully.
+  issuePages: EncounterIssuePageRow[]
 }
 
 // Renderable encounter — composed encounter after release gate passes.
@@ -150,6 +175,7 @@ export type RenderableEncounter = {
   chamberAssignment: EncounterEnvironmentAssignment
   roleCallStanding: RoleCallStanding
   surfaceAssignmentMetadata: Record<string, unknown> | null
+  issuePages: EncounterIssuePageRow[]
   gateResult: { status: "released" }
 }
 

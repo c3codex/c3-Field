@@ -44,6 +44,12 @@ export function composeEncounter(
   const encounterDef =
     resolverData.encounterDefRows.find((d) => d.encounter_key === assignment.registry_key) ?? null
 
+  // Issue Page rows for this registry (publication_key === registry_key for unDrifted).
+  // Ordered by page_number — page_number/page_role are authority, never route_path/slug.
+  const issuePages = resolverData.issuePageRows
+    .filter((row) => row.publication_key === assignment.registry_key)
+    .sort((a, b) => a.page_number - b.page_number)
+
   const mediaByRole = new Map(
     resolverData.mediaRows
       .filter((row) => row.is_active !== false)
@@ -75,5 +81,6 @@ export function composeEncounter(
     chamberAssignment,
     roleCallStanding,
     surfaceAssignmentMetadata: asRecord(assignment.metadata),
+    issuePages,
   }
 }

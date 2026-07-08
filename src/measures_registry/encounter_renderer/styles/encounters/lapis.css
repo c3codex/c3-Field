@@ -160,6 +160,90 @@
   border-bottom-color: var(--undrifted-line, rgba(180, 210, 255, 0.18));
 }
 
+/* ── ISSUE PAGE MODEL (Editor's Letter teaser, Contents, held-state chrome) ────────────── */
+/* Seated by oar2_seat_undrifted_issue_page_model_and_launch_layout_sequence_v1, rendered by
+   oar2_render_issue001_through_issue_page_model_v1. Deliberately quiet/text-first — these are
+   navigational/front-matter sections, not competing cover features. */
+
+.undrifted-editors-letter {
+  padding: clamp(0.75rem, 2vw, 1.25rem) 0;
+  border-bottom: 1px solid rgba(237, 242, 248, 0.08);
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+.undrifted-editors-letter h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 600;
+  color: var(--undrifted-text, #e8edf2);
+  margin: 0 0 0.35rem;
+}
+
+.undrifted-editors-letter-subtitle {
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  color: rgba(237, 242, 248, 0.58);
+  margin: 0 0 0.5rem;
+}
+
+.undrifted-contents {
+  padding: clamp(0.75rem, 2vw, 1.25rem) 0;
+  border-bottom: 1px solid rgba(237, 242, 248, 0.08);
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+.undrifted-contents h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 600;
+  color: var(--undrifted-text, #e8edf2);
+  margin: 0 0 0.5rem;
+}
+
+.undrifted-contents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.undrifted-contents-list li {
+  font-size: clamp(0.84rem, 1.1vw, 0.94rem);
+  color: rgba(237, 242, 248, 0.72);
+}
+
+.undrifted-contents-list a,
+.undrifted-issue-page-link,
+.undrifted-cover-story-link {
+  color: var(--undrifted-cyan, #59c7ff);
+  text-decoration: none;
+}
+
+.undrifted-contents-list a:hover,
+.undrifted-issue-page-link:hover,
+.undrifted-cover-story-link:hover {
+  text-decoration: underline;
+}
+
+.undrifted-cover-story-link {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: clamp(0.78rem, 1vw, 0.88rem);
+  font-weight: 500;
+}
+
+.undrifted-issue-page-held {
+  font-size: clamp(0.72rem, 0.92vw, 0.8rem);
+  font-style: italic;
+  color: rgba(237, 242, 248, 0.42);
+}
+
+.undrifted-cover-story-status {
+  display: inline-block;
+  margin-top: 0.6rem;
+}
+
 .undrifted-issue-rail-left {
   display: flex;
   align-items: baseline;

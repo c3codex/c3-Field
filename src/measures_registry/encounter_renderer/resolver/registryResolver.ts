@@ -3,11 +3,17 @@ import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 import type {
   EncounterDefRow,
   EncounterDesignTokenRow,
+  EncounterIssuePageRow,
   EncounterMediaRow,
   EncounterSurfaceAssignmentRow,
   RegistryResolverData,
   RegistryRow,
 } from "../types/encounterRendererTypes"
+
+// Publications with a seated Issue Page model. Extend as more publications adopt
+// measures_publication_issue_page — absent from this list means issuePageRows stays empty
+// for that registry, and renderers fall back to their existing non-issue-page rendering.
+const ISSUE_PAGE_PUBLICATION_KEYS = ["undrifted"] as const
 
 const ENCOUNTER_REGISTRY_KEYS = [
   "ai_isnt_broken_intro",
@@ -99,6 +105,7 @@ const EMPTY_DATA: RegistryResolverData = {
   mediaRows: [],
   designTokenRows: [],
   surfaceAssignmentRows: [],
+  issuePageRows: [],
   loading: true,
   error: null,
 }
@@ -115,7 +122,7 @@ export function useRegistryResolver(): RegistryResolverData {
     let cancelled = false
 
     async function load() {
-      const [registryResult, defResult, mediaResult, tokenResult, assignmentResult] =
+      const [registryResult, defResult, mediaResult, tokenResult, assignmentResult, issuePageResult] =
         await Promise.all([
           supabase
             .from("measures_registry")
@@ -142,6 +149,13 @@ export function useRegistryResolver(): RegistryResolverData {
             .select(
               "surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes, metadata",
             ),
+          supabase
+            .from("measures_publication_issue_page")
+            .select(
+              "page_key, publication_key, issue_id, page_number, page_role, title, subtitle, asset_id, dispatch_key, banner_asset_id, route_path, layout_profile_key, release_state, visibility_state, metadata",
+            )
+            .in("publication_key", [...ISSUE_PAGE_PUBLICATION_KEYS])
+            .order("page_number", { ascending: true }),
         ])
 
       if (cancelled) return
@@ -152,6 +166,7 @@ export function useRegistryResolver(): RegistryResolverData {
         mediaResult.error?.message ??
         tokenResult.error?.message ??
         assignmentResult.error?.message ??
+        issuePageResult.error?.message ??
         null
 
       setData({
@@ -160,6 +175,7 @@ export function useRegistryResolver(): RegistryResolverData {
         mediaRows: (mediaResult.data ?? []) as EncounterMediaRow[],
         designTokenRows: (tokenResult.data ?? []) as EncounterDesignTokenRow[],
         surfaceAssignmentRows: (assignmentResult.data ?? []) as EncounterSurfaceAssignmentRow[],
+        issuePageRows: (issuePageResult.data ?? []) as EncounterIssuePageRow[],
         loading: false,
         error,
       })
