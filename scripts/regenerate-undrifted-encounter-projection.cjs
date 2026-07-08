@@ -13,6 +13,12 @@
 // project assessment_feature, section_labels, and encounter_profile — all now seated
 // canonically under measures_publication_registry.metadata.
 //
+// encounter_profile is projected as a whole object (see nextMetadata below), so
+// oar2_seat_undrifted_issue_page_model_and_launch_layout_sequence_v1's additions to it
+// (issue_page_sequence, front_matter_sequence, article_sequence, encounter_sequence,
+// layout_profiles, held_future_renderers — sourced from measures_publication_issue_page)
+// flow through automatically on the next run, without a code change here.
+//
 // Usage:
 //   node scripts/regenerate-undrifted-encounter-projection.cjs           (dry run — prints diff only)
 //   node scripts/regenerate-undrifted-encounter-projection.cjs --apply   (writes the correction)
