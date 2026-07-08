@@ -78,6 +78,16 @@ The cover story article (`undrifted_issue01_ai_isnt_broken_systems_are_article_v
 
 The Editor's Letter (`undrifted_issue01_editors_letter_article_v1`) is `published` — registered verbatim from a fully-supplied operator document, then published live to Paragraph (`paragraph.com/@undrifted/from-the-editor`) after explicit operator confirmation. Its banner binds to `editors_note_banner.webp` (uploaded 2026-07-08, registered under a new `measures_media_map` row, `media_role: editorial_banner` — a first-time registration, not a duplicate alias).
 
+## Campaign Layer
+
+`oar2_register_issue001_launch_campaign_and_distribution_assets_v1` seated the first governed Publication Campaign, built on top of this registry rather than replacing it. Campaigns do not own content — Issues own content; Campaigns orchestrate registered assets; Distribution platforms are projections downstream of Publication authority.
+
+Three new tables (`measures_publication_campaign`, `measures_publication_campaign_asset`, `measures_publication_distribution_asset`) carry this orchestration. `campaign_asset.publication_asset_id` and `distribution_asset.publication_asset_id` are pointers back into this registry (or into `measures_publication_dispatch`/`measures_publication_issue_page` for assets that predate the sidecar convention, e.g. `agents_with_keys_dispatch_v1`) — no media is duplicated or re-uploaded anywhere in the campaign layer.
+
+Campaign: `undrifted_issue001_launch_campaign_v1` — status `draft`, `release_state: held`. 6 Campaign Assets (hero graphic, quote, thumbnail, carousel, email excerpt ×2) and 10 Distribution Assets (website, instagram, x, linkedin, email, paragraph) registered, all `status: draft`, unscheduled and unpublished per explicit OAR2 constraint. `optics` fields prepared on all three tables (field scaffolding only — no analytics implementation, no individual tracking). RLS: service_role only, no public read — this is an internal orchestration layer, not FREE-rendered content.
+
+**Missing assets** (not registered, so not referenced by any Campaign Asset): no audio/podcast source exists anywhere in the registry, so no Podcast Clip campaign asset was created; no cut promotional video/Reel/Short exists distinct from the long-form orientation videos (`assessment_report_orientation.mp4`, `questions_ungoverned_systems_cannot_answer.mp4`), so no Reel/Short/Video campaign asset was created for those platforms. Both are genuine content gaps, not something this OAR2 was authorized to fabricate.
+
 ## Relationship to OAR Authority
 
 OAR2 files never appear as rows' content — only as `related_oar2` references. This registry is additive: new rows are appended as assets are registered; existing rows are updated in place as `status` advances, with `related_oar1` filled in once an OAR1 proves the transition.
