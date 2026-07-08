@@ -13,7 +13,7 @@ date: 2026-07-07
 
 ## Summary
 
-The cover story is now a registered article asset with a bound banner and a draft Publication Dispatch record. **The cover region on `/undrifted` is not clickable and `featured_article_set` was not touched**, per this OAR2's explicit hold. The one open item is content depth — see Blocker §1.
+**Updated 2026-07-08.** The cover story is registered, bound to its banner, and now carries the **full approved draft** (supplied verbatim by the operator, applied 2026-07-08) — `status: ready_for_publication`, both in the file asset and the Publication Dispatch row. A live Paragraph publish was attempted, following the same explicit-confirmation pattern used for the Editor's Letter, using the same governed script (`scripts/publish-undrifted-dispatch-to-paragraph.cjs`, extended with a `ai_isnt_broken_systems_are_dispatch_v1` entry). **All three publish attempts were rejected by Paragraph's API with `429 Too many requests`** (retried after 75s, then 300s, then stopped per instruction rather than looping indefinitely). The cover story is therefore **not yet live**. The cover region on `/undrifted` remains non-clickable and `featured_article_set` remains untouched, unchanged from the original pass.
 
 ---
 
@@ -23,11 +23,9 @@ The cover story is now a registered article asset with a bound banner and a draf
 Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_ai_isnt_broken_systems_are_article_v1.md
 ```
 
-`status: registered_draft` (not `ready_for_publication`). **Blocker, flagged rather than worked around:** the OAR2 says "use the approved draft as source body," but no separate long-form draft text was attached to the OAR2 or found anywhere in the repo (searched broadly — 77 files matched "AI Isn't Broken" but none contained an unused full article draft for this title; the two prior registered articles from earlier this session, by contrast, had their full bodies embedded verbatim in their own OAR2 documents). Rather than author substantial new marketing prose that wasn't supplied — which would risk inventing claims — this asset's body uses only:
-- The already-canonical `cover_story` copy seated in `measures_publication_registry.metadata.cover_story` (`feature_headline`, `feature_deck`, `feature_positioning`), i.e. the exact text already live on `/undrifted` today.
-- The two required closing sections (Connect/subscribe invitation, AI Operations Assessment pathway), both written as short functional CTAs pointing at real, already-live destinations (`https://measuresregistry.com/undrifted` and `/ai-operations-assessment`) — no invented links, no certification/conversion/funding/NSF claims.
+**Content-depth blocker resolved.** Originally registered `status: registered_draft` with a short, honest cover statement (canonical `cover_story` copy + two CTA sections) because no long-form draft could be found anywhere in the repo. The operator subsequently supplied the full approved draft directly (verbatim, ~7,300 characters) — the article body was replaced in full, no content added or altered beyond what was supplied, and `status` advanced to `ready_for_publication`. `subtitle: "Responsible AI deployment requires governable systems."` added to frontmatter, matching the supplied document.
 
-This is real and honest, but short — a cover statement, not a full essay. If a fuller draft exists outside this repo, supplying it lets this asset be revised to `status: registered` / `ready_for_publication` without re-deriving anything else here.
+The corresponding `measures_publication_dispatch` row (`ai_isnt_broken_systems_are_dispatch_v1`) was revised the same way — full `dispatch_body`, `title`, `excerpt`, and `metadata.subtitle` updated via migration `20260708004054_revise_undrifted_cover_story_dispatch_full_approved_draft`. `status` remains `draft` (see §7 — publish did not succeed).
 
 ## 2. Banner Binding
 
@@ -66,12 +64,26 @@ Queried `measures_publication_dispatch` fresh for every `dispatch_key` under `pu
 | Computational Systems Governance / NSF pitch | **No dispatch row exists** | none | Exists only as a registered file asset (`Assets/Articles/.../undrifted_issue01_computational_systems_governance_nsf_project_pitch_article_v1.md`, `status: registered`) from an earlier OAR2 this session — never entered Publication Dispatch, never published anywhere. |
 | Measures Registry launch article | **No dispatch row for this asset** | none | Exists only as a registered file asset (`undrifted_issue01_measures_registry_launch_article_v1.md`, `status: registered`). **Do not confuse with** the pre-existing `measures_registry_dispatch_v1` dispatch row, which is a different, bodyless stub (`dispatch_body` length 0, `published_at: null`, only an `external_url` set) that predates this session and does not correspond to this file asset's content. |
 
+## 7. Paragraph Publication — Attempted, Blocked by Rate Limiting
+
+Per the same reasoning applied to the Editor's Letter (irreversible, externally-visible action; stopped and got explicit operator confirmation before attempting it — confirmed "Yes, publish it now"), ran `scripts/publish-undrifted-dispatch-to-paragraph.cjs ai_isnt_broken_systems_are_dispatch_v1`, extending its `DISPATCHES` map with this article's title, subtitle, slug (`ai-isnt-broken-systems-are`), and banner URL (`ai_isnt_broken_landing.webp`).
+
+**Result: not published.** All three attempts failed at the script's own safety check — the `GET /api/v1/me` call (which verifies the API key resolves to the `undrifted` publication *before* any post is attempted) was itself rejected with `429 Too many requests, please try again later`:
+
+| Attempt | Wait beforehand | Result |
+|---|---|---|
+| 1 | — | 429 |
+| 2 | 75s | 429 |
+| 3 | 300s | 429 |
+
+Stopped after the third attempt per explicit instruction not to loop indefinitely. **No partial or malformed publish occurred** — the script aborts before the `POST /posts` call whenever `/me` fails, so nothing was sent to Paragraph. This is very likely resolvable by waiting longer (the Editor's Letter publish + verification calls earlier in this session may have consumed most of a shared rate-driven budget); it is not a code or content problem.
+
 ## Blockers
 
-1. **Content depth** (primary, see §1) — this asset is a short, honest cover statement sourced entirely from already-approved copy, not the fuller article the OAR2's phrasing ("approved draft") implies exists. Needs either: the actual draft supplied for a revision pass, or explicit operator confirmation that the short form is sufficient as `ready_for_publication`.
-2. **Two stub dispatch rows** (`measures_registry_dispatch_v1`, `undrifted_dispatch_v1`) were noticed during §6's verification — both `published` with no body and no `article_url`. Not touched or altered this pass (out of this OAR2's scope), flagged only for awareness.
-3. No route exists for the cover story yet (§5) — expected and correctly left alone per Routed §5; the next OAR2 in this direction should wire it up once either an internal route or a real Paragraph URL exists.
+1. **Not published to Paragraph** (primary, see §7) — three attempts rate-limited. Retry later, either by re-running the same command or asking for another attempt.
+2. **No route exists for the cover story yet** (§5) — expected and correctly left alone per the original OAR2's Routed §5; a follow-up OAR2 should wire it up once it's actually published.
+3. **Two stub dispatch rows** (`measures_registry_dispatch_v1`, `undrifted_dispatch_v1`) — unchanged, still flagged only for awareness, not touched.
 
 ## Next Recommended OAR2
 
-Once either a fuller approved draft is supplied or the short form is confirmed sufficient, and once the piece is actually published (Paragraph or otherwise): update the dispatch row's `status`/`article_url`, then a follow-up OAR2 can wire the cover region to the real route and decide whether `featured_article_set` should include it (a content-authority decision, same category as the still-open Issue 01 decision from the earlier Publication Release OAR2 — not resolved here).
+Retry the Paragraph publish once rate limiting has cleared (`node scripts/publish-undrifted-dispatch-to-paragraph.cjs ai_isnt_broken_systems_are_dispatch_v1`), then sync the result into `measures_publication_dispatch`/`measures_publication_registry` exactly as done for the Editor's Letter (migration `20260708003402` is the template). After that, a follow-up OAR2 can wire the cover region to the real route and decide whether `featured_article_set` should include it — a content-authority decision, same category as the still-open Issue 01 decision from the earlier Publication Release OAR2, not resolved here.

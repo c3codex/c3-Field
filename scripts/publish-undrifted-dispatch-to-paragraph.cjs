@@ -57,6 +57,13 @@ const DISPATCHES = {
     imageUrl: "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/editors_note_banner.webp",
     assetPath: "Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_editors_letter_article_v1.md",
   },
+  ai_isnt_broken_systems_are_dispatch_v1: {
+    title: "AI Isn't Broken. Systems Are.",
+    subtitle: "Responsible AI deployment requires governable systems.",
+    slug: "ai-isnt-broken-systems-are",
+    imageUrl: "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/ai_isnt_broken_landing.webp",
+    assetPath: "Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_ai_isnt_broken_systems_are_article_v1.md",
+  },
 }
 
 function extractMarkdownBody(fileContents) {
