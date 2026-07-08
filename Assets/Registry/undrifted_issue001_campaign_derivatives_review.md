@@ -104,6 +104,19 @@ Terminal CTA changed from "Read the dispatch." to "Explore the dispatch." (opera
 
 ---
 
+## Cover Story — Real Intro Video (NEW — supersedes the pending hero crop)
+
+The operator identified that an existing site video, `ai_isnt_broken_intro.mp4` (already live as the site's `intro_hook_video`, registered media, not newly uploaded), is a direct match for the cover story: its narration ends verbatim with the article's own headline, and its visual (a crystalline star emblem) shares the same eight-pointed-star motif as the cover story hero image.
+
+**Preview**: this video is already live elsewhere on the site (`intro_hook_video`) — it was not produced this pass, only identified and registered as a Derivative Asset.
+
+Real transcript (25.941s):
+> Every AI system enters with the same promise. Faster output, more automation, great — but inside misaligned environments, requirements, results drift, decisions conflict, and coherence collapses under growth. This is not an intelligence problem. It is a system problem. When structure aligns, the signal stabilizes. AI is not broken. Systems are.
+
+**Now bound to** the Website Feature and Instagram Post distribution assets, replacing the still-pending image-crop concept for both. The original hero-crop derivative is **not deleted** — it remains registered and pending, just no longer the active choice for these two channels.
+
+---
+
 ## Captions & Alt Text — ✅ Approved
 
 | Image | Caption | Alt Text |
@@ -118,7 +131,7 @@ Terminal CTA changed from "Read the dispatch." to "Explore the dispatch." (opera
 
 | Derivative | Type | Status |
 |---|---|---|
-| Cover Story Hero Crop | hero | `pending` — no image-editing tool available to produce a campaign-scale crop |
+| Cover Story Hero Crop | hero | `pending` — no image-editing tool available to produce a campaign-scale crop; **superseded for distribution** by the real intro video above (not deleted, just no longer active) |
 | Assessment Hero Crop | hero | `pending` — same |
 | Editor's Letter Thumbnail | thumbnail | `pending` — same |
 

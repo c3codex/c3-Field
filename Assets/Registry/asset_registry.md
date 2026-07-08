@@ -130,6 +130,10 @@ The reel script derivative (Issue Promotion) remains script-only — it was not 
 
 **Blocked, not approved**: the Cover Story X Thread revision required an "operator-approved conversational version" that wasn't supplied in the OAR2 text — left `pending` rather than fabricated. Two more derivatives (the editor's letter newsletter excerpt, and the assessment video's full transcript) simply weren't addressed by this approval round and also remain `pending`. Distribution Assets remain `status: draft` throughout — no scheduling, no publishing, no Buffer automation.
 
-## Relationship to OAR Authority
+## Cover Story Real Intro Video (Conversational Correction)
+
+The operator identified that an existing site video — `ai_isnt_broken_intro.mp4`, already registered in `measures_media_map` as the site's `intro_hook_video` (registry_key `measures_registry_root`) — is a direct match for the cover story: its 25.941s narration ends verbatim with the article's own headline, "AI is not broken. Systems are.", over a visual sharing the same eight-pointed-star motif as the cover story hero image. Confirmed by transcription (ffmpeg whisper filter) and frame review before acting on it.
+
+Registered as a new `video_short` derivative (`undrifted_issue01_ai_isnt_broken_systems_are_article_v1_intro_video_v1`) and a new Campaign Asset, then bound to the Website Feature and Instagram Post Distribution Assets in place of the still-pending image-crop concept. The original hero-crop derivative was **not deleted** — it remains registered and `pending`, simply superseded as the active choice for these two channels by real, superior media. No new upload was made; the video was already live and registered before this pass.
 
 OAR2 files never appear as rows' content — only as `related_oar2` references. This registry is additive: new rows are appended as assets are registered; existing rows are updated in place as `status` advances, with `related_oar1` filled in once an OAR1 proves the transition.
