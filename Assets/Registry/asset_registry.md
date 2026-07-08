@@ -102,6 +102,16 @@ Thread standing recorded in `system_process_registry` (`conversation_threads_wor
 
 No renderer, Buffer automation, scheduling, or UI work was touched by this OAR2 — registry only, as instructed.
 
+## Campaign Derivative Generation
+
+`oar2_generate_issue001_campaign_derivatives_and_buffer_draft_payloads_v1` actually wrote content into the derivative layer the prior OAR2 had only scaffolded. 4 of the 7 original derivatives (pull quote, both carousel copies, launch digest summary) moved `pending → draft` with real text — extracted or drafted from the already-published cover story and editor's letter bodies, never invented beyond what those articles already say. The pull quote was corrected to the article's actual central-hypothesis blockquote rather than the shorter headline/deck pairing used originally.
+
+11 new Derivative Assets registered: 3 captions + 3 alt-text pairs for the cover story hero, editor's letter banner, and assessment hero (drafted from **direct visual inspection** of the actual downloaded images, not guessed from filename/role — see review flag below), a LinkedIn summary, an X thread draft (3 posts), a newsletter excerpt (verbatim from the editor's letter), a reel script, and a short-video narration script for the assessment. All `generation_status: draft`, `approval_status: pending` (no auto-approval, per explicit instruction). 5 new Campaign Assets orchestrate them (Newsletter, X Thread, LinkedIn Summary, Issue Promotion/Reel, Assessment Video), and 3 existing Distribution Assets (X, LinkedIn, Editor's Letter Email) were repointed from the generic Quote/Thumbnail asset to these more precise ones. 2 new Distribution Assets were added (YouTube Short, Instagram Reel) since no target existed for the new video/reel content. All 12 Distribution Assets now carry a Buffer-ready `payload` (title, body, excerpt, hashtags, media references, alt text, CTA, link destination) — still `status: draft`, nothing scheduled, nothing published, no Buffer API called.
+
+**Review flag surfaced on direct inspection**: the editor's letter banner (`editors_note_banner.webp`) is visually a gold/teal/purple "Codexstone" seal graphic reading "In spark, weave, field, and form — the stone remembers." It does not visually reference editorial/letter content. Caption and alt text describe the image honestly as-is; flagged for human confirmation before wide distribution rather than silently treated as correct.
+
+**Genuine gaps, not fabricated**: the 2 hero-image and 1 thumbnail derivatives remain `generation_status: pending` — no image-editing tool was available this pass to actually produce campaign-scale crops, so the full existing banners are referenced as-is in payloads rather than a cropped derivative that doesn't exist. The reel script and short-video narration are scripts only — no video file has been produced or exists; a real cut would need to be edited from the existing long-form assessment orientation video, which is a production step this OAR2 could not complete.
+
 ## Relationship to OAR Authority
 
 OAR2 files never appear as rows' content — only as `related_oar2` references. This registry is additive: new rows are appended as assets are registered; existing rows are updated in place as `status` advances, with `related_oar1` filled in once an OAR1 proves the transition.
