@@ -88,6 +88,20 @@ Campaign: `undrifted_issue001_launch_campaign_v1` — status `draft`, `release_s
 
 **Missing assets** (not registered, so not referenced by any Campaign Asset): no audio/podcast source exists anywhere in the registry, so no Podcast Clip campaign asset was created; no cut promotional video/Reel/Short exists distinct from the long-form orientation videos (`assessment_report_orientation.mp4`, `questions_ungoverned_systems_cannot_answer.mp4`), so no Reel/Short/Video campaign asset was created for those platforms. Both are genuine content gaps, not something this OAR2 was authorized to fabricate.
 
+## Derivative Asset Layer
+
+`oar2_add_campaign_derivative_assets_and_human_ai_role_attribution_v1` closed the remaining architectural seam in the Campaign Layer: Campaign Assets no longer own generated content (excerpts, pull quotes, carousel copy, thumbnails, hero crops) directly. A new `measures_publication_derivative_asset` table sits between Publication Assets and Campaign Assets — the governed lifecycle is now `Publication Asset → Derivative Asset → Campaign Asset → Distribution Asset → Evidence`.
+
+7 Derivative Assets registered (1 hero, 1 pull quote, 1 thumbnail, 2 carousel_copy, 1 summary, 1 more hero), each referencing exactly one canonical Publication Asset. All are `generation_status: pending` — none has actually been produced; this OAR2 is registry-only, no generation workflow was implemented. The 6 existing Campaign Assets were updated with a `derivative_asset_id` link (the "Dispatches Carousel" asset is a disclosed 2-slide composite — its `derivative_asset_id` holds the primary slide's derivative, with the second slide's derivative key recorded in `metadata.additional_derivative_asset_ids` rather than modeled as a second FK, since a Campaign Asset holds exactly one derivative link).
+
+`campaign_asset.campaign_key` was renamed to `campaign_id` for literal field-name parity with `distribution_asset.campaign_id`. All four campaign-layer tables (`campaign`, `campaign_asset`, `distribution_asset`, `derivative_asset`) now carry `created_by_actor_class`/`created_by_actor_key`/`approved_by_actor_class`/`approved_by_actor_key`/`review_status` — Actor Class limited to `Human`/`AI` by check constraint. Every existing row was backfilled `created_by_actor_class: AI, created_by_actor_key: claude_sonnet_5, approved_by_actor_class: Human, approved_by_actor_key: op044` — an accurate record of how those rows actually came to exist (AI executed the OAR2, Human authored/authorized it), not a retroactive fiction.
+
+`optics` on all four tables now includes `observes_chain: [publication_asset, derivative_asset, campaign_asset, distribution_asset, evidence]` — still field scaffolding only, no analytics implemented.
+
+Thread standing recorded in `system_process_registry` (`conversation_threads_working_surface_standing_v1`): Conversation Threads are an operational collaboration surface with `authority: none` — the Registry remains sole authority until a governed Role Workbench exists. No implementation performed, per explicit OAR2 instruction.
+
+No renderer, Buffer automation, scheduling, or UI work was touched by this OAR2 — registry only, as instructed.
+
 ## Relationship to OAR Authority
 
 OAR2 files never appear as rows' content — only as `related_oar2` references. This registry is additive: new rows are appended as assets are registered; existing rows are updated in place as `status` advances, with `related_oar1` filled in once an OAR1 proves the transition.
