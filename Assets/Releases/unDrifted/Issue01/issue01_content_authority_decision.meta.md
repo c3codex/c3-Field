@@ -2,16 +2,18 @@
 decision_id: undrifted_issue01_content_authority_decision
 issue_id: undrifted_issue01
 release_id: undrifted_issue01_release01
-decision_status: undecided
-decided_by: pending
-decided_at: pending
-related_oar2: OAR/OAR2/publication/oar2_establish_undrifted_publication_release_pipeline_v1.meta.md
-related_oar1: pending
+decision_status: resolved
+decided_by: op044
+decided_at: 2026-07-08
+related_oar2: OAR/OAR2/launch/oar2_resolve_issue001_publication_authority_gate_v1.meta.md
+related_oar1: OAR/OAR1/launch/oar1_resolve_issue001_publication_authority_gate_v1.meta.md
 ---
 
 # Issue 01 Content Authority Decision
 
-**Status: undecided.** This document exists to give the operator a single place to make this call — it does not make the call. Per `oar2_establish_undrifted_publication_release_pipeline_v1`, executors may not overwrite live DB article links without explicit operator direction, so no option below has been acted on.
+**Status: resolved — Option A.** The operator confirmed Option A explicitly (SEND.CARD — Publication Authority Gate Decision Confirmation, 2026-07-08): keep the live Issue 001 dispatches ("Agents With Keys", "Fables & Myths") unchanged. The Editor's Letter and Cover Story ("AI Isn't Broken. Systems Are.") are governed separately through the Issue Page / dispatch standing built later in this OAR chain — neither this decision nor its options below ever covered them, since this document predates that work. The two unpublished articles named in Options B/C ("Computational Systems Governance"/NSF pitch, "Measures Registry Is Now Live") are explicitly **not** being replaced or appended into this gate.
+
+`measures_publication_release.publication_state` moved to `approved` with `approved_article_asset_ids: []` and `approved_banner_asset_ids: []` — exactly Option A's own documented meaning below ("approved to change nothing"). The options below are preserved as historical record of the decision surface, not an active choice list.
 
 ## The situation
 
