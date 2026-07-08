@@ -112,6 +112,14 @@ No renderer, Buffer automation, scheduling, or UI work was touched by this OAR2 
 
 **Genuine gaps, not fabricated**: the 2 hero-image and 1 thumbnail derivatives remain `generation_status: pending` — no image-editing tool was available this pass to actually produce campaign-scale crops, so the full existing banners are referenced as-is in payloads rather than a cropped derivative that doesn't exist. The reel script and short-video narration are scripts only — no video file has been produced or exists; a real cut would need to be edited from the existing long-form assessment orientation video, which is a production step this OAR2 could not complete.
 
+## Media Tooling Bridge and Assessment Video Correction
+
+`oar2_correct_assessment_video_derivative_with_real_media_v1` closed the "genuine gap" flagged directly above. `ffmpeg` (with its `whisper` filter, using a downloaded `ggml-base.en` model) was installed locally, closing the video-review/editing gap this registry had previously reported as unavailable. Using it: the assessment orientation video (`assessment_report_orientation.mp4`, 80.375s, hosted on Cloudflare R2 — its `storage_bucket: measures-media` value in `measures_media_map` resolves via R2, not Supabase Storage; see `src/shared/media/runtimeMediaUrl.ts`) was downloaded, transcribed, and reviewed frame-by-frame. It has real spoken narration and burned-in captions — the "short video narration" derivative registered by the prior OAR2 was fabricated on the wrong assumption that no real narration existed.
+
+**Corrected**: a real 26.871-second video was cut from the source (video and original audio intact, not re-narrated), uploaded to `measures-registry/campaign_derivatives/undrifted_issue001_assessment_short_cut_v1.mp4`, and registered as a new `measures_media_map` row. The cut point (0:00–26.871) is a real transcript-segment boundary — a complete thought, not an arbitrary duration. The corresponding derivative, campaign asset title, and YouTube distribution payload were all updated to point at the real file instead of invented text. A separate `transcript` derivative was also registered holding the full 80s narration, cleaned of ASR artifacts only (no content added).
+
+The reel script derivative (Issue Promotion) remains script-only — it was not grounded in any single real narrated source the way the assessment video was, so no corresponding cut was produced for it.
+
 ## Relationship to OAR Authority
 
 OAR2 files never appear as rows' content — only as `related_oar2` references. This registry is additive: new rows are appended as assets are registered; existing rows are updated in place as `status` advances, with `related_oar1` filled in once an OAR1 proves the transition.
