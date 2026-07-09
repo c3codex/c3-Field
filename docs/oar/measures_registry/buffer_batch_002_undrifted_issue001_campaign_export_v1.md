@@ -6,6 +6,24 @@ Campaign: `undrifted_issue001_launch_campaign_v1`
 
 Batch key: `buffer_batch_002_undrifted_issue001_campaign_export`
 
+## 2026-07-09 Live Reexecution Addendum
+
+Standing after reexecution: `buffer_drafts_created_for_connected_channels`.
+
+The initial standing below is preserved as the first-pass history. Reexecution used `BUFFER_SOCIAL_KEY`
+from `.dev.vars` and created Buffer drafts for the 5 connected channels returned by Buffer (Instagram,
+LinkedIn, X). `system_process_registry.buffer_social_distribution_integration` remains `is_active: false`,
+`automation_status: held`. This is not a scheduled or published batch.
+
+Live draft IDs:
+- Post 001 Instagram: `6a5002b7a9e4eacc31025340`
+- Post 002 LinkedIn: `6a5002b8321614183a1f1ff5`
+- Post 003 X thread: `6a5002b83c48e2c7b33feafa`
+- Post 004 Instagram: `6a5002d83c48e2c7b33feb8c`
+- Post 005 LinkedIn: `6a5002d93c48e2c7b33feba4`
+
+Post 006 YouTube remains `manifest_prepared` only because Buffer returned no connected YouTube channel.
+
 Standing: `operator_review_required` — Buffer was **not** called. No `BUFFER_SOCIAL_KEY` exists in this
 environment's `.env`, and no Buffer API integration code exists anywhere in this repo's `functions/`,
 `scripts/`, or `src/` trees. `system_process_registry.buffer_social_distribution_integration` is

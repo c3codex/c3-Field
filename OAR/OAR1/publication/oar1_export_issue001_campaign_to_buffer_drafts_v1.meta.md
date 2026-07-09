@@ -193,6 +193,96 @@ OAR/OAR1/publication/oar1_export_issue001_campaign_to_buffer_drafts_v1.meta.md  
 
 No renderer, `dist-registry/`, publication-authority, or Stripe changes.
 
+## 2026-07-09 Reexecution Addendum - Buffer Credential Present in `.dev.vars`
+
+The OAR2 was reexecuted after the operator clarified that `BUFFER_SOCIAL_KEY` is present in `.dev.vars`.
+The key was used without exposing the value. Buffer API account/channel inspection returned one
+organization, `Measures Registry`, with 3 connected channels:
+
+| Service | Channel name | Channel id |
+|---|---|---|
+| Instagram | `measures_registry` | `6a23bfc4c687a22dd467a045` |
+| LinkedIn | `measures-registry` / `Stephanie Gaffney` | `6a23c027c687a22dd467a132` |
+| X/Twitter | `measures_c3` | `6a23bff1c687a22dd467a0b3` |
+
+No YouTube channel was returned by Buffer, so Post 006 remains held as `manifest_prepared`.
+
+### Reexecution Preflight
+
+Live Supabase readiness was checked before Buffer mutation:
+
+| Check | Result |
+|---|---|
+| Campaign `status` | `ready_for_export` |
+| Campaign `release_state` | `release_ready` |
+| Distribution assets | 12/12 `status: draft` |
+| Distribution assets `metadata.export_status` | 12/12 `ready_for_buffer_draft_export` |
+| Campaign derivatives | 12/12 authorized by approved status or `review_status: oar2_authorized` |
+| Buffer process | `status: seeded`, `process_status: draft`, `automation_status: held`, `is_active: false` |
+
+No readiness mismatches were found.
+
+### Buffer Drafts Created
+
+5 live Buffer drafts were created for the connected Buffer channels. All returned `status: draft` and
+`dueAt: null`.
+
+| Distribution Asset | Buffer draft id | Verification |
+|---|---|---|
+| `undrifted_issue001_da_cover_story_instagram_v1` | `6a5002b7a9e4eacc31025340` | Draft, 1 video asset |
+| `undrifted_issue001_da_cover_story_quote_linkedin_v1` | `6a5002b8321614183a1f1ff5` | Draft, 1 image asset |
+| `undrifted_issue001_da_cover_story_quote_x_v1` | `6a5002b83c48e2c7b33feafa` | Draft, X thread, no media |
+| `undrifted_issue001_da_dispatches_instagram_v1` | `6a5002d83c48e2c7b33feb8c` | Draft, 2 image assets |
+| `undrifted_issue001_da_dispatches_linkedin_v1` | `6a5002d93c48e2c7b33feba4` | Draft, 2 image assets |
+
+Two platform-formatting corrections were required and recorded:
+
+- Buffer rejected `instagram.type: carousel` for the connected Instagram channel even though `carousel`
+  appears in the enum. The Instagram dispatch draft was created as `instagram.type: post` with both image
+  assets attached.
+- Buffer dropped LinkedIn image assets when `linkAttachment` was also present. The two LinkedIn drafts
+  were edited in place to preserve the approved image assets, with the link appended in the post text as
+  platform formatting.
+
+### Metadata Recorded
+
+Live DB metadata was updated for the 5 created drafts only:
+
+```json
+{
+  "buffer_export_state": "draft_created",
+  "buffer_draft_id": "<Buffer draft id>",
+  "buffer_post_status": "draft",
+  "buffer_due_at": null,
+  "exported_at": "2026-07-09T20:23:41.763Z",
+  "exported_by_actor_class": "AI",
+  "approved_by_actor_class": "Human",
+  "source_oar2": "OAR/OAR2/publication/oar2_export_issue001_campaign_to_buffer_drafts_v1.meta.md",
+  "buffer_live_reexecution_at": "2026-07-09T20:23:41.763Z"
+}
+```
+
+`undrifted_issue001_da_assessment_youtube_v1` remains `buffer_export_state: manifest_prepared` with
+`buffer_draft_id: null`.
+
+Repo migration record:
+`supabase/migrations/20260709202341_record_undrifted_issue001_buffer_live_draft_ids_v1.sql`.
+
+### Gates Preserved After Reexecution
+
+| Gate | Status |
+|---|---|
+| Buffer `automation_status` | Untouched - still `held` |
+| Buffer `is_active` | Untouched - still `false` |
+| Campaign `release_state` | Untouched - still `release_ready` |
+| Distribution scheduling state | Untouched - all 12 rows still `status: draft` |
+| Buffer scheduling | Not performed |
+| Buffer publishing | Not performed |
+| Renderer / routes / Stripe / Paragraph | Untouched |
+
+Recommended next gate remains an explicit Buffer scheduling authorization OAR2 after operator review
+inside Buffer.
+
 ## Deploy Note
 
 DB metadata change is already live via `apply_migration`. Only the manifest, migration file, and this
