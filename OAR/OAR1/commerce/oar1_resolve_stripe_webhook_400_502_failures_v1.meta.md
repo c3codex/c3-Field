@@ -131,3 +131,41 @@ functions/api/stripe/webhook.ts        (signature verification fix — accept an
 functions/api/stripe/webhook.test.ts   (new regression test)
 OAR/OAR1/commerce/oar1_resolve_stripe_webhook_400_502_failures_v1.meta.md   (this file)
 ```
+
+## 2026-07-09 Verification Addendum — Fix Confirmed Live
+
+The operator updated `STRIPE_WEBHOOK_SECRET` in Cloudflare Pages production to match Stripe's actual
+signing secret, and the code fix (§6) was pushed to `origin/measures` (`ee82161`), triggering a
+Cloudflare Pages redeploy. The operator then reported seeing a `200` on Stripe's dashboard for webhook
+deliveries. Verified directly against Supabase rather than trusting the dashboard alone:
+
+```
+stripe_event_id: evt_1TqZp0P9heJD6LYqeY4BX73q
+event_type: checkout.session.expired
+status: processed
+checkout_session_id: cs_live_a1adGuauJ6waJiCpw5Lw78PCBDlm45gb1ADHEyiFk428A6JrjI7FsCfoDE
+processing_started_at → processed_at: 2026-07-09 20:26:57 UTC (clean single-attempt pass)
+```
+
+`stripe_webhook_events` went from **zero rows ever** to a genuine `processed` row — the full pipeline
+(signature verification → idempotency claim → DB write → mark processed) is confirmed working end to end
+in production. This confirms the §2 primary hypothesis: the `STRIPE_WEBHOOK_SECRET` mismatch, not the
+rotation-window signature bug, was the actual root cause of the 100%-failure rate — fixing the secret
+alone was sufficient to produce a clean `200`/`processed` result.
+
+**Not yet resolved:** the original stuck order (`map_order_id: 3c7755f8-e4aa-4327-a23c-ce027a210c16`,
+`stripe_checkout_session_id: cs_live_a1sEmtH1ezg9HOLQjuBBQyq0UBeoPEY5EqtlQLggRaL0Rzy2wbBtzaI2iY`) is
+unaffected by this verification — the processed event above is for a *different* checkout session
+(`cs_live_a1adGuau...`). Re-checked live: that order is still `payment_status: checkout_created` /
+`scheduling_state: held`, `webhook_event_id: null`, unchanged since creation at 00:44:45 UTC. Its own
+session has not yet fired a webhook event (Stripe checkout sessions expire ~24h after creation; it may
+still be within that window, or Stripe simply hasn't retried/expired it yet). No action was taken on this
+row — no manual override, no fake completion.
+
+**§3 (502 cause) and §5 (Stripe destination configuration beyond the secret) remain unverified** — this
+addendum confirms the secret was the 400 cause, but does not by itself prove the 502s are gone (no 502 was
+specifically reproduced-then-reverified here; only a clean 200 was observed post-fix). Recommend the
+operator continue watching Stripe's dashboard for a stretch with no more 502s before considering §3 closed.
+
+Updated blockers: §10 items 1 and 3 are resolved by this addendum. §10 item 2 (502/edge-level cause) and
+item 4 (the stuck order) remain open.
