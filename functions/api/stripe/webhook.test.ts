@@ -134,6 +134,30 @@ test("rejects a request with a bad signature", async () => {
   assert.equal(response.status, 400)
 })
 
+test("accepts a valid v1 signature alongside an unrelated rotation-window signature", async () => {
+  const calls: Array<{ url: string; method: string; body: string }> = []
+  const event = { id: "evt_rotation", type: "charge.refunded", data: { object: { id: "ch_1", metadata: {} } } }
+  const request = await signedRequest(event)
+  const rawBody = await request.clone().text()
+  const originalSig = request.headers.get("stripe-signature")!
+  // Simulate Stripe mid-rotation: the valid signature listed before an unrelated one.
+  const rotatedRequest = new Request(request.url, {
+    method: "POST",
+    headers: { "content-type": "application/json", "stripe-signature": `${originalSig},v1=deadbeef` },
+    body: rawBody,
+  })
+
+  const response = await withMockedFetch(
+    (url, method, body) => {
+      calls.push({ url, method, body })
+      throw new Error(`Unexpected fetch: ${method} ${url}`)
+    },
+    async () => onRequestPost({ request: rotatedRequest, env } as never),
+  )
+
+  assert.equal((response as Response).status, 200)
+})
+
 test("checkout.session.completed marks payment paid and dispatches operator + participant notifications", async () => {
   const calls: Array<{ url: string; method: string; body: string }> = []
   const event = {

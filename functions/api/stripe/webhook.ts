@@ -81,15 +81,15 @@ async function verifyStripeSignature(
   signatureHeader: string,
   secret: string,
 ): Promise<boolean> {
-  const parts = signatureHeader.split(",").reduce<Record<string, string>>((acc, part) => {
+  let timestamp: string | undefined
+  const v1Signatures: string[] = []
+  for (const part of signatureHeader.split(",")) {
     const [key, ...rest] = part.split("=")
-    if (key) acc[key] = rest.join("=")
-    return acc
-  }, {})
-
-  const timestamp = parts["t"]
-  const signature = parts["v1"]
-  if (!timestamp || !signature) return false
+    const value = rest.join("=")
+    if (key === "t") timestamp = value
+    else if (key === "v1" && value) v1Signatures.push(value)
+  }
+  if (!timestamp || v1Signatures.length === 0) return false
 
   const age = Math.abs(Date.now() / 1000 - Number(timestamp))
   if (age > 300) return false // reject events older than 5 minutes
@@ -107,7 +107,8 @@ async function verifyStripeSignature(
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("")
 
-  return computed === signature
+  // Stripe sends multiple v1= signatures during signing-secret rotation; any match is valid.
+  return v1Signatures.includes(computed)
 }
 
 async function supabaseFetch<T>(env: Env, path: string, init: RequestInit = {}): Promise<T> {
