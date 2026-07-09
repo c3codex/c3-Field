@@ -6,14 +6,17 @@ Campaign: `undrifted_issue001_launch_campaign_v1`
 
 Batch key: `buffer_batch_002_undrifted_issue001_campaign_export`
 
-## 2026-07-09 Live Reexecution Addendum
+## Standing: `buffer_drafts_created_for_connected_channels` (as of 2026-07-09 Reexecution)
 
-Standing after reexecution: `buffer_drafts_created_for_connected_channels`.
-
-The initial standing below is preserved as the first-pass history. Reexecution used `BUFFER_SOCIAL_KEY`
-from `.dev.vars` and created Buffer drafts for the 5 connected channels returned by Buffer (Instagram,
-LinkedIn, X). `system_process_registry.buffer_social_distribution_integration` remains `is_active: false`,
-`automation_status: held`. This is not a scheduled or published batch.
+This batch was executed in two passes. **First pass** (this file's original content, preserved below as
+history): a payload-complete manifest was prepared but Buffer was never called — no working Buffer
+credential was available in that session. **Second pass, same day (Codex):** reexecuted using
+`BUFFER_SOCIAL_KEY` from `.dev.vars`, which that session's Buffer MCP connection accepted. **5 live Buffer
+drafts now exist** for the 5 connected-channel posts (Instagram ×2, LinkedIn ×2, X thread). Independently
+confirmed against Supabase for this document (not just trusting the file): all 5 corresponding
+`measures_publication_distribution_asset` rows carry `buffer_export_state: draft_created` with these exact
+draft IDs, and `supabase/migrations/20260709202341_record_undrifted_issue001_buffer_live_draft_ids_v1.sql`
+exists in the repo.
 
 Live draft IDs:
 - Post 001 Instagram: `6a5002b7a9e4eacc31025340`
@@ -22,35 +25,39 @@ Live draft IDs:
 - Post 004 Instagram: `6a5002d83c48e2c7b33feb8c`
 - Post 005 LinkedIn: `6a5002d93c48e2c7b33feba4`
 
-Post 006 YouTube remains `manifest_prepared` only because Buffer returned no connected YouTube channel.
+Post 006 (YouTube) remains `manifest_prepared` only — Buffer's own API, queried live, returned no
+connected YouTube channel on this account.
 
-Standing: `operator_review_required` — Buffer was **not** called. No `BUFFER_SOCIAL_KEY` exists in this
-environment's `.env`, and no Buffer API integration code exists anywhere in this repo's `functions/`,
-`scripts/`, or `src/` trees. `system_process_registry.buffer_social_distribution_integration` is
-`is_active: false`, `automation_status: held`. This manifest is a payload-complete, Buffer-ready export
-for the operator to paste into Buffer manually (or feed to whatever tool previously scheduled
-`buffer_batch_001` — see Note below), not a live-scheduled batch.
+`system_process_registry.buffer_social_distribution_integration` remains `is_active: false`,
+`automation_status: held` throughout both passes. **This is not a scheduled or published batch** — all 5
+drafts sit at `dueAt: null` in Buffer, pending operator review and a separate scheduling authorization.
 
-Credential boundary: no raw platform passwords, Buffer API keys, browser automation, DMs, replies,
-scraping, or engagement automation.
+Credential boundary: no raw platform passwords, browser automation, DMs, replies, scraping, or engagement
+automation were used.
 
 **Note on `buffer_batch_001`:** an earlier batch (`docs/oar/measures_registry/buffer_batch_001_undrifted_launch_ready_package_v1.md`)
-*was* successfully scheduled live to Buffer on 2026-06-23 (7 posts, real `buffer_id`s recorded in
-`docs/oar/measures_registry/oar1_seat_social_urls_fables_dispatch_and_authorize_buffer_batch_001_v1.meta.md`),
-through a different execution context that had a working Buffer credential. That credential/tool is not
-available in this session — this pass could not verify whether it's still valid.
+was successfully scheduled live to Buffer on 2026-06-23 (7 posts, real `buffer_id`s recorded in
+`docs/oar/measures_registry/oar1_seat_social_urls_fables_dispatch_and_authorize_buffer_batch_001_v1.meta.md`).
+This batch's reexecution confirms the same underlying Buffer account/credential family is still usable.
 
-## Connected Channels (confirmed active, per `oar1_seat_social_urls_fables_dispatch_and_authorize_buffer_batch_001_v1`)
+## Connected Channels (live-verified via Buffer API during the 2026-07-09 reexecution)
 
-- X: `@measures_c3`
-- Instagram: `measures_registry`
-- LinkedIn profile: `measures-registry`
-- YouTube: **not confirmed as a connected Buffer channel anywhere in this system's records.** One post
-  below (Post 006) targets YouTube — operator must confirm a channel connection exists before it can be
-  drafted in Buffer at all.
+| Service | Channel name | Channel ID |
+|---|---|---|
+| Instagram | `measures_registry` | `6a23bfc4c687a22dd467a045` |
+| LinkedIn | `measures-registry` / Stephanie Gaffney (personal profile) | `6a23c027c687a22dd467a132` |
+| X/Twitter | `measures_c3` | `6a23bff1c687a22dd467a0b3` |
+
+YouTube: **confirmed absent** — Buffer's account/channel API returned no connected YouTube channel. Post
+006 cannot be drafted until one is connected.
 
 Facebook remains not connected, not in scope (Facebook Groups distribution is human-mediated per this
 campaign's own metadata).
+
+---
+
+*The section below is the original first-pass manifest, preserved as history — the copy/media it
+describes is what was actually used to create the 5 live drafts above.*
 
 ## Posts in This Batch
 
@@ -192,9 +199,9 @@ What Does It Mean to Measure a Governable System?
 Your assessment evaluation has identified how your institution's AI-facing environment is currently holding structure. AI systems do not operate in isolation — they interact with workflows, roles, approvals, data, outputs, and decisions. When those systems expand inside an unstructured environment, AI acceleration can amplify instability already present in the institution. Measures Registry exists to address that issue.
 ```
 
-**Gate:** no YouTube channel connection is confirmed anywhere in this system's records (`buffer_batch_001`'s
-connected-channel list covers only X, Instagram, LinkedIn). Do not attempt to draft this post in Buffer
-until a YouTube channel connection is confirmed by the operator.
+**Gate:** confirmed absent, not just unconfirmed — the 2026-07-09 reexecution queried Buffer's own API live
+and it returned no connected YouTube channel on this account. Do not attempt to draft this post in Buffer
+until a YouTube channel is connected.
 
 ---
 

@@ -13,16 +13,26 @@ date: 2026-07-09
 
 ## Summary
 
-Campaign export readiness confirmed clean, no mismatches. Of the campaign's 12 Distribution Assets, 6 are
+This OAR2 was executed in two passes across two sessions. **First pass (this environment):** campaign
+export readiness confirmed clean, no mismatches. Of the campaign's 12 Distribution Assets, 6 are
 Buffer-supported-platform, real-media-backed, and export-ready; the other 6 are correctly excluded (2
 website, 2 email/newsletter, 1 already-published Paragraph row, 1 Instagram Reel with no video file yet).
-**No live Buffer drafts were created** — no `BUFFER_SOCIAL_KEY` exists in this environment and no Buffer
-API integration code exists anywhere in this repo; `buffer_social_distribution_integration` remains
-`is_active: false` / `automation_status: held`, unchanged. Per ROUTED §4's explicit instruction for
-missing credentials, a complete payload manifest was prepared instead:
-`docs/oar/measures_registry/buffer_batch_002_undrifted_issue001_campaign_export_v1.md`. All 5 referenced
-media URLs were verified live (200 OK) before being included. Nothing scheduled. Nothing published.
-Buffer automation remains held.
+No live Buffer drafts were created in this pass — this session had no working Buffer credential (the
+`BUFFER_SOCIAL_KEY` in `.dev.vars` was not yet known to be usable, and no Buffer API integration code
+exists anywhere in this repo). A complete payload manifest was prepared instead:
+`docs/oar/measures_registry/buffer_batch_002_undrifted_issue001_campaign_export_v1.md`, with all 5
+referenced media URLs verified live (200 OK).
+
+**Second pass (Codex, same day):** the operator identified that Codex's session had working Buffer MCP
+access. The OAR2 was reexecuted there using `BUFFER_SOCIAL_KEY` from `.dev.vars` — see the **2026-07-09
+Reexecution Addendum** below. **5 live Buffer drafts now exist** for the 5 platform-confirmed, connected-
+channel posts (Instagram ×2, LinkedIn ×2, X thread). Independently re-verified against this project's own
+Supabase instance for this document: all 5 `measures_publication_distribution_asset` rows carry
+`buffer_export_state: draft_created` with draft IDs matching the addendum exactly, and the addendum's
+migration file (`20260709202341_record_undrifted_issue001_buffer_live_draft_ids_v1.sql`) exists in the
+repo. The YouTube post (Post 006) remains `manifest_prepared` only — Buffer's own API returned no
+connected YouTube channel. Nothing scheduled. Nothing published. `buffer_social_distribution_integration`
+remains `is_active: false` / `automation_status: held` throughout both passes.
 
 ---
 
@@ -71,9 +81,12 @@ text where applicable, link destination, hashtags, CTA, and all 4 source IDs) fr
 generation pass — no canonical copy was mutated. Media references were resolved to real, verified public
 URLs (see §5) rather than left as bucket-relative paths.
 
-## 4. Buffer Draft Creation Result (ROUTED §4) — Manifest, Not Live Drafts
+## 4. Buffer Draft Creation Result (ROUTED §4) — Manifest, Not Live Drafts (First Pass)
 
-**Blocker: missing configuration, not fabricated.**
+**Note: superseded by the 2026-07-09 Reexecution Addendum below, which created 5 live drafts. This
+section is preserved as an accurate record of the first pass's own findings and constraints.**
+
+**Blocker in this pass: missing configuration, not fabricated.**
 
 - No `BUFFER_SOCIAL_KEY` (or any `BUFFER_*` variable) exists in this environment's `.env` — checked
   variable names only.
@@ -154,29 +167,30 @@ via direct query: exactly the 6 intended rows carry `buffer_export_state`, the o
 | Export readiness inspection | Clean, no mismatches — §1 |
 | Exportable asset list | 6/12 — §2 |
 | Skipped asset list | 6/12, reasons given — §2 |
-| Buffer draft creation result | Not performed (no credentials/integration code); manifest prepared instead — §4 |
-| Metadata updates | 6 rows, `buffer_export_state: manifest_prepared` — §6 |
+| Buffer draft creation result | First pass: not performed, manifest prepared — §4. Second pass (Codex): 5 live drafts created — see addendum |
+| Metadata updates | First pass: 6 rows `manifest_prepared` — §6. Second pass: 5 of those 6 upgraded to `draft_created` with real Buffer draft IDs — see addendum |
 | Gates untouched | Confirmed — §7 |
 | Manual QA instructions | See below |
 | Recommended next OAR | See below |
 
 ## Manual QA Instructions (Operator)
 
-1. Open `docs/oar/measures_registry/buffer_batch_002_undrifted_issue001_campaign_export_v1.md`.
-2. For each of the 5 platform-confirmed posts (001–005), paste into Buffer as a **draft** — do not
-   schedule/publish from this pass.
-3. Before drafting Post 003 (X thread), re-check each of the 3 segments against X's live character limit.
-4. **Do not** attempt Post 006 (YouTube) until a YouTube channel connection is confirmed in Buffer — none
-   is recorded anywhere in this system.
-5. If you still have working Buffer credentials from the `buffer_batch_001` scheduling (2026-06-23),
-   confirm whether that same access still works before assuming a new credential is needed.
+1. Open Buffer directly and review the 5 live drafts by ID (see addendum table below) — Instagram ×2,
+   LinkedIn ×2, X thread. Confirm copy, media, and the two platform-formatting corrections noted in the
+   addendum (Instagram carousel→post fallback; LinkedIn image-vs-link-attachment fix) read correctly.
+2. Before scheduling Post 003 (X thread) from Buffer, re-check each of the 3 segments against X's live
+   character limit — this was not re-verified at draft-creation time.
+3. **Do not** attempt to create Post 006 (YouTube) — Buffer's own API confirmed no connected YouTube
+   channel exists on this account. Connect one first if YouTube distribution is wanted.
+4. Nothing has been scheduled or published — all 5 drafts sit at `dueAt: null`, operator action required
+   to schedule.
 
 ## Recommended Next OAR (ROUTED §7)
 
-Once drafts are reviewed and approved by the operator inside Buffer directly (or a working Buffer
-credential is supplied to this environment so drafts can be created programmatically), the next gate is
-an explicit **Buffer scheduling authorization** OAR2 — `automation_status` stays `held` until that
-happens. Separately, Stripe production payment testing remains its own gate, unrelated to this export.
+5 drafts exist in Buffer now, reviewed by no one yet. Next gate is operator review of those 5 drafts
+inside Buffer, followed by an explicit **Buffer scheduling authorization** OAR2 if approved —
+`automation_status` stays `held` until that happens; live drafts existing does not itself authorize
+scheduling. Separately, Stripe production payment testing remains its own gate, unrelated to this export.
 
 ## Blockers
 
@@ -186,8 +200,9 @@ YouTube-channel gap and the unverified `buffer_batch_001` credential are both su
 ## Files Changed
 
 ```
-docs/oar/measures_registry/buffer_batch_002_undrifted_issue001_campaign_export_v1.md   (new manifest)
+docs/oar/measures_registry/buffer_batch_002_undrifted_issue001_campaign_export_v1.md   (manifest + reexecution addendum)
 supabase/migrations/20260709190000_record_undrifted_issue001_buffer_manifest_export_standing_v1.sql
+supabase/migrations/20260709202341_record_undrifted_issue001_buffer_live_draft_ids_v1.sql  (Codex, second pass)
 OAR/OAR1/publication/oar1_export_issue001_campaign_to_buffer_drafts_v1.meta.md          (this file)
 ```
 
