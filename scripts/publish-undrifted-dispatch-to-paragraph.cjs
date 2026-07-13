@@ -69,7 +69,7 @@ const DISPATCHES = {
     subtitle: "Weekly observations from the Field, July 4-10, 2026.",
     slug: "field-findings-2026-w28",
     imageUrl: "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/field_findings_section_banner_2026_w28_v1.webp",
-    assetPath: "Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md",
+    assetPath: "Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md",
   },
   launch_cycle_001__paragraph__publication_002: {
     title: "AI Agents Are Not Entering Empty Systems",

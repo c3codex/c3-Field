@@ -1,4 +1,4 @@
-import fieldFindingsMarkdown from "../../../../Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md?raw"
+import fieldFindingsMarkdown from "../../../../Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md?raw"
 import responseMarkdown from "../../../../Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_response_001_ai_agents_are_not_entering_empty_systems_article_v1.md?raw"
 
 export type UndriftedLaunchCycleArticle = {
@@ -39,7 +39,7 @@ function stripFrontmatter(markdown: string): string {
 export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] = [
   {
     publicationId: "publication_001",
-    assetId: "undrifted_field_findings_2026_w28",
+    assetId: "field_findings_2026_w28_public_article_v2",
     title: "Field Findings 2026-W28",
     subtitle: "Weekly observations from the Field, July 4-10, 2026.",
     routePath: "/undrifted/field-findings-2026-w28",
@@ -52,10 +52,10 @@ export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] 
     bannerUrl: `${SUPABASE_PUBLIC_STORAGE}/field_findings_section_banner_2026_w28_v1.webp`,
     bannerAlt: "Field Findings Section Banner",
     canonicalAssetPath:
-      "Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md",
+      "Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md",
     publicationRecordPath: "docs/_source/codex/publications/publication_record_001_field_findings_2026_w28.meta.md",
     sourceOar2:
-      "docs/oar/measures_registry/oar2_publish_launch_cycle_001_articles_and_project_undrifted_release_v1.meta.md",
+      "docs/oar/measures_registry/oar2_immediately_contain_codex_governance_leak_and_restore_publication_boundary_v1.meta.md",
     issueExcerpt:
       "unDrifted Field Findings, 2026-W28 (July 4-10). Sweep classification: Convergence. Sources: Carnegie Endowment, The Register, Google Cloud, CSA/Zenity, NIST/CAISI. Central finding: organizations are assigning autonomous capability faster than they're building the operational environments to govern it.",
     bodyMarkdown: stripFrontmatter(fieldFindingsMarkdown),
