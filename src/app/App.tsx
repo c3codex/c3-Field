@@ -47,6 +47,22 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
   },
+  "/undrifted/field-findings-2026-w28": {
+    title: "Field Findings 2026-W28 | unDrifted",
+    description: "Weekly observations from the Field, July 4-10, 2026.",
+    url: "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/field_findings_section_banner_2026_w28_v1.webp",
+    type: "article",
+  },
+  "/undrifted/ai-agents-are-not-entering-empty-systems": {
+    title: "AI Agents Are Not Entering Empty Systems | unDrifted",
+    description: "unDrifted Response 001.",
+    url: "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted_response_section_banner_2026_w28_v1.webp",
+    type: "article",
+  },
   "/about": {
     title: "About Measures Registry",
     description: "Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result.",
@@ -211,7 +227,7 @@ export default function App() {
     const routeUnit = REGISTRY_ROUTE_UNITS[pathname]
 
     if (!routeUnit) {
-      applyPageMetadata(REGISTRY_METADATA)
+      applyPageMetadata(REGISTRY_ROUTE_METADATA[pathname] ?? REGISTRY_METADATA)
       return () => { cancelled = true }
     }
 

@@ -64,6 +64,8 @@ const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
   "/ai-operations-assessment": "obsidian_chamber_encounter_surface",
   "/structural-drift": "lapis_chamber_encounter",
   "/undrifted": "lapis_chamber_encounter",
+  "/undrifted/field-findings-2026-w28": "lapis_chamber_encounter",
+  "/undrifted/ai-agents-are-not-entering-empty-systems": "lapis_chamber_encounter",
   "/map-integrity-governance": "marble_chamber_C2_compact", // legacy_route_alias — retained for Stripe cancel_url dependency
   "/about": "crystal_seat_encounter",
   "/about-measures-registry": "crystal_seat_encounter",

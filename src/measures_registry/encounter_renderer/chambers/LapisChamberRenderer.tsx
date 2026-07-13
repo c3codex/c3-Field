@@ -1,5 +1,6 @@
 import type { CSSProperties, FormEvent, ReactNode } from "react"
 import { useState } from "react"
+import ReactMarkdown from "react-markdown"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type {
   EncounterIssuePageRow,
@@ -13,6 +14,11 @@ import {
   asString,
 } from "../shared/encounterRendererUtils"
 import { encounterStyleDataAttributes } from "../styles/encounterStyleProfile"
+import {
+  launchCycleArticleForPath,
+  UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES,
+  type UndriftedLaunchCycleArticle,
+} from "../publications/undriftedLaunchCycle001Projection"
 
 // Payload for Encounter Boundary subscription capture write.
 // Encounter Boundary provides onCaptureSubscription. Omitting disables capture persistence.
@@ -51,6 +57,7 @@ function issuePageHref(page: EncounterIssuePageRow | null): string | null {
   if (!page) return null
   const metadata = asRecord(page.metadata)
   const routeState = asString(metadata?.route_state)
+  if (routeState === "live" && page.route_path) return page.route_path
   if (routeState === "live_but_not_wired_as_issue_page" && page.route_path) return page.route_path
   return asString(metadata?.external_url)
 }
@@ -110,6 +117,8 @@ function UnDriftedIndex({
   const [submitting, setSubmitting] = useState(false)
   const [status, setStatus] = useState<string | null>(null)
   const [subError, setSubError] = useState<string | null>(null)
+  const launchCycleArticle =
+    typeof window !== "undefined" ? launchCycleArticleForPath(window.location.pathname) : null
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const brandCopy = asRecord(meta?.brand_copy)
@@ -209,6 +218,9 @@ function UnDriftedIndex({
   const editorsLetterPage = issuePages.find((p) => p.page_role === "editors_letter") ?? null
   const coverStoryPage = issuePages.find((p) => p.page_role === "cover_story") ?? null
   const contentsPages = issuePages.filter((p) => p.page_role !== "cover" && p.page_role !== "contents")
+  const launchCycleIssuePages = issuePages.filter((p) =>
+    UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.some((article) => article.routePath === p.route_path),
+  )
 
   const undriftedBannerUrl =
     mediaUrl(encounter.mediaByRole.get("undrifted_publication_masthead")) ??
@@ -244,6 +256,24 @@ function UnDriftedIndex({
     setEmail("")
     setOrganization("")
     setStatus("Registry dispatch subscription recorded.")
+  }
+
+  if (launchCycleArticle) {
+    return (
+      <UnDriftedLaunchCycleArticle
+        article={launchCycleArticle}
+        encounter={encounter}
+        registryTokenStyle={registryTokenStyle}
+        renderHeader={renderHeader}
+        renderSystemFooter={renderSystemFooter}
+        styleContractTokens={styleContractTokens}
+        profileStyleVars={profileStyleVars}
+        landingKey={landingKey}
+        styleKey={styleKey}
+        encounterProfile={encounterProfile}
+        title={title}
+      />
+    )
   }
 
   return (
@@ -352,6 +382,20 @@ function UnDriftedIndex({
                       <a href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
                         {page.title}
                       </a>
+                    ) : (
+                      <span>{page.title}</span>
+                    )}
+                    {held ? <span className="undrifted-issue-page-held"> · Coming soon</span> : null}
+                  </li>
+                )
+              })}
+              {launchCycleIssuePages.map((page) => {
+                const href = issuePageHref(page)
+                const held = issuePageIsHeld(page)
+                return (
+                  <li key={page.page_key} data-page-role={page.page_role} data-release-state={page.release_state}>
+                    {href && !held ? (
+                      <a href={href}>{page.title}</a>
                     ) : (
                       <span>{page.title}</span>
                     )}
@@ -586,6 +630,89 @@ function UnDriftedIndex({
         </footer>
 
       </section>
+      {renderSystemFooter()}
+    </main>
+  )
+}
+
+function UnDriftedLaunchCycleArticle({
+  article,
+  encounter,
+  registryTokenStyle,
+  renderHeader,
+  renderSystemFooter,
+  styleContractTokens,
+  profileStyleVars,
+  landingKey,
+  styleKey,
+  encounterProfile,
+  title,
+}: {
+  article: UndriftedLaunchCycleArticle
+  encounter: RenderableEncounter
+  registryTokenStyle: CSSProperties
+  renderHeader: (opts: { title: string }) => ReactNode
+  renderSystemFooter: () => ReactNode
+  styleContractTokens: CSSProperties | undefined
+  profileStyleVars: CSSProperties | undefined
+  landingKey: string | null
+  styleKey: string | null
+  encounterProfile: Record<string, unknown> | null
+  title: string
+}) {
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface={encounter.surface}
+      data-material-family="lapis"
+      data-layout-contract="undrifted_publication"
+      data-landing-contract={landingKey ?? "missing_landing_contract"}
+      data-style-contract={styleKey ?? "missing_style_contract"}
+      data-release-standing="public"
+      data-publication-projection="launch_cycle_001_registered_asset_bridge"
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
+      data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
+      data-masthead-behavior={asString(encounterProfile?.masthead_behavior) ?? undefined}
+      data-cover-story-behavior={asString(encounterProfile?.cover_story_behavior) ?? undefined}
+      data-assessment-behavior={asString(encounterProfile?.assessment_feature_behavior) ?? undefined}
+      data-featured-article-behavior={asString(encounterProfile?.featured_article_behavior) ?? undefined}
+      data-role-call-behavior={asString(encounterProfile?.role_call_behavior) ?? undefined}
+      style={{ ...registryTokenStyle, ...styleContractTokens, ...profileStyleVars }}
+    >
+      {renderHeader({ title })}
+      <article className="undrifted-shell undrifted-article-shell" aria-label={article.title}>
+        <nav className="undrifted-article-return" aria-label="unDrifted navigation">
+          <a href="/undrifted">unDrifted</a>
+          <span aria-hidden="true">/</span>
+          <span>Launch Cycle 001</span>
+        </nav>
+        <header className="undrifted-article-header">
+          <img className="undrifted-article-banner" src={article.bannerUrl} alt={article.bannerAlt} loading="eager" />
+          <div className="undrifted-article-kicker">{article.publicationLabel}</div>
+          <h1>{article.title}</h1>
+          {article.subtitle ? <p className="undrifted-article-subtitle">{article.subtitle}</p> : null}
+          <div className="undrifted-article-meta">
+            <span>{article.authorName}</span>
+            <span>{article.publicationDate}</span>
+          </div>
+          {article.dependencyRoutePath && article.dependencyLabel ? (
+            <p className="undrifted-article-dependency">
+              Responds to <a href={article.dependencyRoutePath}>{article.dependencyLabel}</a>.
+            </p>
+          ) : null}
+        </header>
+        <section className="undrifted-article-body" data-source-asset={article.canonicalAssetPath}>
+          <ReactMarkdown>{article.bodyMarkdown}</ReactMarkdown>
+        </section>
+        <footer className="undrifted-article-evidence" aria-label="Publication evidence">
+          <p>
+            Canonical source: <code>{article.canonicalAssetPath}</code>
+          </p>
+          <p>
+            Publication record: <code>{article.publicationRecordPath}</code>
+          </p>
+        </footer>
+      </article>
       {renderSystemFooter()}
     </main>
   )

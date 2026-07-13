@@ -36,6 +36,25 @@ const routeUnits = [
   },
 ]
 
+const launchCycleArticleRoutes = [
+  {
+    routePath: "/undrifted/field-findings-2026-w28",
+    title: "Field Findings 2026-W28 | unDrifted",
+    description: "Weekly observations from the Field, July 4-10, 2026.",
+    canonical_url: "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/field_findings_section_banner_2026_w28_v1.webp",
+  },
+  {
+    routePath: "/undrifted/ai-agents-are-not-entering-empty-systems",
+    title: "AI Agents Are Not Entering Empty Systems | unDrifted",
+    description: "unDrifted Response 001.",
+    canonical_url: "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted_response_section_banner_2026_w28_v1.webp",
+  },
+]
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -311,6 +330,26 @@ function writeTermsRouteHead(outDir, template) {
   fs.writeFileSync(path.join(routeDir, "index.html"), html)
 }
 
+function writeStaticRouteHead(outDir, template, route) {
+  const routeDir = path.join(outDir, route.routePath.replace(/^\//, ""))
+  fs.mkdirSync(routeDir, { recursive: true })
+  const seo = {
+    title: route.title,
+    description: route.description,
+    canonical_url: route.canonical_url,
+    og_type: "article",
+    og_title: route.title,
+    og_description: route.description,
+    og_url: route.canonical_url,
+    og_image: route.image,
+    twitter_card: "summary_large_image",
+    twitter_title: route.title,
+    twitter_description: route.description,
+    twitter_image: route.image,
+  }
+  fs.writeFileSync(path.join(routeDir, "index.html"), applyRouteHead(template, seo))
+}
+
 async function main() {
   if (!supabaseUrl || !supabaseKey) throw new Error("Supabase URL/key missing for registry route head generation")
 
@@ -357,7 +396,13 @@ async function main() {
     fs.writeFileSync(path.join(routeDir, "index.html"), html)
   }
 
-  console.log(`Generated governed registry route heads: ${routeUnits.map((unit) => unit.routePath).join(", ")}`)
+  for (const route of launchCycleArticleRoutes) {
+    writeStaticRouteHead(outDir, template, route)
+  }
+
+  console.log(
+    `Generated governed registry route heads: ${[...routeUnits.map((unit) => unit.routePath), ...launchCycleArticleRoutes.map((route) => route.routePath)].join(", ")}`,
+  )
 }
 
 main().catch((error) => {

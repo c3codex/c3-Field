@@ -64,6 +64,20 @@ const DISPATCHES = {
     imageUrl: "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/ai_isnt_broken_landing.webp",
     assetPath: "Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_ai_isnt_broken_systems_are_article_v1.md",
   },
+  launch_cycle_001__paragraph__publication_001: {
+    title: "Field Findings 2026-W28",
+    subtitle: "Weekly observations from the Field, July 4-10, 2026.",
+    slug: "field-findings-2026-w28",
+    imageUrl: "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/field_findings_section_banner_2026_w28_v1.webp",
+    assetPath: "Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md",
+  },
+  launch_cycle_001__paragraph__publication_002: {
+    title: "AI Agents Are Not Entering Empty Systems",
+    subtitle: "unDrifted Response 001.",
+    slug: "ai-agents-are-not-entering-empty-systems",
+    imageUrl: "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted_response_section_banner_2026_w28_v1.webp",
+    assetPath: "Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_response_001_ai_agents_are_not_entering_empty_systems_article_v1.md",
+  },
 }
 
 function extractMarkdownBody(fileContents) {
