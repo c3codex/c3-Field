@@ -14,7 +14,7 @@ public_boundary: excludes internal governance review appendix and downstream int
 
 ## Observation Window
 
-July 4–10, 2026
+July 4-10, 2026
 
 ## Sweep Classification
 
@@ -43,25 +43,25 @@ Underneath those classifications sits a more consistent systems problem:
 ### Current Observation Window
 
 1. **Carnegie Endowment for International Peace**
-   *When AI Agents Attack: Autonomous Cyber Operations and Europe's Governance Gap*
+   [*When AI Agents Attack: Autonomous Cyber Operations and Europe's Governance Gap*](https://carnegieendowment.org/research/2026/07/when-ai-agents-attack-autonomous-cyber-operations-and-europes-governance-gap)
    Published July 6, 2026.
 
 2. **The Register**
-   *Enterprise AI still smarting from leaping before looking*
+   [*Enterprise AI still smarting from leaping before looking*](https://www.theregister.com/security/2026/07/07/enterprise-ai-still-smarting-from-leaping-before-looking/5267353)
    Published July 7, 2026.
 
 3. **Google Cloud**
-   *20 Questions for the Agentic Enterprise*
+   [*20 Questions for the Agentic Enterprise*](https://cloud.google.com/blog/products/ai-machine-learning/20-questions-for-the-agentic-enterprise)
    Published during the observation window.
 
 ### Contextual Evidence
 
 1. **Cloud Security Alliance / Zenity**
-   *Enterprise AI Security Starts with AI Agents*
+   [*Enterprise AI Security Starts with AI Agents*](https://cloudsecurityalliance.org/artifacts/enterprise-ai-security-starts-with-ai-agents)
    Released April 15, 2026 and cited widely during the current discussion.
 
 2. **NIST / CAISI**
-   *Summary Analysis of Responses to the Request for Information Regarding Security Considerations for AI Agents*
+   [*Summary Analysis of Responses to the Request for Information Regarding Security Considerations for AI Agents*](https://www.nist.gov/publications/summary-analysis-responses-request-information-regarding-security-considerations-ai)
    Published May 18, 2026 and used as an institutional baseline.
 
 ## Significant Development 1
@@ -228,13 +228,13 @@ The other approaches often begin after an agent has already been selected, confi
 
 ## Structural Drift Indicators
 
-1. **Ownership Drift** — Agents operate without a clearly accountable owner or with ownership fragmented among IT, security, engineering, vendors, and business units.
-2. **Authority Drift** — An agent's technical capability or inherited access is mistaken for legitimate authority.
-3. **Position Drift** — An AI is assigned an objective or operational function without evaluating whether that function should exist, how it contributes to the institution, or what harm may result if it is executed exactly as assigned.
-4. **Identity Drift** — Human accounts, service identities, shared credentials, workload identities, and agent identities are used inconsistently.
-5. **Runtime Drift** — Governance exists in policies and meetings but is not represented in the environment where the agent acts.
-6. **Evidence Drift** — Organizations cannot reconstruct what the agent did, what information influenced it, why it acted, or which authority permitted the action.
-7. **Response Drift** — Human review and incident response remain slower than the computational systems they are expected to govern.
+1. **Ownership Drift** - Agents operate without a clearly accountable owner or with ownership fragmented among IT, security, engineering, vendors, and business units.
+2. **Authority Drift** - An agent's technical capability or inherited access is mistaken for legitimate authority.
+3. **Position Drift** - An AI is assigned an objective or operational function without evaluating whether that function should exist, how it contributes to the institution, or what harm may result if it is executed exactly as assigned.
+4. **Identity Drift** - Human accounts, service identities, shared credentials, workload identities, and agent identities are used inconsistently.
+5. **Runtime Drift** - Governance exists in policies and meetings but is not represented in the environment where the agent acts.
+6. **Evidence Drift** - Organizations cannot reconstruct what the agent did, what information influenced it, why it acted, or which authority permitted the action.
+7. **Response Drift** - Human review and incident response remain slower than the computational systems they are expected to govern.
 
 ## Measures Registry Relation
 
@@ -255,3 +255,11 @@ They do not independently modify SEAT criteria or authority.
 ### Computational Systems Governance
 
 The convergence supports research into: governed computational participation; position assignment; human/AI authority boundaries; relational accountability; operational evidence; the environmental conditions required for autonomous action.
+
+## Longitudinal Baseline
+
+This is the first formal weekly Field Findings sweep.
+
+Its baseline observation is:
+
+> By July 2026, mainstream enterprise security, cloud infrastructure, standards, and policy discourse had begun converging on the need to govern AI agents as operational actors. However, most remedies remained focused on controls applied after deployment rather than determining whether the receiving environment and assigned institutional function were governable before deployment.
