@@ -5,8 +5,6 @@ publication_id: publication_001
 issue_or_campaign: Launch Cycle 001
 status: registered_public_derivative
 related_oar2: docs/oar/measures_registry/oar2_immediately_contain_codex_governance_leak_and_restore_publication_boundary_v1.meta.md
-source_internal_record: Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md
-source_internal_sha256: FF491C9478AE3D2B6FA9FD59FED7608ED29B1C37BF2CC2D53234195AD1D95806
 public_boundary: excludes internal governance review appendix and downstream internal governance sections
 ---
 
@@ -14,7 +12,7 @@ public_boundary: excludes internal governance review appendix and downstream int
 
 ## Observation Window
 
-July 4-10, 2026
+July 4–10, 2026
 
 ## Sweep Classification
 
@@ -43,7 +41,7 @@ Underneath those classifications sits a more consistent systems problem:
 ### Current Observation Window
 
 1. **Carnegie Endowment for International Peace**
-   [*When AI Agents Attack: Autonomous Cyber Operations and Europe's Governance Gap*](https://carnegieendowment.org/research/2026/07/when-ai-agents-attack-autonomous-cyber-operations-and-europes-governance-gap)
+   [*When AI Agents Attack: Autonomous Cyber Operations and Europe's Governance Gap*](https://carnegieendowment.org/europe/research/2026/07/when-ai-agents-attack-autonomous-cyber-operations-and-europes-governance-gap)
    Published July 6, 2026.
 
 2. **The Register**
@@ -228,13 +226,13 @@ The other approaches often begin after an agent has already been selected, confi
 
 ## Structural Drift Indicators
 
-1. **Ownership Drift** - Agents operate without a clearly accountable owner or with ownership fragmented among IT, security, engineering, vendors, and business units.
-2. **Authority Drift** - An agent's technical capability or inherited access is mistaken for legitimate authority.
-3. **Position Drift** - An AI is assigned an objective or operational function without evaluating whether that function should exist, how it contributes to the institution, or what harm may result if it is executed exactly as assigned.
-4. **Identity Drift** - Human accounts, service identities, shared credentials, workload identities, and agent identities are used inconsistently.
-5. **Runtime Drift** - Governance exists in policies and meetings but is not represented in the environment where the agent acts.
-6. **Evidence Drift** - Organizations cannot reconstruct what the agent did, what information influenced it, why it acted, or which authority permitted the action.
-7. **Response Drift** - Human review and incident response remain slower than the computational systems they are expected to govern.
+1. **Ownership Drift** — Agents operate without a clearly accountable owner or with ownership fragmented among IT, security, engineering, vendors, and business units.
+2. **Authority Drift** — An agent's technical capability or inherited access is mistaken for legitimate authority.
+3. **Position Drift** — An AI is assigned an objective or operational function without evaluating whether that function should exist, how it contributes to the institution, or what harm may result if it is executed exactly as assigned.
+4. **Identity Drift** — Human accounts, service identities, shared credentials, workload identities, and agent identities are used inconsistently.
+5. **Runtime Drift** — Governance exists in policies and meetings but is not represented in the environment where the agent acts.
+6. **Evidence Drift** — Organizations cannot reconstruct what the agent did, what information influenced it, why it acted, or which authority permitted the action.
+7. **Response Drift** — Human review and incident response remain slower than the computational systems they are expected to govern.
 
 ## Measures Registry Relation
 

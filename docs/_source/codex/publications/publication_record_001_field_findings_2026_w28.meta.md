@@ -10,6 +10,7 @@ observation_window: 2026-07-04 to 2026-07-10
 standing: release_hold_public_derivative_required
 content_status: public_derivative_registered_after_boundary_containment
 canonical_content: Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md
+public_derivative_sha256: 07BC2BA306B87780E96A1EFE722EBC726DD8A06C603D74C2DEBC282CC94DD537
 internal_research_record: Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md
 internal_research_record_sha256: FF491C9478AE3D2B6FA9FD59FED7608ED29B1C37BF2CC2D53234195AD1D95806
 related_initiative: field_contribution
@@ -39,6 +40,13 @@ is preserved unchanged as an internal research record and is not eligible for di
 publication, social derivation, indexing, preview generation, or public API return. The public-renderable canonical
 asset for Publication 001 is now
 `Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md`.
+
+**Derivative correction update, 2026-07-13.** OAR2
+`docs/oar/measures_registry/oar2_correct_field_findings_public_derivative_encoding_ending_and_source_links_v1.meta.md`
+corrected the public derivative in place for UTF-8 punctuation, source links, removal of public frontmatter
+references to the internal source path/checksum, and the public-safe `Longitudinal Baseline` ending. The public
+derivative asset identity remains unchanged. Corrected SHA256:
+`07BC2BA306B87780E96A1EFE722EBC726DD8A06C603D74C2DEBC282CC94DD537`.
 
 **Standing: Approved.** The operator supplied the finished article as an approved asset (PDF), not a draft for
 executor development.
