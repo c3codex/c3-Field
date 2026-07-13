@@ -1,0 +1,134 @@
+{
+  "document_type": "publication_correction_evidence",
+  "authority": "docs/oar/measures_registry/oar2_correct_field_findings_public_derivative_encoding_ending_and_source_links_v1.meta.md",
+  "executor": "Cody",
+  "checked_at": "2026-07-13T16:52:39Z",
+  "asset": {
+    "asset_id": "field_findings_2026_w28_public_article_v2",
+    "path": "Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md",
+    "prior_sha256": "73CDC79845AE7924719680E46DBBA000F17B4ABA2EBF9299EC50DAC79DF37DD3",
+    "corrected_sha256": "07BC2BA306B87780E96A1EFE722EBC726DD8A06C603D74C2DEBC282CC94DD537",
+    "identity_preserved": true,
+    "ends_with_longitudinal_baseline": true,
+    "internal_source_frontmatter_removed_from_public_derivative": true
+  },
+  "internal_source_record": {
+    "path": "Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md",
+    "sha256": "FF491C9478AE3D2B6FA9FD59FED7608ED29B1C37BF2CC2D53234195AD1D95806",
+    "unchanged": true
+  },
+  "encoding_corrections": {
+    "actual_mojibake_sequences_in_corrected_file": 0,
+    "en_dash_restored": 1,
+    "em_dash_separators_restored": 7,
+    "mojibake_markers_absent": [
+      "â",
+      "Â",
+      "Ã",
+      "�"
+    ]
+  },
+  "source_links": [
+    {
+      "label": "Carnegie Endowment for International Peace",
+      "url": "https://carnegieendowment.org/europe/research/2026/07/when-ai-agents-attack-autonomous-cyber-operations-and-europes-governance-gap",
+      "resolution_status": 200
+    },
+    {
+      "label": "The Register",
+      "url": "https://www.theregister.com/security/2026/07/07/enterprise-ai-still-smarting-from-leaping-before-looking/5267353",
+      "resolution_status": 200
+    },
+    {
+      "label": "Google Cloud",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning/20-questions-for-the-agentic-enterprise",
+      "resolution_status": 200
+    },
+    {
+      "label": "Cloud Security Alliance / Zenity",
+      "url": "https://cloudsecurityalliance.org/artifacts/enterprise-ai-security-starts-with-ai-agents",
+      "resolution_status": 200
+    },
+    {
+      "label": "NIST / CAISI",
+      "url": "https://www.nist.gov/publications/summary-analysis-responses-request-information-regarding-security-considerations-ai",
+      "resolution_status": 200
+    }
+  ],
+  "paragraph": {
+    "method": "PUT /api/v1/posts/8UdwP2yt8pw9FacBWIbw",
+    "url": "https://paragraph.com/@undrifted/field-findings-2026-w28",
+    "status": "published",
+    "sendNewsletter": false,
+    "duplicate_post_created": false,
+    "markdown_required_markers_missing": [],
+    "markdown_forbidden_markers_found": []
+  },
+  "measures_registry": {
+    "route": "https://measuresregistry.com/undrifted/field-findings-2026-w28/",
+    "status": 200,
+    "entry_bundle": "https://measuresregistry.com/assets/index-RBiJi1DK.js",
+    "article_bundle": "https://measuresregistry.com/assets/LapisChamberRenderer-A_HVeQt8.js",
+    "article_required_markers_missing": [],
+    "article_forbidden_markers_found": [],
+    "internal_source_path_or_checksum_exposed": false,
+    "hydrated_dom": {
+      "desktop_1440x1000": "pass",
+      "mobile_390x844": "pass",
+      "in_app_browser": "blocked_missing_sandboxPolicy",
+      "standalone_playwright": "pass"
+    },
+    "metadata": {
+      "title": "Field Findings 2026-W28 | unDrifted",
+      "description": "Weekly observations from the Field, July 4-10, 2026.",
+      "canonical": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "og_title": "Field Findings 2026-W28 | unDrifted",
+      "og_description": "Weekly observations from the Field, July 4-10, 2026.",
+      "structured_data_present": true,
+      "forbidden_markers_found": []
+    },
+    "feeds_and_sitemap": [
+      {
+        "url": "https://measuresregistry.com/feed.xml",
+        "status": 200,
+        "forbidden_markers_found": []
+      },
+      {
+        "url": "https://measuresregistry.com/rss.xml",
+        "status": 200,
+        "forbidden_markers_found": []
+      },
+      {
+        "url": "https://measuresregistry.com/atom.xml",
+        "status": 200,
+        "forbidden_markers_found": []
+      },
+      {
+        "url": "https://measuresregistry.com/undrifted/feed.xml",
+        "status": 200,
+        "forbidden_markers_found": []
+      },
+      {
+        "url": "https://measuresregistry.com/sitemap.xml",
+        "status": 200,
+        "forbidden_markers_found": []
+      }
+    ]
+  },
+  "deployment": {
+    "commit": "c079f94b8f9ca664d6583b60612e6acb61c1b82c",
+    "push_target": "origin measures",
+    "deployment_status": "production_route_verified",
+    "cloudflare_purge_performed": false,
+    "cache_invalidation_substitute": "cache-busted route, bundle, paragraph, metadata, feed, and hydrated DOM checks"
+  },
+  "social": {
+    "buffer_derivative_created": false,
+    "buffer_derivative_scheduled": false,
+    "buffer_derivative_sent": false
+  },
+  "standing": {
+    "publication_hold": "remains_active_pending_operator_approval",
+    "recommendation": "ready_for_operator_publication_review"
+  }
+}
