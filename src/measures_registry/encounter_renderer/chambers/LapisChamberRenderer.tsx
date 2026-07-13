@@ -66,6 +66,37 @@ function issuePageIsHeld(page: EncounterIssuePageRow | null): boolean {
   return !page || page.release_state !== "released"
 }
 
+function publicIssueNumber(value: string | null): string | null {
+  if (!value) return null
+  const numeric = value.match(/^0*(\d+)$/)
+  if (!numeric) return value
+  const parsed = Number.parseInt(numeric[1], 10)
+  if (!Number.isFinite(parsed)) return value
+  return parsed < 10 ? `0${parsed}` : String(parsed)
+}
+
+function publicIssuePeriod(value: string | null): string | null {
+  if (!value) return null
+  const match = value.match(/^(\d{4})-(\d{2})(?:-\d{2})?$/)
+  if (!match) return value
+  const monthIndex = Number.parseInt(match[2], 10) - 1
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ][monthIndex]
+  return month ? `${month} ${match[1]}` : value
+}
+
 function resolveNextSurface(encounter: RenderableEncounter): string | null {
   return asString(encounter.transitionNodes[encounter.surface]?.next_surface)
 }
@@ -169,6 +200,10 @@ function UnDriftedIndex({
   const issueEdition = asString(issueRecord?.edition)
   const issuePublisher = asString(issueRecord?.publisher)
   const issueBranchStanding = asString(issueRecord?.branch_standing)
+  const issueDisplayNumber = publicIssueNumber(issueNumber)
+  const issueDisplayPeriod = publicIssuePeriod(issueDate)
+  const activeIssueLabel =
+    issueDisplayNumber && issueDisplayPeriod ? `Issue ${issueDisplayNumber} / ${issueDisplayPeriod}` : null
   const descriptorLine = asString(brandCopy?.descriptor_line)
 
   const coverEyebrow =
@@ -331,8 +366,9 @@ function UnDriftedIndex({
         {issueNumber || issueDate || issueEdition || issuePublisher || issueBranchStanding ? (
           <div className="undrifted-issue-rail" aria-label="Issue information">
             <div className="undrifted-issue-rail-left">
-              {issueNumber ? <span>ISSUE {issueNumber}</span> : null}
-              {issueDate ? <span>{issueDate}</span> : null}
+              {activeIssueLabel ? <span>{activeIssueLabel}</span> : null}
+              {!activeIssueLabel && issueNumber ? <span>ISSUE {issueNumber}</span> : null}
+              {!activeIssueLabel && issueDate ? <span>{issueDate}</span> : null}
               {issueEdition ? <span>{issueEdition}</span> : null}
             </div>
             {issuePublisher || issueBranchStanding ? (
@@ -343,6 +379,37 @@ function UnDriftedIndex({
             ) : null}
           </div>
         ) : null}
+
+        <section className="undrifted-launch-cycle" aria-label="Launch Cycle 001">
+          <div className="undrifted-insights-header">
+            <span className="undrifted-eyebrow">Launch Cycle 001</span>
+            <h2>
+              {activeIssueLabel ? `${activeIssueLabel} Field Publications` : "Issue 01 Field Publications"}
+            </h2>
+          </div>
+          <div className="undrifted-launch-cycle-grid">
+            {UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.map((article) => (
+              <article
+                className="undrifted-launch-cycle-card"
+                key={article.publicationId}
+                data-publication-id={article.publicationId}
+              >
+                <img src={article.bannerUrl} alt={article.bannerAlt} loading="lazy" />
+                <div>
+                  <span className="undrifted-eyebrow">{article.publicationLabel}</span>
+                  <h3>{article.title}</h3>
+                  {article.subtitle ? <p className="undrifted-launch-cycle-subtitle">{article.subtitle}</p> : null}
+                  <p>{article.issueExcerpt}</p>
+                  <div className="undrifted-article-meta">
+                    <span>{article.authorName}</span>
+                    <span>{article.publicationDate}</span>
+                  </div>
+                  <a href={article.routePath}>Read on Measures Registry →</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
         {/* EDITOR'S LETTER — Issue Page model, page_role: editors_letter */}
         {editorsLetterPage ? (
@@ -485,35 +552,6 @@ function UnDriftedIndex({
             ) : null}
           </section>
         ) : null}
-
-        <section className="undrifted-launch-cycle" aria-label="Launch Cycle 001">
-          <div className="undrifted-insights-header">
-            <span className="undrifted-eyebrow">Launch Cycle 001</span>
-            <h2>Issue 01 Field Publications</h2>
-          </div>
-          <div className="undrifted-launch-cycle-grid">
-            {UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.map((article) => (
-              <article
-                className="undrifted-launch-cycle-card"
-                key={article.publicationId}
-                data-publication-id={article.publicationId}
-              >
-                <img src={article.bannerUrl} alt={article.bannerAlt} loading="lazy" />
-                <div>
-                  <span className="undrifted-eyebrow">{article.publicationLabel}</span>
-                  <h3>{article.title}</h3>
-                  {article.subtitle ? <p className="undrifted-launch-cycle-subtitle">{article.subtitle}</p> : null}
-                  <p>{article.issueExcerpt}</p>
-                  <div className="undrifted-article-meta">
-                    <span>{article.authorName}</span>
-                    <span>{article.publicationDate}</span>
-                  </div>
-                  <a href={article.routePath}>Read on Measures Registry →</a>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
 
         {/* FEATURED ARTICLES */}
         {featuredArticleSet.length > 0 ? (

@@ -1,0 +1,50 @@
+{
+  "document_type": "launch_cycle_001_paragraph_publication_verification",
+  "checked_at": "2026-07-13T17:45:36.067Z",
+  "extraction_mode": "playwright_visible_text_plus_raw_status",
+  "field_findings_public_derivative_sha256": "07BC2BA306B87780E96A1EFE722EBC726DD8A06C603D74C2DEBC282CC94DD537",
+  "expected_field_findings_sha256": "07BC2BA306B87780E96A1EFE722EBC726DD8A06C603D74C2DEBC282CC94DD537",
+  "checksum_match": true,
+  "results": [
+    {
+      "name": "paragraphField",
+      "url": "https://paragraph.com/@undrifted/field-findings-2026-w28",
+      "status": 200,
+      "finalUrl": "https://paragraph.com/@undrifted/field-findings-2026-w28",
+      "rawLength": 354335,
+      "visibleTextLength": 11705,
+      "contains": {
+        "fieldTitle": true,
+        "responseTitle": false,
+        "longitudinalBaseline": true,
+        "carnegie": true,
+        "nist": true,
+        "responseDependencyStableUrl": false,
+        "responseDependencyTitle": true
+      },
+      "visibleMarkerHits": [],
+      "rawMarkerNotes": []
+    },
+    {
+      "name": "paragraphResponse",
+      "url": "https://paragraph.com/@undrifted/ai-agents-are-not-entering-empty-systems",
+      "status": 200,
+      "finalUrl": "https://paragraph.com/@undrifted/ai-agents-are-not-entering-empty-systems",
+      "rawLength": 278376,
+      "visibleTextLength": 7504,
+      "contains": {
+        "fieldTitle": false,
+        "responseTitle": true,
+        "longitudinalBaseline": false,
+        "carnegie": true,
+        "nist": true,
+        "responseDependencyStableUrl": false,
+        "responseDependencyTitle": false
+      },
+      "visibleMarkerHits": [],
+      "rawMarkerNotes": [
+        "raw_OAR_false_positive_in_encoded_page_data"
+      ]
+    }
+  ]
+}
