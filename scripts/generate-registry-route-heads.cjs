@@ -19,6 +19,10 @@ const REGISTRY_OG_IMAGE = "https://measuresregistry.com/og.jpeg"
 const REGISTRY_REDIRECT_RULES = [
   "/c3field https://c3field.online 301",
   "/c3field/ https://c3field.online 301",
+  "/undrifted/field-findings-2026-w28 /undrifted/field-findings-2026-w28/index.html 200",
+  "/undrifted/field-findings-2026-w28/ /undrifted/field-findings-2026-w28/index.html 200",
+  "/undrifted/ai-agents-are-not-entering-empty-systems /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
+  "/undrifted/ai-agents-are-not-entering-empty-systems/ /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
 ]
 
 const routeUnits = [

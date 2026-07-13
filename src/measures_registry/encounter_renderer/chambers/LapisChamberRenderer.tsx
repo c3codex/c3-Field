@@ -486,6 +486,35 @@ function UnDriftedIndex({
           </section>
         ) : null}
 
+        <section className="undrifted-launch-cycle" aria-label="Launch Cycle 001">
+          <div className="undrifted-insights-header">
+            <span className="undrifted-eyebrow">Launch Cycle 001</span>
+            <h2>Issue 01 Field Publications</h2>
+          </div>
+          <div className="undrifted-launch-cycle-grid">
+            {UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.map((article) => (
+              <article
+                className="undrifted-launch-cycle-card"
+                key={article.publicationId}
+                data-publication-id={article.publicationId}
+              >
+                <img src={article.bannerUrl} alt={article.bannerAlt} loading="lazy" />
+                <div>
+                  <span className="undrifted-eyebrow">{article.publicationLabel}</span>
+                  <h3>{article.title}</h3>
+                  {article.subtitle ? <p className="undrifted-launch-cycle-subtitle">{article.subtitle}</p> : null}
+                  <p>{article.issueExcerpt}</p>
+                  <div className="undrifted-article-meta">
+                    <span>{article.authorName}</span>
+                    <span>{article.publicationDate}</span>
+                  </div>
+                  <a href={article.routePath}>Read on Measures Registry →</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
         {/* FEATURED ARTICLES */}
         {featuredArticleSet.length > 0 ? (
           <section className="undrifted-insights" aria-label="Feature articles">

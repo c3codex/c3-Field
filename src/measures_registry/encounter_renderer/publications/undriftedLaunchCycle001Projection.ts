@@ -18,6 +18,7 @@ export type UndriftedLaunchCycleArticle = {
   canonicalAssetPath: string
   publicationRecordPath: string
   sourceOar2: string
+  issueExcerpt: string
   bodyMarkdown: string
   dependencyRoutePath?: string
   dependencyLabel?: string
@@ -55,6 +56,8 @@ export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] 
     publicationRecordPath: "docs/_source/codex/publications/publication_record_001_field_findings_2026_w28.meta.md",
     sourceOar2:
       "docs/oar/measures_registry/oar2_publish_launch_cycle_001_articles_and_project_undrifted_release_v1.meta.md",
+    issueExcerpt:
+      "unDrifted Field Findings, 2026-W28 (July 4-10). Sweep classification: Convergence. Sources: Carnegie Endowment, The Register, Google Cloud, CSA/Zenity, NIST/CAISI. Central finding: organizations are assigning autonomous capability faster than they're building the operational environments to govern it.",
     bodyMarkdown: stripFrontmatter(fieldFindingsMarkdown),
   },
   {
@@ -76,6 +79,8 @@ export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] 
     publicationRecordPath: "docs/_source/codex/publications/publication_record_002_undrifted_response_001.meta.md",
     sourceOar2:
       "docs/oar/measures_registry/oar2_publish_launch_cycle_001_articles_and_project_undrifted_release_v1.meta.md",
+    issueExcerpt:
+      'unDrifted Response 001: "AI Agents Are Not Entering Empty Systems." A response to Field Findings 2026-W28, arguing that agent security failures are, underneath, environmental governance failures - and that the environment has to be measured before autonomous capability is assigned within it.',
     bodyMarkdown: stripFrontmatter(responseMarkdown),
     dependencyRoutePath: "/undrifted/field-findings-2026-w28",
     dependencyLabel: "Field Findings 2026-W28",
