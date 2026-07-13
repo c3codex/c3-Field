@@ -1,0 +1,90 @@
+{
+  "checked_at": "2026-07-13T23:15:29.062Z",
+  "posts": [
+    {
+      "organization": {
+        "id": "6a546d1271344fb67de5c6c4",
+        "name": "My Organization"
+      },
+      "channel": {
+        "id": "6a54734280cc80cdcaa9743b",
+        "service": "facebook",
+        "displayName": "Measures Registry",
+        "organizationId": "6a546d1271344fb67de5c6c4"
+      },
+      "post": {
+        "id": "6a55717c82f1b8ce84c1004f",
+        "status": "draft",
+        "dueAt": null,
+        "text": "Measures Registry notes unDrifted's first Field Findings sweep and accompanying Response as an editorial contribution to the Field, developed under unDrifted's autonomous publication authority. The Response's central claim — that environments must be measured before autonomous capability is assigned within them — reflects Measures Registry's own operational premise, but this acknowledgement does not itself constitute a Measures Registry methodology change, assessment finding, or institutional position on any named organization discussed in either publication. Measures Registry Review of MAP, Foundations Educational Module, SEAT, and Computational Systems Governance implications is tracked separately at docs/_source/codex/publications/measures_registry_review_launch_cycle_001.meta.md and remains its own, distinct governed record.\n\nhttps://measuresregistry.com/undrifted/field-findings-2026-w28",
+        "channelId": "6a54734280cc80cdcaa9743b",
+        "channelService": "facebook",
+        "createdAt": "2026-07-13T23:15:08.025Z",
+        "updatedAt": "2026-07-13T23:15:08.169Z",
+        "assets": [
+          {
+            "id": null,
+            "type": "image",
+            "mimeType": "image/webp",
+            "source": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp",
+            "thumbnail": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp"
+          }
+        ]
+      }
+    },
+    {
+      "organization": {
+        "id": "6a546d1271344fb67de5c6c4",
+        "name": "My Organization"
+      },
+      "channel": {
+        "id": "6a54761280cc80cdcaa97c9a",
+        "service": "facebook",
+        "displayName": "UnDrifted",
+        "organizationId": "6a546d1271344fb67de5c6c4"
+      },
+      "post": {
+        "id": "6a55717b82f1b8ce84c10026",
+        "status": "draft",
+        "dueAt": null,
+        "text": "This week's unDrifted Response: the AI agent security conversation keeps asking \"how do we control the agent?\" We think that's the wrong first question. The right first question is whether the environment the agent is entering was ever governable to begin with. Read our full response.\n\nhttps://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+        "channelId": "6a54761280cc80cdcaa97c9a",
+        "channelService": "facebook",
+        "createdAt": "2026-07-13T23:15:06.999Z",
+        "updatedAt": "2026-07-13T23:15:07.128Z",
+        "assets": [
+          {
+            "id": null,
+            "type": "image",
+            "mimeType": "image/webp",
+            "source": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_landscape_v1.webp",
+            "thumbnail": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_landscape_v1.webp"
+          }
+        ]
+      }
+    },
+    {
+      "organization": {
+        "id": "6a546d1271344fb67de5c6c4",
+        "name": "My Organization"
+      },
+      "channel": {
+        "id": "6a54761280cc80cdcaa97c9a",
+        "service": "facebook",
+        "displayName": "UnDrifted",
+        "organizationId": "6a546d1271344fb67de5c6c4"
+      },
+      "post": {
+        "id": "6a55213145f81c20067e99cf",
+        "status": "scheduled",
+        "dueAt": "2026-07-14T01:31:00.000Z",
+        "text": "We ran our first weekly Field Findings sweep this week — five independent sources (Carnegie Endowment, The Register, Google Cloud, CSA/Zenity, NIST), all converging on the same underlying condition in enterprise AI deployment. Here's what we found, and why we think the usual classifications (security failure, access failure, traceability failure) are missing the structural pattern underneath.\n\nhttps://measuresregistry.com/undrifted/field-findings-2026-w28",
+        "channelId": "6a54761280cc80cdcaa97c9a",
+        "channelService": "facebook",
+        "createdAt": "2026-07-13T17:32:33.534Z",
+        "updatedAt": "2026-07-13T17:32:33.543Z",
+        "assets": []
+      }
+    }
+  ]
+}
