@@ -1,0 +1,1118 @@
+{
+  "oar2": "OAR/OAR2/publication/oar2_finalize_launch_cycle_001_buffer_queue_and_prepare_scheduling_v1.meta.md",
+  "executedAt": "2026-07-14T00:06:10.783Z",
+  "mode": "execute_buffer_drafts_no_schedule_no_publish",
+  "credentialPresence": [
+    {
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "present": true,
+      "authenticated": true,
+      "accountName": "Measures Registry",
+      "channelCount": 3,
+      "errors": []
+    },
+    {
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "present": true,
+      "authenticated": true,
+      "accountName": "undrifted.editor",
+      "channelCount": 3,
+      "errors": []
+    }
+  ],
+  "endpointMap": [
+    {
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "resolved": true,
+      "candidateCount": 1,
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "channelDisplayName": "unDrifted_c3",
+      "service": "twitter",
+      "publicAccount": "https://twitter.com/unDrifted_c3",
+      "organizationName": "My Organization"
+    },
+    {
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "resolved": true,
+      "candidateCount": 1,
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "channelDisplayName": "UnDrifted",
+      "service": "facebook",
+      "publicAccount": "https://facebook.com/1241211659068854",
+      "organizationName": "My Organization"
+    },
+    {
+      "endpoint": "Measures Registry X",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "resolved": true,
+      "candidateCount": 1,
+      "channelId": "6a23bff1c687a22dd467a0b3",
+      "channelDisplayName": "measures_c3",
+      "service": "twitter",
+      "publicAccount": "https://twitter.com/measures_c3",
+      "organizationName": "Measures Registry"
+    },
+    {
+      "endpoint": "Measures Registry Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "resolved": true,
+      "candidateCount": 1,
+      "channelId": "6a54734280cc80cdcaa9743b",
+      "channelDisplayName": "Measures Registry",
+      "service": "facebook",
+      "publicAccount": "https://facebook.com/1179013795290720",
+      "organizationName": "My Organization"
+    },
+    {
+      "endpoint": "Measures Registry Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "resolved": true,
+      "candidateCount": 1,
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "channelDisplayName": "measures_registry",
+      "service": "instagram",
+      "publicAccount": "https://instagram.com/measures_registry",
+      "organizationName": "Measures Registry"
+    }
+  ],
+  "finalDraftInventory": [
+    {
+      "id": "lc001_p001_ud_x_release",
+      "publication": "publication_001",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_landscape_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-14T09:00:00-05:00",
+      "textLength": 306,
+      "bufferId": "6a557d2929834f7ded9a8872",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_ud_x_quote",
+      "publication": "publication_001",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_quote_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_quote_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-15T10:00:00-05:00",
+      "textLength": 227,
+      "bufferId": "6a557d29a208f5b1ac0c5cd6",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_ud_x_discussion",
+      "publication": "publication_001",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_discussion_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_discussion_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-17T10:00:00-05:00",
+      "textLength": 174,
+      "bufferId": "6a557d2b82f1b8ce84c16b8c",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_ud_x_followup",
+      "publication": "publication_001",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_square_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_square_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-18T10:00:00-05:00",
+      "textLength": 243,
+      "bufferId": "6a557d2b5d83824351945f4e",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_ud_x_source_ack",
+      "publication": "publication_001",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": null,
+      "mediaUrl": null,
+      "mediaVerified": true,
+      "proposedAt": "2026-07-19T09:30:00-05:00",
+      "textLength": 243,
+      "bufferId": "6a557d2b0a91bd784c7c7533",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_ud_fb_release",
+      "publication": "publication_001",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_landscape_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-13T20:31:00-05:00",
+      "textLength": 459,
+      "bufferId": "6a55213145f81c20067e99cf",
+      "status": "scheduled",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": "2026-07-14T01:31:00.000Z"
+    },
+    {
+      "id": "lc001_p001_ud_fb_quote",
+      "publication": "publication_001",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_quote_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_quote_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-15T11:00:00-05:00",
+      "textLength": 240,
+      "bufferId": "6a557d2d82f1b8ce84c16ba4",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_ud_fb_discussion",
+      "publication": "publication_001",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_discussion_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_discussion_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-17T11:00:00-05:00",
+      "textLength": 214,
+      "bufferId": "6a557d2d82f1b8ce84c16bc6",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_ud_fb_square",
+      "publication": "publication_001",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_square_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_square_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-18T11:00:00-05:00",
+      "textLength": 319,
+      "bufferId": "6a557d2e29834f7ded9a88ef",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_ud_fb_source_ack",
+      "publication": "publication_001",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": null,
+      "mediaUrl": null,
+      "mediaVerified": true,
+      "proposedAt": "2026-07-19T10:00:00-05:00",
+      "textLength": 265,
+      "bufferId": "6a557d2e5d83824351945f7d",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_ud_x_release",
+      "publication": "publication_002",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_landscape_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_landscape_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-14T12:00:00-05:00",
+      "textLength": 284,
+      "bufferId": "6a557d2ff2cf2ea3bef4596e",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_ud_x_quote",
+      "publication": "publication_002",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_quote_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_quote_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-16T10:00:00-05:00",
+      "textLength": 149,
+      "bufferId": "6a557d3082f1b8ce84c16bff",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_ud_x_discussion",
+      "publication": "publication_002",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_discussion_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_discussion_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-17T13:00:00-05:00",
+      "textLength": 174,
+      "bufferId": "6a557d31a208f5b1ac0c5f37",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_ud_x_followup",
+      "publication": "publication_002",
+      "endpoint": "unDrifted X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_square_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_square_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-18T13:00:00-05:00",
+      "textLength": 277,
+      "bufferId": "6a557d320a91bd784c7c759a",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_ud_fb_release",
+      "publication": "publication_002",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_landscape_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_landscape_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-14T13:00:00-05:00",
+      "textLength": 366,
+      "bufferId": "6a55717b82f1b8ce84c10026",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_ud_fb_quote",
+      "publication": "publication_002",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_quote_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_quote_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-16T11:00:00-05:00",
+      "textLength": 365,
+      "bufferId": "6a557d3329834f7ded9a893f",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_ud_fb_discussion",
+      "publication": "publication_002",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_discussion_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_discussion_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-17T14:00:00-05:00",
+      "textLength": 240,
+      "bufferId": "6a557d3382f1b8ce84c16c50",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_ud_fb_square",
+      "publication": "publication_002",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_square_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_square_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-18T14:00:00-05:00",
+      "textLength": 347,
+      "bufferId": "6a557d345d83824351945ff2",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_mr_x_ack",
+      "publication": "publication_001",
+      "endpoint": "Measures Registry X",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_landscape_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-15T09:00:00-05:00",
+      "textLength": 211,
+      "bufferId": "6a557d350a91bd784c7c75b2",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bff1c687a22dd467a0b3",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_mr_x_contribution",
+      "publication": "publication_002",
+      "endpoint": "Measures Registry X",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "x",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "assessment_primary_clip_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/campaign_derivatives/assessment_primary_clip__9x16_v1.mp4",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-16T09:00:00-05:00",
+      "textLength": 247,
+      "bufferId": "6a557d360a91bd784c7c75ca",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bff1c687a22dd467a0b3",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_mr_fb_ack",
+      "publication": "publication_001",
+      "endpoint": "Measures Registry Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_landscape_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-15T12:00:00-05:00",
+      "textLength": 904,
+      "bufferId": "6a55717c82f1b8ce84c1004f",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54734280cc80cdcaa9743b",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_mr_fb_contribution",
+      "publication": "publication_002",
+      "endpoint": "Measures Registry Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "platform": "facebook",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "crystal_presenter_thumbnail_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/crystal_seat_presenter_thumbnail_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-16T12:00:00-05:00",
+      "textLength": 921,
+      "bufferId": "6a557d3782f1b8ce84c16cbc",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a54734280cc80cdcaa9743b",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_mr_ig_square",
+      "publication": "publication_001",
+      "endpoint": "Measures Registry Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "instagram",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_square_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_square_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-15T13:00:00-05:00",
+      "textLength": 236,
+      "bufferId": "6a557d3782f1b8ce84c16cd5",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_mr_ig_story",
+      "publication": "publication_001",
+      "endpoint": "Measures Registry Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "instagram",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_story_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_story_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-15T17:00:00-05:00",
+      "textLength": 87,
+      "bufferId": "6a557d385d83824351946043",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p001_mr_ig_quote",
+      "publication": "publication_001",
+      "endpoint": "Measures Registry Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "instagram",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "articleUrlVerified": true,
+      "assetId": "ff_quote_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_quote_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-16T13:00:00-05:00",
+      "textLength": 188,
+      "bufferId": "6a557d39a208f5b1ac0c5fa6",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_mr_ig_square",
+      "publication": "publication_002",
+      "endpoint": "Measures Registry Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "instagram",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_square_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_square_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-16T14:00:00-05:00",
+      "textLength": 215,
+      "bufferId": "6a557d39a208f5b1ac0c5fbe",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_mr_ig_story",
+      "publication": "publication_002",
+      "endpoint": "Measures Registry Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "instagram",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_story_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_story_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-16T17:00:00-05:00",
+      "textLength": 86,
+      "bufferId": "6a557d3a29834f7ded9a89a0",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_mr_ig_quote",
+      "publication": "publication_002",
+      "endpoint": "Measures Registry Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "instagram",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_quote_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_quote_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-17T15:00:00-05:00",
+      "textLength": 82,
+      "bufferId": "6a557d3b29834f7ded9a89b8",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "bufferDueAt": null
+    },
+    {
+      "id": "lc001_p002_mr_ig_discussion",
+      "publication": "publication_002",
+      "endpoint": "Measures Registry Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "platform": "instagram",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "articleUrlVerified": true,
+      "assetId": "rs_discussion_01_v1",
+      "mediaUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_discussion_01_v1.webp",
+      "mediaVerified": true,
+      "proposedAt": "2026-07-18T15:00:00-05:00",
+      "textLength": 111,
+      "bufferId": "6a557d3bf2cf2ea3bef45a7f",
+      "status": "draft",
+      "action": "preserved_existing",
+      "reason": null,
+      "duplicateStanding": "exact_text_and_asset_match_no_duplicate_created",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "bufferDueAt": null
+    }
+  ],
+  "heldTargets": [
+    {
+      "id": "lc001_p001_mr_ig_reel",
+      "endpoint": "Measures Registry Instagram",
+      "publication": "publication_001",
+      "status": "held_no_asset",
+      "reason": "endpoint_copy_package_marks_reel_not_applicable_no_purpose_made_video_exists_for_this_cycle"
+    },
+    {
+      "id": "lc001_p002_mr_ig_reel",
+      "endpoint": "Measures Registry Instagram",
+      "publication": "publication_002",
+      "status": "held_no_approved_reel_caption",
+      "reason": "endpoint_copy_package_does_not_provide_a_publication_002_instagram_reel_caption"
+    }
+  ],
+  "duplicateVerification": {
+    "duplicateBufferIdsInTargetSet": [],
+    "duplicateDraftsCreated": false,
+    "notes": [
+      "Existing exact text+asset matches were preserved.",
+      "Existing text-only Pub001 unDrifted Facebook scheduled item was edited in place when Buffer accepted the edit.",
+      "No publishing or automatic scheduling action was requested."
+    ]
+  },
+  "mediaVerification": {
+    "mediaChecks": [
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_quote_01_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_discussion_01_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_square_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_landscape_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_quote_01_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_discussion_01_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_square_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/campaign_derivatives/assessment_primary_clip__9x16_v1.mp4",
+        "ok": true,
+        "status": 200,
+        "contentType": "video/mp4"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/crystal_seat_presenter_thumbnail_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_story_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      },
+      {
+        "url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_story_v1.webp",
+        "ok": true,
+        "status": 200,
+        "contentType": "image/webp"
+      }
+    ],
+    "articleChecks": [
+      {
+        "url": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+        "ok": true,
+        "status": 200,
+        "contentType": "text/html; charset=utf-8"
+      },
+      {
+        "url": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+        "ok": true,
+        "status": 200,
+        "contentType": "text/html; charset=utf-8"
+      }
+    ]
+  },
+  "proposedScheduleTimezone": "America/Chicago",
+  "proposedSchedule": [
+    {
+      "day": "Monday",
+      "date": "2026-07-13",
+      "items": [
+        {
+          "instanceId": "lc001_p001_ud_fb_release",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-13T20:31:00-05:00",
+          "bufferId": "6a55213145f81c20067e99cf",
+          "status": "scheduled",
+          "assetId": "ff_landscape_v1"
+        }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "date": "2026-07-14",
+      "items": [
+        {
+          "instanceId": "lc001_p001_ud_x_release",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-14T09:00:00-05:00",
+          "bufferId": "6a557d2929834f7ded9a8872",
+          "status": "draft",
+          "assetId": "ff_landscape_v1"
+        },
+        {
+          "instanceId": "lc001_p002_ud_x_release",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-14T12:00:00-05:00",
+          "bufferId": "6a557d2ff2cf2ea3bef4596e",
+          "status": "draft",
+          "assetId": "rs_landscape_v1"
+        },
+        {
+          "instanceId": "lc001_p002_ud_fb_release",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-14T13:00:00-05:00",
+          "bufferId": "6a55717b82f1b8ce84c10026",
+          "status": "draft",
+          "assetId": "rs_landscape_v1"
+        }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "date": "2026-07-15",
+      "items": [
+        {
+          "instanceId": "lc001_p001_ud_x_quote",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-15T10:00:00-05:00",
+          "bufferId": "6a557d29a208f5b1ac0c5cd6",
+          "status": "draft",
+          "assetId": "ff_quote_01_v1"
+        },
+        {
+          "instanceId": "lc001_p001_ud_fb_quote",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-15T11:00:00-05:00",
+          "bufferId": "6a557d2d82f1b8ce84c16ba4",
+          "status": "draft",
+          "assetId": "ff_quote_01_v1"
+        },
+        {
+          "instanceId": "lc001_p001_mr_x_ack",
+          "endpoint": "Measures Registry X",
+          "proposedAt": "2026-07-15T09:00:00-05:00",
+          "bufferId": "6a557d350a91bd784c7c75b2",
+          "status": "draft",
+          "assetId": "ff_landscape_v1"
+        },
+        {
+          "instanceId": "lc001_p001_mr_fb_ack",
+          "endpoint": "Measures Registry Facebook",
+          "proposedAt": "2026-07-15T12:00:00-05:00",
+          "bufferId": "6a55717c82f1b8ce84c1004f",
+          "status": "draft",
+          "assetId": "ff_landscape_v1"
+        },
+        {
+          "instanceId": "lc001_p001_mr_ig_square",
+          "endpoint": "Measures Registry Instagram",
+          "proposedAt": "2026-07-15T13:00:00-05:00",
+          "bufferId": "6a557d3782f1b8ce84c16cd5",
+          "status": "draft",
+          "assetId": "ff_square_v1"
+        },
+        {
+          "instanceId": "lc001_p001_mr_ig_story",
+          "endpoint": "Measures Registry Instagram",
+          "proposedAt": "2026-07-15T17:00:00-05:00",
+          "bufferId": "6a557d385d83824351946043",
+          "status": "draft",
+          "assetId": "ff_story_v1"
+        }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "date": "2026-07-16",
+      "items": [
+        {
+          "instanceId": "lc001_p002_ud_x_quote",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-16T10:00:00-05:00",
+          "bufferId": "6a557d3082f1b8ce84c16bff",
+          "status": "draft",
+          "assetId": "rs_quote_01_v1"
+        },
+        {
+          "instanceId": "lc001_p002_ud_fb_quote",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-16T11:00:00-05:00",
+          "bufferId": "6a557d3329834f7ded9a893f",
+          "status": "draft",
+          "assetId": "rs_quote_01_v1"
+        },
+        {
+          "instanceId": "lc001_p002_mr_x_contribution",
+          "endpoint": "Measures Registry X",
+          "proposedAt": "2026-07-16T09:00:00-05:00",
+          "bufferId": "6a557d360a91bd784c7c75ca",
+          "status": "draft",
+          "assetId": "assessment_primary_clip_v1"
+        },
+        {
+          "instanceId": "lc001_p002_mr_fb_contribution",
+          "endpoint": "Measures Registry Facebook",
+          "proposedAt": "2026-07-16T12:00:00-05:00",
+          "bufferId": "6a557d3782f1b8ce84c16cbc",
+          "status": "draft",
+          "assetId": "crystal_presenter_thumbnail_v1"
+        },
+        {
+          "instanceId": "lc001_p001_mr_ig_quote",
+          "endpoint": "Measures Registry Instagram",
+          "proposedAt": "2026-07-16T13:00:00-05:00",
+          "bufferId": "6a557d39a208f5b1ac0c5fa6",
+          "status": "draft",
+          "assetId": "ff_quote_01_v1"
+        },
+        {
+          "instanceId": "lc001_p002_mr_ig_square",
+          "endpoint": "Measures Registry Instagram",
+          "proposedAt": "2026-07-16T14:00:00-05:00",
+          "bufferId": "6a557d39a208f5b1ac0c5fbe",
+          "status": "draft",
+          "assetId": "rs_square_v1"
+        },
+        {
+          "instanceId": "lc001_p002_mr_ig_story",
+          "endpoint": "Measures Registry Instagram",
+          "proposedAt": "2026-07-16T17:00:00-05:00",
+          "bufferId": "6a557d3a29834f7ded9a89a0",
+          "status": "draft",
+          "assetId": "rs_story_v1"
+        }
+      ]
+    },
+    {
+      "day": "Friday",
+      "date": "2026-07-17",
+      "items": [
+        {
+          "instanceId": "lc001_p001_ud_x_discussion",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-17T10:00:00-05:00",
+          "bufferId": "6a557d2b82f1b8ce84c16b8c",
+          "status": "draft",
+          "assetId": "ff_discussion_01_v1"
+        },
+        {
+          "instanceId": "lc001_p001_ud_fb_discussion",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-17T11:00:00-05:00",
+          "bufferId": "6a557d2d82f1b8ce84c16bc6",
+          "status": "draft",
+          "assetId": "ff_discussion_01_v1"
+        },
+        {
+          "instanceId": "lc001_p002_ud_x_discussion",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-17T13:00:00-05:00",
+          "bufferId": "6a557d31a208f5b1ac0c5f37",
+          "status": "draft",
+          "assetId": "rs_discussion_01_v1"
+        },
+        {
+          "instanceId": "lc001_p002_ud_fb_discussion",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-17T14:00:00-05:00",
+          "bufferId": "6a557d3382f1b8ce84c16c50",
+          "status": "draft",
+          "assetId": "rs_discussion_01_v1"
+        },
+        {
+          "instanceId": "lc001_p002_mr_ig_quote",
+          "endpoint": "Measures Registry Instagram",
+          "proposedAt": "2026-07-17T15:00:00-05:00",
+          "bufferId": "6a557d3b29834f7ded9a89b8",
+          "status": "draft",
+          "assetId": "rs_quote_01_v1"
+        }
+      ]
+    },
+    {
+      "day": "Saturday",
+      "date": "2026-07-18",
+      "items": [
+        {
+          "instanceId": "lc001_p001_ud_x_followup",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-18T10:00:00-05:00",
+          "bufferId": "6a557d2b5d83824351945f4e",
+          "status": "draft",
+          "assetId": "ff_square_v1"
+        },
+        {
+          "instanceId": "lc001_p001_ud_fb_square",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-18T11:00:00-05:00",
+          "bufferId": "6a557d2e29834f7ded9a88ef",
+          "status": "draft",
+          "assetId": "ff_square_v1"
+        },
+        {
+          "instanceId": "lc001_p002_ud_x_followup",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-18T13:00:00-05:00",
+          "bufferId": "6a557d320a91bd784c7c759a",
+          "status": "draft",
+          "assetId": "rs_square_v1"
+        },
+        {
+          "instanceId": "lc001_p002_ud_fb_square",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-18T14:00:00-05:00",
+          "bufferId": "6a557d345d83824351945ff2",
+          "status": "draft",
+          "assetId": "rs_square_v1"
+        },
+        {
+          "instanceId": "lc001_p002_mr_ig_discussion",
+          "endpoint": "Measures Registry Instagram",
+          "proposedAt": "2026-07-18T15:00:00-05:00",
+          "bufferId": "6a557d3bf2cf2ea3bef45a7f",
+          "status": "draft",
+          "assetId": "rs_discussion_01_v1"
+        }
+      ]
+    },
+    {
+      "day": "Sunday",
+      "date": "2026-07-19",
+      "items": [
+        {
+          "instanceId": "lc001_p001_ud_x_source_ack",
+          "endpoint": "unDrifted X",
+          "proposedAt": "2026-07-19T09:30:00-05:00",
+          "bufferId": "6a557d2b0a91bd784c7c7533",
+          "status": "draft",
+          "assetId": null
+        },
+        {
+          "instanceId": "lc001_p001_ud_fb_source_ack",
+          "endpoint": "unDrifted Facebook",
+          "proposedAt": "2026-07-19T10:00:00-05:00",
+          "bufferId": "6a557d2e5d83824351945f7d",
+          "status": "draft",
+          "assetId": null
+        }
+      ]
+    }
+  ],
+  "finalDisposition": "HELD_WITH_REASON",
+  "summary": {
+    "targetCount": 29,
+    "createdOrReady": 29,
+    "heldCount": 2,
+    "createdDraftCount": 0,
+    "preservedCount": 29,
+    "editedCount": 0
+  },
+  "executionRunNotes": [
+    {
+      "run": "initial_execute",
+      "result": {
+        "targetCount": 29,
+        "createdOrReady": 29,
+        "heldCount": 2,
+        "createdDraftCount": 26,
+        "preservedCount": 2,
+        "editedCount": 1
+      },
+      "note": "Initial execution created missing eligible drafts, preserved two existing valid drafts, and edited scheduled Pub001 unDrifted Facebook post 6a55213145f81c20067e99cf in place to attach registered media."
+    },
+    {
+      "run": "idempotency_refresh_after_schedule_packet_correction",
+      "result": {
+        "targetCount": 29,
+        "createdOrReady": 29,
+        "heldCount": 2,
+        "createdDraftCount": 0,
+        "preservedCount": 29,
+        "editedCount": 0
+      },
+      "note": "Second execution refreshed the proposed Monday-Sunday scheduling packet and created no additional Buffer drafts."
+    }
+  ]
+}
