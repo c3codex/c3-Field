@@ -1,0 +1,61 @@
+---
+document_type: divergence_review
+document_scope: missing_remote_migration_provenance
+source_oar2: docs/oar/c3_field/oar2_reconcile_remote_migration_ledger_with_repository_history_v1.meta.md
+status: completed_with_one_held_version
+---
+
+# Divergence Review (OAR2 Stage B)
+
+## `20260702130018` — Held
+
+**Local same-name file:** `supabase/migrations/202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql`
+
+**Exact diff found:** the local file's `INSERT INTO public.measures_encounter_def` for `marble_chamber_results`
+sets `surface_type = 'results'` (line 87 of the local file). The ledger's `20260702130018` row contains the
+same migration, byte-identical except that `surface_type = 'threshold'`, with the ledger SQL's own leading
+comment stating: *"Fix: surface_type = 'threshold' (not 'results' — check constraint)."* Every other line of
+both versions is identical (verified by direct string diff, not summarized from memory).
+
+**Determination attempted:** the ledger SQL is self-documenting that `'results'` fails a check constraint and
+`'threshold'` is the corrected value. Taken alone, this reads as "ledger supersedes local file." However,
+`202607020001` is itself already present in the remote ledger under its own version (it was not one of the 18
+target versions — the earlier investigation only exported those 18, not `202607020001`'s own row). This
+executor cannot confirm from available evidence whether:
+
+- `202607020001`'s actually-applied remote content already reads `'threshold'` (i.e., it was corrected in place
+  before or during application, and the local file simply never got updated to match), or
+- `202607020001` failed at application time (the check constraint the comment describes) and never took
+  effect, with `20260702130018` being the real, only-successful application, or
+- some other sequence occurred.
+
+**Disposition:** held, not resolved. Per this OAR2's Stage B decision rule ("if interpretation or
+reconstruction is required, Claude shall hold that version and return it to op044"), no file was renamed,
+merged, or created for this version. Resolving it requires either (a) op044 accepting the ledger's own
+in-SQL explanation as sufficient without seeing `202607020001`'s remote row, or (b) a follow-up read of that
+row specifically, which was outside this OAR2's governing-evidence set.
+
+## `20260702164214` — Recovered (not held)
+
+**Content:** `UPDATE public.measures_encounter_def ... jsonb_set(... '{threshold_copy,plaques}' ...)`, adding a
+`context` string to each of the two `ai_isnt_broken_intro` threshold plaques.
+
+**Determination:** directly diffing this version's SQL against `20260702203335`'s SQL (both present in the
+governing ledger export, no external inference needed) shows `20260702203335` — applied the same day, ~2h51m
+later (17:42:14 → 20:33:35) — replaces the entire `threshold_copy` object at the same jsonb path with a
+different, more complete "final approved copy," itself including its own `context` fields with different
+wording (e.g. "Evaluate your AI operating environment and identify conditions that may lead to operational
+fragmentation, instability, or structural drift." vs. the earlier "Discover how your operating environment
+shapes AI behavior.").
+
+**Disposition:** recovered as its own exact historical file
+(`supabase/migrations/20260702164214_seat_threshold_plaque_context_lines.sql`), representing what actually
+happened at that point in history, not rewritten to match the superseding version. This satisfies the
+decision rule's "exact historical representation... without guessing" bar — the supersession is directly
+readable from the two versions' own SQL, not inferred from external state.
+
+## Method Note
+
+Both determinations above were made by comparing the two ledger SQL texts directly against each other and
+against the current local file, using exact string search (Node.js) rather than summarizing from memory or
+trusting either the ledger export's row order or the prior investigation's provenance-matrix wording alone.
