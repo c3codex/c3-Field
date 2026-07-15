@@ -69,8 +69,12 @@ This convention applies uniformly to: articles, banners, campaign assets, resear
 | `undrifted_ai_isnt_broken_landing_banner_v1` | banner | registered | undrifted_issue01 | unDrifted/Issue01 (cover_story) | oar2_register_undrifted_issue001_cover_story_ai_isnt_broken_systems_are_v1 | Supabase Storage: `measures-registry/ai_isnt_broken_landing.webp` (existing asset, not newly uploaded — see sidecar notes) |
 | `undrifted_issue01_editors_letter_article_v1` | article | published | undrifted_issue01 | unDrifted/Issue01 (editors_letter) | oar2_register_issue001_editors_letter_banner_and_paragraph_publication_v1 | Assets/Articles/unDrifted/Issue01/registered/undrifted_issue01_editors_letter_article_v1.md |
 | `undrifted_issue01_editors_letter_codexstone_banner_v1` | banner | registered | undrifted_issue01 | unDrifted/Issue01 (editors_letter) | oar2_register_issue001_editors_letter_banner_and_paragraph_publication_v1 | Supabase Storage: `measures-registry/editors_note_banner.webp` (see sidecar notes — corrected mid-execution from an initial codexstone-seal guess) |
-| `undrifted_field_findings_2026_w28` | article | internal_research_record | - | Launch Cycle 001 | oar2_immediately_contain_codex_governance_leak_and_restore_publication_boundary_v1 | Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md |
-| `field_findings_2026_w28_public_article_v2` | article | registered_public_derivative | - | Launch Cycle 001 | oar2_immediately_contain_codex_governance_leak_and_restore_publication_boundary_v1 | Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md |
+| `undrifted_field_findings_2026_w28` | article | internal_research_record | — | Launch Cycle 001 | oar2_immediately_contain_codex_governance_leak_and_restore_publication_boundary_v1 | Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md |
+| `field_findings_2026_w28_public_article_v2` | article | registered_public_derivative | — | Launch Cycle 001 | oar2_immediately_contain_codex_governance_leak_and_restore_publication_boundary_v1 | Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md |
+| `undrifted_response_001` | article | registered | — | Launch Cycle 001 | oar2_register_launch_cycle_001_publication_assets_v1 | Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_response_001_ai_agents_are_not_entering_empty_systems_article_v1.md |
+| `launch_cycle_001_ai_operational_readiness_landscape_survey_source` | research | registered | — | Launch Cycle 001 (reusable, not exclusive) | oar2_register_launch_cycle_001_publication_authority_v1 | docs/_source/codex/publications/research/launch_cycle_001_ai_operational_readiness_landscape_survey_source_v1.md |
+| `field_findings_section_banner_2026_w28_v1` | banner (subclass: editorial_identity_asset) | registered | — | Launch Cycle 001 | oar2_register_undrifted_editorial_identity_assets_v1 | Supabase Storage: `measures-registry/field_findings_section_banner_2026_w28_v1.webp` |
+| `undrifted_response_section_banner_2026_w28_v1` | banner (subclass: editorial_identity_asset) | registered | — | Launch Cycle 001 | oar2_register_undrifted_editorial_identity_assets_v1 | Supabase Storage: `measures-registry/undrifted_response_section_banner_2026_w28_v1.webp` |
 
 The two article assets are fully authored and registered (frontmatter + body complete) at their local repo paths. The two banner assets are registered as well — their `.webp` binaries live in the Supabase Storage bucket `measures-registry` (not in the local repo tree); each sidecar's `storage_bucket`/`storage_object_path` fields point to the canonical binary location, confirmed present via `storage.objects` query on 2026-07-07.
 
@@ -138,4 +142,79 @@ The operator identified that an existing site video — `ai_isnt_broken_intro.mp
 
 Registered as a new `video_short` derivative (`undrifted_issue01_ai_isnt_broken_systems_are_article_v1_intro_video_v1`) and a new Campaign Asset, then bound to the Website Feature and Instagram Post Distribution Assets in place of the still-pending image-crop concept. The original hero-crop derivative was **not deleted** — it remains registered and `pending`, simply superseded as the active choice for these two channels by real, superior media. No new upload was made; the video was already live and registered before this pass.
 
+## Launch Cycle 001 (Codex-Governed Publication Series)
+
+`oar2_register_launch_cycle_001_publication_assets_v1` registered the first two assets in a new publication
+series distinct from unDrifted's Issue model: weekly Field Findings and institutional Response articles,
+governed under the Codex Initiative Governance Architecture rather than the Issue/Campaign layers above. Both
+articles (`undrifted_field_findings_2026_w28`, `undrifted_response_001`) were supplied by the operator as
+finished, approved content and registered verbatim — no rewriting, per explicit OAR2 constraint. They live
+under `Assets/Articles/unDrifted/LaunchCycle001/registered/`, a new sibling directory to `Issue01/`, since this
+is a different publication cadence (weekly sweep, not issue-numbered).
+
+Full governance-layer detail (publication standing, content status, family relationships, the supporting
+research asset, and outstanding implementation items — media derivatives, institutional correspondence,
+Measures Registry Review) is tracked separately in `docs/_source/codex/publications/` and
+`docs/_source/codex/initiatives/launch_cycle_001_operational_record.meta.md`, not duplicated here. This
+registry entry exists so Launch Cycle 001's assets are discoverable through the same asset-registry-of-record
+convention as every other unDrifted asset, per this file's own purpose.
+
+## Editorial Identity Assets (New Asset Subclass)
+
+`oar2_register_undrifted_editorial_identity_assets_v1` registered a new asset subclass, **Editorial Identity
+Asset**: a reusable visual/typographic asset that establishes and preserves the recognizable identity of a
+recurring editorial section or publication class, distinct from canonical publications, derivatives, research
+assets, ordinary media, or article-specific hero media. Authority is Measures Registry, direct; owning system
+is unDrifted. Editorial Identity Assets do not create Codex standing, publication standing, or any new system
+boundary — they are visual identity only.
+
+**Normalization applied**: `asset_registry.md`'s controlled `asset_type` enum (`article | banner | campaign |
+research | media_hook`) has no `editorial_identity_asset` value. Per the authorizing OAR2's own instruction to
+"recommend the nearest existing canonical enum if the registry uses controlled values," both rows above are
+recorded as `asset_type: banner` with the precise subclass noted in the same cell and in each asset's sidecar
+(`asset_subclass: editorial_identity_asset`) — no schema/enum change was made to this registry.
+
+Two assets registered: the Field Findings Section Banner and unDrifted Response Section Banner, both confirmed
+present in Supabase Storage bucket `measures-registry` via direct HTTP verification (real `image/webp` files,
+144,616 and 1,782,830 bytes respectively, uploaded 2026-07-12) — not assumed present from the OAR2 text alone.
+Full stable/variable element definitions and reuse standing live in each asset's sidecar under
+`Assets/Banners/unDrifted/LaunchCycle001/`. Publication Records 001 and 002
+(`docs/_source/codex/publications/`) were updated to reference their respective banners; canonical article
+content, publication standing, and publication titles were not touched.
+
 OAR2 files never appear as rows' content — only as `related_oar2` references. This registry is additive: new rows are appended as assets are registered; existing rows are updated in place as `status` advances, with `related_oar1` filled in once an OAR1 proves the transition.
+
+## Launch Cycle 001 Publication Asset Package Registration
+
+`oar2_register_uploaded_launch_cycle_001_publication_assets_v1` registered the 20 creative assets
+produced and uploaded under `oar2_produce_launch_cycle_001_publication_asset_package_v1` (see
+`docs/_source/codex/publications/launch_cycle_001_publication_asset_package_v1.meta.md` for full
+sidecar detail). Per this registry's own architecture, these are **Derivative Assets**, not
+top-level Publication Assets, so — consistent with the Derivative Asset Layer established above —
+they were registered as 20 new rows in `measures_publication_derivative_asset`, not as new rows in
+this file's own table.
+
+`derivative_type` was mapped onto that table's existing `CHECK`-constrained enum rather than
+inventing new values: landscape/story images → `hero`, square images → `thumbnail`, quote cards →
+`pull_quote`, discussion-prompt cards → `excerpt`, the About explainer card → `summary`, all five
+video derivatives → `video_short`. `publication_asset_id` points to `field_findings_2026_w28_public_article_v2`
+and `undrifted_response_001` for the two publications' 10 direct-derivative assets, and to the
+underlying source-video keys (`obsidian_chamber_orientation`, `crystal_seat_orientation`,
+`about_measures_registry`, `intro_hook`, and the existing `undrifted_issue01_page06_launch_encounter`
+family for the two Assessment clips) for the 10 evergreen/video assets — reusing the assessment
+encounter key rather than inventing a parallel one, since those two new clips are siblings of the
+already-registered assessment short-cut derivative.
+
+All 20 rows: `generation_status: draft` (real content, not scaffolding), `release_state: held`
+(no operator distribution approval yet), `created_by_actor_class: AI` /
+`created_by_actor_key: claude_sonnet_5`, `approved_by_actor_class`/`approved_by_actor_key: NULL`
+(explicitly not self-approved, per this OAR2's own constraint). 18 rows carry
+`approval_status: ready_for_operator_approval`; the two About Measures Registry stills carry
+`approval_status: held_text_context_verification`, since `about_measures_registry.mp4` remains
+untranscribed and their burned-in captions are unverified sentence fragments. Each row's `metadata`
+jsonb carries its public Supabase Storage URL, bucket, object path, SHA-256 checksum, and
+dimensions — verified live (HTTP 200) at registration time, not assumed from the upload step alone.
+Migration: `supabase/migrations/20260713224453_register_launch_cycle_001_uploaded_publication_assets_v1.sql`.
+
+No canonical article, banner, or media record was modified. No Buffer draft, schedule, or
+publication action was taken.
