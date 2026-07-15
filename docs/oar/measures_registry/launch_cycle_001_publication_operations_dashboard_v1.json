@@ -1,0 +1,489 @@
+{
+  "sourceOar2": "OAR/OAR2/publication/oar2_complete_launch_cycle_001_publication_operations_environment_v1.meta.md",
+  "generatedAt": "2026-07-13T07:36:22.662Z",
+  "bufferAdapterReport": {
+    "script": "scripts/buffer-native-publication-execution.cjs",
+    "normalizedBy": "scripts/launch-cycle-publication-ops-dashboard.cjs",
+    "explicitCredentialSelection": true,
+    "workspaceRouting": true,
+    "endpointValidation": true,
+    "duplicatePrevention": true,
+    "idempotentPublication": true,
+    "executionEvidence": true,
+    "operatorApprovalBoundary": "review_required_before_schedule_or_publish",
+    "noAdditionalWorkspacesAuthorized": true
+  },
+  "endpointIdentityRegistry": [
+    {
+      "publicationEngine": "Buffer",
+      "endpoint": "Measures Registry YouTube",
+      "platform": "youtube",
+      "bufferWorkspace": "Measures Registry",
+      "credentialReference": "BUFFER_SOCIAL_KEY",
+      "channelIdentifier": "6a54740a80cc80cdcaa976d9",
+      "publicAccount": "https://www.youtube.com/channel/UC84Jbvswj0ykzd5nuKxoNSA",
+      "activeStatus": true,
+      "verificationDate": "2026-07-13",
+      "duplicateCandidateCount": 1,
+      "resolved": true
+    },
+    {
+      "publicationEngine": "Buffer",
+      "endpoint": "Measures Registry Instagram",
+      "platform": "instagram",
+      "bufferWorkspace": "Measures Registry",
+      "credentialReference": "BUFFER_SOCIAL_KEY",
+      "channelIdentifier": "6a23bfc4c687a22dd467a045",
+      "publicAccount": "https://instagram.com/measures_registry",
+      "activeStatus": true,
+      "verificationDate": "2026-07-13",
+      "duplicateCandidateCount": 1,
+      "resolved": true
+    },
+    {
+      "publicationEngine": "Buffer",
+      "endpoint": "Measures Registry X",
+      "platform": "x",
+      "bufferWorkspace": "Measures Registry",
+      "credentialReference": "BUFFER_SOCIAL_KEY",
+      "channelIdentifier": "6a23bff1c687a22dd467a0b3",
+      "publicAccount": "https://twitter.com/measures_c3",
+      "activeStatus": true,
+      "verificationDate": "2026-07-13",
+      "duplicateCandidateCount": 1,
+      "resolved": true
+    },
+    {
+      "publicationEngine": "Buffer",
+      "endpoint": "Measures Registry Facebook",
+      "platform": "facebook",
+      "bufferWorkspace": "undrifted.editor",
+      "credentialReference": "BUFFER_PUB2_KEY",
+      "channelIdentifier": "6a54734280cc80cdcaa9743b",
+      "publicAccount": "https://facebook.com/1179013795290720",
+      "activeStatus": true,
+      "verificationDate": "2026-07-13",
+      "duplicateCandidateCount": 1,
+      "resolved": true
+    },
+    {
+      "publicationEngine": "Buffer",
+      "endpoint": "unDrifted Facebook",
+      "platform": "facebook",
+      "bufferWorkspace": "undrifted.editor",
+      "credentialReference": "BUFFER_PUB2_KEY",
+      "channelIdentifier": "6a54761280cc80cdcaa97c9a",
+      "publicAccount": "https://facebook.com/1241211659068854",
+      "activeStatus": true,
+      "verificationDate": "2026-07-13",
+      "duplicateCandidateCount": 1,
+      "resolved": true
+    },
+    {
+      "publicationEngine": "Buffer",
+      "endpoint": "unDrifted X",
+      "platform": "x",
+      "bufferWorkspace": "undrifted.editor",
+      "credentialReference": "BUFFER_PUB2_KEY",
+      "channelIdentifier": "6a546f6380cc80cdcaa962f0",
+      "publicAccount": "https://twitter.com/unDrifted_c3",
+      "activeStatus": true,
+      "verificationDate": "2026-07-13",
+      "duplicateCandidateCount": 1,
+      "resolved": true
+    }
+  ],
+  "duplicateChecks": {
+    "duplicateFacebookChannelIds": [],
+    "duplicateXChannelIds": [],
+    "correctYouTubeOwnership": true,
+    "correctInstagramOwnership": true
+  },
+  "sevenDayQueue": [
+    {
+      "day": "Monday",
+      "date": "2026-07-13",
+      "system": "Measures Registry",
+      "endpoint": "Measures Registry YouTube",
+      "asset": "measures_canonical_youtube_about_measures_registry_v1",
+      "proposedTimeAmericaChicago": "2026-07-13T10:00:00-05:00",
+      "assetTitle": "About Measures Registry",
+      "sourceDistributionAsset": "measures_canonical_youtube_about_measures_registry_v1",
+      "platform": "youtube",
+      "mediaAttachment": [
+        "measures-media/about_measures_registry.mp4"
+      ],
+      "linkDependency": null,
+      "standing": "buffer_draft_ready_for_operator_review",
+      "reason": null,
+      "bufferUpdateId": "6a548d6c00357d0bb66cd575",
+      "platformUrl": null,
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    },
+    {
+      "day": "Tuesday",
+      "date": "2026-07-14",
+      "system": "unDrifted",
+      "endpoint": "unDrifted X",
+      "asset": "undrifted_issue001_da_cover_story_quote_x_v1",
+      "proposedTimeAmericaChicago": "2026-07-14T10:00:00-05:00",
+      "assetTitle": "AI Isn't Broken. Systems Are. — X Thread",
+      "sourceDistributionAsset": "undrifted_issue001_da_cover_story_quote_x_v1",
+      "platform": "x",
+      "mediaAttachment": [],
+      "linkDependency": "https://paragraph.com/@undrifted/ai-isnt-broken-systems-are",
+      "standing": "published_prior_oar",
+      "reason": "already_published_no_duplicate_publication",
+      "bufferUpdateId": "6a5002b83c48e2c7b33feafa",
+      "platformUrl": "https://x.com/2063041676583583744/status/2075338250911183123",
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    },
+    {
+      "day": "Wednesday",
+      "date": "2026-07-15",
+      "system": "Measures Registry",
+      "endpoint": "Measures Registry YouTube",
+      "asset": "measures_canonical_youtube_crystal_seat_orientation_v1",
+      "proposedTimeAmericaChicago": "2026-07-15T10:00:00-05:00",
+      "assetTitle": "Crystal Seat Orientation",
+      "sourceDistributionAsset": "measures_canonical_youtube_crystal_seat_orientation_v1",
+      "platform": "youtube",
+      "mediaAttachment": [
+        "measures-media/crystal_seat_orientation.mp4"
+      ],
+      "linkDependency": null,
+      "standing": "buffer_draft_ready_for_operator_review",
+      "reason": null,
+      "bufferUpdateId": "6a548d6d98dc0120703ef8e5",
+      "platformUrl": null,
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    },
+    {
+      "day": "Thursday",
+      "date": "2026-07-16",
+      "system": "unDrifted",
+      "endpoint": "unDrifted Facebook",
+      "asset": "undrifted_issue001_da_cover_story_quote_linkedin_v1",
+      "proposedTimeAmericaChicago": "2026-07-16T10:00:00-05:00",
+      "assetTitle": "AI Isn't Broken. Systems Are.",
+      "sourceDistributionAsset": "undrifted_issue001_da_cover_story_quote_linkedin_v1",
+      "platform": "linkedin",
+      "mediaAttachment": [
+        "measures-registry/ai_isnt_broken_landing.webp"
+      ],
+      "linkDependency": "https://paragraph.com/@undrifted/ai-isnt-broken-systems-are",
+      "standing": "published_prior_oar",
+      "reason": "already_published_no_duplicate_publication",
+      "bufferUpdateId": "6a5002b8321614183a1f1ff5",
+      "platformUrl": "https://www.linkedin.com/feed/update/urn:li:share:7481103989191811072",
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    },
+    {
+      "day": "Friday",
+      "date": "2026-07-17",
+      "system": "Measures Registry",
+      "endpoint": "Measures Registry Facebook",
+      "asset": "undrifted_issue001_da_assessment_website_v1",
+      "proposedTimeAmericaChicago": "2026-07-17T10:00:00-05:00",
+      "assetTitle": "AI Operations Assessment",
+      "sourceDistributionAsset": "undrifted_issue001_da_assessment_website_v1",
+      "platform": "website",
+      "mediaAttachment": [
+        "measures-registry/obsidian_assessment_surface_visual_v1.webp"
+      ],
+      "linkDependency": "/ai-operations-assessment",
+      "standing": "queued_for_operator_review",
+      "reason": null,
+      "bufferUpdateId": null,
+      "platformUrl": null,
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    },
+    {
+      "day": "Saturday",
+      "date": "2026-07-18",
+      "system": "unDrifted",
+      "endpoint": "unDrifted Facebook",
+      "asset": "undrifted_issue001_da_dispatches_linkedin_v1",
+      "proposedTimeAmericaChicago": "2026-07-18T10:00:00-05:00",
+      "assetTitle": "Two Dispatches from unDrifted Issue 001",
+      "sourceDistributionAsset": "undrifted_issue001_da_dispatches_linkedin_v1",
+      "platform": "linkedin",
+      "mediaAttachment": [
+        "measures-registry/agents_with_keys.webp",
+        "measures-registry/fables_and_myths.webp"
+      ],
+      "linkDependency": "https://paragraph.com/@undrifted/agents-with-keys",
+      "standing": "published_prior_oar",
+      "reason": "already_published_no_duplicate_publication",
+      "bufferUpdateId": "6a5002d93c48e2c7b33feba4",
+      "platformUrl": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7481106451558662144",
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    },
+    {
+      "day": "Sunday",
+      "date": "2026-07-19",
+      "system": "Measures Registry",
+      "endpoint": "Measures Registry X",
+      "asset": "undrifted_issue001_da_assessment_youtube_v1",
+      "proposedTimeAmericaChicago": "2026-07-19T10:00:00-05:00",
+      "assetTitle": "What Does It Mean to Measure a Governable System?",
+      "sourceDistributionAsset": "undrifted_issue001_da_assessment_youtube_v1",
+      "platform": "youtube",
+      "mediaAttachment": [
+        "measures-registry/campaign_derivatives/undrifted_issue001_assessment_short_cut_v1.mp4"
+      ],
+      "linkDependency": "/ai-operations-assessment",
+      "standing": "queued_for_operator_review",
+      "reason": null,
+      "bufferUpdateId": null,
+      "platformUrl": null,
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    }
+  ],
+  "canonicalMediaActivationPlan": [
+    {
+      "day": "Monday",
+      "date": "2026-07-13",
+      "system": "Measures Registry",
+      "endpoint": "Measures Registry YouTube",
+      "asset": "measures_canonical_youtube_about_measures_registry_v1",
+      "proposedTimeAmericaChicago": "2026-07-13T10:00:00-05:00",
+      "assetTitle": "About Measures Registry",
+      "sourceDistributionAsset": "measures_canonical_youtube_about_measures_registry_v1",
+      "platform": "youtube",
+      "mediaAttachment": [
+        "measures-media/about_measures_registry.mp4"
+      ],
+      "linkDependency": null,
+      "standing": "buffer_draft_ready_for_operator_review",
+      "reason": null,
+      "bufferUpdateId": "6a548d6c00357d0bb66cd575",
+      "platformUrl": null,
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    },
+    {
+      "day": "Wednesday",
+      "date": "2026-07-15",
+      "system": "Measures Registry",
+      "endpoint": "Measures Registry YouTube",
+      "asset": "measures_canonical_youtube_crystal_seat_orientation_v1",
+      "proposedTimeAmericaChicago": "2026-07-15T10:00:00-05:00",
+      "assetTitle": "Crystal Seat Orientation",
+      "sourceDistributionAsset": "measures_canonical_youtube_crystal_seat_orientation_v1",
+      "platform": "youtube",
+      "mediaAttachment": [
+        "measures-media/crystal_seat_orientation.mp4"
+      ],
+      "linkDependency": null,
+      "standing": "buffer_draft_ready_for_operator_review",
+      "reason": null,
+      "bufferUpdateId": "6a548d6d98dc0120703ef8e5",
+      "platformUrl": null,
+      "operatorAuthorizationStatus": "review_required_before_schedule_or_publish"
+    }
+  ],
+  "publicationEvidenceNormalization": [
+    {
+      "distributionAsset": "measures_canonical_youtube_about_measures_registry_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": null,
+        "endpoint": "youtube_measures_registry",
+        "bufferUpdateId": "6a548d6c00357d0bb66cd575",
+        "platformUrl": null,
+        "platformIdentifier": null,
+        "executionMode": "buffer",
+        "executor": "Codex",
+        "publicationStatus": "draft",
+        "failureReason": null,
+        "retryStanding": null
+      }
+    },
+    {
+      "distributionAsset": "measures_canonical_youtube_ai_isnt_broken_intro_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": null,
+        "endpoint": "youtube_measures_registry",
+        "bufferUpdateId": null,
+        "platformUrl": null,
+        "platformIdentifier": null,
+        "executionMode": "buffer",
+        "executor": "Codex",
+        "publicationStatus": "failed",
+        "failureReason": "Buffer API returned UnexpectedError: Invalid post",
+        "retryStanding": "retry_2"
+      }
+    },
+    {
+      "distributionAsset": "measures_canonical_youtube_assessment_report_orientation_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": null,
+        "endpoint": "youtube_measures_registry",
+        "bufferUpdateId": null,
+        "platformUrl": null,
+        "platformIdentifier": null,
+        "executionMode": "buffer",
+        "executor": "Codex",
+        "publicationStatus": "failed",
+        "failureReason": "Buffer API returned UnexpectedError: Invalid post",
+        "retryStanding": "retry_2"
+      }
+    },
+    {
+      "distributionAsset": "measures_canonical_youtube_crystal_seat_orientation_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": null,
+        "endpoint": "youtube_measures_registry",
+        "bufferUpdateId": "6a548d6d98dc0120703ef8e5",
+        "platformUrl": null,
+        "platformIdentifier": null,
+        "executionMode": "buffer",
+        "executor": "Codex",
+        "publicationStatus": "draft",
+        "failureReason": null,
+        "retryStanding": null
+      }
+    },
+    {
+      "distributionAsset": "measures_canonical_youtube_obsidian_chamber_orientation_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": null,
+        "endpoint": "youtube_measures_registry",
+        "bufferUpdateId": null,
+        "platformUrl": null,
+        "platformIdentifier": null,
+        "executionMode": "buffer",
+        "executor": "Codex",
+        "publicationStatus": "failed",
+        "failureReason": "Buffer API returned UnexpectedError: Invalid post",
+        "retryStanding": "retry_2"
+      }
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_assessment_website_v1",
+      "normalizedEvidence": null
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_assessment_youtube_v1",
+      "normalizedEvidence": null
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_cover_story_instagram_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": "2026-07-09T21:58:48.216Z",
+        "endpoint": "instagram_measures_registry",
+        "bufferUpdateId": "6a5002b7a9e4eacc31025340",
+        "platformUrl": "https://www.instagram.com/reel/DalofxJmckI/",
+        "platformIdentifier": "DalofxJmckI",
+        "executionMode": "buffer",
+        "executor": "Cody",
+        "publicationStatus": "published",
+        "failureReason": null,
+        "retryStanding": null
+      }
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_cover_story_quote_linkedin_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": "2026-07-09T21:56:23.513Z",
+        "endpoint": "linkedin_measures_registry",
+        "bufferUpdateId": "6a5002b8321614183a1f1ff5",
+        "platformUrl": "https://www.linkedin.com/feed/update/urn:li:share:7481103989191811072",
+        "platformIdentifier": "urn:li:share:7481103989191811072",
+        "executionMode": "buffer",
+        "executor": "Cody",
+        "publicationStatus": "published",
+        "failureReason": null,
+        "retryStanding": null
+      }
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_cover_story_quote_x_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": "2026-07-09T21:56:12.416Z",
+        "endpoint": "x_measures_c3",
+        "bufferUpdateId": "6a5002b83c48e2c7b33feafa",
+        "platformUrl": "https://x.com/2063041676583583744/status/2075338250911183123",
+        "platformIdentifier": "2075338250911183123",
+        "executionMode": "buffer",
+        "executor": "Cody",
+        "publicationStatus": "published",
+        "failureReason": null,
+        "retryStanding": null
+      }
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_cover_story_website_v1",
+      "normalizedEvidence": null
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_dispatches_instagram_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": null,
+        "endpoint": "instagram_measures_registry",
+        "bufferUpdateId": "6a5002d83c48e2c7b33feb8c",
+        "platformUrl": null,
+        "platformIdentifier": null,
+        "executionMode": "buffer",
+        "executor": "Cody",
+        "publicationStatus": "failed",
+        "failureReason": "Instagram does not support the aspect ratio of this media. Instagram supports aspect ratios between 4:5 and 1.91:1 for feed posts, and 9:16 for Stories and Reels.",
+        "retryStanding": null
+      }
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_dispatches_linkedin_v1",
+      "normalizedEvidence": {
+        "publicationTimestamp": "2026-07-09T22:06:10.564Z",
+        "endpoint": "linkedin_measures_registry",
+        "bufferUpdateId": "6a5002d93c48e2c7b33feba4",
+        "platformUrl": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7481106451558662144",
+        "platformIdentifier": "urn:li:ugcPost:7481106451558662144",
+        "executionMode": "buffer",
+        "executor": "Cody",
+        "publicationStatus": "published",
+        "failureReason": null,
+        "retryStanding": null
+      }
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_editors_letter_email_v1",
+      "normalizedEvidence": null
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_editors_letter_paragraph_v1",
+      "normalizedEvidence": null
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_issue_promotion_instagram_reel_v1",
+      "normalizedEvidence": null
+    },
+    {
+      "distributionAsset": "undrifted_issue001_da_launch_digest_email_v1",
+      "normalizedEvidence": null
+    }
+  ],
+  "weeklyOperationalReview": {
+    "queuedAssets": 4,
+    "publishedAssets": 4,
+    "heldAssets": 0,
+    "failedAssets": 4,
+    "pendingMedia": [
+      "undrifted_issue001_da_issue_promotion_instagram_reel_v1"
+    ],
+    "pendingApprovals": [
+      "measures_canonical_youtube_about_measures_registry_v1",
+      "undrifted_issue001_da_cover_story_quote_x_v1",
+      "measures_canonical_youtube_crystal_seat_orientation_v1",
+      "undrifted_issue001_da_cover_story_quote_linkedin_v1",
+      "undrifted_issue001_da_assessment_website_v1",
+      "undrifted_issue001_da_dispatches_linkedin_v1",
+      "undrifted_issue001_da_assessment_youtube_v1"
+    ],
+    "unresolvedBlockers": [
+      "three_canonical_youtube_assets_rejected_by_buffer_invalid_post",
+      "pub2_facebook_and_undrifted_x_need_endpoint_specific_operator_review_before_external_drafts",
+      "creative_production_pending_for_instagram_launch_reel"
+    ]
+  },
+  "finalDisposition": "HELD WITH REASON"
+}

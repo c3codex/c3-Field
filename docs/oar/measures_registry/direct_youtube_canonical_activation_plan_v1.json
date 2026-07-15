@@ -1,0 +1,193 @@
+{
+  "sourceOar2": "OAR/OAR2/publication/oar2_establish_direct_canonical_youtube_publication_authority_v1.meta.md",
+  "generatedAt": "2026-07-13T07:59:27.456Z",
+  "researchedSources": [
+    "https://developers.google.com/youtube/v3/guides/uploading_a_video",
+    "https://developers.google.com/youtube/v3/docs/videos/insert",
+    "https://developers.google.com/youtube/v3/docs/playlistItems/insert",
+    "https://developers.google.com/youtube/v3/docs/thumbnails/set"
+  ],
+  "capabilityAssessment": {
+    "requiredBoundary": "OAuth 2.0 user authorization for the Measures Registry YouTube channel",
+    "expectedScope": "https://www.googleapis.com/auth/youtube.upload for upload; https://www.googleapis.com/auth/youtube or youtube.force-ssl for playlist/thumbnail operations",
+    "channelIdExpected": "UC84Jbvswj0ykzd5nuKxoNSA",
+    "credentialPresence": {
+      "YOUTUBE_CLIENT_ID": false,
+      "YOUTUBE_CLIENT_SECRET": false,
+      "YOUTUBE_REFRESH_TOKEN": false,
+      "YOUTUBE_ACCESS_TOKEN": false,
+      "YOUTUBE_CHANNEL_ID": false,
+      "YOUTUBE_PLAYLIST_ID": false
+    },
+    "uploadReady": false,
+    "channelIdMatchesKnownMeasuresRegistryChannel": true,
+    "blocker": "missing_youtube_oauth_upload_credentials"
+  },
+  "recommendedGovernedUploadPath": {
+    "path": "Canonical Video -> YouTube Data API videos.insert -> Registry Evidence -> Buffer Distribution",
+    "directUploadMethod": "resumable upload through YouTube Data API videos.insert",
+    "defaultVisibility": "private until operator confirms publication state",
+    "playlistMethod": "playlistItems.insert after video ID exists and playlist ID is authorized",
+    "thumbnailMethod": "thumbnails.set only when a seated thumbnail file exists",
+    "serviceAccountsAllowed": false,
+    "note": "YouTube upload modifies a channel and requires OAuth user authorization for the channel owner/delegate."
+  },
+  "activationPlan": [
+    {
+      "actionId": "direct_youtube__measures_registry__about_measures_registry__v1",
+      "title": "About Measures Registry",
+      "storagePath": "about_measures_registry.mp4",
+      "mediaRole": "about_measures_registry_video",
+      "description": "Shared systems governance for institutions deploying AI.",
+      "proposedVisibility": "private",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "order": 1,
+      "channelId": "UC84Jbvswj0ykzd5nuKxoNSA",
+      "sourceUrl": "https://media.c3field.online/about_measures_registry.mp4",
+      "mimeType": "video/mp4",
+      "status": "held",
+      "blocker": "missing_youtube_oauth_upload_credentials",
+      "result": null,
+      "evidenceDesign": {
+        "registryTarget": "public.measures_distribution_execution plus measures_publication_distribution_asset.metadata",
+        "idempotencyKey": "direct_youtube__measures_registry__about_measures_registry__v1",
+        "evidenceFields": {
+          "youtube_video_id": null,
+          "public_url": null,
+          "publication_timestamp": null,
+          "playlist": "Measures Registry Canonical Orientation",
+          "publication_status": "held",
+          "executor": "Cody",
+          "execution_mode": "direct_youtube_api",
+          "evidence_timestamp": "2026-07-13T07:59:27.456Z"
+        }
+      }
+    },
+    {
+      "actionId": "direct_youtube__measures_registry__ai_isnt_broken_intro__v1",
+      "title": "AI Isn't Broken",
+      "storagePath": "ai_isnt_broken_intro.mp4",
+      "mediaRole": "intro_hook_video",
+      "description": "AI isn't broken. Systems are. Responsible AI deployment requires governable systems.",
+      "proposedVisibility": "private",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "order": 2,
+      "channelId": "UC84Jbvswj0ykzd5nuKxoNSA",
+      "sourceUrl": "https://media.c3field.online/ai_isnt_broken_intro.mp4",
+      "mimeType": "video/mp4",
+      "status": "held",
+      "blocker": "missing_youtube_oauth_upload_credentials",
+      "result": null,
+      "evidenceDesign": {
+        "registryTarget": "public.measures_distribution_execution plus measures_publication_distribution_asset.metadata",
+        "idempotencyKey": "direct_youtube__measures_registry__ai_isnt_broken_intro__v1",
+        "evidenceFields": {
+          "youtube_video_id": null,
+          "public_url": null,
+          "publication_timestamp": null,
+          "playlist": "Measures Registry Canonical Orientation",
+          "publication_status": "held",
+          "executor": "Cody",
+          "execution_mode": "direct_youtube_api",
+          "evidence_timestamp": "2026-07-13T07:59:27.456Z"
+        }
+      }
+    },
+    {
+      "actionId": "direct_youtube__measures_registry__crystal_seat_orientation__v1",
+      "title": "Crystal Seat Orientation",
+      "storagePath": "crystal_seat_orientation.mp4",
+      "mediaRole": "measures_position",
+      "description": "Measures Registry orientation for coherence, resonance, and governed system standing.",
+      "proposedVisibility": "private",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "order": 3,
+      "channelId": "UC84Jbvswj0ykzd5nuKxoNSA",
+      "sourceUrl": "https://media.c3field.online/crystal_seat_orientation.mp4",
+      "mimeType": "video/mp4",
+      "status": "held",
+      "blocker": "missing_youtube_oauth_upload_credentials",
+      "result": null,
+      "evidenceDesign": {
+        "registryTarget": "public.measures_distribution_execution plus measures_publication_distribution_asset.metadata",
+        "idempotencyKey": "direct_youtube__measures_registry__crystal_seat_orientation__v1",
+        "evidenceFields": {
+          "youtube_video_id": null,
+          "public_url": null,
+          "publication_timestamp": null,
+          "playlist": "Measures Registry Canonical Orientation",
+          "publication_status": "held",
+          "executor": "Cody",
+          "execution_mode": "direct_youtube_api",
+          "evidence_timestamp": "2026-07-13T07:59:27.456Z"
+        }
+      }
+    },
+    {
+      "actionId": "direct_youtube__measures_registry__obsidian_chamber_orientation__v1",
+      "title": "Obsidian Chamber Orientation",
+      "storagePath": "obsidian_chamber_orientation.mp4",
+      "mediaRole": "obsidian",
+      "description": "Assessment readiness orientation for the conditions that shape AI behavior.",
+      "proposedVisibility": "private",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "order": 4,
+      "channelId": "UC84Jbvswj0ykzd5nuKxoNSA",
+      "sourceUrl": "https://media.c3field.online/obsidian_chamber_orientation.mp4",
+      "mimeType": "video/mp4",
+      "status": "held",
+      "blocker": "missing_youtube_oauth_upload_credentials",
+      "result": null,
+      "evidenceDesign": {
+        "registryTarget": "public.measures_distribution_execution plus measures_publication_distribution_asset.metadata",
+        "idempotencyKey": "direct_youtube__measures_registry__obsidian_chamber_orientation__v1",
+        "evidenceFields": {
+          "youtube_video_id": null,
+          "public_url": null,
+          "publication_timestamp": null,
+          "playlist": "Measures Registry Canonical Orientation",
+          "publication_status": "held",
+          "executor": "Cody",
+          "execution_mode": "direct_youtube_api",
+          "evidence_timestamp": "2026-07-13T07:59:27.456Z"
+        }
+      }
+    },
+    {
+      "actionId": "direct_youtube__measures_registry__assessment_report_orientation__v1",
+      "title": "Assessment Report Orientation",
+      "storagePath": "assessment_report_orientation.mp4",
+      "mediaRole": "assessment_report_orientation",
+      "description": "A brief orientation before reviewing Measures Registry assessment findings.",
+      "proposedVisibility": "private",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "order": 5,
+      "channelId": "UC84Jbvswj0ykzd5nuKxoNSA",
+      "sourceUrl": "https://media.c3field.online/assessment_report_orientation.mp4",
+      "mimeType": "video/mp4",
+      "status": "held",
+      "blocker": "missing_youtube_oauth_upload_credentials",
+      "result": null,
+      "evidenceDesign": {
+        "registryTarget": "public.measures_distribution_execution plus measures_publication_distribution_asset.metadata",
+        "idempotencyKey": "direct_youtube__measures_registry__assessment_report_orientation__v1",
+        "evidenceFields": {
+          "youtube_video_id": null,
+          "public_url": null,
+          "publication_timestamp": null,
+          "playlist": "Measures Registry Canonical Orientation",
+          "publication_status": "held",
+          "executor": "Cody",
+          "execution_mode": "direct_youtube_api",
+          "evidence_timestamp": "2026-07-13T07:59:27.456Z"
+        }
+      }
+    }
+  ],
+  "bufferRelationship": {
+    "role": "downstream_distribution_scheduler",
+    "mayReferenceCanonicalYoutubeUrlAfterPublication": true,
+    "noLongerCanonicalUploadPath": true
+  },
+  "finalDisposition": "HELD WITH REASON"
+}
