@@ -52,7 +52,7 @@ Live DB surfaces confirmed to already exist (via Cody's OAR1 evidence, not by di
 Content, if/when applied, would:
 
 1. Additively merge an `executor_routing` object into the existing `system_process_registry` row's `metadata` for `process_key = 'new_moon_to_lions_gate_2026'` — default route, single-mutation-executor rule, capacity-aware assignment rule, non-overlapping-work rule, dual-advisement requirement, and the current-registration exception, all as jsonb text (no new column, no new table).
-2. Reconcile the three existing `c3_role_contract` rows additively: set `claude_codex_database_advisement_new_moon_to_lions_gate_2026.mutation_authority_allowed = true` (default primary executor going forward) and merge `routing_standing` metadata into all three rows (claude/cody/chazz) describing their standing under this addendum. Role keys, `system_key`, and all other existing fields are left untouched.
+2. Reconcile the three existing `c3_role_contract` rows additively: merge `routing_standing` metadata into all three rows (claude/cody/chazz) describing their standing under this addendum. Role keys, `system_key`, `mutation_authority_allowed`, and all other existing fields are left untouched — see the correction note under "Role Standing" below; the original draft set `mutation_authority_allowed = true` for Claude's row and was corrected in place before application.
 3. Register this addendum's own OAR2 → OAR1 lifecycle in `c3_oar_process_instance` / `c3_oar_transition_event` / `c3_oar_seeded_reference`, under a `process_instance_key` (`c3field_executor_routing_new_moon_to_lions_gate_2026_v1`) distinct from Cody's already-closed `new_moon_to_lions_gate_2026_initiative_registration` — no shared row, no overlap.
 4. Register a bounded `system_oar_queue` row and `system_oar_execution_evidence` row under a `queue_key` (`executor_routing_new_moon_to_lions_gate_2026_addendum_v1`) distinct from Cody's already-closed `new_moon_to_lions_gate_2026_registration_queue` — no shared row, no overlap.
 
@@ -84,11 +84,22 @@ This executor did not run `supabase migration repair` to force past the drift. R
 
 | Role key | Role state (as registered by Cody) | mutation_authority_allowed (current) | Addendum-intended change |
 |---|---|---|---|
-| claude_codex_database_advisement_new_moon_to_lions_gate_2026 | active | false | → true (default primary executor) |
+| claude_codex_database_advisement_new_moon_to_lions_gate_2026 | active | false | unchanged — see correction below |
 | cody_source_free_advisement_new_moon_to_lions_gate_2026 | active | false | unchanged (bounded executor/validator, per-OAR2 grant only) |
 | chazz_systems_advisement_new_moon_to_lions_gate_2026 | active | false | unchanged (advisor/validator only, never mutation) |
 
 None of these rows were modified by this run. The table above reflects the intended state of the drafted, unapplied migration.
+
+**Correction (2026-07-14, same day, pre-application, per op044/Chazz semantic review):** the migration's original
+draft set `mutation_authority_allowed = true` unconditionally for Claude's row — an evergreen, standing grant
+at the schema level, contradicting this addendum's own authority model (mutation authority is per-OAR2
+authorization, not a permanent role capability). The migration file was corrected in place before ever being
+applied (it was never pushed; this is a pre-application fix, not a rewrite of executed history) to leave
+`mutation_authority_allowed` untouched for all three roles. "Default primary executor" is recorded only as
+descriptive `routing_standing` metadata — an expectation about who is typically routed heavy work — not as a
+standing mutation grant. See
+`docs/oar/c3_field/oar1_reconcile_remote_migration_ledger_with_repository_history_v1.meta.md` for the full
+correction record and re-validated dry-run.
 
 ## Mutation Count
 

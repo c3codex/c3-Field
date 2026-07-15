@@ -3,7 +3,7 @@ document_type: oar1
 authority_level: execution_evidence
 document_scope: remote_migration_repository_reconciliation
 title: OAR1 - Reconcile Remote Migration Ledger With Repository History
-status: completed_with_held_versions
+status: completed_verified
 version: v1
 operator: op044
 executor: Claude
@@ -16,10 +16,11 @@ final_standing: completed_verified
 date: 2026-07-14
 amendment_date: 2026-07-14
 amendment_note: >
-  Amended same day after transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1
-  resolved the one held version. See "Amendment" section below. Final standing updated from
-  completed_with_held_versions to completed_verified for the 18-version reconciliation itself; a new,
-  distinct ordering condition involving 202607020001 was discovered and is returned as evidence, unresolved.
+  Amended twice same day. First: transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1
+  resolved the one held version, surfacing a new ordering condition involving 202607020001 (see "Amendment"
+  below). Second: op044/Chazz quarantined 202607020001 to docs/_source/codex/migration_drafts/ and required
+  semantic (not just ordering) review of the executor-routing migration, which found and corrected a blanket
+  mutation_authority_allowed=true grant before it was ever applied (see "Second Amendment" below).
 ---
 
 # OAR1 - Reconcile Remote Migration Ledger With Repository History
@@ -223,12 +224,83 @@ push would touch. This executor cannot confirm from this output whether
 cleanly once the `202607020001` question is resolved. That confirmation is blocked on resolving condition 2
 first, and is reported as an open question rather than assumed either way.
 
+## Second Amendment (Same Day) — Quarantine And Semantic Hold
+
+op044/Chazz's disposition for `202607020001` (recorded in
+`docs/_source/codex/migration_drafts/202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.provenance.meta.md`)
+authorized a history-preserving quarantine rather than a repair:
+
+1. `git mv supabase/migrations/202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql
+   docs/_source/codex/migration_drafts/202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql`
+   — content byte-for-byte unchanged, only its location changed. It is no longer under `supabase/migrations/`
+   and will not be picked up by any future `supabase db push`.
+2. An adjacent provenance note was created recording: no live ledger row exists for `202607020001`; it is
+   local-only, not proven remotely applied; its `surface_type = 'results'` conflicts with the live
+   `measures_encounter_def_surface_type_check` constraint; it is preserved as historical draft evidence, not
+   executable authority; `20260702130018` is the distinct, ledger-seated corrective migration using
+   `surface_type = 'threshold'`; and the quarantine is not migration repair and did not touch
+   `supabase_migrations.schema_migrations`.
+3. `supabase db push --dry-run` was rerun. Complete result:
+
+   ```
+   Would push these migrations:
+    • 20260709202341_record_undrifted_issue001_buffer_live_draft_ids_v1.sql
+    • 20260709220610_record_issue001_buffer_publication_results_v1.sql
+    • 20260709223000_establish_native_distribution_execution_registry_v1.sql
+    • 20260713071000_record_buffer_native_publication_execution_v1.sql
+    • 20260713072000_record_buffer_native_publication_retry_evidence_v1.sql
+    • 20260713073420_record_launch_cycle_001_publication_operations_dashboard_v1.sql
+    • 20260713075607_record_direct_youtube_canonical_activation_authority_v1.sql
+    • 20260713125621_seat_launch_cycle_001_undrifted_article_routes_v1.sql
+    • 20260713134829_record_launch_cycle_001_paragraph_publication_evidence_v1.sql
+    • 20260713152952_contain_launch_cycle_001_publication_boundary_incident_v1.sql
+    • 20260713154238_remove_internal_record_references_from_public_dispatch_v1.sql
+    • 20260713174500_activate_undrifted_issue_01_july_2026_v1.sql
+    • 20260713224453_register_launch_cycle_001_uploaded_publication_assets_v1.sql
+    • 20260714190132_restore_inanna_foundational_public_encounter_standing_v1.sql
+    • 20260714214628_establish_capacity_aware_executor_routing_for_new_moon_to_lions_gate_v1.sql
+   Finished supabase db push.
+   ```
+
+   All 18 target versions from `c3_ledger_0004` are recognized — none appear in this list (they are already
+   applied remotely or, for `202607020001`, correctly excluded as never-applied and now outside the tracked
+   directory entirely). `202607020001` is no longer proposed or blocking ordering. This is the complete,
+   unfiltered list of every migration the CLI would apply on a real push: 14 pre-existing pending publication/
+   distribution migrations, plus the executor-routing migration.
+
+4. **Semantic review of the executor-routing migration (explicitly required beyond ordering cleanliness):**
+   reading `supabase/migrations/20260714214628_establish_capacity_aware_executor_routing_for_new_moon_to_lions_gate_v1.sql`
+   line by line found that its original draft set
+   `c3_role_contract.mutation_authority_allowed = true` unconditionally for Claude's role row — a permanent,
+   evergreen grant at the schema level. This contradicts the authority model the addendum itself defines and
+   that op044 required this migration preserve: Claude as default heavy-work executor, Cody as bounded
+   advisor/validator, Chazz as systems advisor/validator, op044 as deciding authority, and **mutation authority
+   as per-OAR2 authorization, not a permanent role capability.** A blanket `true` on that column is exactly the
+   condition op044 said to hold for.
+
+   **This was not pushed.** The migration was corrected in place (pre-edit sha256
+   `3f9f03c8ada85c9009dad0536231c5489fbfbe0ae500a178c61a3f9a88c3d630`, post-edit sha256
+   `8e01e741fc963b657ea54b7574dd41553e9ee88b7fdb9c98ae3600087c48750c`) — correcting in place rather than
+   proposing a separate new file was appropriate here because, unlike the ledger recoveries elsewhere in this
+   OAR1, this file was never applied and represents this session's own unexecuted draft, not historical fact
+   that must stay byte-exact. The fix removes the `mutation_authority_allowed = true` assignment entirely; the
+   three role rows' `mutation_authority_allowed` values are left exactly as Cody's original registration set
+   them (`false`). "Default primary executor" now exists only as descriptive `routing_standing` metadata text —
+   an expectation about default routing, not a mutation grant. The addendum's own OAR1
+   (`docs/oar/c3_field/oar1_addendum_establish_capacity_aware_executor_routing_for_new_moon_to_lions_gate_v1.meta.md`)
+   was corrected to match. A third dry-run after this edit produced the identical enumeration above (ordering
+   is insensitive to this content change, as expected).
+
 ## Final Standing
 
 **18-version reconciliation:** `completed_verified` — all 18 target versions now have a truthful, verified
-repository disposition (2 renamed, 16 recovered, 0 held). Nothing was mutated in the database. Nothing was
-repaired in the ledger.
+repository disposition (2 renamed, 16 recovered, 0 quarantined-not-repaired). Nothing was mutated in the
+database. Nothing was repaired in the ledger.
 
-**Separate, newly discovered condition:** `202607020001`'s out-of-order standing relative to the now-corrected
-remote ledger is unresolved and returned as evidence, per explicit instruction not to apply it. This is a new
-question for op044/Chazz, not a defect in the 18-version reconciliation above.
+**202607020001 ordering condition:** resolved by quarantine, not repair. It no longer appears anywhere in
+`supabase/migrations/` and no longer affects `db push` ordering.
+
+**Executor-routing migration:** corrected before application, not push-ready by default — it is one of 15
+migrations a real `db push` would apply, and nothing in this OAR1 authorizes running that push. Its content
+now matches the required per-OAR2 mutation-authority model; op044's confirmation that the correction is
+sufficient, and the separate decision of whether/when to actually push, remain open.

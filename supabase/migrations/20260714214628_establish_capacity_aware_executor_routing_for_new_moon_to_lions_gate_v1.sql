@@ -18,6 +18,17 @@
 -- check constraint does not include 'claude'. Recorded in OAR1 as an exact gap
 -- with a bounded recommendation; the queue/confirm transition below is recorded
 -- with actor = 'operator' (op044 approval), not a fabricated 'claude' actor.
+--
+-- Corrected 2026-07-14 (op044/Chazz semantic review, pre-application): the
+-- original draft of this migration set c3_role_contract.mutation_authority_allowed
+-- = true unconditionally for Claude's role row. That is a permanent/evergreen
+-- grant at the schema level and contradicts the authority model this addendum
+-- itself defines: mutation authority is per-OAR2 authorization, not a standing
+-- role capability. Default routing (who is expected to execute heavy work by
+-- default) is descriptive metadata, not a mutation grant. This migration no
+-- longer touches mutation_authority_allowed for any role; it remains whatever
+-- value Cody's original registration set (false for all three), unchanged by
+-- this addendum.
 
 -- ============================================================
 -- 1. Reconcile initiative-level routing standing
@@ -52,11 +63,10 @@ where process_key = 'new_moon_to_lions_gate_2026';
 
 update public.c3_role_contract
 set
-  mutation_authority_allowed = true,
   metadata = coalesce(metadata, '{}'::jsonb) || jsonb_build_object(
     'routing_standing', 'default_primary_executor_sustained_mutations',
     'routing_source_oar2_addendum', 'docs/oar/c3_field/oar2_addendum_establish_capacity_aware_executor_routing_for_new_moon_to_lions_gate_v1.meta.md',
-    'routing_note', 'Default primary mutation executor for the remaining New Moon to Lion''s Gate critical path. Advises before executing; does not replace operator authority or expand scope independently.'
+    'routing_note', 'Default primary mutation executor for the remaining New Moon to Lion''s Gate critical path. Advises before executing; does not replace operator authority or expand scope independently. This routing_standing describes default expectation only - mutation_authority_allowed is deliberately not set true here. Actual mutation authority for any given piece of work is granted per-OAR2, not by this or any standing role row; this migration does not change mutation_authority_allowed from its currently registered value.'
   )
 where role_key = 'claude_codex_database_advisement_new_moon_to_lions_gate_2026';
 
