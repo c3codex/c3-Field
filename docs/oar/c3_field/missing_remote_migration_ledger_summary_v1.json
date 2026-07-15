@@ -1,0 +1,327 @@
+{
+  "captured_at": "2026-07-14T22:20:43.954Z",
+  "count": 18,
+  "summary": [
+    {
+      "version": "20260702125802",
+      "name": "make_undrifted_launch_edition_publication_cover",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 7649,
+      "objects": [
+        "Publication",
+        "all",
+        "changes",
+        "cover",
+        "encounter_key",
+        "measures_encounter_def",
+        "measures_encounter_surface_assignment",
+        "measures_media_map",
+        "media_role",
+        "return",
+        "selected",
+        "undrifted"
+      ],
+      "source_oar_mentions": [
+        "docs/oar/measures_registry/oar2_make_undrifted_launch_edition_publication_cover_v1.meta.md"
+      ]
+    },
+    {
+      "version": "20260702130018",
+      "name": "seat_marble_surface_style_profiles_and_nested_car_acknowledgments",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 12900,
+      "objects": [
+        "begins",
+        "car_unit_count",
+        "completion",
+        "encounter",
+        "encounter_key",
+        "failed",
+        "is",
+        "marble_chamber_orientation",
+        "marble_chamber_results",
+        "measures_encounter_def",
+        "measures_encounter_surface_assignment",
+        "measures_media_map",
+        "measures_registry",
+        "orientation_next",
+        "payment",
+        "receipt",
+        "registry_key",
+        "requires",
+        "results_standing",
+        "surface_key",
+        "this"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702143712",
+      "name": "decommission_registered_runtime_active_standing",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 1081,
+      "objects": [
+        "DO",
+        "active",
+        "failed",
+        "measures_registry",
+        "registry_key"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702151435",
+      "name": "reseat_crystal_intro_video_and_headline",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 1109,
+      "objects": [
+        "DO",
+        "ai_isnt_broken_intro",
+        "encounter_key",
+        "failed",
+        "measures_encounter_def",
+        "measures_media_map",
+        "media_role"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702153744",
+      "name": "fix_year_2026_and_seat_motion_cdn_urls",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 1813,
+      "objects": [
+        "CDN",
+        "DO",
+        "encounter_key",
+        "failed",
+        "jsonb_array_elements",
+        "measures_encounter_def",
+        "measures_media_map",
+        "media_role",
+        "motion",
+        "year_check"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702154341",
+      "name": "fix_display_titles_for_document_title_pipeline",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 1725,
+      "objects": [
+        "DB",
+        "DO",
+        "encounter_key",
+        "failed",
+        "marble",
+        "measures_encounter_def"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702164214",
+      "name": "seat_threshold_plaque_context_lines",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 887,
+      "objects": [
+        "AI",
+        "encounter_key",
+        "failed",
+        "measures_encounter_def",
+        "threshold"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702174145",
+      "name": "seat_missing_cdn_urls_marble_orientation_and_obsidian",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 606,
+      "objects": [
+        "background",
+        "measures_media_map",
+        "media_role",
+        "video"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702174248",
+      "name": "reseat_marble_orientation_surface_correct_bucket_and_path",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 656,
+      "objects": [
+        "measures_media_map",
+        "media_role",
+        "obsidian"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702174411",
+      "name": "reseat_cdn_urls_until_env_var_live",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 614,
+      "objects": [
+        "R2",
+        "build",
+        "measures_media_map",
+        "media_role"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702203335",
+      "name": "seat_crystal_obsidian_surface_assets_and_normalize_encounter_surfaces_to_r2",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 4018,
+      "objects": [
+        "encounter_key",
+        "measures_encounter_def",
+        "measures_media_map",
+        "media_role",
+        "threshold"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702204120",
+      "name": "correct_surface_backgrounds_to_supabase_measures_registry_bucket",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 2637,
+      "objects": [
+        "measures_media_map",
+        "media_role",
+        "surface"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260702205631",
+      "name": "seat_marble_payment_and_resolution_surface_profiles_v1",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 1296,
+      "objects": [
+        "Received",
+        "both",
+        "encounter_key",
+        "has",
+        "measures_encounter_def",
+        "measures_encounter_surface_assignment"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260705184946",
+      "name": "seat_institutional_metadata_authority",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 4877,
+      "objects": [
+        "are",
+        "dates",
+        "encounter_key",
+        "is",
+        "measures_encounter_def",
+        "measures_registry",
+        "of",
+        "registry_key",
+        "the"
+      ],
+      "source_oar_mentions": [
+        "docs/oar/measures_registry/oar2_seat_institutional_metadata_authority_v1.meta.md"
+      ]
+    },
+    {
+      "version": "20260705190138",
+      "name": "seat_encounter_style_authority_in_field_measures_db",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 11509,
+      "objects": [
+        "OAR1",
+        "measures_encounter_surface_assignment",
+        "null",
+        "surface_key",
+        "the"
+      ],
+      "source_oar_mentions": [
+        "docs/oar/measures_registry/oar2_seat_encounter_style_authority_in_field_measures_db_v1.meta.md"
+      ]
+    },
+    {
+      "version": "20260705190228",
+      "name": "correct_publication_dispatch_and_seat_paragraph_social_link",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 1478,
+      "objects": [
+        "jsonb_array_elements",
+        "measures_encounter_surface_assignment",
+        "measures_registry",
+        "registry_key",
+        "surface_key"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260706061910",
+      "name": "seat_assessment_and_payment_notification_dispatch",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 7046,
+      "objects": [
+        "before",
+        "dispatch",
+        "dispatch_state",
+        "is",
+        "logic",
+        "measures_notification_dispatch_log",
+        "measures_notification_dispatch_log_prevent_mutation",
+        "measures_notification_dispatch_log_source_idx",
+        "measures_notification_template",
+        "measures_seat_hold_notification_template",
+        "on",
+        "or",
+        "set_updated_at",
+        "template",
+        "text",
+        "was"
+      ],
+      "source_oar_mentions": []
+    },
+    {
+      "version": "20260709190108",
+      "name": "record_undrifted_issue001_buffer_manifest_export_standing_v1",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "chars": 2046,
+      "objects": [
+        "Assets",
+        "code",
+        "is",
+        "measures_publication_distribution_asset",
+        "only",
+        "platforms"
+      ],
+      "source_oar_mentions": [
+        "docs/oar/measures_registry/buffer_batch_002_undrifted_issue001_campaign_export_v1.md",
+        "OAR/OAR2/publication/oar2_export_issue001_campaign_to_buffer_drafts_v1.meta.md"
+      ]
+    }
+  ]
+}
