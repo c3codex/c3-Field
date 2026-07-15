@@ -12,8 +12,14 @@ source_oar2: docs/oar/c3_field/oar2_reconcile_remote_migration_ledger_with_repos
 initiative_key: new_moon_to_lions_gate_2026
 database_mutation_count: 0
 migration_ledger_mutation_count: 0
-final_standing: completed_with_held_versions
+final_standing: completed_verified
 date: 2026-07-14
+amendment_date: 2026-07-14
+amendment_note: >
+  Amended same day after transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1
+  resolved the one held version. See "Amendment" section below. Final standing updated from
+  completed_with_held_versions to completed_verified for the 18-version reconciliation itself; a new,
+  distinct ordering condition involving 202607020001 was discovered and is returned as evidence, unresolved.
 ---
 
 # OAR1 - Reconcile Remote Migration Ledger With Repository History
@@ -182,9 +188,47 @@ Not a new OAR2 by default. Two threads remain for op044/Chazz:
    still unapplied) can now proceed given 17 of 18 drift versions are resolved and the dry run is otherwise
    clean.
 
+## Amendment (Same Day) — `20260702130018` Resolved, New Ordering Condition Found
+
+`docs/oar/c3_field/transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1.meta.md`
+(op044/Chazz) supplied the missing piece for the one held version: a live, read-only query of
+`supabase_migrations.schema_migrations` for version `202607020001` specifically returned no row, confirming
+`202607020001` was never applied remotely under that version. Executed per explicit instruction:
+
+1. Recovered `supabase/migrations/20260702130018_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql`
+   verbatim from the ledger export (sha256 `d3e73cb866dbe1cef6fc2f3dbd3eeba61ba664ede5792c68917a911f9fa16d31`,
+   independently recomputed and matching both this session's own earlier export and the transfer surface's
+   stated value).
+2. `supabase/migrations/202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql` was
+   not edited, renamed, or deleted.
+3. `202607020001` is now classified local-only / not proven remotely ledger-applied (recorded in the manifest
+   and divergence review, not in the file itself).
+4. Updated `recovered_remote_migration_manifest_v1.meta.md` (Group 3 amended: 2 renamed, 16 recovered, 0 held)
+   and `remote_migration_divergence_review_v1.meta.md` (resolution appended).
+5. Reran `supabase db push --dry-run`.
+6. No `--include-all`, no actual push, no `migration repair` was run.
+
+**Second dry-run result:** the original drift error (18 missing versions) no longer appears — that condition
+is resolved. A **new, distinct** condition appeared instead: the CLI now reports `202607020001` as a local
+file that would need `--include-all` to insert before the last remote-applied migration (a direct, expected
+consequence of `20260702130018` now being correctly recognized as the real applied version, leaving
+`202607020001` looking out-of-order). Per explicit instruction, this executor stopped here without running
+`--include-all`. Full output and analysis: `remote_migration_reconciliation_validation_v1.meta.md`, "Second Dry
+Run" section.
+
+**On the capacity-aware executor-routing migration:** the second dry run's output does not enumerate it —
+the CLI appears to stop at the first ordering problem (`202607020001`) rather than listing everything a real
+push would touch. This executor cannot confirm from this output whether
+`20260714214628_establish_capacity_aware_executor_routing_for_new_moon_to_lions_gate_v1.sql` would apply
+cleanly once the `202607020001` question is resolved. That confirmation is blocked on resolving condition 2
+first, and is reported as an open question rather than assumed either way.
+
 ## Final Standing
 
-`completed_with_held_versions`
+**18-version reconciliation:** `completed_verified` — all 18 target versions now have a truthful, verified
+repository disposition (2 renamed, 16 recovered, 0 held). Nothing was mutated in the database. Nothing was
+repaired in the ledger.
 
-17 of 18 versions now have a truthful, verified repository disposition. One remains honestly held. Nothing was
-mutated in the database. Nothing was repaired in the ledger.
+**Separate, newly discovered condition:** `202607020001`'s out-of-order standing relative to the now-corrected
+remote ledger is unresolved and returned as evidence, per explicit instruction not to apply it. This is a new
+question for op044/Chazz, not a defect in the 18-version reconciliation above.

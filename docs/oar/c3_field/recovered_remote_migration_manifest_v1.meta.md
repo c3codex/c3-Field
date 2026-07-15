@@ -2,13 +2,17 @@
 document_type: recovery_manifest
 document_scope: missing_remote_migration_provenance
 source_oar2: docs/oar/c3_field/oar2_reconcile_remote_migration_ledger_with_repository_history_v1.meta.md
-status: completed_with_held_versions
+status: completed_verified
 version_count: 18
-recovered_count: 15
+recovered_count: 16
 renamed_count: 2
-held_count: 1
+held_count: 0
 mutation_count: 0
 migration_ledger_mutation_count: 0
+amendment: >
+  2026-07-14, later same day: docs/oar/c3_field/transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1.meta.md
+  supplied a live-ledger-confirmed answer (no `supabase_migrations.schema_migrations` row exists for
+  version 202607020001) that resolves the prior hold on 20260702130018. See Group 3 (Amended) below.
 ---
 
 # Recovered Remote Migration Manifest
@@ -64,6 +68,7 @@ from the ledger export, unmodified, unreformatted, uncombined.
 | `20260705190138` | `20260705190138_seat_encounter_style_authority_in_field_measures_db.sql` | `b9dc5bad18fe3e3b096a26474d3a40d27070fbeff059f7a0fac005e98c4ca3f7` | contribute2c3communitypartners@gmail.com | strong | `measures_encounter_surface_assignment` |
 | `20260705190228` | `20260705190228_correct_publication_dispatch_and_seat_paragraph_social_link.sql` | `f7f812e41e5b8b15693002cd71f296d319b7ce470135ba488252d81dbf5a78f4` | contribute2c3communitypartners@gmail.com | strong | `measures_encounter_surface_assignment`, `measures_registry` |
 | `20260706061910` | `20260706061910_seat_assessment_and_payment_notification_dispatch.sql` | `2920b5b63a179ed31df839596b6df3cb97173909f65cb6b7f2d4a7006330ebfe` | contribute2c3communitypartners@gmail.com | exact (live effects independently confirmed present per prior investigation) | `measures_notification_template`, `measures_notification_dispatch_log` (new tables), triggers, indexes |
+| `20260702130018` | `20260702130018_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql` | `d3e73cb866dbe1cef6fc2f3dbd3eeba61ba664ede5792c68917a911f9fa16d31` | contribute2c3communitypartners@gmail.com | exact (resolved 2026-07-14, see amendment below) | `measures_media_map`, `measures_registry`, `measures_encounter_def`, `measures_encounter_surface_assignment` |
 
 Every sha256 above was independently recomputed by this executor over the exact bytes written to the recovered
 file (not merely copied from the prior investigation's `missing_remote_migration_content_match_v1.json`), and
@@ -78,11 +83,31 @@ directly diffing both versions' ledger SQL (not inferred) — see
 may represent an effect later superseded; it must not be rewritten to resemble current state," the file is
 recovered as originally applied, not adjusted to match the superseding version.
 
-## Group 3 — Held (Stage B)
+## Group 3 (Amended) — Resolved, No Longer Held
 
-| Version | Reason held |
-|---|---|
-| `20260702130018` | Same name as local `202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql`, but content differs in one material respect: the ledger version sets `surface_type = 'threshold'` on the `marble_chamber_results` encounter_def insert, with an inline comment reading "Fix: surface_type = 'threshold' (not 'results' — check constraint)"; the local file has `surface_type = 'results'`. This session's governing evidence covers only the 18 target versions — it does not include the remote ledger's own row for `202607020001`, so this executor cannot confirm whether that version's actually-applied remote content also reads `'results'` (meaning it may have failed a check constraint on first application and never actually seated that value) or something else entirely. Resolving this requires either op044 accepting the ledger export as sufficient without that comparison, or a follow-up read of `202607020001`'s own ledger row. Per this OAR2's Stage B decision rule ("if interpretation or reconstruction is required, Claude shall hold that version and return it to op044"), no file was created or renamed for this version. |
+`20260702130018` was held pending confirmation of `202607020001`'s own remote ledger standing. That evidence
+arrived same-day via
+`docs/oar/c3_field/transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1.meta.md`:
+a live, read-only query of `supabase_migrations.schema_migrations` for version `202607020001` returned **no
+row** — the current live ledger retains no evidence `202607020001` was ever applied remotely under that
+version. Combined with the original finding (ledger `20260702130018` corrects `surface_type` from `'results'`
+to `'threshold'`, matching the live `measures_encounter_def_surface_type_check` constraint, which does not
+accept `'results'`), this resolves the divergence:
+
+- `202607020001` is reclassified **local-only / not proven remotely ledger-applied**. Its file is left exactly
+  as-is — not edited, renamed, or deleted, per explicit instruction. It remains in the repository as local
+  historical draft material.
+- `20260702130018` is recovered verbatim as its own distinct historical migration:
+  `supabase/migrations/20260702130018_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql`
+  (sha256 `d3e73cb866dbe1cef6fc2f3dbd3eeba61ba664ede5792c68917a911f9fa16d31`, independently recomputed by this
+  executor from the same ledger export used in the initial pass, and cross-checked against the transfer
+  surface's independently-stated hash — both match).
+- The transfer surface's stated local-file hash for `202607020001`
+  (`d202488043b81ee76eaecc3a3c449c0276b36751201c95a8898d95be59a38815`) was independently reproduced by this
+  executor after normalizing CRLF→LF and trimming trailing whitespace — the same checkout artifact identified
+  earlier in this reconciliation, not a sign of unexpected drift in the local file.
+
+This closes Group 3. All 18 versions now have a resolved disposition: 2 renamed, 16 recovered, 0 held.
 
 ## Recovery Fidelity Confirmation
 

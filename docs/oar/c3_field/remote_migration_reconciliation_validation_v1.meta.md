@@ -2,8 +2,12 @@
 document_type: reconciliation_validation
 document_scope: missing_remote_migration_provenance
 source_oar2: docs/oar/c3_field/oar2_reconcile_remote_migration_ledger_with_repository_history_v1.meta.md
-status: completed_with_held_versions
+status: completed_verified_new_ordering_blocker_found
 validation_command: supabase db push --dry-run
+amendment: >
+  2026-07-14, later same day: rerun after recovering 20260702130018 per
+  docs/oar/c3_field/transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1.meta.md.
+  See "Second Dry Run" section below.
 ---
 
 # Remote Migration Reconciliation Validation
@@ -61,6 +65,62 @@ interpretation," not "reverted."
 
 Given one version remains an open, honestly-recorded gap, this OAR2 does not meet the bar for
 `completed_verified`. Final standing is `completed_with_held_versions`.
+
+## Second Dry Run (After Recovering `20260702130018`)
+
+### Command
+
+```
+supabase db push --dry-run
+```
+
+### Complete Result
+
+```
+Initialising login role...
+DRY RUN: migrations will *not* be pushed to the database.
+Connecting to remote database...
+Found local migration files to be inserted before the last migration on remote database.
+
+Rerun the command with --include-all flag to apply these migrations:
+supabase\migrations\202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql
+```
+
+`--include-all` was **not** run. No push, no repair, no reconstructed-SQL replay was performed.
+
+### Distinguishing the Three Conditions
+
+**1. Migration-history mismatch (the original 18-version drift):** resolved. This exact error message
+("Remote migration versions not found in local migrations directory") no longer appears. All 18 target
+versions now have either a recovered file at their governed remote timestamp or (for `202607020001`) a
+reasoned, evidence-backed decision to leave them local-only.
+
+**2. Unintended pending migration — new finding, this run:** by successfully recognizing `20260702130018` as
+the real, remote-applied version, `202607020001` (chronologically earlier, never remote-applied per the
+transfer surface's live query) now reads to the CLI as a local file that predates the last-known-applied
+remote migration — an out-of-order insertion. The CLI's own suggested fix is `--include-all`, which would
+apply it. **This is exactly the condition the operator's instruction anticipated and prohibited: `202607020001`
+is proposed for application. This executor stopped here and did not run `--include-all`, `db push`, or
+`migration repair`.** This is evidence to return, not a problem to resolve unilaterally — `202607020001`'s
+own status (local-only draft vs. something that should eventually be reconciled some other way) was already
+decided as "leave untouched" by the prior step; whether it should ever be pushed is a separate, not-yet-made
+operator decision.
+
+**3. The known, intentional, still-unapplied capacity-aware executor-routing migration
+(`supabase/migrations/20260714214628_establish_capacity_aware_executor_routing_for_new_moon_to_lions_gate_v1.sql`):**
+this dry run's output does not mention it at all. The CLI appears to stop at the first ordering problem it
+finds (`202607020001`) rather than enumerating every migration that would be affected by a real push. This
+executor cannot confirm from this output alone whether `20260714214628` would apply cleanly, would also be
+blocked, or would need `--include-all` too — that determination is blocked on resolving condition 2 first,
+since the dry run doesn't get past it.
+
+### Disposition
+
+Provenance drift is reconciled for all 18 target versions. A **new, distinct** ordering condition was
+discovered as a direct consequence of that reconciliation succeeding, involving a file
+(`202607020001_...`) already known and already deliberately left untouched. This condition, and the resulting
+inability to independently confirm the executor-routing migration's push-readiness, are returned as evidence.
+No further action was taken.
 
 ## A Clean Dry Run Does Not Authorize a Push
 

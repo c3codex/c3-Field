@@ -2,12 +2,16 @@
 document_type: divergence_review
 document_scope: missing_remote_migration_provenance
 source_oar2: docs/oar/c3_field/oar2_reconcile_remote_migration_ledger_with_repository_history_v1.meta.md
-status: completed_with_one_held_version
+status: completed
+amendment: >
+  2026-07-14, later same day: resolved via
+  docs/oar/c3_field/transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1.meta.md.
+  See "Resolution" section appended below.
 ---
 
 # Divergence Review (OAR2 Stage B)
 
-## `20260702130018` — Held
+## `20260702130018` — Originally Held, Now Resolved
 
 **Local same-name file:** `supabase/migrations/202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql`
 
@@ -29,11 +33,29 @@ executor cannot confirm from available evidence whether:
   effect, with `20260702130018` being the real, only-successful application, or
 - some other sequence occurred.
 
-**Disposition:** held, not resolved. Per this OAR2's Stage B decision rule ("if interpretation or
+**Original disposition:** held, not resolved. Per this OAR2's Stage B decision rule ("if interpretation or
 reconstruction is required, Claude shall hold that version and return it to op044"), no file was renamed,
-merged, or created for this version. Resolving it requires either (a) op044 accepting the ledger's own
-in-SQL explanation as sufficient without seeing `202607020001`'s remote row, or (b) a follow-up read of that
-row specifically, which was outside this OAR2's governing-evidence set.
+merged, or created for this version at the time.
+
+### Resolution (same day)
+
+`docs/oar/c3_field/transfer_surface_marble_migration_202607020001_20260702130018_reconciliation_v1.meta.md`
+supplied the missing piece: a live, read-only query of `supabase_migrations.schema_migrations` filtered to
+version `202607020001` specifically returned **no row**. The current live ledger retains no evidence that
+`202607020001` was ever applied remotely under that version — which is exactly the fact this executor lacked
+when it held the version.
+
+op044/Chazz accepted this as sufficient. Per their explicit instruction:
+
+- `202607020001` is now classified **local-only / not proven remotely ledger-applied**. Its file
+  (`supabase/migrations/202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql`)
+  was not edited, renamed, or deleted.
+- `20260702130018` was recovered verbatim as its own historical migration file
+  (`supabase/migrations/20260702130018_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql`),
+  sha256 `d3e73cb866dbe1cef6fc2f3dbd3eeba61ba664ede5792c68917a911f9fa16d31` — recomputed by this executor
+  directly from the ledger export (not merely copied from the transfer surface's stated value), and it matches.
+
+This version is no longer held.
 
 ## `20260702164214` — Recovered (not held)
 
