@@ -24,3 +24,13 @@ artifacts/
 .hardhat-build/
 typechain-types/
 types/ethers-contracts/
+
+# Local video production staging (large binaries; canonical copies live in Supabase Storage / R2)
+Assets/Video/**/production/
+
+# Local generated tool state
+supabase/.temp/
+.playwright-mcp/
+.agents/skills/
+.claude/skills/
+skills-lock.json
