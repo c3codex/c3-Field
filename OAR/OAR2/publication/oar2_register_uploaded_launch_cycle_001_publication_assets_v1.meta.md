@@ -48,11 +48,11 @@ It does not authorize:
 
 Preserve:
 
-Canonical Publication or Canonical Media  
-→ Governed Derivative Asset  
-→ Public Storage Object  
-→ Endpoint Assignment  
-→ Buffer Execution  
+Canonical Publication or Canonical Media
+→ Governed Derivative Asset
+→ Public Storage Object
+→ Endpoint Assignment
+→ Buffer Execution
 → Publication Evidence
 
 The uploaded assets are governed descendants and publication-support assets.
@@ -414,10 +414,10 @@ Cody receives stable registered asset IDs and verified public URLs instead of lo
 
 The publication workflow then becomes:
 
-Registered and Approved Asset  
-→ Correct Buffer Workspace  
-→ Operator-Authorized Schedule  
-→ Platform Publication  
+Registered and Approved Asset
+→ Correct Buffer Workspace
+→ Operator-Authorized Schedule
+→ Platform Publication
 → Execution Evidence
 
 ---

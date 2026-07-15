@@ -26,7 +26,6 @@ insert into measures_publication_derivative_asset (
   '{"public_url":"https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp","storage_bucket":"measures-registry","storage_object_path":"launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp","checksum_sha256":"f5a885c198885f2ee4e5e6ee11d7b1048db1de2ad9d3fb75cc630d034b9e3ea4","dimensions":"1200x675","launch_cycle":"launch_cycle_001"}'::jsonb
 )
 on conflict (derivative_key) do nothing;
-
 insert into measures_publication_derivative_asset (
   derivative_key, publication_asset_id, derivative_type, title, description,
   format, duration, source_reference, generation_status, generation_source,
@@ -501,4 +500,3 @@ insert into measures_publication_derivative_asset (
   '{"public_url":"https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/campaign_derivatives/crystal_seat_orientation__primary_clip_9x16_v1.mp4","storage_bucket":"measures-registry","storage_object_path":"campaign_derivatives/crystal_seat_orientation__primary_clip_9x16_v1.mp4","checksum_sha256":"1c5313f0820b136dc56ad1ddc3820146b3040e4ea908012e207adda7d1be8d2c","dimensions":"1080x1920","launch_cycle":"launch_cycle_001"}'::jsonb
 )
 on conflict (derivative_key) do nothing;
-
