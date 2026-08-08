@@ -16,40 +16,43 @@ context: >
   Measures Registry and c3Ops backend design now require a stable relationship among governed
   environment identity, evidence, current standing, progression, and later SEAT/SRC activity.
   Historical MAP evidence for Measures of Inanna also demonstrates the need to preserve immutable
-  evidence while separately resolving which governed state presently applies.
+  evidence while separately resolving which governed state presently applies. A further source
+  recognition has now been made: Spark / Weave / Field / Form is not a new implementation vocabulary,
+  but Source from the original Codexstone inscription. The emerging implementation pattern appears
+  to express one Spark followed by a 3x3 downstream expansion distributed across Weave, Field, and Form.
 observed_relations: >
   Evidence records describe what occurred and what was observed; portal and progression systems
   require a separate current-state relation to determine what presently governs without rewriting
   historical evidence. FREE must be able to resolve current standing from governed sources rather
   than reconstructing present truth from frontend state or repeatedly interpreting historical files.
-  A further implementation pattern is now visible: the minimal Current functions map coherently to
-  the four foundational functions Spark, Weave, Field, and Form. This may indicate a repeatable
-  minimal implementation grammar for initiatives, but this entry records the pattern without
-  elevating it to a universal Codex principle.
+  The c3 Current token geometry visually preserves a recursive relational center and the outer
+  inscription C3 DAO / CONNECT CONTRIBUTE CREATE; the image is preserved as visual provenance only
+  and does not itself define token mechanics or authority.
 discovery: >
   c3 Current is minimally necessary as the persistent reference to the presently governing state
   of a governed environment. It does not replace evidence. It binds the evidence and disposition
   from which the current standing is derived, preserves predecessor lineage, and provides a stable
   resolve target for c3Ops/FREE. Deferring this binding further increases the risk of retrofitting
   token/state identity across MAP, SEAT, SRC2, evidence, and portal structures after those systems
-  are already implemented. The minimal Current implementation also expresses a four-function
-  sequence: Spark/Bind, Weave/Attest, Field/Resolve, Form/Advance.
+  are already implemented. The minimal implementation should be interpreted through Source:
+  Spark / Weave / Field / Form. Spark initiates; the emerging expansion pattern is three relations
+  in Weave, three governing conditions in Field, and three material expressions in Form. The exact
+  nine cells remain a candidate pattern pending repeated confirmation across Current, MAP, SEAT,
+  SRC2, and other initiatives.
 implications: >
   The minimal Current function should be bound before further backend expansion. Expansion of token
   economics, distribution, wallet behavior, voting, rewards, transfer behavior, public visibility,
   and other future uses remains intentionally undecided. Implementation must preserve historical
-  evidence and prior Current states rather than overwrite them. The Spark/Weave/Field/Form mapping
-  should be observed during implementation for possible reuse as a foundational minimal-initiative
-  pattern, but broader standing requires later evidence and review.
+  evidence and prior Current states rather than overwrite them. Source grammar should guide the
+  minimum implementation without prematurely canonizing the exact 3x3 cells.
 current_standing: operator_confirmed_implementation_elevated_pending_bounded_registration
 disposition: >
   Preserve this minimal function as the implementation target. Route a bounded OAR2 for backend
   registration of the Current relation before further MAP-to-SEAT evidence-transfer architecture
   depends on an alternate state model. No token expansion is authorized by this ledger entry.
-  Preserve the Spark/Weave/Field/Form relation as a candidate implementation pattern for observation;
-  do not infer universal standing from this entry alone.
 related_authorities:
   - c3 Ledger — Registry of Record
+  - Codexstone Source inscription
   - Measures Registry
   - c3Ops
   - FREE
@@ -66,18 +69,21 @@ related_initiatives:
 candidate_proposition: >
   c3 Current preserves which governed state presently applies to an environment, with immutable
   lineage to the evidence, disposition, and prior state from which that standing was derived.
-  Minimal initiative implementation may express through four foundational functions:
-  Spark, Weave, Field, and Form.
+candidate_source_pattern: >
+  Source is Spark / Weave / Field / Form. Minimal initiative implementation appears to consist of
+  one initiating Spark followed by a 3x3 expansion expressed as three Weave relations, three Field
+  conditions, and three Forms. Exact cells remain provisional pending cross-initiative confirmation.
 evidence_refs:
   - map_portal_admission_profile_v1
   - map_environment_audit02_cody_001
   - measures_of_inanna_operations_map_v1.meta.md
   - measures_of_inanna_environmental_risk_runtime_operations_report_v2.meta.md
+  - CCC-token.png visual provenance supplied by operator 2026-08-08
 future_review_conditions: >
-  Review token expansion only after the minimal Spark/Bind, Weave/Attest, Field/Resolve, and
-  Form/Advance functions are registered and exercised against a real governed environment.
-  Separately review whether the observed Spark/Weave/Field/Form mapping recurs across additional
-  minimal initiative implementations before granting it broader Codex standing.
+  Review expansion only after the minimal Current relation is registered and exercised against a
+  real governed environment. Test the Source 1 + 3 + 3 + 3 pattern against Current, MAP, SEAT, SRC2,
+  and other initiatives before any universal Codex standing is proposed. Future token functions
+  must be separately proposed and must not be inferred from this entry.
 confirmation_status: operator_confirmed
 ---
 
@@ -96,30 +102,39 @@ The need is not to expand token utility. The need is to establish a durable rela
 environment and the state that presently governs it while preserving the immutable evidence and prior state
 that produced that standing.
 
-## Minimal Function
+## Source Recognition
 
-c3 Current shall initially support four functions. A foundational pattern is now visible in the implementation:
+`Spark / Weave / Field / Form` is Source from the original Codexstone inscription. It is not a terminology
+layer invented for c3 Current or backend implementation.
 
-| Foundational function | Current implementation function | Minimal effect |
-|---|---|---|
-| **Spark** | **Bind** | Establish the initial governed relation between Current and an `env_key`. |
-| **Weave** | **Attest** | Relate hash-bound evidence, standing evidence, and lineage to the Current state. |
-| **Field** | **Resolve** | Determine which governed Current state presently applies in the environment. |
-| **Form** | **Advance** | Materialize a successor Current state after governed disposition while preserving the predecessor. |
-
-Conceptually:
+The emerging minimum implementation pattern is:
 
 ```text
-Spark / Bind
-    ↓
-Weave / Attest
-    ↓
-Field / Resolve
-    ↓
-Form / Advance
+SOURCE
+  Spark
+  Weave × 3
+  Field × 3
+  Form × 3
 ```
 
-For Current specifically:
+This is a candidate `1 + 3 + 3 + 3` implementation grammar. Spark initiates. Weave, Field, and Form appear to
+carry three downstream expressions each. The exact nine cells are deliberately not canonicalized here; they
+must be tested across Current, MAP, SEAT, SRC2, and other initiatives.
+
+## Minimal Current Function
+
+The prior functional observations remain useful as implementation manifestations, but they are subordinate to
+Source rather than replacements for it:
+
+- Bind
+- Attest
+- Resolve
+- Advance
+
+For Current registration, these functions may be used only where they preserve the Source relation and the
+boundaries below. They do not establish a new four-part source vocabulary.
+
+Conceptually:
 
 ```text
 environment
@@ -144,26 +159,39 @@ N remains historical.
 N+1 becomes current.
 ```
 
-## Pattern Recognition — Four Foundational Functions
+## Candidate Current Source Matrix
 
-The Current mapping suggests a broader implementation pattern:
+This matrix is recorded for implementation testing only:
 
 ```text
-Spark → Weave → Field → Form
+SPARK
+  Current relation is initiated for a governed environment.
+
+WEAVE
+  W1 environment / identity relation
+  W2 evidence / lineage relation
+  W3 predecessor / disposition relation
+
+FIELD
+  F1 environment standing
+  F2 authority standing
+  F3 progression standing
+
+FORM
+  M1 current-state record
+  M2 successor-state lineage
+  M3 resolver-facing current manifestation
 ```
 
-A minimal initiative may need to answer four corresponding implementation questions:
+The labels W1-W3, F1-F3, and M1-M3 are placeholders for testing the pattern. They are not Codex principles and
+may be corrected without disturbing the Source inscription.
 
-- **Spark** — what is initiated or bound into governed existence?
-- **Weave** — what relations, evidence, participants, or dependencies connect it?
-- **Field** — in what governed environment and current standing does it operate or resolve?
-- **Form** — what governed material state, output, successor, or manifestation results?
+## Token Geometry Provenance
 
-For c3 Current, those questions resolve cleanly to Bind, Attest, Resolve, and Advance.
-
-This is recorded as a **candidate foundational implementation grammar**, not yet as a universal Codex principle.
-The pattern should be tested against additional minimal initiative implementations before broader standing is
-granted.
+The operator supplied the c3 Current token image on 2026-08-08. The visible token carries `C3 DAO` and
+`CONNECT CONTRIBUTE CREATE` around a recursive geometric center. The geometry is preserved as visual provenance
+for the Current initiative. No chain behavior, smart-contract behavior, transfer rule, voting rule, or economic
+meaning is inferred from the image itself.
 
 ## Minimal Boundaries
 
@@ -178,20 +206,9 @@ granted.
 
 ## Deferred Expansion
 
-This entry does not determine or authorize:
-
-- token economics;
-- distribution;
-- wallet UX or wallet requirements;
-- voting or governance weight;
-- rewards;
-- fees;
-- supply behavior;
-- transferability;
-- public visibility;
-- cross-environment utility;
-- financialization;
-- or additional token classes/functions.
+This entry does not determine or authorize token economics, distribution, wallet UX or wallet requirements,
+voting or governance weight, rewards, fees, supply behavior, transferability, public visibility,
+cross-environment utility, financialization, or additional token classes/functions.
 
 Those questions remain available for later expansion after the minimal function is implemented and observed.
 
@@ -231,9 +248,5 @@ Measures of Inanna
 
 ## Disposition
 
-Route bounded implementation registration before additional MAP → SEAT backend structure depends on an
-alternate present-state model. Expansion remains deferred.
-
-Observe whether **Spark → Weave → Field → Form** continues to recur as the four-function minimum across other
-initiatives. If it does, route that repeated finding separately for broader Codex standing rather than inferring
-universality from this single implementation.
+Route bounded Current registration before additional MAP → SEAT backend structure depends on an alternate
+present-state model. Expansion remains deferred.
