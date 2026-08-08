@@ -52,12 +52,12 @@ implications: >
   minimum implementation without prematurely canonizing the exact 3x3 cells. Future smart contracts
   may be required to materially express recognition, access, circulation, and regenerative return,
   but those contracts must extend rather than contradict the original CCC concept.
-current_standing: operator_confirmed_implementation_elevated_pending_bounded_registration
+current_standing: operator_confirmed_implementation_elevated_model_resolved_pending_environment_registration
 disposition: >
-  Preserve this minimal function as the implementation target. Route a bounded OAR2 for backend
-  registration of the Current relation before further MAP-to-SEAT evidence-transfer architecture
-  depends on an alternate state model. Preserve the original CCC purpose while deferring expanded
-  smart-contract implementation to separately bounded work.
+  The minimal physical model is resolved. Apply and verify the exact registered migration through
+  the bounded successor OAR2 before additional MAP-to-SEAT evidence-transfer architecture depends
+  on Current. Preserve the original CCC purpose while deferring environment binding, evidence import,
+  and expanded smart-contract implementation to separately bounded work.
 related_authorities:
   - c3 Ledger — Registry of Record
   - Codexstone Source inscription
@@ -65,7 +65,9 @@ related_authorities:
   - Measures Registry
   - c3Ops
   - FREE
-related_oars: []
+related_oars:
+  - docs/oar/c3_field/oar2_register_minimal_c3_current_relation_v1.meta.md
+  - docs/oar/c3_field/oar2_apply_minimal_c3_current_relation_v2.meta.md
 related_systems:
   - c3_field
   - c3ops
@@ -87,18 +89,32 @@ original_ccc_concept: >
   recognition, access, and circulation through the Connect / Contribute / Create model. CCC is not
   speculative but regenerative: contributions, art, and initiatives flow back into community, DAO
   continuity, and the commons.
+implementation_model:
+  migration: supabase/migrations/20260808111500_register_minimal_c3_current_relation_v1.sql
+  migration_commit: 3358de2c7afe7f547d978e871bd385cce825922b
+  migration_git_blob_sha: d3022c9abb5a8aa2591414ad6b2061e12a7cc79f
+  state_table: public.c3_current_state
+  evidence_table: public.c3_current_evidence_ref
+  bind_function: public.bind_c3_current
+  attest_function: public.attest_c3_current_evidence
+  resolve_function: public.resolve_c3_current
+  advance_function: public.advance_c3_current
+  initial_environment_binding: deferred
+  ccc_contract_mutation: not_authorized_in_minimal_registration
 evidence_refs:
   - map_portal_admission_profile_v1
   - map_environment_audit02_cody_001
   - measures_of_inanna_operations_map_v1.meta.md
   - measures_of_inanna_environmental_risk_runtime_operations_report_v2.meta.md
   - CCC-token.png visual provenance supplied by operator 2026-08-08
+  - supabase/migrations/20260808111500_register_minimal_c3_current_relation_v1.sql
 future_review_conditions: >
-  Review expansion only after the minimal Current relation is registered and exercised against a
-  real governed environment. Test the Source 1 + 3 + 3 + 3 pattern against Current, MAP, SEAT, SRC2,
-  and other initiatives before any universal Codex standing is proposed. Future token functions and
-  smart contracts must be separately proposed and must preserve the original CCC purpose.
-confirmation_status: operator_confirmed
+  After the minimal Current relation is registered and verified, bind a real governed environment
+  through a separate execution and test evidence attestation against actual MAP evidence. Test the
+  Source 1 + 3 + 3 + 3 pattern across Current, MAP, SEAT, SRC2, and other initiatives before any
+  universal Codex standing is proposed. Future token functions and smart contracts must be separately
+  proposed and must preserve the original CCC purpose.
+confirmation_status: operator_confirmed_model_resolved
 ---
 
 # c3 Ledger Entry — c3_ledger_0005
@@ -153,16 +169,12 @@ must be tested across Current, MAP, SEAT, SRC2, and other initiatives.
 
 ## Minimal Current Function
 
-The prior functional observations remain useful as implementation manifestations, but they are subordinate to
-Source rather than replacements for it:
+The four minimum implementation functions are subordinate to Source rather than replacements for it:
 
-- Bind
-- Attest
-- Resolve
-- Advance
-
-For Current registration, these functions may be used only where they preserve the Source relation and the
-boundaries below. They do not establish a new four-part source vocabulary.
+- **Bind** — initiate Current for an already-governed environment.
+- **Attest** — relate hash-bound governed evidence to a Current state without copying the evidence.
+- **Resolve** — expose which state currently governs an environment through a safe read surface.
+- **Advance** — form a successor Current state only when governed disposition authorizes the change.
 
 Conceptually:
 
@@ -188,6 +200,43 @@ Current state N+1
 N remains historical.
 N+1 becomes current.
 ```
+
+## Physical Model Resolution — 2026-08-08
+
+The model question is resolved before environment execution. The exact minimum physical implementation is:
+
+```text
+public.c3_current_state
+public.c3_current_evidence_ref
+
+public.bind_c3_current(...)
+public.attest_c3_current_evidence(...)
+public.resolve_c3_current(env_key)
+public.advance_c3_current(...)
+```
+
+`c3_current_state` carries versioned environment-bound standing and predecessor/disposition lineage.
+`c3_current_evidence_ref` carries evidence identity, hash, custody reference, evidence standing, and optional
+`asset_key` relation without storing the evidence content itself.
+
+Bind, Attest, and Advance are service-bounded writes. Resolve is the safe read surface available to c3Ops/FREE.
+Base Current tables are not browser-write authority surfaces. Current-state records are immutable except for
+the one-way current-to-historical transition performed atomically by Advance.
+
+The exact migration is:
+
+`supabase/migrations/20260808111500_register_minimal_c3_current_relation_v1.sql`
+
+Migration commit:
+
+`3358de2c7afe7f547d978e871bd385cce825922b`
+
+Git blob SHA:
+
+`d3022c9abb5a8aa2591414ad6b2061e12a7cc79f`
+
+No real environment is bound by this registration. Measures of Inanna binding, MAP evidence attestation, and
+CCC smart-contract relation are downstream executions.
 
 ## Candidate Current Source Matrix
 
@@ -245,40 +294,41 @@ contracts may be necessary later and must be routed separately.
 
 ## Implementation Elevation
 
-The discovery is no longer ledger-only. Operator `op044` has confirmed that the minimal function is now an
-implementation dependency.
+The discovery is no longer ledger-only. Operator `op044` has confirmed that the minimal function is an
+implementation dependency, and Chazz has now resolved the exact minimum physical model before environment
+execution.
 
 Standing:
 
-`operator_confirmed_implementation_elevated_pending_bounded_registration`
+`operator_confirmed_implementation_elevated_model_resolved_pending_environment_registration`
 
-This standing does not itself authorize repository, database, chain, wallet, or deployment mutation.
-Implementation authority must move through a separately bounded OAR2.
+This standing does not itself authorize database or deployment mutation. The exact environment registration is
+routed through `oar2_apply_minimal_c3_current_relation_v2.meta.md`.
 
 ## Initial Application
 
-Measures of Inanna should be the first governed environment used to exercise the minimal relation because its
-existing MAP evidence demonstrates the required distinction between immutable historical evidence and current
-governed standing.
+After the minimal Current relation itself is registered and verified, Measures of Inanna remains the intended
+first real environment for a separately bounded Bind/Attest execution because its existing MAP evidence
+demonstrates the required distinction between immutable historical evidence and current governed standing.
 
-Expected relation:
+Expected later relation:
 
 ```text
 Measures of Inanna
-    → env_key
-    → c3 Current
+    → governed env_key
+    → c3 Current Bind
+    → MAP evidence Attest
     → current MAP standing
-    → evidence references
-    → /map-portal
+    → /map-portal Resolve
     → SEAT entrance determination
 ```
 
 ## Current Standing
 
-`operator_confirmed_implementation_elevated_pending_bounded_registration`
+`operator_confirmed_implementation_elevated_model_resolved_pending_environment_registration`
 
 ## Disposition
 
-Route bounded Current registration before additional MAP → SEAT backend structure depends on an alternate
-present-state model. Preserve the original CCC purpose. Expansion, including additional smart contracts, remains
-separately bounded rather than excluded.
+Apply and verify the exact minimal Current migration through the successor `_002` environment execution.
+Do not bind Inanna, import MAP evidence, or touch CCC smart contracts in that registration pass. Preserve the
+original CCC purpose; expansion remains separately bounded rather than excluded.
