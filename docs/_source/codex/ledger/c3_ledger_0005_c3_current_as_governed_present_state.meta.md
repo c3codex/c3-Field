@@ -20,6 +20,10 @@ context: >
   recognition has now been made: Spark / Weave / Field / Form is not a new implementation vocabulary,
   but Source from the original Codexstone inscription. The emerging implementation pattern appears
   to express one Spark followed by a 3x3 downstream expansion distributed across Weave, Field, and Form.
+  The original CCC concept remains operative: the c3 DAO Token (CCC) is the Current of the Codex,
+  issued by c3 Community Partners DAO, anchoring recognition, access, and circulation through
+  Connect / Contribute / Create. Its regenerative purpose is preserved while expanded smart-contract
+  mechanics remain deferred.
 observed_relations: >
   Evidence records describe what occurred and what was observed; portal and progression systems
   require a separate current-state relation to determine what presently governs without rewriting
@@ -38,21 +42,26 @@ discovery: >
   Spark / Weave / Field / Form. Spark initiates; the emerging expansion pattern is three relations
   in Weave, three governing conditions in Field, and three material expressions in Form. The exact
   nine cells remain a candidate pattern pending repeated confirmation across Current, MAP, SEAT,
-  SRC2, and other initiatives.
+  SRC2, and other initiatives. The minimum present-state relation is an implementation subset of
+  the original CCC purpose, not a replacement definition of CCC.
 implications: >
   The minimal Current function should be bound before further backend expansion. Expansion of token
   economics, distribution, wallet behavior, voting, rewards, transfer behavior, public visibility,
   and other future uses remains intentionally undecided. Implementation must preserve historical
   evidence and prior Current states rather than overwrite them. Source grammar should guide the
-  minimum implementation without prematurely canonizing the exact 3x3 cells.
+  minimum implementation without prematurely canonizing the exact 3x3 cells. Future smart contracts
+  may be required to materially express recognition, access, circulation, and regenerative return,
+  but those contracts must extend rather than contradict the original CCC concept.
 current_standing: operator_confirmed_implementation_elevated_pending_bounded_registration
 disposition: >
   Preserve this minimal function as the implementation target. Route a bounded OAR2 for backend
   registration of the Current relation before further MAP-to-SEAT evidence-transfer architecture
-  depends on an alternate state model. No token expansion is authorized by this ledger entry.
+  depends on an alternate state model. Preserve the original CCC purpose while deferring expanded
+  smart-contract implementation to separately bounded work.
 related_authorities:
   - c3 Ledger — Registry of Record
   - Codexstone Source inscription
+  - c3 Community Partners DAO
   - Measures Registry
   - c3Ops
   - FREE
@@ -73,6 +82,11 @@ candidate_source_pattern: >
   Source is Spark / Weave / Field / Form. Minimal initiative implementation appears to consist of
   one initiating Spark followed by a 3x3 expansion expressed as three Weave relations, three Field
   conditions, and three Forms. Exact cells remain provisional pending cross-initiative confirmation.
+original_ccc_concept: >
+  The c3 DAO Token (CCC) is the Current of the Codex, issued by c3 Community Partners DAO. It anchors
+  recognition, access, and circulation through the Connect / Contribute / Create model. CCC is not
+  speculative but regenerative: contributions, art, and initiatives flow back into community, DAO
+  continuity, and the commons.
 evidence_refs:
   - map_portal_admission_profile_v1
   - map_environment_audit02_cody_001
@@ -82,8 +96,8 @@ evidence_refs:
 future_review_conditions: >
   Review expansion only after the minimal Current relation is registered and exercised against a
   real governed environment. Test the Source 1 + 3 + 3 + 3 pattern against Current, MAP, SEAT, SRC2,
-  and other initiatives before any universal Codex standing is proposed. Future token functions
-  must be separately proposed and must not be inferred from this entry.
+  and other initiatives before any universal Codex standing is proposed. Future token functions and
+  smart contracts must be separately proposed and must preserve the original CCC purpose.
 confirmation_status: operator_confirmed
 ---
 
@@ -98,9 +112,25 @@ c3 Current as the Governed Present-State Relation
 Backend design has reached the point where deferring c3 Current creates more architectural risk than
 binding its minimal function now.
 
-The need is not to expand token utility. The need is to establish a durable relation between a governed
-environment and the state that presently governs it while preserving the immutable evidence and prior state
-that produced that standing.
+The need is not to reduce CCC to a state token. The need is to establish the first durable backend relation
+required for CCC to function as the Current of the Codex while preserving the immutable evidence and prior
+state that produced present standing.
+
+## Original CCC Purpose Preserved
+
+The original c3 Current concept remains operative:
+
+> The c3 DAO Token (CCC) is the Current of the Codex, issued by c3 Community Partners DAO. It anchors
+> recognition, access, and circulation through the Connect · Contribute · Create model. CCC is not
+> speculative but regenerative: contributions, art, and initiatives flow back into community, DAO
+> continuity, and the commons.
+
+The minimal present-state registration in this initiative is one foundational implementation of that purpose.
+It does not supersede or narrow the original concept.
+
+Future implementation may require additional smart contracts to materially express recognition, access,
+circulation, contribution, and regenerative return. Those expansions are expected to be separately bounded
+and must remain consistent with the original CCC purpose.
 
 ## Source Recognition
 
@@ -206,11 +236,12 @@ meaning is inferred from the image itself.
 
 ## Deferred Expansion
 
-This entry does not determine or authorize token economics, distribution, wallet UX or wallet requirements,
-voting or governance weight, rewards, fees, supply behavior, transferability, public visibility,
-cross-environment utility, financialization, or additional token classes/functions.
+This entry does not yet authorize token economics, distribution, wallet UX or wallet requirements, voting or
+governance weight, rewards, fees, supply behavior, transferability, public visibility, cross-environment
+utility, financialization, or new smart-contract deployment.
 
-Those questions remain available for later expansion after the minimal function is implemented and observed.
+These are deferred implementation questions, not rejected parts of the original CCC concept. Expanded smart
+contracts may be necessary later and must be routed separately.
 
 ## Implementation Elevation
 
@@ -249,4 +280,5 @@ Measures of Inanna
 ## Disposition
 
 Route bounded Current registration before additional MAP → SEAT backend structure depends on an alternate
-present-state model. Expansion remains deferred.
+present-state model. Preserve the original CCC purpose. Expansion, including additional smart contracts, remains
+separately bounded rather than excluded.
