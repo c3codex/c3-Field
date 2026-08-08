@@ -73,6 +73,25 @@ The repeatable process is:
 Implementation elevation therefore preserves priority and architectural intent early without allowing the
 Ledger itself to become an execution surface.
 
+## Execution Identity Collision Rule
+
+One `execution_instance_id` may resolve to only one operative OAR authority.
+
+If two materially different OARs, migrations, or model branches claim the same execution instance before
+execution:
+
+1. do not choose one by recency, path proximity, filename similarity, or executor preference;
+2. hold that execution identity from mutation;
+3. preserve both conflicting sources as provenance;
+4. reconcile the model/authority outside the execution environment;
+5. supersede the collided execution identity; and
+6. route the reconciled authority under a new execution instance.
+
+If a collision is discovered after possible mutation, the next action is read-only collision/reconciliation
+evidence. No repair, overwrite, or normalization is implied by the collision itself.
+
+This rule prevents concurrent model work from silently becoming competing execution authority.
+
 ## Required Entry Shape
 
 Every c3 Ledger entry file shall include, at minimum, these fields (as frontmatter and/or body sections):
@@ -102,7 +121,7 @@ No additional authority semantics may be inferred from an entry beyond what it e
 | c3_ledger_0002 | Labor as Contribution to Shared Living Environments | 2026-07-10 | Ledger entry only — no labor model, compensation structure, participant obligation, or operational authority granted; held for future participant-based review | `c3_ledger_0002_labor_as_contribution_to_shared_living_environments.meta.md` |
 | c3_ledger_0003 | Governance Enables Regeneration | 2026-07-12 | Candidate observation — no Codex standing, principle, or operational authority granted; recommended for continued observation | `c3_ledger_0003_governance_enables_regeneration.meta.md` |
 | c3_ledger_0004 | The System Refused to "Just Make It Work" | 2026-07-14 | confirmed_open — provenance investigation closed (see `oar1_investigate_migration_ledger_provenance_drift_v1`); 18 versions remain held, none repaired | `c3_ledger_0004_the_system_refused_to_just_make_it_work.meta.md` |
-| c3_ledger_0005 | c3 Current as the Governed Present-State Relation | 2026-08-08 | operator_confirmed_implementation_elevated_pending_bounded_registration | `c3_ledger_0005_c3_current_as_governed_present_state.meta.md` |
+| c3_ledger_0005 | c3 Current as the Governed Present-State Relation | 2026-08-08 | operator_confirmed_implementation_elevated_exact_execution_routed_pending_return | `c3_ledger_0005_c3_current_as_governed_present_state.meta.md` |
 
 ## Established By
 
