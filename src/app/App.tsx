@@ -93,6 +93,22 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
   },
+  "/seat-portal": {
+    title: "SEAT Portal | Measures Registry",
+    description: "Measures Registry SEAT staging and evidence intake surface.",
+    url: "https://measuresregistry.com/seat-portal",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
+  "/enter-seat": {
+    title: "SEAT Portal | Measures Registry",
+    description: "Measures Registry SEAT staging and evidence intake surface.",
+    url: "https://measuresregistry.com/seat-portal",
+    canonicalUrl: "https://measuresregistry.com/seat-portal",
+    ogUrl: "https://measuresregistry.com/enter-seat",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
 }
 
 const REGISTRY_ROUTE_UNITS: Record<string, string> = {

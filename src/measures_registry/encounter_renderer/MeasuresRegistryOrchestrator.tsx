@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import { useRegistryResolver } from "./resolver/registryResolver"
 import EncounterEntry from "./EncounterEntry"
-import type { AssessmentCapturePayload } from "./chambers/ObsidianChamberRenderer"
+import type { AssessmentCapturePayload, AssessmentCaptureResult } from "./chambers/ObsidianChamberRenderer"
 import type { ConnectCapturePayload } from "./chambers/CrystalSeatRenderer"
 import type { SubscriptionCapturePayload } from "./chambers/LapisChamberRenderer"
 import type { MapPaymentParams } from "./chambers/MarbleChamberRenderer"
@@ -14,6 +14,8 @@ import type { EncounterSurface } from "./types/encounterRendererTypes"
 import { cssTokenName } from "./shared/encounterRendererUtils"
 import RegisteredPrivacy from "./legal/RegisteredPrivacy"
 import RegisteredTerms from "./legal/RegisteredTerms"
+import EnterSeatSurface from "../EnterSeatSurface"
+import { MapPortalSurface } from "../MapPortalSurface"
 // Lazy — internal diagnostic surface (899 lines), not part of any typical visitor path.
 const GovernanceAuditSurface = lazy(() => import("../governance/GovernanceAuditSurface"))
 
@@ -22,7 +24,7 @@ const GovernanceAuditSurface = lazy(() => import("../governance/GovernanceAuditS
 // Delegates determination and rendering to EncounterEntry → EncounterBoundary → ChamberRouter.
 // Does not infer authority. Does not bypass EncounterBoundary.
 
-type OrchestratorSurface = EncounterSurface | "privacy" | "terms" | "governance_audit"
+type OrchestratorSurface = EncounterSurface | "privacy" | "terms" | "governance_audit" | "enter_seat" | "map_portal"
 
 const SURFACE_MATERIAL: Partial<Record<OrchestratorSurface, MaterialIdentity>> = {
   crystal_seat_threshold: "crystal",
@@ -72,6 +74,9 @@ const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
   "/privacy": "privacy",
   "/terms": "terms",
   "/governance-audit": "governance_audit",
+  "/enter-seat": "enter_seat",
+  "/seat-portal": "enter_seat",
+  "/map-portal": "map_portal",
 }
 
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
@@ -83,6 +88,8 @@ const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
   privacy: "/privacy",
   terms: "/terms",
   governance_audit: "/governance-audit",
+  enter_seat: "/seat-portal",
+  map_portal: "/map-portal",
   crystal_seat_intro: "/",
   crystal_seat_threshold: "/",
   crystal_seat_orientation: "/",
@@ -347,18 +354,18 @@ export default function MeasuresRegistryOrchestrator() {
     )
   }
 
-  async function onCaptureAssessment(payload: AssessmentCapturePayload): Promise<{ error: string | null }> {
+  async function onCaptureAssessment(payload: AssessmentCapturePayload): Promise<AssessmentCaptureResult> {
     try {
       const response = await fetch("/api/submit-assessment", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
       })
-      const data = (await response.json()) as { error?: string }
+      const data = (await response.json()) as AssessmentCaptureResult
       if (!response.ok || data.error) {
         return { error: data.error || `Server returned ${response.status}` }
       }
-      return { error: null }
+      return { ...data, error: null }
     } catch (err) {
       return { error: err instanceof Error ? err.message : String(err) }
     }
@@ -447,6 +454,15 @@ export default function MeasuresRegistryOrchestrator() {
       <Suspense fallback={null}>
         <GovernanceAuditSurface />
       </Suspense>
+    )
+  }
+
+  if (activeSurface === "enter_seat") {
+    return (
+      <EnterSeatSurface
+        renderHeader={() => renderHeader({ title: "Measures Registry" })}
+        renderSystemFooter={renderSystemFooter}
+      />
     )
   }
 

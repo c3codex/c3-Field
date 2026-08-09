@@ -23,6 +23,10 @@ const REGISTRY_REDIRECT_RULES = [
   "/undrifted/field-findings-2026-w28/ /undrifted/field-findings-2026-w28/index.html 200",
   "/undrifted/ai-agents-are-not-entering-empty-systems /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
   "/undrifted/ai-agents-are-not-entering-empty-systems/ /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
+  "/map-portal /map-portal/index.html 200",
+  "/map-portal/ /map-portal/index.html 200",
+  "/seat-portal /seat-portal/index.html 200",
+  "/seat-portal/ /seat-portal/index.html 200",
 ]
 
 const routeUnits = [
@@ -56,6 +60,21 @@ const launchCycleArticleRoutes = [
     canonical_url: "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
     image:
       "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted_response_section_banner_2026_w28_v1.webp",
+  },
+]
+
+const operationalPortalRoutes = [
+  {
+    routePath: "/map-portal",
+    title: "MAP Portal | Measures Registry",
+    description: "Measures Registry C2 MAP progression surface for governed environment evidence.",
+    canonical_url: "https://measuresregistry.com/map-portal",
+  },
+  {
+    routePath: "/seat-portal",
+    title: "SEAT Portal | Measures Registry",
+    description: "Measures Registry SEAT staging and evidence intake surface.",
+    canonical_url: "https://measuresregistry.com/seat-portal",
   },
 ]
 
@@ -354,6 +373,26 @@ function writeStaticRouteHead(outDir, template, route) {
   fs.writeFileSync(path.join(routeDir, "index.html"), applyRouteHead(template, seo))
 }
 
+function writeOperationalRouteHead(outDir, template, route) {
+  const routeDir = path.join(outDir, route.routePath.replace(/^\//, ""))
+  fs.mkdirSync(routeDir, { recursive: true })
+  const seo = {
+    title: route.title,
+    description: route.description,
+    canonical_url: route.canonical_url,
+    og_type: "website",
+    og_title: route.title,
+    og_description: route.description,
+    og_url: route.canonical_url,
+    og_image: REGISTRY_OG_IMAGE,
+    twitter_card: "summary_large_image",
+    twitter_title: route.title,
+    twitter_description: route.description,
+    twitter_image: REGISTRY_OG_IMAGE,
+  }
+  fs.writeFileSync(path.join(routeDir, "index.html"), applyRouteHead(template, seo))
+}
+
 async function main() {
   if (!supabaseUrl || !supabaseKey) throw new Error("Supabase URL/key missing for registry route head generation")
 
@@ -404,8 +443,16 @@ async function main() {
     writeStaticRouteHead(outDir, template, route)
   }
 
+  for (const route of operationalPortalRoutes) {
+    writeOperationalRouteHead(outDir, template, route)
+  }
+
   console.log(
-    `Generated governed registry route heads: ${[...routeUnits.map((unit) => unit.routePath), ...launchCycleArticleRoutes.map((route) => route.routePath)].join(", ")}`,
+    `Generated governed registry route heads: ${[
+      ...routeUnits.map((unit) => unit.routePath),
+      ...launchCycleArticleRoutes.map((route) => route.routePath),
+      ...operationalPortalRoutes.map((route) => route.routePath),
+    ].join(", ")}`,
   )
 }
 
