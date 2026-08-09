@@ -87,12 +87,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       return jsonResponse({ error: "RESEND_API_KEY is not configured" }, 503)
     }
 
-    if (!env.OPERATOR_DISPATCH_KEY) {
-      return jsonResponse({ error: "OPERATOR_DISPATCH_KEY is not configured" }, 503)
-    }
-
+    // x-operator-dispatch-key check
     const operatorKey = request.headers.get("x-operator-dispatch-key")
-    if (operatorKey !== env.OPERATOR_DISPATCH_KEY) {
+    const isOperator = !!env.OPERATOR_DISPATCH_KEY && operatorKey === env.OPERATOR_DISPATCH_KEY
+
+    // RA-003: Require operator/internal dispatch credential for generic dispatch
+    if (!isOperator) {
       return jsonResponse({ error: "dispatch access denied" }, 403)
     }
 
