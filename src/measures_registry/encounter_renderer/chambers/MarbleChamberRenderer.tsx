@@ -61,7 +61,7 @@ function marbleBgStyle(url: string | null): CSSProperties {
 export default function MarbleChamberRenderer(props: MarbleChamberProps) {
   const { surface } = props.encounter
 
-  if (surface === "marble_chamber_C2_compact") {
+  if (surface === "marble_chamber_C2_compact" || surface === "map_portal") {
     return <MapIntegrityGovernance {...props} />
   }
   if (surface === "marble_chamber_orientation") {
@@ -180,12 +180,17 @@ function MapIntegrityGovernance({
   const [confirmedCARs, setConfirmedCARs] = useState<Record<string, boolean>>({})
 
   const meta = asRecord(encounter.encounterDef?.metadata)
+  const registryMeta = asRecord(encounter.registryRow.metadata)
+  const modeledInitiative = asRecord(registryMeta?.native_map_guided_operations)
   const centerPanel = asRecord(meta?.center_panel)
   const mapFraming = asRecord(meta?.map_framing)
   const carAck = asRecord(meta?.c3_7_acknowledgment)
   const carUnits = asRecordArray(carAck?.units)
   const pathwayCards = asRecordArray(meta?.pathway_cards)
   const seatHold = asRecord(meta?.seat_hold)
+  const initiativeRelations = asStringArray(modeledInitiative?.map_progression_relations)
+  const knowledgeDispositions = asStringArray(modeledInitiative?.knowledge_dispositions)
+  const heldCapabilities = asStringArray(modeledInitiative?.held_capabilities)
 
   const centerHeading = asString(centerPanel?.heading) ?? asString(mapFraming?.title) ?? "MAP the Environment"
   const centerSubheading = asString(centerPanel?.subheading) ?? ""
@@ -293,6 +298,28 @@ function MapIntegrityGovernance({
               <div className="registry-marble-map-visual" aria-hidden="true">
                 <img src={marbleRiseUrl} alt="" loading="lazy" />
               </div>
+            ) : null}
+            {modeledInitiative ? (
+              <section className="registry-marble-map-modeled-initiative" aria-label="Native MAP Guided Operations">
+                <p className="registry-marble-map-exchange-label">modeled_initiative</p>
+                <h3>{asString(modeledInitiative.title) ?? "Native MAP Guided Operations"}</h3>
+                <p>
+                  Standing: {asString(modeledInitiative.standing) ?? "modeled_pending_resource_normalization"}
+                </p>
+                {initiativeRelations.length > 0 ? (
+                  <ul>
+                    {initiativeRelations.map((relation) => (
+                      <li key={relation}>{relation}</li>
+                    ))}
+                  </ul>
+                ) : null}
+                {knowledgeDispositions.length > 0 ? (
+                  <p>Knowledge dispositions: {knowledgeDispositions.join("; ")}.</p>
+                ) : null}
+                {heldCapabilities.length > 0 ? (
+                  <p>Held future capabilities: {heldCapabilities.join("; ")}.</p>
+                ) : null}
+              </section>
             ) : null}
           </div>
         </section>
