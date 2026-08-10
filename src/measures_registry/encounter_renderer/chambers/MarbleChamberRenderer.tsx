@@ -62,7 +62,7 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
   const { surface } = props.encounter
 
   if (surface === "marble_chamber_C2_compact" || surface === "map_portal") {
-    return <MapIntegrityGovernance {...props} />
+    return <MapEnvironmentPresentation {...props} />
   }
   if (surface === "marble_chamber_orientation") {
     return <MarbleOrientationSeat {...props} />
@@ -154,14 +154,14 @@ function MapCARUnit({
   )
 }
 
-// --- map_integrity_governance -----------------------------------------------
+// --- MAP the Environment -----------------------------------------------------
 
 type MapSession = {
   report: { standing_key?: string } | null
   fields: Record<string, string>
 } | null
 
-function MapIntegrityGovernance({
+function MapEnvironmentPresentation({
   encounter,
   registryTokenStyle,
   onNavigate,
@@ -243,7 +243,7 @@ function MapIntegrityGovernance({
   return (
     <main
       className="measures-registry-runtime"
-      data-surface="map_integrity_governance"
+      data-surface="map_portal"
       data-material-family="marble"
       data-layout-contract="marble_map_three_panel"
       data-release-standing="public"

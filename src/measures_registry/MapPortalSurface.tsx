@@ -282,7 +282,7 @@ export function MapPortalSurface({
                   <strong style={{ fontSize: "0.8rem", color: "#8b949e" }}>MAP 102</strong>
                   <span style={styles.badge("held")}>Locked</span>
                 </div>
-                <div style={{ fontSize: "0.75rem", color: "#8b949e", marginBottom: "0.5rem" }}>Audit the Environment</div>
+                <div style={{ fontSize: "0.75rem", color: "#8b949e", marginBottom: "0.5rem" }}>Align the Environment</div>
                 <div style={{ fontSize: "0.65rem", color: "#8b949e" }}>Entry: requires MAP 101 completion standing. Unlocks: MAP 103</div>
               </div>
 

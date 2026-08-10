@@ -162,7 +162,7 @@
 
 /* ── MAP THREE-PANEL LAYOUT ───────────────────────────────────────────────── */
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] {
+.measures-registry-runtime[data-surface="map_portal"] {
   background-color: var(--registry-marble-map-base, #16140f);
   --registry-brand-primary-text: #1E2C48;
   --registry-brand-secondary-text: #3E485B;
@@ -174,41 +174,41 @@
 
 /* ── MAP: light surface overrides ─────────────────────────────────────────── */
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-car-panel {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-car-panel {
   padding-top: clamp(3rem, 5vw, 5rem);
   padding-inline-start: 0.75rem;
   border-right-color: rgba(30, 44, 72, 0.1);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-center-panel {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-center-panel {
   border-right-color: rgba(30, 44, 72, 0.1);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-panel {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-exchange-panel {
   padding-top: 1rem;
   padding-inline-end: 0.75rem;
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-heading {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-heading {
   font-size: clamp(2rem, 3vw, 3rem);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-car-unit {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-car-unit {
   border-color: rgba(30, 44, 72, 0.12);
   background: rgba(30, 44, 72, 0.03);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-car-unit--confirmed {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-car-unit--confirmed {
   border-color: rgba(166, 124, 56, 0.3);
   background: rgba(166, 124, 56, 0.05);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-amount {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-exchange-amount {
   border-color: rgba(30, 44, 72, 0.12);
   background: rgba(30, 44, 72, 0.03);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-cta-zone {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-cta-zone {
   border-top-color: rgba(30, 44, 72, 0.1);
 }
 
@@ -232,7 +232,7 @@
    three-panel layout its own translucent surface (matching the treatment already used on the
    sibling marble_chamber_results report card) so the exchange authority reads as the primary
    visual layer, with the chamber architecture as a frame around it rather than a competitor. */
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-layout {
+.measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-layout {
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -888,9 +888,9 @@
      exchange_composition. Previously the three panels were a mechanical stack separated only
      by a border-bottom line. Give each its own margined, rounded card so the sequence reads
      as three intentionally composed sections rather than one continuous scroll. */
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-car-panel,
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-center-panel,
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-panel {
+  .measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-car-panel,
+  .measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-center-panel,
+  .measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-exchange-panel {
     border-bottom: none;
     margin: 0 clamp(0.75rem, 3vw, 1.25rem) clamp(0.9rem, 3vw, 1.25rem);
     border: 1px solid rgba(30, 44, 72, 0.12);
@@ -898,11 +898,11 @@
     background: rgba(255, 255, 255, 0.5);
   }
 
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-car-panel {
+  .measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-car-panel {
     margin-top: clamp(0.9rem, 3vw, 1.25rem);
   }
 
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-panel {
+  .measures-registry-runtime[data-surface="map_portal"] .registry-marble-map-exchange-panel {
     margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   }
 

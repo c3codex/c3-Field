@@ -66,8 +66,8 @@ const launchCycleArticleRoutes = [
 const operationalPortalRoutes = [
   {
     routePath: "/map-portal",
-    title: "MAP Portal | Measures Registry",
-    description: "Measures Registry C2 MAP progression surface for governed environment evidence.",
+    title: "MAP the Environment | Measures Registry",
+    description: "Measures Registry C2 Agreement and Resolution encounter for Measure, Align, and Prepare.",
     canonical_url: "https://measuresregistry.com/map-portal",
   },
   {

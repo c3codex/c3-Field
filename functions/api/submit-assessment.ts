@@ -452,7 +452,7 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
           carry_forward: {
             source_surface: "measures_assessment",
             passage_surface: "obsidian_to_marble_passage_video",
-            destination_surface: "map_integrity_governance",
+            destination_surface: "map_portal",
             organization_name: payload.institutionName,
             contact_name: payload.contactName,
             contact_email: payload.contactEmail,
