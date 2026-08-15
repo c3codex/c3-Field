@@ -60,9 +60,22 @@ async function invoke(pathway: keyof typeof pathwayOptions, clientPriceId?: stri
     const headers = new Headers(init?.headers)
     calls.push({ url, method, body, headers })
 
+    if (url.endsWith("/rest/v1/rpc/resolve_c3_current") && method === "POST") {
+      return Response.json([{
+        resolution_standing: "resolved_current_state",
+        current_state_key: "current_env_measures_registry_v1",
+        env_key: "env_measures_registry",
+      }])
+    }
+    if (url.includes("c3_environment?env_key=eq.env_measures_registry")) {
+      return Response.json([{ env_key: "env_measures_registry", system_key: "measures_registry" }])
+    }
     if (url.includes("map_c2_circuit?")) return Response.json(Object.values(pathwayOptions))
     if (url.endsWith("/rest/v1/map_payment_events") && method === "POST") {
-      return Response.json([{ map_order_id: "00000000-0000-4000-8000-000000000001" }])
+      return Response.json([{
+        map_order_id: "00000000-0000-4000-8000-000000000001",
+        current_state_key: "current_env_measures_registry_v1",
+      }])
     }
     if (url.includes("api.stripe.com/v1/checkout/sessions")) {
       return Response.json({ id: "cs_test", url: "https://checkout.stripe.test/session" })
@@ -78,6 +91,7 @@ async function invoke(pathway: keyof typeof pathwayOptions, clientPriceId?: stri
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           evaluation_result_id: paymentOption.applicable_standing_keys[0],
+          current_state_key: "current_env_measures_registry_v1",
           map_standing: paymentOption.applicable_standing_keys[0],
           map_pathway: pathway,
           contact_email: "operator@example.com",
@@ -105,8 +119,13 @@ for (const pathway of ["foundational", "optimization", "remediation"] as const) 
     assert.equal(params.has("line_items[0][price_data][unit_amount]"), false)
     assert.equal(params.get("metadata[offer_type]"), "map")
     assert.equal(params.get("metadata[map_pathway]"), pathway)
+    assert.equal(params.get("metadata[current_state_key]"), "current_env_measures_registry_v1")
     assert.equal(params.get("metadata[creates_seat]"), "false")
     assert.match(stripeCall.headers.get("Idempotency-Key") ?? "", /^map-checkout-/)
+
+    const paymentInsert = result.calls.find((call) => call.url.endsWith("/rest/v1/map_payment_events"))
+    assert.ok(paymentInsert)
+    assert.equal(JSON.parse(paymentInsert.body).current_state_key, "current_env_measures_registry_v1")
   })
 }
 

@@ -37,12 +37,20 @@ export type AssessmentCapturePayload = {
   report: EnvironmentalStandingReport | null
 }
 
+export type AssessmentCaptureResult = {
+  error: string | null
+  assessment_ref?: string
+  report?: EnvironmentalStandingReport
+  emailArtifact?: AssessmentEmailArtifact
+  c2Resolution?: Record<string, unknown>
+}
+
 export type ObsidianChamberProps = {
   encounter: RenderableEncounter
   registryTokenStyle: CSSProperties
   onNavigate: (surface: EncounterSurface) => void
   // Optional until Encounter Boundary wires the callback. Omitting disables DB capture.
-  onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<{ error: string | null }>
+  onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<AssessmentCaptureResult>
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode
 }
@@ -653,27 +661,31 @@ function ObsidianC1Compact({
         emailArtifact: pending.evalEmailArtifact,
         report: pending.evalReport,
       }
-      const { error: captureError } = await onCaptureAssessment(payload)
+      const captureResult = await onCaptureAssessment(payload)
       setSubmitting(false)
-      if (captureError) {
-        setError(captureError)
+      if (captureResult.error) {
+        setError(captureResult.error)
         return
       }
-    } else {
-      setSubmitting(false)
-    }
-
-    if (pending) {
+      const serverReport = captureResult.report ?? pending.evalReport
+      const serverEmailArtifact = captureResult.emailArtifact ?? pending.evalEmailArtifact
+      const c2Resolution = captureResult.c2Resolution ?? null
+      const assessmentRef = captureResult.assessment_ref ?? null
       try {
         sessionStorage.setItem("__mreg_pending_report", JSON.stringify({
-          report: pending.evalReport,
-          emailArtifact: pending.evalEmailArtifact,
+          assessmentRef,
+          report: serverReport,
+          emailArtifact: serverEmailArtifact,
           fields,
+          c2Resolution,
           assessmentCompletion: pending.assessmentCompletion,
           reportContract: pending.assessmentEvaluationReportContract,
+          source: "server_side_registry_resolution",
         }))
         sessionStorage.removeItem("__mreg_c1_pending")
       } catch { /* ignore */ }
+    } else {
+      setSubmitting(false)
     }
 
     if (next) onNavigate(next as EncounterSurface)

@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import { useRegistryResolver } from "./resolver/registryResolver"
 import EncounterEntry from "./EncounterEntry"
-import type { AssessmentCapturePayload } from "./chambers/ObsidianChamberRenderer"
+import type { AssessmentCapturePayload, AssessmentCaptureResult } from "./chambers/ObsidianChamberRenderer"
 import type { ConnectCapturePayload } from "./chambers/CrystalSeatRenderer"
 import type { SubscriptionCapturePayload } from "./chambers/LapisChamberRenderer"
 import type { MapPaymentParams } from "./chambers/MarbleChamberRenderer"
@@ -66,7 +66,7 @@ const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
   "/undrifted": "lapis_chamber_encounter",
   "/undrifted/field-findings-2026-w28": "lapis_chamber_encounter",
   "/undrifted/ai-agents-are-not-entering-empty-systems": "lapis_chamber_encounter",
-  "/map-integrity-governance": "marble_chamber_C2_compact", // legacy_route_alias — retained for Stripe cancel_url dependency
+  "/map-the-environment": "marble_chamber_C2_compact",
   "/about": "crystal_seat_encounter",
   "/about-measures-registry": "crystal_seat_encounter",
   "/privacy": "privacy",
@@ -77,7 +77,7 @@ const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
   obsidian_chamber_encounter_surface: "/ai-operations-assessment",
   crystal_seat_encounter: "/about",
-  marble_chamber_C2_compact: "/map-integrity-governance",
+  marble_chamber_C2_compact: "/map-the-environment",
   lapis_chamber_encounter: "/undrifted",
   publication_dispatch: "/publication/structural_drift",
   privacy: "/privacy",
@@ -347,75 +347,21 @@ export default function MeasuresRegistryOrchestrator() {
     )
   }
 
-  async function onCaptureAssessment(payload: AssessmentCapturePayload): Promise<{ error: string | null }> {
-    const captureId = crypto.randomUUID()
-    const normalizedWebsite = normalizeWebsite(payload.allFields.website)
-
-    const { error } = await supabase.from("measures_iis_eval_gate1_capture").insert({
-      id: captureId,
-      institution_name: payload.institutionName,
-      institution_address: normalizedWebsite,
-      institution_phone: "",
-      contact_name: payload.contactName,
-      contact_position: payload.allFields.role_title?.trim() ?? "",
-      contact_email: payload.contactEmail,
-      evaluation_answers: payload.evaluationAnswers,
-      capture_context: "measures_assessment_contact_gated_delivery",
-      intent: "assessment_result_delivery_request",
-      eligibility: {
-        gate_1: "complete",
-        assessment_returned: true,
-        contact_capture_submitted: true,
-        consent_confirmed: true,
-        minimum_identity_captured: true,
-        src_requirements_satisfied: true,
-        implementation_src_requirements_satisfied: false,
-        deferred_src_fields_held: true,
-      },
-      campaign_tag: "measures_assessment_contact_gated_delivery",
-      notification_state: "queued",
-      metadata: {
-        encounter_key: "measures_ai_operational_evaluation",
-        organization_type: payload.allFields.organization_type?.trim() ?? "",
-        ai_deployment_status: payload.allFields.ai_deployment_status?.trim() ?? "",
-        next_support_question: payload.allFields.next_support_question?.trim() || null,
-        assessment_result_email_consent: payload.allFields.assessment_result_email_consent === "true",
-        assessment_boundary_acknowledgment: payload.allFields.assessment_boundary_acknowledgment === "true",
-        measures_registry_updates_opt_in: payload.allFields.measures_registry_updates_opt_in === "true",
-        source_runtime: "free_encounter_renderer_v1",
-        carry_forward: {
-          source_surface: "measures_assessment",
-          passage_surface: "obsidian_to_marble_passage_video",
-          destination_surface: "map_integrity_governance",
-          organization_name: payload.institutionName,
-          contact_name: payload.contactName,
-          contact_email: payload.contactEmail,
-          current_ai_usage: payload.allFields.ai_deployment_status?.trim() ?? "",
-          circuit_identification: payload.report?.standing_key ?? "",
-          continuation_pathway: payload.report?.continuation_pathway ?? "",
-          state: "carried_forward",
-        },
-        assessment_result_binding: {
-          environmental_standing_report: payload.report,
-          institution_name: payload.institutionName,
-          contact_name: payload.contactName,
-          contact_email: payload.contactEmail,
-          role_title: payload.allFields.role_title?.trim() ?? "",
-          website: normalizedWebsite || null,
-          ai_deployment_status: payload.allFields.ai_deployment_status?.trim() ?? "",
-          assessment_result_email_consent: payload.allFields.assessment_result_email_consent === "true",
-          assessment_boundary_acknowledgment: payload.allFields.assessment_boundary_acknowledgment === "true",
-          measures_registry_updates_opt_in: payload.allFields.measures_registry_updates_opt_in === "true",
-          public_internal_boundary_preserved: true,
-        },
-        environmental_standing_report: payload.report,
-        structured_email_artifact: payload.emailArtifact,
-        condition_traces: payload.conditionTraces,
-        contact_gated_result_delivery: true,
-      },
-    })
-
-    return { error: error?.message ?? null }
+  async function onCaptureAssessment(payload: AssessmentCapturePayload): Promise<AssessmentCaptureResult> {
+    try {
+      const response = await fetch("/api/submit-assessment", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+      const data = (await response.json()) as AssessmentCaptureResult
+      if (!response.ok || data.error) {
+        return { error: data.error || `Server returned ${response.status}` }
+      }
+      return { ...data, error: null }
+    } catch (err) {
+      return { error: err instanceof Error ? err.message : String(err) }
+    }
   }
 
   async function onCaptureConnect(payload: ConnectCapturePayload): Promise<{ error: string | null }> {
@@ -435,19 +381,26 @@ export default function MeasuresRegistryOrchestrator() {
     return { error: error?.message ?? null }
   }
 
-  async function onInitiateMapPayment({ mapPathway, mapStanding, contactEmail }: MapPaymentParams): Promise<{ error: string | null }> {
+  async function onInitiateMapPayment({
+    mapPathway,
+    mapStanding,
+    contactEmail,
+    evaluationResultId,
+    currentStateKey,
+  }: MapPaymentParams): Promise<{ error: string | null }> {
     const origin = window.location.origin
     try {
       const response = await fetch("/api/map/create-checkout-session", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          evaluation_result_id: null,
+          evaluation_result_id: evaluationResultId ?? null,
+          current_state_key: currentStateKey ?? null,
           map_standing: mapStanding,
           map_pathway: mapPathway,
           contact_email: contactEmail,
-          success_url: `${origin}/map-integrity-governance?payment=success`,
-          cancel_url: `${origin}/map-integrity-governance`,
+          success_url: `${origin}/map-the-environment?payment=success`,
+          cancel_url: `${origin}/map-the-environment`,
         }),
       })
       const data = (await response.json()) as { checkout_url?: string; error?: string }

@@ -19,7 +19,7 @@ const ENCOUNTER_REGISTRY_KEYS = [
   "ai_isnt_broken_intro",
   "obsidian_chamber_orientation",
   "measures_assessment",
-  "map_integrity_governance",
+  "map_the_environment",
   "about_measures_registry",
   "undrifted",
   "measures_registry_root",
@@ -36,7 +36,7 @@ const ENCOUNTER_DEF_KEYS = [
   "ai_isnt_broken_intro",
   "obsidian_chamber_orientation",
   "measures_assessment",
-  "map_integrity_governance",
+  "map_the_environment",
   "about_measures_registry",
   "undrifted",
   "crystal_seat_intro",
@@ -122,8 +122,14 @@ export function useRegistryResolver(): RegistryResolverData {
     let cancelled = false
 
     async function load() {
-      const [registryResult, defResult, mediaResult, tokenResult, assignmentResult, issuePageResult] =
-        await Promise.all([
+      const [
+        registryResult,
+        defResult,
+        mediaResult,
+        tokenResult,
+        assignmentResult,
+        issuePageResult,
+      ] = await Promise.all([
           supabase
             .from("measures_registry")
             .select("registry_key, is_active, release_state, access_state, metadata")

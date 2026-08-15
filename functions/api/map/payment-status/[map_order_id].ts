@@ -17,6 +17,7 @@ type MapPaymentEventRow = {
   scheduling_state: string
   paid_at: string | null
   contact_email: string
+  current_state_key: string | null
 }
 
 const jsonHeaders = { "content-type": "application/json; charset=utf-8" }
@@ -59,7 +60,7 @@ export const onRequestGet: PagesFunction<Env, "map_order_id"> = async ({ params,
 
     const [event] = await supabaseFetch<MapPaymentEventRow[]>(
       env,
-      `map_payment_events?map_order_id=eq.${encodeURIComponent(mapOrderId)}&select=map_order_id,map_standing,map_circuit_key,payment_status,scheduling_state,paid_at,contact_email`,
+      `map_payment_events?map_order_id=eq.${encodeURIComponent(mapOrderId)}&select=map_order_id,map_standing,map_circuit_key,payment_status,scheduling_state,paid_at,contact_email,current_state_key`,
     )
 
     if (!event) return jsonResponse({ error: "MAP order not found" }, 404)
@@ -72,6 +73,7 @@ export const onRequestGet: PagesFunction<Env, "map_order_id"> = async ({ params,
       payment_status: event.payment_status,
       scheduling_released: schedulingReleased,
       map_circuit_key: schedulingReleased ? event.map_circuit_key : null,
+      current_state_key: schedulingReleased ? event.current_state_key : null,
       paid_at: schedulingReleased ? event.paid_at : null,
     })
   } catch (error) {

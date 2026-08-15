@@ -45,6 +45,7 @@ type MapPaymentEventRow = {
   amount_paid: number | null
   currency: string | null
   paid_at: string | null
+  current_state_key: string | null
 }
 
 type TemplateRow = {
@@ -386,13 +387,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
         const [paymentEvent] = await supabaseFetch<MapPaymentEventRow[]>(
           env,
-          `map_payment_events?map_order_id=eq.${mapOrderId}&select=map_order_id,contact_email,stripe_payment_intent_id,amount_paid,currency,paid_at&limit=1`,
+          `map_payment_events?map_order_id=eq.${mapOrderId}&select=map_order_id,contact_email,stripe_payment_intent_id,amount_paid,currency,paid_at,current_state_key&limit=1`,
         )
 
         if (paymentEvent) {
           const tokens: Record<string, string> = {
             map_order_id: paymentEvent.map_order_id,
             evaluation_result_id: session.metadata?.["assessment_result_id"] ?? "not linked",
+            current_state_key: paymentEvent.current_state_key ?? session.metadata?.["current_state_key"] ?? "not linked",
             contact_email: paymentEvent.contact_email,
             map_pathway: session.metadata?.["map_pathway"] ?? "not seated",
             amount_paid: paymentEvent.amount_paid != null ? String(paymentEvent.amount_paid) : "not recorded",
@@ -481,7 +483,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
         const [paymentEvent] = await supabaseFetch<MapPaymentEventRow[]>(
           env,
-          `map_payment_events?map_order_id=eq.${mapOrderId}&select=map_order_id,contact_email&limit=1`,
+          `map_payment_events?map_order_id=eq.${mapOrderId}&select=map_order_id,contact_email,current_state_key&limit=1`,
         )
 
         await sendGovernedNotification(env, {

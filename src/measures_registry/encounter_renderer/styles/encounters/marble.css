@@ -1,7 +1,7 @@
-/* Marble chamber surfaces — marble_chamber_orientation, marble_chamber_results, */
-/* marble_chamber_C2_compact (map_integrity_governance), marble_chamber_C2_agreement, marble_chamber_C2_resolution */
+﻿/* Marble chamber surfaces - marble_chamber_orientation, marble_chamber_results, */
+/* marble_chamber_C2_compact (map_the_environment), marble_chamber_C2_agreement, marble_chamber_C2_resolution */
 
-/* ── BASE ─────────────────────────────────────────────────────────────────── */
+/* -- BASE */
 
 .measures-registry-runtime[data-material-family="marble"] {
   min-height: 100svh;
@@ -10,7 +10,7 @@
   color: var(--registry-foreground, #f0ede8);
 }
 
-/* ── ORIENTATION ──────────────────────────────────────────────────────────── */
+/* -- ORIENTATION */
 
 .measures-registry-runtime[data-surface="marble_chamber_orientation"] {
   background-color: var(--registry-marble-base, #1a1814);
@@ -127,14 +127,14 @@
   border-color: rgba(30, 44, 72, 0.4);
 }
 
-/* ── RESULTS (marble_chamber_results / marble_chamber_encounter) ───────────── */
+/* -- RESULTS (marble_chamber_results / marble_chamber_encounter) ------------- */
 
 .measures-registry-runtime[data-surface="marble_chamber_results"],
 .measures-registry-runtime[data-surface="marble_chamber_encounter"] {
   background-color: var(--registry-marble-base, #1a1814);
 }
 
-/* ── RESULTS SURFACE: light marble treatment ─────────────────────────────── */
+/* -- RESULTS SURFACE: light marble treatment */
 
 .measures-registry-runtime[data-surface="marble_chamber_results"] {
   --registry-foreground: #1E2C48;
@@ -160,9 +160,9 @@
   padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
 }
 
-/* ── MAP THREE-PANEL LAYOUT ───────────────────────────────────────────────── */
+/* -- MAP THREE-PANEL LAYOUT */
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] {
+.measures-registry-runtime[data-surface="map_the_environment"] {
   background-color: var(--registry-marble-map-base, #16140f);
   --registry-brand-primary-text: #1E2C48;
   --registry-brand-secondary-text: #3E485B;
@@ -172,43 +172,43 @@
   color: #1E2C48;
 }
 
-/* ── MAP: light surface overrides ─────────────────────────────────────────── */
+/* -- MAP: light surface overrides */
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-car-panel {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-car-panel {
   padding-top: clamp(3rem, 5vw, 5rem);
   padding-inline-start: 0.75rem;
   border-right-color: rgba(30, 44, 72, 0.1);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-center-panel {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-center-panel {
   border-right-color: rgba(30, 44, 72, 0.1);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-panel {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-exchange-panel {
   padding-top: 1rem;
   padding-inline-end: 0.75rem;
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-heading {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-heading {
   font-size: clamp(2rem, 3vw, 3rem);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-car-unit {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-car-unit {
   border-color: rgba(30, 44, 72, 0.12);
   background: rgba(30, 44, 72, 0.03);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-car-unit--confirmed {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-car-unit--confirmed {
   border-color: rgba(166, 124, 56, 0.3);
   background: rgba(166, 124, 56, 0.05);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-amount {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-exchange-amount {
   border-color: rgba(30, 44, 72, 0.12);
   background: rgba(30, 44, 72, 0.03);
 }
 
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-cta-zone {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-cta-zone {
   border-top-color: rgba(30, 44, 72, 0.1);
 }
 
@@ -225,14 +225,14 @@
   min-height: 0;
 }
 
-/* OAR2 "Implement Render Intent Corrections for Layout Composition Drift" —
+/* OAR2 "Implement Render Intent Corrections for Layout Composition Drift" -
    marble_chamber_C2_compact: registered composition_profile is exchange_composition, but the
    three functional panels previously sat directly on the full-bleed ceremonial marble-hall
    background with no grounding of their own, competing with it for attention. Give the
    three-panel layout its own translucent surface (matching the treatment already used on the
    sibling marble_chamber_results report card) so the exchange authority reads as the primary
    visual layer, with the chamber architecture as a frame around it rather than a competitor. */
-.measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-layout {
+.measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-layout {
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -241,7 +241,7 @@
   box-shadow: 0 1.5rem 4rem rgba(30, 44, 72, 0.12);
 }
 
-/* LEFT PANEL — CAR acknowledgments */
+/* LEFT PANEL - CAR acknowledgments */
 
 .registry-marble-map-car-panel {
   display: flex;
@@ -361,7 +361,7 @@
   opacity: 0.85;
 }
 
-/* CENTER PANEL — MAP overview */
+/* CENTER PANEL - MAP overview */
 
 .registry-marble-map-center-panel {
   display: flex;
@@ -420,7 +420,7 @@
   margin: 0;
 }
 
-/* RIGHT PANEL — Exchange summary + CTA */
+/* RIGHT PANEL - Exchange summary + CTA */
 
 .registry-marble-map-exchange-panel {
   display: flex;
@@ -526,7 +526,7 @@
   margin: 0;
 }
 
-/* ── PAYMENT CTA — shared across marble_chamber_C2_compact and C2_agreement ── */
+/* -- PAYMENT CTA - shared across marble_chamber_C2_compact and C2_agreement -- */
 
 .registry-marble-circuit-payment-cta {
   display: block;
@@ -553,17 +553,17 @@
   opacity: 0.85;
 }
 
-/* ── C2 AGREEMENT ─────────────────────────────────────────────────────────── */
+/* -- C2 AGREEMENT */
 
 .measures-registry-runtime[data-surface="marble_chamber_C2_agreement"] {
   background-color: var(--registry-marble-map-base, #16140f);
 }
 
-/* OAR2 "Implement Render Intent Corrections for Layout Composition Drift" — this surface
+/* OAR2 "Implement Render Intent Corrections for Layout Composition Drift" - this surface
    never had the light-marble token overrides its sibling surfaces (marble_chamber_orientation,
-   map_integrity_governance) already have, so it was inheriting index.css's generic
+   map_the_environment) already have, so it was inheriting index.css's generic
    `[data-material-family="marble"]` token block (dark near-black text tuned for a different
-   marble treatment, plus an unrelated blue accent) instead — the actual source of the
+   marble treatment, plus an unrelated blue accent) instead - the actual source of the
    "under-anchored" look: low-contrast title and an off-palette blue CTA. Both attribute
    selectors are combined so this wins over that same-specificity rule regardless of stylesheet
    import order. */
@@ -576,7 +576,7 @@
   color: #1E2C48;
 }
 
-/* OAR2 "Seat MAP Payment Confirmation Content and Background Authority" — governed
+/* OAR2 "Seat MAP Payment Confirmation Content and Background Authority" - governed
    background (payment_map_background.webp) plus a soft overlay so the background supports
    the exchange without competing with the payment card, which remains the visual authority. */
 .measures-registry-runtime[data-surface="marble_chamber_C2_agreement"] {
@@ -592,7 +592,7 @@
   z-index: 0;
 }
 
-/* Keep the shared footer legible above the overlay — same treatment as the payment card
+/* Keep the shared footer legible above the overlay - same treatment as the payment card
    itself, so this surface's overlay doesn't dim shared chrome used across every surface.
    The header is already position:absolute with its own z-index and needs no change. */
 .measures-registry-runtime[data-surface="marble_chamber_C2_agreement"] .registry-system-footer {
@@ -614,7 +614,7 @@
   margin: clamp(1.25rem, 3vw, 2.5rem) auto;
   padding: clamp(2.5rem, 5vw, 3.5rem) clamp(1.75rem, 4vw, 2.75rem);
   box-sizing: border-box;
-  /* Grounding surface — matches the translucent panel treatment on marble_chamber_results
+  /* Grounding surface - matches the translucent panel treatment on marble_chamber_results
      and marble_chamber_C2_compact so the payment agreement reads as a primary document
      sitting in the chamber, not text floating directly on the ceremonial background. */
   background: rgba(255, 255, 255, 0.78);
@@ -789,7 +789,7 @@
   gap: 0.5rem;
 }
 
-/* ── C2 RESOLUTION ────────────────────────────────────────────────────────── */
+/* -- C2 RESOLUTION */
 
 .measures-registry-runtime[data-surface="marble_chamber_C2_resolution"] {
   background-color: var(--registry-marble-base, #1a1814);
@@ -857,7 +857,7 @@
   opacity: 0.88;
 }
 
-/* ── MOBILE RESPONSIVE ────────────────────────────────────────────────────── */
+/* -- MOBILE RESPONSIVE */
 
 @media (max-width: 1024px) {
   .registry-marble-map-layout {
@@ -883,14 +883,14 @@
     gap: 1.5rem;
   }
 
-  /* OAR2 "Implement Render Intent Corrections for Layout Composition Drift" —
+  /* OAR2 "Implement Render Intent Corrections for Layout Composition Drift" -
      marble_chamber_C2_compact mobile: registered mobile_composition_profile is
      exchange_composition. Previously the three panels were a mechanical stack separated only
      by a border-bottom line. Give each its own margined, rounded card so the sequence reads
      as three intentionally composed sections rather than one continuous scroll. */
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-car-panel,
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-center-panel,
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-panel {
+  .measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-car-panel,
+  .measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-center-panel,
+  .measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-exchange-panel {
     border-bottom: none;
     margin: 0 clamp(0.75rem, 3vw, 1.25rem) clamp(0.9rem, 3vw, 1.25rem);
     border: 1px solid rgba(30, 44, 72, 0.12);
@@ -898,11 +898,11 @@
     background: rgba(255, 255, 255, 0.5);
   }
 
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-car-panel {
+  .measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-car-panel {
     margin-top: clamp(0.9rem, 3vw, 1.25rem);
   }
 
-  .measures-registry-runtime[data-surface="map_integrity_governance"] .registry-marble-map-exchange-panel {
+  .measures-registry-runtime[data-surface="map_the_environment"] .registry-marble-map-exchange-panel {
     margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   }
 
@@ -910,3 +910,4 @@
     justify-content: flex-start;
   }
 }
+

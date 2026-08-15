@@ -3,6 +3,8 @@
 // Frontend must not hardcode prices, product IDs, or Stripe URLs.
 // OAR2: oar2_complete_obsidian_marble_launch_chambers_governed_map_payment_boundary_v1
 
+import { validateSystemEnvironmentCurrent } from "../notchazz-system-environment-guard"
+
 type Env = {
   SUPABASE_URL?: string
   VITE_SUPABASE_URL?: string
@@ -32,6 +34,18 @@ type MapC2CircuitRow = {
 
 type MapPaymentEventRow = {
   map_order_id: string
+  current_state_key: string | null
+}
+
+type CurrentResolutionRow = {
+  resolution_standing?: string
+  current_state_key?: string | null
+  env_key?: string | null
+}
+
+type EnvironmentRow = {
+  env_key: string
+  system_key: string
 }
 
 const jsonHeaders = { "content-type": "application/json; charset=utf-8" }
@@ -97,11 +111,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       map_standing?: string
       map_pathway?: string
       contact_email?: string
+      current_state_key?: string
       success_url?: string
       cancel_url?: string
     }
 
     const { evaluation_result_id, map_standing, map_pathway, success_url, cancel_url } = body
+    const currentStateKey = typeof body.current_state_key === "string" && body.current_state_key.trim()
+      ? body.current_state_key.trim()
+      : null
     const contact_email = normalizeEmail(body.contact_email ?? "")
 
     if (!map_standing) return jsonResponse({ error: "map_standing is required" }, 400)
@@ -111,8 +129,40 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     if (!contact_email || !isValidEmail(contact_email)) {
       return jsonResponse({ error: "valid contact_email is required" }, 400)
     }
+    if (!currentStateKey) {
+      return jsonResponse({ error: "current_state_key is required" }, 400)
+    }
     if (!success_url || !cancel_url) {
       return jsonResponse({ error: "success_url and cancel_url are required" }, 400)
+    }
+
+    const activeSystemKey = "measures_registry"
+    const envKey = "env_measures_registry"
+    const [currentResolution] = await supabaseFetch<CurrentResolutionRow[]>(env, "rpc/resolve_c3_current", {
+      method: "POST",
+      body: JSON.stringify({ p_env_key: envKey }),
+    })
+    const [environmentRow] = await supabaseFetch<EnvironmentRow[]>(
+      env,
+      `c3_environment?env_key=eq.${envKey}&select=env_key,system_key&limit=1`,
+    )
+    const currentGuard = validateSystemEnvironmentCurrent({
+      active_system_key: activeSystemKey,
+      target_env_key: envKey,
+      environment_system_key: environmentRow?.system_key ?? null,
+      resolved_current_state_key: currentResolution?.current_state_key ?? null,
+      resolved_current_env_key: currentResolution?.env_key ?? null,
+      target_registry_system_key: activeSystemKey,
+      evidence_system_key: activeSystemKey,
+      mutation_system_key: activeSystemKey,
+      source_execution_instance_id: "resolve_measures_map_identity_confirmation_current_payment_codex_001",
+    })
+    if (currentGuard.standing === "hold" || currentResolution?.current_state_key !== currentStateKey) {
+      return jsonResponse({
+        error: "system/environment/current mismatch",
+        notchazz: currentGuard,
+        expected_current_state_key: currentResolution?.current_state_key ?? null,
+      }, 409)
     }
 
     // Load MAP payment options from the C2 circuit; DB state remains server-side authority.
@@ -145,6 +195,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         map_standing,
         map_circuit_key: paymentOption.map_circuit_key,
         contact_email,
+        current_state_key: currentStateKey,
         payment_status: "checkout_created",
         oar_state: "checkout_initiated",
         scheduling_state: "held",
@@ -169,6 +220,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       "metadata[map_standing]": map_standing,
       "metadata[map_circuit_key]": paymentOption.map_circuit_key,
       "metadata[assessment_result_id]": evaluation_result_id ?? "",
+      "metadata[current_state_key]": currentStateKey ?? "",
       "metadata[contact_email]": contact_email,
       "metadata[creates_seat]": "false",
       "metadata[creates_c3_key]": "false",
@@ -177,6 +229,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       "payment_intent_data[metadata][system]": "measures_registry",
       "payment_intent_data[metadata][offer_type]": "map",
       "payment_intent_data[metadata][map_pathway]": map_pathway,
+      "payment_intent_data[metadata][assessment_result_id]": evaluation_result_id ?? "",
+      "payment_intent_data[metadata][current_state_key]": currentStateKey ?? "",
       "payment_intent_data[metadata][creates_seat]": "false",
       "payment_intent_data[metadata][creates_c3_key]": "false",
       "payment_intent_data[metadata][creates_certification]": "false",
@@ -218,6 +272,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       checkout_url: session.url,
       map_order_id: paymentEvent.map_order_id,
       session_id: session.id,
+      current_state_key: paymentEvent.current_state_key ?? currentStateKey,
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : "checkout session creation failed"

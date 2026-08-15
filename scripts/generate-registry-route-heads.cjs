@@ -405,7 +405,10 @@ async function main() {
   }
 
   console.log(
-    `Generated governed registry route heads: ${[...routeUnits.map((unit) => unit.routePath), ...launchCycleArticleRoutes.map((route) => route.routePath)].join(", ")}`,
+    `Generated governed registry route heads: ${[
+      ...routeUnits.map((unit) => unit.routePath),
+      ...launchCycleArticleRoutes.map((route) => route.routePath),
+    ].join(", ")}`,
   )
 }
 

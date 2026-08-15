@@ -16,6 +16,8 @@ export type MapPaymentParams = {
   mapPathway: string
   mapStanding: string
   contactEmail: string
+  evaluationResultId?: string | null
+  currentStateKey?: string | null
 }
 
 export type MarbleChamberProps = {
@@ -68,7 +70,7 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
     return <MarbleOrientationSeat {...props} />
   }
   if (surface === "marble_chamber_encounter") {
-    // legacy_alias_for_marble_chamber_results — forward immediately
+    // legacy_alias_for_marble_chamber_results - forward immediately
     props.onNavigate("marble_chamber_results")
     return null
   }
@@ -103,7 +105,7 @@ export default function MarbleChamberRenderer(props: MarbleChamberProps) {
 
 // --- MapCARUnit -------------------------------------------------------------
 // Single expandable Contractual Acknowledgment Record unit.
-// open → read → confirm → collapsed with confirmed badge.
+// open -> read -> confirm -> collapsed with confirmed badge.
 
 function MapCARUnit({
   unit,
@@ -133,9 +135,9 @@ function MapCARUnit({
       >
         <span className="registry-marble-car-title">{title}</span>
         {confirmed ? (
-          <span className="registry-marble-car-status" aria-label="Confirmed">✓</span>
+          <span className="registry-marble-car-status" aria-label="Confirmed">OK</span>
         ) : (
-          <span className="registry-marble-car-indicator" aria-hidden="true">{open ? "−" : "+"}</span>
+          <span className="registry-marble-car-indicator" aria-hidden="true">{open ? "-" : "+"}</span>
         )}
       </button>
       {open && !confirmed ? (
@@ -154,11 +156,13 @@ function MapCARUnit({
   )
 }
 
-// --- map_integrity_governance -----------------------------------------------
+// --- map_the_environment -----------------------------------------------
 
 type MapSession = {
+  assessmentRef?: string | null
   report: { standing_key?: string } | null
   fields: Record<string, string>
+  c2Resolution?: Record<string, unknown> | null
 } | null
 
 function MapIntegrityGovernance({
@@ -217,10 +221,12 @@ function MapIntegrityGovernance({
       sessionStorage.setItem("__mreg_c2_pending", JSON.stringify({
         mapPathway,
         mapStanding: standingKey,
-        // OAR2 "Seat MAP Payment Confirmation Content and Background Authority" — carries the
+        evaluationResultId: mapSession?.assessmentRef ?? null,
+        currentStateKey: asString(mapSession?.c2Resolution?.current_state_key) ?? null,
+        // OAR2 "Seat MAP Payment Confirmation Content and Background Authority" - carries the
         // already-resolved pathway card forward so marble_chamber_C2_agreement can display
         // pathway name/price/scope/deliverables without re-deriving or duplicating this
-        // authority. No new pricing/deliverables data is created here — this is the same
+        // authority. No new pricing/deliverables data is created here - this is the same
         // recommendedCard already computed above from pathwayCards.
         mapPathwayCard: recommendedCard
           ? {
@@ -238,7 +244,7 @@ function MapIntegrityGovernance({
   return (
     <main
       className="measures-registry-runtime"
-      data-surface="map_integrity_governance"
+      data-surface="map_the_environment"
       data-material-family="marble"
       data-layout-contract="marble_map_three_panel"
       data-release-standing="public"
@@ -250,7 +256,7 @@ function MapIntegrityGovernance({
 
       <div className="registry-marble-map-layout">
 
-        {/* LEFT — CAR Acknowledgments */}
+        {/* LEFT - CAR Acknowledgments */}
         <aside className="registry-marble-map-car-panel" aria-label={carLabel}>
           <p className="registry-marble-car-label">{carLabel}</p>
           {carInstruction ? (
@@ -277,7 +283,7 @@ function MapIntegrityGovernance({
           )}
         </aside>
 
-        {/* CENTER — MAP Overview */}
+        {/* CENTER - MAP Overview */}
         <section className="registry-marble-map-center-panel" aria-label={centerHeading}>
           <div className="registry-marble-map-center-content">
             <h2 className="registry-marble-map-heading">{centerHeading}</h2>
@@ -297,7 +303,7 @@ function MapIntegrityGovernance({
           </div>
         </section>
 
-        {/* RIGHT — MAP Summary & Exchange */}
+        {/* RIGHT - MAP Summary & Exchange */}
         {recommendedCard ? (
           <aside className="registry-marble-map-exchange-panel" aria-label="MAP Exchange">
             <div className="registry-marble-map-exchange-content">
@@ -552,6 +558,8 @@ type C2PendingPathwayCard = {
 type C2Pending = {
   mapPathway: string
   mapStanding: string
+  evaluationResultId?: string | null
+  currentStateKey?: string | null
   mapPathwayCard?: C2PendingPathwayCard | null
 }
 
@@ -595,7 +603,7 @@ function MarbleC2Agreement({
   const effectiveEmail = contactEmail || emailInput.trim()
 
   // Resolved from the MAP pathway card carried forward from marble_chamber_C2_compact
-  // (measures_encounter_def.map_integrity_governance.pathway_cards) — not duplicated or
+  // (registered as MAP the Environment, with the legacy DB key preserved as provenance) - not duplicated or
   // re-authored here. Falls back to the bare pathway key only if the card wasn't captured
   // (e.g. a session begun before this OAR shipped).
   const pathwayCard = c2Pending?.mapPathwayCard ?? null
@@ -625,6 +633,8 @@ function MarbleC2Agreement({
       mapPathway: c2Pending.mapPathway,
       mapStanding: c2Pending.mapStanding,
       contactEmail: effectiveEmail,
+      evaluationResultId: c2Pending.evaluationResultId ?? null,
+      currentStateKey: c2Pending.currentStateKey ?? null,
     })
     setLoading(false)
     if (payError) setError(payError)
@@ -673,7 +683,7 @@ function MarbleC2Agreement({
         {sealUrl ? (
           <img
             src={sealUrl}
-            alt="Codexstone — Official Seal"
+            alt="Codexstone - Official Seal"
             className="registry-marble-payment-seal"
             loading="eager"
           />
@@ -686,7 +696,7 @@ function MarbleC2Agreement({
               {pathwayPrice ? <strong>{pathwayPrice}</strong> : null}
             </div>
           ) : (
-            <p>{pathwayPrefix} {c2Pending.mapPathway.replaceAll("_", " ")}</p>
+            <p>{pathwayPrefix} {c2Pending.mapPathway.replace(/_/g, " ")}</p>
           )}
         </header>
         {pathwayScopeSummary ? (
@@ -743,7 +753,7 @@ function MarbleC2Agreement({
 
 // --- marble_chamber_C2_resolution -------------------------------------------
 // Payment confirmation surface. Reached via Stripe success_url redirect.
-// Terminal surface — no next_surface in encounter_structure.
+// Terminal surface - no next_surface in encounter_structure.
 
 function MarbleC2Resolution({
   encounter,
