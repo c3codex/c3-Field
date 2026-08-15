@@ -63,6 +63,28 @@ type EnvironmentRow = {
   system_key: string
 }
 
+type SubmitAssessmentPayload = {
+  institutionName?: string
+  contactName?: string
+  contactEmail?: string
+  evaluationAnswers?: Record<string, unknown>
+  report?: {
+    standing_key?: string
+    environmental_standing?: string
+    continuation_pathway?: string
+  }
+  allFields?: {
+    website?: string
+    role_title?: string
+    organization_type?: string
+    ai_deployment_status?: string
+    next_support_question?: string
+    assessment_result_email_consent?: string
+    assessment_boundary_acknowledgment?: string
+    measures_registry_updates_opt_in?: string
+  }
+}
+
 const jsonHeaders = {
   "content-type": "application/json; charset=utf-8",
 }
@@ -354,7 +376,7 @@ function resolveEnvironmentalReportByScore(
 
 export const onRequestPost = async ({ request, env }: { request: Request, env: Env }) => {
   try {
-    const payload = (await request.json()) as Record<string, any>
+    const payload = (await request.json()) as SubmitAssessmentPayload
 
     const captureId = crypto.randomUUID()
     const website = payload.allFields?.website || ""
@@ -459,6 +481,70 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
       frontend_authority: "renderer_only",
     }
 
+    const captureMetadata = {
+      assessment_ref: assessmentRef,
+      env_key: envKey,
+      registry_key: registryKey,
+      encounter_key: encounterKey,
+      legacy_encounter_key: "measures_ai_operational_evaluation",
+      organization_type: payload.allFields?.organization_type?.trim() ?? "",
+      ai_deployment_status: payload.allFields?.ai_deployment_status?.trim() ?? "",
+      next_support_question: payload.allFields?.next_support_question?.trim() || null,
+      assessment_result_email_consent: payload.allFields?.assessment_result_email_consent === "true",
+      assessment_boundary_acknowledgment: payload.allFields?.assessment_boundary_acknowledgment === "true",
+      measures_registry_updates_opt_in: payload.allFields?.measures_registry_updates_opt_in === "true",
+      source_runtime: "free_encounter_renderer_v1",
+      carry_forward: {
+        source_surface: "measures_assessment",
+        passage_surface: "obsidian_to_marble_passage_video",
+        destination_surface: "map_the_environment",
+        destination_label: "MAP the Environment",
+        current_state_key: assessmentRecord.current_state_key,
+        organization_name: payload.institutionName,
+        contact_name: payload.contactName,
+        contact_email: payload.contactEmail,
+        current_ai_usage: payload.allFields?.ai_deployment_status?.trim() ?? "",
+        circuit_identification: payload.report?.standing_key ?? "",
+        continuation_pathway: payload.report?.continuation_pathway ?? "",
+        state: "carried_forward",
+        ccc_token_reference: "held_missing_canonical_ccc_token_reference",
+      },
+      assessment_result_binding: {
+        assessment_ref: assessmentRef,
+        current_state_key: assessmentRecord.current_state_key,
+        environmental_standing_report: resolved.report,
+        institution_name: payload.institutionName,
+        contact_name: payload.contactName,
+        contact_email: payload.contactEmail,
+        role_title: trimmedRoleTitle,
+        website: website || null,
+        ai_deployment_status: payload.allFields?.ai_deployment_status?.trim() ?? "",
+        assessment_result_email_consent: payload.allFields?.assessment_result_email_consent === "true",
+        assessment_boundary_acknowledgment: payload.allFields?.assessment_boundary_acknowledgment === "true",
+        measures_registry_updates_opt_in: payload.allFields?.measures_registry_updates_opt_in === "true",
+        public_internal_boundary_preserved: true,
+      },
+      institutional_identity_relation: {
+        standing: "institutional_identity_represented_by_institutional_representative",
+        institution_name: payload.institutionName,
+        representative_name: payload.contactName,
+        representative_email: payload.contactEmail,
+        role_title: trimmedRoleTitle,
+        c3_7s_acknowledged: payload.allFields?.assessment_boundary_acknowledgment === "true",
+        named_individual_registration_inferred: false,
+        operator_standing_inferred: false,
+      },
+      governed_assessment_instance: assessmentRecord,
+      c2_resolution: c2Resolution,
+      current_state_key: assessmentRecord.current_state_key,
+      notchazz_system_environment_guard: currentGuard,
+      environmental_standing_report: resolved.report,
+      structured_email_artifact: resolved.emailArtifact,
+      condition_traces: serverConditionTraces,
+      contact_gated_result_delivery: true,
+      ccc_token_reference: "held_missing_canonical_ccc_token_reference",
+    }
+
     // Insert capture into Supabase Rest API using server-side service-role key
     await supabaseFetch(env, "measures_iis_eval_gate1_capture", {
       method: "POST",
@@ -486,94 +572,183 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
         },
         campaign_tag: "measures_assessment_contact_gated_delivery",
         notification_state: "queued",
-        metadata: {
-          assessment_ref: assessmentRef,
-          env_key: envKey,
-          registry_key: registryKey,
-          encounter_key: encounterKey,
-          legacy_encounter_key: "measures_ai_operational_evaluation",
-          organization_type: payload.allFields?.organization_type?.trim() ?? "",
-          ai_deployment_status: payload.allFields?.ai_deployment_status?.trim() ?? "",
-          next_support_question: payload.allFields?.next_support_question?.trim() || null,
-          assessment_result_email_consent: payload.allFields?.assessment_result_email_consent === "true",
-          assessment_boundary_acknowledgment: payload.allFields?.assessment_boundary_acknowledgment === "true",
-          measures_registry_updates_opt_in: payload.allFields?.measures_registry_updates_opt_in === "true",
-          source_runtime: "free_encounter_renderer_v1",
-          carry_forward: {
-            source_surface: "measures_assessment",
-            passage_surface: "obsidian_to_marble_passage_video",
-            destination_surface: "map_the_environment",
-            destination_label: "MAP the Environment",
-            current_state_key: assessmentRecord.current_state_key,
-            organization_name: payload.institutionName,
-            contact_name: payload.contactName,
-            contact_email: payload.contactEmail,
-            current_ai_usage: payload.allFields?.ai_deployment_status?.trim() ?? "",
-            circuit_identification: payload.report?.standing_key ?? "",
-            continuation_pathway: payload.report?.continuation_pathway ?? "",
-            state: "carried_forward",
-            ccc_token_reference: "held_missing_canonical_ccc_token_reference",
-          },
-          assessment_result_binding: {
-            assessment_ref: assessmentRef,
-            current_state_key: assessmentRecord.current_state_key,
-            environmental_standing_report: resolved.report,
-            institution_name: payload.institutionName,
-            contact_name: payload.contactName,
-            contact_email: payload.contactEmail,
-            role_title: trimmedRoleTitle,
-            website: website || null,
-            ai_deployment_status: payload.allFields?.ai_deployment_status?.trim() ?? "",
-            assessment_result_email_consent: payload.allFields?.assessment_result_email_consent === "true",
-            assessment_boundary_acknowledgment: payload.allFields?.assessment_boundary_acknowledgment === "true",
-            measures_registry_updates_opt_in: payload.allFields?.measures_registry_updates_opt_in === "true",
-            public_internal_boundary_preserved: true,
-          },
-          institutional_identity_relation: {
-            standing: "institutional_identity_represented_by_institutional_representative",
-            institution_name: payload.institutionName,
-            representative_name: payload.contactName,
-            representative_email: payload.contactEmail,
-            role_title: trimmedRoleTitle,
-            c3_7s_acknowledged: payload.allFields?.assessment_boundary_acknowledgment === "true",
-            named_individual_registration_inferred: false,
-            operator_standing_inferred: false,
-          },
-          governed_assessment_instance: assessmentRecord,
-          c2_resolution: c2Resolution,
-          current_state_key: assessmentRecord.current_state_key,
-          notchazz_system_environment_guard: currentGuard,
-          environmental_standing_report: resolved.report,
-          structured_email_artifact: resolved.emailArtifact,
-          condition_traces: serverConditionTraces,
-          contact_gated_result_delivery: true,
-          ccc_token_reference: "held_missing_canonical_ccc_token_reference",
-        },
+        metadata: captureMetadata,
       }),
     })
 
-    // Server-side internal/API receipt dispatch, then separate assessment-result dispatch.
+    // Resolve routing: relative URL for production, absolute URL for tests/localhost
+    const isLocalOrTest = request.url.includes("localhost") || request.url.includes("example.com")
     const origin = new URL(request.url).origin
-    const receiptResponse = await fetch(`${origin}/api/dispatch-assessment-receipt`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-operator-dispatch-key": env.OPERATOR_DISPATCH_KEY || "",
-      },
-      body: JSON.stringify({ capture_id: captureId }),
-    })
-    const receiptDispatch = (await receiptResponse.json().catch(() => ({}))) as Record<string, unknown>
+    const receiptUrl = isLocalOrTest
+      ? `${origin}/api/dispatch-assessment-receipt`
+      : "/api/dispatch-assessment-receipt"
+    const notificationUrl = isLocalOrTest
+      ? `${origin}/api/dispatch-assessment-notification`
+      : "/api/dispatch-assessment-notification"
 
-    const dispatchResponse = await fetch(`${origin}/api/dispatch-assessment-notification`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-operator-dispatch-key": env.OPERATOR_DISPATCH_KEY || "",
-      },
-      body: JSON.stringify({ capture_id: captureId }),
-    })
+    // Server-side internal/API receipt dispatch with failure observability
+    let receiptDispatch: Record<string, unknown> = {}
+    let receiptStatus = 200
+    let receiptOk = true
+    try {
+      const receiptResponse = await fetch(receiptUrl, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-operator-dispatch-key": env.OPERATOR_DISPATCH_KEY || "",
+        },
+        body: JSON.stringify({ capture_id: captureId }),
+      })
+      receiptStatus = receiptResponse.status
+      receiptOk = receiptResponse.ok
+      receiptDispatch = (await receiptResponse.json().catch(() => ({}))) as Record<string, unknown>
+      if (!receiptOk) {
+        receiptDispatch.status = receiptStatus
+        receiptDispatch.error = (receiptDispatch.error as string | undefined) || `HTTP ${receiptStatus}`
+      }
+    } catch (err) {
+      receiptOk = false
+      receiptStatus = 500
+      receiptDispatch = {
+        error: err instanceof Error ? err.message : "Network error",
+        status: 500,
+      }
+    }
 
-    const dispatchResult = (await dispatchResponse.json().catch(() => ({}))) as Record<string, unknown>
+    if (!receiptOk) {
+      const failureReason = (receiptDispatch.error as string | undefined) || `HTTP error ${receiptStatus}`
+      try {
+        await supabaseFetch(env, `measures_iis_eval_gate1_capture?id=eq.${captureId}`, {
+          method: "PATCH",
+          headers: { Prefer: "return=minimal" },
+          body: JSON.stringify({
+            confirmation_email_state: "failed",
+            metadata: {
+              ...captureMetadata,
+              confirmation_receipt_state: "failed",
+              confirmation_receipt_failure_reason: `Dispatcher boundary failure: ${failureReason}`,
+              confirmation_receipt_failure_status: receiptStatus,
+              source_oar2: "diagnose_measures_notification_dispatch_failure_cline_001",
+            },
+          }),
+        })
+      } catch (err) {
+        // Safe catch-all
+      }
+
+      try {
+        await supabaseFetch(env, "measures_notification_dispatch_log", {
+          method: "POST",
+          headers: { Prefer: "return=minimal" },
+          body: JSON.stringify({
+            id: crypto.randomUUID(),
+            event_type: "assessment_completed",
+            recipient_class: "participant",
+            source_table: "measures_iis_eval_gate1_capture",
+            source_id: captureId,
+            recipient_email: payload.contactEmail,
+            template_key: "assessment_receipt_participant_v1",
+            provider: "internal",
+            dispatch_state: "failed",
+            error_message: `Dispatcher boundary failure: ${failureReason}`,
+            metadata: {
+              notification_class: "assessment_receipt",
+              source_oar2: "diagnose_measures_notification_dispatch_failure_cline_001",
+              execution_instance_id: "diagnose_measures_notification_dispatch_failure_cline_001",
+              assessment_ref: assessmentRef,
+              current_state_key: currentStateKey,
+              http_status: receiptStatus,
+            },
+            created_at: new Date().toISOString(),
+          }),
+        })
+      } catch (err) {
+        // Safe catch-all
+      }
+    }
+
+    // Server-side internal/API result-email dispatch with failure observability
+    let dispatchResult: Record<string, unknown> = {}
+    let dispatchStatus = 200
+    let dispatchOk = true
+    try {
+      const dispatchResponse = await fetch(notificationUrl, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-operator-dispatch-key": env.OPERATOR_DISPATCH_KEY || "",
+        },
+        body: JSON.stringify({ capture_id: captureId }),
+      })
+      dispatchStatus = dispatchResponse.status
+      dispatchOk = dispatchResponse.ok
+      dispatchResult = (await dispatchResponse.json().catch(() => ({}))) as Record<string, unknown>
+      if (!dispatchOk) {
+        dispatchResult.status = dispatchStatus
+        dispatchResult.error = (dispatchResult.error as string | undefined) || `HTTP ${dispatchStatus}`
+      }
+    } catch (err) {
+      dispatchOk = false
+      dispatchStatus = 500
+      dispatchResult = {
+        error: err instanceof Error ? err.message : "Network error",
+        status: 500,
+      }
+    }
+
+    if (!dispatchOk) {
+      const failureReason = (dispatchResult.error as string | undefined) || `HTTP error ${dispatchStatus}`
+      try {
+        await supabaseFetch(env, `measures_iis_eval_gate1_capture?id=eq.${captureId}`, {
+          method: "PATCH",
+          headers: { Prefer: "return=minimal" },
+          body: JSON.stringify({
+            notification_state: "failed",
+            metadata: {
+              ...captureMetadata,
+              confirmation_receipt_state: receiptOk ? ((receiptDispatch.dispatch_state as string | undefined) || "sent") : "failed",
+              confirmation_receipt_failure_reason: receiptOk ? undefined : receiptDispatch.error,
+              assessment_result_email_state: "failed",
+              dispatch_error: `Dispatcher boundary failure: ${failureReason}`,
+              dispatch_failure_status: dispatchStatus,
+              source_oar2: "diagnose_measures_notification_dispatch_failure_cline_001",
+            },
+          }),
+        })
+      } catch (err) {
+        // Safe catch-all
+      }
+
+      try {
+        await supabaseFetch(env, "measures_notification_dispatch_log", {
+          method: "POST",
+          headers: { Prefer: "return=minimal" },
+          body: JSON.stringify({
+            id: crypto.randomUUID(),
+            event_type: "assessment_completed",
+            recipient_class: "participant",
+            source_table: "measures_iis_eval_gate1_capture",
+            source_id: captureId,
+            recipient_email: payload.contactEmail,
+            template_key: "assessment_completed_participant_v1",
+            provider: "internal",
+            dispatch_state: "failed",
+            error_message: `Dispatcher boundary failure: ${failureReason}`,
+            metadata: {
+              notification_class: "assessment_result",
+              source_oar2: "diagnose_measures_notification_dispatch_failure_cline_001",
+              execution_instance_id: "diagnose_measures_notification_dispatch_failure_cline_001",
+              assessment_ref: assessmentRef,
+              current_state_key: currentStateKey,
+              http_status: dispatchStatus,
+            },
+            created_at: new Date().toISOString(),
+          }),
+        })
+      } catch (err) {
+        // Safe catch-all
+      }
+    }
 
     return jsonResponse({
       success: true,
