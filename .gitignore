@@ -10,6 +10,7 @@ dist
 .dev.vars
 .wrangler/
 *.lnk
+.mcp.json
 
 # Local session scripts (contain secrets, never commit)
 execute_via_api.js
