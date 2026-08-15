@@ -1,3 +1,4 @@
+import { deliverAssessmentReceipt, deliverAssessmentResultEmail } from "./assessment-delivery-service"
 import { validateSystemEnvironmentCurrent } from "./notchazz-system-environment-guard"
 
 type Env = {
@@ -576,179 +577,8 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
       }),
     })
 
-    // Resolve routing: relative URL for production, absolute URL for tests/localhost
-    const isLocalOrTest = request.url.includes("localhost") || request.url.includes("example.com")
-    const origin = new URL(request.url).origin
-    const receiptUrl = isLocalOrTest
-      ? `${origin}/api/dispatch-assessment-receipt`
-      : "/api/dispatch-assessment-receipt"
-    const notificationUrl = isLocalOrTest
-      ? `${origin}/api/dispatch-assessment-notification`
-      : "/api/dispatch-assessment-notification"
-
-    // Server-side internal/API receipt dispatch with failure observability
-    let receiptDispatch: Record<string, unknown> = {}
-    let receiptStatus = 200
-    let receiptOk = true
-    try {
-      const receiptResponse = await fetch(receiptUrl, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-operator-dispatch-key": env.OPERATOR_DISPATCH_KEY || "",
-        },
-        body: JSON.stringify({ capture_id: captureId }),
-      })
-      receiptStatus = receiptResponse.status
-      receiptOk = receiptResponse.ok
-      receiptDispatch = (await receiptResponse.json().catch(() => ({}))) as Record<string, unknown>
-      if (!receiptOk) {
-        receiptDispatch.status = receiptStatus
-        receiptDispatch.error = (receiptDispatch.error as string | undefined) || `HTTP ${receiptStatus}`
-      }
-    } catch (err) {
-      receiptOk = false
-      receiptStatus = 500
-      receiptDispatch = {
-        error: err instanceof Error ? err.message : "Network error",
-        status: 500,
-      }
-    }
-
-    if (!receiptOk) {
-      const failureReason = (receiptDispatch.error as string | undefined) || `HTTP error ${receiptStatus}`
-      try {
-        await supabaseFetch(env, `measures_iis_eval_gate1_capture?id=eq.${captureId}`, {
-          method: "PATCH",
-          headers: { Prefer: "return=minimal" },
-          body: JSON.stringify({
-            confirmation_email_state: "failed",
-            metadata: {
-              ...captureMetadata,
-              confirmation_receipt_state: "failed",
-              confirmation_receipt_failure_reason: `Dispatcher boundary failure: ${failureReason}`,
-              confirmation_receipt_failure_status: receiptStatus,
-              source_oar2: "diagnose_measures_notification_dispatch_failure_cline_001",
-            },
-          }),
-        })
-      } catch (err) {
-        // Safe catch-all
-      }
-
-      try {
-        await supabaseFetch(env, "measures_notification_dispatch_log", {
-          method: "POST",
-          headers: { Prefer: "return=minimal" },
-          body: JSON.stringify({
-            id: crypto.randomUUID(),
-            event_type: "assessment_completed",
-            recipient_class: "participant",
-            source_table: "measures_iis_eval_gate1_capture",
-            source_id: captureId,
-            recipient_email: payload.contactEmail,
-            template_key: "assessment_receipt_participant_v1",
-            provider: "internal",
-            dispatch_state: "failed",
-            error_message: `Dispatcher boundary failure: ${failureReason}`,
-            metadata: {
-              notification_class: "assessment_receipt",
-              source_oar2: "diagnose_measures_notification_dispatch_failure_cline_001",
-              execution_instance_id: "diagnose_measures_notification_dispatch_failure_cline_001",
-              assessment_ref: assessmentRef,
-              current_state_key: currentStateKey,
-              http_status: receiptStatus,
-            },
-            created_at: new Date().toISOString(),
-          }),
-        })
-      } catch (err) {
-        // Safe catch-all
-      }
-    }
-
-    // Server-side internal/API result-email dispatch with failure observability
-    let dispatchResult: Record<string, unknown> = {}
-    let dispatchStatus = 200
-    let dispatchOk = true
-    try {
-      const dispatchResponse = await fetch(notificationUrl, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-operator-dispatch-key": env.OPERATOR_DISPATCH_KEY || "",
-        },
-        body: JSON.stringify({ capture_id: captureId }),
-      })
-      dispatchStatus = dispatchResponse.status
-      dispatchOk = dispatchResponse.ok
-      dispatchResult = (await dispatchResponse.json().catch(() => ({}))) as Record<string, unknown>
-      if (!dispatchOk) {
-        dispatchResult.status = dispatchStatus
-        dispatchResult.error = (dispatchResult.error as string | undefined) || `HTTP ${dispatchStatus}`
-      }
-    } catch (err) {
-      dispatchOk = false
-      dispatchStatus = 500
-      dispatchResult = {
-        error: err instanceof Error ? err.message : "Network error",
-        status: 500,
-      }
-    }
-
-    if (!dispatchOk) {
-      const failureReason = (dispatchResult.error as string | undefined) || `HTTP error ${dispatchStatus}`
-      try {
-        await supabaseFetch(env, `measures_iis_eval_gate1_capture?id=eq.${captureId}`, {
-          method: "PATCH",
-          headers: { Prefer: "return=minimal" },
-          body: JSON.stringify({
-            notification_state: "failed",
-            metadata: {
-              ...captureMetadata,
-              confirmation_receipt_state: receiptOk ? ((receiptDispatch.dispatch_state as string | undefined) || "sent") : "failed",
-              confirmation_receipt_failure_reason: receiptOk ? undefined : receiptDispatch.error,
-              assessment_result_email_state: "failed",
-              dispatch_error: `Dispatcher boundary failure: ${failureReason}`,
-              dispatch_failure_status: dispatchStatus,
-              source_oar2: "diagnose_measures_notification_dispatch_failure_cline_001",
-            },
-          }),
-        })
-      } catch (err) {
-        // Safe catch-all
-      }
-
-      try {
-        await supabaseFetch(env, "measures_notification_dispatch_log", {
-          method: "POST",
-          headers: { Prefer: "return=minimal" },
-          body: JSON.stringify({
-            id: crypto.randomUUID(),
-            event_type: "assessment_completed",
-            recipient_class: "participant",
-            source_table: "measures_iis_eval_gate1_capture",
-            source_id: captureId,
-            recipient_email: payload.contactEmail,
-            template_key: "assessment_completed_participant_v1",
-            provider: "internal",
-            dispatch_state: "failed",
-            error_message: `Dispatcher boundary failure: ${failureReason}`,
-            metadata: {
-              notification_class: "assessment_result",
-              source_oar2: "diagnose_measures_notification_dispatch_failure_cline_001",
-              execution_instance_id: "diagnose_measures_notification_dispatch_failure_cline_001",
-              assessment_ref: assessmentRef,
-              current_state_key: currentStateKey,
-              http_status: dispatchStatus,
-            },
-            created_at: new Date().toISOString(),
-          }),
-        })
-      } catch (err) {
-        // Safe catch-all
-      }
-    }
+    const receiptResult = await deliverAssessmentReceipt(env, captureId)
+    const resultEmail = await deliverAssessmentResultEmail(env, captureId)
 
     return jsonResponse({
       success: true,
@@ -757,8 +587,8 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
       report: resolved.report,
       emailArtifact: resolved.emailArtifact,
       c2Resolution,
-      receiptDispatch,
-      dispatch: dispatchResult,
+      receiptDispatch: receiptResult.body,
+      dispatch: resultEmail.body,
     })
   } catch (error) {
     return jsonResponse(

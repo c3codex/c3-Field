@@ -91,7 +91,8 @@ async function withMockedFetch(
   }
 }
 
-test("handles and logs dispatcher 403 boundary failure gracefully", async () => {
+test("handles and logs provider failure without dispatch loopback", async () => {
+  const captures = new Map<string, Record<string, any>>()
   const patches: Array<{
     confirmation_email_state?: string;
     notification_state?: string;
@@ -126,23 +127,45 @@ test("handles and logs dispatcher 403 boundary failure gracefully", async () => 
         return Response.json([{ env_key: "env_measures_registry", system_key: "measures_registry" }])
       }
       if (url.endsWith("/rest/v1/measures_iis_eval_gate1_capture") && method === "POST") {
+        const row = JSON.parse(body)
+        captures.set(row.id, row)
         return new Response(null, { status: 201 })
       }
       if (url.endsWith("/api/dispatch-assessment-receipt") && method === "POST") {
-        // Return 403 Forbidden to trigger our failure observability
-        return new Response(JSON.stringify({ error: "dispatch access denied" }), { status: 403 })
+        throw new Error(`Unexpected dispatch loopback: ${method} ${url}`)
       }
       if (url.endsWith("/api/dispatch-assessment-notification") && method === "POST") {
-        // Return 503 to trigger failure observability
-        return new Response(JSON.stringify({ error: "RESEND_API_KEY is not configured" }), { status: 503 })
+        throw new Error(`Unexpected dispatch loopback: ${method} ${url}`)
+      }
+      if (url.includes("measures_iis_eval_gate1_capture?id=eq.") && method === "GET") {
+        const captureId = decodeURIComponent(url.match(/id=eq\.([^&]+)/)?.[1] ?? "")
+        const row = captures.get(captureId)
+        return Response.json(row ? [row] : [])
       }
       if (url.includes("measures_iis_eval_gate1_capture?id=eq.") && method === "PATCH") {
         patches.push(JSON.parse(body))
         return new Response(null, { status: 204 })
       }
+      if (url.includes("measures_notification_template?template_key=eq.assessment_receipt_participant_v1")) {
+        return Response.json([{
+          template_key: "assessment_receipt_participant_v1",
+          subject: "Receipt {{assessment_ref}}",
+          body: "Receipt {{assessment_ref}}",
+        }])
+      }
+      if (url.includes("measures_notification_template?template_key=eq.assessment_completed_participant_v1")) {
+        return Response.json([{
+          template_key: "assessment_completed_participant_v1",
+          subject: "Result {{environmental_standing}}",
+          body: "Standing {{environmental_standing}}",
+        }])
+      }
       if (url.endsWith("/rest/v1/measures_notification_dispatch_log") && method === "POST") {
         logs.push(JSON.parse(body))
         return new Response(null, { status: 201 })
+      }
+      if (url.includes("api.resend.com/emails") && method === "POST") {
+        return new Response(JSON.stringify({ message: "RESEND_API_KEY is not configured" }), { status: 503 })
       }
       throw new Error(`Unexpected fetch: ${method} ${url}`)
     },
@@ -156,8 +179,8 @@ test("handles and logs dispatcher 403 boundary failure gracefully", async () => 
     dispatch: { status: number; error?: string };
   }
   assert.equal(body.success, true)
-  assert.equal(body.receiptDispatch.status, 403)
-  assert.equal(body.receiptDispatch.error, "dispatch access denied")
+  assert.equal(body.receiptDispatch.status, 503)
+  assert.equal(body.receiptDispatch.error, "RESEND_API_KEY is not configured")
   assert.equal(body.dispatch.status, 503)
   assert.equal(body.dispatch.error, "RESEND_API_KEY is not configured")
 
@@ -166,7 +189,7 @@ test("handles and logs dispatcher 403 boundary failure gracefully", async () => 
   const receiptPatch = patches.find(p => p.confirmation_email_state === "failed")
   assert.ok(receiptPatch)
   assert.equal(receiptPatch!.metadata.confirmation_receipt_state, "failed")
-  assert.match(receiptPatch!.metadata.confirmation_receipt_failure_reason || "", /dispatch access denied/)
+  assert.match(receiptPatch!.metadata.confirmation_receipt_failure_reason || "", /RESEND_API_KEY is not configured/)
 
   const notificationPatch = patches.find(p => p.notification_state === "failed")
   assert.ok(notificationPatch)
@@ -178,7 +201,7 @@ test("handles and logs dispatcher 403 boundary failure gracefully", async () => 
   const receiptLog = logs.find(l => l.metadata.notification_class === "assessment_receipt")
   assert.ok(receiptLog)
   assert.equal(receiptLog!.dispatch_state, "failed")
-  assert.match(receiptLog!.error_message || "", /dispatch access denied/)
+  assert.match(receiptLog!.error_message || "", /RESEND_API_KEY is not configured/)
 
   const notificationLog = logs.find(l => l.metadata.notification_class === "assessment_result")
   assert.ok(notificationLog)

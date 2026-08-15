@@ -5,6 +5,7 @@ import { onRequestPost } from "./submit-assessment"
 
 const env = {
   OPERATOR_DISPATCH_KEY: "operator-test-key",
+  RESEND_API_KEY: "resend-test-key",
   SUPABASE_URL: "https://example.supabase.co",
   SUPABASE_SERVICE_ROLE_KEY: "service-role-test",
 }
@@ -120,10 +121,16 @@ async function withMockedFetch(
 
 test("resolves assessment standing server-side from seated mechanics", async () => {
   const calls: Array<{ url: string; method: string; body: string }> = []
+  const captures = new Map<string, Record<string, any>>()
+  const dispatchLogs: Array<Record<string, any>> = []
+  const providerSends: Array<Record<string, any>> = []
 
   const response = await withMockedFetch(
     (url, method, body) => {
       calls.push({ url, method, body })
+      if (url.endsWith("/api/dispatch-assessment-receipt") || url.endsWith("/api/dispatch-assessment-notification")) {
+        throw new Error(`Unexpected dispatch loopback: ${method} ${url}`)
+      }
       if (url.includes("measures_encounter_def?encounter_key=eq.measures_assessment")) {
         return Response.json([{ metadata: assessmentMetadata }])
       }
@@ -139,18 +146,43 @@ test("resolves assessment standing server-side from seated mechanics", async () 
         return Response.json([{ env_key: "env_measures_registry", system_key: "measures_registry" }])
       }
       if (url.endsWith("/rest/v1/measures_iis_eval_gate1_capture") && method === "POST") {
+        const row = JSON.parse(body)
+        captures.set(row.id, row)
         return new Response(null, { status: 201 })
       }
-      if (url.endsWith("/api/dispatch-assessment-receipt") && method === "POST") {
-        return Response.json({
-          dispatch_state: "sent",
-          template_key: "assessment_receipt_participant_v1",
-          assessment_ref: "assessment_test",
-          current_state_key: "current_env_measures_registry_v1",
-        })
+      if (url.includes("measures_iis_eval_gate1_capture?id=eq.") && method === "GET") {
+        const captureId = decodeURIComponent(url.match(/id=eq\.([^&]+)/)?.[1] ?? "")
+        const row = captures.get(captureId)
+        return Response.json(row ? [row] : [])
       }
-      if (url.endsWith("/api/dispatch-assessment-notification") && method === "POST") {
-        return Response.json({ dispatch_state: "sent" })
+      if (url.includes("measures_iis_eval_gate1_capture?id=eq.") && method === "PATCH") {
+        const captureId = decodeURIComponent(url.match(/id=eq\.([^&]+)/)?.[1] ?? "")
+        const patch = JSON.parse(body)
+        const existing = captures.get(captureId)
+        if (existing) captures.set(captureId, { ...existing, ...patch })
+        return new Response(null, { status: 204 })
+      }
+      if (url.includes("measures_notification_template?template_key=eq.assessment_receipt_participant_v1")) {
+        return Response.json([{
+          template_key: "assessment_receipt_participant_v1",
+          subject: "We received your Measures Registry assessment",
+          body: "Thank you{{contact_name}}. We received {{assessment_ref}}.",
+        }])
+      }
+      if (url.includes("measures_notification_template?template_key=eq.assessment_completed_participant_v1")) {
+        return Response.json([{
+          template_key: "assessment_completed_participant_v1",
+          subject: "Your Measures Registry AI Operations Assessment Results",
+          body: "Standing: {{environmental_standing}}\nContinue: {{continuation_pathway}}",
+        }])
+      }
+      if (url.endsWith("/rest/v1/measures_notification_dispatch_log") && method === "POST") {
+        dispatchLogs.push(JSON.parse(body))
+        return new Response(null, { status: 201 })
+      }
+      if (url.includes("api.resend.com/emails") && method === "POST") {
+        providerSends.push(JSON.parse(body))
+        return Response.json({ id: `email_${providerSends.length}` })
       }
       throw new Error(`Unexpected fetch: ${method} ${url}`)
     },
@@ -167,6 +199,10 @@ test("resolves assessment standing server-side from seated mechanics", async () 
   assert.equal(body.c2Resolution.creates_portal_admission, false)
   assert.equal(body.receiptDispatch.dispatch_state, "sent")
   assert.equal(body.receiptDispatch.template_key, "assessment_receipt_participant_v1")
+  assert.equal(body.dispatch.dispatch_state, "sent")
+  assert.equal(calls.some((call) => call.url.endsWith("/api/dispatch-assessment-receipt")), false)
+  assert.equal(calls.some((call) => call.url.endsWith("/api/dispatch-assessment-notification")), false)
+  assert.equal(providerSends.length, 2)
 
   const captureInsert = calls.find((call) => call.url.endsWith("/rest/v1/measures_iis_eval_gate1_capture"))
   assert.ok(captureInsert)
@@ -180,6 +216,11 @@ test("resolves assessment standing server-side from seated mechanics", async () 
   assert.equal(captureBody.metadata.assessment_result_binding.environmental_standing_report.standing_key === "client_forged", false)
   assert.equal(captureBody.metadata.institutional_identity_relation.named_individual_registration_inferred, false)
   assert.equal(captureBody.metadata.institutional_identity_relation.operator_standing_inferred, false)
+  const updatedCapture = captures.get(JSON.parse(captureInsert!.body).id)
+  assert.equal(updatedCapture?.metadata.assessment_ref, captureBody.metadata.assessment_ref)
+  assert.equal(updatedCapture?.metadata.confirmation_receipt_state, "sent")
+  assert.equal(updatedCapture?.metadata.assessment_result_email_state, "sent")
+  assert.equal(dispatchLogs.length, 2)
 })
 
 test("holds system environment mismatch before capture persistence", async () => {
