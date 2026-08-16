@@ -270,6 +270,7 @@ export async function deliverAssessmentReceipt(
       },
     })
     await writeDispatchLog(env, {
+      event_type: "assessment_receipt",
       source_id: captureId,
       recipient_email: capture.contact_email,
       template_key: RECEIPT_TEMPLATE_KEY,
@@ -315,6 +316,7 @@ export async function deliverAssessmentReceipt(
       },
     })
     await writeDispatchLog(env, {
+      event_type: "assessment_receipt",
       source_id: captureId,
       recipient_email: capture.contact_email,
       template_key: RECEIPT_TEMPLATE_KEY,
@@ -349,6 +351,7 @@ export async function deliverAssessmentReceipt(
     },
   })
   await writeDispatchLog(env, {
+    event_type: "assessment_receipt",
     source_id: captureId,
     recipient_email: capture.contact_email,
     template_key: RECEIPT_TEMPLATE_KEY,
