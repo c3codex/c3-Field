@@ -160,7 +160,7 @@ function MapCARUnit({
 
 type MapSession = {
   assessmentRef?: string | null
-  report: { standing_key?: string } | null
+  report: EnvironmentalStandingReport | null
   fields: Record<string, string>
   c2Resolution?: Record<string, unknown> | null
 } | null
@@ -179,7 +179,18 @@ function MapIntegrityGovernance({
     } catch { return null }
   })
 
-  const standingKey = asString((mapSession?.report as Record<string, unknown> | null | undefined)?.standing_key) ?? ""
+  const reportRecord = asRecord(mapSession?.report)
+  const evaluationV2 = asRecord(reportRecord?.evaluation_v2)
+  const persistedMapScope = asRecord(evaluationV2?.map_scope)
+  const persistedPricingStanding = asRecord(evaluationV2?.pricing_standing)
+  const persistedMapPathway = asString(persistedMapScope?.map_pathway)
+  const persistedAmountUsd =
+    typeof persistedMapScope?.amount_usd === "number" ? persistedMapScope.amount_usd : null
+  const evaluationId = asString(evaluationV2?.evaluation_id)
+  const standingKey =
+    asString(evaluationV2?.evaluation_standing_key) ??
+    asString(reportRecord?.standing_key) ??
+    ""
 
   const [confirmedCARs, setConfirmedCARs] = useState<Record<string, boolean>>({})
 
@@ -203,10 +214,23 @@ function MapIntegrityGovernance({
   const next = resolveNextSurface(encounter)
 
   // Recommended pathway from assessment standing
-  const recommendedCard = pathwayCards.find((card) => {
-    const applicableKeys = asStringArray(card.applicable_standing_keys)
-    return standingKey ? applicableKeys.includes(standingKey) : card.recommended === true
-  }) ?? pathwayCards[0]
+  const recommendedCard =
+    (persistedMapPathway
+      ? pathwayCards.find((card) => asString(card.map_pathway) === persistedMapPathway)
+      : null) ??
+    pathwayCards.find((card) => {
+      const applicableKeys = asStringArray(card.applicable_standing_keys)
+      return standingKey ? applicableKeys.includes(standingKey) : card.recommended === true
+    }) ??
+    pathwayCards[0]
+  const recommendedCardPrice = asString(recommendedCard?.price_label)
+  const recommendedCardAmount = recommendedCardPrice
+    ? Number(recommendedCardPrice.replace(/[^0-9]/g, ""))
+    : null
+  const pricingMatchesPersistedScope =
+    persistedAmountUsd == null ||
+    recommendedCardAmount == null ||
+    recommendedCardAmount === persistedAmountUsd
 
   const allCARsConfirmed = carUnits.length > 0 && carUnits.every((u) => confirmedCARs[asString(u.key) ?? ""] === true)
 
@@ -215,14 +239,16 @@ function MapIntegrityGovernance({
   }
 
   function handleContinueToPayment() {
-    if (!allCARsConfirmed) return
-    const mapPathway = asString(recommendedCard?.map_pathway) ?? ""
+    if (!allCARsConfirmed || !pricingMatchesPersistedScope) return
+    const mapPathway = persistedMapPathway ?? asString(recommendedCard?.map_pathway) ?? ""
     try {
       sessionStorage.setItem("__mreg_c2_pending", JSON.stringify({
         mapPathway,
         mapStanding: standingKey,
-        evaluationResultId: mapSession?.assessmentRef ?? null,
+        evaluationResultId: evaluationId ?? mapSession?.assessmentRef ?? null,
         currentStateKey: asString(mapSession?.c2Resolution?.current_state_key) ?? null,
+        persistedPricingStanding,
+        persistedMapScope,
         // OAR2 "Seat MAP Payment Confirmation Content and Background Authority" - carries the
         // already-resolved pathway card forward so marble_chamber_C2_agreement can display
         // pathway name/price/scope/deliverables without re-deriving or duplicating this
@@ -231,7 +257,7 @@ function MapIntegrityGovernance({
         mapPathwayCard: recommendedCard
           ? {
               title: asString(recommendedCard.title) ?? null,
-              price_label: asString(recommendedCard.price_label) ?? null,
+              price_label: pricingMatchesPersistedScope ? recommendedCardPrice : null,
               map_boundary: asString(recommendedCard.map_boundary) ?? null,
               deliverables: asStringArray(recommendedCard.deliverables),
             }
@@ -309,11 +335,15 @@ function MapIntegrityGovernance({
             <div className="registry-marble-map-exchange-content">
               <p className="registry-marble-map-exchange-label">map_pathway_standing</p>
               <strong className="registry-marble-map-exchange-title">{asString(recommendedCard.title)}</strong>
-              {asString(recommendedCard.price_label) ? (
+              {pricingMatchesPersistedScope && recommendedCardPrice ? (
                 <div className="registry-marble-map-exchange-amount">
-                  <span className="registry-marble-map-exchange-standing-label">map_exchange_standing</span>
-                  <strong>{asString(recommendedCard.price_label)}</strong>
+                  <span className="registry-marble-map-exchange-standing-label">persisted_pricing_standing</span>
+                  <strong>{recommendedCardPrice}</strong>
                 </div>
+              ) : persistedAmountUsd != null ? (
+                <p className="registry-map-assessment-required">
+                  Pricing standing is held until the persisted scope and C2 pathway card align.
+                </p>
               ) : null}
               {asString(recommendedCard.map_boundary) ? (
                 <p className="registry-marble-map-exchange-scope">{asString(recommendedCard.map_boundary)}</p>
@@ -338,7 +368,7 @@ function MapIntegrityGovernance({
               <button
                 type="button"
                 className="registry-marble-circuit-payment-cta"
-                disabled={!allCARsConfirmed || !standingKey}
+                disabled={!allCARsConfirmed || !standingKey || !pricingMatchesPersistedScope}
                 onClick={handleContinueToPayment}
               >
                 Continue to Payment
@@ -560,6 +590,8 @@ type C2Pending = {
   mapStanding: string
   evaluationResultId?: string | null
   currentStateKey?: string | null
+  persistedMapScope?: Record<string, unknown> | null
+  persistedPricingStanding?: Record<string, unknown> | null
   mapPathwayCard?: C2PendingPathwayCard | null
 }
 

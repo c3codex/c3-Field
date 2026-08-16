@@ -262,8 +262,8 @@ export function PublicAssessmentResult({
               <section className="registry-report-group registry-report-v2-map" aria-label="MAP examination scope">
                 <strong>MAP Examination Scope</strong>
                 <p>
-                  {evaluationV2.map_scope.public_label} MAP scope, ${evaluationV2.map_scope.amount_usd}. Current
-                  continuation: {continuationLabel}.
+                  Your evaluation indicates further examination should focus on the priority conditions surfaced across
+                  System, Environment, and Change. Current continuation: {continuationLabel}.
                 </p>
                 {priorityCells.length > 0 ? (
                   <ul>

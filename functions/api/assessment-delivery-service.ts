@@ -3,6 +3,9 @@ export type AssessmentDeliveryEnv = {
   SUPABASE_URL?: string
   VITE_SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
+  VITE_SITE_URL?: string
+  VITE_PAGE_URL?: string
+  PUBLIC_SITE_URL?: string
 }
 
 type ReceiptCaptureRow = {
@@ -72,11 +75,19 @@ function asStringArray(value: unknown) {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
 }
 
+function registryBaseUrl(env: AssessmentDeliveryEnv) {
+  return (env.VITE_PAGE_URL ?? env.VITE_SITE_URL ?? env.PUBLIC_SITE_URL ?? "https://measuresregistry.com")
+    .replace(/\/+$/, "")
+    .replace(/^https:\/\/www\./, "https://")
+}
+
 function renderEvaluationV2Email({
   contactName,
+  evaluationUrl,
   report,
 }: {
   contactName: string
+  evaluationUrl: string
   report: Record<string, unknown>
 }) {
   const evaluation = asRecord(report.evaluation_v2)
@@ -106,10 +117,10 @@ function renderEvaluationV2Email({
     priorityCells.length > 0
       ? `Priority MAP cells: ${priorityCells.map((cell) => cell.replaceAll("_", " ")).join(", ")}`
       : null,
-    `Governed next action: MAP the Environment (${mapLabel}, ${mapPathway}).`,
+    `Governed next action after the evaluation: MAP the Environment (${mapLabel}, ${mapPathway}).`,
     verificationLimits[0] ?? "The assessment is participant-reported until MAP evidence work observes the environment.",
     "This notice does not create verified compliance, certification, SEAT standing, c3 Key issuance, implementation authorization, or portal admission.",
-    "Continue from your assessment session or visit https://measuresregistry.com/map-the-environment.",
+    `Open your persisted evaluation: ${evaluationUrl}`,
     "Questions? Contact us at connect@measuresregistry.com.",
   ].filter((line): line is string => Boolean(line))
 
@@ -121,6 +132,7 @@ function renderEvaluationV2Email({
       assessment_ref: assessmentRef,
       evaluation_standing: standing,
       map_pathway: mapPathway,
+      evaluation_url: evaluationUrl,
     },
   }
 }
@@ -505,7 +517,10 @@ export async function deliverAssessmentResultEmail(
   const template = Array.isArray(templates) ? templates[0] : null
   const report = metadata.environmental_standing_report as Record<string, unknown> | null
   const contactName = capture.contact_name ? capture.contact_name.trim() : ""
-  const evaluationEmail = report ? renderEvaluationV2Email({ contactName, report }) : null
+  const evaluationDeliveryToken = asString(metadata.evaluation_delivery_token) ?? crypto.randomUUID()
+  const evaluationUrl =
+    `${registryBaseUrl(env)}/ai-operations-assessment?evaluation=${encodeURIComponent(evaluationDeliveryToken)}`
+  const evaluationEmail = report ? renderEvaluationV2Email({ contactName, evaluationUrl, report }) : null
   const placeholders: Record<string, string> = {
     contact_name: contactName ? `, ${contactName}` : "",
     assessment_result: typeof report?.environmental_standing === "string" ? report.environmental_standing : "Completed",
@@ -535,6 +550,18 @@ Questions? Contact us at connect@measuresregistry.com.`
     emailBody = emailBody.replace(regex, value)
   }
 
+  if (evaluationEmail) {
+    await updateCapture(env, captureId, {
+      metadata: {
+        ...metadata,
+        evaluation_delivery_token: evaluationDeliveryToken,
+        evaluation_delivery_url: evaluationUrl,
+        evaluation_delivery_permitted_encounter: "marble_chamber_orientation",
+        evaluation_delivery_continuation: "map_the_environment",
+      },
+    })
+  }
+
   const provider = await sendEmail(env, { to: capture.contact_email, subject: emailSubject, body: emailBody })
   if (!provider.ok) {
     const errorMessage = provider.error ?? "email provider failed"
@@ -549,6 +576,12 @@ Questions? Contact us at connect@measuresregistry.com.`
       notification_state: "failed",
       metadata: {
         ...metadata,
+        ...(evaluationEmail ? {
+          evaluation_delivery_token: evaluationDeliveryToken,
+          evaluation_delivery_url: evaluationUrl,
+          evaluation_delivery_permitted_encounter: "marble_chamber_orientation",
+          evaluation_delivery_continuation: "map_the_environment",
+        } : {}),
         dispatch_error: errorMessage,
         assessment_result_email_state: "failed",
         source_oar2: RESULT_SOURCE_OAR2,
@@ -581,10 +614,16 @@ Questions? Contact us at connect@measuresregistry.com.`
   })
   await updateCapture(env, captureId, {
     notification_state: "notified",
-    metadata: {
-      ...metadata,
-      assessment_result_email_state: "sent",
-      assessment_result_email_template_key: RESULT_TEMPLATE_KEY,
+      metadata: {
+        ...metadata,
+        ...(evaluationEmail ? {
+          evaluation_delivery_token: evaluationDeliveryToken,
+          evaluation_delivery_url: evaluationUrl,
+          evaluation_delivery_permitted_encounter: "marble_chamber_orientation",
+          evaluation_delivery_continuation: "map_the_environment",
+        } : {}),
+        assessment_result_email_state: "sent",
+        assessment_result_email_template_key: RESULT_TEMPLATE_KEY,
       last_dispatch_provider: "resend",
       last_dispatch_provider_message_id: provider.providerMessageId,
       last_dispatch_subject: emailSubject,

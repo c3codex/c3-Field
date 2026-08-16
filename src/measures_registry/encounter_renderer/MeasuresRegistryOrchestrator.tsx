@@ -130,6 +130,7 @@ function normalizeWebsite(value: string | undefined): string {
 export default function MeasuresRegistryOrchestrator() {
   const resolverData = useRegistryResolver()
   const [activeSurface, setActiveSurface] = useState<OrchestratorSurface>(initialSurface)
+  const evaluationDeliveryResolvedRef = useRef(false)
   const ambientAudioRef = useRef<HTMLAudioElement>(null)
   const fadeRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const [toneBlocked, setToneBlocked] = useState(false)
@@ -142,6 +143,26 @@ export default function MeasuresRegistryOrchestrator() {
     if (window.location.pathname === "/structural-drift") {
       window.location.replace("/undrifted")
     }
+  }, [])
+
+  useEffect(() => {
+    if (evaluationDeliveryResolvedRef.current) return
+    const token = new URL(window.location.href).searchParams.get("evaluation")
+    if (!token) return
+    evaluationDeliveryResolvedRef.current = true
+    void (async () => {
+      try {
+        const response = await fetch(`/api/assessment-evaluation?token=${encodeURIComponent(token)}`)
+        const data = (await response.json().catch(() => ({}))) as {
+          pendingReport?: unknown
+        }
+        if (!response.ok || !data.pendingReport) return
+        sessionStorage.setItem("__mreg_pending_report", JSON.stringify(data.pendingReport))
+        setActiveSurface("marble_chamber_orientation")
+      } catch {
+        // The public route remains a held lookup if the delivery token cannot resolve.
+      }
+    })()
   }, [])
 
   // URL sync

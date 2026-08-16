@@ -319,6 +319,8 @@ test("validates assessment to Current-bound C2 passage without production side e
     const resultSend = providerSends.find((send) => send.subject === "Your Measures Registry evaluation is ready")
     assert.ok(resultSend)
     assert.match(resultSend.text, new RegExp(submitBody.evaluationV2.evaluation_id))
+    assert.match(resultSend.text, /\/ai-operations-assessment\?evaluation=/)
+    assert.doesNotMatch(resultSend.text, /visit https:\/\/measuresregistry\.com\/map-the-environment/)
     assert.match(resultSend.text, /MAP the Environment/)
     assert.doesNotMatch(resultSend.text, /Governed System Integrity Implementation/)
 
@@ -341,7 +343,7 @@ test("validates assessment to Current-bound C2 passage without production side e
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          evaluation_result_id: submitBody.assessment_ref,
+          evaluation_result_id: submitBody.evaluationV2.evaluation_id,
           current_state_key: submitBody.c2Resolution.current_state_key,
           map_standing: submitBody.report.standing_key,
           map_pathway: "foundational",
@@ -356,11 +358,11 @@ test("validates assessment to Current-bound C2 passage without production side e
     const checkoutBody = await checkoutResponse.json() as Record<string, any>
     const payment = payments.get(checkoutBody.map_order_id)
     assert.ok(payment)
-    assert.equal(payment.evaluation_result_id, submitBody.assessment_ref)
+    assert.equal(payment.evaluation_result_id, submitBody.evaluationV2.evaluation_id)
     assert.equal(payment.current_state_key, "current_env_measures_registry_v1")
     assert.equal(payment.oar_state, "checkout_initiated")
     assert.equal(payment.scheduling_state, "held")
-    assert.equal(stripeBodies[0].get("metadata[assessment_result_id]"), submitBody.assessment_ref)
+    assert.equal(stripeBodies[0].get("metadata[assessment_result_id]"), submitBody.evaluationV2.evaluation_id)
     assert.equal(stripeBodies[0].get("metadata[current_state_key]"), "current_env_measures_registry_v1")
     assert.equal(stripeBodies[0].get("metadata[creates_seat]"), "false")
     assert.equal(stripeBodies[0].get("metadata[creates_c3_key]"), "false")
