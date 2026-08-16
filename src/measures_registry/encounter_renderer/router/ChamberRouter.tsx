@@ -60,7 +60,7 @@ export default function ChamberRouter(props: ChamberRouterProps) {
     return <Suspense fallback={fallback}><ObsidianChamberRenderer {...props} /></Suspense>
   }
 
-  if (chamberAssignment === "lapis") {
+  if (chamberAssignment === "lapis" || chamberAssignment === "public_relational_encounter") {
     return <Suspense fallback={fallback}><LapisChamberRenderer {...props} /></Suspense>
   }
 
@@ -72,7 +72,7 @@ export default function ChamberRouter(props: ChamberRouterProps) {
     return <Suspense fallback={fallback}><CrystalSeatRenderer {...props} /></Suspense>
   }
 
-  // All 4 EncounterEnvironmentAssignment members handled above.
+  // All EncounterEnvironmentAssignment members handled above.
   // TypeScript narrows chamberAssignment to never here — exhaustiveness confirmed.
   // Unknown chamber assignment — public-safe unavailable state, no fallback to Obsidian
   const _exhaustive: never = chamberAssignment

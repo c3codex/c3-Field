@@ -21,6 +21,7 @@ const ENCOUNTER_REGISTRY_KEYS = [
   "measures_assessment",
   "map_the_environment",
   "about_measures_registry",
+  "measures_registry_faq",
   "undrifted",
   "measures_registry_root",
   "crystal_seat_intro",
@@ -38,6 +39,7 @@ const ENCOUNTER_DEF_KEYS = [
   "measures_assessment",
   "map_the_environment",
   "about_measures_registry",
+  "measures_registry_faq",
   "undrifted",
   "crystal_seat_intro",
   "obsidian_chamber_C1_compact",
@@ -95,6 +97,8 @@ const MEDIA_ROLES = [
   "marble_payment_confirmation_seal",
   "hero_poster",
   "about_hero_poster",
+  "mr_public_presentation_seal_artwork_webp_v1",
+  "mr_public_social_banner_webp_v1",
 ] as const
 
 const DESIGN_REGISTRY_KEY = "measures_registry"
@@ -124,6 +128,7 @@ export function useRegistryResolver(): RegistryResolverData {
     async function load() {
       const [
         registryResult,
+        publicationResult,
         defResult,
         mediaResult,
         tokenResult,
@@ -134,6 +139,10 @@ export function useRegistryResolver(): RegistryResolverData {
             .from("measures_registry")
             .select("registry_key, is_active, release_state, access_state, metadata")
             .in("registry_key", [...ENCOUNTER_REGISTRY_KEYS]),
+          supabase
+            .from("measures_publication_registry")
+            .select("publication_key, title, subtitle, metadata")
+            .eq("publication_key", "undrifted"),
           supabase
             .from("measures_encounter_def")
             .select("encounter_key, display_title, metadata")
@@ -168,6 +177,7 @@ export function useRegistryResolver(): RegistryResolverData {
 
       const error =
         registryResult.error?.message ??
+        publicationResult.error?.message ??
         defResult.error?.message ??
         mediaResult.error?.message ??
         tokenResult.error?.message ??
@@ -175,10 +185,55 @@ export function useRegistryResolver(): RegistryResolverData {
         issuePageResult.error?.message ??
         null
 
+      const rawMediaRows = (mediaResult.data ?? []) as EncounterMediaRow[]
+      const mediaRows = await Promise.all(
+        rawMediaRows.map(async (row) => {
+          if (row.storage_bucket === "measures-seed" && row.is_active !== false) {
+            try {
+              const { data } = await supabase.storage
+                .from(row.storage_bucket)
+                .createSignedUrl(row.storage_path, 86400) // 24 hours
+              if (data?.signedUrl) {
+                return {
+                  ...row,
+                  metadata: {
+                    ...(row.metadata as Record<string, unknown>),
+                    public_url: data.signedUrl,
+                    exact_url_seated: data.signedUrl,
+                  },
+                }
+              }
+            } catch (err) {
+              console.error("Error signing private custody media:", row.media_role, err)
+            }
+          }
+          return row
+        })
+      )
+
+      const rawRegistryRows = (registryResult.data ?? []) as RegistryRow[]
+      const registryRows = rawRegistryRows.map((row) => {
+        if (row.registry_key === "undrifted") {
+          const pubRow = publicationResult.data?.[0]
+          if (pubRow) {
+            return {
+              ...row,
+              metadata: {
+                ...(row.metadata as Record<string, unknown>),
+                ...(pubRow.metadata as Record<string, unknown>),
+                publication_title: pubRow.title,
+                publication_subtitle: pubRow.subtitle,
+              }
+            }
+          }
+        }
+        return row
+      })
+
       setData({
-        registryRows: (registryResult.data ?? []) as RegistryRow[],
+        registryRows,
         encounterDefRows: (defResult.data ?? []) as EncounterDefRow[],
-        mediaRows: (mediaResult.data ?? []) as EncounterMediaRow[],
+        mediaRows,
         designTokenRows: (tokenResult.data ?? []) as EncounterDesignTokenRow[],
         surfaceAssignmentRows: (assignmentResult.data ?? []) as EncounterSurfaceAssignmentRow[],
         issuePageRows: (issuePageResult.data ?? []) as EncounterIssuePageRow[],

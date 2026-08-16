@@ -463,10 +463,10 @@ function MarbleOrientationSeat({
                 className="registry-marble-orientation-video"
                 src={videoUrl}
                 autoPlay
-                loop
                 muted
                 playsInline
                 preload="auto"
+                onEnded={handleContinue}
                 aria-label={title}
               />
             </div>
@@ -487,11 +487,13 @@ function MarbleOrientationSeat({
               {statusLabel}
             </p>
           ) : null}
-          <div className="registry-marble-orientation-cta">
-            <button type="button" onClick={handleContinue}>
-              {ctaLabel}
-            </button>
-          </div>
+          {!videoUrl ? (
+            <div className="registry-marble-orientation-cta">
+              <button type="button" onClick={handleContinue}>
+                {ctaLabel}
+              </button>
+            </div>
+          ) : null}
         </div>
       </section>
       {renderSystemFooter()}

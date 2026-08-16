@@ -25,6 +25,7 @@ const GovernanceAuditSurface = lazy(() => import("../governance/GovernanceAuditS
 type OrchestratorSurface = EncounterSurface | "privacy" | "terms" | "governance_audit"
 
 const SURFACE_MATERIAL: Partial<Record<OrchestratorSurface, MaterialIdentity>> = {
+  measures_registry_home: "lapis",
   crystal_seat_threshold: "crystal",
   crystal_seat_orientation: "crystal",
   crystal_seat_encounter: "crystal",
@@ -61,20 +62,22 @@ const TONES_HELD = true
 const HISTORY_SOURCE = "measures_registry_free"
 
 const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
+  "/": "crystal_seat_intro",
+  "/about": "crystal_seat_encounter",
+  "/about-measures-registry": "crystal_seat_encounter",
   "/ai-operations-assessment": "obsidian_chamber_encounter_surface",
   "/structural-drift": "lapis_chamber_encounter",
   "/undrifted": "lapis_chamber_encounter",
   "/undrifted/field-findings-2026-w28": "lapis_chamber_encounter",
   "/undrifted/ai-agents-are-not-entering-empty-systems": "lapis_chamber_encounter",
   "/map-the-environment": "marble_chamber_C2_compact",
-  "/about": "crystal_seat_encounter",
-  "/about-measures-registry": "crystal_seat_encounter",
   "/privacy": "privacy",
   "/terms": "terms",
   "/governance-audit": "governance_audit",
 }
 
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
+  measures_registry_home: "/about",
   obsidian_chamber_encounter_surface: "/ai-operations-assessment",
   crystal_seat_encounter: "/about",
   marble_chamber_C2_compact: "/map-the-environment",
@@ -84,8 +87,8 @@ const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
   terms: "/terms",
   governance_audit: "/governance-audit",
   crystal_seat_intro: "/",
-  crystal_seat_threshold: "/",
-  crystal_seat_orientation: "/",
+  crystal_seat_threshold: "/threshold",
+  crystal_seat_orientation: "/orientation",
 }
 
 function normalizePathname(pathname: string): string {
@@ -314,11 +317,11 @@ export default function MeasuresRegistryOrchestrator() {
           {title ? <span>{title}</span> : null}
         </div>
         <nav className="registry-public-nav" aria-label="Measures Registry navigation">
-          <a href="/" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_intro") }}>Home</a>
+          <a href="/" onClick={(e) => { e.preventDefault(); navigate("measures_registry_home") }}>Home</a>
           <a href="/about" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>About</a>
           <a
             href="/ai-operations-assessment"
-            onClick={(e) => { e.preventDefault(); navigate("obsidian_chamber_encounter_surface") }}
+            onClick={(e) => { e.preventDefault(); navigate("obsidian_chamber_orientation") }}
           >
             Assess the Environment
           </a>
@@ -332,7 +335,7 @@ export default function MeasuresRegistryOrchestrator() {
 
   function renderSystemFooter() {
     const encounterDef = resolverData.encounterDefRows.find(
-      (r) => r.encounter_key === activeSurface || r.encounter_key === "ai_isnt_broken_intro",
+      (r) => r.encounter_key === activeSurface || r.encounter_key === "ai_isnt_broken_intro" || r.encounter_key === "about_measures_registry",
     )
     const meta = encounterDef?.metadata as Record<string, unknown> | null
     const footerContract = meta?.footer_contract as Record<string, unknown> | null

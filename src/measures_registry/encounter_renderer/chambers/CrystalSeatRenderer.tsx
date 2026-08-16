@@ -306,7 +306,7 @@ function CrystalIntroSeat({
   }, [videoUrl])
 
   function handleAdvance() {
-    if (nextSurface) onNavigate(nextSurface as EncounterSurface)
+    onNavigate("measures_registry_home")
   }
 
   function handleIntroAudio(e: MouseEvent) {
@@ -812,6 +812,45 @@ function PathChoiceSeat({
 
 // --- about_measures_registry ------------------------------------------------
 
+const FAQ_ITEMS = [
+  {
+    q: "What is Computational Systems Governance?",
+    a: "Computational Systems Governance is the design, measurement, and maintenance of the institutional environments within which computation and automated agents operate. It focuses on establishing clear system conditions—such as authority, permissions, human review roles, and operational boundaries—to ensure all computational participation remains governable and accountable."
+  },
+  {
+    q: "How is it different from AI governance?",
+    a: "Traditional AI governance often focuses on model-level controls, algorithm behavior, and data inputs. Computational Systems Governance does not replace AI governance; rather, it establishes the fundamental institutional and system conditions that model-level AI governance depends upon to be effective."
+  },
+  {
+    q: "What does Measures Registry measure?",
+    a: "Measures Registry measures the governability of system environments. It records and evaluates the clarity of delegation, authority boundaries, logging, escalation paths, and review practices through which institutions maintain control over their automated operations."
+  },
+  {
+    q: "What does standing mean?",
+    a: "Standing represents an institution's verified state of alignment with governed system conditions. It is recorded in the Registry based on objective evidence rather than self-service claims, providing an authoritative ledger of an environment's governability."
+  },
+  {
+    q: "What does the Assessment evaluate?",
+    a: "The public assessment is a baseline awareness tool that evaluates where structural drift—the gap between intended and actual system behavior—may be quietly occurring within an institution's deployment processes and oversight structures."
+  },
+  {
+    q: "Does Measures Registry certify systems?",
+    a: "No. The Presentation Seal and Registry records represent documented standing based on verified environmental evidence. They are public-presentation proofs of system record and relational standing, not formal regulatory certifications."
+  },
+  {
+    q: "What happens after assessment?",
+    a: "Completion of the assessment provides a detailed evaluation report. For institutions ready to establish structured alignment, it opens the pathway toward the Measures Alignment Protocol (MAP) to design and record governable system boundaries."
+  },
+  {
+    q: "How does Measures Registry relate to the c3 Field?",
+    a: "Measures Registry is a Registered Branch of the c3 Field, operating under the decentralized governance and legal framework of c3 Community Partners DAO, LLC."
+  },
+  {
+    q: "What is unDrifted?",
+    a: "unDrifted is a distinct, public publication identity that records and presents Measures Registry's ongoing research, field findings, and case studies regarding structural drift and the design of governable environments."
+  }
+]
+
 function AboutMeasuresRegistry({
   encounter,
   registryTokenStyle,
@@ -823,92 +862,20 @@ function AboutMeasuresRegistry({
   const [connectSubmitting, setConnectSubmitting] = useState(false)
   const [connectSubmitted, setConnectSubmitted] = useState(false)
   const [connectError, setConnectError] = useState<string | null>(null)
-  // OAR2 "Replace Initial Hero Video Load With Poster-First Media Delivery" —
-  // seated `about_hero_poster` paints immediately; the video is not requested until
-  // the page has settled (load event + idle), matching the crystal_seat_intro pattern.
-  const [aboutVideoActivated, setAboutVideoActivated] = useState(false)
-  const videoUrl = mediaUrl(encounter.mediaByRole.get("about_measures_registry_video"))
-  const posterUrl = mediaUrl(encounter.mediaByRole.get("about_hero_poster"))
-
-  useEffect(() => {
-    if (!videoUrl) return
-    let idleId: number | undefined
-    function scheduleActivate() {
-      if (typeof window.requestIdleCallback === "function") {
-        idleId = window.requestIdleCallback(() => setAboutVideoActivated(true), { timeout: 1500 })
-      } else {
-        idleId = window.setTimeout(() => setAboutVideoActivated(true), 200)
-      }
-    }
-    if (document.readyState === "complete") {
-      scheduleActivate()
-    } else {
-      window.addEventListener("load", scheduleActivate, { once: true })
-    }
-    return () => {
-      window.removeEventListener("load", scheduleActivate)
-      if (idleId !== undefined) {
-        if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId)
-        else window.clearTimeout(idleId)
-      }
-    }
-  }, [videoUrl])
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const approved = asRecord(meta?.approved_content_contract)
-  const title =
-    asString(approved?.title) ??
-    encounter.encounterDef?.display_title ??
-    "About Measures Registry"
+  const title = "Questions — Measures Registry"
 
-  if (!approved) {
-    return (
-      <main
-        className="measures-registry-runtime"
-        data-surface={encounter.surface}
-        data-material-family="crystal"
-        data-release-standing="held_missing_registry_content"
-        style={registryTokenStyle}
-      >
-        {renderHeader({ title })}
-        <section className="registry-held-state" role="status">
-          <span>Crystal Seat</span>
-          <p>About Measures Registry content is not seated in the registry.</p>
-        </section>
-        {renderSystemFooter()}
-      </main>
-    )
-  }
-
-  const codexstoneSealSection = asRecord(approved.codexstone_seal_section)
-  const orientationSections = asRecordArray(approved.orientation_sections)
-  const bridgeSection = asRecord(approved.undrifted_bridge_section)
-  // OAR2 "Seat Institutional Metadata Authority" — both gated on explicit content_standing
-  // flags seated alongside the copy; render nothing until standing says "public"/
-  // "public_as_our_story". Our Story renders as conceptual copy only — it does not
-  // restore the previously-removed outbound c3field.online links.
-  const contentStanding = asRecord(approved.content_standing)
-  const legalIdentityStatement =
-    asString(contentStanding?.legal_identity_statement) === "public"
-      ? asString(approved.legal_identity_statement)
-      : null
-  const ourStorySection =
-    asString(contentStanding?.c3field_links_section) === "public_as_our_story"
-      ? asRecord(approved.our_story_section)
-      : null
-  const connectSection = asRecord(approved.connect_section)
+  const connectSection = asRecord(approved?.connect_section)
   const connectTitle = asString(connectSection?.title) ?? "Connect"
-  const connectBody = asString(connectSection?.body)
+  const connectBody = asString(connectSection?.body) ?? "Request conversation regarding registered standing, MAP paths, or institutional research."
   const connectSupportingCopy = asStringArray(connectSection?.supporting_copy)
   const connectFieldDefs = asRecordArray(connectSection?.fields)
   const connectCtaLabel = asString(connectSection?.cta_label) ?? "Request Conversation"
   const connectSuccessTitle = asString(connectSection?.success_title) ?? "Received."
-  const connectSuccessCopy = asString(connectSection?.success_copy)
+  const connectSuccessCopy = asString(connectSection?.success_copy) ?? "Your request has been recorded."
 
-  const featuredArticle = asRecord(approved.featured_article)
-  const articleUrl =
-    asString(featuredArticle?.article_url) ?? asString(featuredArticle?.external_url) ?? null
-  const sealUrl = mediaUrl(encounter.mediaByRole.get("official_codexstone_seal"))
   const bgUrl = mediaUrl(encounter.mediaByRole.get("crystal_longform_surface"))
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -926,112 +893,32 @@ function AboutMeasuresRegistry({
   return (
     <main
       className="measures-registry-runtime"
-      data-surface={encounter.surface}
+      data-surface="crystal_seat_encounter"
       data-material-family="crystal"
       data-release-standing="public"
       {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       style={{ ...registryTokenStyle, ...surfaceBgStyle(bgUrl) }}
     >
-      {renderHeader({ title })}
-
-      {codexstoneSealSection ? (
-        <section className="registry-about-seal" aria-label="Codexstone">
-          {sealUrl ? (
-            <img src={sealUrl} alt="Codexstone — Official Seal" className="registry-about-seal-image" loading="eager" />
-          ) : null}
-          {asString(codexstoneSealSection.title) ? (
-            <h2 className="registry-about-seal-title">{asString(codexstoneSealSection.title)}</h2>
-          ) : null}
-          {asString(codexstoneSealSection.subtitle) ? (
-            <p className="registry-about-seal-subtitle">{asString(codexstoneSealSection.subtitle)}</p>
-          ) : null}
-        </section>
-      ) : null}
+      {renderHeader({ title: "Measures Registry" })}
 
       <section className="registry-about-orientation" aria-label={title}>
-        <div className="registry-about-orientation-copy">
-          <h2 className="registry-about-orientation-title">{title}</h2>
-          {orientationSections.length > 0 ? (
-            <div className="registry-about-orientation-blocks">
-              {orientationSections.map((block) => {
-                const label = asString(block.label)
-                const copy = asString(block.copy)
-                if (!label || !copy) return null
-                return (
-                  <div key={label} className="registry-about-orientation-block">
-                    <span className="registry-about-orientation-block-label">{label}</span>
-                    <p className="registry-about-orientation-block-copy">{copy}</p>
-                  </div>
-                )
-              })}
-            </div>
-          ) : null}
-        </div>
-        {videoUrl ? (
-          <div className="registry-about-orientation-video">
-            {aboutVideoActivated ? (
-              <video
-                src={videoUrl}
-                poster={posterUrl ?? undefined}
-                controls
-                autoPlay
-                muted
-                playsInline
-                preload="auto"
-                aria-label={title}
-              />
-            ) : posterUrl ? (
-              <img src={posterUrl} alt="" aria-hidden="true" loading="eager" fetchPriority="high" />
-            ) : (
-              <button
-                type="button"
-                className="registry-about-orientation-video-activate"
-                onClick={() => setAboutVideoActivated(true)}
-                aria-label={`Play video — ${title}`}
-              >
-                <span aria-hidden="true">▶</span>
-                <span>Play video</span>
-              </button>
-            )}
+        <div className="registry-about-orientation-copy" style={{ maxWidth: "100%", width: "100%" }}>
+          <h2 className="registry-about-orientation-title" style={{ marginBottom: "2rem" }}>{title}</h2>
+          <div className="registry-about-orientation-blocks" style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+            {FAQ_ITEMS.map((item, idx) => (
+              <div key={idx} className="registry-about-orientation-block" style={{ flexDirection: "column", alignItems: "flex-start", gap: "0.5rem" }}>
+                <span className="registry-about-orientation-block-label" style={{ fontWeight: 700, fontSize: "1.15rem", letterSpacing: "normal", textTransform: "none", color: "inherit" }}>
+                  {item.q}
+                </span>
+                <p className="registry-about-orientation-block-copy" style={{ fontSize: "1rem", lineHeight: "1.6", color: "rgba(31, 50, 96, 0.72)", margin: 0 }}>
+                  {item.a}
+                </p>
+              </div>
+            ))}
           </div>
-        ) : null}
+        </div>
       </section>
-
-      {ourStorySection ? (
-        <section className="registry-about-our-story" aria-label={asString(ourStorySection.title) ?? "Our Story"}>
-          <h2 className="registry-about-our-story-title">{asString(ourStorySection.title) ?? "Our Story"}</h2>
-          {asString(ourStorySection.body) ? (
-            <p className="registry-about-our-story-body">{asString(ourStorySection.body)}</p>
-          ) : null}
-        </section>
-      ) : null}
-
-      {bridgeSection ? (
-        <section className="registry-about-bridge" aria-label="unDrifted publication">
-          <a
-            className="registry-about-bridge-panel"
-            href={articleUrl ?? asString(bridgeSection.cta_url) ?? "/undrifted"}
-            rel="noreferrer"
-          >
-            <span className="registry-about-bridge-label">
-              {asString(bridgeSection.label) ?? "unDrifted"}
-            </span>
-            {asString(bridgeSection.subtitle) ? (
-              <p className="registry-about-bridge-subtitle">{asString(bridgeSection.subtitle)}</p>
-            ) : null}
-            {asString(bridgeSection.issue_label) ? (
-              <span className="registry-about-bridge-issue">{asString(bridgeSection.issue_label)}</span>
-            ) : null}
-            {asString(bridgeSection.headline) ? (
-              <h2 className="registry-about-bridge-headline">{asString(bridgeSection.headline)}</h2>
-            ) : null}
-            <span className="registry-about-bridge-cta">
-              {asString(bridgeSection.cta_label) ?? "Read Issue →"}
-            </span>
-          </a>
-        </section>
-      ) : null}
 
       {connectSection ? (
         <section className="registry-about-connect" aria-label={connectTitle}>
@@ -1118,10 +1005,6 @@ function AboutMeasuresRegistry({
             )}
           </div>
         </section>
-      ) : null}
-
-      {legalIdentityStatement ? (
-        <p className="registry-about-legal-identity">{legalIdentityStatement}</p>
       ) : null}
 
       <UnDriftedMark encounter={encounter} />

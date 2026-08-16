@@ -17,6 +17,7 @@ const VALID_CHAMBER_ASSIGNMENTS = new Set<string>([
   "crystal_seat",
   "lapis",
   "marble",
+  "public_relational_encounter",
 ])
 
 // Orchestration only. Finds seated data, delegates assembly to composition
@@ -26,7 +27,18 @@ export function loadEncounterProfile(
   resolverData: RegistryResolverData,
 ): RenderableEncounterResult {
   // 1. Surface assignment
-  const assignment = resolverData.surfaceAssignmentRows.find((r) => r.surface_key === surface)
+  let assignment = resolverData.surfaceAssignmentRows.find((r) => r.surface_key === surface)
+  if (!assignment && surface === "crystal_seat_encounter") {
+    const homeAssignment = resolverData.surfaceAssignmentRows.find((r) => r.surface_key === "measures_registry_home")
+    if (homeAssignment) {
+      assignment = {
+        ...homeAssignment,
+        surface_key: "crystal_seat_encounter",
+        material_identity: "crystal",
+        chamber_assignment: "crystal_seat",
+      }
+    }
+  }
   if (!assignment) {
     return { renderable: false, reason: "missing_surface_assignment" }
   }

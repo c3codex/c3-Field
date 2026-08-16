@@ -10,9 +10,12 @@ export type EncounterEnvironmentAssignment =
   | "crystal_seat"
   | "lapis"
   | "marble"
+  | "public_relational_encounter"
 
 export type EncounterSurface =
   // Active SEAT surfaces — final canonical 13-term structure
+  | "measures_registry_home"
+  | "measures_registry_faq"
   | "crystal_seat_intro"
   | "crystal_seat_threshold"
   | "crystal_seat_orientation"

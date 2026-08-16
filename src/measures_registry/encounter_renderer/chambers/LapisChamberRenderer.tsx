@@ -1,5 +1,5 @@
 import type { CSSProperties, FormEvent, ReactNode } from "react"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type {
@@ -12,6 +12,7 @@ import {
   asRecord,
   asRecordArray,
   asString,
+  asStringArray,
 } from "../shared/encounterRendererUtils"
 import { encounterStyleDataAttributes } from "../styles/encounterStyleProfile"
 import {
@@ -108,6 +109,9 @@ function resolveNextSurface(encounter: RenderableEncounter): string | null {
 export default function LapisChamberRenderer(props: LapisChamberProps) {
   const { surface } = props.encounter
 
+  if (surface === "measures_registry_home") {
+    return <MeasuresRegistryHome {...props} />
+  }
   if (surface === "lapis_chamber_encounter") {
     return <UnDriftedIndex {...props} />
   }
@@ -151,7 +155,9 @@ function UnDriftedIndex({
   const launchCycleArticle =
     typeof window !== "undefined" ? launchCycleArticleForPath(window.location.pathname) : null
 
-  const meta = asRecord(encounter.encounterDef?.metadata)
+  const defMeta = asRecord(encounter.encounterDef?.metadata)
+  const regMeta = asRecord(encounter.registryRow?.metadata)
+  const meta = { ...defMeta, ...regMeta }
   const brandCopy = asRecord(meta?.brand_copy)
   const brandAssets = asRecord(meta?.brand_assets)
   const styleContract = asRecord(meta?.style_contract)
@@ -380,11 +386,36 @@ function UnDriftedIndex({
           </div>
         ) : null}
 
-        <section className="undrifted-launch-cycle" aria-label="Launch Cycle 001">
+        {/* Issue 002 Current Desks section (rendered only if current standing is Issue 002) */}
+        {issueNumber === "002" ? (
+          <section className="undrifted-desks-section" style={{ borderBottom: "1px solid rgba(237, 242, 248, 0.1)", paddingBottom: "2.5rem", marginBottom: "2.5rem" }}>
+            <div className="undrifted-insights-header" style={{ marginBottom: "1.5rem" }}>
+              <span className="undrifted-eyebrow">Current Desks — Issue 002</span>
+              <h2>{activeIssueLabel ? `${activeIssueLabel} Desks` : "Issue 002 Desks"}</h2>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(20rem, 100%), 1fr))", gap: "1.5rem" }}>
+              {asRecordArray(meta?.editorial_sections).map((sec, idx) => (
+                <div key={idx} style={{ display: "flex", flexDirection: "column", gap: "0.5rem", border: "1px solid rgba(237, 242, 248, 0.1)", padding: "1.5rem", background: "rgba(237, 242, 248, 0.02)" }}>
+                  <span className="undrifted-eyebrow" style={{ color: "var(--undrifted-cyan)", fontSize: "0.7rem" }}>Desk 0{idx + 1}</span>
+                  <h3 style={{ fontFamily: "Georgia, serif", fontSize: "1.4-rem", margin: 0, color: "var(--undrifted-text)", fontWeight: 500 }}>{asString(sec.title)}</h3>
+                  {asString(sec.question) ? (
+                    <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--undrifted-muted)", lineHeight: "1.5" }}>{asString(sec.question)}</p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+            <p style={{ marginTop: "2rem", fontSize: "0.9rem", color: "var(--undrifted-muted)", fontStyle: "italic", textAlign: "center" }}>
+              Issue 002 dispatches are approved and undergoing registry standing review prior to publication.
+            </p>
+          </section>
+        ) : null}
+
+        {/* Historical Issue 001 Preserved Dispatches Section */}
+        <section className="undrifted-launch-cycle" aria-label="Historical Preserved Issue 001 Dispatches" style={issueNumber === "002" ? { borderTop: "none" } : undefined}>
           <div className="undrifted-insights-header">
-            <span className="undrifted-eyebrow">Launch Cycle 001</span>
+            <span className="undrifted-eyebrow">{issueNumber === "002" ? "Historical Preserved Dispatches" : "Launch Cycle 001"}</span>
             <h2>
-              {activeIssueLabel ? `${activeIssueLabel} Field Publications` : "Issue 01 Field Publications"}
+              {issueNumber === "002" ? "Issue 001 Preserved Dispatches" : (activeIssueLabel ? `${activeIssueLabel} Field Publications` : "Issue 01 Field Publications")}
             </h2>
           </div>
           <div className="undrifted-launch-cycle-grid">
@@ -835,6 +866,410 @@ function PublicationDispatch({
           </section>
         ) : null}
       </article>
+      {renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- Measures Registry Home (Lapis-led Public Relational Encounter) ---------
+
+function MeasuresRegistryHome({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  renderHeader,
+  renderSystemFooter,
+}: LapisChamberProps) {
+  const [aboutVideoActivated, setAboutVideoActivated] = useState(false)
+  
+  const approved = asRecord(encounter.encounterDef?.metadata?.approved_content_contract)
+  if (!approved) {
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface={encounter.surface}
+        data-material-family="lapis"
+        data-release-standing="held_missing_registry_content"
+        style={registryTokenStyle}
+      >
+        {renderHeader({ title: "Measures Registry" })}
+        <section className="registry-held-state" role="status">
+          <span>Lapis Chamber</span>
+          <p>Measures Registry Home content is not seated in the registry.</p>
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
+  }
+
+  // Seated branding and content properties
+  const identity = asRecord(approved.identity)
+  const category = asString(identity?.category) ?? "Computational Systems Governance"
+  const tagline = asString(identity?.tagline) ?? "Governed Systems. Relational Operations."
+  const missionText = asString(approved.mission) ?? "Make computational participation governable."
+
+  // Hero & Brand media consumed through registered encounter media roles
+  const presentationSealRow = encounter.mediaByRole.get("mr_public_presentation_seal_artwork_webp_v1")
+  const socialBannerRow = encounter.mediaByRole.get("mr_public_social_banner_webp_v1")
+  const presentationSealUrl = mediaUrl(presentationSealRow)
+  const socialBannerUrl = mediaUrl(socialBannerRow)
+
+  // Hero media
+  const videoRow = encounter.mediaByRole.get("about_measures_registry_video")
+  const posterRow = encounter.mediaByRole.get("about_hero_poster")
+  const videoUrl = mediaUrl(videoRow)
+  const posterUrl = mediaUrl(posterRow)
+
+  // Section list from metadata
+  const sectionsArray = asRecordArray(approved.sections)
+  const getSection = (key: string) => sectionsArray.find((s) => asString(s.key) === key)
+
+  const heroSection = getSection("hero")
+  const problemSection = getSection("problem")
+  const positionSection = getSection("position")
+  const missionSection = getSection("mission")
+  const assessmentSection = getSection("assessment")
+  const alignmentSection = getSection("alignment")
+  const registrySection = getSection("registry")
+  const operationsRelationSection = getSection("operations_relation")
+  const undriftedSection = getSection("undrifted")
+  const institutionalRelationSection = getSection("institutional_relation")
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="measures_registry_home"
+      data-material-family="lapis"
+      data-layout-contract="measures_registry_home"
+      data-release-standing="public"
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title: "Measures Registry" })}
+
+      <div className="registry-home-shell">
+        {/* 1. HERO SECTION - Approved registered Measures Registry banner as Hero */}
+        {socialBannerUrl ? (
+          <section id="hero" className="registry-home-hero-banner" aria-label="Hero Banner" style={{ width: "100%", overflow: "hidden", borderBottom: "1px solid rgba(114, 144, 188, 0.15)", paddingBottom: "2rem" }}>
+            <img
+              src={socialBannerUrl}
+              alt="Measures Registry — Computational Systems Governance — Governed Systems. Relational Operations."
+              style={{ width: "100%", height: "auto", display: "block" }}
+              loading="eager"
+            />
+          </section>
+        ) : null}
+
+        {/* space / material transition */}
+        <div style={{ height: "3rem" }} />
+
+        {/* Approved talking-head video */}
+        {videoUrl ? (
+          <section className="registry-home-video-section" aria-label="Orientation Video" style={{ borderBottom: "1px solid rgba(114, 144, 188, 0.15)", paddingBottom: "3.5rem" }}>
+            <div className="registry-home-video-wrapper" style={{ maxWidth: "36rem", margin: "0 auto", width: "100%" }}>
+              {aboutVideoActivated ? (
+                <video
+                  src={videoUrl}
+                  poster={posterUrl ?? undefined}
+                  controls
+                  autoPlay
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-label="Measures Registry Orientation"
+                />
+              ) : posterUrl ? (
+                <div className="registry-home-video-poster" onClick={() => setAboutVideoActivated(true)}>
+                  <img src={posterUrl} alt="Video Poster" loading="eager" />
+                  <button type="button" className="registry-home-video-play-btn" aria-label="Play video">
+                    <span aria-hidden="true">▶</span>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="registry-home-video-activate-btn"
+                  onClick={() => setAboutVideoActivated(true)}
+                  aria-label="Play video"
+                >
+                  <span>▶ Play Video</span>
+                </button>
+              )}
+            </div>
+          </section>
+        ) : null}
+
+        {/* 2. THE PROBLEM SECTION */}
+        {problemSection ? (
+          <section id="problem" className="registry-home-problem" aria-label="The Problem" style={{ maxWidth: "48rem", paddingBottom: "2rem", borderBottom: "1px solid rgba(114, 144, 188, 0.15)" }}>
+            <span className="registry-home-section-eyebrow">The Problem</span>
+            <h2 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(2.2rem, 4vw, 3rem)", fontWeight: 700, margin: "0 0 1rem" }}>{asString(problemSection.heading)}</h2>
+            <p className="registry-home-core-line" style={{ fontSize: "1.25rem", color: "rgba(237, 242, 248, 0.85)", lineHeight: "1.5" }}>{asString(problemSection.core_line)}</p>
+          </section>
+        ) : null}
+
+        {/* 3. MEASURES REGISTRY POSITION SECTION */}
+        {positionSection ? (
+          <section id="position" className="registry-home-position" aria-label="Our Position" style={{ maxWidth: "48rem", borderLeft: "2px solid var(--registry-accent-lapis-primary, #92bbf3)", padding: "2rem 2.5rem", background: "rgba(146, 187, 243, 0.04)", borderRadius: "4px" }}>
+            <span className="registry-home-section-eyebrow">Home Positioning</span>
+            <h2 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 700, margin: "0 0 1rem" }}>{asString(positionSection.heading)}</h2>
+            <p className="registry-home-core-line" style={{ fontSize: "1.1rem", fontStyle: "italic", marginBottom: "1rem" }}>{asString(positionSection.core_line)}</p>
+            {asString(positionSection.public_positioning) ? (
+              <p style={{ margin: 0, fontSize: "1.05rem", lineHeight: "1.65", color: "rgba(237, 242, 248, 0.78)" }}>
+                {asString(positionSection.public_positioning)}
+              </p>
+            ) : null}
+          </section>
+        ) : null}
+
+        {/* 4. MISSION SECTION */}
+        {missionSection ? (
+          <section id="mission" className="registry-home-mission" aria-label="Our Mission" style={{ maxWidth: "42rem", paddingBottom: "2rem", borderBottom: "1px solid rgba(114, 144, 188, 0.15)" }}>
+            <span className="registry-home-section-eyebrow">Mission</span>
+            <p className="registry-home-mission-text" style={{ fontSize: "clamp(1.7rem, 3.5vw, 2.4rem)", fontWeight: 400, fontFamily: "var(--registry-font-heading, Georgia, serif)", lineHeight: "1.3", color: "var(--registry-brand-primary-text, #edf2f8)", margin: 0 }}>{asString(missionSection.heading) ?? missionText}</p>
+          </section>
+        ) : null}
+
+        {/* 5. ASSESSMENT SECTION - Guides user to the Assessment Passage video */}
+        {assessmentSection ? (
+          <section id="assessment" className="registry-home-assessment" aria-label="Assessment" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            <span className="registry-home-section-eyebrow">Assessment</span>
+            <h2 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(1.7rem, 3vw, 2.4rem)", margin: 0 }}>{asString(assessmentSection.heading)}</h2>
+            <div className="registry-home-assessment-card" style={{ padding: "1.5rem 2rem", background: "rgba(237, 242, 248, 0.02)", border: "1px solid rgba(114, 144, 188, 0.2)", borderRadius: "2rem", maxWidth: "38rem" }}>
+              <h3 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(1.35rem, 2vw, 1.65rem)", margin: "0 0 0.5rem", color: "var(--registry-brand-primary-text, #edf2f8)" }}>{asString(assessmentSection.assessment_name) ?? "AI Operations Assessment"}</h3>
+              <p className="registry-home-progression-path" style={{ fontSize: "0.85rem", fontWeight: 600, letterSpacing: "0.04em", color: "var(--registry-accent-lapis-primary, #92bbf3)", margin: "0 0 1rem" }}>{asString(assessmentSection.progression)}</p>
+              <button
+                type="button"
+                className="registry-home-card-cta"
+                onClick={() => onNavigate("obsidian_chamber_orientation")}
+              >
+                Assess the Environment →
+              </button>
+            </div>
+          </section>
+        ) : null}
+
+        {/* 6. ALIGNMENT / GOVERNED PROGRESSION SECTION */}
+        {alignmentSection ? (
+          <section id="alignment" className="registry-home-alignment" aria-label="Progression" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            <span className="registry-home-section-eyebrow">Alignment / Governed Progression</span>
+            <h2 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(1.7rem, 3vw, 2.4rem)", margin: 0 }}>{asString(alignmentSection.heading)}</h2>
+            <div className="registry-home-progression-steps">
+              {asStringArray(alignmentSection.progression).map((step, idx) => (
+                <div key={step} className="registry-home-progression-step">
+                  <span className="registry-home-step-num">0{idx + 1}</span>
+                  <span className="registry-home-step-name">{step}</span>
+                  {idx < asStringArray(alignmentSection.progression).length - 1 ? (
+                    <span className="registry-home-step-arrow" aria-hidden="true">→</span>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {/* 7. THE REGISTRY SECTION */}
+        {registrySection ? (
+          <section id="registry" className="registry-home-registry" aria-label="The Registry" style={{ maxWidth: "48rem" }}>
+            <span className="registry-home-section-eyebrow">The Registry</span>
+            <h2 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(1.5rem, 3vw, 2.2rem)", margin: "0 0 1rem" }}>{asString(registrySection.heading)}</h2>
+            <p className="registry-home-boundary-desc">{asString(registrySection.boundary)}</p>
+          </section>
+        ) : null}
+
+        {/* 8. REGISTRY → GOVERNED OPERATIONS BOUNDARY SECTION */}
+        {operationsRelationSection ? (
+          <section id="operations_relation" className="registry-home-operations-relation" aria-label="Registry Operations" style={{ maxWidth: "48rem", paddingBottom: "2rem", borderBottom: "1px solid rgba(114, 144, 188, 0.15)" }}>
+            <span className="registry-home-section-eyebrow">Registry &rarr; Governed Operations</span>
+            <h2 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(1.65rem, 3vw, 2.3rem)", fontWeight: 700, margin: "0 0 1rem" }}>{asString(operationsRelationSection.heading)}</h2>
+            <p className="registry-home-boundary-desc" style={{ fontSize: "1.1rem", lineHeight: "1.6", color: "rgba(237, 242, 248, 0.85)" }}>{asString(operationsRelationSection.boundary)}</p>
+            {asString(operationsRelationSection.portable_standing_line) ? (
+              <p style={{ marginTop: "1rem", fontSize: "1rem", fontStyle: "italic", color: "var(--registry-accent-lapis-primary, #92bbf3)" }}>
+                {asString(operationsRelationSection.portable_standing_line)}
+              </p>
+            ) : null}
+          </section>
+        ) : null}
+
+        {/* 9. UNDRIFTED SECTION */}
+        {undriftedSection ? (
+          <section id="undrifted" className="registry-home-undrifted" aria-label="unDrifted Publication" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            <span className="registry-home-section-eyebrow">unDrifted Publication</span>
+            <div className="registry-home-undrifted-card" style={{ padding: "1.5rem 2rem", background: "rgba(237, 242, 248, 0.02)", border: "1px solid rgba(114, 144, 188, 0.2)", borderRadius: "2rem", maxWidth: "42rem" }}>
+              <div className="registry-home-undrifted-card-header">
+                <h2>{asString(undriftedSection.name) ?? "unDrifted"}</h2>
+                <span className="registry-home-undrifted-issue">Active Issue {asString(undriftedSection.issue)}</span>
+              </div>
+              <p className="registry-home-undrifted-tagline">{asString(undriftedSection.tagline)}</p>
+              <p className="registry-home-undrifted-rhythm">{asString(undriftedSection.rhythm_line)}</p>
+              
+              <div className="registry-home-undrifted-sections">
+                <h4>Featured Sections:</h4>
+                <ul>
+                  {asStringArray(undriftedSection.sections).map((s) => (
+                    <li key={s}>{s}</li>
+                  ))}
+                </ul>
+              </div>
+              
+              <button
+                type="button"
+                className="registry-home-card-cta"
+                onClick={() => onNavigate("lapis_chamber_encounter")}
+              >
+                Explore unDrifted Publications &rarr;
+              </button>
+            </div>
+          </section>
+        ) : null}
+
+        {/* 10. INSTITUTIONAL RELATION SECTION - Presentation Seal used in its actual relational provenance context */}
+        {institutionalRelationSection ? (
+          <section id="institutional_relation" className="registry-home-institutional-relation" aria-label="Institutional Relation" style={{ borderTop: "1px solid rgba(114, 144, 188, 0.15)", paddingTop: "4rem" }}>
+            <span className="registry-home-section-eyebrow">Institutional Relation</span>
+            <div className="registry-home-institutional-layout" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2rem", alignItems: "center" }}>
+              {presentationSealUrl ? (
+                <div style={{ maxWidth: "7.5rem", margin: "0 auto" }}>
+                  <img
+                    src={presentationSealUrl}
+                    alt="Measures Registry Public Presentation Seal"
+                    style={{ width: "100%", height: "auto" }}
+                    loading="lazy"
+                  />
+                </div>
+              ) : null}
+              
+              <div className="registry-home-institutional-copy" style={{ textAlign: "center" }}>
+                <h2 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(1.65rem, 3vw, 2.2rem)", margin: "0 0 1rem", fontWeight: 700 }}>{asString(institutionalRelationSection.branch_relation)}</h2>
+                <p style={{ margin: 0, fontSize: "1.05rem", color: "rgba(237, 242, 248, 0.72)" }}>
+                  {asString(institutionalRelationSection.operator)}
+                </p>
+                {asString(institutionalRelationSection.closing_positioning) ? (
+                  <p style={{ marginTop: "1rem", fontSize: "1.05rem", fontStyle: "italic", color: "var(--registry-accent-lapis-primary, #92bbf3)", maxWidth: "38rem", marginLeft: "auto", marginRight: "auto" }}>
+                    {asString(institutionalRelationSection.closing_positioning)}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          </section>
+        ) : null}
+      </div>
+
+      {renderSystemFooter()}
+    </main>
+  )
+}
+
+// --- Measures Registry FAQ / Questions Surface (Lapis-led Public Relational) --
+
+function MeasuresRegistryFaq({
+  encounter,
+  registryTokenStyle,
+  onNavigate,
+  renderHeader,
+  renderSystemFooter,
+}: LapisChamberProps) {
+  const approved = asRecord(encounter.encounterDef?.metadata?.approved_content_contract)
+  if (!approved) {
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface={encounter.surface}
+        data-material-family="lapis"
+        data-release-standing="held_missing_registry_content"
+        style={registryTokenStyle}
+      >
+        {renderHeader({ title: "Measures Registry" })}
+        <section className="registry-held-state" role="status">
+          <span>Lapis Chamber</span>
+          <p>Questions surface content is not seated in the registry.</p>
+        </section>
+        {renderSystemFooter()}
+      </main>
+    )
+  }
+
+  // Seated title
+  const title = asString(approved.title) ?? "Questions — Measures Registry"
+
+  // Brand assets fetched via registered media roles
+  const socialBannerRow = encounter.mediaByRole.get("mr_public_social_banner_webp_v1")
+  const presentationSealRow = encounter.mediaByRole.get("mr_public_presentation_seal_artwork_webp_v1")
+  const socialBannerUrl = mediaUrl(socialBannerRow)
+  const presentationSealUrl = mediaUrl(presentationSealRow)
+
+  // Parse questions list dynamically from metadata
+  const questionsList = asRecordArray(approved.questions).sort(
+    (a, b) => (Number(a.order) || 0) - (Number(b.order) || 0)
+  )
+
+  return (
+    <main
+      className="measures-registry-runtime"
+      data-surface="measures_registry_faq"
+      data-material-family="lapis"
+      data-layout-contract="measures_registry_faq"
+      data-release-standing="public"
+      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
+      style={registryTokenStyle}
+    >
+      {renderHeader({ title: "Measures Registry" })}
+
+      <div className="registry-home-shell" style={{ maxWidth: "48rem" }}>
+        
+        {/* Restrained Width Masthead Banner */}
+        {socialBannerUrl ? (
+          <div className="registry-faq-banner-wrapper" style={{ width: "100%", maxWidth: "36rem", margin: "0 auto 2.5rem", overflow: "hidden", border: "1px solid rgba(114, 144, 188, 0.15)", borderRadius: "4px" }}>
+            <img
+              src={socialBannerUrl}
+              alt="Measures Registry"
+              style={{ width: "100%", height: "auto", display: "block" }}
+              loading="eager"
+            />
+          </div>
+        ) : null}
+
+        {/* Public Page Heading */}
+        <h1 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: 700, textAlign: "center", margin: "0 0 3.5rem" }}>
+          {title}
+        </h1>
+
+        {/* FAQ Content Section (Editorial Open Document Scroll, Not SaaS Accordions) */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "3.5rem" }}>
+          {questionsList.map((item, idx) => {
+            const q = asString(item.question)
+            const a = asString(item.answer)
+            if (!q || !a) return null
+            return (
+              <article key={idx} style={{ display: "flex", flexDirection: "column", gap: "0.75rem", borderBottom: "1px solid rgba(114, 144, 188, 0.1)", paddingBottom: "2.5rem" }}>
+                <h3 style={{ fontFamily: "var(--registry-font-heading, Georgia, serif)", fontSize: "1.25rem", fontWeight: 700, margin: 0, color: "var(--registry-brand-primary-text, #edf2f8)" }}>
+                  {q}
+                </h3>
+                <p style={{ fontSize: "1rem", lineHeight: "1.65", color: "rgba(237, 242, 248, 0.72)", margin: 0 }}>
+                  {a}
+                </p>
+              </article>
+            )
+          })}
+        </div>
+
+        {/* Relational / Provance Presentation Seal Placement */}
+        {presentationSealUrl ? (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem", marginTop: "4rem", borderTop: "1px solid rgba(114, 144, 188, 0.15)", paddingTop: "3rem" }}>
+            <img
+              src={presentationSealUrl}
+              alt="Measures Registry Public Presentation Seal"
+              style={{ width: "6.5rem", height: "auto", opacity: 0.8 }}
+              loading="lazy"
+            />
+            <span style={{ fontSize: "0.72rem", letterSpacing: "0.08em", color: "rgba(237, 242, 248, 0.4)" }}>
+              OPERATOR AUTHORIZED RECORD · REGISTERED STANDING
+            </span>
+          </div>
+        ) : null}
+
+      </div>
+
       {renderSystemFooter()}
     </main>
   )
