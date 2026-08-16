@@ -237,6 +237,13 @@ test("resolves assessment standing server-side from seated mechanics", async () 
   assert.equal(calls.some((call) => call.url.endsWith("/api/dispatch-assessment-receipt")), false)
   assert.equal(calls.some((call) => call.url.endsWith("/api/dispatch-assessment-notification")), false)
   assert.equal(providerSends.length, 2)
+  const resultEmail = providerSends[1]
+  assert.equal(resultEmail.subject, "Your Measures Registry evaluation is ready")
+  assert.match(resultEmail.text, new RegExp(body.evaluationV2.evaluation_id))
+  assert.match(resultEmail.text, /MAP the Environment/)
+  assert.doesNotMatch(resultEmail.text, /Governed System Integrity Implementation/)
+  assert.match(resultEmail.text, /does not create verified compliance, certification, SEAT standing/)
+  assert.doesNotMatch(resultEmail.text, /creates certification|creates SEAT standing|authorizes implementation/i)
 
   const captureInsert = calls.find((call) => call.url.endsWith("/rest/v1/measures_iis_eval_gate1_capture"))
   assert.ok(captureInsert)

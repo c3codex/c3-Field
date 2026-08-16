@@ -68,6 +68,63 @@ function asString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value : null
 }
 
+function asStringArray(value: unknown) {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
+}
+
+function renderEvaluationV2Email({
+  contactName,
+  report,
+}: {
+  contactName: string
+  report: Record<string, unknown>
+}) {
+  const evaluation = asRecord(report.evaluation_v2)
+  if (!evaluation) return null
+
+  const evaluationId = asString(evaluation.evaluation_id)
+  const assessmentRef = asString(evaluation.assessment_ref)
+  const standing = asString(evaluation.evaluation_standing) ?? "Assessment & Evaluation v2 ready"
+  const mapScope = asRecord(evaluation.map_scope)
+  const mapLabel = asString(mapScope?.public_label) ?? "MAP"
+  const mapPathway = asString(mapScope?.map_pathway) ?? "foundational"
+  const verificationLimits = asStringArray(evaluation.verification_limits)
+  const priorityCells = asStringArray(evaluation.priority_cells)
+  const conditionTags = asStringArray(evaluation.reported_conditions)
+
+  const subject = "Your Measures Registry evaluation is ready"
+  const greeting = `Thank you for completing the Measures Registry AI Operations Assessment${contactName ? `, ${contactName}` : ""}.`
+  const lines = [
+    greeting,
+    "Your Assessment & Evaluation v2 result is ready.",
+    evaluationId ? `Evaluation reference: ${evaluationId}` : null,
+    assessmentRef ? `Assessment reference: ${assessmentRef}` : null,
+    `Evaluation standing: ${standing}`,
+    conditionTags.length > 0
+      ? `Reported condition boundary: ${conditionTags.map((tag) => tag.replaceAll("_", " ")).join(", ")}`
+      : null,
+    priorityCells.length > 0
+      ? `Priority MAP cells: ${priorityCells.map((cell) => cell.replaceAll("_", " ")).join(", ")}`
+      : null,
+    `Governed next action: MAP the Environment (${mapLabel}, ${mapPathway}).`,
+    verificationLimits[0] ?? "The assessment is participant-reported until MAP evidence work observes the environment.",
+    "This notice does not create verified compliance, certification, SEAT standing, c3 Key issuance, implementation authorization, or portal admission.",
+    "Continue from your assessment session or visit https://measuresregistry.com/map-the-environment.",
+    "Questions? Contact us at connect@measuresregistry.com.",
+  ].filter((line): line is string => Boolean(line))
+
+  return {
+    subject,
+    body: lines.join("\n\n"),
+    evidence: {
+      evaluation_id: evaluationId,
+      assessment_ref: assessmentRef,
+      evaluation_standing: standing,
+      map_pathway: mapPathway,
+    },
+  }
+}
+
 async function supabaseFetch<T>(
   env: AssessmentDeliveryEnv,
   path: string,
@@ -448,6 +505,7 @@ export async function deliverAssessmentResultEmail(
   const template = Array.isArray(templates) ? templates[0] : null
   const report = metadata.environmental_standing_report as Record<string, unknown> | null
   const contactName = capture.contact_name ? capture.contact_name.trim() : ""
+  const evaluationEmail = report ? renderEvaluationV2Email({ contactName, report }) : null
   const placeholders: Record<string, string> = {
     contact_name: contactName ? `, ${contactName}` : "",
     assessment_result: typeof report?.environmental_standing === "string" ? report.environmental_standing : "Completed",
@@ -457,8 +515,8 @@ export async function deliverAssessmentResultEmail(
     continuation_pathway: typeof report?.continuation_pathway === "string" ? report.continuation_pathway : "",
   }
 
-  let emailSubject = template?.subject || "Your Measures Registry AI Operations Assessment Results"
-  let emailBody = template?.body || `Thank you for completing the Measures Registry AI Operations Assessment{{contact_name}}.
+  let emailSubject = evaluationEmail?.subject ?? template?.subject ?? "Your Measures Registry AI Operations Assessment Results"
+  let emailBody = evaluationEmail?.body ?? template?.body ?? `Thank you for completing the Measures Registry AI Operations Assessment{{contact_name}}.
 
 Here are your assessment results:
 - Assessment result: {{assessment_result}}
@@ -506,6 +564,7 @@ Questions? Contact us at connect@measuresregistry.com.`
       metadata: {
         notification_class: "assessment_result",
         error: true,
+        evaluation_email: evaluationEmail?.evidence,
         source_oar2: RESULT_SOURCE_OAR2,
       },
     })
@@ -544,6 +603,7 @@ Questions? Contact us at connect@measuresregistry.com.`
       notification_class: "assessment_result",
       success: true,
       notified_at: notifiedAt,
+      evaluation_email: evaluationEmail?.evidence,
       source_oar2: RESULT_SOURCE_OAR2,
     },
   })

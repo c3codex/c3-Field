@@ -309,11 +309,18 @@ test("validates assessment to Current-bound C2 passage without production side e
     assert.equal(receiptLog.metadata.current_state_key, "current_env_measures_registry_v1")
     assert.equal(receiptLog.metadata.does_not_include_assessment_result, true)
     assert.equal(resultLog.metadata.success, true)
+    assert.equal(resultLog.metadata.evaluation_email.evaluation_id, submitBody.evaluationV2.evaluation_id)
     for (const send of providerSends) {
       const text = `${send.subject}\n${send.text}\n${send.html}`
       assert.equal(/\bC[123]\b/.test(text), false)
-      assert.equal(/map-portal|seat-portal|portal admission|certification/i.test(text), false)
+      assert.equal(/map-portal|seat-portal/i.test(text), false)
+      assert.equal(/creates certification|creates SEAT standing|authorizes implementation/i.test(text), false)
     }
+    const resultSend = providerSends.find((send) => send.subject === "Your Measures Registry evaluation is ready")
+    assert.ok(resultSend)
+    assert.match(resultSend.text, new RegExp(submitBody.evaluationV2.evaluation_id))
+    assert.match(resultSend.text, /MAP the Environment/)
+    assert.doesNotMatch(resultSend.text, /Governed System Integrity Implementation/)
 
     const duplicateReceipt = await dispatchReceipt({
       request: new Request("https://example.com/api/dispatch-assessment-receipt", {

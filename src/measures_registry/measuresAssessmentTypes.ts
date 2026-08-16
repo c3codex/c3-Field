@@ -40,10 +40,13 @@ export type AssessmentEvaluationV2Cell = {
 }
 
 export type AssessmentEvaluationV2 = {
+  assessment_ref?: string
   evaluation_id: string
+  capture_id?: string
   matrix_version: string
   evaluation_standing: string
   evaluation_standing_key: string
+  reported_conditions?: string[]
   matrix_cells: AssessmentEvaluationV2Cell[]
   priority_cells: string[]
   verification_limits: string[]
@@ -55,6 +58,13 @@ export type AssessmentEvaluationV2 = {
     amount_usd: 333 | 777 | 999
     standing: string
   }
+  continuation?: {
+    surface: "map_the_environment"
+    label: "MAP the Environment"
+    next_encounter_key: "marble_chamber_orientation"
+    marble_order: string[]
+  }
+  six_touchpoint_chain?: string[]
 }
 
 export type EnvironmentalStandingReport = {
