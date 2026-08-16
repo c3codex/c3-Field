@@ -105,6 +105,18 @@ function jsonResponse(body: unknown, status = 200) {
   })
 }
 
+function publicSafeSubmissionError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error)
+  console.error("assessment submission internal failure", {
+    message,
+    source: "submit_assessment_public_boundary",
+  })
+  return jsonResponse({
+    error: "Assessment submission reached an internal evidence boundary. No database details are exposed publicly.",
+    public_error_boundary: "internal_evidence_persistence",
+  }, 500)
+}
+
 async function supabaseFetch<T>(
   env: Env,
   path: string,
@@ -747,9 +759,6 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
       dispatch: resultEmail.body,
     })
   } catch (error) {
-    return jsonResponse(
-      { error: error instanceof Error ? error.message : "Submission failed" },
-      500,
-    )
+    return publicSafeSubmissionError(error)
   }
 }

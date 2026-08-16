@@ -234,3 +234,86 @@ test("handles and logs provider failure without dispatch loopback", async () => 
   assert.equal(notificationLog!.dispatch_state, "failed")
   assert.match(notificationLog!.error_message || "", /RESEND_API_KEY is not configured/)
 })
+
+test("does not expose raw database errors when evidence logging fails", async () => {
+  const captures = new Map<string, Record<string, any>>()
+  const originalConsoleError = console.error
+  console.error = () => undefined
+
+  try {
+    const response = await withMockedFetch(
+      (url, method, body) => {
+        if (url.includes("measures_encounter_def?encounter_key=eq.measures_assessment")) {
+          return Response.json([{ metadata: assessmentMetadata }])
+        }
+        if (url.endsWith("/rest/v1/rpc/resolve_c3_current") && method === "POST") {
+          return Response.json([{
+            resolution_standing: "resolved_current_state",
+            current_state_key: "current_env_measures_registry_v1",
+            env_key: "env_measures_registry",
+          }])
+        }
+        if (url.includes("c3_environment?env_key=eq.env_measures_registry")) {
+          return Response.json([{ env_key: "env_measures_registry", system_key: "measures_registry" }])
+        }
+        if (url.endsWith("/rest/v1/measures_iis_eval_gate1_capture") && method === "POST") {
+          const row = JSON.parse(body)
+          captures.set(row.id, row)
+          return new Response(null, { status: 201 })
+        }
+        if (url.endsWith("/rest/v1/mr_assessment_evaluation_v2") && method === "POST") {
+          return new Response(null, { status: 201 })
+        }
+        if (url.endsWith("/rest/v1/mr_assessment_evaluation_cell_v2") && method === "POST") {
+          return new Response(null, { status: 201 })
+        }
+        if (url.endsWith("/rest/v1/mr_assessment_evaluation_exposure_v2") && method === "POST") {
+          return new Response(null, { status: 201 })
+        }
+        if (url.endsWith("/rest/v1/mr_assessment_delivery_artifact_v2") && method === "POST") {
+          return new Response(null, { status: 201 })
+        }
+        if (url.endsWith("/rest/v1/mr_map_continuation_state_v2") && method === "POST") {
+          return new Response(null, { status: 201 })
+        }
+        if (url.includes("measures_iis_eval_gate1_capture?id=eq.") && method === "GET") {
+          const captureId = decodeURIComponent(url.match(/id=eq\.([^&]+)/)?.[1] ?? "")
+          const row = captures.get(captureId)
+          return Response.json(row ? [row] : [])
+        }
+        if (url.includes("measures_iis_eval_gate1_capture?id=eq.") && method === "PATCH") {
+          return new Response(null, { status: 204 })
+        }
+        if (url.includes("measures_notification_template?template_key=eq.assessment_receipt_participant_v1")) {
+          return Response.json([{
+            template_key: "assessment_receipt_participant_v1",
+            subject: "Receipt {{assessment_ref}}",
+            body: "Receipt {{assessment_ref}}",
+          }])
+        }
+        if (url.endsWith("/rest/v1/measures_notification_dispatch_log") && method === "POST") {
+          return new Response(JSON.stringify({
+            code: "23514",
+            details: "failing row contains (...)",
+            message: "violates check constraint measures_notification_dispatch_log_event_type_check",
+          }), { status: 400 })
+        }
+        if (url.includes("api.resend.com/emails") && method === "POST") {
+          return Response.json({ id: "email_receipt" })
+        }
+        throw new Error(`Unexpected fetch: ${method} ${url}`)
+      },
+      () => onRequestPost({ request: request(), env } as never),
+    )
+
+    assert.equal((response as Response).status, 500)
+    const body = await (response as Response).json() as Record<string, unknown>
+    const publicText = JSON.stringify(body)
+    assert.equal(body.public_error_boundary, "internal_evidence_persistence")
+    assert.equal(publicText.includes("23514"), false)
+    assert.equal(publicText.includes("measures_notification_dispatch_log_event_type_check"), false)
+    assert.equal(publicText.includes("failing row"), false)
+  } finally {
+    console.error = originalConsoleError
+  }
+})
