@@ -112,6 +112,7 @@ export function PublicAssessmentResult({
     typeof reportContract?.key_environmental_indicators_label === "string"
       ? reportContract.key_environmental_indicators_label as string
       : "Key Environmental Indicators"
+  const evaluationV2 = report?.evaluation_v2 ?? null
   const conditionIndicatorMap =
     reportContract?.condition_indicator_map && typeof reportContract.condition_indicator_map === "object"
       ? reportContract.condition_indicator_map as Record<string, unknown>
@@ -180,6 +181,22 @@ export function PublicAssessmentResult({
             <section className="registry-standing-measures">
               {measuresStandingTitle ? <strong>{measuresStandingTitle}</strong> : null}
               {measuresStandingBody ? <p>{measuresStandingBody}</p> : null}
+            </section>
+          ) : null}
+          {evaluationV2 ? (
+            <section className="registry-report-group registry-report-v2-matrix" aria-label="Evaluation matrix">
+              <strong>{evaluationV2.evaluation_standing}</strong>
+              <p>{evaluationV2.map_scope.public_label} MAP scope · ${evaluationV2.map_scope.amount_usd}</p>
+              <ul>
+                {evaluationV2.matrix_cells.map((cell) => (
+                  <li key={cell.cell_key}>
+                    {cell.row_axis} / {cell.column_axis}: {cell.standing}
+                  </li>
+                ))}
+              </ul>
+              {evaluationV2.verification_limits.length > 0 ? (
+                <p>{evaluationV2.verification_limits[0]}</p>
+              ) : null}
             </section>
           ) : null}
           <p className="registry-report-boundary">{boundaryNote}</p>

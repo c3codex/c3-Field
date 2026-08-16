@@ -122,6 +122,11 @@ async function withMockedFetch(
 test("resolves assessment standing server-side from seated mechanics", async () => {
   const calls: Array<{ url: string; method: string; body: string }> = []
   const captures = new Map<string, Record<string, any>>()
+  const evaluations: Array<Record<string, any>> = []
+  const cells: Array<Record<string, any>> = []
+  const exposures: Array<Record<string, any>> = []
+  const artifacts = new Map<string, Record<string, any>>()
+  const continuations: Array<Record<string, any>> = []
   const dispatchLogs: Array<Record<string, any>> = []
   const providerSends: Array<Record<string, any>> = []
 
@@ -148,6 +153,33 @@ test("resolves assessment standing server-side from seated mechanics", async () 
       if (url.endsWith("/rest/v1/measures_iis_eval_gate1_capture") && method === "POST") {
         const row = JSON.parse(body)
         captures.set(row.id, row)
+        return new Response(null, { status: 201 })
+      }
+      if (url.endsWith("/rest/v1/mr_assessment_evaluation_v2") && method === "POST") {
+        evaluations.push(JSON.parse(body))
+        return new Response(null, { status: 201 })
+      }
+      if (url.endsWith("/rest/v1/mr_assessment_evaluation_cell_v2") && method === "POST") {
+        cells.push(...JSON.parse(body))
+        return new Response(null, { status: 201 })
+      }
+      if (url.endsWith("/rest/v1/mr_assessment_evaluation_exposure_v2") && method === "POST") {
+        exposures.push(...JSON.parse(body))
+        return new Response(null, { status: 201 })
+      }
+      if (url.endsWith("/rest/v1/mr_assessment_delivery_artifact_v2") && method === "POST") {
+        const row = JSON.parse(body)
+        artifacts.set(row.evaluation_id, row)
+        return new Response(null, { status: 201 })
+      }
+      if (url.includes("mr_assessment_delivery_artifact_v2?evaluation_id=eq.") && method === "PATCH") {
+        const evaluationId = decodeURIComponent(url.match(/evaluation_id=eq\.([^&]+)/)?.[1] ?? "")
+        const existing = artifacts.get(evaluationId)
+        if (existing) artifacts.set(evaluationId, { ...existing, ...JSON.parse(body) })
+        return new Response(null, { status: 204 })
+      }
+      if (url.endsWith("/rest/v1/mr_map_continuation_state_v2") && method === "POST") {
+        continuations.push(JSON.parse(body))
         return new Response(null, { status: 201 })
       }
       if (url.includes("measures_iis_eval_gate1_capture?id=eq.") && method === "GET") {
@@ -194,6 +226,8 @@ test("resolves assessment standing server-side from seated mechanics", async () 
   assert.equal(body.report.standing_key, "active_structural_drift")
   assert.equal(body.report.environmental_standing, "Active Runtime Exposure")
   assert.equal(body.emailArtifact.source, "server_scoring_threshold_contract")
+  assert.equal(body.evaluationV2.matrix_cells.length, 9)
+  assert.equal(body.report.evaluation_v2.evaluation_id, body.evaluationV2.evaluation_id)
   assert.equal(body.c2Resolution.active_commerce_scope, "map_the_environment")
   assert.equal(body.c2Resolution.governed_map_encounter, "MAP the Environment")
   assert.equal(body.c2Resolution.creates_portal_admission, false)
@@ -212,6 +246,9 @@ test("resolves assessment standing server-side from seated mechanics", async () 
   assert.equal(captureBody.metadata.notchazz_system_environment_guard.standing, "pass")
   assert.equal(captureBody.metadata.carry_forward.destination_surface, "map_the_environment")
   assert.equal(captureBody.metadata.environmental_standing_report.standing_key, "active_structural_drift")
+  assert.equal(captureBody.metadata.evaluation_id, body.evaluationV2.evaluation_id)
+  assert.equal(captureBody.metadata.matrix_cells.length, 9)
+  assert.equal(captureBody.metadata.map_scope.map_pathway, body.evaluationV2.map_scope.map_pathway)
   assert.equal(captureBody.metadata.assessment_result_binding.environmental_standing_report.standing_key, "active_structural_drift")
   assert.equal(captureBody.metadata.assessment_result_binding.environmental_standing_report.standing_key === "client_forged", false)
   assert.equal(captureBody.metadata.institutional_identity_relation.named_individual_registration_inferred, false)
@@ -220,6 +257,13 @@ test("resolves assessment standing server-side from seated mechanics", async () 
   assert.equal(updatedCapture?.metadata.assessment_ref, captureBody.metadata.assessment_ref)
   assert.equal(updatedCapture?.metadata.confirmation_receipt_state, "sent")
   assert.equal(updatedCapture?.metadata.assessment_result_email_state, "sent")
+  assert.equal(evaluations.length, 1)
+  assert.equal(evaluations[0].evaluation_id, body.evaluationV2.evaluation_id)
+  assert.equal(cells.length, 9)
+  assert.equal(exposures.length, 4)
+  assert.equal(continuations.length, 1)
+  assert.equal(continuations[0].evaluation_id, body.evaluationV2.evaluation_id)
+  assert.equal(artifacts.get(body.evaluationV2.evaluation_id)?.delivery_standing, "provider_accepted")
   assert.equal(dispatchLogs.length, 2)
 })
 

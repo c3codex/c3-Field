@@ -105,6 +105,9 @@ function assessmentPayload() {
 test("validates assessment to Current-bound C2 passage without production side effects", async () => {
   const originalFetch = globalThis.fetch
   const captures = new Map<string, Record<string, any>>()
+  const evaluations: Array<Record<string, any>> = []
+  const cells: Array<Record<string, any>> = []
+  const artifacts = new Map<string, Record<string, any>>()
   const payments = new Map<string, Record<string, any>>()
   const dispatchLogs: Array<Record<string, any>> = []
   const providerSends: Array<Record<string, any>> = []
@@ -159,6 +162,31 @@ test("validates assessment to Current-bound C2 passage without production side e
     if (url.endsWith("/rest/v1/measures_iis_eval_gate1_capture") && method === "POST") {
       const row = JSON.parse(rawBody)
       captures.set(row.id, row)
+      return new Response(null, { status: 201 })
+    }
+    if (url.endsWith("/rest/v1/mr_assessment_evaluation_v2") && method === "POST") {
+      evaluations.push(JSON.parse(rawBody))
+      return new Response(null, { status: 201 })
+    }
+    if (url.endsWith("/rest/v1/mr_assessment_evaluation_cell_v2") && method === "POST") {
+      cells.push(...JSON.parse(rawBody))
+      return new Response(null, { status: 201 })
+    }
+    if (url.endsWith("/rest/v1/mr_assessment_evaluation_exposure_v2") && method === "POST") {
+      return new Response(null, { status: 201 })
+    }
+    if (url.endsWith("/rest/v1/mr_assessment_delivery_artifact_v2") && method === "POST") {
+      const row = JSON.parse(rawBody)
+      artifacts.set(row.evaluation_id, row)
+      return new Response(null, { status: 201 })
+    }
+    if (url.includes("mr_assessment_delivery_artifact_v2?evaluation_id=eq.") && method === "PATCH") {
+      const evaluationId = decodeURIComponent(url.match(/evaluation_id=eq\.([^&]+)/)?.[1] ?? "")
+      const existing = artifacts.get(evaluationId)
+      if (existing) artifacts.set(evaluationId, { ...existing, ...JSON.parse(rawBody) })
+      return new Response(null, { status: 204 })
+    }
+    if (url.endsWith("/rest/v1/mr_map_continuation_state_v2") && method === "POST") {
       return new Response(null, { status: 201 })
     }
     if (url.includes("measures_iis_eval_gate1_capture?id=eq.") && method === "GET") {
@@ -252,6 +280,7 @@ test("validates assessment to Current-bound C2 passage without production side e
     const submitBody = await submitResponse.json() as Record<string, any>
     assert.equal(submitBody.report.standing_key, "active_structural_drift")
     assert.equal(submitBody.c2Resolution.current_state_key, "current_env_measures_registry_v1")
+    assert.equal(submitBody.c2Resolution.evaluation_id, submitBody.evaluationV2.evaluation_id)
     assert.equal(submitBody.c2Resolution.active_commerce_scope, "map_the_environment")
     assert.equal(submitBody.receiptDispatch.template_key, "assessment_receipt_participant_v1")
     assert.equal(submitBody.dispatch.dispatch_state, "sent")
@@ -261,11 +290,16 @@ test("validates assessment to Current-bound C2 passage without production side e
     assert.equal(capture.metadata.notchazz_system_environment_guard.standing, "pass")
     assert.equal(capture.metadata.current_state_key, "current_env_measures_registry_v1")
     assert.equal(capture.metadata.environmental_standing_report.standing_key, submitBody.report.standing_key)
+    assert.equal(capture.metadata.evaluation_v2.evaluation_id, submitBody.evaluationV2.evaluation_id)
+    assert.equal(capture.metadata.matrix_cells.length, 9)
     assert.equal(capture.metadata.carry_forward.destination_surface, "map_the_environment")
     assert.equal(capture.metadata.confirmation_receipt_state, "sent")
     assert.equal(capture.metadata.assessment_result_email_state, "sent")
     assert.equal(capture.confirmation_email_state, "sent")
     assert.equal(capture.notification_state, "notified")
+    assert.equal(evaluations.length, 1)
+    assert.equal(cells.length, 9)
+    assert.equal(artifacts.get(submitBody.evaluationV2.evaluation_id)?.delivery_standing, "provider_accepted")
 
     const receiptLog = dispatchLogs.find((log) => log.template_key === "assessment_receipt_participant_v1")
     const resultLog = dispatchLogs.find((log) => log.template_key === "assessment_completed_participant_v1")

@@ -93,6 +93,7 @@ async function withMockedFetch(
 
 test("handles and logs provider failure without dispatch loopback", async () => {
   const captures = new Map<string, Record<string, any>>()
+  const artifacts = new Map<string, Record<string, any>>()
   const patches: Array<{
     confirmation_email_state?: string;
     notification_state?: string;
@@ -129,6 +130,30 @@ test("handles and logs provider failure without dispatch loopback", async () => 
       if (url.endsWith("/rest/v1/measures_iis_eval_gate1_capture") && method === "POST") {
         const row = JSON.parse(body)
         captures.set(row.id, row)
+        return new Response(null, { status: 201 })
+      }
+      if (url.endsWith("/rest/v1/mr_assessment_evaluation_v2") && method === "POST") {
+        return new Response(null, { status: 201 })
+      }
+      if (url.endsWith("/rest/v1/mr_assessment_evaluation_cell_v2") && method === "POST") {
+        assert.equal(JSON.parse(body).length, 9)
+        return new Response(null, { status: 201 })
+      }
+      if (url.endsWith("/rest/v1/mr_assessment_evaluation_exposure_v2") && method === "POST") {
+        return new Response(null, { status: 201 })
+      }
+      if (url.endsWith("/rest/v1/mr_assessment_delivery_artifact_v2") && method === "POST") {
+        const row = JSON.parse(body)
+        artifacts.set(row.evaluation_id, row)
+        return new Response(null, { status: 201 })
+      }
+      if (url.includes("mr_assessment_delivery_artifact_v2?evaluation_id=eq.") && method === "PATCH") {
+        const evaluationId = decodeURIComponent(url.match(/evaluation_id=eq\.([^&]+)/)?.[1] ?? "")
+        const existing = artifacts.get(evaluationId)
+        if (existing) artifacts.set(evaluationId, { ...existing, ...JSON.parse(body) })
+        return new Response(null, { status: 204 })
+      }
+      if (url.endsWith("/rest/v1/mr_map_continuation_state_v2") && method === "POST") {
         return new Response(null, { status: 201 })
       }
       if (url.endsWith("/api/dispatch-assessment-receipt") && method === "POST") {
@@ -183,6 +208,7 @@ test("handles and logs provider failure without dispatch loopback", async () => 
   assert.equal(body.receiptDispatch.error, "RESEND_API_KEY is not configured")
   assert.equal(body.dispatch.status, 503)
   assert.equal(body.dispatch.error, "RESEND_API_KEY is not configured")
+  assert.equal([...artifacts.values()][0]?.delivery_standing, "provider_failed")
 
   // Verify that the database was correctly updated with the failed statuses
   assert.ok(patches.length >= 2)

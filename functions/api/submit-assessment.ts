@@ -1,4 +1,5 @@
 import { deliverAssessmentReceipt, deliverAssessmentResultEmail } from "./assessment-delivery-service"
+import { evaluateAssessmentV2, type AssessmentEvaluationV2 } from "./assessment-evaluation-v2"
 import { validateSystemEnvironmentCurrent } from "./notchazz-system-environment-guard"
 
 type Env = {
@@ -44,6 +45,7 @@ type EnvironmentalStandingReport = {
     condition_tags: string[]
     standing_rule: string
   }
+  evaluation_v2?: AssessmentEvaluationV2
 }
 
 type AssessmentEmailArtifact = {
@@ -51,6 +53,12 @@ type AssessmentEmailArtifact = {
   preview: string
   body: string[]
   source: string
+}
+
+type V2PersistenceContext = {
+  evaluation: AssessmentEvaluationV2
+  payload: SubmitAssessmentPayload
+  emailArtifact: AssessmentEmailArtifact
 }
 
 type CurrentResolutionRow = {
@@ -153,6 +161,119 @@ function replaceTemplateTokens(value: string, replacements: Record<string, strin
     (current, [key, replacement]) => current.replaceAll(`{${key}}`, replacement),
     value,
   )
+}
+
+async function persistAssessmentEvaluationV2(env: Env, context: V2PersistenceContext) {
+  const { evaluation, payload, emailArtifact } = context
+  await supabaseFetch(env, "mr_assessment_evaluation_v2", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      evaluation_id: evaluation.evaluation_id,
+      assessment_ref: evaluation.assessment_ref,
+      capture_id: evaluation.capture_id,
+      participant_email: payload.contactEmail ?? null,
+      institution_name: payload.institutionName ?? null,
+      env_key: evaluation.env_key,
+      current_state_key: evaluation.current_state_key,
+      matrix_version: evaluation.matrix_version,
+      evaluation_standing: evaluation.evaluation_standing,
+      evaluation_standing_key: evaluation.evaluation_standing_key,
+      reported_conditions: evaluation.reported_conditions,
+      priority_cells: evaluation.priority_cells,
+      relational_exposures: evaluation.relational_exposures,
+      system_consequences: evaluation.system_consequences,
+      verification_limits: evaluation.verification_limits,
+      unknown_unresolved_held: evaluation.unknown_unresolved_held,
+      continuation: evaluation.continuation,
+      map_scope: evaluation.map_scope,
+      pricing_standing: evaluation.pricing_standing,
+      six_touchpoint_chain: evaluation.six_touchpoint_chain,
+      metadata: {
+        source_runtime: "submit_assessment_server_v2",
+        source_oar2: "oar2_implement_mr_assessment_evaluation_v2_end_to_end_codex_v1",
+      },
+    }),
+  })
+
+  await supabaseFetch(env, "mr_assessment_evaluation_cell_v2", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify(evaluation.matrix_cells.map((cell) => ({
+      evaluation_id: evaluation.evaluation_id,
+      cell_key: cell.cell_key,
+      row_axis: cell.row_axis,
+      column_axis: cell.column_axis,
+      standing: cell.standing,
+      evidence_question_keys: cell.evidence_question_keys,
+      evidence_tags: cell.evidence_tags,
+      finding: cell.finding,
+      consequence: cell.consequence,
+      next_action: cell.next_action,
+    }))),
+  })
+
+  await supabaseFetch(env, "mr_assessment_evaluation_exposure_v2", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify(evaluation.relational_exposures.map((exposure) => ({
+      evaluation_id: evaluation.evaluation_id,
+      exposure_key: exposure,
+      exposure_class: "relational_assessment_exposure",
+      standing: evaluation.evaluation_standing_key,
+      evidence: {
+        assessment_ref: evaluation.assessment_ref,
+        current_state_key: evaluation.current_state_key,
+      },
+    }))),
+  })
+
+  await supabaseFetch(env, "mr_assessment_delivery_artifact_v2", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      artifact_id: `delivery_${evaluation.capture_id}`,
+      evaluation_id: evaluation.evaluation_id,
+      capture_id: evaluation.capture_id,
+      assessment_ref: evaluation.assessment_ref,
+      artifact_class: "assessment_result_email",
+      delivery_standing: "artifact_rendered",
+      recipient_email: payload.contactEmail ?? null,
+      template_key: "assessment_completed_participant_v1",
+      rendered_subject: emailArtifact.subject,
+      rendered_preview: emailArtifact.preview,
+      metadata: {
+        source: emailArtifact.source,
+        verification_limits: evaluation.verification_limits,
+      },
+    }),
+  })
+
+  await supabaseFetch(env, "mr_map_continuation_state_v2", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      continuation_id: `map_continuation_${evaluation.capture_id}`,
+      evaluation_id: evaluation.evaluation_id,
+      capture_id: evaluation.capture_id,
+      assessment_ref: evaluation.assessment_ref,
+      current_state_key: evaluation.current_state_key,
+      env_key: evaluation.env_key,
+      map_pathway: evaluation.map_scope.map_pathway,
+      public_label: evaluation.map_scope.public_label,
+      amount_usd: evaluation.map_scope.amount_usd,
+      continuation_standing: evaluation.map_scope.standing,
+      next_encounter_key: evaluation.continuation.next_encounter_key,
+      marble_order: evaluation.continuation.marble_order,
+      creates_identity: false,
+      creates_authority: false,
+      creates_certification: false,
+      metadata: {
+        pricing_standing: evaluation.pricing_standing,
+        six_touchpoint_chain: evaluation.six_touchpoint_chain,
+      },
+    }),
+  })
 }
 
 function allAssessmentMechanics(metadataValue: unknown): AssessmentMechanicQuestion[] {
@@ -468,18 +589,33 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
 
     const c2Resolution = {
       assessment_ref: assessmentRef,
+      evaluation_id: `evaluation_${captureId}`,
       env_key: envKey,
       source_standing_key: resolved.report.standing_key,
       current_state_key: assessmentRecord.current_state_key,
       active_commerce_scope: "map_the_environment",
       public_continuation_label: "MAP the Environment",
       governed_map_encounter: "MAP the Environment",
+      map_pathway: "pending_v2_evaluation",
       pathway_standing: "pending_map_the_environment_c2_checkout",
       creates_identity: false,
       creates_authority: false,
       creates_permission: false,
       creates_portal_admission: false,
       frontend_authority: "renderer_only",
+    }
+
+    const evaluationV2 = evaluateAssessmentV2({
+      assessment_ref: assessmentRef,
+      capture_id: captureId,
+      current_state_key: assessmentRecord.current_state_key,
+      env_key: envKey,
+      traces: serverConditionTraces,
+    })
+    c2Resolution.map_pathway = evaluationV2.map_scope.map_pathway
+    const reportWithEvaluationV2: EnvironmentalStandingReport = {
+      ...resolved.report,
+      evaluation_v2: evaluationV2,
     }
 
     const captureMetadata = {
@@ -513,7 +649,7 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
       assessment_result_binding: {
         assessment_ref: assessmentRef,
         current_state_key: assessmentRecord.current_state_key,
-        environmental_standing_report: resolved.report,
+        environmental_standing_report: reportWithEvaluationV2,
         institution_name: payload.institutionName,
         contact_name: payload.contactName,
         contact_email: payload.contactEmail,
@@ -537,9 +673,22 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
       },
       governed_assessment_instance: assessmentRecord,
       c2_resolution: c2Resolution,
+      evaluation_id: evaluationV2.evaluation_id,
+      matrix_version: evaluationV2.matrix_version,
+      evaluation_v2: evaluationV2,
+      matrix_cells: evaluationV2.matrix_cells,
+      priority_cells: evaluationV2.priority_cells,
+      verification_limits: evaluationV2.verification_limits,
+      relational_exposures: evaluationV2.relational_exposures,
+      system_consequences: evaluationV2.system_consequences,
+      map_scope: evaluationV2.map_scope,
+      pricing_standing: evaluationV2.pricing_standing,
+      next_encounter_key: evaluationV2.continuation.next_encounter_key,
+      six_touchpoint_chain: evaluationV2.six_touchpoint_chain,
+      marble_order: evaluationV2.continuation.marble_order,
       current_state_key: assessmentRecord.current_state_key,
       notchazz_system_environment_guard: currentGuard,
-      environmental_standing_report: resolved.report,
+      environmental_standing_report: reportWithEvaluationV2,
       structured_email_artifact: resolved.emailArtifact,
       condition_traces: serverConditionTraces,
       contact_gated_result_delivery: true,
@@ -577,6 +726,12 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
       }),
     })
 
+    await persistAssessmentEvaluationV2(env, {
+      evaluation: evaluationV2,
+      payload,
+      emailArtifact: resolved.emailArtifact,
+    })
+
     const receiptResult = await deliverAssessmentReceipt(env, captureId)
     const resultEmail = await deliverAssessmentResultEmail(env, captureId)
 
@@ -584,8 +739,9 @@ export const onRequestPost = async ({ request, env }: { request: Request, env: E
       success: true,
       capture_id: captureId,
       assessment_ref: assessmentRef,
-      report: resolved.report,
+      report: reportWithEvaluationV2,
       emailArtifact: resolved.emailArtifact,
+      evaluationV2,
       c2Resolution,
       receiptDispatch: receiptResult.body,
       dispatch: resultEmail.body,

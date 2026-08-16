@@ -149,6 +149,23 @@ async function writeDispatchLog(
   })
 }
 
+async function updateDeliveryArtifactV2(
+  env: AssessmentDeliveryEnv,
+  metadata: Record<string, unknown>,
+  payload: Record<string, unknown>,
+) {
+  const evaluationId = asString(metadata.evaluation_id)
+  if (!evaluationId) return
+  await supabaseFetch(env, `mr_assessment_delivery_artifact_v2?evaluation_id=eq.${encodeURIComponent(evaluationId)}`, {
+    method: "PATCH",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      ...payload,
+      updated_at: new Date().toISOString(),
+    }),
+  })
+}
+
 async function sendEmail(
   env: AssessmentDeliveryEnv,
   message: {
@@ -460,6 +477,13 @@ Questions? Contact us at connect@measuresregistry.com.`
   const provider = await sendEmail(env, { to: capture.contact_email, subject: emailSubject, body: emailBody })
   if (!provider.ok) {
     const errorMessage = provider.error ?? "email provider failed"
+    await updateDeliveryArtifactV2(env, metadata, {
+      delivery_standing: "provider_failed",
+      provider: provider.status === 503 ? "internal" : "resend",
+      error_message: errorMessage,
+      template_key: RESULT_TEMPLATE_KEY,
+      rendered_subject: emailSubject,
+    })
     await updateCapture(env, captureId, {
       notification_state: "failed",
       metadata: {
@@ -486,6 +510,13 @@ Questions? Contact us at connect@measuresregistry.com.`
   }
 
   const notifiedAt = new Date().toISOString()
+  await updateDeliveryArtifactV2(env, metadata, {
+    delivery_standing: "provider_accepted",
+    provider: "resend",
+    provider_message_id: provider.providerMessageId,
+    template_key: RESULT_TEMPLATE_KEY,
+    rendered_subject: emailSubject,
+  })
   await updateCapture(env, captureId, {
     notification_state: "notified",
     metadata: {
