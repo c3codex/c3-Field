@@ -326,7 +326,7 @@ export default function MeasuresRegistryOrchestrator() {
             Assess the Environment
           </a>
           <a href="/undrifted" onClick={(e) => { e.preventDefault(); navigate("lapis_chamber_encounter") }}>
-            Understand the Environment
+            Read unDrifted
           </a>
         </nav>
       </header>
