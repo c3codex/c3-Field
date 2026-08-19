@@ -27,3 +27,16 @@ authority_oar2: docs/oar/c3_field/oar2_establish_artifact_bound_oar1_and_capabil
 commit_hash: 41572dac94ea91148d0c1ac7c2ac424fa36c4b35
 validation: verified_from_git_commit
 standing: reconciled_historical_ai_touch
+
+## execution_entry_002
+
+timestamp: 2026-08-19T21:17:59Z
+ai_role: chazz
+operator: op044
+objective: Add current unDrifted article routes to public discovery while preserving existing canonical public routes.
+action: direct repository mutation through connected GitHub execution surface
+result: completed
+files_fields_touched: URL set
+commit_hash: 7f03968965aa15e38fb52600838a7c9066ba6853
+validation: repository_write_confirmed
+standing: current_artifact_state
