@@ -26,6 +26,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://measuresregistry.com/undrifted/field-findings-2026-w28</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://measuresregistry.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
