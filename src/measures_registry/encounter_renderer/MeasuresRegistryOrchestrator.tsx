@@ -63,6 +63,8 @@ const HISTORY_SOURCE = "measures_registry_free"
 
 const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
   "/": "crystal_seat_intro",
+  "/home": "measures_registry_home",
+  "/connect": "crystal_seat_encounter",
   "/about": "crystal_seat_encounter",
   "/about-measures-registry": "crystal_seat_encounter",
   "/ai-operations-assessment": "obsidian_chamber_encounter_surface",
@@ -77,9 +79,9 @@ const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
 }
 
 const PUBLIC_ROUTE_BY_SURFACE: Partial<Record<OrchestratorSurface, string>> = {
-  measures_registry_home: "/about",
+  measures_registry_home: "/home",
   obsidian_chamber_encounter_surface: "/ai-operations-assessment",
-  crystal_seat_encounter: "/about",
+  crystal_seat_encounter: "/connect",
   marble_chamber_C2_compact: "/map-the-environment",
   lapis_chamber_encounter: "/undrifted",
   publication_dispatch: "/publication/structural_drift",
@@ -317,8 +319,8 @@ export default function MeasuresRegistryOrchestrator() {
           {title ? <span>{title}</span> : null}
         </div>
         <nav className="registry-public-nav" aria-label="Measures Registry navigation">
-          <a href="/" onClick={(e) => { e.preventDefault(); navigate("measures_registry_home") }}>Home</a>
-          <a href="/about" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>About</a>
+          <a href="/home" onClick={(e) => { e.preventDefault(); navigate("measures_registry_home") }}>Home</a>
+          <a href="/connect" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Connect</a>
           <a
             href="/ai-operations-assessment"
             onClick={(e) => { e.preventDefault(); navigate("obsidian_chamber_orientation") }}
@@ -357,7 +359,7 @@ export default function MeasuresRegistryOrchestrator() {
           <span aria-hidden="true">·</span>
           <a href="/terms" onClick={(e) => { e.preventDefault(); navigate("terms") }}>Terms</a>
           <span aria-hidden="true">·</span>
-          <a href="/about" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Contact</a>
+          <a href="/connect" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Connect</a>
         </nav>
         <nav className="registry-footer-social-links" aria-label="Measures Registry public profiles">
           <a href="https://twitter.com/measures_c3" target="_blank" rel="me noreferrer">X</a>
