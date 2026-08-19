@@ -11,6 +11,18 @@ const publicNav = [
   ["unDrifted", "/undrifted"],
 ]
 
+const publicRouteFiles = [
+  "index.html",
+  "home/index.html",
+  "connect/index.html",
+  "ai-operations-assessment/index.html",
+  "undrifted/index.html",
+  "undrifted/field-findings-2026-w28/index.html",
+  "undrifted/ai-agents-are-not-entering-empty-systems/index.html",
+  "privacy/index.html",
+  "terms/index.html",
+]
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -76,7 +88,7 @@ function injectStaticRepresentation(html, filePath) {
     filePath,
   )
 
-  if (!canonical.startsWith(baseUrl) && canonical !== "https://c3field.online") {
+  if (!canonical.startsWith(baseUrl)) {
     throw new Error(`${filePath} has unexpected canonical URL: ${canonical}`)
   }
 
@@ -90,50 +102,23 @@ function injectStaticRepresentation(html, filePath) {
   )
 }
 
-function walkIndexFiles(dir) {
-  const results = []
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name)
-    if (entry.isDirectory()) results.push(...walkIndexFiles(full))
-    if (entry.isFile() && entry.name === "index.html") results.push(full)
-  }
-  return results
-}
-
 function main() {
   const rootIndex = path.join(outDir, "index.html")
   if (!fs.existsSync(rootIndex)) throw new Error(`${rootIndex} missing`)
-
   fs.writeFileSync(rootIndex, normalizeRootHead(fs.readFileSync(rootIndex, "utf8")))
 
-  const indexFiles = walkIndexFiles(outDir)
-  for (const filePath of indexFiles) {
-    const relative = path.relative(outDir, filePath).replaceAll("\\", "/")
-    if (relative === "c3field/index.html") continue
-    const html = fs.readFileSync(filePath, "utf8")
-    fs.writeFileSync(filePath, injectStaticRepresentation(html, relative))
-  }
-
-  const requiredRoutes = [
-    "index.html",
-    "home/index.html",
-    "connect/index.html",
-    "ai-operations-assessment/index.html",
-    "undrifted/index.html",
-    "privacy/index.html",
-    "terms/index.html",
-  ]
-
-  for (const relative of requiredRoutes) {
+  for (const relative of publicRouteFiles) {
     const filePath = path.join(outDir, relative)
     if (!fs.existsSync(filePath)) throw new Error(`required public route missing: ${relative}`)
     const html = fs.readFileSync(filePath, "utf8")
-    if (!html.includes('data-public-static-representation="true"')) {
+    const rendered = injectStaticRepresentation(html, relative)
+    if (!rendered.includes('data-public-static-representation="true"')) {
       throw new Error(`required public route lacks static representation: ${relative}`)
     }
+    fs.writeFileSync(filePath, rendered)
   }
 
-  console.log(`Generated agent-readable static representations for ${indexFiles.length - 1} registry routes plus root.`)
+  console.log(`Generated agent-readable static representations for ${publicRouteFiles.length} governed public routes.`)
 }
 
 main()
