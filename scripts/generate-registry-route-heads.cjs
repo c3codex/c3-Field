@@ -162,8 +162,7 @@ function buildRootJsonLdGraph({ founder, sameAs }) {
       "@id": REGISTRY_ORGANIZATION_ID,
       name: "Measures Registry",
       url: `${REGISTRY_BASE_URL}/`,
-      description:
-        "Institutional governance framework for AI deployment, structural drift detection, and governable environments.",
+      description: "Computational Systems Governance. Governed Systems. Relational Operations.",
       sameAs,
     },
     {
@@ -219,18 +218,6 @@ function buildUndriftedArticleJsonLd(articles) {
   }
 }
 
-function buildAboutPageJsonLd(url, name, description) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    name,
-    description,
-    url,
-    isPartOf: { "@id": REGISTRY_WEBSITE_ID },
-    about: { "@id": REGISTRY_ORGANIZATION_ID },
-  }
-}
-
 function patchRootHead(html, { founder, sameAs }) {
   let out = html
   out = replaceTag(out, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/" />`)
@@ -266,46 +253,25 @@ function writeC3FieldRouteHead(outDir, template) {
   fs.writeFileSync(path.join(routeDir, "index.html"), html)
 }
 
-function writeAboutRouteHead(outDir, template) {
-  const routeDir = path.join(outDir, "about-measures-registry")
+function writeWebsiteRouteHead(outDir, template, routePath, title, description) {
+  const routeDir = path.join(outDir, routePath.replace(/^\//, ""))
   fs.mkdirSync(routeDir, { recursive: true })
-  let html = template
-  html = html.replace(/<title>.*?<\/title>/s, "<title>About Measures Registry</title>")
-  html = replaceTag(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/>/s, `<meta name="description" content="Measures Registry is a media-first guided encounter for AI operations governance." />`)
-  html = replaceTag(html, /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/s, `<meta property="og:title" content="About Measures Registry" />`)
-  html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="Measures Registry is a media-first guided encounter for AI operations governance." />`)
-  html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/about-measures-registry" />`)
-  html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="${REGISTRY_BASE_URL}/about-measures-registry" />`)
-  html = injectJsonLd(
-    html,
-    buildAboutPageJsonLd(
-      `${REGISTRY_BASE_URL}/about-measures-registry`,
-      "About Measures Registry",
-      "Measures Registry is a media-first guided encounter for AI operations governance.",
-    ),
-  )
-  fs.writeFileSync(path.join(routeDir, "index.html"), html)
-}
-
-function writeAboutCanonicalHead(outDir, template) {
-  const routeDir = path.join(outDir, "about")
-  fs.mkdirSync(routeDir, { recursive: true })
-  let html = template
-  html = html.replace(/<title>.*?<\/title>/s, "<title>About Measures Registry</title>")
-  html = replaceTag(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/>/s, `<meta name="description" content="Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result." />`)
-  html = replaceTag(html, /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/s, `<meta property="og:title" content="About Measures Registry" />`)
-  html = replaceTag(html, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/s, `<meta property="og:description" content="Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result." />`)
-  html = replaceTag(html, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/>/s, `<meta property="og:url" content="${REGISTRY_BASE_URL}/about" />`)
-  html = replaceTag(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/>/s, `<link rel="canonical" href="${REGISTRY_BASE_URL}/about" />`)
-  html = injectJsonLd(
-    html,
-    buildAboutPageJsonLd(
-      `${REGISTRY_BASE_URL}/about`,
-      "About Measures Registry",
-      "Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result.",
-    ),
-  )
-  fs.writeFileSync(path.join(routeDir, "index.html"), html)
+  const canonical = `${REGISTRY_BASE_URL}${routePath}`
+  const seo = {
+    title,
+    description,
+    canonical_url: canonical,
+    og_type: "website",
+    og_title: title,
+    og_description: description,
+    og_url: canonical,
+    og_image: REGISTRY_OG_IMAGE,
+    twitter_card: "summary_large_image",
+    twitter_title: title,
+    twitter_description: description,
+    twitter_image: REGISTRY_OG_IMAGE,
+  }
+  fs.writeFileSync(path.join(routeDir, "index.html"), applyRouteHead(template, seo))
 }
 
 function writePrivacyRouteHead(outDir, template) {
@@ -382,8 +348,20 @@ async function main() {
   fs.writeFileSync(templatePath, template)
 
   writeC3FieldRouteHead(outDir, template)
-  writeAboutRouteHead(outDir, template)
-  writeAboutCanonicalHead(outDir, template)
+  writeWebsiteRouteHead(
+    outDir,
+    template,
+    "/home",
+    "Measures Registry | Computational Systems Governance",
+    "Computational Systems Governance for governed systems and relational operations.",
+  )
+  writeWebsiteRouteHead(
+    outDir,
+    template,
+    "/connect",
+    "Connect | Measures Registry",
+    "Connect with Measures Registry through questions about Computational Systems Governance, assessment, standing, governed progression, and unDrifted.",
+  )
   writePrivacyRouteHead(outDir, template)
   writeTermsRouteHead(outDir, template)
 
@@ -406,6 +384,8 @@ async function main() {
 
   console.log(
     `Generated governed registry route heads: ${[
+      "/home",
+      "/connect",
       ...routeUnits.map((unit) => unit.routePath),
       ...launchCycleArticleRoutes.map((route) => route.routePath),
     ].join(", ")}`,
