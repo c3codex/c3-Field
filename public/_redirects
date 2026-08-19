@@ -1,1 +1,7 @@
+/about /connect 301
+/about/ /connect 301
+/about-measures-registry /connect 301
+/about-measures-registry/ /connect 301
+/faq /connect 301
+/faq/ /connect 301
 /* /index.html 200
