@@ -16,16 +16,30 @@ type PageMetadata = {
 
 const REGISTRY_METADATA: PageMetadata = {
   title: "Measures Registry",
-  description: "Integrity Governance for AI Systems",
+  description: "Computational Systems Governance. Governed Systems. Relational Operations.",
   url: "https://measuresregistry.com",
   image: "https://measuresregistry.com/og.jpeg",
   type: "website",
 }
 
 const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
+  "/home": {
+    title: "Measures Registry | Computational Systems Governance",
+    description: "Computational Systems Governance for governed systems and relational operations.",
+    url: "https://measuresregistry.com/home",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
+  "/connect": {
+    title: "Connect | Measures Registry",
+    description: "Connect with Measures Registry through questions about Computational Systems Governance, assessment, standing, governed progression, and unDrifted.",
+    url: "https://measuresregistry.com/connect",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
   "/ai-operations-assessment": {
-    title: "AI Operations Assessment | Measures Registry",
-    description: "Identify structural drift in AI operations and begin where drift becomes visible.",
+    title: "Assess the Environment | Measures Registry",
+    description: "Assess the environment around AI use. Identify structural conditions affecting authority, review, accountability, and operational stability.",
     url: "https://measuresregistry.com/ai-operations-assessment",
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
@@ -42,7 +56,7 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
   },
   "/undrifted": {
     title: "unDrifted | Measures Registry",
-    description: "Structural drift is detectable. Collapse is not the default.",
+    description: "Reporting on structural drift in AI systems—examining the authority, operations, environments, and responsibility behind consequential outcomes.",
     url: "https://measuresregistry.com/undrifted",
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
@@ -64,17 +78,19 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     type: "article",
   },
   "/about": {
-    title: "About Measures Registry",
-    description: "Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result.",
-    url: "https://measuresregistry.com/about",
+    title: "Connect | Measures Registry",
+    description: "Connect with Measures Registry through questions about Computational Systems Governance, assessment, standing, governed progression, and unDrifted.",
+    url: "https://measuresregistry.com/connect",
+    canonicalUrl: "https://measuresregistry.com/connect",
+    ogUrl: "https://measuresregistry.com/about",
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
   },
   "/about-measures-registry": {
-    title: "About Measures Registry",
-    description: "Integrity governance for AI-accelerated systems. The Codexstone Seal. Objective. Action. Result.",
-    url: "https://measuresregistry.com/about",
-    canonicalUrl: "https://measuresregistry.com/about",
+    title: "Connect | Measures Registry",
+    description: "Connect with Measures Registry through questions about Computational Systems Governance, assessment, standing, governed progression, and unDrifted.",
+    url: "https://measuresregistry.com/connect",
+    canonicalUrl: "https://measuresregistry.com/connect",
     ogUrl: "https://measuresregistry.com/about-measures-registry",
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
