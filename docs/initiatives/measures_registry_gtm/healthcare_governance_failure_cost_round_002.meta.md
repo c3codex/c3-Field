@@ -2,7 +2,7 @@
 document_type: gtm_research_evidence_round
 title: Healthcare Governance Failure and Compensatory Cost Study
 status: working_research_evidence
-version: v1
+version: v1.1
 timestamp: 2026-08-21
 operator: op044
 author: chazz
@@ -16,23 +16,46 @@ registry_standing: unregistered
 # Healthcare Governance Failure and Compensatory Cost Study
 
 ## Purpose
-Use healthcare as a proving ground for the necessity and economics of a coherent computational operating environment. This study does not presume healthcare is a permanent Measures Registry vertical or Registry-candidate environment.
+Use healthcare as a proving ground for the necessity and economics of a coherent computational operating environment. This study does not presume healthcare is a permanent Measures Registry vertical. Registry candidacy remains open and must be tested independently from vertical specialization.
 
 ## Governing Research Chain
-`observed condition → governance failure boundary → compensating mechanism → operational/economic consequence → MR relevance`
+`observed condition → governance failure boundary → boundary crossed → coherence property missing → compensating mechanism → operational/economic consequence → Registry relevance`
 
-MR relevance must be recorded conservatively as one of:
+Registry relevance must be recorded conservatively as one of:
 - `native_condition_candidate`
 - `potentially_reducible`
+- `interoperability_candidate`
+- `registry_candidate_open`
 - `unrelated`
 - `insufficient_evidence`
 
 No external expenditure is assumed avoidable merely because Measures Registry can describe the failure.
 
 ## Core Thesis Under Test
-> Consequential computational systems operating in incoherent environments may create recurring compensatory governance costs because visibility, identity, ownership, authority, evidence, review, and lifecycle accountability must be reconstructed externally rather than carried coherently by the operating environment.
+> Consequential computational systems operating in incoherent environments may create recurring compensatory governance costs because visibility, identity, ownership, authority, evidence, review, terminology, and lifecycle accountability must be reconstructed externally rather than carried coherently by the operating environment.
 
-Healthcare is Case 001 because governance pressure, procurement activity, and operational consequences are unusually observable.
+Healthcare is Case 001 because governance pressure, procurement activity, heterogeneous systems, vendor boundaries, shared terminology requirements, and operational consequences are unusually observable.
+
+## Registry Candidacy Reframe
+Healthcare standing for this research program:
+
+- `healthcare_as_proving_ground: supported`
+- `healthcare_vertical_specialization: not_assumed`
+- `healthcare_registry_candidacy: OPEN`
+
+A healthcare institution may remain responsible for and authoritative over its own clinical, administrative, legal, accreditation, and patient-safety systems while still presenting candidate Registry needs at computational boundaries.
+
+The relevant question is not whether healthcare terminology should become Registry terminology. The question is whether independent systems, intelligences, roles, evidence, and institutional vocabularies can remain autonomous while carrying sufficient shared identity, authority, provenance, review, and return across boundaries.
+
+Candidate Registry coherence properties to test:
+- shared/canonical relationship language without erasing institutional terminology;
+- system and actor identity;
+- bounded authority and role standing;
+- interoperable access relationships;
+- evidence/provenance persistence;
+- review and disposition traceability;
+- optics across system boundaries;
+- portal/interoperability passage while preserving institutional autonomy.
 
 ## F1 — Visibility / Inventory Failure
 ### Observed condition
@@ -59,7 +82,7 @@ Governance work shifts from native operating knowledge to reconstructive discove
 ### Economic evidence
 IBM/Ponemon's 2025 breach study found organizations with high levels of shadow AI incurred an average $670,000 higher breach cost than organizations with low or no shadow AI. This is cross-industry evidence and must not be represented as hospital-specific MR savings.
 
-### MR relevance
+### Registry relevance
 `native_condition_candidate`
 
 ### Hold
@@ -87,7 +110,7 @@ Responsibility exists institutionally but does not resolve consistently to a cle
 ### Consequence
 Organizations add human coordination layers to reconstruct responsibility that is not evident from the operating relationship itself.
 
-### MR relevance
+### Registry relevance
 `native_condition_candidate`
 
 ### Hold
@@ -107,6 +130,12 @@ CommonSpirit Health publicly described rejecting an ambient-AI vendor during con
 ### Failure boundary
 Evidence sufficient at procurement does not remain sufficient across vendor updates, model changes, new data flows, and operational use.
 
+### Boundary crossed
+`external vendor system ↔ institutional operating environment`
+
+### Coherence property potentially missing
+`persistent provenance + version identity + authority/evidence continuity`
+
 ### Compensating mechanisms
 - AI-specific vendor questionnaires;
 - model cards and attestations;
@@ -118,8 +147,8 @@ Evidence sufficient at procurement does not remain sufficient across vendor upda
 ### Consequence
 Governance recurs at every vendor/change boundary because evidence and authority do not persist coherently across the lifecycle.
 
-### MR relevance
-`native_condition_candidate`
+### Registry relevance
+`interoperability_candidate`
 
 ### Hold
 Recurring contract-review and monitoring costs are clearly plausible but transaction-level cost evidence remains incomplete.
@@ -136,6 +165,12 @@ Joint Commission RUAIH standards require ongoing monitoring, evaluation, validat
 ### Failure boundary
 Governance is expressed in policy or committee decisions but is not carried into the operational state of the system.
 
+### Boundary crossed
+`institutional decision/policy ↔ runtime computational system`
+
+### Coherence property potentially missing
+`authority-to-execution continuity + observable evidence of conformance`
+
 ### Compensating mechanisms
 - governance/AI-management platforms;
 - manual control testing;
@@ -146,7 +181,7 @@ Governance is expressed in policy or committee decisions but is not carried into
 ### Consequence
 Organizations purchase or build a second technical governance layer to make policy operationally observable and enforceable.
 
-### MR relevance
+### Registry relevance
 `native_condition_candidate`
 
 ### Hold
@@ -164,6 +199,12 @@ Health-sector guidance recommends risk-based AI review across procurement, deplo
 ### Failure boundary
 Existing procurement records do not contain enough persistent, system-specific evidence about AI use, authority, risk, data handling, model changes, and review conditions.
 
+### Boundary crossed
+`procurement ↔ vendor ↔ IT/security ↔ clinical/operational governance`
+
+### Coherence property potentially missing
+`shared evidence model + persistent system identity + reusable review standing`
+
 ### Compensating mechanisms
 - AI intake forms;
 - AI-specific questionnaires;
@@ -174,7 +215,7 @@ Existing procurement records do not contain enough persistent, system-specific e
 ### Consequence
 The same system relationship must be re-described and re-evaluated across multiple organizational boundaries.
 
-### MR relevance
+### Registry relevance
 `potentially_reducible`
 
 ### Hold
@@ -194,32 +235,68 @@ Do not claim:
 - a coherent environment would prevent all AI incidents;
 - a specific contract value is recoverable savings.
 
-## Proving-Ground Reframe
-Healthcare standing for this research program:
-`proving_ground_candidate`
+## F7 — Interoperability / Provenance Boundary
+### Observed condition
+Healthcare already has mature interoperability standards for exchanging clinical data, but exchange interoperability does not automatically establish coherent governance standing across every computational actor, model, vendor, role, policy, or AI lifecycle event.
 
-Healthcare is used to test whether coherent operating-environment failures have observable governance and economic consequences. It is not presumed to be the permanent Measures Registry market, product boundary, or Registry-participation model.
+### Evidence
+HL7 FHIR explicitly defines Provenance as a record of the entities and processes involved in producing, delivering, or influencing a resource. It identifies agents, activities, entities, timing, policy context, and version-specific relationships to support authenticity, trust, reproducibility, integrity, privacy, and security decisions.
+
+FHIR also distinguishes Provenance from AuditEvent: provenance describes the context and responsibility around the creation/change of a resource, while audit records operational events as they occur.
+
+FHIR's own specification notes that provenance introduces requirements for unique and unambiguous identification and potentially version identification across systems, and that integrity problems can arise if the target resource is updated but the corresponding provenance cannot be created coherently.
+
+### Boundary crossed
+`institution ↔ EHR/resource ↔ external application/vendor/AI ↔ downstream institutional actor`
+
+### Coherence property potentially missing
+`shared identity + provenance + version continuity + actor responsibility + policy context across independent systems`
+
+### Why this matters to Registry candidacy
+Healthcare demonstrates that data interoperability and governance interoperability are related but not identical problems. FHIR can carry provenance for health-information resources; the research question for Measures Registry is whether comparable coherence must also persist for computational-system identity, authority, role standing, review, evidence, and return across portals and institutional boundaries.
+
+This does not establish that Measures Registry should replace or duplicate FHIR, HL7, EHR identity, or healthcare governance standards. Candidate Registry value would have to be complementary: preserving institutional autonomy while providing coherent cross-system governance relationships not already carried by the underlying standards or products.
+
+### Registry relevance
+`registry_candidate_open`
+
+### Hold
+Need concrete provider cases where technically interoperable systems still require governance reconstruction at organizational or AI-system boundaries.
+
+## Revised Proving-Ground Reframe
+Healthcare is not treated as a healthcare-only product destination.
+
+Healthcare is used to test three separable propositions:
+1. **Coherent environment necessity:** where governance fails when AI/computational systems enter fragmented operating environments.
+2. **Economic consequence:** what compensatory governance, contract, labor, platform, monitoring, remediation, and renewal costs follow.
+3. **Registry candidacy:** whether shared identity, authority, provenance, optics, review, and interoperable passage across autonomous systems produce value beyond local governance tools and healthcare-native interoperability standards.
 
 ## New Primary Research Questions
 1. Where does governance fail first as AI crosses organizational/system boundaries?
-2. Which compensating controls are added because the operating environment cannot natively preserve visibility, authority, responsibility, evidence, and review?
-3. Which compensating controls recur over time or across contracts?
-4. What are the measurable labor, delay, contract, platform, legal, monitoring, remediation, and renewal costs?
-5. Which costs are intrinsic to responsible governance and which are reconstructive/duplicative?
-6. Can the same failure classes be observed outside healthcare?
-7. Does a coherent operating environment measurably reduce the need for reconstructive governance without weakening legitimate oversight?
+2. Which boundary is being crossed when each failure occurs?
+3. Which coherence property is missing: identity, authority, responsibility, shared terminology, provenance, review standing, optics, or return?
+4. Which compensating controls are added because the operating environment cannot preserve those properties?
+5. Which compensating controls recur over time, across contracts, or across system/institution boundaries?
+6. What are the measurable labor, delay, contract, platform, legal, monitoring, remediation, and renewal costs?
+7. Which costs are intrinsic to responsible governance and which are reconstructive/duplicative?
+8. Do technically interoperable healthcare systems still require governance reconstruction across AI/vendor/institutional boundaries?
+9. Which failure classes recur outside healthcare?
+10. Does a coherent operating environment measurably reduce reconstructive governance without weakening legitimate institutional oversight?
 
 ## Next Evidence Work
 ### A. Follow three named provider cases end-to-end
 For each, capture:
-`system/use → failure boundary → governance response → vendor/contract/process added → recurring obligation → measurable cost/delay → unresolved condition`
+`system/use → failure boundary → boundary crossed → coherence property missing → governance response → vendor/contract/process added → recurring obligation → measurable cost/delay → unresolved condition → Registry relevance`
 
 Priority candidates:
 - Hawaii Health Systems Corporation;
 - Mercyhealth;
 - Tahoe Forest Health System.
 
-### B. Quantify compensatory governance
+### B. Add one interoperability-boundary case
+Identify a case involving an EHR, external AI vendor/application, clinician/role, and institutional governance process where information exchange works but governance evidence/authority still has to be reconstructed.
+
+### C. Quantify compensatory governance
 Search for:
 - contract terms and renewal periods;
 - governance-platform licensing/implementation;
@@ -231,7 +308,7 @@ Search for:
 - reassessment and monitoring frequency;
 - cost of remediation or failed pilots.
 
-### C. Build the failure taxonomy before the sales message
+### D. Build the failure taxonomy before the sales message
 Do not tailor the Healthcare AI Environment Assessment around healthcare compliance categories yet. First determine whether the same failure boundaries reliably recur and whether they map to Measures Registry's native system/environment relationships.
 
 ## Research Sources
@@ -243,8 +320,10 @@ Do not tailor the Healthcare AI Environment Assessment around healthcare complia
 - Health Sector Coordinating Council, Health Industry Cybersecurity Third-Party AI Risk Guide (2026): https://healthsectorcouncil.org/wp-content/uploads/2026/04/AI-Third-Party-Risk-Guide.pdf
 - American Hospital Association, "Avoiding Missteps: 3 Keys to Governing, Scaling and Deploying AI Responsibly" (Jul. 21, 2026): https://www.aha.org/aha-center-health-innovation-market-scan/2026-07-21-avoiding-missteps-3-keys-governing-scaling-and-deploying-ai-responsibly
 - Censinet, "AI Governance Theater: How Health Systems Confuse Activity with Control" (Jul. 17, 2026): https://www.censinet.com/perspectives/ai-governance-theater-health-systems-confuse-activity-control
+- HL7 FHIR Provenance specification: https://hl7.org/fhir/provenance.html
+- US Core Provenance Profile: https://hl7.org/fhir/us/core/StructureDefinition-us-core-provenance.html
 
 ## Standing
-`research_round_002_formed_pending_additional_evidence`
+`research_round_002_refined_registry_candidacy_open`
 
 No Registry mutation, healthcare-market disposition, pricing change, publication, sales activation, or MAP terminology resolution is established by this research round.
