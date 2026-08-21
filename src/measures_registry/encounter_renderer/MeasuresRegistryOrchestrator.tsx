@@ -72,6 +72,7 @@ const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
   "/undrifted": "lapis_chamber_encounter",
   "/undrifted/field-findings-2026-w28": "lapis_chamber_encounter",
   "/undrifted/ai-agents-are-not-entering-empty-systems": "lapis_chamber_encounter",
+  "/undrifted/the-pair-over-time": "lapis_chamber_encounter",
   "/map-the-environment": "marble_chamber_C2_compact",
   "/privacy": "privacy",
   "/terms": "terms",

@@ -419,7 +419,7 @@ function UnDriftedIndex({
             </h2>
           </div>
           <div className="undrifted-launch-cycle-grid">
-            {UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.map((article) => (
+            {UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.filter((article) => article.issueLabel === "Launch Cycle 001").map((article) => (
               <article
                 className="undrifted-launch-cycle-card"
                 key={article.publicationId}
@@ -767,7 +767,7 @@ function UnDriftedLaunchCycleArticle({
       data-landing-contract={landingKey ?? "missing_landing_contract"}
       data-style-contract={styleKey ?? "missing_style_contract"}
       data-release-standing="public"
-      data-publication-projection="launch_cycle_001_registered_asset_bridge"
+      data-publication-projection="undrifted_registered_asset_bridge"
       {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       data-directory-key={asString(encounter.encounterDef?.metadata?.directory_key) ?? undefined}
       data-masthead-behavior={asString(encounterProfile?.masthead_behavior) ?? undefined}
@@ -782,7 +782,7 @@ function UnDriftedLaunchCycleArticle({
         <nav className="undrifted-article-return" aria-label="unDrifted navigation">
           <a href="/undrifted">unDrifted</a>
           <span aria-hidden="true">/</span>
-          <span>Launch Cycle 001</span>
+          <span>{article.issueLabel}</span>
         </nav>
         <header className="undrifted-article-header">
           <img className="undrifted-article-banner" src={article.bannerUrl} alt={article.bannerAlt} loading="eager" />

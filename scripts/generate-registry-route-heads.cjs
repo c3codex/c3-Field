@@ -23,6 +23,8 @@ const REGISTRY_REDIRECT_RULES = [
   "/undrifted/field-findings-2026-w28/ /undrifted/field-findings-2026-w28/index.html 200",
   "/undrifted/ai-agents-are-not-entering-empty-systems /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
   "/undrifted/ai-agents-are-not-entering-empty-systems/ /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
+  "/undrifted/the-pair-over-time /undrifted/the-pair-over-time/index.html 200",
+  "/undrifted/the-pair-over-time/ /undrifted/the-pair-over-time/index.html 200",
 ]
 
 const routeUnits = [
@@ -56,6 +58,14 @@ const launchCycleArticleRoutes = [
     canonical_url: "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
     image:
       "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted_response_section_banner_2026_w28_v1.webp",
+  },
+  {
+    routePath: "/undrifted/the-pair-over-time",
+    title: "The Pair Over Time | unDrifted",
+    description:
+      "Mapped & Measured 002 reflects on sustained human-AI collaboration, the pair over time, and the limits of what present evidence can support.",
+    canonical_url: "https://measuresregistry.com/undrifted/the-pair-over-time",
+    image: "https://measuresregistry.com/undrifted/issue-002/mapped_measured_002_pair_over_time_banner.webp",
   },
 ]
 

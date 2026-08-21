@@ -19,6 +19,7 @@ const publicRouteFiles = [
   "undrifted/index.html",
   "undrifted/field-findings-2026-w28/index.html",
   "undrifted/ai-agents-are-not-entering-empty-systems/index.html",
+  "undrifted/the-pair-over-time/index.html",
   "privacy/index.html",
   "terms/index.html",
 ]

@@ -77,6 +77,14 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
       "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted_response_section_banner_2026_w28_v1.webp",
     type: "article",
   },
+  "/undrifted/the-pair-over-time": {
+    title: "The Pair Over Time | unDrifted",
+    description:
+      "Mapped & Measured 002 reflects on sustained human-AI collaboration, the pair over time, and the limits of what present evidence can support.",
+    url: "https://measuresregistry.com/undrifted/the-pair-over-time",
+    image: "https://measuresregistry.com/undrifted/issue-002/mapped_measured_002_pair_over_time_banner.webp",
+    type: "article",
+  },
   "/about": {
     title: "Connect | Measures Registry",
     description: "Connect with Measures Registry through questions about Computational Systems Governance, assessment, standing, governed progression, and unDrifted.",

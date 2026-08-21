@@ -1,11 +1,13 @@
 import fieldFindingsMarkdown from "../../../../Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md?raw"
 import responseMarkdown from "../../../../Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_response_001_ai_agents_are_not_entering_empty_systems_article_v1.md?raw"
+import pairOverTimeMarkdown from "../../../../Assets/Articles/unDrifted/Issue002/registered/mapped_measured_002_the_pair_over_time_v1.md?raw"
 
 export type UndriftedLaunchCycleArticle = {
-  publicationId: "publication_001" | "publication_002"
+  publicationId: string
   assetId: string
   title: string
   subtitle: string | null
+  issueLabel: string
   routePath: string
   paragraphSlug: string
   paragraphUrl: string
@@ -42,6 +44,7 @@ export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] 
     assetId: "field_findings_2026_w28_public_article_v2",
     title: "Field Findings 2026-W28",
     subtitle: "Weekly observations from the Field, July 4-10, 2026.",
+    issueLabel: "Launch Cycle 001",
     routePath: "/undrifted/field-findings-2026-w28",
     paragraphSlug: "field-findings-2026-w28",
     paragraphUrl: "https://paragraph.com/@undrifted/field-findings-2026-w28",
@@ -65,6 +68,7 @@ export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] 
     assetId: "undrifted_response_001",
     title: "AI Agents Are Not Entering Empty Systems",
     subtitle: "unDrifted Response 001.",
+    issueLabel: "Launch Cycle 001",
     routePath: "/undrifted/ai-agents-are-not-entering-empty-systems",
     paragraphSlug: "ai-agents-are-not-entering-empty-systems",
     paragraphUrl: "https://paragraph.com/@undrifted/ai-agents-are-not-entering-empty-systems",
@@ -84,6 +88,31 @@ export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] 
     bodyMarkdown: stripFrontmatter(responseMarkdown),
     dependencyRoutePath: "/undrifted/field-findings-2026-w28",
     dependencyLabel: "Field Findings 2026-W28",
+  },
+  {
+    publicationId: "mapped_measured_002",
+    assetId: "mapped_measured_002_the_pair_over_time_v1",
+    title: "The Pair Over Time",
+    subtitle: "What one paper about AI scientists made us notice about eighteen months of human-AI work",
+    issueLabel: "Issue 002 / Mapped & Measured",
+    routePath: "/undrifted/the-pair-over-time",
+    paragraphSlug: "the-pair-over-time",
+    paragraphUrl: "https://measuresregistry.com/undrifted/the-pair-over-time",
+    authorName: "unDrifted Editorial",
+    authorSlug: "undrifted-editorial",
+    publicationDate: "2026-08-20",
+    publicationLabel: "Mapped & Measured 002",
+    bannerUrl: "/undrifted/issue-002/mapped_measured_002_pair_over_time_banner.webp",
+    bannerAlt: "Mapped & Measured 002 - The Pair Over Time",
+    canonicalAssetPath:
+      "Assets/Articles/unDrifted/Issue002/registered/mapped_measured_002_the_pair_over_time_v1.md",
+    publicationRecordPath:
+      "docs/_source/codex/publications/publication_record_mapped_measured_002_the_pair_over_time.meta.md",
+    sourceOar2:
+      "CanCom/codex/mapped_measured_002_pair_over_time/oar2_register_publish_mapped_measured_002_pair_over_time_codex_v1",
+    issueExcerpt:
+      "Mapped & Measured 002: an exploratory reflection on the human-agent pair over time, preserving the Method & Scope boundary and treating longitudinal interaction records as hypothesis-generating provenance rather than proof of causation.",
+    bodyMarkdown: stripFrontmatter(pairOverTimeMarkdown),
   },
 ]
 
