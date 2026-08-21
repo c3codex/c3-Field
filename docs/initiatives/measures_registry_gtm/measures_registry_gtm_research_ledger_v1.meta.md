@@ -1,7 +1,7 @@
 ---
 document_type: gtm_research_ledger
 title: Measures Registry GTM Research Ledger
-status: git_formed_pending_operator_review
+status: working_research_ledger
 version: v1
 timestamp: 2026-08-21
 operator: op044
@@ -11,7 +11,7 @@ scope: go_to_market_research_and_market_validation
 authoritative_custody: git
 repository: c3codex/c3-Field
 branch: gtm-ledger-v1
-registry_standing: unregistered_pending_operator_disposition
+registry_standing: unregistered
 source_authority_index: project_source_authority_index_v7.meta.md
 source_concordance: source_concordance_current_v8.meta.md
 operational_concordance: c3_operational_concordance_v3.meta.md
@@ -21,302 +21,234 @@ map_terminology_standing: held_unresolved
 # Measures Registry GTM Research Ledger
 
 ## Purpose
+Maintain a durable, evidence-led record of Measures Registry go-to-market research. Research evidence does not itself create Registry standing, publication authority, compliance claims, sales activation, or MAP terminology resolution.
 
-Maintain a durable, evidence-led record of Measures Registry go-to-market research so market conclusions, ICP choices, buyer findings, offer decisions, acquisition experiments, counterevidence, and Operator dispositions accumulate without being mistaken for authority merely because research exists.
-
-This ledger is a market-research and decision-evidence artifact. It does not by itself register a market position, authorize publication, establish a compliance claim, activate a sales campaign, resolve MAP terminology, or substitute research for observed buying behavior.
-
-## Governing Research Principle
-
-Research must answer a decision Measures Registry actually needs to make.
-
-A persuasive report is not passage evidence by itself. Findings advance only when the evidence required by the applicable GTM gate is sufficient and the Operator disposes the finding.
-
-The governing sequence is:
-
+## Governing Sequence
 `MARKET → ICP → BUYER → OFFER → ACQUISITION`
 
-Evidence may move backward when later findings challenge an earlier assumption.
+Later evidence may move a hypothesis backward. A persuasive report is not passage evidence by itself.
 
 ## Five GTM Gates
-
 | Gate | Decision | Governing question | Passage evidence |
 | --- | --- | --- | --- |
 | G1 Market | Select or reject a candidate market | Is there observable demand worth pursuing? | purchasing behavior, forcing events, accessibility, alternatives, ability to pay, counterevidence |
-| G2 ICP | Define the organizations most likely to buy | Which organizations exhibit the conditions associated with demand? | organization type, scale, AI deployment, governance maturity, external trigger, internal ownership |
-| G3 Buyer | Identify the people who experience, own, fund, or block the work | Who feels the problem, owns the work, approves spending, and influences procurement? | recent-behavior interviews, role evidence, procurement path, budget authority, blockers |
+| G2 ICP | Define organizations most likely to buy | Which organizations exhibit conditions associated with demand? | organization type, AI deployment, governance maturity, trigger, ownership |
+| G3 Buyer | Identify people who experience, own, fund, or block the work | Who feels the problem, owns it, approves spending, and influences procurement? | role evidence, interviews, procurement path, budget authority, blockers |
 | G4 Offer | Define what the buyer will purchase | What bounded outcome, deliverable, price, and credibility package will the buyer accept? | buyer language, purchasing evidence, offer tests, price evidence, objections, conversion behavior |
-| G5 Acquisition | Establish a repeatable path to qualified demand | Can Measures Registry reliably reach and convert the buyer? | qualified target cohort, channel response, assessment visits/starts/completions, conversations, opportunities, revenue |
+| G5 Acquisition | Establish repeatable qualified demand | Can Measures Registry reliably reach and convert the buyer? | target cohort, channel response, assessment activity, conversations, opportunities, revenue |
 
 ## Research Record Schema
+Preserve: `record_id`, `date`, `gate`, `candidate_market_or_segment`, `hypothesis`, `evidence`, `counterevidence`, `confidence`, `unresolved_gap`, `research_method`, `source`, `finding`, `decision_implication`, `standing`, `operator_disposition`.
 
-Every material GTM finding should preserve:
-
-1. `record_id`
-2. `date`
-3. `gate`
-4. `candidate_market_or_segment`
-5. `hypothesis`
-6. `evidence`
-7. `counterevidence`
-8. `confidence`
-9. `unresolved_gap`
-10. `research_method`
-11. `source`
-12. `finding`
-13. `decision_implication`
-14. `standing`
-15. `operator_disposition`
-
-Recommended standing values:
-
-- `candidate_under_validation`
-- `supported_pending_market_validation`
-- `supported`
-- `contradicted`
-- `held_for_evidence`
-- `rejected`
-- `operator_confirmed`
-
-A research source may support a finding without receiving operative authority. Tool access, file presence, model memory, technical capability, and persuasive synthesis do not create GTM standing.
-
-## Research Method Allocation
-
-### Chazz / Measures Registry
-
-Use for research architecture, source synthesis, evidence evaluation, ICP logic, prospect scoring, competitor synthesis, buyer-interview design, assessment mapping, messaging tests, and interpretation of results.
-
-### Public Primary Sources
-
-Prefer provider and regulator datasets, hospital and health-system publications, leadership pages, procurement materials, RFP/RFI artifacts, job postings, conference presentations, Joint Commission and CHAI material, government sources, litigation records, and actual service offerings.
-
-### Deep-Research Tools and Trials
-
-Reserve for fragmented or expensive research questions where synthesis across many sources materially reduces uncertainty: observed purchasing behavior, accreditation/readiness activity, RFP and contract archaeology, consulting service and pricing evidence, procurement barriers, competitive alternatives, and adversarial falsification.
-
-### Contact and Lead Tools
-
-Use after the ICP and named-account rationale exist. Lead databases are retrieval machinery, not market authority. Contact enrichment should be spent on evidence-qualified prospects rather than broad market lists.
-
-### Human Validation
-
-Use for buyer ownership, recent operational behavior, willingness to pay, purchasing path, credibility requirements, objections, and actual decision dynamics. No research synthesis substitutes for observed buyer behavior.
+Recommended standings: `candidate_under_validation`, `supported_pending_market_validation`, `supported`, `contradicted`, `held_for_evidence`, `rejected`, `operator_confirmed`.
 
 ## Case 001 — U.S. Healthcare Providers
-
 ### Case Standing
-
 `candidate_under_validation`
 
-Healthcare is the first candidate vertical entered into this ledger. Its inclusion records current research direction, not a final market disposition.
+Healthcare is the first candidate vertical. Measures Registry remains vertical-agnostic; healthcare is being tested as an initial beachhead, not adopted as company identity.
 
-### G1 Market Hypothesis
+## Research Round 001 — Healthcare Market / ICP / Offer
+Date: 2026-08-21
+Standing: `research_findings_not_registry_registered`
 
-Regional and community healthcare providers deploying AI may exhibit stronger near-term demand for independent computational-systems governance assessment than undifferentiated mid-market organizations.
+### G1.1 — Demonstrated Healthcare AI-Governance Purchasing Behavior
+**Finding:** `supported`
 
-The current thesis is driven more by accreditation/readiness and procurement behavior than by demonstrated regulatory enforcement.
+Provider-side AI-governance demand has moved beyond theoretical regulatory concern. Current research found direct evidence of formal procurement, outside advisory demand, governance-platform purchases, procurement gating, and governance affecting vendor selection.
 
-### Primary Trigger Hypothesis
+Evidence set includes:
+- Hawaii Health Systems Corporation RFP 25-005: external healthcare AI technology legal consulting, governance formation, education, procurement/contract guidance, and ongoing advisory across community-serving facilities. Public awardee and final contract value remain unverified.
+- UT Health San Antonio RFP 745-26-P33: AI governance and monitoring platform plus associated services.
+- Mercyhealth selection of Vitea: regional nonprofit provider purchasing external governance infrastructure after AI expanded across clinical and operational workflows.
+- JPS Health Network: AI Governance Questionnaire incorporated into procurement review.
+- Impact Advisors: external clinical-AI governance/readiness consulting work for a health-system client.
+- Governance-driven vendor selection/rejection behavior at larger systems provides additional behavioral context.
 
-Joint Commission Responsible Use of AI in Healthcare (RUAIH) readiness may be the clearest provider-side forcing event because its governance expectations overlap with the environmental conditions Measures Registry already evaluates.
+**Limitation:** market frequency, penetration, and typical transaction values remain unresolved.
 
-Standing:
+### G1.2 — Forcing Event Correction
+**Prior hypothesis:** RUAIH readiness may be the primary provider-side forcing event.
 
-`supported_pending_market_validation`
+**Revised finding:** `supported_but_narrowed`
 
-Required next evidence:
+RUAIH is a credible, timely accelerator but is not required to explain observed healthcare governance demand. A broader forcing condition is better supported:
 
-- adoption velocity outside flagship systems;
-- hospitals publicly preparing for RUAIH;
-- external readiness assistance being purchased;
-- readiness timelines and budget ownership;
-- evidence that RUAIH changes current behavior rather than merely signaling interest.
+> AI deployment becomes sufficiently distributed across clinical and operational environments that existing security, procurement, ownership, and technology controls no longer provide adequate visibility and governance.
 
-### Supporting Context Hypotheses
+RUAIH, procurement requirements, patient-safety/quality responsibilities, and regulation may accelerate recognition of that condition.
 
-The following may strengthen the market context but are not presently treated as independent hard-demand triggers:
+### G1.3 — Candidate Governance Maturity Lifecycle
+**Finding:** `working_model_supported`
 
-- Section 1557 §92.210 responsibilities;
-- patient safety and quality governance;
-- AI inventory and lifecycle oversight;
-- hospital AI procurement and vendor-review requirements;
-- state and federal payer rules where relevant to payer or utilization-review segments;
-- litigation and enforcement precedent as credibility/context evidence.
+`Experimentation → Proliferation → Governance Recognition → Governance Formation → External Purchase → Sustained Governance`
 
-### Current Counterevidence
+Current hypothesis: Measures Registry's strongest commercial entry window is **Governance Recognition → Governance Formation**.
 
-The healthcare thesis must preserve the following weaknesses:
+Too early: insufficient perceived pain or urgency.
+Too late: mature internal governance infrastructure, established advisory relationships, or enterprise governance platforms may already satisfy the need.
 
-- RUAIH is voluntary rather than mandatory accreditation;
-- published AI-specific enforcement remains limited;
-- responsibility is distributed across committees;
-- governance budgets may be thin or folded into existing IT, quality, safety, compliance, or privacy budgets;
-- healthcare procurement may be slow or credential-heavy;
-- malpractice underwriting has not clearly hardened around AI;
-- payer litigation does not directly establish demand among community hospitals;
-- evidence of health-tech deals actually lost because of missing AI-governance documentation remains thin.
+Illustrative evidence roles:
+- Tahoe Forest Health System: governance recognition / formation signal through formal AI-governance initiative and policy/process development.
+- HHSC: governance formation plus external consulting procurement.
+- Mercyhealth: external governance-platform purchase.
+- WellSpan: high-maturity benchmark with substantial internal capability and strategic external AI partnerships.
 
-### G2 ICP Hypothesis
+### G2.1 — ICP Refinement
+**Finding:** `working_hypothesis_strengthened`
 
-Candidate organizations:
+Replace a primarily size-based ICP with a condition-based hypothesis:
 
-U.S. regional health systems and community hospitals large enough to operate meaningful clinical or administrative AI, but without mature dedicated responsible-AI governance infrastructure.
+> Multi-site healthcare provider with meaningful and growing AI deployment, emerging formal governance requirements, identifiable responsibility for AI oversight, and insufficient mature internal governance infrastructure.
 
-Variables to test:
+Positive prospect signals:
+- multiple AI use cases across clinical and/or operational workflows;
+- multi-site or multi-state complexity;
+- governance committee, policy, or formal review activity;
+- evidence of governance recognition but incomplete governance formation;
+- openness to outside partnerships;
+- identifiable accountable executive(s);
+- no mature dedicated AI-governance function/platform apparent.
 
-- provider organization type;
-- number of hospitals/facilities;
-- employee count and operating scale;
-- evidence of AI deployment;
-- AI governance or responsible-AI activity;
-- CHAI/RUAIH participation or readiness signals;
-- clinical informatics leadership;
-- quality/patient-safety leadership;
-- compliance/privacy leadership;
-- absence or presence of a dedicated AI governance office;
-- procurement accessibility;
-- geographic concentration.
+Negative signal:
+- sophisticated AI deployment combined with mature dedicated internal governance capability may reduce initial MR fit.
 
-A target account should be evidence-qualified before contact enrichment.
+**Implication:** governance maturity may predict fit better than employee count alone.
 
-### G3 Buyer Hypothesis
+### G3.1 — Buyer Hypothesis Split
+**Finding:** `single_buyer_model_rejected_as_oversimplification`
 
-Primary provider-side buying relation:
+Buyer ownership appears to vary with the intervention purchased.
 
-`CMIO / clinical informatics + Compliance + Quality / Patient Safety`
+**Governance infrastructure/control layer:** CIO, CDAO, digital/IT leadership currently appear prominent in named purchases.
 
-CIO/IT is expected to participate in many organizations but must not be presumed the economic buyer without evidence.
+**Readiness/environment assessment/governance formation:** CMIO/clinical informatics, Quality/Patient Safety, and Compliance remain candidate owners, but the economic buyer for an MR-specific engagement is not yet validated.
 
-Research must distinguish:
+Research must distinguish clinical champion, governance/process owner, technical owner, economic approver, procurement gatekeeper, and executive sponsor rather than assigning one universal healthcare AI-governance buyer.
 
-- clinical champion;
-- governance/process owner;
-- compliance or quality owner;
-- technical owner;
-- economic approver;
-- procurement gatekeeper;
-- executive sponsor.
+### G4.1 — Competitive Pricing Evidence
+**Finding:** `competitive_pricing_supported; MR_willingness_to_pay_unvalidated`
 
-### Buyer Validation Method
+Observed advertised market pricing currently spans approximately:
+- free self-assessment / maturity tools;
+- ~$1.5K lightweight readiness assessment;
+- ~$4.5K–$12K boutique readiness work;
+- ~$12K–$20K hospital/service-line assessment;
+- ~$15K–$35K governance design;
+- ~$20K–$50K+ implementation;
+- higher enterprise/platform/advisory engagements.
 
-Interview recent behavior rather than hypothetical interest.
+These are competitive benchmarks, not verified MR willingness-to-pay evidence. No MR price change is authorized by this research.
 
-Preferred prompts include:
+### G4.2 — Commodity Assessment Warning
+**Finding:** `supported`
 
-- What happened the last time the organization introduced an AI system?
+Free and lightweight healthcare AI-governance maturity assessments already exist. Therefore Measures Registry should not assume differentiation from an AI inventory, maturity score, gap list, or generic readiness report alone.
+
+Candidate distinction requiring validation:
+
+> Measures Registry evaluates the operating environment computational systems inherit: system relationships, identity, ownership, authority, responsibility, evidence, review, and sustained governance conditions.
+
+The paid continuation must derive value from observed/evidenced environmental work rather than merely a more elaborate self-reported questionnaire.
+
+### G4.3 — Preliminary Competitive Position
+**Finding:** `differentiation_hypothesis_pending_buyer_validation`
+
+Current category map:
+- Joint Commission / CHAI: standards, readiness expectations, guidance;
+- governance platforms such as Vitea: discovery/control/visibility;
+- AI management platforms such as Signal 1: intake, portfolio governance, monitoring, management;
+- consultancies/law firms: framework, policy, readiness, implementation, advisory;
+- internal teams/free playbooks: no-purchase substitutes;
+- Measures Registry candidate position: upstream environmental assessment/diagnosis before selecting the governance intervention.
+
+Candidate positioning hypothesis:
+
+> Measures Registry establishes what governance environment actually exists before the organization decides which governance intervention it needs.
+
+This position may be complementary to platforms, consultants, counsel, and certification preparation rather than substitutive.
+
+### G4.4 — Central Demand Hold: Upstream Position ≠ Upstream Demand
+**Finding:** `HELD_FOR_BUYER_EVIDENCE`
+
+> Upstream positioning does not establish upstream demand. Measures Registry must demonstrate that target buyers recognize, seek, or can be reliably activated around the need to assess their operating environment before selecting a governance intervention.
+
+Falsification condition:
+
+> If healthcare buyers do not perceive meaningful value in independently establishing environmental conditions before selecting governance tools, frameworks, consultants, or certification work, the proposed upstream MR position is not commercially differentiated.
+
+This is now the central G4 validation hold.
+
+## Current Evidence Gaps
+1. Typical regional/community provider transaction values for governance/readiness work.
+2. Named advisory engagements and selected vendors beyond platform purchases.
+3. What causes providers to choose outside help rather than internal governance formation.
+4. The pre-purchase decision: how providers determine what governance intervention they need.
+5. MR-specific economic buyer and budget path.
+6. Whether an independent upstream diagnostic is recognized as valuable before a platform/framework/certification purchase.
+7. Frequency of governance purchasing across the target provider population.
+8. Procurement thresholds, insurance/credential requirements, and accessibility for a small specialist provider.
+
+## Next Course of Research
+### Priority 1 — Pre-Purchase Decision Archaeology
+For named providers that purchased a governance platform, consultant, or formal governance program, reconstruct:
+
+`trigger → perceived problem → current-state assessment (if any) → internal owner → alternatives considered → solution category selected → purchase path → outcome`
+
+Key question:
+
+> When the organization realized it needed to govern AI more formally, how did it determine what it actually needed?
+
+Search specifically for evidence of uncertainty before purchase: unclear inventory, ownership, authority, workflow, policy consistency, evidence, monitoring need, vendor-review friction, or inability to choose an intervention.
+
+### Priority 2 — Competitive/Substitute Analysis
+Analyze serious alternatives at the buying moment, not generic AI-governance companies.
+
+For each category preserve:
+`buyer → trigger → promise → methodology → deliverables → price → duration → credibility → sales entrance → post-assessment path → advantage over MR → gap relative to MR`
+
+Categories:
+1. direct readiness/environment assessment competitors;
+2. implementation/advisory firms;
+3. governance/AI-management platforms;
+4. law/compliance firms;
+5. Joint Commission/CHAI/free institutional guidance;
+6. internal governance committees / do-it-yourself / no purchase.
+
+### Priority 3 — Buyer Interviews
+Use Nashville healthcare access and accelerator introductions to test the upstream-demand hold directly.
+
+Core prompt:
+
+> When your organization realized it needed to govern AI more formally, how did you figure out what you actually needed?
+
+Do not lead interviewees with the MR upstream thesis. Reconstruct recent behavior.
+
+### Priority 4 — Ten-Account Maturity Cohort
+Build ten evidence-qualified regional/community provider accounts distributed across the maturity lifecycle. Observe where outside spending first appears and what conditions precede it.
+
+### Priority 5 — Offer Test Only After Priorities 1–4
+Do not finalize healthcare paid-assessment positioning from competitor architecture alone. Use buyer evidence to determine whether MR should sell:
+- an independent upstream environmental assessment;
+- readiness tied to an already recognized forcing event;
+- governance-formation work;
+- or another bounded entrance buyers already seek.
+
+## Human Validation Prompts
+- What happened the last time your organization introduced an AI system?
 - Who had to review it before use?
-- Where did the process slow down or fail?
-- What documentation or evidence was requested?
-- Has an external requirement changed that process?
-- Has outside help been purchased?
-- Who could approve that engagement and from what budget?
-
-### G4 Offer Hypothesis
-
-Candidate entrance:
-
-`Healthcare AI Environment Assessment`
-
-The assessment should remain a healthcare-context entrance into the existing Measures Registry measurement system rather than a separate compliance product.
-
-Candidate passage:
-
-`Healthcare AI Environment Assessment → findings → governed continuation where warranted`
-
-A healthcare interpretation layer may crosswalk observed conditions to healthcare-specific readiness contexts without representing Measures Registry as a certification body, legal compliance auditor, or Joint Commission-authorized assessor.
-
-Potential trigger frames to test without creating separate products:
-
-1. responsible-AI / RUAIH readiness;
-2. operational AI visibility and ownership;
-3. procurement and governance evidence.
-
-Buyer language and observed conversion should determine the preferred frame.
-
-### G5 Acquisition Hypothesis
-
-Initial acquisition should favor a small evidence-qualified cohort over a broad purchased list.
-
-Candidate research cohort:
-
-`25–50 provider organizations`
-
-Preferred qualification sequence:
-
-`provider fit → AI activity → governance/readiness signal → identifiable buyer → reachable contact`
-
-Potential public-source spine:
-
-`CMS / provider data → CHAI / readiness signals → hospital leadership and AI activity → NPPES identity context → contact discovery / verification`
-
-The assessment may serve as both a market entrance and a measurable conversion surface.
-
-Candidate acquisition measures:
-
-`delivered → opened → assessment visited → assessment started → assessment completed → buyer conversation → MAP opportunity → revenue`
-
-## Immediate Research Question
-
-The first Gate 1 question is:
-
-> Do regional U.S. healthcare providers exhibit observable purchasing behavior for outside AI-governance or responsible-AI readiness work, and what event causes that purchase to happen?
-
-This question precedes broad lead generation.
-
-## Priority Research Queue
-
-1. RUAIH adoption and readiness behavior.
-2. Actual hospital AI-governance consulting purchases, RFPs, RFIs, contracts, or readiness engagements.
-3. Procurement requirements and barriers for outside governance/advisory work.
-4. Competitive alternatives, including internal teams, CHAI resources, law firms, compliance consultants, EHR vendors, specialist consultancies, large advisory firms, and doing nothing.
-5. A 25–50 account evidence-qualified provider cohort.
-6. Buyer interviews across clinical informatics, quality/patient safety, compliance, IT, and procurement.
-7. Offer and price evidence.
-8. Acquisition experiments after G1–G3 evidence is sufficient.
-9. Adversarial research attempting to falsify the healthcare thesis.
-
-## Tool Trial Rule
-
-Do not optimize research around whichever free trial or database happens to be available.
-
-First define the decision and evidence gap. Then choose the least costly source or tool capable of producing credible evidence.
-
-Premium or trial research capacity should be spent on questions that cannot be answered efficiently through public primary sources or direct buyer validation.
+- When did AI governance become a formal issue rather than an informal concern?
+- How did you determine what kind of governance capability you needed?
+- Did you assess the current environment before selecting a tool, consultant, policy framework, or committee structure?
+- What was unclear at that point?
+- What did you handle internally versus purchase externally?
+- Who approved outside spending and from what budget?
+- What would make an independent assessment useful—or unnecessary?
 
 ## MAP Boundary Hold
+The unresolved MAP terminology conflict remains held. This ledger does not resolve MAP terminology or establish a canonical GTM↔MAP relationship.
 
-The operative Project Source Authority Index preserves an unresolved MAP terminology conflict among previously used formulations, including `Measure-Audit-Prepare`, `MAP the Environment`, and `Measure-Align-Prepare`.
+Standing: `HELD — MAP terminology and GTM↔MAP canonical relation unresolved`
 
-This ledger does not resolve that terminology.
-
-GTM research may later be mapped relationally to MAP only after the applicable MAP terminology and relationship receive their own governed resolution.
-
-Standing:
-
-`HELD — MAP terminology and GTM↔MAP canonical relation unresolved`
-
-## Custody and Registry Relation
-
-Current formation establishes Git custody only.
-
-Proposed long-term relation:
-
-- Git preserves authoritative versioned document custody.
-- Measures Registry may record stable artifact identity, version, standing, SHA-256, authoritative custody location, and applicable relationships.
-- Research records may accumulate as append-only evidence or versioned ledger updates.
-- Registration does not make every research finding operative.
-- Publication, activation, sales execution, database mutation, or MAP resolution requires its own applicable authority.
-
-## Change Rule
-
-Material changes to the five-gate architecture, healthcare case standing, canonical offer identity, market disposition, MAP relation, or registry standing require review and Operator disposition.
-
-New evidence may be appended without rewriting historical findings. Corrections should preserve prior evidence and state the corrected condition.
-
-## Formation Standing
-
-This v1 artifact is formed in Git under direct Operator authorization for Git construction.
-
-It is pending Chazz return review and Operator disposition for merge and any later Registry registration.
-
-No Registry mutation, public publication, sales activation, contact enrichment, outreach enrollment, deployment, or MAP terminology resolution is authorized by this formation.
+## Custody / Mutation Boundary
+Current custody is Git only. The ledger remains unregistered. Research accumulation does not authorize Registry mutation, public publication, sales activation, outreach enrollment, deployment, contact enrichment, MAP resolution, or pricing changes.
