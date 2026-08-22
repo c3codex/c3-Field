@@ -23,6 +23,10 @@ const REGISTRY_REDIRECT_RULES = [
   "/undrifted/field-findings-2026-w28/ /undrifted/field-findings-2026-w28/index.html 200",
   "/undrifted/ai-agents-are-not-entering-empty-systems /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
   "/undrifted/ai-agents-are-not-entering-empty-systems/ /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
+  "/undrifted/the-boundary-problem /undrifted/the-boundary-problem/index.html 200",
+  "/undrifted/the-boundary-problem/ /undrifted/the-boundary-problem/index.html 200",
+  "/undrifted/environmentally-enabled /undrifted/environmentally-enabled/index.html 200",
+  "/undrifted/environmentally-enabled/ /undrifted/environmentally-enabled/index.html 200",
   "/undrifted/the-pair-over-time /undrifted/the-pair-over-time/index.html 200",
   "/undrifted/the-pair-over-time/ /undrifted/the-pair-over-time/index.html 200",
 ]
@@ -60,12 +64,31 @@ const launchCycleArticleRoutes = [
       "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted_response_section_banner_2026_w28_v1.webp",
   },
   {
+    routePath: "/undrifted/the-boundary-problem",
+    title: "The Boundary Problem | unDrifted",
+    description:
+      "Drift Report 002 examines capability, authority, execution boundaries, and why useful AI needs governed passage before capability becomes consequence.",
+    canonical_url: "https://measuresregistry.com/undrifted/the-boundary-problem",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/drift-report-002/paragraph/drift_report_002_boundary_problem_banner_2000x1000_v1.webp",
+  },
+  {
+    routePath: "/undrifted/environmentally-enabled",
+    title: "Environmentally Enabled | unDrifted",
+    description:
+      "Drift Report 003 asks what made the action possible, locating agent behavior inside inherited permissions, monitoring boundaries, and effect-capable environments.",
+    canonical_url: "https://measuresregistry.com/undrifted/environmentally-enabled",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/drift-report-003/paragraph/drift_report_003_environmentally_enabled_banner_2000x1000_v1.webp",
+  },
+  {
     routePath: "/undrifted/the-pair-over-time",
     title: "The Pair Over Time | unDrifted",
     description:
       "Mapped & Measured 002 reflects on sustained human-AI collaboration, the pair over time, and the limits of what present evidence can support.",
     canonical_url: "https://measuresregistry.com/undrifted/the-pair-over-time",
-    image: "https://measuresregistry.com/undrifted/issue-002/mapped_measured_002_pair_over_time_banner.webp",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/mapped-measured-002/paragraph/mapped_measured_002_pair_over_time_banner_2000x1000_v1.webp",
   },
 ]
 

@@ -36,6 +36,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://measuresregistry.com/undrifted/the-boundary-problem</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://measuresregistry.com/undrifted/environmentally-enabled</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://measuresregistry.com/undrifted/the-pair-over-time</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

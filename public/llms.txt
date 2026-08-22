@@ -12,6 +12,8 @@ Measures Registry is not itself the c3 Field, Codex, or c3Ops. Public pages desc
 - [Connect](https://measuresregistry.com/connect): Public contact and relationship entry surface.
 - [Assess the Environment](https://measuresregistry.com/ai-operations-assessment): Public baseline environmental assessment for conditions that may influence AI governance, review, accountability, and operational stability.
 - [unDrifted](https://measuresregistry.com/undrifted): Measures Registry publication surface for reporting on structural drift, authority, operations, environments, and responsibility.
+- [The Boundary Problem](https://measuresregistry.com/undrifted/the-boundary-problem): Drift Report 002 in unDrifted Issue 002.
+- [Environmentally Enabled](https://measuresregistry.com/undrifted/environmentally-enabled): Drift Report 003 in unDrifted Issue 002.
 - [The Pair Over Time](https://measuresregistry.com/undrifted/the-pair-over-time): Mapped & Measured 002 exploratory reflection in unDrifted Issue 002.
 - [Privacy Policy](https://measuresregistry.com/privacy)
 - [Terms of Use](https://measuresregistry.com/terms)

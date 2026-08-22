@@ -1,5 +1,7 @@
 import fieldFindingsMarkdown from "../../../../Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md?raw"
 import responseMarkdown from "../../../../Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_response_001_ai_agents_are_not_entering_empty_systems_article_v1.md?raw"
+import boundaryProblemMarkdown from "../../../../Assets/Articles/unDrifted/Issue002/registered/drift_report_002_the_boundary_problem_v1.md?raw"
+import environmentallyEnabledMarkdown from "../../../../Assets/Articles/unDrifted/Issue002/registered/drift_report_003_environmentally_enabled_v1.md?raw"
 import pairOverTimeMarkdown from "../../../../Assets/Articles/unDrifted/Issue002/registered/mapped_measured_002_the_pair_over_time_v1.md?raw"
 
 export type UndriftedLaunchCycleArticle = {
@@ -90,6 +92,54 @@ export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] 
     dependencyLabel: "Field Findings 2026-W28",
   },
   {
+    publicationId: "drift_report_002",
+    assetId: "drift_report_002_the_boundary_problem_v1",
+    title: "The Boundary Problem",
+    subtitle: "When capability becomes consequential",
+    issueLabel: "Issue 002 / Drift Report",
+    routePath: "/undrifted/the-boundary-problem",
+    paragraphSlug: "the-boundary-problem",
+    paragraphUrl: "https://paragraph.com/@undrifted/the-boundary-problem",
+    authorName: "unDrifted Editorial",
+    authorSlug: "undrifted-editorial",
+    publicationDate: "2026-08-22",
+    publicationLabel: "Drift Report 002",
+    bannerUrl: `${SUPABASE_PUBLIC_STORAGE}/undrifted/issues/issue-002/drift-report-002/paragraph/drift_report_002_boundary_problem_banner_2000x1000_v1.webp`,
+    bannerAlt: "Drift Report 002 - The Boundary Problem",
+    canonicalAssetPath: "Assets/Articles/unDrifted/Issue002/registered/drift_report_002_the_boundary_problem_v1.md",
+    publicationRecordPath:
+      "CanCom/codex/oar2_correct_undrifted_issue002_storage_and_resume_codex_v5",
+    sourceOar2:
+      "CanCom/codex/oar2_correct_undrifted_issue002_storage_and_resume_codex_v5",
+    issueExcerpt:
+      "Drift Report 002 examines capability, authority, execution boundaries, and why useful AI needs governed passage before capability becomes consequence.",
+    bodyMarkdown: stripFrontmatter(boundaryProblemMarkdown),
+  },
+  {
+    publicationId: "drift_report_003",
+    assetId: "drift_report_003_environmentally_enabled_v1",
+    title: "Environmentally Enabled",
+    subtitle: "When the agent acts, who built the conditions that made the action possible?",
+    issueLabel: "Issue 002 / Drift Report",
+    routePath: "/undrifted/environmentally-enabled",
+    paragraphSlug: "environmentally-enabled",
+    paragraphUrl: "https://paragraph.com/@undrifted/environmentally-enabled",
+    authorName: "unDrifted Editorial",
+    authorSlug: "undrifted-editorial",
+    publicationDate: "2026-08-22",
+    publicationLabel: "Drift Report 003",
+    bannerUrl: `${SUPABASE_PUBLIC_STORAGE}/undrifted/issues/issue-002/drift-report-003/paragraph/drift_report_003_environmentally_enabled_banner_2000x1000_v1.webp`,
+    bannerAlt: "Drift Report 003 - Environmentally Enabled",
+    canonicalAssetPath: "Assets/Articles/unDrifted/Issue002/registered/drift_report_003_environmentally_enabled_v1.md",
+    publicationRecordPath:
+      "CanCom/codex/oar2_correct_undrifted_issue002_storage_and_resume_codex_v5",
+    sourceOar2:
+      "CanCom/codex/oar2_correct_undrifted_issue002_storage_and_resume_codex_v5",
+    issueExcerpt:
+      "Drift Report 003 asks what made the action possible, locating agent behavior inside inherited permissions, monitoring boundaries, and effect-capable environments.",
+    bodyMarkdown: stripFrontmatter(environmentallyEnabledMarkdown),
+  },
+  {
     publicationId: "mapped_measured_002",
     assetId: "mapped_measured_002_the_pair_over_time_v1",
     title: "The Pair Over Time",
@@ -102,7 +152,7 @@ export const UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES: UndriftedLaunchCycleArticle[] 
     authorSlug: "undrifted-editorial",
     publicationDate: "2026-08-20",
     publicationLabel: "Mapped & Measured 002",
-    bannerUrl: "/undrifted/issue-002/mapped_measured_002_pair_over_time_banner.webp",
+    bannerUrl: `${SUPABASE_PUBLIC_STORAGE}/undrifted/issues/issue-002/mapped-measured-002/paragraph/mapped_measured_002_pair_over_time_banner_2000x1000_v1.webp`,
     bannerAlt: "Mapped & Measured 002 - The Pair Over Time",
     canonicalAssetPath:
       "Assets/Articles/unDrifted/Issue002/registered/mapped_measured_002_the_pair_over_time_v1.md",

@@ -82,7 +82,26 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     description:
       "Mapped & Measured 002 reflects on sustained human-AI collaboration, the pair over time, and the limits of what present evidence can support.",
     url: "https://measuresregistry.com/undrifted/the-pair-over-time",
-    image: "https://measuresregistry.com/undrifted/issue-002/mapped_measured_002_pair_over_time_banner.webp",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/mapped-measured-002/paragraph/mapped_measured_002_pair_over_time_banner_2000x1000_v1.webp",
+    type: "article",
+  },
+  "/undrifted/the-boundary-problem": {
+    title: "The Boundary Problem | unDrifted",
+    description:
+      "Drift Report 002 examines capability, authority, execution boundaries, and why useful AI needs governed passage before capability becomes consequence.",
+    url: "https://measuresregistry.com/undrifted/the-boundary-problem",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/drift-report-002/paragraph/drift_report_002_boundary_problem_banner_2000x1000_v1.webp",
+    type: "article",
+  },
+  "/undrifted/environmentally-enabled": {
+    title: "Environmentally Enabled | unDrifted",
+    description:
+      "Drift Report 003 asks what made the action possible, locating agent behavior inside inherited permissions, monitoring boundaries, and effect-capable environments.",
+    url: "https://measuresregistry.com/undrifted/environmentally-enabled",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/drift-report-003/paragraph/drift_report_003_environmentally_enabled_banner_2000x1000_v1.webp",
     type: "article",
   },
   "/about": {
