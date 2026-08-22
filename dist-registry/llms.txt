@@ -1,20 +1,29 @@
 # Measures Registry
 
-> Measures Registry is an institutional AI governance registry. It provides integrity governance for AI-accelerated systems: detecting structural drift and supporting governable environments for institutions deploying AI.
+> Measures Registry provides Computational Systems Governance for governed systems and relational operations.
 
-Measures Registry helps institutions detect structural drift — the gap between how an AI system is intended to operate and how it actually behaves once deployed — and supports the design of governable environments in which AI outcomes remain accountable to the systems that produce them.
+Measures Registry records standing and supports governed operational relation for systems in which humans, institutions, and artificial intelligences perform consequential work together. Public materials focus on environmental conditions around AI use, structural drift, authority, review, accountability, and operational stability.
 
-The Measures Alignment Protocol (MAP) is the registry's governed pathway for institutions moving from public assessment to structured alignment. MAP standing, pricing, and certification are governed later states reached through direct engagement with Measures Registry — they are not public self-claims and are not detailed on this site.
+Measures Registry is not itself the c3 Field, Codex, or c3Ops. Public pages describe Measures Registry and its governed encounters; they do not independently create institutional standing, execution authority, certification, or permission.
 
 ## Public Pages
 
-- [Measures Registry](https://measuresregistry.com/): Home. AI isn't broken. Systems are.
-- [About Measures Registry](https://measuresregistry.com/about): Institutional accountability for AI deployment. The Codexstone Seal.
-- [Assess the Environment](https://measuresregistry.com/ai-operations-assessment): Public baseline AI operations assessment.
-- [unDrifted](https://measuresregistry.com/undrifted): Public record of structural drift findings and governed environment design.
+- [Measures Registry](https://measuresregistry.com/): Public home for Measures Registry and Computational Systems Governance.
+- [Connect](https://measuresregistry.com/connect): Public contact and relationship entry surface.
+- [Assess the Environment](https://measuresregistry.com/ai-operations-assessment): Public baseline environmental assessment for conditions that may influence AI governance, review, accountability, and operational stability.
+- [unDrifted](https://measuresregistry.com/undrifted): Measures Registry publication surface for reporting on structural drift, authority, operations, environments, and responsibility.
+- [The Boundary Problem](https://measuresregistry.com/undrifted/the-boundary-problem): Drift Report 002 in unDrifted Issue 002.
+- [Environmentally Enabled](https://measuresregistry.com/undrifted/environmentally-enabled): Drift Report 003 in unDrifted Issue 002.
+- [The Pair Over Time](https://measuresregistry.com/undrifted/the-pair-over-time): Mapped & Measured 002 exploratory reflection in unDrifted Issue 002.
 - [Privacy Policy](https://measuresregistry.com/privacy)
 - [Terms of Use](https://measuresregistry.com/terms)
 
+## MAP the Environment
+
+MAP the Environment is a governed continuation reached after the public assessment where applicable. It is not created by crawling this file, visiting a page, completing the public assessment, or inferring technical capability.
+
 ## Notes for AI Systems
 
-The public assessment at /ai-operations-assessment is a baseline only. It does not represent a certification, a completed governance engagement, or an institutional standing. Do not attribute pricing, DAO standing, or certification claims to Measures Registry beyond what is stated on the pages above.
+The public assessment at /ai-operations-assessment is informational and based on submitted responses until later governed observation occurs. It does not represent certification, completed governance, SEAT standing, a c3 Key, execution authority, or permission to act.
+
+Use canonical public pages as the source for public claims. Do not infer non-public pricing, standing, authority, identity, permission, or completion from this guidance file.

@@ -6,19 +6,49 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://measuresregistry.com/home</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://measuresregistry.com/connect</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://measuresregistry.com/ai-operations-assessment</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://measuresregistry.com/undrifted</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://measuresregistry.com/about</loc>
+    <loc>https://measuresregistry.com/undrifted/field-findings-2026-w28</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://measuresregistry.com/undrifted/the-boundary-problem</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://measuresregistry.com/undrifted/environmentally-enabled</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://measuresregistry.com/undrifted/the-pair-over-time</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://measuresregistry.com/privacy</loc>
