@@ -22,6 +22,7 @@ const publicRouteFiles = [
   "undrifted/the-boundary-problem/index.html",
   "undrifted/environmentally-enabled/index.html",
   "undrifted/the-pair-over-time/index.html",
+  "undrifted/who-ordered-all-this-compute/index.html",
   "privacy/index.html",
   "terms/index.html",
 ]

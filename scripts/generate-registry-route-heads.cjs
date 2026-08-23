@@ -29,6 +29,8 @@ const REGISTRY_REDIRECT_RULES = [
   "/undrifted/environmentally-enabled/ /undrifted/environmentally-enabled/index.html 200",
   "/undrifted/the-pair-over-time /undrifted/the-pair-over-time/index.html 200",
   "/undrifted/the-pair-over-time/ /undrifted/the-pair-over-time/index.html 200",
+  "/undrifted/who-ordered-all-this-compute /undrifted/who-ordered-all-this-compute/index.html 200",
+  "/undrifted/who-ordered-all-this-compute/ /undrifted/who-ordered-all-this-compute/index.html 200",
 ]
 
 const routeUnits = [
@@ -89,6 +91,15 @@ const launchCycleArticleRoutes = [
     canonical_url: "https://measuresregistry.com/undrifted/the-pair-over-time",
     image:
       "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/mapped-measured-002/paragraph/mapped_measured_002_pair_over_time_banner_2000x1000_v1.webp",
+  },
+  {
+    routePath: "/undrifted/who-ordered-all-this-compute",
+    title: "Who Ordered All This Compute? | unDrifted",
+    description:
+      "Mapped & Measured 003 compares visible AI adoption with the capital, energy, water, land, and infrastructure commitments being made upstream.",
+    canonical_url: "https://measuresregistry.com/undrifted/who-ordered-all-this-compute",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/mapped-measured-003/paragraph/mapped_measured_003_paragraph_banner_2000x1000_v1.webp",
   },
 ]
 

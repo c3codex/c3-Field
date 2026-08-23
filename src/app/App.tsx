@@ -86,6 +86,15 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
       "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/mapped-measured-002/paragraph/mapped_measured_002_pair_over_time_banner_2000x1000_v1.webp",
     type: "article",
   },
+  "/undrifted/who-ordered-all-this-compute": {
+    title: "Who Ordered All This Compute? | unDrifted",
+    description:
+      "Mapped & Measured 003 compares visible AI adoption with the capital, energy, water, land, and infrastructure commitments being made upstream.",
+    url: "https://measuresregistry.com/undrifted/who-ordered-all-this-compute",
+    image:
+      "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/undrifted/issues/issue-002/mapped-measured-003/paragraph/mapped_measured_003_paragraph_banner_2000x1000_v1.webp",
+    type: "article",
+  },
   "/undrifted/the-boundary-problem": {
     title: "The Boundary Problem | unDrifted",
     description:
