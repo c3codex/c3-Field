@@ -17,3 +17,5 @@
 /faq /connect 301
 /faq/ /connect 301
 /* /index.html 200
+/undrifted/who-ordered-all-this-compute /undrifted/who-ordered-all-this-compute/index.html 200
+/undrifted/who-ordered-all-this-compute/ /undrifted/who-ordered-all-this-compute/index.html 200
