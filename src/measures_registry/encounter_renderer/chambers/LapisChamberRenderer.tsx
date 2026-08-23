@@ -71,6 +71,7 @@ function publicIssueNumber(value: string | null): string | null {
   if (!value) return null
   const numeric = value.match(/^0*(\d+)$/)
   if (!numeric) return value
+  if (value.length >= 3) return value
   const parsed = Number.parseInt(numeric[1], 10)
   if (!Number.isFinite(parsed)) return value
   return parsed < 10 ? `0${parsed}` : String(parsed)
@@ -100,6 +101,16 @@ function publicIssuePeriod(value: string | null): string | null {
 
 function resolveNextSurface(encounter: RenderableEncounter): string | null {
   return asString(encounter.transitionNodes[encounter.surface]?.next_surface)
+}
+
+function isLiveIssuePage(page: EncounterIssuePageRow): boolean {
+  const metadata = asRecord(page.metadata)
+  const routeState = asString(metadata?.route_state)
+  return page.release_state === "released" && (routeState === "live" || routeState === "live_but_not_wired_as_issue_page")
+}
+
+function normalizeMastheadLine(value: string | null): string | null {
+  return value?.replace(/\s+/g, " ").trim().toUpperCase() ?? null
 }
 
 // --- Entry point ------------------------------------------------------------
@@ -194,6 +205,15 @@ function UnDriftedIndex({
   const title =
     asString(brandCopy?.header) ?? encounter.encounterDef?.display_title ?? "unDrifted"
   const mastHeadPrinciples = asString(brandCopy?.principles_line)
+  const mastheadPrimaryLine = normalizeMastheadLine(asString(brandCopy?.primary_line))
+  const mastheadSubtitleLines = asStringArray(brandCopy?.subtitle_lines).map(normalizeMastheadLine).filter(Boolean)
+  const mastheadLines =
+    mastheadPrimaryLine === "DRIFT IS DETECTABLE. ACCOUNTABILITY IS OPERATIONAL."
+      ? mastheadPrimaryLine.split(". ").map((line) => line.endsWith(".") ? line : `${line}.`)
+      : mastheadSubtitleLines.join(" ") === "DRIFT IS DETECTABLE. ACCOUNTABILITY IS OPERATIONAL."
+        ? mastheadSubtitleLines
+        : []
+  const mastheadAuthorityPresent = mastheadLines.length > 0
   const primaryLogoPath = asString(brandAssets?.primary_full_lockup_path)
   const styleKey =
     asString(landingContract?.style_contract_key) ?? asString(styleContract?.key)
@@ -210,6 +230,8 @@ function UnDriftedIndex({
   const issueDisplayPeriod = publicIssuePeriod(issueDate)
   const activeIssueLabel =
     issueDisplayNumber && issueDisplayPeriod ? `Issue ${issueDisplayNumber} / ${issueDisplayPeriod}` : null
+  const issueFolio =
+    issueDisplayNumber && issueDisplayPeriod ? `ISSUE ${issueDisplayNumber} · ${issueDisplayPeriod.toUpperCase()}` : null
   const descriptorLine = asString(brandCopy?.descriptor_line)
 
   const coverEyebrow =
@@ -256,9 +278,15 @@ function UnDriftedIndex({
   // section below is optional and the existing DB-metadata-driven sections above/below are
   // untouched, so nothing regresses when issuePages is [].
   const issuePages = encounter.issuePages
-  const editorsLetterPage = issuePages.find((p) => p.page_role === "editors_letter") ?? null
-  const coverStoryPage = issuePages.find((p) => p.page_role === "cover_story") ?? null
-  const contentsPages = issuePages.filter((p) => p.page_role !== "cover" && p.page_role !== "contents")
+  const currentIssueKey = asString(issueRecord?.issue_key)
+  const currentIssuePages = issuePages.filter((p) => p.issue_id === currentIssueKey && isLiveIssuePage(p))
+  const currentIssueLeadPage = currentIssuePages[0] ?? null
+  const currentIssueSupportingPages = currentIssuePages.slice(1, 4)
+  const currentIssueAdditionalPages = currentIssuePages.slice(4)
+  const archiveIssuePages = issuePages.filter((p) => p.issue_id !== currentIssueKey)
+  const editorsLetterPage = archiveIssuePages.find((p) => p.page_role === "editors_letter") ?? null
+  const coverStoryPage = archiveIssuePages.find((p) => p.page_role === "cover_story") ?? null
+  const contentsPages = archiveIssuePages.filter((p) => p.page_role !== "cover" && p.page_role !== "contents")
   const launchCycleIssuePages = issuePages.filter((p) =>
     UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.some((article) => article.routePath === p.route_path),
   )
@@ -277,6 +305,15 @@ function UnDriftedIndex({
     if (mediaRole === "fables_and_myths_cover") return fablesAndMythsCoverUrl
     return null
   }
+
+  function issuePageBanner(page: EncounterIssuePageRow | null): UndriftedLaunchCycleArticle | null {
+    if (!page?.banner_asset_id) return null
+    return UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.find((article) =>
+      article.assetId === page.asset_id || article.bannerUrl.includes(page.banner_asset_id ?? ""),
+    ) ?? null
+  }
+
+  const currentIssueLeadBanner = issuePageBanner(currentIssueLeadPage)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -365,17 +402,25 @@ function UnDriftedIndex({
             </div>
           )}
         </header>
-        <p className="undrifted-masthead-slogan">
-          Structural drift is detectable. Collapse is not the default.
-        </p>
+        {mastheadAuthorityPresent ? (
+          <p className="undrifted-masthead-slogan">
+            {mastheadLines.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
+          </p>
+        ) : (
+          <p className="undrifted-masthead-slogan undrifted-authority-gap">
+            Registry-held masthead authority is not available.
+          </p>
+        )}
         <hr className="undrifted-masthead-rule" aria-hidden="true" />
         {issueNumber || issueDate || issueEdition || issuePublisher || issueBranchStanding ? (
           <div className="undrifted-issue-rail" aria-label="Issue information">
             <div className="undrifted-issue-rail-left">
-              {activeIssueLabel ? <span>{activeIssueLabel}</span> : null}
+              {issueFolio ? <span>{issueFolio}</span> : null}
               {!activeIssueLabel && issueNumber ? <span>ISSUE {issueNumber}</span> : null}
               {!activeIssueLabel && issueDate ? <span>{issueDate}</span> : null}
-              {issueEdition ? <span>{issueEdition}</span> : null}
+              {!issueFolio && issueEdition ? <span>{issueEdition}</span> : null}
             </div>
             {issuePublisher || issueBranchStanding ? (
               <div className="undrifted-issue-rail-right">
@@ -386,8 +431,78 @@ function UnDriftedIndex({
           </div>
         ) : null}
 
+        {currentIssuePages.length > 0 ? (
+          <section className="undrifted-current-issue" aria-label={issueFolio ?? activeIssueLabel ?? "Current Issue"}>
+            {currentIssueLeadPage ? (
+              <article className="undrifted-current-lead" data-page-role={currentIssueLeadPage.page_role}>
+                {currentIssueLeadBanner ? (
+                  <a
+                    className="undrifted-current-lead-media"
+                    href={issuePageHref(currentIssueLeadPage) ?? currentIssueLeadPage.route_path ?? undefined}
+                    aria-label={currentIssueLeadPage.title}
+                  >
+                    <img src={currentIssueLeadBanner.bannerUrl} alt={currentIssueLeadBanner.bannerAlt} loading="eager" />
+                  </a>
+                ) : null}
+                <div className="undrifted-current-lead-copy">
+                  <span className="undrifted-eyebrow">Current Issue</span>
+                  <h1>
+                    <a href={issuePageHref(currentIssueLeadPage) ?? currentIssueLeadPage.route_path ?? undefined}>
+                      {currentIssueLeadPage.title}
+                    </a>
+                  </h1>
+                  {currentIssueLeadPage.subtitle ? <p>{currentIssueLeadPage.subtitle}</p> : null}
+                </div>
+              </article>
+            ) : null}
+
+            {currentIssueSupportingPages.length > 0 ? (
+              <div className="undrifted-current-supporting" aria-label="Issue 002 supporting dispatches">
+                {currentIssueSupportingPages.map((page) => (
+                  <article key={page.page_key} data-page-role={page.page_role}>
+                    <span className="undrifted-eyebrow">{page.layout_profile_key}</span>
+                    <h2>
+                      <a href={issuePageHref(page) ?? page.route_path ?? undefined}>{page.title}</a>
+                    </h2>
+                    {page.subtitle ? <p>{page.subtitle}</p> : null}
+                  </article>
+                ))}
+              </div>
+            ) : null}
+
+            {asRecordArray(meta?.editorial_sections).length > 0 ? (
+              <nav className="undrifted-desks-section" aria-label="unDrifted desks">
+                <div className="undrifted-insights-header">
+                  <span className="undrifted-eyebrow">Publication Structure</span>
+                  <h2>Desks</h2>
+                </div>
+                <div className="undrifted-desks-grid">
+                  {asRecordArray(meta?.editorial_sections).map((sec, idx) => (
+                    <div key={asString(sec.key) ?? idx} className="undrifted-desk-card">
+                      <span className="undrifted-eyebrow">Desk {String(idx + 1).padStart(2, "0")}</span>
+                      <h3>{asString(sec.title)}</h3>
+                      {asString(sec.question) ? <p>{asString(sec.question)}</p> : null}
+                    </div>
+                  ))}
+                </div>
+              </nav>
+            ) : null}
+
+            <nav className="undrifted-current-contents" aria-label="Issue 002 contents">
+              <h2>Issue 002 Contents</h2>
+              <ol>
+                {currentIssuePages.map((page) => (
+                  <li key={page.page_key}>
+                    <a href={issuePageHref(page) ?? page.route_path ?? undefined}>{page.title}</a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          </section>
+        ) : null}
+
         {/* Issue 002 Current Desks section (rendered only if current standing is Issue 002) */}
-        {issueNumber === "002" ? (
+        {issueNumber === "002" && currentIssuePages.length === 0 ? (
           <section className="undrifted-desks-section" style={{ borderBottom: "1px solid rgba(237, 242, 248, 0.1)", paddingBottom: "2.5rem", marginBottom: "2.5rem" }}>
             <div className="undrifted-insights-header" style={{ marginBottom: "1.5rem" }}>
               <span className="undrifted-eyebrow">Current Desks — Issue 002</span>
@@ -410,6 +525,8 @@ function UnDriftedIndex({
           </section>
         ) : null}
 
+        {currentIssuePages.length === 0 ? (
+          <>
         {/* Historical Issue 001 Preserved Dispatches Section */}
         <section className="undrifted-launch-cycle" aria-label="Historical Preserved Issue 001 Dispatches" style={issueNumber === "002" ? { borderTop: "none" } : undefined}>
           <div className="undrifted-insights-header">
@@ -435,7 +552,7 @@ function UnDriftedIndex({
                     <span>{article.authorName}</span>
                     <span>{article.publicationDate}</span>
                   </div>
-                  <a href={article.routePath}>Read on Measures Registry →</a>
+                  <a href={article.routePath}>Read on Measures Registry &rarr;</a>
                 </div>
               </article>
             ))}
@@ -553,6 +670,8 @@ function UnDriftedIndex({
             ) : null}
           </div>
         </section>
+          </>
+        ) : null}
 
         {/* EDITOR'S FEATURE */}
         {assessmentFeatureLabel || assessmentFeatureTitle ? (
@@ -584,8 +703,61 @@ function UnDriftedIndex({
           </section>
         ) : null}
 
+        {currentIssuePages.length > 0 ? (
+          <section className="undrifted-archive" aria-label="Past Issues">
+            <div className="undrifted-insights-header">
+              <span className="undrifted-eyebrow">Past Issues / Preserved Dispatches</span>
+              <h2>Issue 001 Archive</h2>
+            </div>
+            {contentsPages.length > 0 ? (
+              <nav className="undrifted-archive-contents" aria-label="Issue 001 preserved contents">
+                <ol>
+                  {contentsPages.map((page) => {
+                    const href = issuePageHref(page)
+                    const held = issuePageIsHeld(page)
+                    const external = href?.startsWith("http") ?? false
+                    return (
+                      <li key={page.page_key} data-page-role={page.page_role} data-release-state={page.release_state}>
+                        {href && !held ? (
+                          <a href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
+                            {page.title}
+                          </a>
+                        ) : (
+                          <span>{page.title}</span>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ol>
+              </nav>
+            ) : null}
+            <div className="undrifted-launch-cycle-grid">
+              {UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES.filter((article) => article.issueLabel === "Launch Cycle 001").map((article) => (
+                <article
+                  className="undrifted-launch-cycle-card"
+                  key={article.publicationId}
+                  data-publication-id={article.publicationId}
+                >
+                  <img src={article.bannerUrl} alt={article.bannerAlt} loading="lazy" />
+                  <div>
+                    <span className="undrifted-eyebrow">{article.publicationLabel}</span>
+                    <h3>{article.title}</h3>
+                    {article.subtitle ? <p className="undrifted-launch-cycle-subtitle">{article.subtitle}</p> : null}
+                    <p>{article.issueExcerpt}</p>
+                    <div className="undrifted-article-meta">
+                      <span>{article.authorName}</span>
+                      <span>{article.publicationDate}</span>
+                    </div>
+                    <a href={article.routePath}>Read on Measures Registry &rarr;</a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         {/* FEATURED ARTICLES */}
-        {featuredArticleSet.length > 0 ? (
+        {currentIssuePages.length === 0 && featuredArticleSet.length > 0 ? (
           <section className="undrifted-insights" aria-label="Feature articles">
             {insightsEyebrow || insightsHeading ? (
               <div className="undrifted-insights-header">
@@ -642,7 +814,7 @@ function UnDriftedIndex({
         ) : null}
 
         {/* ROLE CALL */}
-        {roleCallLabel || roleCallTitle ? (
+        {currentIssuePages.length === 0 && (roleCallLabel || roleCallTitle) ? (
           <section className="undrifted-role-call" aria-label={roleCallTitle ?? "Role Call"}>
             {roleCallLabel ? (
               <span className="undrifted-eyebrow">{roleCallLabel}</span>
@@ -674,7 +846,7 @@ function UnDriftedIndex({
         ) : null}
 
         {/* NEXT ISSUE */}
-        {nextIssueLabel || nextIssueTitle ? (
+        {currentIssuePages.length === 0 && (nextIssueLabel || nextIssueTitle) ? (
           <section
             className="undrifted-next-issue"
             aria-label={nextIssueTitle ?? "Next Issue"}
