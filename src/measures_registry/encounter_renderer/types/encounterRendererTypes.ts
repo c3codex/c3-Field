@@ -13,7 +13,6 @@ export type EncounterEnvironmentAssignment =
   | "public_relational_encounter"
 
 export type EncounterSurface =
-  // Active SEAT surfaces — final canonical 13-term structure
   | "measures_registry_home"
   | "measures_registry_faq"
   | "crystal_seat_intro"
@@ -30,9 +29,7 @@ export type EncounterSurface =
   | "marble_chamber_C2_compact"
   | "marble_chamber_C2_agreement"
   | "marble_chamber_C2_resolution"
-  // Active passage transition (not in 13 SEAT terms; held for secured/scale)
   | "obsidian_to_marble_passage_video"
-  // Audit-trace / held — DB rows retained, not active public launch surfaces
   | "publication_dispatch"
   | "eval_passage"
   | "structure_passage"
@@ -40,8 +37,6 @@ export type EncounterSurface =
   | "obsidian_chamber_orientation_passage"
   | "marble_chamber_orientation_passage"
   | "measures_structured_environments"
-
-// DB row types
 
 export type RegistryRow = {
   registry_key: string
@@ -83,9 +78,6 @@ export type EncounterSurfaceAssignmentRow = {
   metadata: Record<string, unknown> | null
 }
 
-// Issue Page row — from measures_publication_issue_page, seated by
-// oar2_seat_undrifted_issue_page_model_and_launch_layout_sequence_v1. page_key/page_role/
-// page_number are authority; route_path is a routing surface only (may be held/unwired).
 export type EncounterIssuePageRow = {
   page_key: string
   publication_key: string
@@ -104,7 +96,23 @@ export type EncounterIssuePageRow = {
   metadata: Record<string, unknown> | null
 }
 
-// Resolver output — all raw DB rows; no authority decisions
+// Published article state from measures_publication_dispatch. FREE may render it, but does
+// not change title/body/standing/route authority. Public RLS exposes only status=published.
+export type EncounterPublicationDispatchRow = {
+  publication_key: string
+  dispatch_key: string
+  title: string
+  dispatch_body: string | null
+  excerpt: string | null
+  media_manifest: Record<string, unknown> | null
+  internal_route: string | null
+  external_url: string | null
+  article_url: string | null
+  status: string
+  published_at: string | null
+  issue_number: string | null
+  metadata: Record<string, unknown> | null
+}
 
 export type RegistryResolverData = {
   registryRows: RegistryRow[]
@@ -113,17 +121,14 @@ export type RegistryResolverData = {
   designTokenRows: EncounterDesignTokenRow[]
   surfaceAssignmentRows: EncounterSurfaceAssignmentRow[]
   issuePageRows: EncounterIssuePageRow[]
+  publicationDispatchRows: EncounterPublicationDispatchRow[]
   loading: boolean
   error: string | null
 }
 
-// Gate result
-
 export type GateResult =
   | { status: "released" }
   | { status: "held"; reason: string }
-
-// Transition node — from measures_registry_root.metadata.encounter_structure
 
 export type TransitionNode = {
   content_encounter_key?: string | null
@@ -133,17 +138,12 @@ export type TransitionNode = {
   [key: string]: unknown
 }
 
-// role_call standing read from measures_registry_root.
-// Structural encounter authorities only — not login, gating, or access control.
-
 export type RoleCallStanding = {
   standing: Record<string, unknown> | null
   nativeRoleRegistry: Record<string, unknown> | null
   passageModes: Record<string, unknown> | null
   legacyFieldMapping: Record<string, unknown> | null
 }
-
-// Composed encounter — fully assembled state before gate evaluation
 
 export type ComposedEncounter = {
   surface: EncounterSurface
@@ -155,17 +155,10 @@ export type ComposedEncounter = {
   materialIdentity: MaterialIdentity
   chamberAssignment: EncounterEnvironmentAssignment
   roleCallStanding: RoleCallStanding
-  // Surface assignment metadata — carries style_profile, directory_key, registered_surface.
-  // Threaded from measures_encounter_surface_assignment.metadata for FREE consumption.
   surfaceAssignmentMetadata: Record<string, unknown> | null
-  // Issue Page rows for this registry_key (publication_key), ordered by page_number.
-  // Empty for surfaces with no seated issue-page model — renderers must fall back gracefully.
   issuePages: EncounterIssuePageRow[]
+  publicationDispatches: EncounterPublicationDispatchRow[]
 }
-
-// Renderable encounter — composed encounter after release gate passes.
-// gateResult is narrowed to released only; held state cannot reach this type.
-// Chamber renderers and chamber router accept only RenderableEncounter.
 
 export type RenderableEncounter = {
   surface: EncounterSurface
@@ -179,11 +172,9 @@ export type RenderableEncounter = {
   roleCallStanding: RoleCallStanding
   surfaceAssignmentMetadata: Record<string, unknown> | null
   issuePages: EncounterIssuePageRow[]
+  publicationDispatches: EncounterPublicationDispatchRow[]
   gateResult: { status: "released" }
 }
-
-// Held encounter state — surface key and sanitized reason only.
-// Must not expose internal registry standing or gate internals.
 
 export type HeldEncounterState = {
   surface: EncounterSurface
@@ -193,8 +184,6 @@ export type HeldEncounterState = {
 export type RenderableEncounterResult =
   | { renderable: true; encounter: RenderableEncounter }
   | { renderable: false; reason: string }
-
-// Chamber renderer props contract
 
 export type EncounterRendererProps = {
   activeSurface: EncounterSurface
