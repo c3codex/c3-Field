@@ -1,7 +1,8 @@
 type Env = {
   SUPABASE_URL?: string
   VITE_SUPABASE_URL?: string
-  SUPABASE_SERVICE_ROLE_KEY?: string
+  SUPABASE_ANON_KEY?: string
+  VITE_SUPABASE_ANON_KEY?: string
 }
 
 type DispatchRow = {
@@ -56,8 +57,8 @@ function category(row: DispatchRow) {
 
 async function loadPublishedDispatches(env: Env): Promise<DispatchRow[]> {
   const supabaseUrl = env.SUPABASE_URL ?? env.VITE_SUPABASE_URL
-  const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
-  if (!supabaseUrl || !serviceRoleKey) throw new Error("Supabase server credentials are not configured")
+  const anonKey = env.SUPABASE_ANON_KEY ?? env.VITE_SUPABASE_ANON_KEY
+  if (!supabaseUrl || !anonKey) throw new Error("Supabase public runtime credentials are not configured")
 
   const query = new URLSearchParams({
     select:
@@ -73,8 +74,8 @@ async function loadPublishedDispatches(env: Env): Promise<DispatchRow[]> {
     `${supabaseUrl.replace(/\/$/, "")}/rest/v1/measures_publication_dispatch?${query.toString()}`,
     {
       headers: {
-        apikey: serviceRoleKey,
-        authorization: `Bearer ${serviceRoleKey}`,
+        apikey: anonKey,
+        authorization: `Bearer ${anonKey}`,
         accept: "application/json",
       },
     },
