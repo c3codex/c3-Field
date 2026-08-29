@@ -9,7 +9,7 @@ registrar: chazz
 reviewer_or_disposition_authority: op044
 standard_key: minimum_governed_standard_v1
 target: undrifted
-standing: executed_source_and_registry_complete_public_runtime_verification_pending
+standing: executed_registry_source_and_deployment_complete_visual_runtime_verification_pending
 ---
 
 # OAR1 — Apply MGS to unDrifted 008
@@ -86,11 +86,11 @@ The new `UnDriftedMgsRenderer` resolves:
 
 The orchestrator no longer enumerates individual unDrifted article routes. Any `/undrifted/...` path enters the unDrifted encounter; Registry Dispatch state determines whether the path resolves to a published article.
 
-Source head after implementation:
+Primary implementation source head:
 
 `7b2ccb5e2a4f7ef1d9683af1b919d4b3a99cf3a9`
 
-Primary commits:
+Primary implementation commits:
 
 - `3ffe4cf833fa305139f09a6efde555668b3fe992` — expose publication Dispatch state to FREE
 - `ba1be6e77501ff422cbeeb40b1e4c942a7621419` — resolve published unDrifted Dispatch rows
@@ -100,9 +100,17 @@ Primary commits:
 - `1841cd369cba89a3bd9f364f1f381314804db95e` — replace per-article route list with governed publication prefix
 - `7b2ccb5e2a4f7ef1d9683af1b919d4b3a99cf3a9` — render all registered unDrifted article routes from Dispatch
 
+### Deployment / public runtime
+
+Operator op044 confirmed that pushes to the `measures` branch deploy automatically.
+
+The implementation commits therefore triggered deployment by branch push. The public `/undrifted/` route was subsequently observed responding from `measuresregistry.com`.
+
+This establishes deployment occurrence and public route availability. It does not substitute for a full browser/visual verification of the new rendered composition and every article route.
+
 ## Result
 
-Registry and source implementation completed.
+Registry, source implementation, and push-triggered deployment completed.
 
 Verified:
 
@@ -114,17 +122,21 @@ Verified:
 - published Dispatch bodies are available through public-read RLS.
 - the two historical Launch Cycle body stubs were reconciled to full registered bodies.
 - source branch contains a generic Registry-driven unDrifted route and render path.
+- pushes to `measures` deploy automatically per Operator-confirmed deployment relation.
+- the public `/undrifted/` route responds after deployment.
 
-Not independently verified in this execution environment:
+Still pending independent visual/runtime verification:
 
-- Cloudflare build/deployment completion for source head `7b2ccb5e2a4f7ef1d9683af1b919d4b3a99cf3a9`.
-- browser-rendered public manifestation of the new FREE path at `/undrifted` and its article routes.
+- rendered Current Desks composition;
+- rendered Active Issue 002 composition;
+- rendered Past Issues / Issue 001 archive composition;
+- visual/readback verification of individual article routes under the new generic Registry-driven route resolver.
 
 Accordingly the execution returns as:
 
-`executed_source_and_registry_complete_public_runtime_verification_pending`
+`executed_registry_source_and_deployment_complete_visual_runtime_verification_pending`
 
-This is not a Registry or source hold. It is a runtime-manifestation verification boundary.
+This is not a Registry, source, or deployment hold. It is a final manifestation-verification boundary.
 
 ## Mutation Classification
 
@@ -132,9 +144,9 @@ This is not a Registry or source hold. It is a runtime-manifestation verificatio
 - Registry/database mutation: **changed**
 - Git mutation: **changed**
 - Storage/media mutation: **unchanged**
-- Deployment/runtime mutation: **not independently verified**
+- Deployment/runtime mutation: **changed via automatic push-triggered deployment**
 - External configuration/API mutation: **unchanged**
-- Public-state mutation: **Registry-facing publication state changed; browser manifestation not independently verified**
+- Public-state mutation: **changed; public route available, visual composition verification pending**
 - Schedule/automation mutation: **unchanged**
 - Process-standing mutation: **changed**
 - Authority/disposition mutation: **unchanged; final disposition remains with op044**
