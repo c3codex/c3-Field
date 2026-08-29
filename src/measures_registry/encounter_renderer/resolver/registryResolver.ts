@@ -5,15 +5,14 @@ import type {
   EncounterDesignTokenRow,
   EncounterIssuePageRow,
   EncounterMediaRow,
+  EncounterPublicationDispatchRow,
   EncounterSurfaceAssignmentRow,
   RegistryResolverData,
   RegistryRow,
 } from "../types/encounterRendererTypes"
 
-// Publications with a seated Issue Page model. Extend as more publications adopt
-// measures_publication_issue_page — absent from this list means issuePageRows stays empty
-// for that registry, and renderers fall back to their existing non-issue-page rendering.
 const ISSUE_PAGE_PUBLICATION_KEYS = ["undrifted"] as const
+const PUBLICATION_DISPATCH_KEYS = ["undrifted"] as const
 
 const ENCOUNTER_REGISTRY_KEYS = [
   "ai_isnt_broken_intro",
@@ -110,6 +109,7 @@ const EMPTY_DATA: RegistryResolverData = {
   designTokenRows: [],
   surfaceAssignmentRows: [],
   issuePageRows: [],
+  publicationDispatchRows: [],
   loading: true,
   error: null,
 }
@@ -134,44 +134,47 @@ export function useRegistryResolver(): RegistryResolverData {
         tokenResult,
         assignmentResult,
         issuePageResult,
+        publicationDispatchResult,
       ] = await Promise.all([
-          supabase
-            .from("measures_registry")
-            .select("registry_key, is_active, release_state, access_state, metadata")
-            .in("registry_key", [...ENCOUNTER_REGISTRY_KEYS]),
-          supabase
-            .from("measures_publication_registry")
-            .select("publication_key, title, subtitle, metadata")
-            .eq("publication_key", "undrifted"),
-          supabase
-            .from("measures_encounter_def")
-            .select("encounter_key, display_title, metadata")
-            .in("encounter_key", [...ENCOUNTER_DEF_KEYS])
-            .order("sequence_order", { ascending: true }),
-          supabase
-            .from("measures_media_map")
-            .select("media_role, storage_bucket, storage_path, mime_type, is_active, metadata")
-            .in("campaign_key", [...MEDIA_CAMPAIGN_KEYS])
-            .in("media_role", [...MEDIA_ROLES])
-            .order("sort_order", { ascending: true }),
-          supabase
-            .from("measures_design_token")
-            .select("token_key, token_value, media_query, is_active")
-            .eq("registry_key", DESIGN_REGISTRY_KEY)
-            .eq("is_active", true),
-          supabase
-            .from("measures_encounter_surface_assignment")
-            .select(
-              "surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes, metadata",
-            ),
-          supabase
-            .from("measures_publication_issue_page")
-            .select(
-              "page_key, publication_key, issue_id, page_number, page_role, title, subtitle, asset_id, dispatch_key, banner_asset_id, route_path, layout_profile_key, release_state, visibility_state, metadata",
-            )
-            .in("publication_key", [...ISSUE_PAGE_PUBLICATION_KEYS])
-            .order("page_number", { ascending: true }),
-        ])
+        supabase
+          .from("measures_registry")
+          .select("registry_key, is_active, release_state, access_state, metadata")
+          .in("registry_key", [...ENCOUNTER_REGISTRY_KEYS]),
+        supabase
+          .from("measures_publication_registry")
+          .select("publication_key, title, subtitle, metadata")
+          .eq("publication_key", "undrifted"),
+        supabase
+          .from("measures_encounter_def")
+          .select("encounter_key, display_title, metadata")
+          .in("encounter_key", [...ENCOUNTER_DEF_KEYS])
+          .order("sequence_order", { ascending: true }),
+        supabase
+          .from("measures_media_map")
+          .select("media_role, storage_bucket, storage_path, mime_type, is_active, metadata")
+          .in("campaign_key", [...MEDIA_CAMPAIGN_KEYS])
+          .in("media_role", [...MEDIA_ROLES])
+          .order("sort_order", { ascending: true }),
+        supabase
+          .from("measures_design_token")
+          .select("token_key, token_value, media_query, is_active")
+          .eq("registry_key", DESIGN_REGISTRY_KEY)
+          .eq("is_active", true),
+        supabase
+          .from("measures_encounter_surface_assignment")
+          .select("surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes, metadata"),
+        supabase
+          .from("measures_publication_issue_page")
+          .select("page_key, publication_key, issue_id, page_number, page_role, title, subtitle, asset_id, dispatch_key, banner_asset_id, route_path, layout_profile_key, release_state, visibility_state, metadata")
+          .in("publication_key", [...ISSUE_PAGE_PUBLICATION_KEYS])
+          .order("page_number", { ascending: true }),
+        supabase
+          .from("measures_publication_dispatch")
+          .select("publication_key, dispatch_key, title, dispatch_body, excerpt, media_manifest, internal_route, external_url, article_url, status, published_at, issue_number, metadata")
+          .in("publication_key", [...PUBLICATION_DISPATCH_KEYS])
+          .eq("status", "published")
+          .order("published_at", { ascending: false, nullsFirst: false }),
+      ])
 
       if (cancelled) return
 
@@ -183,6 +186,7 @@ export function useRegistryResolver(): RegistryResolverData {
         tokenResult.error?.message ??
         assignmentResult.error?.message ??
         issuePageResult.error?.message ??
+        publicationDispatchResult.error?.message ??
         null
 
       const rawMediaRows = (mediaResult.data ?? []) as EncounterMediaRow[]
@@ -190,9 +194,7 @@ export function useRegistryResolver(): RegistryResolverData {
         rawMediaRows.map(async (row) => {
           if (row.storage_bucket === "measures-seed" && row.is_active !== false) {
             try {
-              const { data } = await supabase.storage
-                .from(row.storage_bucket)
-                .createSignedUrl(row.storage_path, 86400) // 24 hours
+              const { data } = await supabase.storage.from(row.storage_bucket).createSignedUrl(row.storage_path, 86400)
               if (data?.signedUrl) {
                 return {
                   ...row,
@@ -208,7 +210,7 @@ export function useRegistryResolver(): RegistryResolverData {
             }
           }
           return row
-        })
+        }),
       )
 
       const rawRegistryRows = (registryResult.data ?? []) as RegistryRow[]
@@ -223,7 +225,7 @@ export function useRegistryResolver(): RegistryResolverData {
                 ...(pubRow.metadata as Record<string, unknown>),
                 publication_title: pubRow.title,
                 publication_subtitle: pubRow.subtitle,
-              }
+              },
             }
           }
         }
@@ -237,6 +239,7 @@ export function useRegistryResolver(): RegistryResolverData {
         designTokenRows: (tokenResult.data ?? []) as EncounterDesignTokenRow[],
         surfaceAssignmentRows: (assignmentResult.data ?? []) as EncounterSurfaceAssignmentRow[],
         issuePageRows: (issuePageResult.data ?? []) as EncounterIssuePageRow[],
+        publicationDispatchRows: (publicationDispatchResult.data ?? []) as EncounterPublicationDispatchRow[],
         loading: false,
         error,
       })
