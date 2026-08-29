@@ -32,7 +32,6 @@ function extractTransitionNodes(
 
 // Assembles encounter state from seated registry data.
 // Pure — no authority decisions, no release checks, no routing.
-// Caller (encounterProfileLoader) validates inputs before calling.
 export function composeEncounter(
   surface: EncounterSurface,
   assignment: EncounterSurfaceAssignmentRow,
@@ -44,11 +43,17 @@ export function composeEncounter(
   const encounterDef =
     resolverData.encounterDefRows.find((d) => d.encounter_key === assignment.registry_key) ?? null
 
-  // Issue Page rows for this registry (publication_key === registry_key for unDrifted).
-  // Ordered by page_number — page_number/page_role are authority, never route_path/slug.
   const issuePages = resolverData.issuePageRows
     .filter((row) => row.publication_key === assignment.registry_key)
     .sort((a, b) => a.page_number - b.page_number)
+
+  const publicationDispatches = resolverData.publicationDispatchRows
+    .filter((row) => row.publication_key === assignment.registry_key && row.status === "published")
+    .sort((a, b) => {
+      const aTime = a.published_at ? Date.parse(a.published_at) : 0
+      const bTime = b.published_at ? Date.parse(b.published_at) : 0
+      return bTime - aTime
+    })
 
   const mediaByRole = new Map(
     resolverData.mediaRows
@@ -82,5 +87,6 @@ export function composeEncounter(
     roleCallStanding,
     surfaceAssignmentMetadata: asRecord(assignment.metadata),
     issuePages,
+    publicationDispatches,
   }
 }
