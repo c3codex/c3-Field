@@ -14,7 +14,6 @@ type DispatchRow = {
   article_url: string | null
   external_url: string | null
   published_at: string | null
-  updated_at: string | null
   issue_number: string | null
   metadata: Record<string, unknown> | null
 }
@@ -47,12 +46,17 @@ function canonicalUrl(row: DispatchRow) {
   return row.article_url || row.external_url || null
 }
 
-function category(row: DispatchRow) {
+function devSafeCategory(row: DispatchRow) {
   const label = row.metadata?.series_label
-  if (typeof label === "string" && label.trim()) return label.trim()
   const key = row.metadata?.series_key
-  if (typeof key === "string" && key.trim()) return key.replaceAll("_", " ")
-  return row.issue_number || "unDrifted"
+  const raw =
+    (typeof label === "string" && label.trim()) ||
+    (typeof key === "string" && key.trim()) ||
+    row.issue_number ||
+    "undrifted"
+
+  const normalized = String(raw).toLowerCase().replace(/[^a-z0-9]/g, "")
+  return normalized.slice(0, 20) || "undrifted"
 }
 
 async function loadPublishedDispatches(env: Env): Promise<DispatchRow[]> {
@@ -62,7 +66,7 @@ async function loadPublishedDispatches(env: Env): Promise<DispatchRow[]> {
 
   const query = new URLSearchParams({
     select:
-      "dispatch_key,title,excerpt,seo_description,internal_route,article_url,external_url,published_at,updated_at,issue_number,metadata",
+      "dispatch_key,title,excerpt,seo_description,internal_route,article_url,external_url,published_at,issue_number,metadata",
     publication_key: "eq.undrifted",
     status: "eq.published",
     published_at: "not.is.null",
@@ -96,15 +100,13 @@ function renderFeed(rows: DispatchRow[]) {
       if (!url || !row.published_at) return ""
       const description = row.excerpt || row.seo_description || "Read this unDrifted article."
       const published = new Date(row.published_at).toUTCString()
-      const updated = row.updated_at ? new Date(row.updated_at).toUTCString() : null
 
       return `    <item>
       <title>${xmlEscape(row.title)}</title>
       <link>${xmlEscape(url)}</link>
       <guid isPermaLink="true">${xmlEscape(url)}</guid>
       <pubDate>${xmlEscape(published)}</pubDate>
-      ${updated ? `<atom:updated>${xmlEscape(updated)}</atom:updated>` : ""}
-      <category>${xmlEscape(category(row))}</category>
+      <category>${xmlEscape(devSafeCategory(row))}</category>
       <description>${xmlEscape(description)}</description>
     </item>`
     })
