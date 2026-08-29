@@ -5,11 +5,15 @@ type Env = {
   VITE_SUPABASE_ANON_KEY?: string
 }
 
+type MediaObject = Record<string, unknown>
+
 type DispatchRow = {
   dispatch_key: string
   title: string
+  dispatch_body: string | null
   excerpt: string | null
   seo_description: string | null
+  media_manifest: MediaObject | null
   internal_route: string | null
   article_url: string | null
   external_url: string | null
@@ -18,9 +22,18 @@ type DispatchRow = {
   metadata: Record<string, unknown> | null
 }
 
+type Enclosure = {
+  url: string
+  length: number
+  type: string
+}
+
 const BASE_URL = "https://measuresregistry.com"
+const SUPABASE_PUBLIC_STORAGE_BASE =
+  "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public"
 const FEED_URL = `${BASE_URL}/undrifted/rss.xml`
 const PUBLICATION_URL = `${BASE_URL}/undrifted`
+const FEED_CREATOR = "unDrifted"
 
 function xmlEscape(value: unknown) {
   return String(value ?? "")
@@ -59,6 +72,93 @@ function devSafeCategory(row: DispatchRow) {
   return normalized.slice(0, 20) || "undrifted"
 }
 
+function stripMarkdown(value: string) {
+  return value
+    .replace(/^---[\s\S]*?---\s*/m, "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^>\s?/gm, "")
+    .replace(/[*_~`]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function summary(row: DispatchRow) {
+  const body = row.dispatch_body ? stripMarkdown(row.dispatch_body) : ""
+  const preferred = [row.excerpt, row.seo_description]
+    .filter((value): value is string => Boolean(value?.trim()))
+    .join(" ")
+    .trim()
+
+  let value = preferred
+  if (value.length < 300 && body) {
+    value = body
+  }
+  if (!value) value = "Read this unDrifted article."
+
+  if (value.length <= 520) return value
+  const clipped = value.slice(0, 517)
+  const boundary = clipped.lastIndexOf(" ")
+  return `${clipped.slice(0, boundary > 300 ? boundary : 517).trim()}...`
+}
+
+function asMediaObject(value: unknown): MediaObject | null {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as MediaObject)
+    : null
+}
+
+function mediaFromObject(value: unknown): Enclosure | null {
+  const media = asMediaObject(value)
+  if (!media) return null
+  const url = typeof media.public_url === "string" ? media.public_url : null
+  if (!url?.startsWith("https://")) return null
+  return {
+    url,
+    length: typeof media.bytes === "number" ? media.bytes : 0,
+    type: typeof media.mime_type === "string" ? media.mime_type : "image/webp",
+  }
+}
+
+function enclosure(row: DispatchRow): Enclosure | null {
+  const manifest = row.media_manifest
+  if (!manifest) return null
+
+  for (const candidate of [manifest.cover, manifest.website, manifest.paragraph]) {
+    const found = mediaFromObject(candidate)
+    if (found) return found
+  }
+
+  if (typeof manifest.banner_url === "string" && manifest.banner_url.startsWith("https://")) {
+    return { url: manifest.banner_url, length: 0, type: "image/webp" }
+  }
+
+  const bucket = typeof manifest.storage_bucket === "string" ? manifest.storage_bucket : null
+  const storagePath = typeof manifest.storage_path === "string" ? manifest.storage_path : null
+  if (bucket && storagePath) {
+    return {
+      url: `${SUPABASE_PUBLIC_STORAGE_BASE}/${bucket}/${storagePath.replace(/^\//, "")}`,
+      length: 0,
+      type: "image/webp",
+    }
+  }
+
+  const bannerImage = typeof manifest.banner_image === "string" ? manifest.banner_image : null
+  if (bannerImage) {
+    const clean = bannerImage.replace(/^\//, "")
+    const path = clean.startsWith("measures-registry/") ? clean : `measures-registry/${clean}`
+    return {
+      url: `${SUPABASE_PUBLIC_STORAGE_BASE}/${path}`,
+      length: 0,
+      type: "image/webp",
+    }
+  }
+
+  return null
+}
+
 async function loadPublishedDispatches(env: Env): Promise<DispatchRow[]> {
   const supabaseUrl = env.SUPABASE_URL ?? env.VITE_SUPABASE_URL
   const anonKey = env.SUPABASE_ANON_KEY ?? env.VITE_SUPABASE_ANON_KEY
@@ -66,7 +166,7 @@ async function loadPublishedDispatches(env: Env): Promise<DispatchRow[]> {
 
   const query = new URLSearchParams({
     select:
-      "dispatch_key,title,excerpt,seo_description,internal_route,article_url,external_url,published_at,issue_number,metadata",
+      "dispatch_key,title,dispatch_body,excerpt,seo_description,media_manifest,internal_route,article_url,external_url,published_at,issue_number,metadata",
     publication_key: "eq.undrifted",
     status: "eq.published",
     published_at: "not.is.null",
@@ -98,16 +198,21 @@ function renderFeed(rows: DispatchRow[]) {
     .map((row) => {
       const url = canonicalUrl(row)
       if (!url || !row.published_at) return ""
-      const description = row.excerpt || row.seo_description || "Read this unDrifted article."
       const published = new Date(row.published_at).toUTCString()
+      const itemEnclosure = enclosure(row)
 
       return `    <item>
       <title>${xmlEscape(row.title)}</title>
       <link>${xmlEscape(url)}</link>
       <guid isPermaLink="true">${xmlEscape(url)}</guid>
       <pubDate>${xmlEscape(published)}</pubDate>
+      <dc:creator>${xmlEscape(FEED_CREATOR)}</dc:creator>
       <category>${xmlEscape(devSafeCategory(row))}</category>
-      <description>${xmlEscape(description)}</description>
+      <description>${xmlEscape(summary(row))}</description>${
+        itemEnclosure
+          ? `\n      <enclosure url="${xmlEscape(itemEnclosure.url)}" length="${itemEnclosure.length}" type="${xmlEscape(itemEnclosure.type)}" />`
+          : ""
+      }
     </item>`
     })
     .filter(Boolean)
@@ -118,7 +223,7 @@ function renderFeed(rows: DispatchRow[]) {
     : new Date().toUTCString()
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>unDrifted</title>
     <link>${PUBLICATION_URL}</link>
