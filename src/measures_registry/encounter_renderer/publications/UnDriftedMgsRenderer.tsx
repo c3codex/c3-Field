@@ -55,6 +55,10 @@ function pageHref(page: EncounterIssuePageRow): string | null {
   return asString(meta?.external_url)
 }
 
+function pageMediaUrl(page: EncounterIssuePageRow): string | null {
+  return asString(asRecord(page.metadata)?.media_url)
+}
+
 function dispatchPath(dispatch: EncounterPublicationDispatchRow): string | null {
   return dispatch.internal_route
     ? normalizePath(dispatch.internal_route)
@@ -278,7 +282,9 @@ export default function UnDriftedMgsRenderer({
               if (!deskKey) return null
               const latest = latestDeskPage(deskKey, activePages, encounter.publicationDispatches)
               const href = latest ? pageHref(latest.page) : null
-              const banner = dispatchBanner(latest?.dispatch ?? null)
+              const banner = latest
+                ? dispatchBanner(latest.dispatch) ?? pageMediaUrl(latest.page)
+                : null
               return (
                 <article className="undrifted-desk-card" key={deskKey} data-desk-key={deskKey}>
                   {banner ? <img src={banner} alt="" loading="lazy" /> : null}
@@ -309,7 +315,7 @@ export default function UnDriftedMgsRenderer({
               const dispatch = dispatchForPage(page, encounter.publicationDispatches)
               const href = pageHref(page)
               const deskTitle = asString(asRecord(page.metadata)?.desk_title)
-              const banner = dispatchBanner(dispatch)
+              const banner = dispatchBanner(dispatch) ?? pageMediaUrl(page)
               return (
                 <article key={page.page_key} data-page-role={page.page_role}>
                   {banner ? <img src={banner} alt="" loading="lazy" /> : null}
