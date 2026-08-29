@@ -173,14 +173,21 @@ function ArticleView({
   )
 }
 
+function registryDispatchForPath(
+  encounter: RenderableEncounter,
+  path: string,
+): EncounterPublicationDispatchRow | null {
+  return encounter.publicationDispatches.find(
+    (dispatch) => Boolean(dispatch.dispatch_body?.trim()) && dispatchPath(dispatch) === path,
+  ) ?? null
+}
+
 export function shouldUseUnDriftedMgsRenderer(encounter: RenderableEncounter): boolean {
   if (encounter.registryKey !== "undrifted") return false
   if (typeof window === "undefined") return true
   const path = normalizePath(window.location.pathname)
   if (path === "/undrifted") return true
-  return encounter.publicationDispatches.some(
-    (dispatch) => dispatch.issue_number === "002" && dispatchPath(dispatch) === path,
-  )
+  return Boolean(registryDispatchForPath(encounter, path))
 }
 
 export default function UnDriftedMgsRenderer({
@@ -191,14 +198,12 @@ export default function UnDriftedMgsRenderer({
   renderSystemFooter,
 }: UnDriftedMgsRendererProps) {
   const pathname = typeof window !== "undefined" ? normalizePath(window.location.pathname) : "/undrifted"
-  const issue002Dispatch = encounter.publicationDispatches.find(
-    (dispatch) => dispatch.issue_number === "002" && dispatchPath(dispatch) === pathname,
-  )
-  if (pathname !== "/undrifted" && issue002Dispatch) {
+  const routeDispatch = registryDispatchForPath(encounter, pathname)
+  if (pathname !== "/undrifted" && routeDispatch) {
     return (
       <ArticleView
         encounter={encounter}
-        dispatch={issue002Dispatch}
+        dispatch={routeDispatch}
         registryTokenStyle={registryTokenStyle}
         onNavigate={onNavigate}
         renderHeader={renderHeader}
