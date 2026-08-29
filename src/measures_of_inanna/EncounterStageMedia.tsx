@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import type { CSSProperties } from "react"
 import { toPublicMediaUrl } from "./resolve_encounter"
 import type {
@@ -26,6 +27,8 @@ type Props = {
   primaryVideoMuted?: boolean
 }
 
+const MEDIA_UNLOCK_SESSION_KEY = "c3_media_audio_unlocked"
+
 function mediaDefaultVolume(item?: RuntimeMediaItem | null, fallback = 0.07) {
   const mapVolume = item?.mapMetadata?.default_volume
   const assetVolume = item?.assetMetadata?.default_volume
@@ -47,6 +50,32 @@ function mediaBoolean(item: RuntimeMediaItem, key: string) {
   return null
 }
 
+function useMediaAudioUnlocked() {
+  const [unlocked, setUnlocked] = useState(() => {
+    if (typeof window === "undefined") return false
+    return window.sessionStorage.getItem(MEDIA_UNLOCK_SESSION_KEY) === "true"
+  })
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const unlock = () => {
+      window.sessionStorage.setItem(MEDIA_UNLOCK_SESSION_KEY, "true")
+      setUnlocked(true)
+    }
+
+    window.addEventListener("pointerdown", unlock, { once: true, passive: true })
+    window.addEventListener("keydown", unlock, { once: true })
+
+    return () => {
+      window.removeEventListener("pointerdown", unlock)
+      window.removeEventListener("keydown", unlock)
+    }
+  }, [])
+
+  return unlocked
+}
+
 function RenderMediaItem({
   item,
   autoPlayMuted,
@@ -63,6 +92,7 @@ function RenderMediaItem({
   audioVolume?: number
 }) {
   const src = toPublicMediaUrl(item)
+  const mediaAudioUnlocked = useMediaAudioUnlocked()
 
   if (!src) {
     return <div className="media-empty">media unavailable</div>
@@ -77,7 +107,9 @@ function RenderMediaItem({
   if (item.mediaType === "video") {
     const shouldLoop = mediaBoolean(item, "loop") === true
     const shouldAutoplay = Boolean(autoPlayMuted || shouldLoop)
-    const videoMuted = muted ?? shouldAutoplay
+    const embeddedAudio = mediaBoolean(item, "audio_embedded") === true
+    const requestedMuted = muted ?? shouldAutoplay
+    const videoMuted = shouldAutoplay && embeddedAudio && mediaAudioUnlocked ? false : requestedMuted
 
     return (
       <video
@@ -98,7 +130,14 @@ function RenderMediaItem({
             if (shouldAutoplay) {
               const playPromise = node.play()
               if (playPromise && typeof playPromise.catch === "function") {
-                playPromise.catch(() => undefined)
+                playPromise.catch(() => {
+                  node.muted = true
+                  node.defaultMuted = true
+                  const mutedPlayPromise = node.play()
+                  if (mutedPlayPromise && typeof mutedPlayPromise.catch === "function") {
+                    mutedPlayPromise.catch(() => undefined)
+                  }
+                })
               }
             }
           }
@@ -115,7 +154,7 @@ function RenderMediaItem({
     return (
       <audio
         src={src}
-        autoPlay
+        autoPlay={mediaAudioUnlocked}
         playsInline
         preload="auto"
         controls={!hidden}
@@ -132,7 +171,15 @@ function RenderMediaItem({
             : { display: "block" }
         }
         ref={(node) => {
-          if (node) node.volume = audioVolume ?? mediaDefaultVolume(item)
+          if (node) {
+            node.volume = audioVolume ?? mediaDefaultVolume(item)
+            if (mediaAudioUnlocked) {
+              const playPromise = node.play()
+              if (playPromise && typeof playPromise.catch === "function") {
+                playPromise.catch(() => undefined)
+              }
+            }
+          }
         }}
       />
     )
