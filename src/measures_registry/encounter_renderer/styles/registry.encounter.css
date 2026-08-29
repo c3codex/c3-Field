@@ -16,3 +16,25 @@
 @import "./encounters/lapis.css";
 @import "./encounters/legal.css";
 @import "./registry.visual-system.css";
+
+/* FREE owns layout; the document owns vertical scrolling. Legacy fullscreen encounter
+   CSS in src/index.css sets html/body/#root to overflow:hidden for old fixed-stage surfaces.
+   When FREE is mounted, release that legacy root lock without changing those older surfaces. */
+html:has(.measures-registry-runtime),
+body:has(.measures-registry-runtime),
+#root:has(.measures-registry-runtime) {
+  min-height: 100%;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.measures-registry-runtime {
+  min-height: 100svh;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] {
+  overflow-y: visible;
+}
