@@ -5,12 +5,11 @@ import type { SubscriptionCapturePayload } from "../chambers/LapisChamberRendere
 import type { MapPaymentParams } from "../chambers/MarbleChamberRenderer"
 import type { ConnectCapturePayload } from "../chambers/CrystalSeatRenderer"
 import type { EncounterSurface, RenderableEncounter } from "../types/encounterRendererTypes"
+import { shouldUseUnDriftedMgsRenderer } from "../publications/UnDriftedMgsRenderer"
 
-// Lazy-loaded per chamber — only the chamber assignment actually active on a given
-// surface is fetched. Reduces initial bundle weight (previously all four chamber
-// renderers were statically bundled together regardless of which one a visitor needed).
 const ObsidianChamberRenderer = lazy(() => import("../chambers/ObsidianChamberRenderer"))
 const LapisChamberRenderer = lazy(() => import("../chambers/LapisChamberRenderer"))
+const UnDriftedMgsRenderer = lazy(() => import("../publications/UnDriftedMgsRenderer"))
 const MarbleChamberRenderer = lazy(() => import("../chambers/MarbleChamberRenderer"))
 const CrystalSeatRenderer = lazy(() => import("../chambers/CrystalSeatRenderer"))
 
@@ -18,7 +17,6 @@ export type ChamberRouterProps = {
   encounter: RenderableEncounter
   registryTokenStyle: CSSProperties
   onNavigate: (surface: EncounterSurface) => void
-  // Encounter Boundary provides these. Omitting disables capture persistence.
   onCaptureAssessment?: (payload: AssessmentCapturePayload) => Promise<{ error: string | null }>
   onCaptureSubscription?: (payload: SubscriptionCapturePayload) => Promise<{ error: string | null }>
   onCaptureConnect?: (payload: ConnectCapturePayload) => Promise<{ error: string | null }>
@@ -27,12 +25,6 @@ export type ChamberRouterProps = {
   renderSystemFooter: () => ReactNode
 }
 
-// Routes a RenderableEncounter to the correct chamber renderer.
-// Dispatches from encounter.chamberAssignment — value seated by DB surface assignment.
-// No DB access. No authority logic. No release logic. No composition.
-// Loading fallback while a chamber's code chunk is fetched — mirrors the resolver's own
-// loading state in EncounterEntry.tsx so a slow chunk fetch reads the same as a slow
-// resolver fetch, not as a distinct/broken state.
 function ChamberLoadingFallback({ encounter, registryTokenStyle, renderHeader, renderSystemFooter }: ChamberRouterProps) {
   return (
     <main
@@ -60,6 +52,10 @@ export default function ChamberRouter(props: ChamberRouterProps) {
     return <Suspense fallback={fallback}><ObsidianChamberRenderer {...props} /></Suspense>
   }
 
+  if ((chamberAssignment === "lapis" || chamberAssignment === "public_relational_encounter") && shouldUseUnDriftedMgsRenderer(encounter)) {
+    return <Suspense fallback={fallback}><UnDriftedMgsRenderer {...props} /></Suspense>
+  }
+
   if (chamberAssignment === "lapis" || chamberAssignment === "public_relational_encounter") {
     return <Suspense fallback={fallback}><LapisChamberRenderer {...props} /></Suspense>
   }
@@ -72,9 +68,6 @@ export default function ChamberRouter(props: ChamberRouterProps) {
     return <Suspense fallback={fallback}><CrystalSeatRenderer {...props} /></Suspense>
   }
 
-  // All EncounterEnvironmentAssignment members handled above.
-  // TypeScript narrows chamberAssignment to never here — exhaustiveness confirmed.
-  // Unknown chamber assignment — public-safe unavailable state, no fallback to Obsidian
   const _exhaustive: never = chamberAssignment
   void _exhaustive
 
