@@ -50,10 +50,18 @@ function mediaBoolean(item: RuntimeMediaItem, key: string) {
   return null
 }
 
+function browserHasUserActivation() {
+  if (typeof navigator === "undefined") return false
+  return navigator.userActivation?.hasBeenActive === true
+}
+
 function useMediaAudioUnlocked() {
   const [unlocked, setUnlocked] = useState(() => {
     if (typeof window === "undefined") return false
-    return window.sessionStorage.getItem(MEDIA_UNLOCK_SESSION_KEY) === "true"
+    return (
+      window.sessionStorage.getItem(MEDIA_UNLOCK_SESSION_KEY) === "true" ||
+      browserHasUserActivation()
+    )
   })
 
   useEffect(() => {
@@ -62,6 +70,11 @@ function useMediaAudioUnlocked() {
     const unlock = () => {
       window.sessionStorage.setItem(MEDIA_UNLOCK_SESSION_KEY, "true")
       setUnlocked(true)
+    }
+
+    if (browserHasUserActivation()) {
+      unlock()
+      return
     }
 
     window.addEventListener("pointerdown", unlock, { once: true, passive: true })
@@ -107,9 +120,13 @@ function RenderMediaItem({
   if (item.mediaType === "video") {
     const shouldLoop = mediaBoolean(item, "loop") === true
     const shouldAutoplay = Boolean(autoPlayMuted || shouldLoop)
-    const embeddedAudio = mediaBoolean(item, "audio_embedded") === true
-    const requestedMuted = muted ?? shouldAutoplay
-    const videoMuted = shouldAutoplay && embeddedAudio && mediaAudioUnlocked ? false : requestedMuted
+    const explicitlyMuted =
+      muted === true ||
+      mediaBoolean(item, "muted") === true ||
+      mediaBoolean(item, "muted_autoplay") === true
+    const videoMuted = shouldAutoplay
+      ? !mediaAudioUnlocked || explicitlyMuted
+      : Boolean(muted ?? explicitlyMuted)
 
     return (
       <video
@@ -125,6 +142,7 @@ function RenderMediaItem({
         style={commonStyle}
         ref={(node) => {
           if (node) {
+            node.volume = mediaDefaultVolume(item, 1)
             node.muted = Boolean(videoMuted)
             node.defaultMuted = Boolean(videoMuted)
             if (shouldAutoplay) {
