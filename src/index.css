@@ -1,1 +1,49 @@
-__RESTORE_PENDING__
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+.c3-visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.measures-registry-runtime {
+  min-height: 100svh;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+  background: var(--registry-brand-field);
+  color: var(--registry-brand-primary-text);
+  padding: 0;
+  font-size: var(--registry-body);
+  --registry-brand-field: var(--registry-brand-obsidian, var(--registry-background-obsidian));
+  --registry-brand-panel-surface: var(--registry-brand-lapis-night, var(--registry-panel-obsidian));
+  --registry-brand-accent: var(--registry-brand-deep-lapis, var(--registry-accent-cool));
+  --registry-brand-primary-text: var(--registry-brand-silver-frame, var(--registry-text-primary));
+  --registry-brand-secondary-text: var(--registry-brand-marble-accent, var(--registry-text-secondary));
+  --registry-brand-muted-text: var(--registry-brand-marble-accent, var(--registry-text-muted));
+  --registry-brand-border: var(--registry-brand-silver-frame, var(--registry-border-subtle));
+  --registry-brand-highlight: var(--registry-brand-crystal-star, var(--registry-text-primary));
+  --registry-brand-panel-wash: color-mix(in srgb, var(--registry-brand-panel-surface) 72%, transparent);
+  --registry-brand-field-wash: color-mix(in srgb, var(--registry-brand-field) 76%, transparent);
+  --registry-entry-headline-active: var(--registry-entry-headline);
+  --registry-entry-sub-active: var(--registry-entry-sub);
+  --registry-body-active: var(--registry-body);
+  --registry-plaque-title-active: var(--registry-plaque-title);
+  --registry-plaque-body-active: var(--registry-plaque-body);
+  --registry-page-padding-active: var(--registry-page-padding-desktop);
+  --registry-section-spacing-active: var(--registry-section-spacing-desktop);
+  --registry-plaque-padding-active: var(--registry-plaque-padding-desktop);
+}
