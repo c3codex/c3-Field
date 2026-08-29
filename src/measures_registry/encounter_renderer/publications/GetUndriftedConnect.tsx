@@ -1,5 +1,6 @@
 import { FormEvent, useMemo, useState } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
+import "./getUndriftedConnect.css"
 
 type DeskKey = "drift_report" | "structural_standings" | "mapped_and_measured" | "current"
 
