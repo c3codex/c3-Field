@@ -57,7 +57,7 @@ function useMediaAudioUnlocked() {
   })
 
   useEffect(() => {
-    if (typeof window === "undefined") return
+    if (typeof window === "undefined" || unlocked) return
 
     const unlock = () => {
       window.sessionStorage.setItem(MEDIA_UNLOCK_SESSION_KEY, "true")
@@ -71,7 +71,7 @@ function useMediaAudioUnlocked() {
       window.removeEventListener("pointerdown", unlock)
       window.removeEventListener("keydown", unlock)
     }
-  }, [])
+  }, [unlocked])
 
   return unlocked
 }
