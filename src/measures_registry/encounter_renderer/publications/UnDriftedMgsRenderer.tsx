@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react"
 import ReactMarkdown from "react-markdown"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
+import GetUndriftedConnect from "./GetUndriftedConnect"
 import type {
   EncounterIssuePageRow,
   EncounterPublicationDispatchRow,
@@ -144,6 +145,7 @@ function ArticleView({
   const seriesLabel = asString(meta?.series_label)
   const banner = dispatchBanner(dispatch)
   const published = formatDate(dispatch.published_at)
+  const articleRoute = dispatchPath(dispatch) ?? "/undrifted"
 
   return (
     <main
@@ -171,6 +173,11 @@ function ArticleView({
         <section className="undrifted-article-body" data-source="measures_publication_dispatch">
           <ReactMarkdown>{dispatch.dispatch_body ?? ""}</ReactMarkdown>
         </section>
+        <GetUndriftedConnect
+          compact
+          dispatchKey={dispatch.dispatch_key}
+          sourceRoute={articleRoute}
+        />
       </article>
       {renderSystemFooter()}
     </main>
@@ -357,6 +364,8 @@ export default function UnDriftedMgsRenderer({
             </a>
           </section>
         ) : null}
+
+        <GetUndriftedConnect sourceRoute="/undrifted" />
       </section>
       {renderSystemFooter()}
     </main>
