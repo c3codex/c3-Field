@@ -14,13 +14,7 @@ import type { EncounterSurface } from "./types/encounterRendererTypes"
 import { cssTokenName } from "./shared/encounterRendererUtils"
 import RegisteredPrivacy from "./legal/RegisteredPrivacy"
 import RegisteredTerms from "./legal/RegisteredTerms"
-// Lazy — internal diagnostic surface (899 lines), not part of any typical visitor path.
 const GovernanceAuditSurface = lazy(() => import("../governance/GovernanceAuditSurface"))
-
-// FREE — Frontend Replacement Encounter Environment.
-// Top-level orchestrator. Owns navigation, URL sync, token style, and DB capture callbacks.
-// Delegates determination and rendering to EncounterEntry → EncounterBoundary → ChamberRouter.
-// Does not infer authority. Does not bypass EncounterBoundary.
 
 type OrchestratorSurface = EncounterSurface | "privacy" | "terms" | "governance_audit"
 
@@ -55,12 +49,11 @@ const MATERIAL_TONE_VOLUME: Record<MaterialIdentity, number> = {
   marble: 0.02,
 }
 
-// Tones held — ambient audio competes with video audio unlock on mobile browsers.
-// Re-enable by setting to false once video audio and tone coexistence is verified.
 const TONES_HELD = true
-
 const HISTORY_SOURCE = "measures_registry_free"
 
+// Only true surface routes are named here. Publication-object routes are resolved by the
+// governed publication prefix and then identified from Registry dispatch state inside FREE.
 const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
   "/": "crystal_seat_intro",
   "/home": "measures_registry_home",
@@ -70,11 +63,6 @@ const ROUTE_SURFACE_MAP: Record<string, OrchestratorSurface> = {
   "/ai-operations-assessment": "obsidian_chamber_encounter_surface",
   "/structural-drift": "lapis_chamber_encounter",
   "/undrifted": "lapis_chamber_encounter",
-  "/undrifted/field-findings-2026-w28": "lapis_chamber_encounter",
-  "/undrifted/ai-agents-are-not-entering-empty-systems": "lapis_chamber_encounter",
-  "/undrifted/the-boundary-problem": "lapis_chamber_encounter",
-  "/undrifted/environmentally-enabled": "lapis_chamber_encounter",
-  "/undrifted/the-pair-over-time": "lapis_chamber_encounter",
   "/map-the-environment": "marble_chamber_C2_compact",
   "/privacy": "privacy",
   "/terms": "terms",
@@ -100,34 +88,37 @@ function normalizePathname(pathname: string): string {
   return pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname
 }
 
-function initialSurface(): OrchestratorSurface {
-  const url = new URL(window.location.href)
-  const pathname = normalizePathname(url.pathname)
-  if (url.searchParams.get("payment") === "success") return "marble_chamber_C2_resolution"
-  const mapped = ROUTE_SURFACE_MAP[pathname]
+function surfaceForPath(pathname: string): OrchestratorSurface | null {
+  const normalized = normalizePathname(pathname)
+  const mapped = ROUTE_SURFACE_MAP[normalized]
   if (mapped) return mapped
-  // publication_dispatch deprecated (OAR2 "Deprecate Stale Publication Dispatch Surface") —
-  // /undrifted is the active governed publication index; route all /publication/structural_drift*
-  // paths there rather than to the unprofiled publication_dispatch surface.
-  if (pathname === "/publication/structural_drift" || pathname.startsWith("/publication/structural_drift/")) {
+  if (normalized.startsWith("/undrifted/")) return "lapis_chamber_encounter"
+  if (normalized === "/publication/structural_drift" || normalized.startsWith("/publication/structural_drift/")) {
     return "lapis_chamber_encounter"
   }
-  return "crystal_seat_intro"
+  return null
+}
+
+function initialSurface(): OrchestratorSurface {
+  const url = new URL(window.location.href)
+  if (url.searchParams.get("payment") === "success") return "marble_chamber_C2_resolution"
+  return surfaceForPath(url.pathname) ?? "crystal_seat_intro"
 }
 
 function historyUrl(surface: OrchestratorSurface): string {
   const url = new URL(window.location.href)
+  // Preserve a publication-object URL while the visitor remains inside the unDrifted
+  // encounter. Registry state, not a frontend route list, resolves the object.
+  if (surface === "lapis_chamber_encounter" && normalizePathname(url.pathname).startsWith("/undrifted/")) {
+    return `${url.pathname}${url.search}${url.hash}`
+  }
   url.pathname = PUBLIC_ROUTE_BY_SURFACE[surface] ?? "/"
   url.searchParams.delete("surface")
   return `${url.pathname}${url.search}${url.hash}`
 }
 
 function writeHistory(method: "pushState" | "replaceState", surface: OrchestratorSurface) {
-  window.history[method](
-    { source: HISTORY_SOURCE, surface },
-    "",
-    historyUrl(surface),
-  )
+  window.history[method]({ source: HISTORY_SOURCE, surface }, "", historyUrl(surface))
 }
 
 function normalizeWebsite(value: string | undefined): string {
@@ -144,9 +135,8 @@ export default function MeasuresRegistryOrchestrator() {
   const [toneBlocked, setToneBlocked] = useState(false)
 
   const navigationSourceRef = useRef<"app" | "history">("app")
-  const activeRouteDefaultSurface = ROUTE_SURFACE_MAP[normalizePathname(window.location.pathname)] ?? null
+  const activeRouteDefaultSurface = surfaceForPath(window.location.pathname)
 
-  // Redirect legacy /structural-drift alias
   useEffect(() => {
     if (window.location.pathname === "/structural-drift") {
       window.location.replace("/undrifted")
@@ -161,9 +151,7 @@ export default function MeasuresRegistryOrchestrator() {
     void (async () => {
       try {
         const response = await fetch(`/api/assessment-evaluation?token=${encodeURIComponent(token)}`)
-        const data = (await response.json().catch(() => ({}))) as {
-          pendingReport?: unknown
-        }
+        const data = (await response.json().catch(() => ({}))) as { pendingReport?: unknown }
         if (!response.ok || !data.pendingReport) return
         sessionStorage.setItem("__mreg_pending_report", JSON.stringify(data.pendingReport))
         setActiveSurface("marble_chamber_orientation")
@@ -173,7 +161,6 @@ export default function MeasuresRegistryOrchestrator() {
     })()
   }, [])
 
-  // URL sync
   useEffect(() => {
     if (activeRouteDefaultSurface === activeSurface) return
     if (navigationSourceRef.current === "history") {
@@ -186,12 +173,18 @@ export default function MeasuresRegistryOrchestrator() {
     writeHistory(method, activeSurface)
   }, [activeRouteDefaultSurface, activeSurface])
 
-  // popstate
   useEffect(() => {
     function handlePopState(event: PopStateEvent) {
-      if (event.state?.source !== HISTORY_SOURCE || !event.state.surface) return
-      navigationSourceRef.current = "history"
-      setActiveSurface(event.state.surface as OrchestratorSurface)
+      if (event.state?.source === HISTORY_SOURCE && event.state.surface) {
+        navigationSourceRef.current = "history"
+        setActiveSurface(event.state.surface as OrchestratorSurface)
+        return
+      }
+      const resolved = surfaceForPath(window.location.pathname)
+      if (resolved) {
+        navigationSourceRef.current = "history"
+        setActiveSurface(resolved)
+      }
     }
     window.addEventListener("popstate", handlePopState)
     return () => window.removeEventListener("popstate", handlePopState)
@@ -207,9 +200,7 @@ export default function MeasuresRegistryOrchestrator() {
   }, [resolverData.designTokenRows])
 
   const registryMarkUrl = useMemo(() => {
-    const row = resolverData.mediaRows.find(
-      (r) => r.media_role === "registry_mark" && r.is_active !== false,
-    )
+    const row = resolverData.mediaRows.find((r) => r.media_role === "registry_mark" && r.is_active !== false)
     if (!row) return null
     const meta = row.metadata as Record<string, unknown> | null
     const publicUrl = typeof meta?.public_url === "string" ? meta.public_url : null
@@ -240,12 +231,10 @@ export default function MeasuresRegistryOrchestrator() {
   useEffect(() => {
     const el = ambientAudioRef.current
     if (!el) return
-
     if (fadeRef.current) {
       clearInterval(fadeRef.current)
       fadeRef.current = null
     }
-
     if (!activeToneUrl) {
       if (!el.paused) {
         fadeRef.current = setInterval(() => {
@@ -263,7 +252,6 @@ export default function MeasuresRegistryOrchestrator() {
         if (fadeRef.current) { clearInterval(fadeRef.current); fadeRef.current = null }
       }
     }
-
     const target = activeToneVolume
     el.pause()
     el.src = activeToneUrl
@@ -281,17 +269,12 @@ export default function MeasuresRegistryOrchestrator() {
           fadeRef.current = null
         }
       }, 50)
-    }).catch(() => {
-      setToneBlocked(true)
-    })
-
+    }).catch(() => setToneBlocked(true))
     return () => {
       if (fadeRef.current) { clearInterval(fadeRef.current); fadeRef.current = null }
     }
   }, [activeToneUrl, activeToneVolume])
 
-  // Document title — resolved from surface assignment → encounter_def → display_title.
-  // Never falls back to static index.html title.
   useEffect(() => {
     if (resolverData.loading) return
     const LEGAL_TITLES: Partial<Record<OrchestratorSurface, string>> = {
@@ -324,15 +307,8 @@ export default function MeasuresRegistryOrchestrator() {
         <nav className="registry-public-nav" aria-label="Measures Registry navigation">
           <a href="/home" onClick={(e) => { e.preventDefault(); navigate("measures_registry_home") }}>Home</a>
           <a href="/connect" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Connect</a>
-          <a
-            href="/ai-operations-assessment"
-            onClick={(e) => { e.preventDefault(); navigate("obsidian_chamber_orientation") }}
-          >
-            Assess the Environment
-          </a>
-          <a href="/undrifted" onClick={(e) => { e.preventDefault(); navigate("lapis_chamber_encounter") }}>
-            Read unDrifted
-          </a>
+          <a href="/ai-operations-assessment" onClick={(e) => { e.preventDefault(); navigate("obsidian_chamber_orientation") }}>Assess the Environment</a>
+          <a href="/undrifted" onClick={(e) => { e.preventDefault(); window.history.pushState({ source: HISTORY_SOURCE, surface: "lapis_chamber_encounter" }, "", "/undrifted"); navigate("lapis_chamber_encounter") }}>Read unDrifted</a>
         </nav>
       </header>
     )
@@ -347,16 +323,9 @@ export default function MeasuresRegistryOrchestrator() {
     const copyLines = Array.isArray(footerContract?.copy_lines)
       ? (footerContract.copy_lines as unknown[]).filter((l): l is string => typeof l === "string")
       : []
-
     return (
-      <footer
-        className="registry-system-footer"
-        data-layout-contract="footer"
-        data-release-standing="system_frame"
-      >
-        {copyLines.map((line) => (
-          <p key={line}>{line}</p>
-        ))}
+      <footer className="registry-system-footer" data-layout-contract="footer" data-release-standing="system_frame">
+        {copyLines.map((line) => <p key={line}>{line}</p>)}
         <nav className="registry-footer-legal-links" aria-label="Legal">
           <a href="/privacy" onClick={(e) => { e.preventDefault(); navigate("privacy") }}>Privacy</a>
           <span aria-hidden="true">·</span>
@@ -367,9 +336,6 @@ export default function MeasuresRegistryOrchestrator() {
         <nav className="registry-footer-social-links" aria-label="Measures Registry public profiles">
           <a href="https://twitter.com/measures_c3" target="_blank" rel="me noreferrer">X</a>
           <a href="https://instagram.com/measures_registry" target="_blank" rel="me noreferrer">Instagram</a>
-          {/* LinkedIn removed per OAR2 "Resolve Final Launch Blockers" — prior link did not
-              resolve to a valid business profile. Restore only once a real profile is seated;
-              do not substitute a personal LinkedIn without explicit operator approval. */}
           <a href="https://paragraph.com/@undrifted" target="_blank" rel="me noreferrer">unDrifted / Paragraph</a>
         </nav>
       </footer>
@@ -384,9 +350,7 @@ export default function MeasuresRegistryOrchestrator() {
         body: JSON.stringify(payload),
       })
       const data = (await response.json()) as AssessmentCaptureResult
-      if (!response.ok || data.error) {
-        return { error: data.error || `Server returned ${response.status}` }
-      }
+      if (!response.ok || data.error) return { error: data.error || `Server returned ${response.status}` }
       return { ...data, error: null }
     } catch (err) {
       return { error: err instanceof Error ? err.message : String(err) }
@@ -402,21 +366,12 @@ export default function MeasuresRegistryOrchestrator() {
       message: fields.message?.trim() || null,
       capture_context: "about_measures_registry_connect",
       notification_state: "queued",
-      metadata: {
-        source_surface: "about_measures_registry",
-        source_runtime: "free_encounter_renderer_v1",
-      },
+      metadata: { source_surface: "about_measures_registry", source_runtime: "free_encounter_renderer_v1" },
     })
     return { error: error?.message ?? null }
   }
 
-  async function onInitiateMapPayment({
-    mapPathway,
-    mapStanding,
-    contactEmail,
-    evaluationResultId,
-    currentStateKey,
-  }: MapPaymentParams): Promise<{ error: string | null }> {
+  async function onInitiateMapPayment({ mapPathway, mapStanding, contactEmail, evaluationResultId, currentStateKey }: MapPaymentParams): Promise<{ error: string | null }> {
     const origin = window.location.origin
     try {
       const response = await fetch("/api/map/create-checkout-session", {
@@ -459,31 +414,13 @@ export default function MeasuresRegistryOrchestrator() {
   }
 
   if (activeSurface === "privacy") {
-    return (
-      <RegisteredPrivacy
-        registryTokenStyle={registryTokenStyle}
-        renderHeader={() => renderHeader({ title: "Measures Registry" })}
-        renderSystemFooter={renderSystemFooter}
-      />
-    )
+    return <RegisteredPrivacy registryTokenStyle={registryTokenStyle} renderHeader={() => renderHeader({ title: "Measures Registry" })} renderSystemFooter={renderSystemFooter} />
   }
-
   if (activeSurface === "terms") {
-    return (
-      <RegisteredTerms
-        registryTokenStyle={registryTokenStyle}
-        renderHeader={() => renderHeader({ title: "Measures Registry" })}
-        renderSystemFooter={renderSystemFooter}
-      />
-    )
+    return <RegisteredTerms registryTokenStyle={registryTokenStyle} renderHeader={() => renderHeader({ title: "Measures Registry" })} renderSystemFooter={renderSystemFooter} />
   }
-
   if (activeSurface === "governance_audit") {
-    return (
-      <Suspense fallback={null}>
-        <GovernanceAuditSurface />
-      </Suspense>
-    )
+    return <Suspense fallback={null}><GovernanceAuditSurface /></Suspense>
   }
 
   function handleEnableTone() {
@@ -508,30 +445,12 @@ export default function MeasuresRegistryOrchestrator() {
 
   return (
     <>
-      <audio
-        ref={ambientAudioRef}
-        aria-hidden="true"
-        style={{ position: "fixed", width: 0, height: 0, opacity: 0, pointerEvents: "none" }}
-      />
+      <audio ref={ambientAudioRef} aria-hidden="true" style={{ position: "fixed", width: 0, height: 0, opacity: 0, pointerEvents: "none" }} />
       {toneBlocked && activeToneUrl ? (
         <button
           onClick={handleEnableTone}
           aria-label="About site tones"
-          style={{
-            position: "fixed",
-            bottom: "4.5rem",
-            right: "1rem",
-            zIndex: 50,
-            background: "transparent",
-            border: "1px solid currentColor",
-            borderRadius: "2rem",
-            padding: "0.3rem 0.7rem",
-            fontSize: "0.65rem",
-            letterSpacing: "0.08em",
-            cursor: "pointer",
-            opacity: 0.4,
-            color: "inherit",
-          }}
+          style={{ position: "fixed", bottom: "4.5rem", right: "1rem", zIndex: 50, background: "transparent", border: "1px solid currentColor", borderRadius: "2rem", padding: "0.3rem 0.7rem", fontSize: "0.65rem", letterSpacing: "0.08em", cursor: "pointer", opacity: 0.4, color: "inherit" }}
         >
           About Site Tones
         </button>
