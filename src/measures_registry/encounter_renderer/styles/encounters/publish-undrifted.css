@@ -47,3 +47,59 @@
   display: inline-flex;
   margin-top: 2rem;
 }
+
+.registry-control-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.registry-control-actions button {
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  color: inherit;
+  cursor: pointer;
+  min-height: 2.5rem;
+  padding: 0.6rem 0.9rem;
+}
+
+.registry-control-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.registry-control-standing {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+  margin: 0.85rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.registry-destination-list {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.registry-destination-row {
+  border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: minmax(8rem, 1.25fr) minmax(7rem, 1fr) minmax(8rem, 1fr);
+  list-style: none;
+  min-width: 0;
+  padding-top: 0.7rem;
+}
+
+.registry-destination-row span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .registry-destination-row {
+    grid-template-columns: 1fr;
+  }
+}

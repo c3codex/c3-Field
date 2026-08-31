@@ -30,6 +30,69 @@ type ProofBody = {
   held_check?: string
 }
 
+type ControlsState =
+  | { status: "loading" }
+  | { status: "ready"; body: ControlsBody }
+  | { status: "held"; body: ControlsBody }
+  | { status: "error"; message: string }
+
+type ControlsBody = {
+  final_standing?: string
+  held_check?: string | null
+  external_publication_effects?: number
+  passage?: {
+    object_key?: string | null
+    publication_object?: {
+      dispatch_key?: string
+      title?: string
+      internal_route?: string | null
+      external_url?: string | null
+    } | null
+    recovery_path?: string
+  }
+  lapzuli_distribution?: {
+    route_standing?: string
+    controls_enabled?: boolean
+    dispatch_now?: string
+    schedule?: string
+    route_key?: string
+    executions?: Array<{
+      execution_status?: string | null
+      platform_post_id?: string | null
+      platform_url?: string | null
+    }>
+  }
+  controls?: {
+    select_object?: Array<{ dispatch_key?: string; title?: string; internal_route?: string | null }>
+    recover?: string
+    preflight?: string
+    open_passage?: string
+    dispatch_now?: string
+    schedule?: string
+  }
+  destinations?: Array<{
+    outlet_key: string
+    display_name?: string | null
+    domain?: string | null
+    route_type?: string | null
+    qualification_standing?: string | null
+    account_state?: string | null
+    fit_score?: number | null
+  }>
+  dizzy?: {
+    standing?: string
+    worker_identity?: string | null
+    role_identity?: string | null
+    external_publication_effects?: number
+  }
+  action_result?: {
+    action?: string
+    standing?: string
+    mutation_count?: number
+    external_publication_effects?: number
+  }
+}
+
 type Props = {
   registryTokenStyle: CSSProperties
   renderHeader: (opts: { title: string }) => ReactNode
@@ -42,6 +105,8 @@ export default function PublishUndriftedPassage({
   renderSystemFooter,
 }: Props) {
   const [proof, setProof] = useState<ProofState>({ status: "loading" })
+  const [controls, setControls] = useState<ControlsState>({ status: "loading" })
+  const [actionResult, setActionResult] = useState<ControlsBody["action_result"] | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -68,10 +133,64 @@ export default function PublishUndriftedPassage({
     }
   }, [])
 
+  useEffect(() => {
+    let cancelled = false
+
+    async function runControls() {
+      try {
+        const response = await fetch("/api/publish-undrifted-lapzuli-controls")
+        const body = (await response.json().catch(() => ({}))) as ControlsBody
+        if (cancelled) return
+        if (response.ok && body.final_standing === "implemented_publish_undrifted_lapzuli_human_compute_controls_proven") {
+          setControls({ status: "ready", body })
+          return
+        }
+        setControls({ status: "held", body })
+      } catch (error) {
+        if (cancelled) return
+        setControls({ status: "error", message: error instanceof Error ? error.message : String(error) })
+      }
+    }
+
+    void runControls()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  async function submitControl(action: "dispatch_now" | "schedule") {
+    setActionResult({ action, standing: "submitting", mutation_count: 0, external_publication_effects: 0 })
+    try {
+      const response = await fetch("/api/publish-undrifted-lapzuli-controls", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action }),
+      })
+      const body = (await response.json().catch(() => ({}))) as ControlsBody
+      setActionResult(body.action_result ?? {
+        action,
+        standing: response.ok ? "accepted" : body.held_check ?? body.final_standing ?? "held",
+        mutation_count: 0,
+        external_publication_effects: 0,
+      })
+      setControls(response.ok ? { status: "ready", body } : { status: "held", body })
+    } catch (error) {
+      setActionResult({
+        action,
+        standing: error instanceof Error ? error.message : String(error),
+        mutation_count: 0,
+        external_publication_effects: 0,
+      })
+    }
+  }
+
   const body = proof.status === "satisfied" || proof.status === "held" ? proof.body : null
   const publication = body?.persistence_state_used?.publication_object
   const recoveredFrom = body?.persistence_state_used?.recovered_from ?? []
   const admitted = proof.status === "satisfied"
+  const controlsBody = controls.status === "ready" || controls.status === "held" ? controls.body : null
+  const destinationRows = controlsBody?.destinations ?? []
+  const controlsEnabled = controlsBody?.lapzuli_distribution?.controls_enabled === true
 
   return (
     <main className="registry-encounter-shell" style={registryTokenStyle}>
@@ -143,6 +262,69 @@ export default function PublishUndriftedPassage({
               </ul>
             ) : (
               <p>{proof.status === "loading" ? "Recovering governed state." : body?.held_check ?? "No recovery proof returned."}</p>
+            )}
+          </section>
+
+          <section className="registry-proof-section" aria-labelledby="lapzuli-controls">
+            <p className="registry-kicker">Lapzuli Controls</p>
+            <h2 id="lapzuli-controls">{controlsBody?.final_standing ?? (controls.status === "loading" ? "Recovering controls" : "Controls held")}</h2>
+            <dl className="registry-proof-list">
+              <div>
+                <dt>Selected Object</dt>
+                <dd>{controlsBody?.passage?.object_key ?? controlsBody?.passage?.publication_object?.dispatch_key ?? "pending"}</dd>
+              </div>
+              <div>
+                <dt>RECOVER</dt>
+                <dd>{controlsBody?.controls?.recover ?? (controls.status === "loading" ? "resolving" : controls.status)}</dd>
+              </div>
+              <div>
+                <dt>PREFLIGHT</dt>
+                <dd>{controlsBody?.controls?.preflight ?? controlsBody?.held_check ?? "pending"}</dd>
+              </div>
+              <div>
+                <dt>OPEN PASSAGE</dt>
+                <dd>{controlsBody?.controls?.open_passage ?? "pending"}</dd>
+              </div>
+              <div>
+                <dt>Lapzuli Standing</dt>
+                <dd>{controlsBody?.lapzuli_distribution?.route_standing ?? "pending"}</dd>
+              </div>
+              <div>
+                <dt>Dizzy</dt>
+                <dd>{controlsBody?.dizzy?.worker_identity ?? controlsBody?.dizzy?.standing ?? "pending"}</dd>
+              </div>
+            </dl>
+
+            <div className="registry-control-actions" aria-label="Lapzuli distribution controls">
+              <button type="button" disabled={!controlsEnabled} onClick={() => void submitControl("dispatch_now")}>
+                Dispatch Now
+              </button>
+              <button type="button" disabled={!controlsEnabled} onClick={() => void submitControl("schedule")}>
+                Schedule
+              </button>
+            </div>
+            <p className="registry-control-standing">
+              {actionResult
+                ? `${actionResult.action}: ${actionResult.standing}; mutations ${actionResult.mutation_count ?? 0}; external effects ${actionResult.external_publication_effects ?? 0}`
+                : `dispatch_now: ${controlsBody?.controls?.dispatch_now ?? "pending"}; schedule: ${controlsBody?.controls?.schedule ?? "pending"}`}
+            </p>
+          </section>
+
+          <section className="registry-proof-section" aria-labelledby="destination-controls">
+            <p className="registry-kicker">Qualified Destinations</p>
+            <h2 id="destination-controls">{destinationRows.length} destinations returned from Lapzuli</h2>
+            {destinationRows.length > 0 ? (
+              <ul className="registry-destination-list">
+                {destinationRows.slice(0, 6).map((destination) => (
+                  <li className="registry-destination-row" key={destination.outlet_key}>
+                    <span>{destination.display_name ?? destination.outlet_key}</span>
+                    <span>{destination.route_type ?? "route pending"}</span>
+                    <span>{destination.qualification_standing ?? "unverified"}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>{controls.status === "loading" ? "Recovering destination qualifications." : "No independently qualified destinations returned."}</p>
             )}
           </section>
 
