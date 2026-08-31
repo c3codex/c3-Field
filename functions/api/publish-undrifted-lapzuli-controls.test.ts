@@ -145,6 +145,17 @@ test("returns proven controls with distribution actions held when no route exist
   assert.equal(body.controls.dispatch_now, "held_route_required")
   assert.equal(body.dizzy.worker_identity, "dizzy_lapzuli_distribution_worker_v1")
   assert.equal(body.external_publication_effects, 0)
+  assert.equal(body.chamber_environment.media_role, "lapis_publication_chamber_operator_environment")
+  assert.equal(body.chamber_environment.derivative_storage_path, "undrifted/publication-chamber/lapis_antechamber_ops_surface_web_v1.webp")
+  assert.equal(body.stations.length, 6)
+  assert.deepEqual(body.stations.map((station: Record<string, string>) => station.station_key), [
+    "desks",
+    "pubpac",
+    "publication",
+    "social",
+    "audience",
+    "campaigns",
+  ])
 })
 
 test("dispatch action returns a held zero-mutation result without a route", async () => {

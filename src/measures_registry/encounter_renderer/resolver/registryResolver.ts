@@ -86,6 +86,7 @@ const MEDIA_ROLES = [
   "obsidian_eval_result_surface_visual",
   "assessment_report_orientation",
   "undrifted_publication_masthead",
+  "lapis_publication_chamber_operator_environment",
   "marble_orientation_surface",
   "marble_results_surface",
   "marble_map_surface",

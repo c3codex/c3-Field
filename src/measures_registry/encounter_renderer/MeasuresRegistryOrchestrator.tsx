@@ -505,6 +505,7 @@ export default function MeasuresRegistryOrchestrator() {
     return (
       <PublishUndriftedPassage
         registryTokenStyle={registryTokenStyle}
+        mediaRows={resolverData.mediaRows}
         renderHeader={renderHeader}
         renderSystemFooter={renderSystemFooter}
       />

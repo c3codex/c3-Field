@@ -1,10 +1,19 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import type { CSSProperties, ReactNode } from "react"
+import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
+import type { EncounterMediaRow } from "../types/encounterRendererTypes"
 
 type ProofState =
   | { status: "loading" }
   | { status: "satisfied"; body: ProofBody }
   | { status: "held"; body: ProofBody }
+  | { status: "error"; message: string }
+
+type ControlState =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "satisfied"; body: ControlsBody }
+  | { status: "held"; body: ControlsBody }
   | { status: "error"; message: string }
 
 type ProofBody = {
@@ -18,72 +27,50 @@ type ProofBody = {
   determination?: string
   next_permitted_transition?: string
   persistence_state_used?: {
-    publication_object?: {
-      dispatch_key?: string
-      title?: string
-      internal_route?: string
-      source_sha256?: string
-      source_drive_id?: string
-    }
+    publication_object?: PublicationObject
     recovered_from?: string[]
   }
   held_check?: string
 }
 
-type ControlsState =
-  | { status: "loading" }
-  | { status: "ready"; body: ControlsBody }
-  | { status: "held"; body: ControlsBody }
-  | { status: "error"; message: string }
+type PublicationObject = {
+  dispatch_key?: string
+  title?: string
+  internal_route?: string
+  source_sha256?: string
+  source_drive_id?: string
+}
 
 type ControlsBody = {
   final_standing?: string
   held_check?: string | null
-  external_publication_effects?: number
-  passage?: {
-    object_key?: string | null
-    publication_object?: {
-      dispatch_key?: string
-      title?: string
-      internal_route?: string | null
-      external_url?: string | null
-    } | null
-    recovery_path?: string
-  }
-  lapzuli_distribution?: {
-    route_standing?: string
-    controls_enabled?: boolean
-    dispatch_now?: string
-    schedule?: string
-    route_key?: string
-    executions?: Array<{
-      execution_status?: string | null
-      platform_post_id?: string | null
-      platform_url?: string | null
-    }>
-  }
   controls?: {
-    select_object?: Array<{ dispatch_key?: string; title?: string; internal_route?: string | null }>
+    select_object?: PublicationObject[]
     recover?: string
     preflight?: string
     open_passage?: string
     dispatch_now?: string
     schedule?: string
   }
-  destinations?: Array<{
-    outlet_key: string
-    display_name?: string | null
-    domain?: string | null
-    route_type?: string | null
-    qualification_standing?: string | null
-    account_state?: string | null
-    fit_score?: number | null
-  }>
+  passage?: {
+    publication_object?: PublicationObject
+    object_key?: string | null
+    recovery_path?: string
+    preflight?: Array<{ key: string; standing: string }>
+  }
+  lapzuli_distribution?: {
+    route_standing?: string
+    controls_enabled?: boolean
+    routes?: unknown[]
+    executions?: unknown[]
+  }
+  destinations?: unknown[]
   dizzy?: {
     standing?: string
     worker_identity?: string | null
     role_identity?: string | null
     external_publication_effects?: number
+    autonomous_distribution_authority?: string
   }
   action_result?: {
     action?: string
@@ -93,20 +80,89 @@ type ControlsBody = {
   }
 }
 
+type Station = {
+  key: string
+  label: string
+  x: number
+  y: number
+  status: (body: ControlsBody | null, proof: ProofState) => string
+}
+
 type Props = {
   registryTokenStyle: CSSProperties
+  mediaRows: EncounterMediaRow[]
   renderHeader: (opts: { title: string }) => ReactNode
   renderSystemFooter: () => ReactNode
 }
 
+const STATIONS: Station[] = [
+  {
+    key: "desks",
+    label: "DESKS",
+    x: 17,
+    y: 73,
+    status: (body) => `${body?.controls?.select_object?.length ?? 0} eligible`,
+  },
+  {
+    key: "pubpac",
+    label: "PUBPAC",
+    x: 31,
+    y: 73,
+    status: (body) => body?.passage?.object_key ?? "pending",
+  },
+  {
+    key: "publication",
+    label: "PUBLICATION",
+    x: 44,
+    y: 73,
+    status: (_body, proof) => proof.status === "satisfied" ? "passage ready" : proof.status,
+  },
+  {
+    key: "social",
+    label: "SOCIAL",
+    x: 57,
+    y: 73,
+    status: (body) => body?.controls?.dispatch_now ?? "held",
+  },
+  {
+    key: "audience",
+    label: "AUDIENCE",
+    x: 70,
+    y: 73,
+    status: (body) => `${body?.destinations?.length ?? 0} destinations`,
+  },
+  {
+    key: "campaigns",
+    label: "CAMPAIGNS",
+    x: 83,
+    y: 73,
+    status: (body) => body?.lapzuli_distribution?.route_standing ?? "held",
+  },
+]
+
+function mediaUrl(row: EncounterMediaRow | undefined): string | null {
+  if (!row || row.is_active === false) return null
+  const meta = row.metadata as Record<string, unknown> | null
+  return resolveRuntimeMediaUrl({
+    publicUrl: typeof meta?.exact_url_seated === "string" ? meta.exact_url_seated : null,
+    bucketName: row.storage_bucket,
+    storagePath: row.storage_path,
+  })
+}
+
+function standingLabel(value: string | null | undefined) {
+  return value?.replaceAll("_", " ") ?? "pending"
+}
+
 export default function PublishUndriftedPassage({
   registryTokenStyle,
+  mediaRows,
   renderHeader,
   renderSystemFooter,
 }: Props) {
   const [proof, setProof] = useState<ProofState>({ status: "loading" })
-  const [controls, setControls] = useState<ControlsState>({ status: "loading" })
-  const [actionResult, setActionResult] = useState<ControlsBody["action_result"] | null>(null)
+  const [controls, setControls] = useState<ControlState>({ status: "idle" })
+  const [selectedStation, setSelectedStation] = useState("publication")
 
   useEffect(() => {
     let cancelled = false
@@ -127,39 +183,28 @@ export default function PublishUndriftedPassage({
       }
     }
 
-    void runProof()
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-
     async function runControls() {
+      setControls({ status: "loading" })
       try {
         const response = await fetch("/api/publish-undrifted-lapzuli-controls")
         const body = (await response.json().catch(() => ({}))) as ControlsBody
         if (cancelled) return
-        if (response.ok && body.final_standing === "implemented_publish_undrifted_lapzuli_human_compute_controls_proven") {
-          setControls({ status: "ready", body })
-          return
-        }
-        setControls({ status: "held", body })
+        setControls(response.ok ? { status: "satisfied", body } : { status: "held", body })
       } catch (error) {
         if (cancelled) return
         setControls({ status: "error", message: error instanceof Error ? error.message : String(error) })
       }
     }
 
+    void runProof()
     void runControls()
     return () => {
       cancelled = true
     }
   }, [])
 
-  async function submitControl(action: "dispatch_now" | "schedule") {
-    setActionResult({ action, standing: "submitting", mutation_count: 0, external_publication_effects: 0 })
+  async function runAction(action: "dispatch_now" | "schedule") {
+    setControls({ status: "loading" })
     try {
       const response = await fetch("/api/publish-undrifted-lapzuli-controls", {
         method: "POST",
@@ -167,172 +212,125 @@ export default function PublishUndriftedPassage({
         body: JSON.stringify({ action }),
       })
       const body = (await response.json().catch(() => ({}))) as ControlsBody
-      setActionResult(body.action_result ?? {
-        action,
-        standing: response.ok ? "accepted" : body.held_check ?? body.final_standing ?? "held",
-        mutation_count: 0,
-        external_publication_effects: 0,
-      })
-      setControls(response.ok ? { status: "ready", body } : { status: "held", body })
+      setControls(response.ok ? { status: "satisfied", body } : { status: "held", body })
     } catch (error) {
-      setActionResult({
-        action,
-        standing: error instanceof Error ? error.message : String(error),
-        mutation_count: 0,
-        external_publication_effects: 0,
-      })
+      setControls({ status: "error", message: error instanceof Error ? error.message : String(error) })
     }
   }
 
-  const body = proof.status === "satisfied" || proof.status === "held" ? proof.body : null
-  const publication = body?.persistence_state_used?.publication_object
-  const recoveredFrom = body?.persistence_state_used?.recovered_from ?? []
-  const admitted = proof.status === "satisfied"
-  const controlsBody = controls.status === "ready" || controls.status === "held" ? controls.body : null
-  const destinationRows = controlsBody?.destinations ?? []
-  const controlsEnabled = controlsBody?.lapzuli_distribution?.controls_enabled === true
+  const proofBody = proof.status === "satisfied" || proof.status === "held" ? proof.body : null
+  const controlsBody = controls.status === "satisfied" || controls.status === "held" ? controls.body : null
+  const publication =
+    controlsBody?.passage?.publication_object ??
+    proofBody?.persistence_state_used?.publication_object ??
+    null
+  const recoveredFrom = proofBody?.persistence_state_used?.recovered_from ?? []
+  const chamberUrl = useMemo(
+    () =>
+      mediaUrl(mediaRows.find((row) => row.media_role === "lapis_publication_chamber_operator_environment")) ??
+      mediaUrl(mediaRows.find((row) => row.media_role === "undrifted_publication_masthead")),
+    [mediaRows],
+  )
+  const selected = STATIONS.find((station) => station.key === selectedStation) ?? STATIONS[2]
+  const preflight = controlsBody?.passage?.preflight ?? []
+  const actionStanding = controlsBody?.action_result?.standing ?? controlsBody?.held_check
 
   return (
     <main className="registry-encounter-shell" style={registryTokenStyle}>
       {renderHeader({ title: "unDrifted" })}
       <section
-        className="registry-encounter registry-encounter-lapis"
+        className="registry-encounter registry-encounter-lapis publish-chamber"
         data-surface="publish_undrifted"
         data-passage-surface="/publish-undrifted"
         data-resulting-encounter="/undrifted"
       >
-        <div className="registry-encounter-inner">
-          <p className="registry-kicker">/publish-undrifted</p>
-          <h1>publish_undrifted</h1>
-          <p className="registry-lede">
-            Environment resolves env.role_call. env.role_call invokes Persistence. Persistence
-            returns governed Drift Report state for deterministic passage.
-          </p>
+        <div className="publish-chamber-stage" aria-label="publish-undrifted operator chamber">
+          {chamberUrl ? <img className="publish-chamber-image" src={chamberUrl} alt="" loading="eager" /> : null}
+          <div className="publish-chamber-shade" />
+          <div className="publish-chamber-heading">
+            <p className="registry-kicker">/publish-undrifted</p>
+            <h1>Human operator chamber</h1>
+          </div>
+          <div className="publish-chamber-stations" aria-label="Publication chamber stations">
+            {STATIONS.map((station) => (
+              <button
+                key={station.key}
+                className="publish-station-button"
+                style={{ "--station-x": `${station.x}%`, "--station-y": `${station.y}%` } as CSSProperties}
+                aria-pressed={selectedStation === station.key}
+                onClick={() => setSelectedStation(station.key)}
+              >
+                <span>{station.label}</span>
+                <small>{standingLabel(station.status(controlsBody, proof))}</small>
+              </button>
+            ))}
+          </div>
+        </div>
 
-          <dl className="registry-fact-grid">
-            <div>
-              <dt>Passage</dt>
-              <dd>{body?.passage_surface ?? "/publish-undrifted"}</dd>
-            </div>
-            <div>
-              <dt>Encounter</dt>
-              <dd>{body?.resulting_encounter ?? "/undrifted"}</dd>
-            </div>
-            <div>
-              <dt>Standing</dt>
-              <dd>{proof.status === "loading" ? "resolving" : body?.final_standing ?? proof.status}</dd>
-            </div>
-            <div>
-              <dt>Determination</dt>
-              <dd>{body?.determination ?? (proof.status === "error" ? proof.message : "pending")}</dd>
-            </div>
-          </dl>
-
-          {publication ? (
-            <section className="registry-proof-section" aria-labelledby="publish-proof-target">
-              <p className="registry-kicker">Persisted DR State</p>
-              <h2 id="publish-proof-target">{publication.title}</h2>
-              <dl className="registry-proof-list">
-                <div>
-                  <dt>Dispatch</dt>
-                  <dd>{publication.dispatch_key}</dd>
-                </div>
-                <div>
-                  <dt>Route</dt>
-                  <dd>{publication.internal_route}</dd>
-                </div>
-                <div>
-                  <dt>Source SHA-256</dt>
-                  <dd>{publication.source_sha256}</dd>
-                </div>
-                <div>
-                  <dt>Source Drive ID</dt>
-                  <dd>{publication.source_drive_id}</dd>
-                </div>
-              </dl>
-            </section>
-          ) : null}
-
-          <section className="registry-proof-section" aria-labelledby="publish-proof-recovery">
-            <p className="registry-kicker">Recovery</p>
-            <h2 id="publish-proof-recovery">{body?.event_identity ?? "Awaiting event identity"}</h2>
-            {recoveredFrom.length > 0 ? (
-              <ul className="registry-proof-sources">
-                {recoveredFrom.map((source) => <li key={source}>{source}</li>)}
-              </ul>
-            ) : (
-              <p>{proof.status === "loading" ? "Recovering governed state." : body?.held_check ?? "No recovery proof returned."}</p>
-            )}
-          </section>
-
-          <section className="registry-proof-section" aria-labelledby="lapzuli-controls">
-            <p className="registry-kicker">Lapzuli Controls</p>
-            <h2 id="lapzuli-controls">{controlsBody?.final_standing ?? (controls.status === "loading" ? "Recovering controls" : "Controls held")}</h2>
-            <dl className="registry-proof-list">
+        <div className="publish-chamber-console">
+          <section className="publish-console-primary" aria-labelledby="publish-console-selected">
+            <p className="registry-kicker">{selected.label}</p>
+            <h2 id="publish-console-selected">{publication?.title ?? "Publication object pending"}</h2>
+            <dl className="registry-proof-list publish-proof-list">
               <div>
-                <dt>Selected Object</dt>
-                <dd>{controlsBody?.passage?.object_key ?? controlsBody?.passage?.publication_object?.dispatch_key ?? "pending"}</dd>
+                <dt>Dispatch</dt>
+                <dd>{publication?.dispatch_key ?? "pending"}</dd>
               </div>
               <div>
-                <dt>RECOVER</dt>
-                <dd>{controlsBody?.controls?.recover ?? (controls.status === "loading" ? "resolving" : controls.status)}</dd>
+                <dt>Route</dt>
+                <dd>{publication?.internal_route ?? proofBody?.resulting_encounter ?? "/undrifted"}</dd>
               </div>
               <div>
-                <dt>PREFLIGHT</dt>
-                <dd>{controlsBody?.controls?.preflight ?? controlsBody?.held_check ?? "pending"}</dd>
+                <dt>Source SHA-256</dt>
+                <dd>{publication?.source_sha256 ?? "pending"}</dd>
               </div>
               <div>
-                <dt>OPEN PASSAGE</dt>
-                <dd>{controlsBody?.controls?.open_passage ?? "pending"}</dd>
-              </div>
-              <div>
-                <dt>Lapzuli Standing</dt>
-                <dd>{controlsBody?.lapzuli_distribution?.route_standing ?? "pending"}</dd>
-              </div>
-              <div>
-                <dt>Dizzy</dt>
-                <dd>{controlsBody?.dizzy?.worker_identity ?? controlsBody?.dizzy?.standing ?? "pending"}</dd>
+                <dt>Source Drive ID</dt>
+                <dd>{publication?.source_drive_id ?? "pending"}</dd>
               </div>
             </dl>
+          </section>
 
-            <div className="registry-control-actions" aria-label="Lapzuli distribution controls">
-              <button type="button" disabled={!controlsEnabled} onClick={() => void submitControl("dispatch_now")}>
-                Dispatch Now
+          <section className="publish-console-rail" aria-labelledby="publish-control-sequence">
+            <p className="registry-kicker">Human / Compute</p>
+            <h2 id="publish-control-sequence">PULL REPORT / RECOVER STATE / PREFLIGHT / OPEN PASSAGE</h2>
+            <div className="publish-control-grid">
+              <span>{standingLabel(`${controlsBody?.controls?.select_object?.length ?? 0} eligible`)}</span>
+              <span>{standingLabel(controlsBody?.controls?.recover ?? proof.status)}</span>
+              <span>{standingLabel(controlsBody?.controls?.preflight ?? controls.status)}</span>
+              <span>{standingLabel(controlsBody?.controls?.open_passage ?? proof.status)}</span>
+            </div>
+            <div className="publish-actions" aria-label="Distribution controls">
+              <button type="button" onClick={() => void runAction("dispatch_now")}>
+                Dispatch
               </button>
-              <button type="button" disabled={!controlsEnabled} onClick={() => void submitControl("schedule")}>
+              <button type="button" onClick={() => void runAction("schedule")}>
                 Schedule
               </button>
             </div>
-            <p className="registry-control-standing">
-              {actionResult
-                ? `${actionResult.action}: ${actionResult.standing}; mutations ${actionResult.mutation_count ?? 0}; external effects ${actionResult.external_publication_effects ?? 0}`
-                : `dispatch_now: ${controlsBody?.controls?.dispatch_now ?? "pending"}; schedule: ${controlsBody?.controls?.schedule ?? "pending"}`}
+            <p className="publish-action-standing">
+              {standingLabel(actionStanding ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status)}
             </p>
           </section>
 
-          <section className="registry-proof-section" aria-labelledby="destination-controls">
-            <p className="registry-kicker">Qualified Destinations</p>
-            <h2 id="destination-controls">{destinationRows.length} destinations returned from Lapzuli</h2>
-            {destinationRows.length > 0 ? (
-              <ul className="registry-destination-list">
-                {destinationRows.slice(0, 6).map((destination) => (
-                  <li className="registry-destination-row" key={destination.outlet_key}>
-                    <span>{destination.display_name ?? destination.outlet_key}</span>
-                    <span>{destination.route_type ?? "route pending"}</span>
-                    <span>{destination.qualification_standing ?? "unverified"}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>{controls.status === "loading" ? "Recovering destination qualifications." : "No independently qualified destinations returned."}</p>
-            )}
+          <section className="publish-console-rail" aria-labelledby="publish-evidence">
+            <p className="registry-kicker">Evidence</p>
+            <h2 id="publish-evidence">{proofBody?.event_identity ?? "Route evidence"}</h2>
+            <ul className="registry-proof-sources publish-proof-sources">
+              {preflight.slice(0, 8).map((item) => (
+                <li key={item.key}>
+                  <span>{standingLabel(item.key)}</span>
+                  <strong>{standingLabel(item.standing)}</strong>
+                </li>
+              ))}
+              {recoveredFrom.map((source) => (
+                <li key={source}>
+                  <span>{source}</span>
+                  <strong>recovered</strong>
+                </li>
+              ))}
+            </ul>
           </section>
-
-          {admitted && body?.next_permitted_transition ? (
-            <a className="registry-primary-link" href={body.next_permitted_transition}>
-              Continue to /undrifted
-            </a>
-          ) : null}
         </div>
       </section>
       {renderSystemFooter()}

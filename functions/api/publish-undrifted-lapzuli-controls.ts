@@ -89,9 +89,56 @@ type ExecutionRow = {
   metadata: Record<string, unknown> | null
 }
 
-const SOURCE_OAR2_PATH = "CanCom/codex/oar2_implement_publish_undrifted_lapzuli_controls_codex_003"
+const STATION_SOURCE_MAP = [
+  {
+    station_key: "desks",
+    station_label: "DESKS",
+    authoritative_source: "measures_publication_dispatch + lapzuli_object_profile",
+    mutation_authority: "none",
+  },
+  {
+    station_key: "pubpac",
+    station_label: "PUBPAC",
+    authoritative_source: "published measures_publication_dispatch rows and object custody metadata",
+    mutation_authority: "none",
+  },
+  {
+    station_key: "publication",
+    station_label: "PUBLICATION",
+    authoritative_source: "env.role_call, persistence, and /api/publish-undrifted-proof",
+    mutation_authority: "passage open only",
+  },
+  {
+    station_key: "social",
+    station_label: "SOCIAL",
+    authoritative_source: "lapzuli_outlet_qualification, lapzuli_route, measures_distribution_execution",
+    mutation_authority: "held until qualified route and operator confirmation",
+  },
+  {
+    station_key: "audience",
+    station_label: "AUDIENCE",
+    authoritative_source: "existing outlet/account standing and registered capture surfaces",
+    mutation_authority: "none",
+  },
+  {
+    station_key: "campaigns",
+    station_label: "CAMPAIGNS",
+    authoritative_source: "registered process and route standing only",
+    mutation_authority: "none",
+  },
+]
+
+const SOURCE_OAR2_PATH =
+  "CanCom/codex/oar2_implement_lapis_publication_chamber_operator_environment_codex_005"
 const EXPECTED_OAR1_PATH =
-  "G:/My Drive/CanCom/cancom/oar1_implement_publish_undrifted_lapzuli_controls_codex_003.meta.md"
+  "G:/My Drive/CanCom/cancom/oar1_implement_lapis_publication_chamber_operator_environment_codex_005.meta.md"
+const SOURCE_OAR2_005_PATH =
+  "CanCom/codex/oar2_implement_lapis_publication_chamber_operator_environment_codex_005"
+const SOURCE_CHAMBER_ASSET_SHA256 =
+  "64EC28A4BA640D1181D85780C40D4BB9D8373868D21B82CDB2D037505E683FC2"
+const CHAMBER_SOURCE_PATH = "lapis_antechamber_ops_surface.webp"
+const CHAMBER_DERIVATIVE_PATH =
+  "undrifted/publication-chamber/lapis_antechamber_ops_surface_web_v1.webp"
 const DEFAULT_DIZZY_URL = "https://lapzuli-distribution-worker.c3field.workers.dev"
 
 const jsonHeaders = { "content-type": "application/json; charset=utf-8" }
@@ -432,6 +479,18 @@ async function loadControls(env: Env) {
     expected_oar1_path: EXPECTED_OAR1_PATH,
     mutation_authority: "website_controls_and_registry_record_only",
     external_publication_effects: 0,
+    chamber_environment: {
+      source_oar2_path: SOURCE_OAR2_005_PATH,
+      source_storage_bucket: "measures-registry",
+      source_storage_path: CHAMBER_SOURCE_PATH,
+      source_sha256: SOURCE_CHAMBER_ASSET_SHA256,
+      derivative_storage_bucket: "measures-registry",
+      derivative_storage_path: CHAMBER_DERIVATIVE_PATH,
+      derivative_sha256: SOURCE_CHAMBER_ASSET_SHA256,
+      custody_standing: "chamber_held_governed_source_with_registered_live_derivative",
+      media_role: "lapis_publication_chamber_operator_environment",
+    },
+    stations: STATION_SOURCE_MAP,
     passage: {
       publication_object: selectedObject,
       object_key: objectKey,
