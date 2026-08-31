@@ -10,6 +10,10 @@ type PageMetadata = {
   url: string
   canonicalUrl?: string
   ogUrl?: string
+  rss?: {
+    title: string
+    href: string
+  }
   image: string
   type: string
 }
@@ -58,6 +62,10 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     title: "unDrifted | Measures Registry",
     description: "Reporting on structural drift in AI systems—examining the authority, operations, environments, and responsibility behind consequential outcomes.",
     url: "https://measuresregistry.com/undrifted",
+    rss: {
+      title: "unDrifted RSS",
+      href: "https://measuresregistry.com/undrifted/rss.xml",
+    },
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
   },
@@ -211,6 +219,23 @@ function setCanonical(href: string) {
   element.href = href
 }
 
+function setRssAlternate(rss: PageMetadata["rss"] | undefined) {
+  let element = document.head.querySelector<HTMLLinkElement>('link[rel="alternate"][type="application/rss+xml"][data-managed="registry-rss"]')
+  if (!rss) {
+    element?.remove()
+    return
+  }
+  if (!element) {
+    element = document.createElement("link")
+    element.rel = "alternate"
+    element.type = "application/rss+xml"
+    element.setAttribute("data-managed", "registry-rss")
+    document.head.appendChild(element)
+  }
+  element.title = rss.title
+  element.href = rss.href
+}
+
 function stringFromRecord(record: Record<string, unknown>, key: string) {
   const value = record[key]
   return typeof value === "string" && value.trim() ? value : null
@@ -260,6 +285,7 @@ function applyPageMetadata(metadata: PageMetadata) {
   setMeta('meta[name="twitter:title"]', metadata.title)
   setMeta('meta[name="twitter:description"]', metadata.description)
   setMeta('meta[name="twitter:image"]', metadata.image)
+  setRssAlternate(metadata.rss)
 }
 
 export default function App() {

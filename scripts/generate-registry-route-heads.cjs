@@ -15,6 +15,8 @@ const supabaseKey =
 
 const REGISTRY_BASE_URL = "https://measuresregistry.com"
 const REGISTRY_OG_IMAGE = "https://measuresregistry.com/og.jpeg"
+const UNDRIFTED_RSS_ALTERNATE =
+  '<link rel="alternate" type="application/rss+xml" title="unDrifted RSS" href="https://measuresregistry.com/undrifted/rss.xml" />'
 
 const REGISTRY_REDIRECT_RULES = [
   "/c3field https://c3field.online 301",
@@ -145,6 +147,14 @@ function applyRouteHead(template, seo) {
   html = replaceTag(html, /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/>/s, `<meta name="twitter:description" content="${twitterDescription}" />`)
   html = replaceTag(html, /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/>/s, `<meta name="twitter:image" content="${twitterImage}" />`)
   return html
+}
+
+function applyUndriftedRssAlternate(html) {
+  return replaceTag(
+    html,
+    /<link\s+rel="alternate"\s+type="application\/rss\+xml"\s+title="unDrifted RSS"\s+href="https:\/\/measuresregistry\.com\/undrifted\/rss\.xml"\s*\/>/s,
+    UNDRIFTED_RSS_ALTERNATE,
+  )
 }
 
 function routeSeo(row, routePath) {
@@ -425,6 +435,7 @@ async function main() {
     fs.mkdirSync(routeDir, { recursive: true })
     let html = applyRouteHead(template, seo)
     if (unit.unitKey === "undrifted_publication_landing") {
+      html = applyUndriftedRssAlternate(html)
       const articleGraph = buildUndriftedArticleJsonLd(articles)
       if (articleGraph) html = injectJsonLd(html, articleGraph)
     }

@@ -29,8 +29,6 @@ type Enclosure = {
 }
 
 const BASE_URL = "https://measuresregistry.com"
-const SUPABASE_PUBLIC_STORAGE_BASE =
-  "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public"
 const FEED_URL = `${BASE_URL}/undrifted/rss.xml`
 const PUBLICATION_URL = `${BASE_URL}/undrifted`
 const FEED_CREATOR = "unDrifted"
@@ -110,14 +108,35 @@ function asMediaObject(value: unknown): MediaObject | null {
     : null
 }
 
+function positiveLength(value: unknown): number | null {
+  if (typeof value === "number" && Number.isSafeInteger(value) && value > 0) return value
+  if (typeof value === "string" && /^\d+$/.test(value.trim())) {
+    const parsed = Number(value.trim())
+    return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : null
+  }
+  return null
+}
+
+function lengthFromMedia(media: MediaObject) {
+  return (
+    positiveLength(media.bytes) ??
+    positiveLength(media.byte_size) ??
+    positiveLength(media.byte_count) ??
+    positiveLength(media.size_bytes) ??
+    positiveLength(media.content_length)
+  )
+}
+
 function mediaFromObject(value: unknown): Enclosure | null {
   const media = asMediaObject(value)
   if (!media) return null
   const url = typeof media.public_url === "string" ? media.public_url : null
   if (!url?.startsWith("https://")) return null
+  const length = lengthFromMedia(media)
+  if (!length) return null
   return {
     url,
-    length: typeof media.bytes === "number" ? media.bytes : 0,
+    length,
     type: typeof media.mime_type === "string" ? media.mime_type : "image/webp",
   }
 }
@@ -129,31 +148,6 @@ function enclosure(row: DispatchRow): Enclosure | null {
   for (const candidate of [manifest.cover, manifest.website, manifest.paragraph]) {
     const found = mediaFromObject(candidate)
     if (found) return found
-  }
-
-  if (typeof manifest.banner_url === "string" && manifest.banner_url.startsWith("https://")) {
-    return { url: manifest.banner_url, length: 0, type: "image/webp" }
-  }
-
-  const bucket = typeof manifest.storage_bucket === "string" ? manifest.storage_bucket : null
-  const storagePath = typeof manifest.storage_path === "string" ? manifest.storage_path : null
-  if (bucket && storagePath) {
-    return {
-      url: `${SUPABASE_PUBLIC_STORAGE_BASE}/${bucket}/${storagePath.replace(/^\//, "")}`,
-      length: 0,
-      type: "image/webp",
-    }
-  }
-
-  const bannerImage = typeof manifest.banner_image === "string" ? manifest.banner_image : null
-  if (bannerImage) {
-    const clean = bannerImage.replace(/^\//, "")
-    const path = clean.startsWith("measures-registry/") ? clean : `measures-registry/${clean}`
-    return {
-      url: `${SUPABASE_PUBLIC_STORAGE_BASE}/${path}`,
-      length: 0,
-      type: "image/webp",
-    }
   }
 
   return null
@@ -193,7 +187,7 @@ async function loadPublishedDispatches(env: Env): Promise<DispatchRow[]> {
   return (await response.json()) as DispatchRow[]
 }
 
-function renderFeed(rows: DispatchRow[]) {
+export function renderFeed(rows: DispatchRow[]) {
   const items = rows
     .map((row) => {
       const url = canonicalUrl(row)
