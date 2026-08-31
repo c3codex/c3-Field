@@ -1,0 +1,16 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "lapzuli-distribution-worker",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-30",
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "vars": {
+    "MEASURES_BLUESKY_HANDLE": "measures-registry.bsky.social",
+    "UNDRIFTED_BLUESKY_HANDLE": "undrifted.bsky.social",
+    "DIZZY_WORKER_IDENTITY": "dizzy_lapzuli_distribution_worker_v1",
+    "DIZZY_EXECUTION_INSTANCE": "complete_dizzy_worker_scheduler_integration_codex_002"
+  }
+}
