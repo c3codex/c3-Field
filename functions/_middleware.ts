@@ -66,7 +66,7 @@ function denied(request: Request) {
     })
   }
   return new Response("operator access denied", {
-    status: 403,
+    status: 401,
     headers: {
       "content-type": "text/plain; charset=utf-8",
       "www-authenticate": 'Basic realm="Measures Registry operator chamber", charset="UTF-8"',

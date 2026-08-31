@@ -36,10 +36,10 @@ test("passes public undrifted routes without operator key", async () => {
   assert.equal(nextCalled, true)
 })
 
-test("denies anonymous chamber page with basic challenge", async () => {
+test("challenges anonymous chamber page for browser credential entry", async () => {
   const response = await callMiddleware(new Request("https://measuresregistry.com/publish-undrifted/"))
 
-  assert.equal(response.status, 403)
+  assert.equal(response.status, 401)
   assert.match(response.headers.get("www-authenticate") ?? "", /Measures Registry operator chamber/)
   assert.equal(await response.text(), "operator access denied")
 })
@@ -61,6 +61,28 @@ test("allows existing operator dispatch key and marks response private", async (
   const response = await callMiddleware(
     new Request("https://measuresregistry.com/publish-undrifted/", {
       headers: { "x-operator-dispatch-key": env.OPERATOR_DISPATCH_KEY },
+    }),
+    {
+      next: async () => {
+        nextCalled = true
+        return new Response("chamber")
+      },
+    },
+  )
+
+  assert.equal(response.status, 200)
+  assert.equal(nextCalled, true)
+  assert.equal(response.headers.get("cache-control"), "private, no-store")
+  assert.match(response.headers.get("set-cookie") ?? "", /mr_operator_chamber=/)
+  assert.equal(await response.text(), "chamber")
+})
+
+test("allows browser basic auth password and marks response private", async () => {
+  let nextCalled = false
+  const basic = btoa(`op044:${env.OPERATOR_DISPATCH_KEY}`)
+  const response = await callMiddleware(
+    new Request("https://measuresregistry.com/publish-undrifted/", {
+      headers: { authorization: `Basic ${basic}` },
     }),
     {
       next: async () => {
