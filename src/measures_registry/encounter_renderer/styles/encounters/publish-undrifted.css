@@ -1,0 +1,49 @@
+.registry-fact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.registry-fact-grid div,
+.registry-proof-list div {
+  min-width: 0;
+}
+
+.registry-fact-grid dt,
+.registry-proof-list dt {
+  color: color-mix(in srgb, currentColor 58%, transparent);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.registry-fact-grid dd,
+.registry-proof-list dd {
+  margin: 0.25rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.registry-proof-section {
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+
+.registry-proof-list {
+  display: grid;
+  gap: 0.85rem;
+  margin: 1rem 0 0;
+}
+
+.registry-proof-sources {
+  display: grid;
+  gap: 0.45rem;
+  margin: 1rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.registry-primary-link {
+  display: inline-flex;
+  margin-top: 2rem;
+}

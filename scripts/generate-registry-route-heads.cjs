@@ -19,6 +19,8 @@ const REGISTRY_OG_IMAGE = "https://measuresregistry.com/og.jpeg"
 const REGISTRY_REDIRECT_RULES = [
   "/c3field https://c3field.online 301",
   "/c3field/ https://c3field.online 301",
+  "/publish-undrifted /publish-undrifted/index.html 200",
+  "/publish-undrifted/ /publish-undrifted/index.html 200",
   "/undrifted/field-findings-2026-w28 /undrifted/field-findings-2026-w28/index.html 200",
   "/undrifted/field-findings-2026-w28/ /undrifted/field-findings-2026-w28/index.html 200",
   "/undrifted/ai-agents-are-not-entering-empty-systems /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
@@ -406,6 +408,13 @@ async function main() {
     "Connect | Measures Registry",
     "Connect with Measures Registry through questions about Computational Systems Governance, assessment, standing, governed progression, and unDrifted.",
   )
+  writeWebsiteRouteHead(
+    outDir,
+    template,
+    "/publish-undrifted",
+    "publish_undrifted | unDrifted",
+    "Governed passage surface for env.role_call, Persistence, and unDrifted publication admission.",
+  )
   writePrivacyRouteHead(outDir, template)
   writeTermsRouteHead(outDir, template)
 
@@ -430,6 +439,7 @@ async function main() {
     `Generated governed registry route heads: ${[
       "/home",
       "/connect",
+      "/publish-undrifted",
       ...routeUnits.map((unit) => unit.routePath),
       ...launchCycleArticleRoutes.map((route) => route.routePath),
     ].join(", ")}`,

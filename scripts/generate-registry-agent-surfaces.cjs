@@ -8,6 +8,7 @@ const publicNav = [
   ["Measures Registry", "/"],
   ["Connect", "/connect"],
   ["Assess the Environment", "/ai-operations-assessment"],
+  ["publish_undrifted", "/publish-undrifted"],
   ["unDrifted", "/undrifted"],
 ]
 
@@ -15,6 +16,7 @@ const publicRouteFiles = [
   "index.html",
   "home/index.html",
   "connect/index.html",
+  "publish-undrifted/index.html",
   "ai-operations-assessment/index.html",
   "undrifted/index.html",
   "undrifted/field-findings-2026-w28/index.html",

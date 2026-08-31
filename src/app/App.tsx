@@ -61,6 +61,13 @@ const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
     image: "https://measuresregistry.com/og.jpeg",
     type: "website",
   },
+  "/publish-undrifted": {
+    title: "publish_undrifted | unDrifted",
+    description: "Governed passage surface for env.role_call, Persistence, and unDrifted publication admission.",
+    url: "https://measuresregistry.com/publish-undrifted",
+    image: "https://measuresregistry.com/og.jpeg",
+    type: "website",
+  },
   "/undrifted/field-findings-2026-w28": {
     title: "Field Findings 2026-W28 | unDrifted",
     description: "Weekly observations from the Field, July 4-10, 2026.",
