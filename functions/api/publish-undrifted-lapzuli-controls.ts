@@ -129,9 +129,9 @@ const STATION_SOURCE_MAP = [
 ]
 
 const SOURCE_OAR2_PATH =
-  "CanCom/codex/oar2_implement_lapis_publication_chamber_operator_environment_codex_005"
+  "CanCom/codex/oar2_harden_complete_undrifted_publication_operator_passage_codex_006"
 const EXPECTED_OAR1_PATH =
-  "G:/My Drive/CanCom/cancom/oar1_implement_lapis_publication_chamber_operator_environment_codex_005.meta.md"
+  "G:/My Drive/CanCom/cancom/oar1_harden_complete_undrifted_publication_operator_passage_codex_006.meta.md"
 const SOURCE_OAR2_005_PATH =
   "CanCom/codex/oar2_implement_lapis_publication_chamber_operator_environment_codex_005"
 const SOURCE_CHAMBER_ASSET_SHA256 =
@@ -479,6 +479,16 @@ async function loadControls(env: Env) {
     expected_oar1_path: EXPECTED_OAR1_PATH,
     mutation_authority: "website_controls_and_registry_record_only",
     external_publication_effects: 0,
+    operator_access: {
+      mechanism: "existing OPERATOR_DISPATCH_KEY",
+      protected_surfaces: [
+        "/publish-undrifted",
+        "/api/publish-undrifted-proof",
+        "/api/publish-undrifted-lapzuli-controls",
+      ],
+      anonymous_privileged_state: "denied_by_pages_middleware",
+      public_routes_preserved: ["/undrifted"],
+    },
     chamber_environment: {
       source_oar2_path: SOURCE_OAR2_005_PATH,
       source_storage_bucket: "measures-registry",

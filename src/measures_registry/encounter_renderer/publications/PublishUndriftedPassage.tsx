@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import type { CSSProperties, ReactNode } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type { EncounterMediaRow } from "../types/encounterRendererTypes"
 
 type ProofState =
+  | { status: "idle" }
   | { status: "loading" }
   | { status: "satisfied"; body: ProofBody }
   | { status: "held"; body: ProofBody }
@@ -83,6 +84,7 @@ type ControlsBody = {
 type Station = {
   key: string
   label: string
+  shortLabel: string
   x: number
   y: number
   status: (body: ControlsBody | null, proof: ProofState) => string
@@ -99,44 +101,50 @@ const STATIONS: Station[] = [
   {
     key: "desks",
     label: "DESKS",
+    shortLabel: "DESK",
     x: 17,
     y: 73,
-    status: (body) => `${body?.controls?.select_object?.length ?? 0} eligible`,
+    status: (body) => body ? `${body.controls?.select_object?.length ?? 0} eligible` : "awaiting pull",
   },
   {
     key: "pubpac",
     label: "PUBPAC",
+    shortLabel: "PUB",
     x: 31,
     y: 73,
-    status: (body) => body?.passage?.object_key ?? "pending",
+    status: (body) => body?.passage?.object_key ?? "awaiting pull",
   },
   {
     key: "publication",
     label: "PUBLICATION",
+    shortLabel: "PUBN",
     x: 44,
     y: 73,
-    status: (_body, proof) => proof.status === "satisfied" ? "passage ready" : proof.status,
+    status: (body, proof) => body ? (proof.status === "satisfied" ? "passage ready" : proof.status) : "awaiting pull",
   },
   {
     key: "social",
     label: "SOCIAL",
+    shortLabel: "SOC",
     x: 57,
     y: 73,
-    status: (body) => body?.controls?.dispatch_now ?? "held",
+    status: (body) => body?.controls?.dispatch_now ?? "awaiting pull",
   },
   {
     key: "audience",
     label: "AUDIENCE",
+    shortLabel: "AUD",
     x: 70,
     y: 73,
-    status: (body) => `${body?.destinations?.length ?? 0} destinations`,
+    status: (body) => body ? `${body.destinations?.length ?? 0} destinations` : "awaiting pull",
   },
   {
     key: "campaigns",
     label: "CAMPAIGNS",
+    shortLabel: "CAMP",
     x: 83,
     y: 73,
-    status: (body) => body?.lapzuli_distribution?.route_standing ?? "held",
+    status: (body) => body?.lapzuli_distribution?.route_standing ?? "awaiting pull",
   },
 ]
 
@@ -160,48 +168,39 @@ export default function PublishUndriftedPassage({
   renderHeader,
   renderSystemFooter,
 }: Props) {
-  const [proof, setProof] = useState<ProofState>({ status: "loading" })
+  const [proof, setProof] = useState<ProofState>({ status: "idle" })
   const [controls, setControls] = useState<ControlState>({ status: "idle" })
   const [selectedStation, setSelectedStation] = useState("publication")
 
-  useEffect(() => {
-    let cancelled = false
-
-    async function runProof() {
-      try {
-        const response = await fetch("/api/publish-undrifted-proof", { method: "POST" })
-        const body = (await response.json().catch(() => ({}))) as ProofBody
-        if (cancelled) return
-        if (response.ok && body.final_standing === "implemented_and_passage_proven") {
-          setProof({ status: "satisfied", body })
-          return
-        }
-        setProof({ status: "held", body })
-      } catch (error) {
-        if (cancelled) return
-        setProof({ status: "error", message: error instanceof Error ? error.message : String(error) })
+  async function runProof() {
+    setProof({ status: "loading" })
+    try {
+      const response = await fetch("/api/publish-undrifted-proof", { method: "POST" })
+      const body = (await response.json().catch(() => ({}))) as ProofBody
+      if (response.ok && body.final_standing === "implemented_and_passage_proven") {
+        setProof({ status: "satisfied", body })
+        return
       }
+      setProof({ status: "held", body })
+    } catch (error) {
+      setProof({ status: "error", message: error instanceof Error ? error.message : String(error) })
     }
+  }
 
-    async function runControls() {
-      setControls({ status: "loading" })
-      try {
-        const response = await fetch("/api/publish-undrifted-lapzuli-controls")
-        const body = (await response.json().catch(() => ({}))) as ControlsBody
-        if (cancelled) return
-        setControls(response.ok ? { status: "satisfied", body } : { status: "held", body })
-      } catch (error) {
-        if (cancelled) return
-        setControls({ status: "error", message: error instanceof Error ? error.message : String(error) })
-      }
+  async function runControls() {
+    setControls({ status: "loading" })
+    try {
+      const response = await fetch("/api/publish-undrifted-lapzuli-controls")
+      const body = (await response.json().catch(() => ({}))) as ControlsBody
+      setControls(response.ok ? { status: "satisfied", body } : { status: "held", body })
+    } catch (error) {
+      setControls({ status: "error", message: error instanceof Error ? error.message : String(error) })
     }
+  }
 
-    void runProof()
-    void runControls()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  async function pullReport() {
+    await Promise.all([runProof(), runControls()])
+  }
 
   async function runAction(action: "dispatch_now" | "schedule") {
     setControls({ status: "loading" })
@@ -247,10 +246,6 @@ export default function PublishUndriftedPassage({
         <div className="publish-chamber-stage" aria-label="publish-undrifted operator chamber">
           {chamberUrl ? <img className="publish-chamber-image" src={chamberUrl} alt="" loading="eager" /> : null}
           <div className="publish-chamber-shade" />
-          <div className="publish-chamber-heading">
-            <p className="registry-kicker">/publish-undrifted</p>
-            <h1>Human operator chamber</h1>
-          </div>
           <div className="publish-chamber-stations" aria-label="Publication chamber stations">
             {STATIONS.map((station) => (
               <button
@@ -258,10 +253,11 @@ export default function PublishUndriftedPassage({
                 className="publish-station-button"
                 style={{ "--station-x": `${station.x}%`, "--station-y": `${station.y}%` } as CSSProperties}
                 aria-pressed={selectedStation === station.key}
+                aria-label={station.label}
                 onClick={() => setSelectedStation(station.key)}
               >
-                <span>{station.label}</span>
-                <small>{standingLabel(station.status(controlsBody, proof))}</small>
+                <span className="publish-station-label-full">{station.label}</span>
+                <span className="publish-station-label-short" aria-hidden="true">{station.shortLabel}</span>
               </button>
             ))}
           </div>
@@ -270,7 +266,15 @@ export default function PublishUndriftedPassage({
         <div className="publish-chamber-console">
           <section className="publish-console-primary" aria-labelledby="publish-console-selected">
             <p className="registry-kicker">{selected.label}</p>
-            <h2 id="publish-console-selected">{publication?.title ?? "Publication object pending"}</h2>
+            <h2 id="publish-console-selected">{publication?.title ?? "Pull report to recover eligible state"}</h2>
+            <button
+              className="publish-pull-report"
+              type="button"
+              onClick={() => void pullReport()}
+              disabled={proof.status === "loading" || controls.status === "loading"}
+            >
+              Pull Report
+            </button>
             <dl className="registry-proof-list publish-proof-list">
               <div>
                 <dt>Dispatch</dt>
@@ -295,7 +299,7 @@ export default function PublishUndriftedPassage({
             <p className="registry-kicker">Human / Compute</p>
             <h2 id="publish-control-sequence">PULL REPORT / RECOVER STATE / PREFLIGHT / OPEN PASSAGE</h2>
             <div className="publish-control-grid">
-              <span>{standingLabel(`${controlsBody?.controls?.select_object?.length ?? 0} eligible`)}</span>
+              <span>{controlsBody ? standingLabel(`${controlsBody.controls?.select_object?.length ?? 0} eligible`) : "awaiting pull report"}</span>
               <span>{standingLabel(controlsBody?.controls?.recover ?? proof.status)}</span>
               <span>{standingLabel(controlsBody?.controls?.preflight ?? controls.status)}</span>
               <span>{standingLabel(controlsBody?.controls?.open_passage ?? proof.status)}</span>
