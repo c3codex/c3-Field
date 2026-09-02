@@ -17,6 +17,12 @@ type ControlState =
   | { status: "held"; body: ControlsBody }
   | { status: "error"; message: string }
 
+type ReportState =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "satisfied"; body: DistributionReportBody }
+  | { status: "error"; message: string }
+
 type ProofBody = {
   final_standing?: string
   execution_instance_id?: string
@@ -40,6 +46,44 @@ type PublicationObject = {
   internal_route?: string
   source_sha256?: string
   source_drive_id?: string
+}
+
+type DistributionArticle = {
+  dispatch_key: string
+  issue_key: string
+  desk_key: string
+  title: string
+  internal_route: string | null
+  external_url: string | null
+  publication_status: string
+  published_at: string | null
+  publication_object_key: string
+  source_sha256: string | null
+  source_drive_id: string | null
+  source_distribution_hold: boolean
+  object_profile_standing: string | null
+  distribution_state: string
+  allowed_channels: Array<{
+    outlet_key?: string
+    outlet_name?: string
+    distribution_mode?: string
+    standing?: string
+    fit_score?: number
+    account_standing?: string
+  }>
+}
+
+type DistributionReportBody = {
+  issue_key: string | null
+  article_count: number
+  desks: Record<string, DistributionArticle[]>
+  articles: DistributionArticle[]
+  action_summary: {
+    ready_for_route_resolution: number
+    profile_required: number
+    source_hold: number
+    distributed: number
+  }
 }
 
 type ControlsBody = {
@@ -170,6 +214,7 @@ export default function PublishUndriftedPassage({
 }: Props) {
   const [proof, setProof] = useState<ProofState>({ status: "idle" })
   const [controls, setControls] = useState<ControlState>({ status: "idle" })
+  const [report, setReport] = useState<ReportState>({ status: "idle" })
   const [selectedStation, setSelectedStation] = useState("publication")
 
   async function runProof() {
@@ -198,8 +243,20 @@ export default function PublishUndriftedPassage({
     }
   }
 
+  async function runDistributionReport() {
+    setReport({ status: "loading" })
+    try {
+      const response = await fetch("/api/undrifted-distribution-report")
+      const body = (await response.json().catch(() => ({}))) as DistributionReportBody
+      if (!response.ok) throw new Error("Unable to load current unDrifted distribution report")
+      setReport({ status: "satisfied", body })
+    } catch (error) {
+      setReport({ status: "error", message: error instanceof Error ? error.message : String(error) })
+    }
+  }
+
   async function pullReport() {
-    await Promise.all([runProof(), runControls()])
+    await Promise.all([runProof(), runControls(), runDistributionReport()])
   }
 
   async function runAction(action: "dispatch_now" | "schedule") {
@@ -219,10 +276,17 @@ export default function PublishUndriftedPassage({
 
   const proofBody = proof.status === "satisfied" || proof.status === "held" ? proof.body : null
   const controlsBody = controls.status === "satisfied" || controls.status === "held" ? controls.body : null
-  const publication =
-    controlsBody?.passage?.publication_object ??
-    proofBody?.persistence_state_used?.publication_object ??
-    null
+  const reportBody = report.status === "satisfied" ? report.body : null
+  const reportPublication = reportBody?.articles[0]
+  const publication = reportPublication
+    ? {
+        dispatch_key: reportPublication.dispatch_key,
+        title: reportPublication.title,
+        internal_route: reportPublication.internal_route ?? undefined,
+        source_sha256: reportPublication.source_sha256 ?? undefined,
+        source_drive_id: reportPublication.source_drive_id ?? undefined,
+      }
+    : controlsBody?.passage?.publication_object ?? proofBody?.persistence_state_used?.publication_object ?? null
   const recoveredFrom = proofBody?.persistence_state_used?.recovered_from ?? []
   const chamberUrl = useMemo(
     () =>
@@ -233,6 +297,7 @@ export default function PublishUndriftedPassage({
   const selected = STATIONS.find((station) => station.key === selectedStation) ?? STATIONS[2]
   const preflight = controlsBody?.passage?.preflight ?? []
   const actionStanding = controlsBody?.action_result?.standing ?? controlsBody?.held_check
+  const reportLoading = report.status === "loading"
 
   return (
     <main className="registry-encounter-shell" style={registryTokenStyle}>
@@ -266,16 +331,24 @@ export default function PublishUndriftedPassage({
         <div className="publish-chamber-console">
           <section className="publish-console-primary" aria-labelledby="publish-console-selected">
             <p className="registry-kicker">{selected.label}</p>
-            <h2 id="publish-console-selected">{publication?.title ?? "Pull report to recover eligible state"}</h2>
+            <h2 id="publish-console-selected">{publication?.title ?? "Pull report to recover current publication state"}</h2>
             <button
               className="publish-pull-report"
               type="button"
               onClick={() => void pullReport()}
-              disabled={proof.status === "loading" || controls.status === "loading"}
+              disabled={proof.status === "loading" || controls.status === "loading" || reportLoading}
             >
               Pull Report
             </button>
             <dl className="registry-proof-list publish-proof-list">
+              <div>
+                <dt>Issue</dt>
+                <dd>{reportBody?.issue_key ?? "pending"}</dd>
+              </div>
+              <div>
+                <dt>Published articles</dt>
+                <dd>{reportBody?.article_count ?? "pending"}</dd>
+              </div>
               <div>
                 <dt>Dispatch</dt>
                 <dd>{publication?.dispatch_key ?? "pending"}</dd>
@@ -295,25 +368,48 @@ export default function PublishUndriftedPassage({
             </dl>
           </section>
 
+          <section className="publish-console-rail" aria-labelledby="publish-desk-report">
+            <p className="registry-kicker">Current issue</p>
+            <h2 id="publish-desk-report">DESK DISTRIBUTION REPORT</h2>
+            <ul className="registry-proof-sources publish-proof-sources">
+              {reportBody?.articles.map((article) => (
+                <li key={article.dispatch_key}>
+                  <span>{article.desk_key.replaceAll("_", " ")} · {article.title}</span>
+                  <strong>
+                    {standingLabel(article.distribution_state)} · {article.allowed_channels.length} channels
+                  </strong>
+                </li>
+              ))}
+              {report.status === "idle" ? (
+                <li><span>Pull Report</span><strong>awaiting current issue</strong></li>
+              ) : null}
+              {report.status === "error" ? (
+                <li><span>Report</span><strong>{report.message}</strong></li>
+              ) : null}
+            </ul>
+          </section>
+
           <section className="publish-console-rail" aria-labelledby="publish-control-sequence">
-            <p className="registry-kicker">Human / Compute</p>
-            <h2 id="publish-control-sequence">PULL REPORT / RECOVER STATE / PREFLIGHT / OPEN PASSAGE</h2>
+            <p className="registry-kicker">Distribution actions</p>
+            <h2 id="publish-control-sequence">SOURCE / CHANNEL / ROUTE / ASSIGNMENT</h2>
             <div className="publish-control-grid">
-              <span>{controlsBody ? standingLabel(`${controlsBody.controls?.select_object?.length ?? 0} eligible`) : "awaiting pull report"}</span>
-              <span>{standingLabel(controlsBody?.controls?.recover ?? proof.status)}</span>
-              <span>{standingLabel(controlsBody?.controls?.preflight ?? controls.status)}</span>
-              <span>{standingLabel(controlsBody?.controls?.open_passage ?? proof.status)}</span>
+              <span>{reportBody ? `${reportBody.article_count} published` : "awaiting report"}</span>
+              <span>{reportBody ? `${reportBody.action_summary.profile_required} profile required` : "awaiting report"}</span>
+              <span>{reportBody ? `${reportBody.action_summary.source_hold} source hold` : "awaiting report"}</span>
+              <span>{reportBody ? `${reportBody.action_summary.distributed} distributed` : "awaiting report"}</span>
             </div>
             <div className="publish-actions" aria-label="Distribution controls">
-              <button type="button" onClick={() => void runAction("dispatch_now")}>
+              <button type="button" onClick={() => void runAction("dispatch_now")} disabled>
                 Dispatch
               </button>
-              <button type="button" onClick={() => void runAction("schedule")}>
+              <button type="button" onClick={() => void runAction("schedule")} disabled>
                 Schedule
               </button>
             </div>
             <p className="publish-action-standing">
-              {standingLabel(actionStanding ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status)}
+              {reportBody
+                ? "held until a source-specific action call is bound"
+                : standingLabel(actionStanding ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status)}
             </p>
           </section>
 
