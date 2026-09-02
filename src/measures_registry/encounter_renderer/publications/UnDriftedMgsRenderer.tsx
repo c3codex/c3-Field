@@ -135,6 +135,7 @@ function latestDeskPage(
 ): { page: EncounterIssuePageRow; dispatch: EncounterPublicationDispatchRow | null } | null {
   const candidates = activePages
     .filter((page) => asString(asRecord(page.metadata)?.desk_key) === deskKey)
+    .filter((page) => asRecord(page.metadata)?.featured_article !== true)
     .map((page) => ({ page, dispatch: dispatchForPage(page, dispatches) }))
     .filter(({ dispatch }) => !dispatch || dispatch.status === "published")
     .sort((a, b) => {
