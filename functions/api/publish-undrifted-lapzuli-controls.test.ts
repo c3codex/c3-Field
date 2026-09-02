@@ -66,7 +66,42 @@ function dispatchRows() {
   }]
 }
 
+function reportRows() {
+  return [{
+    dispatch_key: "drift_report_005_the_wiz_behind_the_curtain",
+    issue_key: "undrifted_issue_003",
+    desk_key: "drift_report",
+    title: "The Wiz Behind the Curtain",
+    internal_route: "/undrifted/the-wiz-behind-the-curtain",
+    external_url: "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/",
+    publication_status: "published",
+    published_at: "2026-08-29T20:32:03.028237+00:00",
+    publication_object_key: "undrifted_drift_report_005",
+    source_sha256: "4c84fa696df8dcefe25877f86a2b3b8670267c795a884ffd378980c85b8813c9",
+    source_drive_id: "16PJHULbIWZ7Sz6s1Q9pmJWfEgyoYGaVJ",
+    source_distribution_hold: true,
+    object_profile_standing: "profiled_citation_verified",
+    researched_and_cited: true,
+    citations_verified: true,
+    execution_count: 0,
+    completed_distribution_count: 0,
+    latest_platform_url: null,
+    distribution_state: "source_hold",
+    allowed_channels: [{
+      outlet_key: "dev",
+      outlet_name: "DEV Community",
+      distribution_mode: "canonical_crosspost",
+      standing: "qualified_with_constraints",
+      fit_score: 82,
+      account_standing: "verified",
+    }],
+  }]
+}
+
 function mockHandler(url: string, init: RequestInit) {
+  if (init.method === "POST" && url.includes("c3_oar_")) {
+    return new Response("", { status: 201 })
+  }
   if (url === "https://lapzuli.example/role-call/proof") {
     assert.equal((init.headers as Record<string, string>).authorization, "Bearer lapzuli-test")
     return Response.json({
@@ -91,6 +126,9 @@ function mockHandler(url: string, init: RequestInit) {
   }
   if (url.includes("measures_publication_dispatch?")) {
     return Response.json(dispatchRows())
+  }
+  if (url.includes("undrifted_distribution_report_v1?")) {
+    return Response.json(reportRows())
   }
   if (url.includes("lapzuli_object_profile?")) {
     return Response.json([{
@@ -131,7 +169,7 @@ function mockHandler(url: string, init: RequestInit) {
   return Response.json([])
 }
 
-test("returns proven controls with distribution actions held when no route exists", async () => {
+test("returns selectable objects without silently choosing an action target", async () => {
   const response = await withMockedFetch(mockHandler, () => onRequestGet({
     request: new Request("https://example.com/api/publish-undrifted-lapzuli-controls"),
     env,
@@ -140,13 +178,14 @@ test("returns proven controls with distribution actions held when no route exist
   assert.equal(response.status, 200)
   const body = await response.json() as Record<string, any>
   assert.equal(body.final_standing, "implemented_publish_undrifted_lapzuli_human_compute_controls_proven")
-  assert.equal(body.passage.publication_object.dispatch_key, "drift_report_005_the_wiz_behind_the_curtain")
-  assert.equal(body.lapzuli_distribution.route_standing, "qualification_required")
-  assert.equal(body.controls.dispatch_now, "held_route_required")
+  assert.equal(body.passage.publication_object, null)
+  assert.equal(body.controls.select_object[0].publication_object_key, "undrifted_drift_report_005")
+  assert.equal(body.lapzuli_distribution.route_standing, "held_binding")
+  assert.equal(body.controls.dispatch_now, "held_binding")
   assert.equal(body.dizzy.worker_identity, "dizzy_lapzuli_distribution_worker_v1")
   assert.equal(body.external_publication_effects, 0)
-  assert.equal(body.source_oar2_path, "CanCom/codex/oar2_harden_complete_undrifted_publication_operator_passage_codex_006")
-  assert.equal(body.expected_oar1_path, "G:/My Drive/CanCom/cancom/oar1_harden_complete_undrifted_publication_operator_passage_codex_006.meta.md")
+  assert.equal(body.source_oar2_path, "CanCom/codex/oar2_normalize_undrifted_source_specific_lapzuli_actions_codex_008")
+  assert.equal(body.expected_oar1_path, "G:/My Drive/CanCom/cancom/oar1_normalize_undrifted_source_specific_lapzuli_actions_codex_008.meta.md")
   assert.equal(body.operator_access.mechanism, "existing OPERATOR_DISPATCH_KEY")
   assert.equal(body.chamber_environment.media_role, "lapis_publication_chamber_operator_environment")
   assert.equal(body.chamber_environment.derivative_storage_path, "undrifted/publication-chamber/lapis_antechamber_ops_surface_web_v1.webp")
@@ -161,7 +200,7 @@ test("returns proven controls with distribution actions held when no route exist
   ])
 })
 
-test("dispatch action returns a held zero-mutation result without a route", async () => {
+test("dispatch action requires an explicit publication object and target channel", async () => {
   const response = await withMockedFetch(mockHandler, () => onRequestPost({
     request: new Request("https://example.com/api/publish-undrifted-lapzuli-controls", {
       method: "POST",
@@ -170,9 +209,30 @@ test("dispatch action returns a held zero-mutation result without a route", asyn
     env,
   } as never))
 
-  assert.equal(response.status, 409)
+  assert.equal(response.status, 400)
   const body = await response.json() as Record<string, any>
-  assert.equal(body.action_result.standing, "held_route_required")
+  assert.equal(body.action_result.standing, "held_explicit_selection_required")
   assert.equal(body.action_result.mutation_count, 0)
   assert.equal(body.action_result.external_publication_effects, 0)
+})
+
+test("dispatch action persists a held evidence event for selected source-held object", async () => {
+  const response = await withMockedFetch(mockHandler, () => onRequestPost({
+    request: new Request("https://example.com/api/publish-undrifted-lapzuli-controls", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "dispatch_now",
+        publication_object_key: "undrifted_drift_report_005",
+        outlet_key: "dev",
+      }),
+    }),
+    env,
+  } as never))
+
+  assert.equal(response.status, 409)
+  const body = await response.json() as Record<string, any>
+  assert.equal(body.action_result.standing, "held_source_distribution_hold")
+  assert.equal(body.action_result.mutation_count, 1)
+  assert.equal(body.action_result.external_publication_effects, 0)
+  assert.match(body.action_result.evidence_identity, /^lapzuli_source_action_undrifted_drift_report_005_dev_/)
 })

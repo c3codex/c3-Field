@@ -46,6 +46,11 @@ type PublicationObject = {
   internal_route?: string
   source_sha256?: string
   source_drive_id?: string
+  publication_object_key?: string
+  desk_key?: string
+  source_distribution_hold?: boolean
+  object_profile_standing?: string | null
+  distribution_state?: string
 }
 
 type DistributionArticle = {
@@ -91,6 +96,8 @@ type ControlsBody = {
   held_check?: string | null
   controls?: {
     select_object?: PublicationObject[]
+    selected_channel?: DistributionArticle["allowed_channels"][number] | null
+    selected_route?: unknown | null
     recover?: string
     preflight?: string
     open_passage?: string
@@ -216,6 +223,8 @@ export default function PublishUndriftedPassage({
   const [controls, setControls] = useState<ControlState>({ status: "idle" })
   const [report, setReport] = useState<ReportState>({ status: "idle" })
   const [selectedStation, setSelectedStation] = useState("publication")
+  const [selectedObjectKey, setSelectedObjectKey] = useState<string>("")
+  const [selectedOutletKey, setSelectedOutletKey] = useState<string>("")
 
   async function runProof() {
     setProof({ status: "loading" })
@@ -235,7 +244,11 @@ export default function PublishUndriftedPassage({
   async function runControls() {
     setControls({ status: "loading" })
     try {
-      const response = await fetch("/api/publish-undrifted-lapzuli-controls")
+      const params = new URLSearchParams()
+      if (selectedObjectKey) params.set("publication_object_key", selectedObjectKey)
+      if (selectedOutletKey) params.set("outlet_key", selectedOutletKey)
+      const suffix = params.toString() ? `?${params.toString()}` : ""
+      const response = await fetch(`/api/publish-undrifted-lapzuli-controls${suffix}`)
       const body = (await response.json().catch(() => ({}))) as ControlsBody
       setControls(response.ok ? { status: "satisfied", body } : { status: "held", body })
     } catch (error) {
@@ -265,7 +278,11 @@ export default function PublishUndriftedPassage({
       const response = await fetch("/api/publish-undrifted-lapzuli-controls", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({
+          action,
+          publication_object_key: selectedObjectKey,
+          outlet_key: selectedOutletKey,
+        }),
       })
       const body = (await response.json().catch(() => ({}))) as ControlsBody
       setControls(response.ok ? { status: "satisfied", body } : { status: "held", body })
@@ -277,7 +294,8 @@ export default function PublishUndriftedPassage({
   const proofBody = proof.status === "satisfied" || proof.status === "held" ? proof.body : null
   const controlsBody = controls.status === "satisfied" || controls.status === "held" ? controls.body : null
   const reportBody = report.status === "satisfied" ? report.body : null
-  const reportPublication = reportBody?.articles[0]
+  const reportPublication = reportBody?.articles.find((article) => article.publication_object_key === selectedObjectKey) ?? null
+  const selectedChannels = reportPublication?.allowed_channels ?? []
   const publication = reportPublication
     ? {
         dispatch_key: reportPublication.dispatch_key,
@@ -285,6 +303,11 @@ export default function PublishUndriftedPassage({
         internal_route: reportPublication.internal_route ?? undefined,
         source_sha256: reportPublication.source_sha256 ?? undefined,
         source_drive_id: reportPublication.source_drive_id ?? undefined,
+        publication_object_key: reportPublication.publication_object_key,
+        desk_key: reportPublication.desk_key,
+        source_distribution_hold: reportPublication.source_distribution_hold,
+        object_profile_standing: reportPublication.object_profile_standing,
+        distribution_state: reportPublication.distribution_state,
       }
     : controlsBody?.passage?.publication_object ?? proofBody?.persistence_state_used?.publication_object ?? null
   const recoveredFrom = proofBody?.persistence_state_used?.recovered_from ?? []
@@ -298,6 +321,7 @@ export default function PublishUndriftedPassage({
   const preflight = controlsBody?.passage?.preflight ?? []
   const actionStanding = controlsBody?.action_result?.standing ?? controlsBody?.held_check
   const reportLoading = report.status === "loading"
+  const actionSelectionReady = Boolean(selectedObjectKey && selectedOutletKey)
 
   return (
     <main className="registry-encounter-shell" style={registryTokenStyle}>
@@ -340,6 +364,42 @@ export default function PublishUndriftedPassage({
             >
               Pull Report
             </button>
+            {reportBody ? (
+              <div className="publish-selection-grid">
+                <label>
+                  <span>Article</span>
+                  <select
+                    value={selectedObjectKey}
+                    onChange={(event) => {
+                      setSelectedObjectKey(event.target.value)
+                      setSelectedOutletKey("")
+                    }}
+                  >
+                    <option value="">Select article</option>
+                    {reportBody.articles.map((article) => (
+                      <option key={article.publication_object_key} value={article.publication_object_key}>
+                        {article.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>Channel</span>
+                  <select
+                    value={selectedOutletKey}
+                    onChange={(event) => setSelectedOutletKey(event.target.value)}
+                    disabled={!selectedObjectKey}
+                  >
+                    <option value="">Select channel</option>
+                    {selectedChannels.map((channel) => (
+                      <option key={channel.outlet_key} value={channel.outlet_key}>
+                        {channel.outlet_name ?? channel.outlet_key} / {standingLabel(channel.distribution_mode)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            ) : null}
             <dl className="registry-proof-list publish-proof-list">
               <div>
                 <dt>Issue</dt>
@@ -364,6 +424,14 @@ export default function PublishUndriftedPassage({
               <div>
                 <dt>Source Drive ID</dt>
                 <dd>{publication?.source_drive_id ?? "pending"}</dd>
+              </div>
+              <div>
+                <dt>Source Hold</dt>
+                <dd>{publication?.source_distribution_hold === true ? "held" : publication ? "clear" : "pending"}</dd>
+              </div>
+              <div>
+                <dt>Selected Channel</dt>
+                <dd>{selectedOutletKey || "pending"}</dd>
               </div>
             </dl>
           </section>
@@ -399,11 +467,11 @@ export default function PublishUndriftedPassage({
               <span>{reportBody ? `${reportBody.action_summary.distributed} distributed` : "awaiting report"}</span>
             </div>
             <div className="publish-actions" aria-label="Distribution controls">
-              <button type="button" onClick={() => void runAction("dispatch_now")} disabled>
-                Dispatch
-              </button>
-              <button type="button" onClick={() => void runAction("schedule")} disabled>
+              <button type="button" onClick={() => void runAction("schedule")} disabled={!actionSelectionReady || controls.status === "loading"}>
                 Schedule
+              </button>
+              <button type="button" onClick={() => void runAction("dispatch_now")} disabled={!actionSelectionReady || controls.status === "loading"}>
+                Dispatch
               </button>
             </div>
             <p className="publish-action-standing">

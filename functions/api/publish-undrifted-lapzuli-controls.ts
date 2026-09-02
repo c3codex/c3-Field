@@ -34,6 +34,36 @@ type DispatchRow = {
   metadata: Record<string, unknown> | null
 }
 
+type DistributionReportRow = {
+  dispatch_key: string
+  issue_key: string | null
+  desk_key: string
+  title: string
+  internal_route: string | null
+  external_url: string | null
+  publication_status: string
+  published_at: string | null
+  publication_object_key: string
+  source_sha256: string | null
+  source_drive_id: string | null
+  source_distribution_hold: boolean
+  object_profile_standing: string | null
+  researched_and_cited: boolean | null
+  citations_verified: boolean | null
+  execution_count: number
+  completed_distribution_count: number
+  latest_platform_url: string | null
+  distribution_state: string
+  allowed_channels: Array<{
+    outlet_key?: string
+    outlet_name?: string
+    distribution_mode?: string
+    standing?: string
+    fit_score?: number
+    account_standing?: string
+  }>
+}
+
 type ObjectProfileRow = {
   publication_object_key: string
   desk_key: string | null
@@ -129,9 +159,9 @@ const STATION_SOURCE_MAP = [
 ]
 
 const SOURCE_OAR2_PATH =
-  "CanCom/codex/oar2_harden_complete_undrifted_publication_operator_passage_codex_006"
+  "CanCom/codex/oar2_normalize_undrifted_source_specific_lapzuli_actions_codex_008"
 const EXPECTED_OAR1_PATH =
-  "G:/My Drive/CanCom/cancom/oar1_harden_complete_undrifted_publication_operator_passage_codex_006.meta.md"
+  "G:/My Drive/CanCom/cancom/oar1_normalize_undrifted_source_specific_lapzuli_actions_codex_008.meta.md"
 const SOURCE_OAR2_005_PATH =
   "CanCom/codex/oar2_implement_lapis_publication_chamber_operator_environment_codex_005"
 const SOURCE_CHAMBER_ASSET_SHA256 =
@@ -205,28 +235,33 @@ async function loadProcess(env: Env, key: string) {
 }
 
 async function loadEligibleObjects(env: Env) {
-  const rows = await supabaseFetch<DispatchRow[]>(
+  const rows = await supabaseFetch<DistributionReportRow[]>(
     env,
-    "measures_publication_dispatch?publication_key=eq.undrifted&status=eq.published&select=dispatch_key,publication_key,title,internal_route,external_url,status,published_at,metadata&order=published_at.desc.nullslast&limit=20",
+    "undrifted_distribution_report_v1?issue_key=eq.undrifted_issue_003&publication_status=eq.published&select=*&order=published_at.desc.nullslast",
   )
 
-  return rows.filter((row) => {
-    const metadata = row.metadata ?? {}
-    return (
-      asString(metadata.series_key) === "drift_report" &&
-      Boolean(asString(metadata.source_sha256)) &&
-      Boolean(asString(metadata.source_drive_id)) &&
-      Boolean(row.internal_route?.startsWith("/undrifted/"))
-    )
-  })
+  return rows.filter((row) => Boolean(row.publication_object_key && row.internal_route?.startsWith("/undrifted/")))
 }
 
-function objectKeyFromDispatch(dispatch: DispatchRow | null) {
-  if (!dispatch) return null
-  const metadataKey = asString(dispatch.metadata?.lapzuli_publication_object_key)
-  if (metadataKey) return metadataKey
-  const number = dispatch.dispatch_key.match(/(?:^|_)0*(\d{3})(?:_|$)/)?.[1]
-  return number ? `undrifted_drift_report_${number}` : dispatch.dispatch_key
+function publicationObject(row: DistributionReportRow) {
+  return {
+    dispatch_key: row.dispatch_key,
+    title: row.title,
+    internal_route: row.internal_route,
+    source_sha256: row.source_sha256,
+    source_drive_id: row.source_drive_id,
+    publication_object_key: row.publication_object_key,
+    desk_key: row.desk_key,
+    issue_key: row.issue_key,
+    source_distribution_hold: row.source_distribution_hold,
+    object_profile_standing: row.object_profile_standing,
+    distribution_state: row.distribution_state,
+  }
+}
+
+function selectedAllowedChannel(row: DistributionReportRow | null, outletKey: string | null) {
+  if (!row || !outletKey) return null
+  return row.allowed_channels.find((channel) => channel.outlet_key === outletKey) ?? null
 }
 
 async function loadObjectProfile(env: Env, objectKey: string | null) {
@@ -284,11 +319,12 @@ async function loadRoutes(env: Env, objectKey: string | null) {
   )
 }
 
-async function loadExecutions(env: Env, dispatchKey: string | null) {
-  if (!dispatchKey) return []
+async function loadExecutions(env: Env, objectKey: string | null, dispatchKey: string | null) {
+  if (!objectKey && !dispatchKey) return []
+  const values = [objectKey, dispatchKey].filter(Boolean).map((value) => `"${value}"`).join(",")
   return supabaseFetch<ExecutionRow[]>(
     env,
-    `measures_distribution_execution?distribution_asset_id=eq.${encodeURIComponent(dispatchKey)}&select=distribution_asset_id,executor_key,channel_key,execution_status,platform_post_id,platform_url,evidence,metadata&limit=50`,
+    `measures_distribution_execution?distribution_asset_id=in.(${encodeURIComponent(values)})&select=distribution_asset_id,executor_key,channel_key,execution_status,platform_post_id,platform_url,evidence,metadata&limit=50`,
   )
 }
 
@@ -319,6 +355,57 @@ async function proveDizzy(env: Env) {
     autonomous_distribution_authority: body?.autonomous_distribution_authority ?? "none",
     external_publication_effects: body?.external_publication_effects ?? 0,
   }
+}
+
+async function recordActionEvidence(env: Env, event: {
+  eventKey: string
+  fromStatus: string
+  toStatus: string
+  transitionType: "execution" | "held"
+  evidenceReference: string
+  notes: string
+}) {
+  await supabaseFetch(env, "c3_oar_process_instance?on_conflict=process_instance_key", {
+    method: "POST",
+    headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+    body: JSON.stringify({
+      process_instance_key: "normalize_undrifted_source_specific_lapzuli_actions_codex_008",
+      source_oar2_path: SOURCE_OAR2_PATH,
+      source_oar2_standing: "confirmed",
+      expected_oar1_path: EXPECTED_OAR1_PATH,
+      actual_oar1_path: EXPECTED_OAR1_PATH,
+      evidence_path: "/api/publish-undrifted-lapzuli-controls",
+      lifecycle_type: event.transitionType === "held" ? "held" : "valid",
+      execution_standing: event.transitionType === "held" ? "held" : "completed",
+      validation_standing: "chazz_review_required",
+      deploy_standing: "configured",
+      held_standing: event.transitionType === "held" ? "held_pending_operator" : null,
+      seeded_reference_standing: "seeded",
+      correction_source_oar2_path: null,
+      correction_oar2_path: null,
+      partial_oar1_reference: null,
+      validation_finding:
+        "Source-specific Lapzuli action path required explicit publication object and channel selection before mutation.",
+      correction_scope: null,
+      execution_result: event.notes,
+    }),
+  })
+
+  await supabaseFetch(env, "c3_oar_transition_event", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      transition_event_key: event.eventKey,
+      process_instance_key: "normalize_undrifted_source_specific_lapzuli_actions_codex_008",
+      actor: "measures",
+      from_status: event.fromStatus,
+      to_status: event.toStatus,
+      transition_type: event.transitionType,
+      timestamp: new Date().toISOString(),
+      evidence_reference: event.evidenceReference,
+      notes: event.notes,
+    }),
+  })
 }
 
 function buildLapzuliStanding(args: {
@@ -387,7 +474,11 @@ function buildLapzuliStanding(args: {
   }
 }
 
-async function loadControls(env: Env) {
+async function loadControls(env: Env, selection: {
+  publicationObjectKey?: string | null
+  outletKey?: string | null
+  routeKey?: string | null
+} = {}) {
   const [
     envRoleCall,
     persistence,
@@ -410,15 +501,21 @@ async function loadControls(env: Env) {
     proveDizzy(env),
   ])
 
-  const selectedObject = eligibleObjects[0] ?? null
-  const objectKey = objectKeyFromDispatch(selectedObject)
+  const selectedObject = selection.publicationObjectKey
+    ? eligibleObjects.find((row) => row.publication_object_key === selection.publicationObjectKey) ?? null
+    : null
+  const objectKey = selectedObject?.publication_object_key ?? null
   const objectProfile = await loadObjectProfile(env, objectKey)
+  const selectedChannel = selectedAllowedChannel(selectedObject, selection.outletKey ?? null)
   const [destinations, routes, executions] = await Promise.all([
-    loadDestinations(env, objectProfile?.desk_key ?? asString(selectedObject?.metadata?.series_key)),
+    loadDestinations(env, objectProfile?.desk_key ?? selectedObject?.desk_key ?? null),
     loadRoutes(env, objectKey),
-    loadExecutions(env, selectedObject?.dispatch_key ?? null),
+    loadExecutions(env, objectKey, selectedObject?.dispatch_key ?? null),
   ])
   const lapzuliStanding = buildLapzuliStanding({ objectProfile, destinations, routes, executions })
+  const selectedRoute = selection.routeKey
+    ? routes.find((row) => row.route_key === selection.routeKey) ?? null
+    : null
 
   const preflight = [
     check(Boolean(envRoleCall?.is_active), "env_role_call_registered", {
@@ -443,16 +540,28 @@ async function loadControls(env: Env) {
       process_key: persistenceBinding?.process_key ?? null,
       call_relation: persistenceBinding?.metadata?.call_relation ?? null,
     }),
-    check(Boolean(selectedObject), "eligible_governed_publication_object_recovered", {
+    check(!selection.publicationObjectKey || Boolean(selectedObject), "selected_governed_publication_object_recovered", {
+      requested_publication_object_key: selection.publicationObjectKey ?? null,
       dispatch_key: selectedObject?.dispatch_key ?? null,
       title: selectedObject?.title ?? null,
-      source_sha256: selectedObject?.metadata?.source_sha256 ?? null,
-      source_drive_id: selectedObject?.metadata?.source_drive_id ?? null,
+      source_sha256: selectedObject?.source_sha256 ?? null,
+      source_drive_id: selectedObject?.source_drive_id ?? null,
     }),
-    check(Boolean(objectProfile), "lapzuli_object_profile_recovered", {
+    check(!selection.publicationObjectKey || Boolean(objectProfile), "lapzuli_object_profile_recovered", {
       object_key: objectProfile?.publication_object_key ?? objectKey,
       standing: objectProfile?.standing ?? null,
       citation_standing: objectProfile?.citations_verified === true ? "verified" : "unverified",
+    }),
+    check(!selection.outletKey || Boolean(selectedChannel), "selected_channel_allowed_for_object_and_desk", {
+      requested_outlet_key: selection.outletKey ?? null,
+      allowed_channel_count: selectedObject?.allowed_channels.length ?? 0,
+      selected_channel: selectedChannel ?? null,
+    }),
+    check(!selection.routeKey || Boolean(selectedRoute), "selected_route_recovered", {
+      requested_route_key: selection.routeKey ?? null,
+      route_key: selectedRoute?.route_key ?? null,
+      route_status: selectedRoute?.route_status ?? null,
+      operator_confirmed: selectedRoute?.operator_confirmed ?? null,
     }),
     check(standingOf(lapzuliProcess) === "active", "dizzy_worker_binding_active", {
       process_key: lapzuliProcess?.process_key ?? null,
@@ -502,7 +611,7 @@ async function loadControls(env: Env) {
     },
     stations: STATION_SOURCE_MAP,
     passage: {
-      publication_object: selectedObject,
+      publication_object: selectedObject ? publicationObject(selectedObject) : null,
       object_key: objectKey,
       passage_surface: "/publish-undrifted",
       resulting_encounter: "/undrifted",
@@ -518,13 +627,9 @@ async function loadControls(env: Env) {
       executions,
     },
     controls: {
-      select_object: eligibleObjects.map((row) => ({
-        dispatch_key: row.dispatch_key,
-        title: row.title,
-        internal_route: row.internal_route,
-        source_sha256: row.metadata?.source_sha256 ?? null,
-        source_drive_id: row.metadata?.source_drive_id ?? null,
-      })),
+      select_object: eligibleObjects.map(publicationObject),
+      selected_channel: selectedChannel,
+      selected_route: selectedRoute,
       recover: "satisfied",
       preflight: held ? "held" : "satisfied",
       open_passage: held ? "held" : "satisfied",
@@ -537,11 +642,48 @@ async function loadControls(env: Env) {
 }
 
 async function handleAction(request: Request, env: Env) {
-  const body = await request.json().catch(() => ({})) as { action?: string }
-  const state = await loadControls(env)
+  const body = await request.json().catch(() => ({})) as {
+    action?: string
+    publication_object_key?: string
+    outlet_key?: string
+    route_key?: string
+  }
   const action = body.action === "schedule" ? "schedule" : "dispatch_now"
+  const publicationObjectKey = asString(body.publication_object_key)
+  const outletKey = asString(body.outlet_key)
+  const routeKey = asString(body.route_key)
+
+  if (!publicationObjectKey || (!outletKey && !routeKey)) {
+    return jsonResponse({
+      final_standing: "held_explicit_selection_required",
+      held_check: !publicationObjectKey ? "publication_object_key_required" : "target_route_or_channel_required",
+      action_result: {
+        action,
+        standing: "held_explicit_selection_required",
+        mutation_count: 0,
+        external_publication_effects: 0,
+      },
+    }, 400)
+  }
+
+  const state = await loadControls(env, { publicationObjectKey, outletKey, routeKey })
+  const selectedObject = state.passage.publication_object as ReturnType<typeof publicationObject> | null
+  const selectedChannel = state.controls.selected_channel as ReturnType<typeof selectedAllowedChannel> | null
+  const selectedRoute = state.controls.selected_route as RouteRow | null
+  const eventKey = `lapzuli_source_action_${publicationObjectKey}_${outletKey ?? routeKey}_${crypto.randomUUID()}`
+  const evidenceReference = `/publish-undrifted?event=${encodeURIComponent(eventKey)}`
 
   if (state.final_standing !== "implemented_publish_undrifted_lapzuli_human_compute_controls_proven") {
+    await recordActionEvidence(env, {
+      eventKey,
+      fromStatus: "selection_submitted",
+      toStatus: state.held_check ?? "held_preflight_failed",
+      transitionType: "held",
+      evidenceReference,
+      notes:
+        `Held ${action} for ${publicationObjectKey} on ${outletKey ?? routeKey}: ` +
+        `${state.held_check ?? "preflight failed"}; route mutations 0; external publication effects 0.`,
+    })
     return jsonResponse({
       ...state,
       action_result: {
@@ -553,14 +695,51 @@ async function handleAction(request: Request, env: Env) {
     }, 409)
   }
 
+  if (selectedObject?.source_distribution_hold === true) {
+    await recordActionEvidence(env, {
+      eventKey,
+      fromStatus: "selection_submitted",
+      toStatus: "held_source_distribution_hold",
+      transitionType: "held",
+      evidenceReference,
+      notes:
+        `Held ${action} for ${publicationObjectKey} on ${outletKey ?? routeKey}: source_distribution_hold is true; ` +
+        "route mutations 0; job mutations 0; external publication effects 0.",
+    })
+    return jsonResponse({
+      ...state,
+      action_result: {
+        action,
+        standing: "held_source_distribution_hold",
+        mutation_count: 1,
+        external_publication_effects: 0,
+        evidence_identity: eventKey,
+        selected_publication_object: selectedObject,
+        selected_channel: selectedChannel,
+        selected_route: selectedRoute,
+      },
+    }, 409)
+  }
+
   if (!state.lapzuli_distribution.controls_enabled) {
+    await recordActionEvidence(env, {
+      eventKey,
+      fromStatus: "selection_submitted",
+      toStatus: state.lapzuli_distribution[action],
+      transitionType: "held",
+      evidenceReference,
+      notes:
+        `Held ${action} for ${publicationObjectKey} on ${outletKey ?? routeKey}: ${state.lapzuli_distribution[action]}; ` +
+        "route mutations 0; job mutations 0; external publication effects 0.",
+    })
     return jsonResponse({
       ...state,
       action_result: {
         action,
         standing: state.lapzuli_distribution[action],
-        mutation_count: 0,
+        mutation_count: 1,
         external_publication_effects: 0,
+        evidence_identity: eventKey,
       },
     }, 409)
   }
@@ -577,9 +756,14 @@ async function handleAction(request: Request, env: Env) {
   }, 409)
 }
 
-export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
+export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   try {
-    const state = await loadControls(env)
+    const params = new URL(request.url).searchParams
+    const state = await loadControls(env, {
+      publicationObjectKey: params.get("publication_object_key"),
+      outletKey: params.get("outlet_key"),
+      routeKey: params.get("route_key"),
+    })
     return jsonResponse(state, state.final_standing === "held_preflight_failed" ? 409 : 200)
   } catch (error) {
     return jsonResponse({
