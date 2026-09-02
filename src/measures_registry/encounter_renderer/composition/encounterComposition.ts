@@ -55,6 +55,10 @@ export function composeEncounter(
       return bTime - aTime
     })
 
+  const publicationReleases = resolverData.publicationReleaseRows
+    .filter((row) => row.is_active !== false)
+    .sort((a, b) => Number(b.active_issue) - Number(a.active_issue))
+
   const mediaByRole = new Map(
     resolverData.mediaRows
       .filter((row) => row.is_active !== false)
@@ -87,6 +91,7 @@ export function composeEncounter(
     roleCallStanding,
     surfaceAssignmentMetadata: asRecord(assignment.metadata),
     issuePages,
+    publicationReleases,
     publicationDispatches,
   }
 }

@@ -23,18 +23,6 @@ const REGISTRY_REDIRECT_RULES = [
   "/c3field/ https://c3field.online 301",
   "/publish-undrifted /publish-undrifted/index.html 200",
   "/publish-undrifted/ /publish-undrifted/index.html 200",
-  "/undrifted/field-findings-2026-w28 /undrifted/field-findings-2026-w28/index.html 200",
-  "/undrifted/field-findings-2026-w28/ /undrifted/field-findings-2026-w28/index.html 200",
-  "/undrifted/ai-agents-are-not-entering-empty-systems /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
-  "/undrifted/ai-agents-are-not-entering-empty-systems/ /undrifted/ai-agents-are-not-entering-empty-systems/index.html 200",
-  "/undrifted/the-boundary-problem /undrifted/the-boundary-problem/index.html 200",
-  "/undrifted/the-boundary-problem/ /undrifted/the-boundary-problem/index.html 200",
-  "/undrifted/environmentally-enabled /undrifted/environmentally-enabled/index.html 200",
-  "/undrifted/environmentally-enabled/ /undrifted/environmentally-enabled/index.html 200",
-  "/undrifted/the-pair-over-time /undrifted/the-pair-over-time/index.html 200",
-  "/undrifted/the-pair-over-time/ /undrifted/the-pair-over-time/index.html 200",
-  "/undrifted/who-ordered-all-this-compute /undrifted/who-ordered-all-this-compute/index.html 200",
-  "/undrifted/who-ordered-all-this-compute/ /undrifted/who-ordered-all-this-compute/index.html 200",
 ]
 
 const routeUnits = [
@@ -376,6 +364,70 @@ function writeStaticRouteHead(outDir, template, route) {
   fs.writeFileSync(path.join(routeDir, "index.html"), applyRouteHead(template, seo))
 }
 
+function normalizeRoutePath(value) {
+  if (typeof value !== "string" || !value.startsWith("/undrifted/")) return null
+  return value.length > 1 ? value.replace(/\/$/, "") : value
+}
+
+function mediaManifestImage(manifest) {
+  if (!manifest || typeof manifest !== "object") return null
+  return (
+    manifest.website?.public_url ||
+    manifest.cover?.public_url ||
+    manifest.banner_url ||
+    manifest.paragraph?.public_url ||
+    null
+  )
+}
+
+function routeFromDispatch(row) {
+  const routePath = normalizeRoutePath(row.internal_route)
+  if (!routePath) return null
+  const metadata = row.metadata || {}
+  const seo = metadata.seo || {}
+  const image = mediaManifestImage(row.media_manifest) || seo.og_image || REGISTRY_OG_IMAGE
+  const canonical = `${REGISTRY_BASE_URL}${routePath}`
+  return {
+    routePath,
+    title: seo.title || `${row.title} | unDrifted`,
+    description: seo.description || row.seo_description || row.excerpt || "Registered unDrifted dispatch.",
+    canonical_url: seo.canonical_url || canonical,
+    image,
+  }
+}
+
+async function loadPublishedUndriftedRoutes(supabase) {
+  const { data, error } = await supabase
+    .from("measures_publication_dispatch")
+    .select("title, excerpt, seo_description, media_manifest, internal_route, status, metadata")
+    .eq("publication_key", "undrifted")
+    .eq("status", "published")
+  if (error) throw error
+  return (data || []).map(routeFromDispatch).filter(Boolean)
+}
+
+function mergeRoutes(...routeSets) {
+  const byPath = new Map()
+  for (const route of routeSets.flat()) {
+    if (!route?.routePath) continue
+    byPath.set(route.routePath, route)
+  }
+  return [...byPath.values()].sort((a, b) => a.routePath.localeCompare(b.routePath))
+}
+
+function patchUndriftedRedirects(outDir, routes) {
+  const redirectsPath = path.join(outDir, "_redirects")
+  const existing = fs.existsSync(redirectsPath) ? fs.readFileSync(redirectsPath, "utf8") : ""
+  const routeRules = routes.flatMap((route) => [
+    `${route.routePath} ${route.routePath}/index.html 200`,
+    `${route.routePath}/ ${route.routePath}/index.html 200`,
+  ])
+  const lines = existing
+    .split("\n")
+    .filter((line) => line.trim() && !routeRules.some((rule) => line.startsWith(rule.split(" ")[0])))
+  fs.writeFileSync(redirectsPath, [...routeRules, ...lines].join("\n") + "\n")
+}
+
 async function main() {
   if (!supabaseUrl || !supabaseKey) throw new Error("Supabase URL/key missing for registry route head generation")
 
@@ -389,6 +441,7 @@ async function main() {
     .eq("is_active", true)
 
   if (error) throw error
+  const publishedUndriftedRoutes = await loadPublishedUndriftedRoutes(supabase)
 
   const founderRow = data.find((item) => item.registry_key === "founder_authority")
   const undriftedRow = data.find((item) => item.registry_key === "undrifted_publication_landing")
@@ -442,7 +495,9 @@ async function main() {
     fs.writeFileSync(path.join(routeDir, "index.html"), html)
   }
 
-  for (const route of launchCycleArticleRoutes) {
+  const articleRoutes = mergeRoutes(launchCycleArticleRoutes, publishedUndriftedRoutes)
+  patchUndriftedRedirects(outDir, articleRoutes)
+  for (const route of articleRoutes) {
     writeStaticRouteHead(outDir, template, route)
   }
 
@@ -452,7 +507,7 @@ async function main() {
       "/connect",
       "/publish-undrifted",
       ...routeUnits.map((unit) => unit.routePath),
-      ...launchCycleArticleRoutes.map((route) => route.routePath),
+      ...articleRoutes.map((route) => route.routePath),
     ].join(", ")}`,
   )
 }

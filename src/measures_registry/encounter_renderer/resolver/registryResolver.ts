@@ -6,6 +6,7 @@ import type {
   EncounterIssuePageRow,
   EncounterMediaRow,
   EncounterPublicationDispatchRow,
+  EncounterPublicationReleaseRow,
   EncounterSurfaceAssignmentRow,
   RegistryResolverData,
   RegistryRow,
@@ -110,6 +111,7 @@ const EMPTY_DATA: RegistryResolverData = {
   designTokenRows: [],
   surfaceAssignmentRows: [],
   issuePageRows: [],
+  publicationReleaseRows: [],
   publicationDispatchRows: [],
   loading: true,
   error: null,
@@ -134,6 +136,7 @@ export function useRegistryResolver(): RegistryResolverData {
         mediaResult,
         tokenResult,
         assignmentResult,
+        publicationReleaseResult,
         issuePageResult,
         publicationDispatchResult,
       ] = await Promise.all([
@@ -165,6 +168,11 @@ export function useRegistryResolver(): RegistryResolverData {
           .from("measures_encounter_surface_assignment")
           .select("surface_key, registry_key, encounter_key, material_identity, chamber_assignment, public_routes, metadata"),
         supabase
+          .from("measures_publication_release")
+          .select("release_id, issue_id, active_issue, publication_state, archive_state, renderer_eligibility, db_sync_status, is_active, metadata")
+          .eq("is_active", true)
+          .order("active_issue", { ascending: false }),
+        supabase
           .from("measures_publication_issue_page")
           .select("page_key, publication_key, issue_id, page_number, page_role, title, subtitle, asset_id, dispatch_key, banner_asset_id, route_path, layout_profile_key, release_state, visibility_state, metadata")
           .in("publication_key", [...ISSUE_PAGE_PUBLICATION_KEYS])
@@ -186,6 +194,7 @@ export function useRegistryResolver(): RegistryResolverData {
         mediaResult.error?.message ??
         tokenResult.error?.message ??
         assignmentResult.error?.message ??
+        publicationReleaseResult.error?.message ??
         issuePageResult.error?.message ??
         publicationDispatchResult.error?.message ??
         null
@@ -239,6 +248,7 @@ export function useRegistryResolver(): RegistryResolverData {
         mediaRows,
         designTokenRows: (tokenResult.data ?? []) as EncounterDesignTokenRow[],
         surfaceAssignmentRows: (assignmentResult.data ?? []) as EncounterSurfaceAssignmentRow[],
+        publicationReleaseRows: (publicationReleaseResult.data ?? []) as EncounterPublicationReleaseRow[],
         issuePageRows: (issuePageResult.data ?? []) as EncounterIssuePageRow[],
         publicationDispatchRows: (publicationDispatchResult.data ?? []) as EncounterPublicationDispatchRow[],
         loading: false,

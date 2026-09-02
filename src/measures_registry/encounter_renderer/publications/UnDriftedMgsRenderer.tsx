@@ -5,6 +5,7 @@ import GetUndriftedConnect from "./GetUndriftedConnect"
 import type {
   EncounterIssuePageRow,
   EncounterPublicationDispatchRow,
+  EncounterPublicationReleaseRow,
   EncounterSurface,
   RenderableEncounter,
 } from "../types/encounterRendererTypes"
@@ -115,6 +116,16 @@ function formatDate(value: string | null): string | null {
 
 function isEligibleIssuePage(page: EncounterIssuePageRow): boolean {
   return page.release_state === "released" && page.visibility_state === "visible"
+}
+
+function isRendererEligibleRelease(release: EncounterPublicationReleaseRow): boolean {
+  return release.renderer_eligibility && release.publication_state !== "pending_content_authority_decision"
+}
+
+function issueLabel(issueId: string, fallback?: string | null): string {
+  if (fallback) return `Issue ${fallback}`
+  const match = issueId.match(/(\d+)$/)
+  return match ? `Issue ${match[1].padStart(3, "0")}` : issueId
 }
 
 function latestDeskPage(
@@ -230,15 +241,27 @@ export default function UnDriftedMgsRenderer({
   const issueRecord = asRecord(meta.issue_record)
   const assessmentFeature = asRecord(meta.assessment_feature)
   const desks = asRecordArray(meta.editorial_sections)
-  const activeIssueKey = asString(issueRecord?.issue_key)
-  const activeIssueNumber = asString(issueRecord?.issue_number)
-  const activeIssueDate = asString(issueRecord?.issue_date)
+  const activeRelease =
+    encounter.publicationReleases.find((release) => release.active_issue && isRendererEligibleRelease(release)) ?? null
+  const activeReleaseMeta = asRecord(activeRelease?.metadata)
+  const activeIssueKey = activeRelease?.issue_id ?? asString(issueRecord?.issue_key)
+  const activeIssueNumber = asString(activeReleaseMeta?.issue_number) ?? asString(issueRecord?.issue_number)
+  const activeIssueDate = asString(activeReleaseMeta?.issue_date) ?? asString(issueRecord?.issue_date)
   const activePages = encounter.issuePages.filter(
     (page) => page.issue_id === activeIssueKey && isEligibleIssuePage(page),
   )
-  const pastPages = encounter.issuePages.filter(
-    (page) => page.issue_id !== activeIssueKey && isEligibleIssuePage(page),
+  const archivedIssueIds = new Set(
+    encounter.publicationReleases
+      .filter((release) => release.archive_state === "archived" && isRendererEligibleRelease(release))
+      .map((release) => release.issue_id),
   )
+  const pastPages = encounter.issuePages.filter((page) => archivedIssueIds.has(page.issue_id) && isEligibleIssuePage(page))
+  const featuredPage =
+    activePages.find((page) => asRecord(page.metadata)?.featured_article === true) ??
+    activePages.find((page) => page.page_role === "cover_story") ??
+    activePages[0] ??
+    null
+  const featuredDispatch = featuredPage ? dispatchForPage(featuredPage, encounter.publicationDispatches) : null
   const masthead = registeredMediaUrl(encounter, "undrifted_publication_masthead")
   const title = asString(brandCopy?.header) ?? "unDrifted"
   const primaryLine = asString(brandCopy?.primary_line)
@@ -277,6 +300,36 @@ export default function UnDriftedMgsRenderer({
             {activeIssueDate ? <span>{activeIssueDate}</span> : null}
           </div>
         </div>
+
+        {featuredPage ? (
+          <section className="undrifted-editor-feature" aria-label="Featured Article">
+            {(() => {
+              const href = pageHref(featuredPage)
+              const banner = dispatchBanner(featuredDispatch) ?? pageMediaUrl(featuredPage)
+              const deskTitle = asString(asRecord(featuredPage.metadata)?.desk_title)
+              return (
+                <>
+                  {banner ? <img src={banner} alt="" loading="eager" /> : null}
+                  <span className="undrifted-eyebrow">{deskTitle ?? "Featured Article"}</span>
+                  <h2>{featuredPage.title}</h2>
+                  {featuredDispatch?.excerpt ? <p>{featuredDispatch.excerpt}</p> : null}
+                  {href ? <a className="undrifted-cta-primary" href={href}>Read Feature</a> : null}
+                </>
+              )
+            })()}
+          </section>
+        ) : null}
+
+        {asString(assessmentFeature?.route_path) ? (
+          <section className="undrifted-editor-feature" aria-label="Assessment">
+            <span className="undrifted-eyebrow">{asString(assessmentFeature?.feature_label) ?? "Measures Registry"}</span>
+            <h2>{asString(assessmentFeature?.feature_title) ?? "Assess the Environment"}</h2>
+            {asString(assessmentFeature?.feature_body) ? <p>{asString(assessmentFeature?.feature_body)}</p> : null}
+            <a className="undrifted-cta-primary" href={asString(assessmentFeature?.route_path) as string}>
+              {asString(assessmentFeature?.cta_label) ?? "Assess the Environment"}
+            </a>
+          </section>
+        ) : null}
 
         <section className="undrifted-desks-section" aria-label="Current Desks">
           <div className="undrifted-insights-header">
@@ -319,6 +372,7 @@ export default function UnDriftedMgsRenderer({
           </div>
           <div className="undrifted-current-supporting">
             {activePages.map((page) => {
+              if (featuredPage && page.page_key === featuredPage.page_key) return null
               const dispatch = dispatchForPage(page, encounter.publicationDispatches)
               const href = pageHref(page)
               const deskTitle = asString(asRecord(page.metadata)?.desk_title)
@@ -343,7 +397,7 @@ export default function UnDriftedMgsRenderer({
           </div>
           {[...archivedByIssue.entries()].map(([issueId, pages]) => (
             <section key={issueId} className="undrifted-archive-contents" aria-label={issueId}>
-              <h3>{issueId === "undrifted_issue01" ? "Issue 001" : issueId}</h3>
+              <h3>{issueLabel(issueId, pages[0]?.issue_number)}</h3>
               <ol>
                 {pages.map((page) => {
                   const href = pageHref(page)
@@ -353,17 +407,6 @@ export default function UnDriftedMgsRenderer({
             </section>
           ))}
         </section>
-
-        {asString(assessmentFeature?.route_path) ? (
-          <section className="undrifted-editor-feature" aria-label="Assessment">
-            <span className="undrifted-eyebrow">{asString(assessmentFeature?.feature_label) ?? "Measures Registry"}</span>
-            <h2>{asString(assessmentFeature?.feature_title) ?? "Assess the Environment"}</h2>
-            {asString(assessmentFeature?.feature_body) ? <p>{asString(assessmentFeature?.feature_body)}</p> : null}
-            <a className="undrifted-cta-primary" href={asString(assessmentFeature?.route_path) as string}>
-              {asString(assessmentFeature?.cta_label) ?? "Assess the Environment"}
-            </a>
-          </section>
-        ) : null}
 
         <GetUndriftedConnect sourceRoute="/undrifted" />
       </section>

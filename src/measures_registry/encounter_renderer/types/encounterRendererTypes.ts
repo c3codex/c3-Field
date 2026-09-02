@@ -96,6 +96,18 @@ export type EncounterIssuePageRow = {
   metadata: Record<string, unknown> | null
 }
 
+export type EncounterPublicationReleaseRow = {
+  release_id: string
+  issue_id: string
+  active_issue: boolean
+  publication_state: string
+  archive_state: string
+  renderer_eligibility: boolean
+  db_sync_status: string
+  is_active: boolean
+  metadata: Record<string, unknown> | null
+}
+
 // Published article state from measures_publication_dispatch. FREE may render it, but does
 // not change title/body/standing/route authority. Public RLS exposes only status=published.
 export type EncounterPublicationDispatchRow = {
@@ -121,6 +133,7 @@ export type RegistryResolverData = {
   designTokenRows: EncounterDesignTokenRow[]
   surfaceAssignmentRows: EncounterSurfaceAssignmentRow[]
   issuePageRows: EncounterIssuePageRow[]
+  publicationReleaseRows: EncounterPublicationReleaseRow[]
   publicationDispatchRows: EncounterPublicationDispatchRow[]
   loading: boolean
   error: string | null
@@ -157,6 +170,7 @@ export type ComposedEncounter = {
   roleCallStanding: RoleCallStanding
   surfaceAssignmentMetadata: Record<string, unknown> | null
   issuePages: EncounterIssuePageRow[]
+  publicationReleases: EncounterPublicationReleaseRow[]
   publicationDispatches: EncounterPublicationDispatchRow[]
 }
 
@@ -172,6 +186,7 @@ export type RenderableEncounter = {
   roleCallStanding: RoleCallStanding
   surfaceAssignmentMetadata: Record<string, unknown> | null
   issuePages: EncounterIssuePageRow[]
+  publicationReleases: EncounterPublicationReleaseRow[]
   publicationDispatches: EncounterPublicationDispatchRow[]
   gateResult: { status: "released" }
 }
