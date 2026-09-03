@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import type { CSSProperties, ReactNode } from "react"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type { EncounterMediaRow } from "../types/encounterRendererTypes"
@@ -272,6 +272,11 @@ export default function PublishUndriftedPassage({
   async function pullReport() {
     await Promise.all([runProof(), runControls(), runDistributionReport()])
   }
+
+  useEffect(() => {
+    if (!selectedObjectKey || !selectedOutletKey) return
+    void runControls()
+  }, [selectedObjectKey, selectedOutletKey])
 
   async function runAction(action: "dispatch_now" | "schedule") {
     setActionAttempted(true)
