@@ -7,6 +7,20 @@
   "browser": {
     "binding": "BROWSER"
   },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "BROWSER_STATE",
+        "class_name": "BrowserState"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["BrowserState"]
+    }
+  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
