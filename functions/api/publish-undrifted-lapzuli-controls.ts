@@ -29,6 +29,11 @@ type DispatchRow = {
   title: string
   internal_route: string | null
   external_url: string | null
+  article_url?: string | null
+  dispatch_body?: string | null
+  excerpt?: string | null
+  seo_description?: string | null
+  tags?: unknown
   status: string
   published_at: string | null
   metadata: Record<string, unknown> | null
@@ -119,6 +124,16 @@ type ExecutionRow = {
   metadata: Record<string, unknown> | null
 }
 
+type DistributionAssetRow = {
+  distribution_asset_key: string
+  platform: string
+  distribution_type: string
+  status: string
+  review_status: string | null
+  payload: Record<string, unknown> | null
+  metadata: Record<string, unknown> | null
+}
+
 const STATION_SOURCE_MAP = [
   {
     station_key: "desks",
@@ -170,6 +185,10 @@ const CHAMBER_SOURCE_PATH = "lapis_antechamber_ops_surface.webp"
 const CHAMBER_DERIVATIVE_PATH =
   "undrifted/publication-chamber/lapis_antechamber_ops_surface_web_v1.webp"
 const DEFAULT_DIZZY_URL = "https://lapzuli-distribution-worker.c3field.workers.dev"
+const WIZ_DEV_ROUTE_KEY = "lapzuli_route_undrifted_drift_report_005_dev_codex_010"
+const WIZ_DEV_DISTRIBUTION_ASSET_KEY = "undrifted_drift_report_005_dev_canonical_crosspost_v1"
+const OAR12_SOURCE_OAR2_PATH =
+  "CanCom/codex/oar2_implement_dev_delivery_adapter_wiz_distribution_asset_codex_012"
 
 const jsonHeaders = { "content-type": "application/json; charset=utf-8" }
 
@@ -273,6 +292,15 @@ async function loadObjectProfile(env: Env, objectKey: string | null) {
   return rows[0] ?? null
 }
 
+async function loadDispatch(env: Env, dispatchKey: string | null) {
+  if (!dispatchKey) return null
+  const rows = await supabaseFetch<DispatchRow[]>(
+    env,
+    `measures_publication_dispatch?dispatch_key=eq.${encodeURIComponent(dispatchKey)}&select=dispatch_key,publication_key,title,dispatch_body,excerpt,seo_description,tags,internal_route,external_url,article_url,status,published_at,metadata&limit=1`,
+  )
+  return rows[0] ?? null
+}
+
 async function loadDestinations(env: Env, deskKey: string | null) {
   const [qualifications, outlets] = await Promise.all([
     supabaseFetch<QualificationRow[]>(
@@ -328,6 +356,15 @@ async function loadExecutions(env: Env, objectKey: string | null, dispatchKey: s
   )
 }
 
+async function loadDistributionAssets(env: Env, routeKey: string | null) {
+  if (!routeKey) return []
+  const rows = await supabaseFetch<DistributionAssetRow[]>(
+    env,
+    `measures_publication_distribution_asset?distribution_asset_key=eq.${encodeURIComponent(WIZ_DEV_DISTRIBUTION_ASSET_KEY)}&select=distribution_asset_key,platform,distribution_type,status,review_status,payload,metadata&limit=10`,
+  )
+  return rows.filter((row) => row.metadata?.route_key === routeKey)
+}
+
 async function proveDizzy(env: Env) {
   const token = env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN
   if (!token) {
@@ -353,6 +390,69 @@ async function proveDizzy(env: Env) {
     relation: body?.relation ?? null,
     operator_confirmation_required: body?.operator_confirmation_required ?? true,
     autonomous_distribution_authority: body?.autonomous_distribution_authority ?? "none",
+    external_publication_effects: body?.external_publication_effects ?? 0,
+  }
+}
+
+async function proveDevAdapter(env: Env, args: {
+  route: RouteRow | null
+  asset: DistributionAssetRow | null
+  dispatch: DispatchRow | null
+  selectedObject: DistributionReportRow | null
+}) {
+  if (!args.route || !args.asset || !args.dispatch || !args.selectedObject) {
+    return {
+      ok: false,
+      standing: "held_dev_adapter_inputs_missing",
+      external_publication_effects: 0,
+    }
+  }
+  const token = env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN
+  if (!token) {
+    return {
+      ok: false,
+      standing: "held_credentials",
+      external_publication_effects: 0,
+    }
+  }
+
+  const baseUrl = (env.LAPZULI_DISTRIBUTION_WORKER_URL ?? DEFAULT_DIZZY_URL).replace(/\/$/, "")
+  const payload = args.asset.payload ?? {}
+  const response = await fetch(`${baseUrl}/dev/articles`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      dry_run: true,
+      route_key: args.route.route_key,
+      publication_object_key: args.selectedObject.publication_object_key,
+      dispatch_key: args.dispatch.dispatch_key,
+      distribution_asset_id: args.asset.distribution_asset_key,
+      outlet_key: args.route.outlet_key,
+      distribution_mode: args.route.distribution_mode,
+      title: args.dispatch.title,
+      canonical_url: args.route.canonical_url,
+      body_markdown: payload.body_markdown,
+      description: args.dispatch.seo_description ?? args.dispatch.excerpt ?? "",
+      tags: payload.tags,
+      authority_reference: args.route.authority_reference,
+      idempotency_key: payload.idempotency_key,
+      constraints: payload.constraints,
+      editorial_disclosure: payload.editorial_disclosure,
+      source_oar2_path: OAR12_SOURCE_OAR2_PATH,
+    }),
+  })
+  const body = await response.json().catch(() => ({}))
+  return {
+    ok: response.ok && body?.ok === true,
+    standing: response.ok ? body?.standing ?? "dev_adapter_ready_dry_run" : body?.standing ?? "held_dev_adapter_proof",
+    adapter: body?.adapter ?? null,
+    request_identity: body?.request_identity ?? null,
+    forem_contract: body?.forem_contract ?? null,
+    article: body?.article ?? null,
+    credential_present: body?.credential_present ?? null,
     external_publication_effects: body?.external_publication_effects ?? 0,
   }
 }
@@ -445,12 +545,12 @@ function buildLapzuliStanding(args: {
       schedule: "held_route_required",
     }
   }
-  if (activeRoute.metadata?.external_identity || activeRoute.canonical_url) {
+  if (activeRoute.metadata?.external_identity || activeRoute.metadata?.external_url) {
     return {
       route_standing: "already_distributed",
       controls_enabled: false,
       external_identity: activeRoute.metadata?.external_identity,
-      external_url: activeRoute.canonical_url,
+      external_url: activeRoute.metadata?.external_url,
       dispatch_now: "already_distributed",
       schedule: "already_distributed",
     }
@@ -505,6 +605,7 @@ async function loadControls(env: Env, selection: {
     ? eligibleObjects.find((row) => row.publication_object_key === selection.publicationObjectKey) ?? null
     : null
   const objectKey = selectedObject?.publication_object_key ?? null
+  const dispatch = await loadDispatch(env, selectedObject?.dispatch_key ?? null)
   const objectProfile = await loadObjectProfile(env, objectKey)
   const selectedChannel = selectedAllowedChannel(selectedObject, selection.outletKey ?? null)
   const [destinations, routes, executions] = await Promise.all([
@@ -516,6 +617,17 @@ async function loadControls(env: Env, selection: {
   const selectedRoute = selection.routeKey
     ? routes.find((row) => row.route_key === selection.routeKey) ?? null
     : routes.find((row) => row.route_key === lapzuliStanding.route_key) ?? null
+  const distributionAssets = await loadDistributionAssets(env, selectedRoute?.route_key ?? null)
+  const selectedDistributionAsset =
+    distributionAssets.find((row) => row.distribution_asset_key === WIZ_DEV_DISTRIBUTION_ASSET_KEY) ??
+    distributionAssets[0] ??
+    null
+  const devAdapter = await proveDevAdapter(env, {
+    route: selectedRoute,
+    asset: selectedDistributionAsset,
+    dispatch,
+    selectedObject,
+  })
 
   const preflight = [
     check(Boolean(envRoleCall?.is_active), "env_role_call_registered", {
@@ -612,6 +724,13 @@ async function loadControls(env: Env, selection: {
     stations: STATION_SOURCE_MAP,
     passage: {
       publication_object: selectedObject ? publicationObject(selectedObject) : null,
+      dispatch: dispatch ? {
+        dispatch_key: dispatch.dispatch_key,
+        article_url: dispatch.article_url ?? null,
+        external_url: dispatch.external_url,
+        status: dispatch.status,
+        body_present: Boolean(dispatch.dispatch_body),
+      } : null,
       object_key: objectKey,
       passage_surface: "/publish-undrifted",
       resulting_encounter: "/undrifted",
@@ -625,15 +744,21 @@ async function loadControls(env: Env, selection: {
       ...lapzuliStanding,
       routes,
       executions,
+      distribution_assets: distributionAssets,
     },
     controls: {
       select_object: eligibleObjects.map(publicationObject),
       selected_channel: selectedChannel,
       selected_route: selectedRoute,
+      selected_distribution_asset: selectedDistributionAsset,
+      dev_adapter: devAdapter,
       recover: "satisfied",
       preflight: held ? "held" : "satisfied",
       open_passage: held ? "held" : "satisfied",
-      dispatch_now: lapzuliStanding.dispatch_now,
+      dispatch_now:
+        selectedRoute?.route_key === WIZ_DEV_ROUTE_KEY && devAdapter.ok
+          ? "ready_for_operator_dev_execution"
+          : lapzuliStanding.dispatch_now,
       schedule: lapzuliStanding.schedule,
     },
     destinations,

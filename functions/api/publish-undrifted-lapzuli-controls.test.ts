@@ -10,6 +10,9 @@ const env = {
   LAPZULI_DISTRIBUTION_WORKER_URL: "https://lapzuli.example",
 }
 
+const wizDevRouteKey = "lapzuli_route_undrifted_drift_report_005_dev_codex_010"
+const wizDevAssetKey = "undrifted_drift_report_005_dev_canonical_crosspost_v1"
+
 async function withMockedFetch(
   handler: (url: string, init: RequestInit) => Response | Promise<Response>,
   run: () => Promise<Response>,
@@ -56,6 +59,11 @@ function dispatchRows() {
     title: "The Wiz Behind the Curtain",
     internal_route: "/undrifted/the-wiz-behind-the-curtain",
     external_url: "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/",
+    article_url: "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/",
+    dispatch_body: "Body",
+    excerpt: "Excerpt",
+    seo_description: "A Drift Report on Wiz and operational security.",
+    tags: ["unDrifted", "Drift Report", "AI infrastructure", "Wiz"],
     status: "published",
     published_at: "2026-08-29T20:32:03.028237+00:00",
     metadata: {
@@ -108,7 +116,7 @@ function reportRowsClearHold() {
 
 function authorizedRouteRows() {
   return [{
-    route_key: "lapzuli_route_wiz_dev_codex_010",
+    route_key: wizDevRouteKey,
     publication_object_key: "undrifted_drift_report_005",
     desk_key: "drift_report",
     outlet_key: "dev",
@@ -116,11 +124,46 @@ function authorizedRouteRows() {
     route_status: "authorized",
     authority_reference: "op044 authorization for DR_005 distribution plus CanCom/codex/oar2_resolve_lapzuli_route_status_and_form_dev_route_codex_010",
     operator_confirmed: true,
-    canonical_url: null,
-    payload_reference: null,
+    canonical_url: "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/",
+    payload_reference: `measures_publication_distribution_asset:${wizDevAssetKey}:payload.body_markdown`,
     metadata: {
       return_required: true,
       oar2_path: "CanCom/codex/oar2_resolve_lapzuli_route_status_and_form_dev_route_codex_010",
+    },
+  }]
+}
+
+function distributionAssetRows() {
+  return [{
+    distribution_asset_key: wizDevAssetKey,
+    platform: "dev",
+    distribution_type: "canonical_crosspost",
+    status: "ready_for_operator_execution",
+    review_status: "chazz_review_required",
+    payload: {
+      title: "The Wiz Behind the Curtain",
+      body_markdown: "Body",
+      canonical_url: "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/",
+      published: false,
+      description: "A Drift Report on Wiz and operational security.",
+      tags: ["ai", "security", "governance", "devops"],
+      idempotency_key: `${wizDevRouteKey}:${wizDevAssetKey}`,
+      constraints: {
+        ai_disclosure_required: true,
+        canonical_required: true,
+        fact_check_required: true,
+        not_pure_promotion: true,
+      },
+      editorial_disclosure: "Editorial Disclosure: present",
+    },
+    metadata: {
+      route_key: wizDevRouteKey,
+      publication_object_key: "undrifted_drift_report_005",
+      dispatch_key: "drift_report_005_the_wiz_behind_the_curtain",
+      outlet_key: "dev",
+      distribution_mode: "canonical_crosspost",
+      external_publication_authorized: false,
+      external_publication_effects: 0,
     },
   }]
 }
@@ -153,6 +196,9 @@ function mockHandler(url: string, init: RequestInit) {
   }
   if (url.includes("measures_publication_dispatch?")) {
     return Response.json(dispatchRows())
+  }
+  if (url.includes("measures_publication_distribution_asset?")) {
+    return Response.json([])
   }
   if (url.includes("undrifted_distribution_report_v1?")) {
     return Response.json(reportRows())
@@ -269,6 +315,37 @@ test("dispatch action recognizes an authorized route and stops before Dizzy exec
     if (url.includes("undrifted_distribution_report_v1?")) return Response.json(reportRowsClearHold())
     if (url.includes("lapzuli_route?")) return Response.json(authorizedRouteRows())
     if (url.includes("measures_distribution_execution?")) return Response.json([])
+    if (url.includes("measures_publication_distribution_asset?")) return Response.json(distributionAssetRows())
+    if (url === "https://lapzuli.example/dev/articles") {
+      assert.equal(init.method, "POST")
+      assert.equal((init.headers as Record<string, string>).authorization, "Bearer lapzuli-test")
+      const requestBody = JSON.parse(String(init.body))
+      assert.equal(requestBody.dry_run, true)
+      assert.equal(requestBody.route_key, wizDevRouteKey)
+      assert.equal(requestBody.canonical_url, "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/")
+      return Response.json({
+        ok: true,
+        standing: "dev_adapter_ready_dry_run",
+        adapter: "forem_articles_create_v1",
+        request_identity: `${wizDevRouteKey}:${wizDevAssetKey}:${wizDevRouteKey}:${wizDevAssetKey}`,
+        credential_present: true,
+        forem_contract: {
+          method: "POST",
+          url: "https://dev.to/api/articles",
+          auth_header: "api-key",
+          accept: "application/vnd.forem.api-v1+json",
+          payload_shape: "article",
+        },
+        article: {
+          title: "The Wiz Behind the Curtain",
+          canonical_url: "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/",
+          published: false,
+          tags: "ai, security, governance, devops",
+          body_markdown_bytes: 4,
+        },
+        external_publication_effects: 0,
+      })
+    }
     return mockHandler(url, init)
   }
 
@@ -287,8 +364,10 @@ test("dispatch action recognizes an authorized route and stops before Dizzy exec
   assert.equal(response.status, 409)
   const body = await response.json() as Record<string, any>
   assert.equal(body.lapzuli_distribution.route_standing, "authorized")
-  assert.equal(body.lapzuli_distribution.route_key, "lapzuli_route_wiz_dev_codex_010")
-  assert.equal(body.controls.dispatch_now, "ready")
+  assert.equal(body.lapzuli_distribution.route_key, wizDevRouteKey)
+  assert.equal(body.controls.dispatch_now, "ready_for_operator_dev_execution")
+  assert.equal(body.controls.dev_adapter.ok, true)
+  assert.equal(body.controls.dev_adapter.external_publication_effects, 0)
   assert.equal(body.action_result.standing, "held_dizzy_execution_not_authorized")
   assert.equal(body.action_result.mutation_count, 1)
   assert.equal(body.action_result.external_publication_effects, 0)
