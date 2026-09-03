@@ -1,0 +1,17 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "lapzuli-browser-executor",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-30",
+  "browser": {
+    "binding": "BROWSER"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "vars": {
+    "DIZZY_BROWSER_IDENTITY": "dizzy_lapzuli_browser_executor_v1",
+    "MEDIUM_ACCOUNT_IDENTITY": "unDrifted"
+  }
+}
