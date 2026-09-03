@@ -1,25 +1,40 @@
+import { DurableObject } from "cloudflare:workers";
 import puppeteer from "@cloudflare/puppeteer";
 
 const MEDIUM_IMPORT_URL = "https://medium.com/p/import";
 const MEDIUM_DRAFTS_URL = "https://medium.com/me/stories/drafts";
+const MEDIUM_SIGNIN_URL = "https://medium.com/m/signin";
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
     if (url.pathname === "/health") {
+      const state = await readMediumState(env);
       return json({
         service: "lapzuli-browser-executor",
         status: "operative",
         worker_identity: env.DIZZY_BROWSER_IDENTITY || "dizzy_lapzuli_browser_executor_v1",
         browser_binding_present: Boolean(env.BROWSER),
-        medium_session_binding_present: Boolean(env.MEDIUM_SESSION_COOKIES),
+        state_binding_present: Boolean(env.BROWSER_STATE),
+        medium_session_persisted: Boolean(state.cookies?.length),
+        medium_bootstrap_pending: Boolean(state.bootstrap?.session_id),
         external_publication_effects: 0,
       });
     }
 
     if (!isAuthorized(request, env)) {
       return json({ ok: false, error: "unauthorized", external_publication_effects: 0 }, 401);
+    }
+
+    if (url.pathname === "/medium/bootstrap/start") {
+      if (request.method !== "POST") return json({ ok: false, error: "method_not_allowed" }, 405);
+      return startMediumBootstrap(env);
+    }
+
+    if (url.pathname === "/medium/bootstrap/complete") {
+      if (request.method !== "POST") return json({ ok: false, error: "method_not_allowed" }, 405);
+      return completeMediumBootstrap(env);
     }
 
     if (url.pathname === "/medium/session-proof") {
@@ -35,6 +50,45 @@ export default {
     return json({ ok: false, error: "not_found", external_publication_effects: 0 }, 404);
   },
 };
+
+export class BrowserState extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
+    this.ctx = ctx;
+  }
+
+  async fetch(request) {
+    const url = new URL(request.url);
+
+    if (url.pathname === "/state" && request.method === "GET") {
+      const [cookies, bootstrap] = await Promise.all([
+        this.ctx.storage.get("medium:cookies"),
+        this.ctx.storage.get("medium:bootstrap"),
+      ]);
+      return json({ cookies: cookies || [], bootstrap: bootstrap || null });
+    }
+
+    if (url.pathname === "/cookies" && request.method === "PUT") {
+      const body = await request.json().catch(() => ({}));
+      const cookies = Array.isArray(body.cookies) ? body.cookies : [];
+      await this.ctx.storage.put("medium:cookies", cookies);
+      return json({ ok: true, count: cookies.length });
+    }
+
+    if (url.pathname === "/bootstrap" && request.method === "PUT") {
+      const body = await request.json().catch(() => ({}));
+      await this.ctx.storage.put("medium:bootstrap", body);
+      return json({ ok: true });
+    }
+
+    if (url.pathname === "/bootstrap" && request.method === "DELETE") {
+      await this.ctx.storage.delete("medium:bootstrap");
+      return json({ ok: true });
+    }
+
+    return json({ ok: false, error: "state_route_not_found" }, 404);
+  }
+}
 
 function isAuthorized(request, env) {
   const expected = clean(env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN);
@@ -53,11 +107,139 @@ function timingSafeEqual(a, b) {
   return diff === 0;
 }
 
+function mediumStateStub(env) {
+  const id = env.BROWSER_STATE.idFromName("medium-unDrifted");
+  return env.BROWSER_STATE.get(id);
+}
+
+async function readMediumState(env) {
+  if (!env.BROWSER_STATE) return { cookies: [], bootstrap: null };
+  const response = await mediumStateStub(env).fetch("https://state/state");
+  if (!response.ok) return { cookies: [], bootstrap: null };
+  return response.json();
+}
+
+async function storeMediumCookies(env, cookies) {
+  return mediumStateStub(env).fetch("https://state/cookies", {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ cookies }),
+  });
+}
+
+async function storeBootstrap(env, bootstrap) {
+  return mediumStateStub(env).fetch("https://state/bootstrap", {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(bootstrap),
+  });
+}
+
+async function clearBootstrap(env) {
+  return mediumStateStub(env).fetch("https://state/bootstrap", { method: "DELETE" });
+}
+
+async function startMediumBootstrap(env) {
+  if (!env.BROWSER) {
+    return json({ ok: false, standing: "held_browser_binding_missing", external_publication_effects: 0 }, 409);
+  }
+  if (!env.BROWSER_STATE) {
+    return json({ ok: false, standing: "held_browser_state_binding_missing", external_publication_effects: 0 }, 409);
+  }
+
+  const browser = await puppeteer.launch(env.BROWSER, { keep_alive: 600000 });
+  try {
+    const page = await browser.newPage();
+    await page.goto(MEDIUM_SIGNIN_URL, { waitUntil: "domcontentloaded", timeout: 30000 });
+
+    const cdp = await page.createCDPSession();
+    const { devtoolsFrontendUrl } = await cdp.send("Cloudflare.getLiveView", {
+      mode: "tab",
+      expiresInMs: 600000,
+    });
+    const sessionId = browser.sessionId();
+
+    await storeBootstrap(env, {
+      session_id: sessionId,
+      live_view_url: devtoolsFrontendUrl,
+      started_at: new Date().toISOString(),
+      account_identity: env.MEDIUM_ACCOUNT_IDENTITY || "unDrifted",
+    });
+
+    browser.disconnect();
+
+    return json({
+      ok: true,
+      standing: "medium_login_handoff_ready",
+      session_id: sessionId,
+      live_view_url: devtoolsFrontendUrl,
+      instructions: "Open the Live View URL, sign in to the unDrifted Medium account, then call /medium/bootstrap/complete.",
+      external_publication_effects: 0,
+    });
+  } catch (error) {
+    try { await browser.close(); } catch {}
+    return json({
+      ok: false,
+      standing: "held_medium_bootstrap_exception",
+      error: error instanceof Error ? error.message : String(error),
+      external_publication_effects: 0,
+    }, 502);
+  }
+}
+
+async function completeMediumBootstrap(env) {
+  const state = await readMediumState(env);
+  const sessionId = clean(state.bootstrap?.session_id);
+  if (!sessionId) {
+    return json({ ok: false, standing: "held_medium_bootstrap_not_started", external_publication_effects: 0 }, 409);
+  }
+
+  let browser;
+  try {
+    browser = await puppeteer.connect(env.BROWSER, sessionId);
+    const pages = await browser.pages();
+    const page = pages[pages.length - 1] || await browser.newPage();
+    await page.goto(MEDIUM_DRAFTS_URL, { waitUntil: "domcontentloaded", timeout: 30000 });
+
+    if (/signin|login|m\/signin/i.test(page.url())) {
+      browser.disconnect();
+      return json({ ok: false, standing: "held_medium_login_not_completed", external_publication_effects: 0 }, 409);
+    }
+
+    const cookies = await page.cookies();
+    if (!cookies.length) {
+      browser.disconnect();
+      return json({ ok: false, standing: "held_medium_session_capture_empty", external_publication_effects: 0 }, 409);
+    }
+
+    await storeMediumCookies(env, cookies);
+    await clearBootstrap(env);
+    await browser.close();
+
+    return json({
+      ok: true,
+      standing: "medium_session_persisted",
+      account_identity: env.MEDIUM_ACCOUNT_IDENTITY || "unDrifted",
+      cookie_count: cookies.length,
+      external_publication_effects: 0,
+    });
+  } catch (error) {
+    try { if (browser) browser.disconnect(); } catch {}
+    return json({
+      ok: false,
+      standing: "held_medium_bootstrap_complete_exception",
+      error: error instanceof Error ? error.message : String(error),
+      external_publication_effects: 0,
+    }, 502);
+  }
+}
+
 async function proveMediumSession(env) {
   if (!env.BROWSER) {
     return json({ ok: false, standing: "held_browser_binding_missing", external_publication_effects: 0 }, 409);
   }
-  const cookies = readCookies(env.MEDIUM_SESSION_COOKIES);
+  const state = await readMediumState(env);
+  const cookies = Array.isArray(state.cookies) ? state.cookies : [];
   if (!cookies.length) {
     return json({ ok: false, standing: "held_medium_session_missing", external_publication_effects: 0 }, 409);
   }
@@ -68,7 +250,7 @@ async function proveMediumSession(env) {
     await page.setCookie(...cookies);
     await page.goto(MEDIUM_DRAFTS_URL, { waitUntil: "domcontentloaded", timeout: 30000 });
     const currentUrl = page.url();
-    const loggedIn = !/signin|login|m/signin/i.test(currentUrl);
+    const loggedIn = !/signin|login|m\/signin/i.test(currentUrl);
     return json({
       ok: loggedIn,
       standing: loggedIn ? "medium_session_proven" : "held_medium_session_invalid",
@@ -96,7 +278,8 @@ async function runMediumImport(request, env) {
     return json({ ok: false, standing: "held_browser_binding_missing", external_publication_effects: 0 }, 409);
   }
 
-  const cookies = readCookies(env.MEDIUM_SESSION_COOKIES);
+  const state = await readMediumState(env);
+  const cookies = Array.isArray(state.cookies) ? state.cookies : [];
   if (!cookies.length) {
     return json({ ok: false, standing: "held_medium_session_missing", external_publication_effects: 0 }, 409);
   }
@@ -184,7 +367,6 @@ async function runMediumImport(request, env) {
     }
     await waitForSettled(page, 5000);
 
-    // Medium commonly presents a second confirmation dialog.
     await clickButtonByText(page, ["Publish now", "Publish"]);
     await waitForSettled(page, 12000);
 
@@ -229,36 +411,6 @@ function validateMediumRequest(body) {
   if (body?.constraints?.operator_confirmation_required !== true) missing.push("operator_confirmation_required");
   if (body?.publish === true && body?.operator_confirmed !== true) missing.push("operator_confirmed_for_publish");
   return { ok: missing.length === 0, missing };
-}
-
-function readCookies(raw) {
-  const text = clean(raw);
-  if (!text) return [];
-  try {
-    const parsed = JSON.parse(text);
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .filter((cookie) => cookie && typeof cookie.name === "string" && typeof cookie.value === "string")
-      .map((cookie) => ({
-        name: cookie.name,
-        value: cookie.value,
-        domain: cookie.domain || ".medium.com",
-        path: cookie.path || "/",
-        httpOnly: Boolean(cookie.httpOnly),
-        secure: cookie.secure !== false,
-        sameSite: normalizeSameSite(cookie.sameSite),
-        ...(Number.isFinite(cookie.expires) ? { expires: cookie.expires } : {}),
-      }));
-  } catch {
-    return [];
-  }
-}
-
-function normalizeSameSite(value) {
-  const normalized = String(value || "").toLowerCase();
-  if (normalized === "strict") return "Strict";
-  if (normalized === "none") return "None";
-  return "Lax";
 }
 
 async function firstExistingSelector(page, selectors) {
