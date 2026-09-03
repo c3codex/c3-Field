@@ -402,6 +402,36 @@ async function proveDizzy(env: Env) {
   }
 }
 
+
+async function proveBlueskyBinding(env: Env, account: "measures" | "undrifted") {
+  const token = env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN
+  if (!token) {
+    return {
+      ok: false,
+      account,
+      standing: "held_credentials",
+      did: null,
+      handle: null,
+      external_publication_effects: 0,
+    }
+  }
+
+  const baseUrl = (env.LAPZULI_DISTRIBUTION_WORKER_URL ?? DEFAULT_DIZZY_URL).replace(/\/$/, "")
+  const response = await fetch(`${baseUrl}/verify/bluesky/${account}`, {
+    headers: { authorization: `Bearer ${token}` },
+  })
+  const body = await response.json().catch(() => ({}))
+  return {
+    ok: response.ok && body?.ok === true,
+    account,
+    standing: response.ok && body?.ok === true ? "bluesky_session_verified" : body?.error ?? "held_bluesky_session_verification",
+    did: body?.did ?? null,
+    handle: body?.handle ?? null,
+    external_response_code: response.status,
+    external_publication_effects: body?.external_publication_effects ?? 0,
+  }
+}
+
 async function proveDevAdapter(env: Env, args: {
   route: RouteRow | null
   asset: DistributionAssetRow | null
@@ -703,6 +733,8 @@ async function loadControls(env: Env, selection: {
     schedulerProcess,
     eligibleObjects,
     dizzyProof,
+    measuresBlueskyProof,
+    undriftedBlueskyProof,
   ] = await Promise.all([
     loadRegistry(env, "env.role_call"),
     loadRegistry(env, "persistence"),
@@ -713,6 +745,8 @@ async function loadControls(env: Env, selection: {
     loadProcess(env, "dizzy_worker_scheduler_integration_v1"),
     loadEligibleObjects(env),
     proveDizzy(env),
+    proveBlueskyBinding(env, "measures"),
+    proveBlueskyBinding(env, "undrifted"),
   ])
 
   const selectedObject = selection.publicationObjectKey
@@ -886,6 +920,14 @@ async function loadControls(env: Env, selection: {
     },
     destinations,
     dizzy: dizzyProof,
+    bluesky: {
+      measures: measuresBlueskyProof,
+      undrifted: undriftedBlueskyProof,
+      verified: measuresBlueskyProof.ok && undriftedBlueskyProof.ok,
+      external_publication_effects:
+        (measuresBlueskyProof.external_publication_effects ?? 0) +
+        (undriftedBlueskyProof.external_publication_effects ?? 0),
+    },
   }
 }
 
