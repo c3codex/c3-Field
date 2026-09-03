@@ -310,41 +310,56 @@ test("dispatch action persists a held evidence event for selected source-held ob
   assert.match(body.action_result.evidence_identity, /^lapzuli_source_action_undrifted_drift_report_005_dev_/)
 })
 
-test("dispatch action recognizes an authorized route and stops before Dizzy execution", async () => {
+test("dispatch action executes the authorized DEV route and records returned evidence", async () => {
   const handler = (url: string, init: RequestInit) => {
     if (url.includes("undrifted_distribution_report_v1?")) return Response.json(reportRowsClearHold())
     if (url.includes("lapzuli_route?")) return Response.json(authorizedRouteRows())
+    if (init.method === "POST" && url.includes("measures_distribution_execution")) {
+      return new Response("", { status: 201 })
+    }
     if (url.includes("measures_distribution_execution?")) return Response.json([])
     if (url.includes("measures_publication_distribution_asset?")) return Response.json(distributionAssetRows())
     if (url === "https://lapzuli.example/dev/articles") {
       assert.equal(init.method, "POST")
       assert.equal((init.headers as Record<string, string>).authorization, "Bearer lapzuli-test")
       const requestBody = JSON.parse(String(init.body))
-      assert.equal(requestBody.dry_run, true)
       assert.equal(requestBody.route_key, wizDevRouteKey)
       assert.equal(requestBody.canonical_url, "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/")
+      if (requestBody.dry_run !== false) {
+        return Response.json({
+          ok: true,
+          standing: "dev_adapter_ready_dry_run",
+          adapter: "forem_articles_create_v1",
+          request_identity: `${wizDevRouteKey}:${wizDevAssetKey}:${wizDevRouteKey}:${wizDevAssetKey}`,
+          credential_present: true,
+          forem_contract: {
+            method: "POST",
+            url: "https://dev.to/api/articles",
+            auth_header: "api-key",
+            accept: "application/vnd.forem.api-v1+json",
+            payload_shape: "article",
+          },
+          article: {
+            title: "The Wiz Behind the Curtain",
+            canonical_url: "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/",
+            published: false,
+            tags: "ai, security, governance, devops",
+            body_markdown_bytes: 4,
+          },
+          external_publication_effects: 0,
+        })
+      }
+      assert.equal(requestBody.dry_run, false)
+      assert.equal(requestBody.published, true)
       return Response.json({
         ok: true,
-        standing: "dev_adapter_ready_dry_run",
-        adapter: "forem_articles_create_v1",
-        request_identity: `${wizDevRouteKey}:${wizDevAssetKey}:${wizDevRouteKey}:${wizDevAssetKey}`,
-        credential_present: true,
-        forem_contract: {
-          method: "POST",
-          url: "https://dev.to/api/articles",
-          auth_header: "api-key",
-          accept: "application/vnd.forem.api-v1+json",
-          payload_shape: "article",
-        },
-        article: {
-          title: "The Wiz Behind the Curtain",
-          canonical_url: "https://measuresregistry.com/undrifted/the-wiz-behind-the-curtain/",
-          published: false,
-          tags: "ai, security, governance, devops",
-          body_markdown_bytes: 4,
-        },
-        external_publication_effects: 0,
-      })
+        standing: "dev_article_created",
+        request_identity: `${wizDevRouteKey}:${wizDevAssetKey}:live`,
+        external_response_code: 201,
+        platform_post_id: "12345",
+        platform_url: "https://dev.to/undrifted/the-wiz-behind-the-curtain-123",
+        external_publication_effects: 1,
+      }, { status: 201 })
     }
     return mockHandler(url, init)
   }
@@ -361,15 +376,16 @@ test("dispatch action recognizes an authorized route and stops before Dizzy exec
     env,
   } as never))
 
-  assert.equal(response.status, 409)
+  assert.equal(response.status, 201)
   const body = await response.json() as Record<string, any>
   assert.equal(body.lapzuli_distribution.route_standing, "authorized")
   assert.equal(body.lapzuli_distribution.route_key, wizDevRouteKey)
   assert.equal(body.controls.dispatch_now, "ready_for_operator_dev_execution")
   assert.equal(body.controls.dev_adapter.ok, true)
   assert.equal(body.controls.dev_adapter.external_publication_effects, 0)
-  assert.equal(body.action_result.standing, "held_dizzy_execution_not_authorized")
-  assert.equal(body.action_result.mutation_count, 1)
-  assert.equal(body.action_result.external_publication_effects, 0)
+  assert.equal(body.action_result.standing, "dev_article_created")
+  assert.equal(body.action_result.external_publication_effects, 1)
+  assert.equal(body.action_result.platform_post_id, "12345")
+  assert.equal(body.action_result.platform_url, "https://dev.to/undrifted/the-wiz-behind-the-curtain-123")
   assert.equal(body.action_result.selected_route.route_status, "authorized")
 })
