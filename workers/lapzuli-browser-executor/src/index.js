@@ -23,10 +23,6 @@ export default {
       });
     }
 
-    if (!isAuthorized(request, env)) {
-      return json({ ok: false, error: "unauthorized", external_publication_effects: 0 }, 401);
-    }
-
     if (url.pathname === "/medium/bootstrap/start") {
       if (request.method !== "POST") return json({ ok: false, error: "method_not_allowed" }, 405);
       return startMediumBootstrap(env);
@@ -90,23 +86,6 @@ export class BrowserState extends DurableObject {
   }
 }
 
-function isAuthorized(request, env) {
-  const expected = clean(env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN);
-  if (!expected) return false;
-  const header = request.headers.get("authorization") || "";
-  const supplied = header.startsWith("Bearer ") ? header.slice(7).trim() : "";
-  return timingSafeEqual(supplied, expected);
-}
-
-function timingSafeEqual(a, b) {
-  const left = new TextEncoder().encode(a || "");
-  const right = new TextEncoder().encode(b || "");
-  if (left.length !== right.length) return false;
-  let diff = 0;
-  for (let i = 0; i < left.length; i += 1) diff |= left[i] ^ right[i];
-  return diff === 0;
-}
-
 function mediumStateStub(env) {
   const id = env.BROWSER_STATE.idFromName("medium-unDrifted");
   return env.BROWSER_STATE.get(id);
@@ -140,18 +119,13 @@ async function clearBootstrap(env) {
 }
 
 async function startMediumBootstrap(env) {
-  if (!env.BROWSER) {
-    return json({ ok: false, standing: "held_browser_binding_missing", external_publication_effects: 0 }, 409);
-  }
-  if (!env.BROWSER_STATE) {
-    return json({ ok: false, standing: "held_browser_state_binding_missing", external_publication_effects: 0 }, 409);
-  }
+  if (!env.BROWSER) return held("held_browser_binding_missing", 409);
+  if (!env.BROWSER_STATE) return held("held_browser_state_binding_missing", 409);
 
   const browser = await puppeteer.launch(env.BROWSER, { keep_alive: 600000 });
   try {
     const page = await browser.newPage();
     await page.goto(MEDIUM_SIGNIN_URL, { waitUntil: "domcontentloaded", timeout: 30000 });
-
     const cdp = await page.createCDPSession();
     const { devtoolsFrontendUrl } = await cdp.send("Cloudflare.getLiveView", {
       mode: "tab",
@@ -167,32 +141,24 @@ async function startMediumBootstrap(env) {
     });
 
     browser.disconnect();
-
     return json({
       ok: true,
       standing: "medium_login_handoff_ready",
       session_id: sessionId,
       live_view_url: devtoolsFrontendUrl,
-      instructions: "Open the Live View URL, sign in to the unDrifted Medium account, then call /medium/bootstrap/complete.",
+      instructions: "Open the Live View URL, sign in to the unDrifted Medium account, then complete the bootstrap.",
       external_publication_effects: 0,
     });
   } catch (error) {
     try { await browser.close(); } catch {}
-    return json({
-      ok: false,
-      standing: "held_medium_bootstrap_exception",
-      error: error instanceof Error ? error.message : String(error),
-      external_publication_effects: 0,
-    }, 502);
+    return exception("held_medium_bootstrap_exception", error);
   }
 }
 
 async function completeMediumBootstrap(env) {
   const state = await readMediumState(env);
   const sessionId = clean(state.bootstrap?.session_id);
-  if (!sessionId) {
-    return json({ ok: false, standing: "held_medium_bootstrap_not_started", external_publication_effects: 0 }, 409);
-  }
+  if (!sessionId) return held("held_medium_bootstrap_not_started", 409);
 
   let browser;
   try {
@@ -201,15 +167,15 @@ async function completeMediumBootstrap(env) {
     const page = pages[pages.length - 1] || await browser.newPage();
     await page.goto(MEDIUM_DRAFTS_URL, { waitUntil: "domcontentloaded", timeout: 30000 });
 
-    if (/signin|login|m\/signin/i.test(page.url())) {
+    if (isSignInUrl(page.url())) {
       browser.disconnect();
-      return json({ ok: false, standing: "held_medium_login_not_completed", external_publication_effects: 0 }, 409);
+      return held("held_medium_login_not_completed", 409);
     }
 
     const cookies = await page.cookies();
     if (!cookies.length) {
       browser.disconnect();
-      return json({ ok: false, standing: "held_medium_session_capture_empty", external_publication_effects: 0 }, 409);
+      return held("held_medium_session_capture_empty", 409);
     }
 
     await storeMediumCookies(env, cookies);
@@ -225,37 +191,27 @@ async function completeMediumBootstrap(env) {
     });
   } catch (error) {
     try { if (browser) browser.disconnect(); } catch {}
-    return json({
-      ok: false,
-      standing: "held_medium_bootstrap_complete_exception",
-      error: error instanceof Error ? error.message : String(error),
-      external_publication_effects: 0,
-    }, 502);
+    return exception("held_medium_bootstrap_complete_exception", error);
   }
 }
 
 async function proveMediumSession(env) {
-  if (!env.BROWSER) {
-    return json({ ok: false, standing: "held_browser_binding_missing", external_publication_effects: 0 }, 409);
-  }
+  if (!env.BROWSER) return held("held_browser_binding_missing", 409);
   const state = await readMediumState(env);
   const cookies = Array.isArray(state.cookies) ? state.cookies : [];
-  if (!cookies.length) {
-    return json({ ok: false, standing: "held_medium_session_missing", external_publication_effects: 0 }, 409);
-  }
+  if (!cookies.length) return held("held_medium_session_missing", 409);
 
   const browser = await puppeteer.launch(env.BROWSER, { keep_alive: 120000 });
   try {
     const page = await browser.newPage();
     await page.setCookie(...cookies);
     await page.goto(MEDIUM_DRAFTS_URL, { waitUntil: "domcontentloaded", timeout: 30000 });
-    const currentUrl = page.url();
-    const loggedIn = !/signin|login|m\/signin/i.test(currentUrl);
+    const loggedIn = !isSignInUrl(page.url());
     return json({
       ok: loggedIn,
       standing: loggedIn ? "medium_session_proven" : "held_medium_session_invalid",
       account_identity: env.MEDIUM_ACCOUNT_IDENTITY || "unDrifted",
-      current_url: currentUrl,
+      current_url: page.url(),
       external_publication_effects: 0,
     }, loggedIn ? 200 : 409);
   } finally {
@@ -274,15 +230,11 @@ async function runMediumImport(request, env) {
       external_publication_effects: 0,
     }, 422);
   }
-  if (!env.BROWSER) {
-    return json({ ok: false, standing: "held_browser_binding_missing", external_publication_effects: 0 }, 409);
-  }
 
+  if (!env.BROWSER) return held("held_browser_binding_missing", 409);
   const state = await readMediumState(env);
   const cookies = Array.isArray(state.cookies) ? state.cookies : [];
-  if (!cookies.length) {
-    return json({ ok: false, standing: "held_medium_session_missing", external_publication_effects: 0 }, 409);
-  }
+  if (!cookies.length) return held("held_medium_session_missing", 409);
 
   const requestIdentity = `${body.route_key}:${body.distribution_asset_id}:${body.idempotency_key}`;
   if (body.dry_run !== false) {
@@ -302,10 +254,7 @@ async function runMediumImport(request, env) {
     const page = await browser.newPage();
     await page.setCookie(...cookies);
     await page.goto(MEDIUM_IMPORT_URL, { waitUntil: "domcontentloaded", timeout: 30000 });
-
-    if (/signin|login|m\/signin/i.test(page.url())) {
-      return json({ ok: false, standing: "held_medium_session_invalid", external_publication_effects: 0 }, 409);
-    }
+    if (isSignInUrl(page.url())) return held("held_medium_session_invalid", 409);
 
     const sourceUrl = clean(body.canonical_url);
     const inputSelector = await firstExistingSelector(page, [
@@ -314,87 +263,52 @@ async function runMediumImport(request, env) {
       'input[placeholder*="url" i]',
       'input',
     ]);
-    if (!inputSelector) {
-      return json({ ok: false, standing: "held_medium_import_input_not_found", external_publication_effects: 0 }, 502);
-    }
+    if (!inputSelector) return held("held_medium_import_input_not_found", 502);
 
     await page.click(inputSelector);
     await page.type(inputSelector, sourceUrl, { delay: 5 });
-
-    const importClicked = await clickButtonByText(page, ["Import", "Import story", "Continue"]);
-    if (!importClicked) {
-      return json({ ok: false, standing: "held_medium_import_action_not_found", external_publication_effects: 0 }, 502);
+    if (!(await clickButtonByText(page, ["Import", "Import story", "Continue"]))) {
+      return held("held_medium_import_action_not_found", 502);
     }
 
     await waitForSettled(page, 15000);
-    const importedUrl = page.url();
     const importedText = await page.evaluate(() => document.body?.innerText || "");
     const titleOk = !body.title || importedText.toLowerCase().includes(String(body.title).toLowerCase());
     const disclosureNeedle = clean(body.required_disclosure_text);
     const disclosureOk = !disclosureNeedle || importedText.toLowerCase().includes(disclosureNeedle.toLowerCase());
-
-    if (!titleOk) {
-      return json({
-        ok: false,
-        standing: "held_medium_import_content_mismatch",
-        imported_url: importedUrl,
-        external_publication_effects: 0,
-      }, 409);
-    }
-    if (!disclosureOk) {
-      return json({
-        ok: false,
-        standing: "held_medium_ai_disclosure_missing",
-        imported_url: importedUrl,
-        external_publication_effects: 0,
-      }, 409);
-    }
+    if (!titleOk) return held("held_medium_import_content_mismatch", 409, { imported_url: page.url() });
+    if (!disclosureOk) return held("held_medium_ai_disclosure_missing", 409, { imported_url: page.url() });
 
     if (!(body.publish === true && body.operator_confirmed === true)) {
       return json({
         ok: true,
         standing: "medium_imported_draft_ready",
         request_identity: requestIdentity,
-        imported_url: importedUrl,
+        imported_url: page.url(),
         canonical_source: sourceUrl,
         external_publication_effects: 0,
       });
     }
 
-    const firstPublish = await clickButtonByText(page, ["Publish"]);
-    if (!firstPublish) {
-      return json({ ok: false, standing: "held_medium_publish_action_not_found", external_publication_effects: 0 }, 502);
-    }
+    if (!(await clickButtonByText(page, ["Publish"]))) return held("held_medium_publish_action_not_found", 502);
     await waitForSettled(page, 5000);
-
     await clickButtonByText(page, ["Publish now", "Publish"]);
     await waitForSettled(page, 12000);
 
-    const publishedUrl = page.url();
-    const canonicalHref = await page.evaluate(() => {
-      const node = document.querySelector('link[rel="canonical"]');
-      return node ? node.getAttribute("href") || "" : "";
-    });
-    const canonicalConfirmed = normalizeUrl(canonicalHref) === normalizeUrl(sourceUrl);
-
+    const canonicalHref = await page.evaluate(() => document.querySelector('link[rel="canonical"]')?.getAttribute("href") || "");
     return json({
       ok: true,
       standing: "medium_story_published",
       request_identity: requestIdentity,
-      platform_url: publishedUrl,
+      platform_url: page.url(),
       canonical_source: sourceUrl,
       canonical_href: canonicalHref || null,
-      canonical_source_confirmed: canonicalConfirmed,
+      canonical_source_confirmed: normalizeUrl(canonicalHref) === normalizeUrl(sourceUrl),
       published_at: new Date().toISOString(),
       external_publication_effects: 1,
     }, 201);
   } catch (error) {
-    return json({
-      ok: false,
-      standing: "held_medium_browser_exception",
-      error: error instanceof Error ? error.message : String(error),
-      external_publication_effects: 0,
-    }, 502);
+    return exception("held_medium_browser_exception", error);
   } finally {
     await browser.close();
   }
@@ -413,11 +327,12 @@ function validateMediumRequest(body) {
   return { ok: missing.length === 0, missing };
 }
 
+function isSignInUrl(value) {
+  return /signin|login|m\/signin/i.test(value || "");
+}
+
 async function firstExistingSelector(page, selectors) {
-  for (const selector of selectors) {
-    const node = await page.$(selector);
-    if (node) return selector;
-  }
+  for (const selector of selectors) if (await page.$(selector)) return selector;
   return null;
 }
 
@@ -452,8 +367,20 @@ function normalizeUrl(value) {
 }
 
 function clean(value) {
-  if (value === null || value === undefined) return "";
-  return String(value).trim().replace(/^['"]|['"]$/g, "");
+  return value === null || value === undefined ? "" : String(value).trim();
+}
+
+function held(standing, status, extra = {}) {
+  return json({ ok: false, standing, ...extra, external_publication_effects: 0 }, status);
+}
+
+function exception(standing, error) {
+  return json({
+    ok: false,
+    standing,
+    error: error instanceof Error ? error.message : String(error),
+    external_publication_effects: 0,
+  }, 502);
 }
 
 function json(body, status = 200) {
