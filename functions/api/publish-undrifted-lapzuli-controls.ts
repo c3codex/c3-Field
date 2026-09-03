@@ -186,7 +186,6 @@ const CHAMBER_DERIVATIVE_PATH =
   "undrifted/publication-chamber/lapis_antechamber_ops_surface_web_v1.webp"
 const DEFAULT_DIZZY_URL = "https://lapzuli-distribution-worker.c3field.workers.dev"
 const WIZ_DEV_ROUTE_KEY = "lapzuli_route_undrifted_drift_report_005_dev_codex_010"
-const WIZ_DEV_DISTRIBUTION_ASSET_KEY = "undrifted_drift_report_005_dev_canonical_crosspost_v1"
 const OAR12_SOURCE_OAR2_PATH =
   "CanCom/codex/oar2_implement_dev_delivery_adapter_wiz_distribution_asset_codex_012"
 
@@ -344,15 +343,6 @@ async function loadRoutes(env: Env, objectKey: string | null) {
   return supabaseFetch<RouteRow[]>(
     env,
     `lapzuli_route?publication_object_key=eq.${encodeURIComponent(objectKey)}&select=route_key,publication_object_key,desk_key,outlet_key,distribution_mode,route_status,authority_reference,operator_confirmed,canonical_url,payload_reference,metadata&limit=50`,
-  )
-}
-
-async function loadExecutions(env: Env, objectKey: string | null, dispatchKey: string | null) {
-  if (!objectKey && !dispatchKey) return []
-  const values = [objectKey, dispatchKey].filter(Boolean).map((value) => `"${value}"`).join(",")
-  return supabaseFetch<ExecutionRow[]>(
-    env,
-    `measures_distribution_execution?distribution_asset_id=in.(${encodeURIComponent(values)})&select=distribution_asset_id,executor_key,channel_key,execution_status,platform_post_id,platform_url,evidence,metadata&limit=50`,
   )
 }
 
