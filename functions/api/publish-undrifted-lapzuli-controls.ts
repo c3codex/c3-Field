@@ -503,6 +503,98 @@ async function proveDevAdapter(env: Env, args: {
 }
 
 
+async function executeBlueskyAdapter(env: Env, args: {
+  route: RouteRow
+  asset: DistributionAssetRow
+  selectedObject: ReturnType<typeof publicationObject>
+}) {
+  const token = env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN
+  if (!token) {
+    return { ok: false, standing: "held_credentials", external_publication_effects: 0 }
+  }
+  const payload = args.asset.payload ?? {}
+  const baseUrl = (env.LAPZULI_DISTRIBUTION_WORKER_URL ?? DEFAULT_DIZZY_URL).replace(/\/$/, "")
+  const response = await fetch(`${baseUrl}/bluesky/posts`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      dry_run: false,
+      route_key: args.route.route_key,
+      publication_object_key: args.selectedObject.publication_object_key,
+      dispatch_key: args.selectedObject.dispatch_key,
+      distribution_asset_id: args.asset.distribution_asset_key,
+      outlet_key: args.route.outlet_key,
+      distribution_mode: args.route.distribution_mode,
+      text: payload.text,
+      canonical_url: args.route.canonical_url,
+      authority_reference: args.route.authority_reference,
+      idempotency_key: payload.idempotency_key,
+      constraints: payload.constraints,
+    }),
+  })
+  const body = await response.json().catch(() => ({}))
+  return {
+    ok: response.ok && body?.ok === true,
+    standing: body?.standing ?? (response.ok ? "bluesky_post_created" : "held_bluesky_external_response"),
+    request_identity: body?.request_identity ?? null,
+    external_response_code: body?.external_response_code ?? response.status,
+    platform_post_id: body?.platform_post_id ?? null,
+    platform_cid: body?.platform_cid ?? null,
+    platform_url: body?.platform_url ?? null,
+    external_publication_effects: body?.external_publication_effects ?? 0,
+  }
+}
+
+async function recordBlueskyDistributionExecution(env: Env, args: {
+  asset: DistributionAssetRow
+  route: RouteRow
+  result: Awaited<ReturnType<typeof executeBlueskyAdapter>>
+}) {
+  const published = args.result.ok && args.result.external_publication_effects === 1
+  await supabaseFetch(env, "measures_distribution_execution", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      distribution_asset_id: args.asset.distribution_asset_key,
+      executor_key: "bluesky_api",
+      channel_key: null,
+      execution_status: published ? "published" : (args.result.ok ? "publication_attempted" : "failed"),
+      execution_mode: "platform_api",
+      attempt_number: 1,
+      executed_at: new Date().toISOString(),
+      published_at: published ? new Date().toISOString() : null,
+      platform_post_id: args.result.platform_post_id,
+      platform_url: args.result.platform_url,
+      evidence: {
+        route_key: args.route.route_key,
+        request_identity: args.result.request_identity,
+        external_response_code: args.result.external_response_code,
+        platform_cid: args.result.platform_cid,
+        adapter_standing: args.result.standing,
+        external_publication_effects: args.result.external_publication_effects,
+      },
+      error: args.result.ok ? null : args.result.standing,
+      source_oar2: args.route.authority_reference,
+      created_by_actor_class: "AI",
+      created_by_actor_key: "Dizzy",
+      approved_by_actor_class: "Human",
+      approved_by_actor_key: "op044",
+      metadata: {
+        worker_identity: "dizzy_lapzuli_distribution_worker_v1",
+        adapter: "atproto_create_record_v1",
+        operator_surface: "/publish-undrifted",
+      },
+      optics: {
+        observes: "distribution_event",
+        models_individuals_as_primary: false,
+      },
+    }),
+  })
+}
+
 async function executeDevAdapter(env: Env, args: {
   route: RouteRow
   asset: DistributionAssetRow
@@ -1053,6 +1145,58 @@ async function handleAction(request: Request, env: Env) {
         evidence_identity: eventKey,
       },
     }, 409)
+  }
+
+  if (selectedRoute?.outlet_key === "bluesky") {
+    const selectedAsset = state.controls.selected_distribution_asset as DistributionAssetRow | null
+    if (!selectedAsset || !selectedObject) {
+      return jsonResponse({
+        ...state,
+        action_result: {
+          action,
+          standing: "held_distribution_asset_missing",
+          mutation_count: 0,
+          external_publication_effects: 0,
+        },
+      }, 409)
+    }
+
+    const result = await executeBlueskyAdapter(env, {
+      route: selectedRoute,
+      asset: selectedAsset,
+      selectedObject,
+    })
+    await recordBlueskyDistributionExecution(env, {
+      route: selectedRoute,
+      asset: selectedAsset,
+      result,
+    })
+    await recordActionEvidence(env, {
+      eventKey,
+      fromStatus: "route_recognized",
+      toStatus: result.ok ? result.standing : "held_bluesky_execution_failed",
+      transitionType: result.ok ? "execution" : "held",
+      evidenceReference,
+      notes:
+        `Bluesky dispatch for ${publicationObjectKey}: ${result.standing}; ` +
+        `external publication effects ${result.external_publication_effects}.`,
+    })
+    return jsonResponse({
+      ...state,
+      action_result: {
+        action,
+        standing: result.standing,
+        mutation_count: 2,
+        external_publication_effects: result.external_publication_effects,
+        evidence_identity: eventKey,
+        platform_post_id: result.platform_post_id,
+        platform_cid: result.platform_cid,
+        platform_url: result.platform_url,
+        selected_publication_object: selectedObject,
+        selected_channel: selectedChannel,
+        selected_route: selectedRoute,
+      },
+    }, result.ok ? 201 : 502)
   }
 
   if (selectedRoute?.outlet_key === "dev") {
