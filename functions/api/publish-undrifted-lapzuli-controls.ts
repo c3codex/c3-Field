@@ -159,9 +159,9 @@ const STATION_SOURCE_MAP = [
 ]
 
 const SOURCE_OAR2_PATH =
-  "CanCom/codex/oar2_normalize_undrifted_source_specific_lapzuli_actions_codex_008"
+  "CanCom/codex/oar2_bind_publish_undrifted_source_specific_actions_codex_009"
 const EXPECTED_OAR1_PATH =
-  "G:/My Drive/CanCom/cancom/oar1_normalize_undrifted_source_specific_lapzuli_actions_codex_008.meta.md"
+  "G:/My Drive/CanCom/cancom/oar1_bind_publish_undrifted_source_specific_actions_codex_009.meta.md"
 const SOURCE_OAR2_005_PATH =
   "CanCom/codex/oar2_implement_lapis_publication_chamber_operator_environment_codex_005"
 const SOURCE_CHAMBER_ASSET_SHA256 =
@@ -369,7 +369,7 @@ async function recordActionEvidence(env: Env, event: {
     method: "POST",
     headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
     body: JSON.stringify({
-      process_instance_key: "normalize_undrifted_source_specific_lapzuli_actions_codex_008",
+      process_instance_key: "bind_publish_undrifted_source_specific_actions_codex_009",
       source_oar2_path: SOURCE_OAR2_PATH,
       source_oar2_standing: "confirmed",
       expected_oar1_path: EXPECTED_OAR1_PATH,
@@ -396,7 +396,7 @@ async function recordActionEvidence(env: Env, event: {
     headers: { Prefer: "return=minimal" },
     body: JSON.stringify({
       transition_event_key: event.eventKey,
-      process_instance_key: "normalize_undrifted_source_specific_lapzuli_actions_codex_008",
+      process_instance_key: "bind_publish_undrifted_source_specific_actions_codex_009",
       actor: "measures",
       from_status: event.fromStatus,
       to_status: event.toStatus,

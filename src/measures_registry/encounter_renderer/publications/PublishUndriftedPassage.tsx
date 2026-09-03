@@ -225,6 +225,7 @@ export default function PublishUndriftedPassage({
   const [selectedStation, setSelectedStation] = useState("publication")
   const [selectedObjectKey, setSelectedObjectKey] = useState<string>("")
   const [selectedOutletKey, setSelectedOutletKey] = useState<string>("")
+  const [actionAttempted, setActionAttempted] = useState(false)
 
   async function runProof() {
     setProof({ status: "loading" })
@@ -273,6 +274,7 @@ export default function PublishUndriftedPassage({
   }
 
   async function runAction(action: "dispatch_now" | "schedule") {
+    setActionAttempted(true)
     setControls({ status: "loading" })
     try {
       const response = await fetch("/api/publish-undrifted-lapzuli-controls", {
@@ -373,6 +375,7 @@ export default function PublishUndriftedPassage({
                     onChange={(event) => {
                       setSelectedObjectKey(event.target.value)
                       setSelectedOutletKey("")
+                      setActionAttempted(false)
                     }}
                   >
                     <option value="">Select article</option>
@@ -387,7 +390,10 @@ export default function PublishUndriftedPassage({
                   <span>Channel</span>
                   <select
                     value={selectedOutletKey}
-                    onChange={(event) => setSelectedOutletKey(event.target.value)}
+                    onChange={(event) => {
+                      setSelectedOutletKey(event.target.value)
+                      setActionAttempted(false)
+                    }}
                     disabled={!selectedObjectKey}
                   >
                     <option value="">Select channel</option>
@@ -476,7 +482,9 @@ export default function PublishUndriftedPassage({
             </div>
             <p className="publish-action-standing">
               {reportBody
-                ? "held until a source-specific action call is bound"
+                ? actionAttempted
+                  ? standingLabel(actionStanding ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status)
+                  : "held until a source-specific action call is bound"
                 : standingLabel(actionStanding ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status)}
             </p>
           </section>
