@@ -1,3 +1,5 @@
+import { proxyBrowserExecutor } from "./browser-proxy.js";
+
 const PDS_URL = "https://bsky.social";
 
 const ROLE_CALL = {
@@ -45,6 +47,7 @@ export default {
         role_identity: ROLE_CALL.role_identity,
         publishing_enabled: Boolean(readDevApiKey(env)),
         dev_adapter_enabled: true,
+        browser_executor_enabled: Boolean(env.BROWSER_EXECUTOR),
         scheduling_enabled: true,
         queue_enabled: false,
         external_publication_effects: 0,
@@ -64,6 +67,7 @@ export default {
           MEASURES_BLUESKY_HANDLE: Boolean(env.MEASURES_BLUESKY_HANDLE),
           UNDRIFTED_APP_PASSWORD: Boolean(env.UNDRIFTED_APP_PASSWORD),
           UNDRIFTED_BLUESKY_HANDLE: Boolean(env.UNDRIFTED_BLUESKY_HANDLE),
+          BROWSER_EXECUTOR: Boolean(env.BROWSER_EXECUTOR),
         },
         external_publication_effects: 0,
       });
@@ -79,6 +83,11 @@ export default {
       if (!isAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401);
       if (request.method !== "POST") return json({ ok: false, error: "method_not_allowed" }, 405);
       return prepareOrPublishBlueskyPost(request, env);
+    }
+
+    if (url.pathname.startsWith("/browser/")) {
+      if (!isAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401);
+      return proxyBrowserExecutor(request, env, url.pathname.replace(/^\/browser/, ""));
     }
 
     if (url.pathname === "/role-call/proof") {
