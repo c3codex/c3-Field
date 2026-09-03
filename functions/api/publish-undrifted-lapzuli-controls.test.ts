@@ -98,6 +98,33 @@ function reportRows() {
   }]
 }
 
+function reportRowsClearHold() {
+  return reportRows().map((row) => ({
+    ...row,
+    source_distribution_hold: false,
+    distribution_state: "ready_for_route_resolution",
+  }))
+}
+
+function authorizedRouteRows() {
+  return [{
+    route_key: "lapzuli_route_wiz_dev_codex_010",
+    publication_object_key: "undrifted_drift_report_005",
+    desk_key: "drift_report",
+    outlet_key: "dev",
+    distribution_mode: "canonical_crosspost",
+    route_status: "authorized",
+    authority_reference: "op044 authorization for DR_005 distribution plus CanCom/codex/oar2_resolve_lapzuli_route_status_and_form_dev_route_codex_010",
+    operator_confirmed: true,
+    canonical_url: null,
+    payload_reference: null,
+    metadata: {
+      return_required: true,
+      oar2_path: "CanCom/codex/oar2_resolve_lapzuli_route_status_and_form_dev_route_codex_010",
+    },
+  }]
+}
+
 function mockHandler(url: string, init: RequestInit) {
   if (init.method === "POST" && url.includes("c3_oar_")) {
     return new Response("", { status: 201 })
@@ -184,8 +211,8 @@ test("returns selectable objects without silently choosing an action target", as
   assert.equal(body.controls.dispatch_now, "held_binding")
   assert.equal(body.dizzy.worker_identity, "dizzy_lapzuli_distribution_worker_v1")
   assert.equal(body.external_publication_effects, 0)
-  assert.equal(body.source_oar2_path, "CanCom/codex/oar2_bind_publish_undrifted_source_specific_actions_codex_009")
-  assert.equal(body.expected_oar1_path, "G:/My Drive/CanCom/cancom/oar1_bind_publish_undrifted_source_specific_actions_codex_009.meta.md")
+  assert.equal(body.source_oar2_path, "CanCom/codex/oar2_resolve_lapzuli_route_status_and_form_dev_route_codex_010")
+  assert.equal(body.expected_oar1_path, "G:/My Drive/CanCom/cancom/oar1_resolve_lapzuli_route_status_and_form_dev_route_codex_010.meta.md")
   assert.equal(body.operator_access.mechanism, "existing OPERATOR_DISPATCH_KEY")
   assert.equal(body.chamber_environment.media_role, "lapis_publication_chamber_operator_environment")
   assert.equal(body.chamber_environment.derivative_storage_path, "undrifted/publication-chamber/lapis_antechamber_ops_surface_web_v1.webp")
@@ -235,4 +262,35 @@ test("dispatch action persists a held evidence event for selected source-held ob
   assert.equal(body.action_result.mutation_count, 1)
   assert.equal(body.action_result.external_publication_effects, 0)
   assert.match(body.action_result.evidence_identity, /^lapzuli_source_action_undrifted_drift_report_005_dev_/)
+})
+
+test("dispatch action recognizes an authorized route and stops before Dizzy execution", async () => {
+  const handler = (url: string, init: RequestInit) => {
+    if (url.includes("undrifted_distribution_report_v1?")) return Response.json(reportRowsClearHold())
+    if (url.includes("lapzuli_route?")) return Response.json(authorizedRouteRows())
+    if (url.includes("measures_distribution_execution?")) return Response.json([])
+    return mockHandler(url, init)
+  }
+
+  const response = await withMockedFetch(handler, () => onRequestPost({
+    request: new Request("https://example.com/api/publish-undrifted-lapzuli-controls", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "dispatch_now",
+        publication_object_key: "undrifted_drift_report_005",
+        outlet_key: "dev",
+      }),
+    }),
+    env,
+  } as never))
+
+  assert.equal(response.status, 409)
+  const body = await response.json() as Record<string, any>
+  assert.equal(body.lapzuli_distribution.route_standing, "authorized")
+  assert.equal(body.lapzuli_distribution.route_key, "lapzuli_route_wiz_dev_codex_010")
+  assert.equal(body.controls.dispatch_now, "ready")
+  assert.equal(body.action_result.standing, "held_dizzy_execution_not_authorized")
+  assert.equal(body.action_result.mutation_count, 1)
+  assert.equal(body.action_result.external_publication_effects, 0)
+  assert.equal(body.action_result.selected_route.route_status, "authorized")
 })

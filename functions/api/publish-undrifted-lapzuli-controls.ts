@@ -159,9 +159,9 @@ const STATION_SOURCE_MAP = [
 ]
 
 const SOURCE_OAR2_PATH =
-  "CanCom/codex/oar2_bind_publish_undrifted_source_specific_actions_codex_009"
+  "CanCom/codex/oar2_resolve_lapzuli_route_status_and_form_dev_route_codex_010"
 const EXPECTED_OAR1_PATH =
-  "G:/My Drive/CanCom/cancom/oar1_bind_publish_undrifted_source_specific_actions_codex_009.meta.md"
+  "G:/My Drive/CanCom/cancom/oar1_resolve_lapzuli_route_status_and_form_dev_route_codex_010.meta.md"
 const SOURCE_OAR2_005_PATH =
   "CanCom/codex/oar2_implement_lapis_publication_chamber_operator_environment_codex_005"
 const SOURCE_CHAMBER_ASSET_SHA256 =
@@ -369,7 +369,7 @@ async function recordActionEvidence(env: Env, event: {
     method: "POST",
     headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
     body: JSON.stringify({
-      process_instance_key: "bind_publish_undrifted_source_specific_actions_codex_009",
+      process_instance_key: "resolve_lapzuli_route_status_and_form_dev_route_codex_010",
       source_oar2_path: SOURCE_OAR2_PATH,
       source_oar2_standing: "confirmed",
       expected_oar1_path: EXPECTED_OAR1_PATH,
@@ -396,7 +396,7 @@ async function recordActionEvidence(env: Env, event: {
     headers: { Prefer: "return=minimal" },
     body: JSON.stringify({
       transition_event_key: event.eventKey,
-      process_instance_key: "bind_publish_undrifted_source_specific_actions_codex_009",
+      process_instance_key: "resolve_lapzuli_route_status_and_form_dev_route_codex_010",
       actor: "measures",
       from_status: event.fromStatus,
       to_status: event.toStatus,
@@ -427,7 +427,7 @@ function buildLapzuliStanding(args: {
   }
 
   const activeRoute = args.routes.find((row) =>
-    ["ready", "scheduled", "dispatching", "accepted"].includes(row.route_status ?? ""),
+    ["authorized", "attempted", "accepted"].includes(row.route_status ?? ""),
   )
   if (!args.objectProfile) {
     return {
@@ -515,7 +515,7 @@ async function loadControls(env: Env, selection: {
   const lapzuliStanding = buildLapzuliStanding({ objectProfile, destinations, routes, executions })
   const selectedRoute = selection.routeKey
     ? routes.find((row) => row.route_key === selection.routeKey) ?? null
-    : null
+    : routes.find((row) => row.route_key === lapzuliStanding.route_key) ?? null
 
   const preflight = [
     check(Boolean(envRoleCall?.is_active), "env_role_call_registered", {
@@ -744,14 +744,29 @@ async function handleAction(request: Request, env: Env) {
     }, 409)
   }
 
+  await recordActionEvidence(env, {
+    eventKey,
+    fromStatus: "route_recognized",
+    toStatus: "held_dizzy_execution_not_authorized",
+    transitionType: "held",
+    evidenceReference,
+    notes:
+      `Held ${action} for ${publicationObjectKey} on ${outletKey ?? routeKey}: route recognized as ` +
+      `${state.lapzuli_distribution.route_standing}; Dizzy/external publication execution not authorized by this proof; ` +
+      "route mutations 0; job mutations 0; external publication effects 0.",
+  })
   return jsonResponse({
     ...state,
     action_result: {
       action,
-      standing: "held_operator_confirmation_required",
-      mutation_count: 0,
+      standing: "held_dizzy_execution_not_authorized",
+      mutation_count: 1,
       external_publication_effects: 0,
-      next_action: "Operator-confirmed route handoff to existing Lapzuli/Dizzy path required.",
+      evidence_identity: eventKey,
+      selected_publication_object: selectedObject,
+      selected_channel: selectedChannel,
+      selected_route: selectedRoute,
+      next_action: "Separately authorized Dizzy execution handoff required.",
     },
   }, 409)
 }
