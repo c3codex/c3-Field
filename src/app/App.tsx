@@ -1,4 +1,6 @@
 import { useEffect } from "react"
+import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
+import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import Temple from "../measures_of_inanna/Temple"
@@ -177,9 +179,17 @@ const INANNA_METADATA = {
 }
 
 const C3_FIELD_METADATA = {
-  title: "c3 Field",
-  description: "c3 Field Convergence operations spine.",
+  title: "c3 Community Connect | c3 Field",
+  description: "Held C1 Connect doorway for governed c3 Community candidate signals and Current review.",
   url: "https://c3field.online",
+  image: "https://c3field.online/og.jpeg",
+  type: "website",
+}
+
+const C3_OPS_METADATA = {
+  title: "c3 Field Operations",
+  description: "c3 Field Convergence operations spine.",
+  url: "https://c3field.online/c3ops",
   image: "https://c3field.online/og.jpeg",
   type: "website",
 }
@@ -294,12 +304,13 @@ export default function App() {
   const isRegistryHost = isMeasuresRegistryHost(hostname)
   const isInannaHost = isMeasuresOfInannaHost(hostname)
   const isC3Host = isC3FieldHost(hostname)
+  const c3Route = resolveC3FieldRoute(window.location.pathname)
 
   useEffect(() => {
     let cancelled = false
 
     if (isC3Host || mode === "c3field") {
-      applyPageMetadata(C3_FIELD_METADATA)
+      applyPageMetadata(c3Route.kind === "operations" ? C3_OPS_METADATA : C3_FIELD_METADATA)
       return () => { cancelled = true }
     }
 
@@ -336,7 +347,7 @@ export default function App() {
       })
 
     return () => { cancelled = true }
-  }, [isC3Host, isInannaHost, mode])
+  }, [c3Route.kind, isC3Host, isInannaHost, mode])
 
   if (isRegistryHost) {
     return <MeasuresRegistryRuntime />
@@ -347,7 +358,9 @@ export default function App() {
   }
 
   if (isC3Host || mode === "c3field") {
-    return <OarOperationsConsole />
+    if (c3Route.kind === "operations") return <OarOperationsConsole />
+    if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
+    return <C3CommunityConnect />
   }
 
   if (mode === "inanna") {
