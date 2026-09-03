@@ -481,11 +481,11 @@ export default function PublishUndriftedPassage({
               </button>
             </div>
             <p className="publish-action-standing">
-              {reportBody
-                ? actionAttempted
-                  ? standingLabel(actionStanding ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status)
-                  : "held until a source-specific action call is bound"
-                : standingLabel(actionStanding ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status)}
+              {standingLabel(
+                actionAttempted
+                  ? actionStanding ?? controlsBody?.controls?.dispatch_now ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status
+                  : controlsBody?.controls?.dispatch_now ?? controlsBody?.lapzuli_distribution?.route_standing ?? controls.status
+              )}
             </p>
           </section>
 
