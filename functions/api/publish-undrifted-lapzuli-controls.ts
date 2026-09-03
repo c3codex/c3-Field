@@ -356,13 +356,31 @@ async function loadExecutions(env: Env, objectKey: string | null, dispatchKey: s
   )
 }
 
-async function loadDistributionAssets(env: Env, routeKey: string | null) {
-  if (!routeKey) return []
-  const rows = await supabaseFetch<DistributionAssetRow[]>(
+function distributionAssetKeyFromRoute(route: RouteRow | null) {
+  if (!route) return null
+  const metadataKey = asString(route.metadata?.distribution_asset_key)
+  if (metadataKey) return metadataKey
+  const reference = asString(route.payload_reference)
+  const prefix = "measures_publication_distribution_asset:"
+  if (!reference?.startsWith(prefix)) return null
+  return asString(reference.slice(prefix.length).split(":")[0])
+}
+
+async function loadDistributionAssets(env: Env, route: RouteRow | null) {
+  const assetKey = distributionAssetKeyFromRoute(route)
+  if (!assetKey) return []
+  return supabaseFetch<DistributionAssetRow[]>(
     env,
-    `measures_publication_distribution_asset?distribution_asset_key=eq.${encodeURIComponent(WIZ_DEV_DISTRIBUTION_ASSET_KEY)}&select=distribution_asset_key,platform,distribution_type,status,review_status,payload,metadata&limit=10`,
+    `measures_publication_distribution_asset?distribution_asset_key=eq.${encodeURIComponent(assetKey)}&select=distribution_asset_key,platform,distribution_type,status,review_status,payload,metadata&limit=10`,
   )
-  return rows.filter((row) => row.metadata?.route_key === routeKey)
+}
+
+async function loadExecutionsByAsset(env: Env, distributionAssetKey: string | null) {
+  if (!distributionAssetKey) return []
+  return supabaseFetch<ExecutionRow[]>(
+    env,
+    `measures_distribution_execution?distribution_asset_id=eq.${encodeURIComponent(distributionAssetKey)}&select=distribution_asset_id,executor_key,channel_key,execution_status,platform_post_id,platform_url,evidence,metadata&order=created_at.desc&limit=50`,
+  )
 }
 
 async function proveDizzy(env: Env) {
@@ -400,6 +418,13 @@ async function proveDevAdapter(env: Env, args: {
   dispatch: DispatchRow | null
   selectedObject: DistributionReportRow | null
 }) {
+  if (args.route?.outlet_key && args.route.outlet_key !== "dev") {
+    return {
+      ok: false,
+      standing: "not_applicable",
+      external_publication_effects: 0,
+    }
+  }
   if (!args.route || !args.asset || !args.dispatch || !args.selectedObject) {
     return {
       ok: false,
@@ -455,6 +480,103 @@ async function proveDevAdapter(env: Env, args: {
     credential_present: body?.credential_present ?? null,
     external_publication_effects: body?.external_publication_effects ?? 0,
   }
+}
+
+
+async function executeDevAdapter(env: Env, args: {
+  route: RouteRow
+  asset: DistributionAssetRow
+  selectedObject: ReturnType<typeof publicationObject>
+}) {
+  const token = env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN
+  if (!token) {
+    return { ok: false, standing: "held_credentials", external_publication_effects: 0 }
+  }
+  const payload = args.asset.payload ?? {}
+  const baseUrl = (env.LAPZULI_DISTRIBUTION_WORKER_URL ?? DEFAULT_DIZZY_URL).replace(/\/$/, "")
+  const response = await fetch(`${baseUrl}/dev/articles`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      dry_run: false,
+      route_key: args.route.route_key,
+      publication_object_key: args.selectedObject.publication_object_key,
+      dispatch_key: args.selectedObject.dispatch_key,
+      distribution_asset_id: args.asset.distribution_asset_key,
+      outlet_key: args.route.outlet_key,
+      distribution_mode: args.route.distribution_mode,
+      title: asString(payload.title) ?? args.selectedObject.title,
+      canonical_url: args.route.canonical_url,
+      body_markdown: payload.body_markdown,
+      description: payload.description,
+      tags: payload.tags,
+      published: true,
+      authority_reference: args.route.authority_reference,
+      idempotency_key: payload.idempotency_key,
+      constraints: payload.constraints,
+      editorial_disclosure: payload.editorial_disclosure,
+      source_oar2_path: OAR12_SOURCE_OAR2_PATH,
+    }),
+  })
+  const body = await response.json().catch(() => ({}))
+  return {
+    ok: response.ok && body?.ok === true,
+    standing: body?.standing ?? (response.ok ? "dev_article_created" : "held_dev_external_response"),
+    request_identity: body?.request_identity ?? null,
+    external_response_code: body?.external_response_code ?? response.status,
+    platform_post_id: body?.platform_post_id ?? null,
+    platform_url: body?.platform_url ?? null,
+    external_publication_effects: body?.external_publication_effects ?? 0,
+  }
+}
+
+async function recordDistributionExecution(env: Env, args: {
+  asset: DistributionAssetRow
+  route: RouteRow
+  result: Awaited<ReturnType<typeof executeDevAdapter>>
+}) {
+  const published = args.result.ok && args.result.external_publication_effects === 1
+  await supabaseFetch(env, "measures_distribution_execution", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      distribution_asset_id: args.asset.distribution_asset_key,
+      executor_key: "dev_api",
+      channel_key: null,
+      execution_status: published ? "published" : (args.result.ok ? "publication_attempted" : "failed"),
+      execution_mode: "platform_api",
+      attempt_number: 1,
+      executed_at: new Date().toISOString(),
+      published_at: published ? new Date().toISOString() : null,
+      platform_post_id: args.result.platform_post_id,
+      platform_url: args.result.platform_url,
+      evidence: {
+        route_key: args.route.route_key,
+        request_identity: args.result.request_identity,
+        external_response_code: args.result.external_response_code,
+        adapter_standing: args.result.standing,
+        external_publication_effects: args.result.external_publication_effects,
+      },
+      error: args.result.ok ? null : args.result.standing,
+      source_oar2: args.route.authority_reference,
+      created_by_actor_class: "AI",
+      created_by_actor_key: "Dizzy",
+      approved_by_actor_class: "Human",
+      approved_by_actor_key: "op044",
+      metadata: {
+        worker_identity: "dizzy_lapzuli_distribution_worker_v1",
+        adapter: "forem_articles_create_v1",
+        operator_surface: "/publish-undrifted",
+      },
+      optics: {
+        observes: "distribution_event",
+        models_individuals_as_primary: false,
+      },
+    }),
+  })
 }
 
 async function recordActionEvidence(env: Env, event: {
@@ -513,6 +635,7 @@ function buildLapzuliStanding(args: {
   destinations: Awaited<ReturnType<typeof loadDestinations>>
   routes: RouteRow[]
   executions: ExecutionRow[]
+  outletKey?: string | null
 }) {
   const alreadyDistributed = args.executions.find((row) => row.platform_post_id || row.platform_url)
   if (alreadyDistributed) {
@@ -527,7 +650,8 @@ function buildLapzuliStanding(args: {
   }
 
   const activeRoute = args.routes.find((row) =>
-    ["authorized", "attempted", "accepted"].includes(row.route_status ?? ""),
+    ["authorized", "attempted", "accepted"].includes(row.route_status ?? "") &&
+    (!args.outletKey || row.outlet_key === args.outletKey),
   )
   if (!args.objectProfile) {
     return {
@@ -608,20 +732,29 @@ async function loadControls(env: Env, selection: {
   const dispatch = await loadDispatch(env, selectedObject?.dispatch_key ?? null)
   const objectProfile = await loadObjectProfile(env, objectKey)
   const selectedChannel = selectedAllowedChannel(selectedObject, selection.outletKey ?? null)
-  const [destinations, routes, executions] = await Promise.all([
+  const [destinations, routes] = await Promise.all([
     loadDestinations(env, objectProfile?.desk_key ?? selectedObject?.desk_key ?? null),
     loadRoutes(env, objectKey),
-    loadExecutions(env, objectKey, selectedObject?.dispatch_key ?? null),
   ])
-  const lapzuliStanding = buildLapzuliStanding({ objectProfile, destinations, routes, executions })
   const selectedRoute = selection.routeKey
     ? routes.find((row) => row.route_key === selection.routeKey) ?? null
-    : routes.find((row) => row.route_key === lapzuliStanding.route_key) ?? null
-  const distributionAssets = await loadDistributionAssets(env, selectedRoute?.route_key ?? null)
-  const selectedDistributionAsset =
-    distributionAssets.find((row) => row.distribution_asset_key === WIZ_DEV_DISTRIBUTION_ASSET_KEY) ??
-    distributionAssets[0] ??
-    null
+    : routes.find((row) =>
+        ["authorized", "attempted", "accepted"].includes(row.route_status ?? "") &&
+        (!selection.outletKey || row.outlet_key === selection.outletKey),
+      ) ?? null
+  const distributionAssets = await loadDistributionAssets(env, selectedRoute)
+  const selectedDistributionAsset = distributionAssets[0] ?? null
+  const executions = await loadExecutionsByAsset(
+    env,
+    selectedDistributionAsset?.distribution_asset_key ?? null,
+  )
+  const lapzuliStanding = buildLapzuliStanding({
+    objectProfile,
+    destinations,
+    routes,
+    executions,
+    outletKey: selection.outletKey ?? selectedRoute?.outlet_key ?? null,
+  })
   const devAdapter = await proveDevAdapter(env, {
     route: selectedRoute,
     asset: selectedDistributionAsset,
@@ -869,29 +1002,97 @@ async function handleAction(request: Request, env: Env) {
     }, 409)
   }
 
+  if (action === "schedule") {
+    await recordActionEvidence(env, {
+      eventKey,
+      fromStatus: "route_recognized",
+      toStatus: "held_scheduling_not_implemented",
+      transitionType: "held",
+      evidenceReference,
+      notes: `Held schedule for ${publicationObjectKey} on ${outletKey ?? routeKey}: scheduling is not implemented in this handoff; external publication effects 0.`,
+    })
+    return jsonResponse({
+      ...state,
+      action_result: {
+        action,
+        standing: "held_scheduling_not_implemented",
+        mutation_count: 1,
+        external_publication_effects: 0,
+        evidence_identity: eventKey,
+      },
+    }, 409)
+  }
+
+  if (selectedRoute?.outlet_key === "dev") {
+    const selectedAsset = state.controls.selected_distribution_asset as DistributionAssetRow | null
+    if (!selectedAsset || !selectedObject) {
+      return jsonResponse({
+        ...state,
+        action_result: {
+          action,
+          standing: "held_distribution_asset_missing",
+          mutation_count: 0,
+          external_publication_effects: 0,
+        },
+      }, 409)
+    }
+    const result = await executeDevAdapter(env, {
+      route: selectedRoute,
+      asset: selectedAsset,
+      selectedObject,
+    })
+    await recordDistributionExecution(env, {
+      route: selectedRoute,
+      asset: selectedAsset,
+      result,
+    })
+    await recordActionEvidence(env, {
+      eventKey,
+      fromStatus: "route_recognized",
+      toStatus: result.ok ? result.standing : "held_dev_execution_failed",
+      transitionType: result.ok ? "execution" : "held",
+      evidenceReference,
+      notes:
+        `DEV dispatch for ${publicationObjectKey}: ${result.standing}; ` +
+        `external publication effects ${result.external_publication_effects}.`,
+    })
+    return jsonResponse({
+      ...state,
+      action_result: {
+        action,
+        standing: result.standing,
+        mutation_count: 2,
+        external_publication_effects: result.external_publication_effects,
+        evidence_identity: eventKey,
+        platform_post_id: result.platform_post_id,
+        platform_url: result.platform_url,
+        selected_publication_object: selectedObject,
+        selected_channel: selectedChannel,
+        selected_route: selectedRoute,
+      },
+    }, result.ok ? 201 : 502)
+  }
+
   await recordActionEvidence(env, {
     eventKey,
     fromStatus: "route_recognized",
-    toStatus: "held_dizzy_execution_not_authorized",
+    toStatus: "held_execution_adapter_not_callable",
     transitionType: "held",
     evidenceReference,
     notes:
-      `Held ${action} for ${publicationObjectKey} on ${outletKey ?? routeKey}: route recognized as ` +
-      `${state.lapzuli_distribution.route_standing}; Dizzy/external publication execution not authorized by this proof; ` +
-      "route mutations 0; job mutations 0; external publication effects 0.",
+      `Held ${action} for ${publicationObjectKey} on ${outletKey ?? routeKey}: selected route is registered but its execution adapter is not callable from /publish-undrifted; external publication effects 0.`,
   })
   return jsonResponse({
     ...state,
     action_result: {
       action,
-      standing: "held_dizzy_execution_not_authorized",
+      standing: "held_execution_adapter_not_callable",
       mutation_count: 1,
       external_publication_effects: 0,
       evidence_identity: eventKey,
       selected_publication_object: selectedObject,
       selected_channel: selectedChannel,
       selected_route: selectedRoute,
-      next_action: "Separately authorized Dizzy execution handoff required.",
     },
   }, 409)
 }
