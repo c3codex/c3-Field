@@ -3,6 +3,12 @@
   "name": "lapzuli-distribution-worker",
   "main": "src/index.js",
   "compatibility_date": "2026-08-30",
+  "services": [
+    {
+      "binding": "BROWSER_EXECUTOR",
+      "service": "lapzuli-browser-executor"
+    }
+  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
