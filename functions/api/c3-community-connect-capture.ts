@@ -1,53 +1,66 @@
-type Env = Record<string, unknown>
-
-const jsonHeaders = {
-  "content-type": "application/json; charset=utf-8",
+const headers = {"content-type": "application/json; charset=utf-8", "cache-control": "no-store"}
+const allowed = new Set(["name", "email", "message", "consent", "participationIntention", "attestation", "connectAs", "initiativeKey"])
+function held(standing: string, message: string, status: number, evidence?: unknown) {
+  return new Response(JSON.stringify({
+    standing, result_label: "Not saved", message, saved: false,
+    external_standing_created: false, persistence_created: false, current_created: false, mutation_count: 0,
+    ...(evidence ? {candidate_evidence: evidence} : {}),
+  }), {status, headers})
 }
+const clean = (value: unknown) => typeof value === "string" ? value.trim() : ""
 
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), { status, headers: jsonHeaders })
+export const onRequestPost: PagesFunction = async ({request}) => {
+  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json"))
+    return held("held_content_type", "A JSON submission is required.", 415)
+  const origin = request.headers.get("origin")
+  if (origin && origin !== new URL(request.url).origin)
+    return held("held_origin_mismatch", "The submission could not be verified.", 403)
+  const reader = request.body?.getReader()
+  if (!reader) return held("held_invalid_candidate_signal", "A submission is required.", 400)
+  let length = 0
+  const chunks: Uint8Array[] = []
+  try {
+    while (true) {
+      const {value, done} = await reader.read()
+      if (done) break
+      length += value.byteLength
+      if (length > 16384) {
+        await reader.cancel()
+        return held("held_request_too_large", "The submission is too long.", 413)
+      }
+      chunks.push(value)
+    }
+  } catch { return held("held_invalid_candidate_signal", "The submission could not be read.", 400) }
+  let body: Record<string, unknown>
+  try {
+    const buffer = new Uint8Array(length)
+    let offset = 0
+    for (const chunk of chunks) { buffer.set(chunk, offset); offset += chunk.length }
+    const parsed = JSON.parse(new TextDecoder().decode(buffer))
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("object required")
+    body = parsed
+  } catch { return held("held_invalid_candidate_signal", "The submission could not be read.", 400) }
+  // Client Registry CAR, verified contact, Boundary, timestamp, persistence and Current are never authority.
+  if (Object.keys(body).some(key => !allowed.has(key)))
+    return held("held_unexpected_candidate_field", "The submission contains unsupported fields.", 400)
+  const name = clean(body.name), email = clean(body.email), message = clean(body.message)
+  if (name.length < 2 || name.length > 160 || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+      message.length > 4000 || (body.message !== undefined && typeof body.message !== "string"))
+    return held("held_invalid_candidate_signal", "A name and valid email are required. Please check the length of your response.", 400)
+  if (body.consent !== true || body.participationIntention !== true || body.attestation !== true)
+    return held("held_required_evidence_missing", "Consent, an accuracy confirmation and participation intention are required.", 400)
+  if (body.connectAs !== "individual" || body.initiativeKey !== undefined)
+    return held("held_initiative_binding_missing", "This connection context is not available.", 409)
+  // Stop before persistence, contact verification, Registry disposition and Boundary/NotChazz.
+  // No eligible C1 adapter is seated. Never substitute another environment's capture table.
+  return held("held_candidate_capture_adapter_missing",
+    "Connecting is not open yet. Your information has not been saved.", 409, {
+      identity: {name_present: true, contact_present: true},
+      verification: {attestation_present: true, contact_verification: "not_performed"},
+      relationship: {participation_intention: true, response_present: Boolean(message)},
+      consent_present: true,
+      registry_car: "not_evaluated", boundary: "not_evaluated", notchazz: "not_invoked", registration: "not_attempted",
+    })
 }
-
-function clean(value: unknown) {
-  return typeof value === "string" ? value.trim() : ""
-}
-
-function validEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-}
-
-export const onRequestPost: PagesFunction<Env> = async ({ request }) => {
-  const body = await request.json().catch(() => ({})) as Record<string, unknown>
-  const name = clean(body.name)
-  const email = clean(body.email).toLowerCase()
-  const message = clean(body.message)
-
-  if (name.length < 2 || !validEmail(email)) {
-    return jsonResponse({
-      standing: "held_invalid_candidate_signal",
-      result_label: "Signal Held",
-      message: "A name and valid email are required before candidate review can be received.",
-      external_standing_created: false,
-      mutation_count: 0,
-    }, 400)
-  }
-
-  return jsonResponse({
-    standing: "held_candidate_capture_adapter_missing",
-    result_label: "Pending Current Review",
-    message:
-      "The candidate signal is valid, but no governed C1 Connect capture adapter is seated. Current review is required before any relational standing can be created.",
-    source_registry_key: "c3_community_connect",
-    capture_context: "c3_community_c1_connect_candidate",
-    candidate_signal: {
-      name_present: true,
-      email_present: true,
-      message_present: Boolean(message),
-    },
-    external_standing_created: false,
-    mutation_count: 0,
-  }, 409)
-}
-
-export const onRequest: PagesFunction<Env> = async () =>
-  jsonResponse({ error: "method not allowed" }, 405)
+export const onRequest: PagesFunction = async () =>
+  new Response(JSON.stringify({error:"method not allowed"}), {status:405,headers:{...headers,allow:"POST"}})

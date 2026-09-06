@@ -179,8 +179,8 @@ const INANNA_METADATA = {
 }
 
 const C3_FIELD_METADATA = {
-  title: "c3 Community Connect | c3 Field",
-  description: "Held C1 Connect doorway for governed c3 Community candidate signals and Current review.",
+  title: "c3 Community Partners",
+  description: "Together, Our Potential Is Unlimited.",
   url: "https://c3field.online",
   image: "https://c3field.online/og.jpeg",
   type: "website",
