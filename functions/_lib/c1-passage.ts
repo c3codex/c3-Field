@@ -2,6 +2,8 @@
 export const ENV_KEY = "env_c3_community_connect"
 const PROJECT_URL = "https://zfihrspxvennjzazxcbj.supabase.co"
 export interface PassageEnv {
+  C1_REQUEST_LIMITER?: RateLimit
+  C1_ATTEMPT_LIMITER?: RateLimit
   SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
   RESEND_API_KEY?: string
@@ -18,11 +20,14 @@ export const json = (body: RecordValue, status = 200) => new Response(JSON.strin
   status, headers: {"content-type":"application/json; charset=utf-8","cache-control":"no-store","referrer-policy":"no-referrer"},
 })
 export function hold(stage: string, candidate: boolean | null = null) {
-  return json({standing: "held_" + stage, candidate_saved: candidate, saved:false,
-    persistence_created:stage === "persistence_unconfirmed" ? null : false,
-    current_created:stage === "persistence_unconfirmed" ? null : false,
-    message:"We could not confirm your connection. Please try again later."}, 409)
+  // Arguments remain internal diagnostics only; no stage or record existence is projected.
+  return json({standing:"invalid_or_expired_verification",saved:false,
+    message:"We could not confirm your connection. Please request a new link or return later."},409)
 }
+const verificationRequired = () => json({standing:"verification_required",saved:false,
+  message:"If your request can be processed, check your email to confirm your connection."},202)
+const unavailable = () => json({standing:"unable_to_process",saved:false,
+  message:"We could not process this request. Please try again later."},409)
 function configuration(env: PassageEnv) {
   if (env.C1_PASSAGE_ENABLED !== "true" || env.SUPABASE_URL?.replace(/\/$/,"") !== PROJECT_URL ||
       !env.SUPABASE_SERVICE_ROLE_KEY || !env.C1_VERIFICATION_SIGNING_KEY ||
@@ -32,8 +37,11 @@ function configuration(env: PassageEnv) {
       origin.username || origin.password) throw new Error("server_configuration")
   return origin.origin
 }
-export function rpcClient(env: PassageEnv, deps: Dependencies = defaults): Rpc {
+function rpcClient(env: PassageEnv, deps: Dependencies = defaults): Rpc {
   return async (name, args) => {
+    if (!["capture_relational_candidate","issue_relational_verification","verify_relational_contact",
+      "evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship"].includes(name))
+      throw new Error("unregistered_call")
     const response = await deps.fetch(PROJECT_URL + "/rest/v1/rpc/" + name, {
       method:"POST", redirect:"error", signal:AbortSignal.timeout(12000),
       headers:{"content-type":"application/json",apikey:env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -73,7 +81,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     const origin = configuration(env)
     // Transport must be configured before collecting candidate evidence.
     if (!env.RESEND_API_KEY || !env.C1_VERIFICATION_FROM || /[\r\n]/.test(env.C1_VERIFICATION_FROM))
-      return hold("verification_transport_unavailable", false)
+      return unavailable()
     const rpc = rpcClient(env,deps)
     stage = "capture_unconfirmed"
     candidate = null // A network timeout cannot prove that the transaction did not commit.
@@ -87,7 +95,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     if (captured.accepted !== true || captured.relationship_standing !== "candidate_unverified" ||
         !/^crs_[a-f0-9]{32}$/.test(captured.relationship_key) ||
         captured.standing_created !== false || captured.current_created !== false || captured.persistence_created !== false)
-      return hold("capture_contract",null)
+      return verificationRequired()
     candidate = true
     stage = "verification_issue"
     const issue = await rpc("issue_relational_verification", {
@@ -98,7 +106,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
         typeof issue.challenge_key !== "string" || !issue.challenge_key ||
         !/^[a-f0-9]{48}$/.test(issue.challenge_token) || !Number.isFinite(Date.parse(issue.expires_at)) ||
         Date.parse(issue.expires_at) <= deps.now() || issue.standing_created !== false ||
-        issue.current_created !== false || issue.persistence_created !== false) return hold("verification_issue_contract",true)
+        issue.current_created !== false || issue.persistence_created !== false) return verificationRequired()
     const receipt = await signedReceipt(captured.relationship_key,issue.expires_at,env)
     // Fragment never reaches GET access logs or Referer; explicit POST is the second encounter.
     const link = origin + "/api/c3-community-connect-verify#" + new URLSearchParams({receipt,token:issue.challenge_token})
@@ -113,10 +121,9 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     })
     const delivery = await delivered.json().catch(() => null)
     if (!delivered.ok || !delivery || typeof delivery !== "object" || !("id" in delivery) ||
-        typeof delivery.id !== "string" || !delivery.id) return hold(stage,true)
-    return json({standing:"verification_required",candidate_saved:true,saved:false,
-      persistence_created:false,current_created:false,message:"Check your email to confirm your connection."},202)
-  } catch { return hold(stage,candidate) }
+        typeof delivery.id !== "string" || !delivery.id) return verificationRequired()
+    return verificationRequired()
+  } catch { return stage === "server_configuration" ? unavailable() : verificationRequired() }
 }
 export async function verifyCandidate(body: RecordValue, env: PassageEnv, deps: Dependencies = defaults) {
   let stage = "verification"

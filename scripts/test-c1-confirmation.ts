@@ -4,7 +4,9 @@ import {writeFile,mkdir} from "node:fs/promises"
 import {pathToFileURL} from "node:url"
 import {onRequestGet} from "../functions/api/c3-community-connect-verify"
 const {chromium}=await import(process.argv[2] ? pathToFileURL(process.argv[2]).href : "playwright")
-const response=await onRequestGet({} as any), html=await response.text()
+const request=new Request("https://example.invalid/api/c3-community-connect-verify",{headers:{"cf-connecting-ip":"192.0.2.1"}})
+Object.defineProperty(request,"cf",{value:{}})
+const response=await onRequestGet({request,env:{C1_REQUEST_LIMITER:{limit:async()=>({success:true})}}} as any), html=await response.text()
 const server=createServer((req,res)=>{res.writeHead(200,Object.fromEntries(response.headers));res.end(html)})
 await new Promise<void>(resolve=>server.listen(5195,"127.0.0.1",resolve))
 const browser=await chromium.launch({headless:true,executablePath:process.argv[3] || undefined})

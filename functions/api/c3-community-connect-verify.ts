@@ -1,10 +1,12 @@
 import {json, hold, verifyCandidate, type PassageEnv} from "../_lib/c1-passage"
+import {permitRequest,permitAttempt,unable} from "../_lib/c1-abuse"
 
 export const onRequestPost: PagesFunction<PassageEnv> = async ({request,env}) => {
+  if (!await permitRequest(request,env,"verify")) return unable(429)
   if (request.headers.get("origin") !== new URL(request.url).origin ||
       request.headers.get("origin") !== env?.C1_PUBLIC_ORIGIN) return hold("origin_mismatch")
   if (request.headers.get("content-type")?.split(";")[0].trim() !== "application/json")
-    return json({standing:"held_content_type"},415)
+    return unable(415)
   const reader = request.body?.getReader()
   if (!reader) return hold("verification_input")
   let size = 0
@@ -14,7 +16,7 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request,env}) =>
       const {done,value} = await reader.read()
       if (done) break
       size += value.byteLength
-      if (size > 4096) { await reader.cancel(); return json({standing:"held_request_too_large"},413) }
+      if (size > 4096) { await reader.cancel(); return unable(413) }
       chunks.push(value)
     }
     const bytes = new Uint8Array(size)
@@ -22,10 +24,13 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request,env}) =>
     for (const chunk of chunks) { bytes.set(chunk,offset); offset += chunk.byteLength }
     const body = JSON.parse(new TextDecoder().decode(bytes))
     if (!body || typeof body !== "object" || Array.isArray(body)) return hold("verification_input")
+    if (typeof body.receipt !== "string" || body.receipt.length > 2048) return hold("verification_input")
+    if (!await permitAttempt(env,"verify",body.receipt)) return unable(429)
     return verifyCandidate(body,env)
   } catch { return hold("verification_input") }
 }
-export const onRequestGet: PagesFunction = async () => {
+export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => {
+  if (!await permitRequest(request,env,"verify-page")) return unable(429)
   const nonce = crypto.randomUUID().replace(/-/g,"")
   // GET has no effect. Email scanners cannot consume a challenge by following the link.
   return new Response(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="referrer" content="no-referrer"><title>Confirm your connection</title>

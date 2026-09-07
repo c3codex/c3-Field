@@ -56,7 +56,7 @@ export default function C3CommunityConnect() {
       const verificationRequired = response.status === 202 && body && typeof body === "object" &&
         "standing" in body && body.standing === "verification_required"
       setResult(verificationRequired
-        ? "Check your email to confirm your connection."
+        ? "If your request can be processed, check your email to confirm your connection."
         : held
           ? "We could not confirm your connection. Your information remains in this form."
           : "We could not confirm a saved submission. Your information remains in this form.")

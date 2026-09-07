@@ -4,20 +4,17 @@ import {onRequestPost, onRequest} from "./c3-community-connect-capture"
 import {onRequest as packageRequest} from "./c3-community-connect-package"
 
 const candidate = {name:"Review Participant",email:"review@example.invalid",message:"Connect local skills.",consent:true,participationIntention:true,attestation:true,connectAs:"individual"}
-const send = (body: unknown, headers: Record<string,string> = {"content-type":"application/json"}) =>
-  onRequestPost({request:new Request("http://127.0.0.1/api/c3-community-connect-capture",{method:"POST",headers,body:JSON.stringify(body)})} as any)
+const send = (body: unknown, headers: Record<string,string> = {"content-type":"application/json"}) => {
+  const request=new Request("http://127.0.0.1/api/c3-community-connect-capture",{method:"POST",headers:{...headers,"cf-connecting-ip":"192.0.2.1"},body:JSON.stringify(body)})
+  Object.defineProperty(request,"cf",{value:{}})
+  return onRequestPost({request,env:{C1_REQUEST_LIMITER:{limit:async()=>({success:true})},C1_ATTEMPT_LIMITER:{limit:async()=>({success:true})}}} as any)
+}
 test("surfaced evidence reaches handler without registration or contact leakage", async () => {
   const response = await send(candidate), body = await response.json()
   assert.equal(response.status,409)
   assert.equal(body.saved,false)
-  assert.equal(body.mutation_count,0)
-  assert.equal(body.current_created,false)
-  assert.equal(body.persistence_created,false)
-  assert.equal(body.candidate_evidence.verification.contact_verification,"not_performed")
-  assert.equal(body.candidate_evidence.registry_car,"not_evaluated")
-  assert.equal(body.candidate_evidence.boundary,"not_evaluated")
-  assert.equal(body.candidate_evidence.notchazz,"not_invoked")
-  assert.equal(body.candidate_evidence.registration,"not_attempted")
+  assert.equal(body.standing,"unable_to_process")
+  assert.deepEqual(Object.keys(body).sort(),["message","saved","standing"])
   assert.ok(!JSON.stringify(body).includes(candidate.email))
   assert.equal(response.headers.get("cache-control"),"no-store")
 })
@@ -34,7 +31,7 @@ for (const field of ["current","standing","persistence","boundary","registryCar"
 test("unregistered initiative never transfers custody", async () => {
   const r = await send({...candidate,connectAs:"initiative",initiativeKey:"invented"})
   assert.equal(r.status,409)
-  assert.equal((await r.json()).standing,"held_initiative_binding_missing")
+  assert.equal((await r.json()).standing,"unable_to_process")
 })
 test("malformed, oversized and cross-origin inputs fail closed", async () => {
   for (const body of [null,[],{}, { ...candidate,email:"invalid" }]) assert.equal((await send(body)).status,400)
