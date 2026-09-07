@@ -53,11 +53,13 @@ export default function C3CommunityConnect() {
       const body: unknown = await response.json().catch(() => null)
       const held = body && typeof body === "object" && "standing" in body &&
         typeof body.standing === "string" && body.standing.startsWith("held")
-      // This implementation has no admission or persistence authority. Even an
-      // unexpected 2xx response cannot be promoted into participant success.
-      setResult(held
-        ? "Connecting is not open yet. Your information has not been saved."
-        : "We could not confirm a saved submission. Your information remains in this form.")
+      const verificationRequired = response.status === 202 && body && typeof body === "object" &&
+        "standing" in body && body.standing === "verification_required"
+      setResult(verificationRequired
+        ? "Check your email to confirm your connection."
+        : held
+          ? "We could not confirm your connection. Your information remains in this form."
+          : "We could not confirm a saved submission. Your information remains in this form.")
     } catch {
       setResult("We could not reach the connection service. Your information remains in this form; no saved submission is confirmed.")
     } finally {
