@@ -1,5 +1,5 @@
 import {captureCandidate, type PassageEnv} from "../_lib/c1-passage"
-import {permitRequest,permitAttempt,unable} from "../_lib/c1-abuse"
+import {unable} from "../_lib/c1-abuse"
 const headers = {"content-type": "application/json; charset=utf-8", "cache-control": "no-store"}
 const allowed = new Set(["name", "email", "message", "consent", "participationIntention", "attestation", "connectAs", "initiativeKey"])
 function held(standing: string, message: string, status: number, evidence?: unknown) {
@@ -8,7 +8,6 @@ function held(standing: string, message: string, status: number, evidence?: unkn
 const clean = (value: unknown) => typeof value === "string" ? value.trim() : ""
 
 export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) => {
-  if (!await permitRequest(request,env,"capture")) return unable(429)
   if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json"))
     return held("held_content_type", "A JSON submission is required.", 415)
   const origin = request.headers.get("origin")
@@ -50,7 +49,6 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) =
     return held("held_required_evidence_missing", "Consent, an accuracy confirmation and participation intention are required.", 400)
   if (body.connectAs !== "individual" || body.initiativeKey !== undefined)
     return held("held_initiative_binding_missing", "This connection context is not available.", 409)
-  if (!await permitAttempt(env,"capture",email.toLowerCase())) return unable(429)
   if (env?.C1_PASSAGE_ENABLED === "true") {
     if (origin !== env.C1_PUBLIC_ORIGIN || origin !== new URL(request.url).origin)
       return held("held_origin_mismatch", "The submission could not be verified.", 403)

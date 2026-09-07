@@ -1,0 +1,15 @@
+{
+  "description": "c1 capture and verification: shared IP/location budget",
+  "expression": "(http.request.uri.path eq \"/api/c3-community-connect-capture\" or http.request.uri.path eq \"/api/c3-community-connect-verify\")",
+  "action": "block",
+  "enabled": true,
+  "ratelimit": {
+    "characteristics": [
+      "cf.colo.id",
+      "ip.src"
+    ],
+    "period": 60,
+    "requests_per_period": 30,
+    "mitigation_timeout": 60
+  }
+}

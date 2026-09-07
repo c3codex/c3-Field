@@ -5,9 +5,8 @@ import {onRequest as packageRequest} from "./c3-community-connect-package"
 
 const candidate = {name:"Review Participant",email:"review@example.invalid",message:"Connect local skills.",consent:true,participationIntention:true,attestation:true,connectAs:"individual"}
 const send = (body: unknown, headers: Record<string,string> = {"content-type":"application/json"}) => {
-  const request=new Request("http://127.0.0.1/api/c3-community-connect-capture",{method:"POST",headers:{...headers,"cf-connecting-ip":"192.0.2.1"},body:JSON.stringify(body)})
-  Object.defineProperty(request,"cf",{value:{}})
-  return onRequestPost({request,env:{C1_REQUEST_LIMITER:{limit:async()=>({success:true})},C1_ATTEMPT_LIMITER:{limit:async()=>({success:true})}}} as any)
+  const request=new Request("http://127.0.0.1/api/c3-community-connect-capture",{method:"POST",headers,body:JSON.stringify(body)})
+  return onRequestPost({request,env:{}} as any)
 }
 test("surfaced evidence reaches handler without registration or contact leakage", async () => {
   const response = await send(candidate), body = await response.json()

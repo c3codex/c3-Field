@@ -2,8 +2,6 @@
 export const ENV_KEY = "env_c3_community_connect"
 const PROJECT_URL = "https://zfihrspxvennjzazxcbj.supabase.co"
 export interface PassageEnv {
-  C1_REQUEST_LIMITER?: RateLimit
-  C1_ATTEMPT_LIMITER?: RateLimit
   SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
   RESEND_API_KEY?: string

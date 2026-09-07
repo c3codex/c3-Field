@@ -1,24 +1,19 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-test("F: edge request budgets bound repeated capture and verification with identical public errors",async()=>{
- const {permitRequest,permitAttempt,unable}=await import("./c1-abuse")
- const counts=new Map<string,number>()
- const limiter={limit:async({key}:{key:string})=>{const n=(counts.get(key)||0)+1;counts.set(key,n);return {success:n<=3}}}
- const limited={...env,C1_REQUEST_LIMITER:limiter,C1_ATTEMPT_LIMITER:limiter}
- for(const route of ["capture","verify"]){
-  for(let n=0;n<3;n++) assert.equal(await permitRequest(edgeRequest("https://example.invalid"),limited,route),true)
-  for(let n=0;n<20;n++) assert.equal(await permitRequest(edgeRequest("https://example.invalid"),limited,route),false)
-  for(let n=0;n<3;n++) assert.equal(await permitAttempt(limited,route,"contact-or-receipt"),true)
-  assert.equal(await permitAttempt(limited,route,"contact-or-receipt"),false)
- }
- assert.ok([...counts.keys()].every(key=>!key.includes("192.0.2.1") && !key.includes("contact-or-receipt")))
- const noBinding=await captureRoute({env:{},request:edgeRequest("https://example.invalid")} as any)
- const denied=await captureRoute({env:limited,request:edgeRequest("https://example.invalid")} as any)
- assert.equal(await noBinding.text(),await denied.text())
- assert.equal(await permitRequest(edgeRequest("https://example.invalid"),{C1_REQUEST_LIMITER:{limit:async()=>{throw Error("private failure")}}},"x"),false)
- assert.equal(await permitRequest(new Request("https://example.invalid"),limited,"x"),false)
- assert.equal(await permitAttempt({},"x","y"),false)
+test("007: capture and callback complete without Pages limiter bindings or fabricated edge metadata",async()=>{
+ const h=harness(), originalFetch=globalThis.fetch
+ globalThis.fetch=h.deps.fetch as typeof fetch
+ try{
+  const request=(path:string,body:unknown)=>new Request("https://example.invalid/api/"+path,{method:"POST",headers:{"content-type":"application/json",origin:"https://example.invalid"},body:JSON.stringify(body)})
+  const captured=await captureRoute({env,request:request("c3-community-connect-capture",candidate)} as any)
+  assert.equal(captured.status,202)
+  const verified=await verifyRoute({env,request:request("c3-community-connect-verify",h.proof)} as any)
+  assert.equal(verified.status,200)
+  assert.equal((await verified.json() as any).standing,"connection_recorded")
+  assert.deepEqual(h.calls,["capture_relational_candidate","issue_relational_verification","emails","verify_relational_contact","evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship"])
+ }finally{globalThis.fetch=originalFetch}
 })
+
 test("F: participant existence and internal capture failures cannot be distinguished in response bodies",async()=>{
  const normal=harness()
  const expected=await (await captureCandidate(candidate,env,normal.deps)).text()
@@ -76,12 +71,10 @@ import {onRequestPost as verifyRoute,onRequestGet} from "../api/c3-community-con
 const key="crs_"+"a".repeat(32), token="b".repeat(48)
 const env: PassageEnv={SUPABASE_URL:"https://zfihrspxvennjzazxcbj.supabase.co",SUPABASE_SERVICE_ROLE_KEY:"server-secret",RESEND_API_KEY:"transport-secret",C1_VERIFICATION_FROM:"c3 <connect@example.invalid>",C1_PUBLIC_ORIGIN:"https://example.invalid",C1_VERIFICATION_SIGNING_KEY:"s".repeat(48),C1_PASSAGE_ENABLED:"true"}
 const candidate={name:"Synthetic",email:"synthetic@example.invalid",message:"Test",consent:true,attestation:true,participationIntention:true,connectAs:"individual"}
-env.C1_REQUEST_LIMITER={limit:async()=>({success:true})}
-env.C1_ATTEMPT_LIMITER={limit:async()=>({success:true})}
+
+
 function edgeRequest(url:string,init?:RequestInit) {
  const request=new Request(url,init)
- request.headers.set("cf-connecting-ip","192.0.2.1")
- Object.defineProperty(request,"cf",{value:{}})
  return request
 }
 const states: Record<string,any>={
