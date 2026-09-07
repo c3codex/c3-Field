@@ -1,0 +1,36 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "undrifted-social-scheduler",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
+  "vars": {
+    "MEASURES_BLUESKY_PUBLIC_HANDLE": "measuresregistry.com",
+    "MEASURES_BLUESKY_AUTH_IDENTIFIER": "measures-registry.bsky.social",
+    "MEASURES_BLUESKY_DID": "did:plc:uvqr6psiajj67c2xlqz3xqaj",
+    "UNDRIFTED_BLUESKY_HANDLE": "undrifted.bsky.social",
+    "UNDRIFTED_BLUESKY_DID": "did:plc:xj67gdemsw6w3sycturitw6e",
+    "SCHEDULER_EXECUTION_INSTANCE": "complete_dizzy_worker_scheduler_integration_codex_002"
+  },
+  "services": [
+    {
+      "binding": "DIZZY",
+      "service": "lapzuli-distribution-worker"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "undrifted-social-scheduler-state",
+      "database_id": "92578a5a-68fb-452a-89b3-2240ba90c91a",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

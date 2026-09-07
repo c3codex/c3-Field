@@ -1,0 +1,51 @@
+/* FREE encounter renderer CSS entry point — scoped to .measures-registry-runtime */
+/* Consumes DB-injected CSS variables. Does not replace src/index.css. */
+
+@import "./registry.tokens.css";
+@import "./registry.layout.css";
+@import "./registry.materials.css";
+@import "./registry.buttons.css";
+@import "./registry.footer.css";
+@import "./encounters/passage.css";
+@import "./encounters/assessment.css";
+@import "./encounters/public_understand.css";
+@import "./encounters/about.css";
+@import "./encounters/crystal.css";
+@import "./encounters/obsidian.css";
+@import "./encounters/marble.css";
+@import "./encounters/lapis.css";
+@import "./encounters/legal.css";
+@import "./encounters/publish-undrifted.css";
+@import "./registry.visual-system.css";
+
+/* Site-wide document-scroll contract for Measures Registry public surfaces.
+   Legacy fullscreen encounter CSS in src/index.css locks html/body/#root with overflow:hidden.
+   Whenever FREE is mounted, release that root lock so desktop, tablet, and phone use normal
+   document scrolling. Explicit fullscreen encounter components may still opt out locally. */
+html:has(.measures-registry-runtime),
+body:has(.measures-registry-runtime),
+#root:has(.measures-registry-runtime) {
+  min-height: 100%;
+  height: auto;
+  overflow-x: clip;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+}
+
+.measures-registry-runtime {
+  min-height: 100svh;
+  height: auto;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+@media (pointer: coarse), (max-width: 1024px) {
+  html:has(.measures-registry-runtime),
+  body:has(.measures-registry-runtime),
+  #root:has(.measures-registry-runtime) {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: auto;
+    touch-action: pan-y;
+  }
+}

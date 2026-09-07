@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Marble: governed form / contract / Commerced Circuit -->
+  <!-- Outer circle: the governing boundary -->
+  <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Inner circle: the sealed contract core -->
+  <circle cx="50" cy="50" r="23" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Rotated inner square (45°): the structured form within governed boundary -->
+  <polygon points="50,27 73,50 50,73 27,50" stroke="currentColor" stroke-width="1"/>
+  <!-- Cardinal marks: the four axes of formal governance (N/E/S/W) -->
+  <line x1="50" y1="12" x2="50" y2="27" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="88" y1="50" x2="73" y2="50" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="50" y1="88" x2="50" y2="73" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="12" y1="50" x2="27" y2="50" stroke="currentColor" stroke-width="1.5"/>
+</svg>

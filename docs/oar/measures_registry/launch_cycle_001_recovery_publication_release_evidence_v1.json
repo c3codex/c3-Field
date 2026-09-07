@@ -1,0 +1,173 @@
+{
+  "document_type": "publication_release_evidence",
+  "authority": "docs/oar/measures_registry/oar2_resume_launch_cycle_001_production_deployment_and_complete_publication_release_v1.meta.md",
+  "executor": "Cody",
+  "evidence_timestamp": "2026-07-13T13:54:13Z",
+  "production_recovery": {
+    "root_cause": "Cloudflare Pages cloned commit fc06a19 from branch measures, but the registered Launch Cycle 001 article Markdown assets were untracked locally and absent from the remote clone; Rollup could not resolve the raw Markdown imports. Explicit article redirect rules were also added before the SPA catch-all.",
+    "production_branch": "measures",
+    "build_command": "npm run build:registry",
+    "output_directory": "dist-registry",
+    "failed_commit_from_operator_log": "fc06a19dc274925f73420df0da594d57a5ff1a98",
+    "fix_commit": "32cfaf2ef373b8fc719e80eef5173230e6cdc676",
+    "deploy_retrigger_commit": "e70f945",
+    "deployment_identifier": "not_available_from_non_wrangler_verification_surface",
+    "verification_surface": "fresh Playwright browser context plus curl response headers"
+  },
+  "production_url_verification": [
+    {
+      "url": "https://measuresregistry.com/undrifted",
+      "status": 200,
+      "final_url": "https://measuresregistry.com/undrifted/",
+      "title": "unDrifted — Measures Registry",
+      "h1": "AI ISN'T BROKEN. SYSTEMS ARE.",
+      "canonical": "https://measuresregistry.com/undrifted",
+      "desktop_pass": true,
+      "mobile_pass": true,
+      "launch_cycle_visible": true,
+      "field_findings_link_present": true,
+      "response_link_present": true,
+      "stale_bundle_absent": true
+    },
+    {
+      "url": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "status": 200,
+      "final_url": "https://measuresregistry.com/undrifted/field-findings-2026-w28/",
+      "title": "unDrifted — Measures Registry",
+      "h1": "Field Findings 2026-W28",
+      "canonical": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "desktop_pass": true,
+      "mobile_pass": true,
+      "canonical_body_present": true,
+      "stale_bundle_absent": true
+    },
+    {
+      "url": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "status": 200,
+      "final_url": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems/",
+      "title": "unDrifted — Measures Registry",
+      "h1": "AI Agents Are Not Entering Empty Systems",
+      "canonical": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "desktop_pass": true,
+      "mobile_pass": true,
+      "canonical_body_present": true,
+      "links_to_publication_001": "/undrifted/field-findings-2026-w28",
+      "stale_bundle_absent": true
+    }
+  ],
+  "paragraph_publication": [
+    {
+      "dispatch_key": "launch_cycle_001__paragraph__publication_001",
+      "title": "Field Findings 2026-W28",
+      "paragraph_post_id": "8UdwP2yt8pw9FacBWIbw",
+      "public_url": "https://paragraph.com/@undrifted/field-findings-2026-w28",
+      "status": "published",
+      "send_newsletter": false,
+      "registry_evidence_status": "seated_in_measures_publication_dispatch"
+    },
+    {
+      "dispatch_key": "launch_cycle_001__paragraph__publication_002",
+      "title": "AI Agents Are Not Entering Empty Systems",
+      "paragraph_post_id": "SRdBfqs0Xi4jr44T4r8o",
+      "public_url": "https://paragraph.com/@undrifted/ai-agents-are-not-entering-empty-systems",
+      "status": "published",
+      "send_newsletter": false,
+      "registry_evidence_status": "seated_in_measures_publication_dispatch",
+      "paragraph_related_link_status": "not_present_in_live_paragraph_body",
+      "measures_registry_related_link_status": "present"
+    }
+  ],
+  "buffer_endpoint_matrix": [
+    {
+      "identity": "Measures Registry",
+      "platform": "YouTube",
+      "credential_reference": "BUFFER_SOCIAL_KEY",
+      "channel_id": "6a54740a80cc80cdcaa976d9",
+      "public_account": "Measures Registry",
+      "disposition": "not_applicable",
+      "reason": "no approved Launch Cycle 001 video derivative for this recovery OAR"
+    },
+    {
+      "identity": "Measures Registry",
+      "platform": "Instagram",
+      "credential_reference": "BUFFER_SOCIAL_KEY",
+      "channel_id": "6a23bfc4c687a22dd467a045",
+      "public_account": "measures_registry",
+      "disposition": "held_missing_approved_derivative",
+      "reason": "no approved visual derivative/crop for this endpoint"
+    },
+    {
+      "identity": "Measures Registry",
+      "platform": "X",
+      "credential_reference": "BUFFER_SOCIAL_KEY",
+      "channel_id": "6a23bff1c687a22dd467a0b3",
+      "public_account": "measures_c3",
+      "disposition": "held_missing_approved_derivative",
+      "reason": "Measures Registry acknowledgement copy is not platform-specific for X"
+    },
+    {
+      "identity": "Measures Registry",
+      "platform": "Facebook",
+      "credential_reference": "BUFFER_PUB2_KEY",
+      "channel_id": "6a54734280cc80cdcaa9743b",
+      "public_account": "Measures Registry",
+      "disposition": "held_missing_approved_derivative",
+      "reason": "Measures Registry acknowledgement copy is not platform-specific for Facebook"
+    },
+    {
+      "identity": "unDrifted",
+      "platform": "Facebook",
+      "credential_reference": "BUFFER_PUB2_KEY",
+      "channel_id": "6a54761280cc80cdcaa97c9a",
+      "public_account": "UnDrifted",
+      "disposition": "draft_ready",
+      "buffer_drafts": [
+        {
+          "action_key": "launch_cycle_001__undrifted_facebook__field_findings_2026_w28",
+          "buffer_draft_id": "6a54ede947830b281a71e8cd",
+          "target_url": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+          "status": "draft",
+          "approval_basis": "draft only; operator send approval outstanding"
+        },
+        {
+          "action_key": "launch_cycle_001__undrifted_facebook__response_001",
+          "buffer_draft_id": "6a54edead6677965d318facb",
+          "target_url": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+          "status": "draft",
+          "approval_basis": "draft only; operator send approval outstanding"
+        }
+      ]
+    },
+    {
+      "identity": "unDrifted",
+      "platform": "X",
+      "credential_reference": "BUFFER_PUB2_KEY",
+      "channel_id": "6a546f6380cc80cdcaa962f0",
+      "public_account": "unDrifted_c3",
+      "disposition": "held_missing_approved_url_bound_derivative",
+      "reason": "approved X thread starters exceed the platform boundary when bound to the live canonical URLs; shortening would be editorial work"
+    },
+    {
+      "identity": "unDrifted",
+      "platform": "Instagram",
+      "credential_reference": null,
+      "channel_id": null,
+      "public_account": null,
+      "disposition": "held_missing_approved_derivative",
+      "reason": "no connected endpoint and no approved visual derivative/crop for this recovery OAR"
+    },
+    {
+      "identity": "unDrifted",
+      "platform": "YouTube",
+      "credential_reference": null,
+      "channel_id": null,
+      "public_account": null,
+      "disposition": "not_applicable",
+      "reason": "no connected endpoint and no approved Launch Cycle 001 video derivative"
+    }
+  ],
+  "secret_safety": {
+    "secrets_committed": false,
+    "secret_values_recorded_in_artifacts": false
+  }
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Delivery Contract seal: proof-backed delivery contract standing -->
+  <!-- Octagonal outer boundary: same sealed standing class as Verified Assessment seal -->
+  <polygon points="50,12 77,23 88,50 77,77 50,88 23,77 12,50 23,23" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Two parallel contract tier marks: Marble governance / contract language — sealed inside the proof boundary -->
+  <line x1="38" y1="42" x2="62" y2="42" stroke="currentColor" stroke-width="1"/>
+  <line x1="38" y1="58" x2="62" y2="58" stroke="currentColor" stroke-width="1"/>
+</svg>

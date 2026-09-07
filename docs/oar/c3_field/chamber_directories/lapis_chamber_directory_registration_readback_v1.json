@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-06-07T02:03:34.394Z",
+  "target_table": "public.system_process_registry",
+  "duplicate_count": 1,
+  "counts": {
+    "system_process_registry": 8,
+    "system_oar_queue": 2,
+    "system_oar_execution_evidence": 3,
+    "measures_registry": 117
+  },
+  "readback": {
+    "id": "5f964d0e-d6ed-4b13-b6f4-ea13bf8ee6a8",
+    "process_key": "c3_field_chamber_directory_lapis_v1",
+    "process_family": "chamber_directory",
+    "title": "Lapis Chamber Directory",
+    "status": "active",
+    "source_path": "docs/oar/c3_field/chamber_directories/lapis/lapis_chamber_directory_index_v1.meta.md",
+    "authority_state": "working",
+    "metadata": {
+      "authority": "system_process_surface",
+      "index_path": "docs/oar/c3_field/chamber_directories/lapis/lapis_chamber_directory_index_v1.meta.md",
+      "source_oar1": "docs/oar/c3_field/chamber_directories/oar1_seat_chamber_directory_system_process_surface_and_run_db_schema_review_v1.meta.md",
+      "source_oar2": "docs/oar/c3_field/chamber_directories/oar2_register_lapis_chamber_directory_system_process_standing_v1.meta.md",
+      "public_facing": false,
+      "material_family": "lapis",
+      "contract_families": [
+        "public_encounter_contracts",
+        "landing_page_design_contracts",
+        "content_contracts",
+        "media_contracts",
+        "runtime_render_contracts",
+        "cta_transition_contracts",
+        "seo_contracts",
+        "paragraph_contracts",
+        "buffer_contracts",
+        "social_distribution_contracts"
+      ],
+      "current_branch_use": [
+        "measures_registry_public_landing",
+        "undrifted_publication",
+        "ai_operations_assessment",
+        "structural_drift_legacy_trace"
+      ],
+      "registration_state": "registered_after_readback",
+      "disallowed_authority": [
+        "public_brand",
+        "public_route",
+        "db_authority",
+        "publication_authority",
+        "landing_page_authority",
+        "payment_surface",
+        "c3_key_surface",
+        "certification_surface",
+        "conversion_surface",
+        "dao_surface",
+        "marble_readiness_surface"
+      ],
+      "system_process_surface": "chamber_directory",
+      "working_directory_path": "docs/oar/c3_field/chamber_directories/lapis/"
+    },
+    "created_at": "2026-06-07T02:03:03.181074+00:00",
+    "updated_at": "2026-06-07T02:03:03.181074+00:00",
+    "process_title": "Lapis Chamber Directory",
+    "process_scope": "docs/oar/c3_field/chamber_directories/lapis/lapis_chamber_directory_index_v1.meta.md",
+    "process_status": "active",
+    "authority_level": "working",
+    "source_reference_set": [
+      "docs/oar/c3_field/chamber_directories/oar2_register_lapis_chamber_directory_system_process_standing_v1.meta.md",
+      "docs/oar/c3_field/chamber_directories/oar1_seat_chamber_directory_system_process_surface_and_run_db_schema_review_v1.meta.md",
+      "docs/oar/c3_field/chamber_directories/lapis/lapis_chamber_directory_index_v1.meta.md"
+    ],
+    "required_oar_type": "both",
+    "requires_operator_confirm": true,
+    "requires_preflight": true,
+    "requires_oar1_closeout": true
+  },
+  "measures_registry_matching_lapis_directory_rows": []
+}

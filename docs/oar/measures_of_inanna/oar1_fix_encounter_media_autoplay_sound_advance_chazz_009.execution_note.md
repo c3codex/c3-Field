@@ -1,0 +1,1 @@
+Execution note: OAR1 opened before source mutation. No runtime/source behavior changed yet. Search now tracing existing gesture/unlock state before modifying renderer.

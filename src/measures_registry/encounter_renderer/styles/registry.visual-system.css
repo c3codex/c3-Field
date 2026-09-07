@@ -1,0 +1,682 @@
+﻿/* Launch-grade visual system overrides.
+   Contract-native: driven by material/layout data attributes already seated by runtime. */
+
+/* Governed typography scale — shared across Crystal, Obsidian, Marble, and About */
+.measures-registry-runtime {
+  --enc-eyebrow-size: 0.75rem;         /* 12px */
+  --enc-eyebrow-tracking: 0.24em;
+  --enc-title-size: clamp(2.25rem, 4vw, 3.5rem);  /* 36–56px */
+  --enc-title-weight: 500;
+  --enc-title-lh: 1.1;
+  --enc-context-size: 1.125rem;        /* 18px */
+  --enc-context-lh: 1.7;
+  --enc-context-maxw: 68ch;
+  --enc-body-size: 1rem;               /* 16px */
+  --enc-body-lh: 1.7;
+}
+
+.measures-registry-runtime {
+  overflow-x: clip;
+  isolation: isolate;
+}
+
+/* OAR2 "Resolve Final Launch Blockers" removed a fully self-contained, superseded
+   "gold/paper 3-column grid" undrifted cover design that lived here (~455 lines,
+   [data-layout-contract="undrifted_publication"]-scoped). It conflicted with the live
+   flex-column design in encounters/lapis.css — same class names, higher specificity via
+   the attribute selector, and explicit grid-row placements (row 5/6) that no longer match
+   the current component structure, which is what was collapsing/cramping the live cover
+   and interfering with normal scroll. lapis.css is the sole source of truth for this
+   surface's layout going forward; nothing here was still needed. */
+
+.measures-registry-runtime::before,
+.measures-registry-runtime::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.measures-registry-runtime::before {
+  background:
+    linear-gradient(115deg, transparent 0 18%, color-mix(in srgb, var(--registry-brand-accent) 8%, transparent) 18.2% 18.45%, transparent 18.7% 100%),
+    linear-gradient(68deg, transparent 0 58%, color-mix(in srgb, var(--registry-brand-highlight) 6%, transparent) 58.2% 58.42%, transparent 58.65% 100%),
+    radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--registry-brand-accent) 12%, transparent), transparent 24rem),
+    radial-gradient(circle at 80% 12%, color-mix(in srgb, var(--registry-brand-highlight) 8%, transparent), transparent 22rem);
+  opacity: 0.82;
+}
+
+.measures-registry-runtime::after {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--registry-brand-border) 34%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--registry-brand-border) 26%, transparent) 1px, transparent 1px);
+  background-size: 7.5rem 7.5rem;
+  mask-image: radial-gradient(circle at 50% 18%, black, transparent 68%);
+  opacity: 0.2;
+}
+
+.measures-registry-runtime > * {
+  position: relative;
+  z-index: 1;
+}
+
+.measures-registry-runtime[data-material-family="crystal"] {
+  --registry-chamber-panel: color-mix(in srgb, var(--registry-brand-panel-surface) 58%, transparent);
+  --registry-chamber-border: color-mix(in srgb, var(--registry-brand-highlight) 24%, var(--registry-brand-border));
+  --registry-chamber-shadow: 0 1.2rem 4rem rgba(4, 10, 18, 0.32);
+  --registry-source-image: var(--registry-crystal-source-image, none);
+  --registry-source-position: 78% 42%;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"] {
+  --registry-chamber-panel: color-mix(in srgb, #090a0f 88%, transparent);
+  --registry-chamber-border: color-mix(in srgb, var(--registry-brand-border) 72%, rgba(255, 255, 255, 0.08));
+  --registry-chamber-shadow: 0 1rem 3.2rem rgba(0, 0, 0, 0.42);
+  --registry-source-image: var(--registry-obsidian-source-image, none);
+  --registry-source-position: 18% 50%;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"][data-layout-contract="result_gate"] {
+  --registry-source-image: var(--registry-obsidian-eval-result-visual, none);
+}
+
+.measures-registry-runtime[data-material-family="crystal"]::before {
+  background:
+    linear-gradient(90deg, rgba(4, 9, 17, 0.72), rgba(4, 9, 17, 0.28) 48%, rgba(4, 9, 17, 0.72)),
+    var(--registry-source-image),
+    linear-gradient(115deg, transparent 0 18%, color-mix(in srgb, var(--registry-brand-accent) 8%, transparent) 18.2% 18.45%, transparent 18.7% 100%),
+    linear-gradient(68deg, transparent 0 58%, color-mix(in srgb, var(--registry-brand-highlight) 6%, transparent) 58.2% 58.42%, transparent 58.65% 100%),
+    radial-gradient(circle at 80% 12%, color-mix(in srgb, var(--registry-brand-highlight) 10%, transparent), transparent 24rem);
+  background-size: cover, cover, auto, auto, auto;
+  background-position: center, var(--registry-source-position), center, center, center;
+  background-blend-mode: normal, luminosity, normal, normal, screen;
+  opacity: 0.86;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"]::before {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22), transparent 54%),
+    var(--registry-source-image),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 3rem),
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--registry-brand-accent) 10%, transparent), transparent 23rem),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 40%);
+  background-size: cover, cover, auto, auto, auto;
+  background-position: center, var(--registry-source-position), center, center, center;
+  background-blend-mode: normal, luminosity, normal, screen, normal;
+  opacity: 0.82;
+}
+
+.measures-registry-runtime[data-material-family="obsidian"]::after {
+  background-image:
+    repeating-linear-gradient(112deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(22deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 17px);
+  background-size: auto;
+  mask-image: radial-gradient(circle at 50% 24%, black, transparent 72%);
+  opacity: 0.28;
+}
+
+.measures-registry-runtime[data-material-family="lapis"]::before {
+  background:
+    var(--registry-lapis-source-image, none),
+    radial-gradient(circle at 22% 30%, rgba(94, 138, 209, 0.22), transparent 20rem),
+    radial-gradient(circle at 82% 18%, rgba(212, 196, 142, 0.1), transparent 18rem),
+    linear-gradient(135deg, rgba(13, 30, 82, 0.72), transparent 62%);
+  background-size: cover, auto, auto, auto;
+  background-position: center;
+  background-blend-mode: luminosity, normal, normal, normal;
+}
+
+.measures-registry-runtime[data-material-family="marble"]::before {
+  background:
+    linear-gradient(118deg, rgba(255,255,255,0.26) 0 1px, transparent 1px 11rem),
+    radial-gradient(circle at 18% 20%, rgba(255,255,255,0.34), transparent 18rem),
+    linear-gradient(180deg, rgba(55, 51, 44, 0.08), transparent);
+}
+
+.measures-registry-runtime .registry-public-header {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--registry-brand-field) 82%, transparent), transparent);
+}
+
+.measures-registry-runtime .registry-public-brand {
+  min-height: 2.5rem;
+  padding: 0.25rem 0.55rem 0.25rem 0;
+}
+
+.measures-registry-runtime .registry-public-brand img {
+  width: 2.25rem;
+  min-width: 2.25rem;
+  max-height: 1.75rem;
+  filter: drop-shadow(0 0.4rem 1.2rem rgba(0, 0, 0, 0.22));
+  opacity: 0.88;
+}
+
+.measures-registry-runtime .registry-public-brand > span {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: color-mix(in srgb, var(--registry-brand-primary-text) 72%, var(--registry-brand-muted-text));
+}
+
+.measures-registry-runtime .registry-system-footer {
+  margin-top: clamp(0.65rem, 2vw, 1.2rem);
+  border-top-color: color-mix(in srgb, var(--registry-brand-border) 76%, var(--registry-brand-highlight) 10%);
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--registry-brand-field) 60%, transparent));
+}
+
+.measures-registry-runtime button,
+.measures-registry-runtime a {
+  border-radius: 6px;
+}
+
+.measures-registry-runtime .registry-diagnostic-passage-controls > button {
+  min-height: 2.25rem;
+  border-left: 0;
+  border-right: 0;
+  border-top: 1px solid color-mix(in srgb, var(--registry-brand-highlight) 74%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--registry-brand-highlight) 74%, transparent);
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--registry-brand-highlight) 5%, transparent) 50%, transparent),
+    color-mix(in srgb, var(--registry-brand-field) 58%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 0.6rem 1.8rem rgba(0,0,0,0.18);
+  color: var(--registry-brand-primary-text);
+}
+
+/* OAR2 "Inventory and Reduce Legacy CSS After Render Authority Seating" removed the
+   "Structure passage" (`[data-public-path="understand_environment"]`), "Crystal chamber"
+   (`[data-public-path="crystal_chamber"]`), and "Publication surfaces"
+   (`[data-layout-contract="publication_encounter"]`) blocks that previously lived here (~225
+   lines). Verified dead: `data-public-path` is never set by any component in src/ (confirmed by
+   a project-wide grep), and `data-layout-contract="publication_encounter"` is set only by the
+   already-deprecated, unreachable `PublicationDispatch` component in LapisChamberRenderer.tsx
+   (publication_dispatch routes to /undrifted since the prior OAR in this sequence). The bare
+   `.registry-field-guide-featured a` / `.registry-field-guide-grid a` / `.registry-field-guide-cta
+   button` rules folded into the button rule above were also removed — same zero-usage evidence.
+   `.registry-publication-subscribe-capture` (used live on lapis_chamber_encounter) and
+   `.registry-public-header`/`.registry-public-brand` overrides below were preserved unchanged;
+   only the dead `publication_encounter`-scoped compound selectors referencing them were removed. */
+
+/* OAR2 "Resolve Final Launch Blockers" removed a second, fully self-contained, superseded
+   undrifted redesign that lived here (~1130 lines, unscoped `.measures-registry-runtime
+   .undrifted-*` selectors plus one more `[data-layout-contract="undrifted_publication"]`
+   variable block). Confirmed dead or actively conflicting: most of its unique class names
+   (undrifted-hero, undrifted-featured, undrifted-series-nav, undrifted-legacy-route,
+   undrifted-about, undrifted-evaluation, undrifted-grid, undrifted-dispatch-*, etc.) have
+   zero usage anywhere in any .tsx file under src/ (project-wide grep); the handful of class names it
+   shares with the live JSX (undrifted-shell, undrifted-masthead, undrifted-cover*,
+   undrifted-eyebrow) redefined them with unscoped-but-still-higher-specificity rules that
+   overrode encounters/lapis.css, the file that actually documents itself as this surface's
+   source of truth. Removing this lets lapis.css render as designed.
+
+
+.measures-registry-runtime[data-layout-contract="assessment_public_landing"] {
+  background:
+    radial-gradient(circle at 80% 12%, rgba(49, 165, 255, 0.16), transparent 22rem),
+    linear-gradient(180deg, rgba(4, 9, 14, 0.96), #05070a);
+  color: var(--registry-brand-text);
+}
+
+.measures-registry-runtime .assessment-landing-shell {
+  width: min(72rem, 100%);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: calc(var(--registry-header-height, 3rem) + 1.4rem) var(--registry-page-padding-active) 1.5rem;
+  box-sizing: border-box;
+}
+
+.measures-registry-runtime .assessment-landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1rem, 3vw, 2.4rem);
+  align-items: end;
+  min-height: clamp(18rem, 38svh, 27rem);
+  border-bottom: 1px solid rgba(96, 186, 255, 0.5);
+  padding-bottom: clamp(1rem, 2.4vw, 1.8rem);
+}
+
+.measures-registry-runtime .assessment-landing-hero span,
+.measures-registry-runtime .assessment-landing-panel > span,
+.measures-registry-runtime .assessment-landing-cta span {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: #59c7ff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.measures-registry-runtime .assessment-landing-hero h1 {
+  max-width: 48rem;
+  margin: 0;
+  color: #f2f6f8;
+  font-family: var(--registry-font-heading);
+  font-size: clamp(3.6rem, 5.2rem, 5.2rem);
+  font-weight: 500;
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.measures-registry-runtime .assessment-landing-hero p,
+.measures-registry-runtime .assessment-landing-panel p,
+.measures-registry-runtime .assessment-landing-cta p {
+  max-width: 48rem;
+  color: #aab4bf;
+  line-height: 1.6;
+}
+
+.measures-registry-runtime .assessment-landing-line {
+  color: #f2f6f8;
+  font-size: 1.22rem;
+}
+
+.measures-registry-runtime .assessment-landing-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+  gap: 0.9rem;
+  padding: 1rem 0;
+}
+
+.measures-registry-runtime .assessment-landing-panel,
+.measures-registry-runtime .assessment-landing-cta {
+  border: 1px solid rgba(180, 210, 255, 0.18);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(89, 199, 255, 0.055), rgba(7, 11, 15, 0.9) 42%);
+  box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.22);
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.measures-registry-runtime .assessment-landing-panel div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.measures-registry-runtime .assessment-landing-panel p {
+  margin: 0;
+  border-top: 1px solid rgba(180, 210, 255, 0.18);
+  padding-top: 0.55rem;
+}
+
+.measures-registry-runtime .assessment-landing-boundary p {
+  color: #c0c8cf;
+}
+
+.measures-registry-runtime .assessment-landing-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.measures-registry-runtime .assessment-landing-hero button,
+.measures-registry-runtime .assessment-landing-cta button {
+  min-height: 2.55rem;
+  border: 1px solid rgba(96, 186, 255, 0.68);
+  border-radius: 6px;
+  background: rgba(31, 140, 255, 0.1);
+  color: #f2f6f8;
+  padding: 0.6rem 0.9rem;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.measures-registry-runtime .assessment-landing-hero button:hover,
+.measures-registry-runtime .assessment-landing-cta button:hover {
+  background: rgba(89, 199, 255, 0.14);
+  border-color: #59c7ff;
+  transform: translateY(-1px);
+}
+
+/* Assessment laptop fit and branded obsidian chamber */
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-iis-eval.registry-assessment-chamber {
+  justify-content: flex-start;
+  min-height: 100svh;
+  padding-top: calc(var(--registry-header-height, 3rem) + 0.65rem);
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--registry-brand-accent) 8%, transparent), transparent 22rem),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.2), transparent 42%),
+    var(--registry-brand-field);
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-chamber-heading,
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-question-progress,
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-single-question-fieldset,
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-diagnostic-passage-controls {
+  max-width: min(58rem, 100%);
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-chamber-heading {
+  padding-bottom: 0.45rem;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-chamber-heading > h1 {
+  font-size: 1.42rem;
+  letter-spacing: 0;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-chamber-heading > p {
+  font-size: 0.8rem;
+  max-width: 58rem;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-iis-eval-form {
+  border: 1px solid var(--registry-chamber-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, #020306 42%, transparent), transparent 44%, color-mix(in srgb, #020306 46%, transparent)),
+    var(--registry-obsidian-source-image, none),
+    linear-gradient(145deg, color-mix(in srgb, var(--registry-chamber-panel) 92%, transparent), color-mix(in srgb, var(--registry-brand-field) 78%, transparent));
+  background-size: cover, cover, auto;
+  background-position: center, 18% 50%, center;
+  background-blend-mode: normal, luminosity, normal;
+  box-shadow: var(--registry-chamber-shadow);
+  padding: 0.85rem;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-question-progress {
+  margin-bottom: 0.45rem;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-context-statement {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  margin-bottom: 0.45rem;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-question-text {
+  font-size: 1rem;
+  line-height: 1.32;
+  margin-bottom: 0.45rem;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-option {
+  min-height: 0;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--registry-brand-border) 74%, transparent);
+  border-radius: 6px;
+  margin-bottom: 0.42rem;
+  background: color-mix(in srgb, var(--registry-brand-panel-surface) 50%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.035);
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-option:first-child {
+  border-top: 1px solid color-mix(in srgb, var(--registry-brand-border) 74%, transparent);
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-option > span {
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-diagnostic-passage-controls {
+  margin-top: 0.45rem;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-diagnostic-passage-controls > button {
+  padding: 0.46rem 1rem;
+  font-size: 0.78rem;
+}
+
+.measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-system-footer {
+  font-size: 0.66rem;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-contact-capture,
+.measures-registry-runtime[data-layout-contract="result_gate"] .registry-branded-assessment-report {
+  border-radius: 8px;
+  border-color: var(--registry-chamber-border);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--registry-chamber-panel) 90%, transparent), color-mix(in srgb, var(--registry-brand-field) 75%, transparent));
+  box-shadow: var(--registry-chamber-shadow);
+}
+
+/* Contact gate — density, hierarchy, no-standing note */
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-chamber-heading {
+  padding-bottom: 0.3rem;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-chamber-heading > h1 {
+  font-size: 1.2rem;
+  margin-bottom: 0.12rem;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-chamber-heading > p {
+  display: none;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form.registry-contact-capture {
+  gap: 0.62rem;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-chamber-copy > span {
+  display: block;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--registry-brand-muted-text);
+  margin-bottom: 0.18rem;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-chamber-copy > h2 {
+  font-family: var(--registry-font-heading);
+  font-size: 1.22rem;
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0 0 0.2rem;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-chamber-copy > p {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-contact-standing-note {
+  font-size: 0.74rem;
+  color: var(--registry-brand-muted-text);
+  line-height: 1.42;
+  border-left: 2px solid color-mix(in srgb, var(--registry-brand-border) 72%, transparent);
+  padding: 0.18rem 0 0.18rem 0.62rem;
+  margin: 0;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.46rem;
+  min-inline-size: 0;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form label:not(.registry-consent-field) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.16rem;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form label:not(.registry-consent-field) > span {
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  color: var(--registry-brand-muted-text);
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form input[type="text"],
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form input[type="email"],
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form select {
+  border: 1px solid color-mix(in srgb, var(--registry-brand-border) 78%, transparent);
+  background: color-mix(in srgb, var(--registry-brand-field) 76%, transparent);
+  color: var(--registry-brand-primary-text);
+  font-family: var(--registry-font-body);
+  font-size: 0.82rem;
+  padding: 0.36rem 0.52rem;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form input[type="text"]:focus,
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form input[type="email"]:focus,
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--registry-brand-accent) 58%, var(--registry-brand-border));
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-consent-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.46rem;
+  font-size: 0.7rem;
+  color: var(--registry-brand-muted-text);
+  line-height: 1.4;
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-consent-field input[type="checkbox"] {
+  flex-shrink: 0;
+  margin-top: 0.12rem;
+  width: 0.88rem;
+  height: 0.88rem;
+  accent-color: var(--registry-brand-accent);
+}
+
+.measures-registry-runtime[data-layout-contract="contact_contract"] .registry-diagnostic-passage-controls {
+  margin-top: 0.2rem;
+}
+
+@media (max-height: 780px) and (min-width: 900px) {
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-iis-eval.registry-assessment-chamber {
+    padding-top: calc(var(--registry-header-height, 3rem) + 0.4rem);
+    padding-bottom: 0.25rem;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-chamber-heading > span {
+    margin-bottom: 0.22rem;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-chamber-heading > h1 {
+    font-size: 1.26rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-chamber-heading > p {
+    display: none;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-context {
+    display: none;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-iis-eval-form {
+    padding: 0.68rem;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-context-statement {
+    font-size: 0.72rem;
+    margin-bottom: 0.28rem;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-question-text {
+    margin-bottom: 0.28rem;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-option {
+    padding: 0.42rem 0.62rem;
+    margin-bottom: 0.34rem;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-structured-option > span {
+    font-size: 0.76rem;
+  }
+
+  /* Contact gate compact at laptop height */
+  .measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval.registry-assessment-chamber {
+    padding-top: calc(var(--registry-header-height, 3rem) + 0.3rem);
+  }
+
+  .measures-registry-runtime[data-layout-contract="contact_contract"] .registry-iis-eval-form.registry-contact-capture {
+    padding: 0.55rem;
+  }
+}
+
+/* OAR2 "Resolve Final Launch Blockers" removed a mobile-only @media (max-width: 860px)
+   block here that exclusively targeted the now-removed dead undrifted-hero/-grid/
+   -series-nav/-evaluation classes (zero live usage). */
+
+@media (max-width: 620px) {
+  .measures-registry-runtime::after {
+    background-size: 4.5rem 4.5rem;
+  }
+
+  .measures-registry-runtime .registry-public-header {
+    padding: 0.65rem 1rem;
+  }
+
+  .measures-registry-runtime .registry-public-brand > span {
+    display: none;
+  }
+
+  .measures-registry-runtime[data-surface="measures_ai_operational_evaluation"] .registry-iis-eval-form {
+    padding: 0.65rem;
+  }
+}
+
+/* ── MARBLE CHAMBER ORIENTATION ──────────────────────────────────────────── */
+/* Contained video orientation before assessment findings. Does not fullscreen-dominate. */
+
+.measures-registry-runtime[data-surface="marble_chamber_orientation"] {
+  display: flex;
+  flex-direction: column;
+}
+
+.measures-registry-runtime[data-surface="marble_chamber_orientation"] .registry-marble-chamber.registry-marble-orientation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  width: min(var(--registry-content-max-width, 72rem), 100%);
+  margin: 0 auto;
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3.5rem));
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(1.5rem, 3vw, 2.5rem));
+  padding-bottom: clamp(2rem, 4vw, 4rem);
+  box-sizing: border-box;
+}
+
+.measures-registry-runtime[data-surface="marble_chamber_orientation"] .registry-marble-chamber.registry-marble-orientation video {
+  width: min(54rem, 100%);
+  max-height: 52svh;
+  border-radius: 6px;
+  border: 1px solid rgba(230, 230, 220, 0.14);
+  background: #000;
+  display: block;
+  object-fit: contain;
+}
+
+.measures-registry-runtime[data-surface="marble_chamber_orientation"] .registry-diagnostic-passage-controls {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.measures-registry-runtime[data-surface="marble_chamber_orientation"] .registry-diagnostic-passage-controls > button {
+  padding: 0.55rem 1.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.measures-registry-runtime[data-surface="marble_chamber_orientation"] .registry-media-absence {
+  color: var(--registry-brand-secondary-text, rgba(237, 242, 248, 0.5));
+  font-size: 0.86rem;
+  text-align: center;
+  max-width: 32rem;
+  padding: 2rem;
+}

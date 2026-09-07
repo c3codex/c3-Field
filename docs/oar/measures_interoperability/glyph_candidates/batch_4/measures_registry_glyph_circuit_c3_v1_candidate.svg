@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- C3 circuit glyph: third governed Commerced Circuit standing -->
+  <!-- Governed circuit boundary -->
+  <circle cx="50" cy="50" r="28" stroke="currentColor" stroke-width="1.5"/>
+  <!-- C3 standing mark: formal diamond at 150° position (lower-left tier location, r=17) -->
+  <polygon points="35,56 38,59 35,62 32,59" stroke="currentColor" stroke-width="1"/>
+</svg>

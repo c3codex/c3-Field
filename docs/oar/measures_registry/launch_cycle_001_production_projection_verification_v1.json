@@ -1,0 +1,198 @@
+{
+  "checked_at": "2026-07-13T17:51:20.779Z",
+  "base": "https://measuresregistry.com",
+  "commit": "50c45c0",
+  "checks": [
+    {
+      "name": "desktop-undrifted",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "url": "https://measuresregistry.com/undrifted/?codex_verify=1783965062238",
+      "contains": {
+        "masthead": true,
+        "brandLine": true,
+        "publisher": true,
+        "issue": true,
+        "fieldFindings": true,
+        "response001": true,
+        "assessmentCta": true
+      },
+      "links": [
+        {
+          "text": "Assess the Environment",
+          "href": "https://measuresregistry.com/ai-operations-assessment"
+        },
+        {
+          "text": "Understand the Environment",
+          "href": "https://measuresregistry.com/undrifted"
+        },
+        {
+          "text": "Read on Measures Registry →",
+          "href": "https://measuresregistry.com/undrifted/field-findings-2026-w28"
+        },
+        {
+          "text": "Read on Measures Registry →",
+          "href": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems"
+        },
+        {
+          "text": "AI Operations Assessment",
+          "href": "https://measuresregistry.com/ai-operations-assessment"
+        },
+        {
+          "text": "Field Findings 2026-W28",
+          "href": "https://measuresregistry.com/undrifted/field-findings-2026-w28"
+        },
+        {
+          "text": "AI Agents Are Not Entering Empty Systems",
+          "href": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems"
+        },
+        {
+          "text": "Field Findings 2026-W28",
+          "href": "https://measuresregistry.com/undrifted/field-findings-2026-w28"
+        },
+        {
+          "text": "AI Agents Are Not Entering Empty Systems",
+          "href": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems"
+        },
+        {
+          "text": "AI ISN'T BROKEN. SYSTEMS ARE.",
+          "href": "https://measuresregistry.com/ai-operations-assessment"
+        },
+        {
+          "text": "ASSESS THE ENVIRONMENT",
+          "href": "https://measuresregistry.com/ai-operations-assessment"
+        }
+      ],
+      "positions": {
+        "issue": {
+          "top": 431,
+          "text": "Issue 01 / July 2026"
+        },
+        "field": {
+          "top": 1069,
+          "text": "Field Findings 2026-W28"
+        },
+        "response": {
+          "top": 1069,
+          "text": "AI Agents Are Not Entering Empty Systems"
+        },
+        "assessment": {
+          "top": 1921,
+          "text": "AI ISN'T BROKEN. SYSTEMS ARE."
+        },
+        "cta": {
+          "top": 2694,
+          "text": "ASSESS THE ENVIRONMENT"
+        }
+      }
+    },
+    {
+      "name": "mobile-undrifted",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "url": "https://measuresregistry.com/undrifted/?codex_verify=1783965067999",
+      "contains": {
+        "masthead": true,
+        "brandLine": true,
+        "publisher": true,
+        "issue": true,
+        "fieldFindings": true,
+        "response001": true,
+        "assessmentCta": true
+      },
+      "links": [
+        {
+          "text": "Assess the Environment",
+          "href": "https://measuresregistry.com/ai-operations-assessment"
+        },
+        {
+          "text": "Understand the Environment",
+          "href": "https://measuresregistry.com/undrifted"
+        },
+        {
+          "text": "Read on Measures Registry →",
+          "href": "https://measuresregistry.com/undrifted/field-findings-2026-w28"
+        },
+        {
+          "text": "Read on Measures Registry →",
+          "href": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems"
+        },
+        {
+          "text": "AI Operations Assessment",
+          "href": "https://measuresregistry.com/ai-operations-assessment"
+        },
+        {
+          "text": "Field Findings 2026-W28",
+          "href": "https://measuresregistry.com/undrifted/field-findings-2026-w28"
+        },
+        {
+          "text": "AI Agents Are Not Entering Empty Systems",
+          "href": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems"
+        },
+        {
+          "text": "Field Findings 2026-W28",
+          "href": "https://measuresregistry.com/undrifted/field-findings-2026-w28"
+        },
+        {
+          "text": "AI Agents Are Not Entering Empty Systems",
+          "href": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems"
+        },
+        {
+          "text": "AI ISN'T BROKEN. SYSTEMS ARE.",
+          "href": "https://measuresregistry.com/ai-operations-assessment"
+        },
+        {
+          "text": "ASSESS THE ENVIRONMENT",
+          "href": "https://measuresregistry.com/ai-operations-assessment"
+        }
+      ],
+      "positions": {
+        "issue": {
+          "top": 266,
+          "text": "Issue 01 / July 2026"
+        },
+        "field": {
+          "top": 662,
+          "text": "Field Findings 2026-W28"
+        },
+        "response": {
+          "top": 1305,
+          "text": "AI Agents Are Not Entering Empty Systems"
+        },
+        "assessment": {
+          "top": 2297,
+          "text": "AI ISN'T BROKEN. SYSTEMS ARE."
+        },
+        "cta": {
+          "top": 2785,
+          "text": "ASSESS THE ENVIRONMENT"
+        }
+      }
+    },
+    {
+      "name": "route:/undrifted/field-findings-2026-w28",
+      "url": "https://measuresregistry.com/undrifted/field-findings-2026-w28/?codex_verify=1783965073601",
+      "contains": {
+        "Field Findings 2026-W28": true,
+        "Longitudinal Baseline": true,
+        "Carnegie Endowment": true,
+        "NIST": true,
+        "Computational Systems Governance": true
+      }
+    },
+    {
+      "name": "route:/undrifted/ai-agents-are-not-entering-empty-systems",
+      "url": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems/?codex_verify=1783965077257",
+      "contains": {
+        "AI Agents Are Not Entering Empty Systems": true,
+        "Field Findings 2026-W28": true,
+        "Measures Registry": true,
+        "Assess the Environment": true
+      }
+    }
+  ]
+}

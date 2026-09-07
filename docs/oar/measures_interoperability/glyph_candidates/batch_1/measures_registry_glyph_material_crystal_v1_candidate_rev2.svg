@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Crystal: recognition / pattern visibility — rev2 -->
+  <!-- Outer hexagonal crystal boundary (pointed-top, R=38) -->
+  <polygon points="50,12 83,31 83,69 50,88 17,69 17,31" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Six facet lines: crystal face edges from outer vertex inward to inner boundary -->
+  <!-- Not triangles — each line runs radially from outer vertex to corresponding inner vertex -->
+  <line x1="50"  y1="12" x2="50"  y2="32" stroke="currentColor" stroke-width="0.75" opacity="0.55"/>
+  <line x1="83"  y1="31" x2="66"  y2="41" stroke="currentColor" stroke-width="0.75" opacity="0.55"/>
+  <line x1="83"  y1="69" x2="66"  y2="59" stroke="currentColor" stroke-width="0.75" opacity="0.55"/>
+  <line x1="50"  y1="88" x2="50"  y2="68" stroke="currentColor" stroke-width="0.75" opacity="0.55"/>
+  <line x1="17"  y1="69" x2="34"  y2="59" stroke="currentColor" stroke-width="0.75" opacity="0.55"/>
+  <line x1="17"  y1="31" x2="34"  y2="41" stroke="currentColor" stroke-width="0.75" opacity="0.55"/>
+  <!-- Inner hexagonal recognition aperture (same axis, R=18): the pattern revealed inside structure -->
+  <polygon points="50,32 66,41 66,59 50,68 34,59 34,41" stroke="currentColor" stroke-width="1.5"/>
+</svg>

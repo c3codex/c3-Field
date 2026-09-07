@@ -1,0 +1,75 @@
+/* Shared header/brand chrome, plus the diagnostic-passage-controls alignment helper.
+   OAR2 "Inventory and Reduce Legacy CSS After Render Authority Seating" removed the rest of
+   this file's original content: `.registry-diagnostic-passage` (bare parent, its `video` and
+   `> button` children), and the entire "split-screen passage" block (`.registry-passage-split`,
+   `.registry-passage-media-panel`, `.registry-passage-information-panel`,
+   `.registry-passage-audio-control`, the nested `.registry-encounter-entry`/
+   `.registry-encounter-actions` rules) — all confirmed dead by a project-wide grep across every
+   .tsx file in src/measures_registry: none of those class names are ever applied by a live
+   component. `eval_passage` and `structure_passage` (the surfaces this file's name references)
+   are seated `held`/`legacy_alias` in encounter_structure and render only the generic
+   `.registry-held-state` fallback, never this file's removed layout. */
+
+/* ── SHARED HEADER — governs registry mark upper-left placement ─────────── */
+.measures-registry-runtime .registry-public-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(0.75rem, 1.8vw, 1.1rem) clamp(1.25rem, 3vw, 2.5rem);
+  height: var(--registry-header-height, 3rem);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.measures-registry-runtime .registry-public-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  pointer-events: auto;
+}
+
+/* .registry-public-header sets pointer-events:none above so it never blocks click-through
+   on cinematic/full-bleed surfaces; .registry-public-nav must opt back in explicitly or its
+   links inherit none and become unclickable sitewide (OAR2 "Resolve Final Launch Blockers"). */
+.measures-registry-runtime .registry-public-nav {
+  pointer-events: auto;
+}
+
+.measures-registry-runtime .registry-public-brand img {
+  height: auto;
+  min-width: 40px;
+  width: 44px;
+  display: block;
+  opacity: 0.72;
+  transition: opacity 0.15s ease;
+}
+
+.measures-registry-runtime .registry-public-brand:hover img {
+  opacity: 1;
+}
+
+.measures-registry-runtime .registry-public-brand > span {
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--registry-brand-muted-text);
+}
+
+/* Controls: align to content edge — used standalone across assessment/report/passage-control
+   surfaces (ObsidianChamberRenderer, PublicAssessmentSurface, PublicAssessmentResult). */
+.measures-registry-runtime .registry-diagnostic-passage-controls {
+  max-width: min(var(--registry-content-max-width, 64rem), 100%);
+  margin-left: auto;
+}
+
+@media (max-width: 620px) {
+  .measures-registry-runtime .registry-public-brand img {
+    min-width: 30px;
+    width: 34px;
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "document_type": "publication_boundary_incident_containment_evidence",
+  "authority": "docs/oar/measures_registry/oar2_immediately_contain_codex_governance_leak_and_restore_publication_boundary_v1.meta.md",
+  "executor": "Cody",
+  "incident_class": "internal_governance_content_exposed_to_public_projection",
+  "affected_publication": "Field Findings 2026-W28",
+  "containment_commit": "4ac8b9e",
+  "pushed_to": "origin/measures",
+  "source_internal_record": {
+    "path": "Assets/Articles/unDrifted/LaunchCycle001/registered/undrifted_field_findings_2026_w28_article_v1.md",
+    "sha256": "FF491C9478AE3D2B6FA9FD59FED7608ED29B1C37BF2CC2D53234195AD1D95806",
+    "preserved_unchanged": true,
+    "standing_after_containment": "internal_research_record"
+  },
+  "public_derivative": {
+    "path": "Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md",
+    "boundary": "ends before the internal governance review appendix",
+    "incident_marker_scan": {
+      "local_derivative": "pass_zero_markers",
+      "local_projection": "pass_zero_markers",
+      "production_measures_registry": "pass_zero_markers",
+      "paragraph": "pass_zero_markers"
+    }
+  },
+  "paragraph": {
+    "field_findings_post_id": "8UdwP2yt8pw9FacBWIbw",
+    "field_findings_url": "https://paragraph.com/@undrifted/field-findings-2026-w28",
+    "containment_action": "updated_in_place_with_public_derivative",
+    "method": "PUT /api/v1/posts/8UdwP2yt8pw9FacBWIbw",
+    "newsletter_sent": false,
+    "response_url": "https://paragraph.com/@undrifted/ai-agents-are-not-entering-empty-systems",
+    "response_marker_scan": "pass_zero_markers"
+  },
+  "buffer": {
+    "deleted_draft_ids": [
+      "6a54ede947830b281a71e8cd",
+      "6a54edead6677965d318facb"
+    ],
+    "post_delete_verification": {
+      "matching_posts": 0,
+      "remaining_draft_count_for_undrifted_facebook": 0
+    }
+  },
+  "supabase_registry_evidence": {
+    "migration": "supabase/migrations/20260713152952_contain_launch_cycle_001_publication_boundary_incident_v1.sql",
+    "applied": true,
+    "field_findings_dispatch_metadata": "public_derivative_asset_path and paragraph update status seated",
+    "response_dispatch_metadata": "audited_no_incident_markers_detected"
+  },
+  "production_verification": {
+    "first_clean_poll": "2026-07-13T15:34:27Z",
+    "final_check": "2026-07-13T15:34:50.266Z",
+    "routes": [
+      {
+        "url": "https://measuresregistry.com/undrifted",
+        "status": 200,
+        "h1": "AI ISN'T BROKEN. SYSTEMS ARE.",
+        "incident_markers": 0,
+        "field_link_present": true,
+        "response_link_present": true
+      },
+      {
+        "url": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+        "status": 200,
+        "h1": "Field Findings 2026-W28",
+        "incident_markers": 0,
+        "public_body_present": true
+      },
+      {
+        "url": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+        "status": 200,
+        "h1": "AI Agents Are Not Entering Empty Systems",
+        "incident_markers": 0,
+        "response_body_present": true,
+        "field_findings_link_present": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "document_type": "launch_cycle_001_buffer_draft_operator_review_packet",
+  "source_oar2": "OAR/OAR2/publication/oar2_load_registered_launch_cycle_001_assets_into_buffer_v1.meta.md",
+  "executed_at": "2026-07-13T23:15:08.238Z",
+  "mode": "draft_creation_not_scheduling",
+  "credential_presence": [
+    {
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "present": true,
+      "authenticated": true,
+      "accountName": "Measures Registry",
+      "channelCount": 3,
+      "errors": []
+    },
+    {
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "present": true,
+      "authenticated": true,
+      "accountName": "undrifted.editor",
+      "channelCount": 3,
+      "errors": []
+    }
+  ],
+  "endpoint_matrix": [
+    {
+      "platform": "youtube",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a54740a80cc80cdcaa976d9",
+      "displayName": "Measures Registry",
+      "publicUrl": "https://www.youtube.com/channel/UC84Jbvswj0ykzd5nuKxoNSA",
+      "active": true,
+      "organizationId": "6a23bebd718b53dcaa0839fc"
+    },
+    {
+      "platform": "instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "displayName": "measures_registry",
+      "publicUrl": "https://instagram.com/measures_registry",
+      "active": true,
+      "organizationId": "6a23bebd718b53dcaa0839fc"
+    },
+    {
+      "platform": "x",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a23bff1c687a22dd467a0b3",
+      "displayName": "measures_c3",
+      "publicUrl": "https://twitter.com/measures_c3",
+      "active": true,
+      "organizationId": "6a23bebd718b53dcaa0839fc"
+    },
+    {
+      "platform": "facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "displayName": "UnDrifted",
+      "publicUrl": "https://facebook.com/1241211659068854",
+      "active": true,
+      "organizationId": "6a546d1271344fb67de5c6c4"
+    },
+    {
+      "platform": "facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a54734280cc80cdcaa9743b",
+      "displayName": "Measures Registry",
+      "publicUrl": "https://facebook.com/1179013795290720",
+      "active": true,
+      "organizationId": "6a546d1271344fb67de5c6c4"
+    },
+    {
+      "platform": "x",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "displayName": "unDrifted_c3",
+      "publicUrl": "https://twitter.com/unDrifted_c3",
+      "active": true,
+      "organizationId": "6a546d1271344fb67de5c6c4"
+    }
+  ],
+  "duplicate_channel_ids": [],
+  "created_or_preserved": [
+    {
+      "distributionInstanceId": "lc001_p002_ud_fb_release",
+      "canonicalPublicationId": "publication_002",
+      "systemVoice": "unDrifted Response",
+      "platform": "facebook",
+      "endpoint": "unDrifted Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelDisplayMatch": {},
+      "approvedCopyReference": "launch_cycle_001_publication_distribution_package_v1 section 1 Response Facebook",
+      "registeredDerivativeAssetId": "rs_landscape_v1",
+      "publicAssetUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_landscape_v1.webp",
+      "articleUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "proposedPublishTime": "2026-07-14T14:00:00-05:00",
+      "timezone": "America/Chicago",
+      "idempotencyKey": "lc001_p002_ud_fb_release__rs_landscape_v1__undrifted_facebook__v1",
+      "text": "This week's unDrifted Response: the AI agent security conversation keeps asking \"how do we control the agent?\" We think that's the wrong first question. The right first question is whether the environment the agent is entering was ever governable to begin with. Read our full response.\n\nhttps://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "bufferDraftId": "6a55717b82f1b8ce84c10026",
+      "bufferStatus": "draft",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "channelDisplayName": "UnDrifted",
+      "channelPublicUrl": "https://facebook.com/1241211659068854",
+      "createdAt": "2026-07-13T23:15:06.999Z",
+      "dueAt": null,
+      "publicationState": "draft",
+      "evidenceState": "created_draft_with_registered_media",
+      "disposition": "created_buffer_draft",
+      "bufferAssets": [
+        {
+          "type": "image",
+          "mimeType": "image/webp",
+          "source": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_landscape_v1.webp",
+          "thumbnail": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_response_landscape_v1.webp"
+        }
+      ]
+    },
+    {
+      "distributionInstanceId": "lc001_p001_mr_fb_ack",
+      "canonicalPublicationId": "publication_001",
+      "systemVoice": "Measures Registry institutional",
+      "platform": "facebook",
+      "endpoint": "Measures Registry Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelDisplayMatch": {},
+      "approvedCopyReference": "launch_cycle_001_publication_distribution_package_v1 section 6 institutional acknowledgement",
+      "registeredDerivativeAssetId": "ff_landscape_v1",
+      "publicAssetUrl": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp",
+      "articleUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "proposedPublishTime": "2026-07-14T13:00:00-05:00",
+      "timezone": "America/Chicago",
+      "idempotencyKey": "lc001_p001_mr_fb_ack__ff_landscape_v1__measures_registry_facebook__v1",
+      "text": "Measures Registry notes unDrifted's first Field Findings sweep and accompanying Response as an editorial contribution to the Field, developed under unDrifted's autonomous publication authority. The Response's central claim — that environments must be measured before autonomous capability is assigned within them — reflects Measures Registry's own operational premise, but this acknowledgement does not itself constitute a Measures Registry methodology change, assessment finding, or institutional position on any named organization discussed in either publication. Measures Registry Review of MAP, Foundations Educational Module, SEAT, and Computational Systems Governance implications is tracked separately at docs/_source/codex/publications/measures_registry_review_launch_cycle_001.meta.md and remains its own, distinct governed record.\n\nhttps://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "bufferDraftId": "6a55717c82f1b8ce84c1004f",
+      "bufferStatus": "draft",
+      "channelId": "6a54734280cc80cdcaa9743b",
+      "channelDisplayName": "Measures Registry",
+      "channelPublicUrl": "https://facebook.com/1179013795290720",
+      "createdAt": "2026-07-13T23:15:08.025Z",
+      "dueAt": null,
+      "publicationState": "draft",
+      "evidenceState": "created_draft_with_registered_media",
+      "disposition": "created_buffer_draft",
+      "bufferAssets": [
+        {
+          "type": "image",
+          "mimeType": "image/webp",
+          "source": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp",
+          "thumbnail": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/launch_cycle_001/launch_cycle_001_field_findings_landscape_v1.webp"
+        }
+      ]
+    }
+  ],
+  "held": [
+    {
+      "distributionInstanceId": "lc001_p001_ud_x_release",
+      "disposition": "held_ambiguous",
+      "heldReason": "approved X text plus URL exceeds platform limit; no shortening authorized"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_ud_fb_release",
+      "disposition": "held_duplicate_text_asset_mismatch",
+      "bufferId": "6a55213145f81c20067e99cf",
+      "heldReason": "existing scheduled item has matching copy/URL but no registered media asset attached; duplicate not created"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_ud_x_quote",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_ud_x_discussion",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_ud_fb_square",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_ud_fb_quote",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_ud_fb_discussion",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_mr_x_ack",
+      "disposition": "held_ambiguous",
+      "heldReason": "no exact X-compatible institutional acknowledgement approved"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_mr_ig_square",
+      "disposition": "held_missing_exact_instagram_caption",
+      "heldReason": "Instagram profile-link caption not approved"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_mr_ig_story",
+      "disposition": "held_missing_exact_instagram_caption",
+      "heldReason": "Instagram profile-link caption not approved"
+    },
+    {
+      "distributionInstanceId": "lc001_p001_mr_ig_quote",
+      "disposition": "held_missing_exact_instagram_caption",
+      "heldReason": "Instagram profile-link caption not approved"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_ud_x_release",
+      "disposition": "held_ambiguous",
+      "heldReason": "approved X text plus URL exceeds platform limit; no shortening authorized"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_ud_x_quote",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_ud_x_discussion",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_ud_fb_square",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_ud_fb_quote",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_ud_fb_discussion",
+      "disposition": "held_missing_exact_endpoint_copy",
+      "heldReason": "follow-up endpoint-specific caption unresolved in matrix"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_mr_x_contribution",
+      "disposition": "held_operator_selection_required",
+      "heldReason": "operator must choose assessment_primary_clip_v1 or crystal_primary_clip_v1 and approve exact platform copy"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_mr_fb_contribution",
+      "disposition": "held_operator_selection_required",
+      "heldReason": "operator must choose rs_landscape_v1 or crystal_presenter_thumbnail_v1 and approve exact platform copy"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_mr_ig_square",
+      "disposition": "held_missing_exact_instagram_caption",
+      "heldReason": "Instagram profile-link caption not approved"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_mr_ig_story",
+      "disposition": "held_missing_exact_instagram_caption",
+      "heldReason": "Instagram profile-link caption not approved"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_mr_ig_quote",
+      "disposition": "held_missing_exact_instagram_caption",
+      "heldReason": "Instagram profile-link caption not approved"
+    },
+    {
+      "distributionInstanceId": "lc001_p002_mr_ig_discussion",
+      "disposition": "held_missing_exact_instagram_caption",
+      "heldReason": "Instagram profile-link caption not approved"
+    }
+  ],
+  "duplicate_snapshots": [
+    {
+      "instanceId": "lc001_p002_ud_fb_release",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "inspectedPostCount": 3,
+      "matchingText": []
+    },
+    {
+      "instanceId": "lc001_p001_mr_fb_ack",
+      "channelId": "6a54734280cc80cdcaa9743b",
+      "inspectedPostCount": 6,
+      "matchingText": []
+    }
+  ],
+  "summary": {
+    "created_buffer_draft": 2,
+    "preserved_existing": 0,
+    "held": 23,
+    "scheduled_or_published": 0
+  },
+  "no_mutation_confirmations": {
+    "scheduled": false,
+    "published": false,
+    "creative_modified": false,
+    "copy_rewritten": false,
+    "credentials_exposed": false
+  }
+}

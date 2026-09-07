@@ -1,0 +1,196 @@
+{
+  "captured_at": "2026-07-14T22:24:17.227Z",
+  "scope": "current supabase/migrations exact hash and filename matching only",
+  "results": [
+    {
+      "version": "20260702125802",
+      "name": "make_undrifted_launch_edition_publication_cover",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "6afb9202aa46bd1bcd8a4c3f0c26f1120898791c9f904cf1c1317bd497582687",
+      "current_exact": [
+        "supabase/migrations/202607010007_make_undrifted_launch_edition_publication_cover.sql"
+      ],
+      "current_name_match": [
+        "supabase/migrations/202607010007_make_undrifted_launch_edition_publication_cover.sql"
+      ],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702130018",
+      "name": "seat_marble_surface_style_profiles_and_nested_car_acknowledgments",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "d3e73cb866dbe1cef6fc2f3dbd3eeba61ba664ede5792c68917a911f9fa16d31",
+      "current_exact": [],
+      "current_name_match": [
+        "supabase/migrations/202607020001_seat_marble_surface_style_profiles_and_nested_car_acknowledgments.sql"
+      ],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702143712",
+      "name": "decommission_registered_runtime_active_standing",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "ec4c05d7858a3577981ddd4f1ae61e6223bf8406110973b78c25e76c2bb9cff0",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702151435",
+      "name": "reseat_crystal_intro_video_and_headline",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "80a017da364092d9b3d432ce326f7f18e1a4f08d4aa044ff5b90f8410002537d",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702153744",
+      "name": "fix_year_2026_and_seat_motion_cdn_urls",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "15738b7067030b02aeed58d773259184cda9fb5014837356ae18e6296ac08411",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702154341",
+      "name": "fix_display_titles_for_document_title_pipeline",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "3ad97dc6e61170f6f7d76a4018ef0b2fc5a1797eb84c76d1c4fb820376e50d62",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702164214",
+      "name": "seat_threshold_plaque_context_lines",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "5f01f11c8727862ab53bfeef62c85503fdfcc43c4357cd6eb834ee74e3eaf6d9",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702174145",
+      "name": "seat_missing_cdn_urls_marble_orientation_and_obsidian",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "1a80fb0491d9813286e0f8f66dc08401834626320e2c16f029a1a4139db3adca",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702174248",
+      "name": "reseat_marble_orientation_surface_correct_bucket_and_path",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "1ef158848db42f4b0738641babfca4b9148a5dc84134e1bacf62e34966c566e0",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702174411",
+      "name": "reseat_cdn_urls_until_env_var_live",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "6650ef6fd61e893b3ebaa8dc48e87d863763b40ff3cd7242e8f38e44aba08a85",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702203335",
+      "name": "seat_crystal_obsidian_surface_assets_and_normalize_encounter_surfaces_to_r2",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "cb107f90adc79f959603d8f03ab09858c20382c92f5b7da87ce0c655bbd7b814",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702204120",
+      "name": "correct_surface_backgrounds_to_supabase_measures_registry_bucket",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "3c75a82e7726ea3cb30764d65dbc67253b17d5bb7abde236cfd9ba7c77b7d63c",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260702205631",
+      "name": "seat_marble_payment_and_resolution_surface_profiles_v1",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "5734f6bddebb1aad5e450f1565b9ea4e5c95e4d5deba7d457b9a78af89ebd11c",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260705184946",
+      "name": "seat_institutional_metadata_authority",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "90839982dbb3682ab29d6106b4e5583170e633f223d502e3dfa738a0966f82eb",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260705190138",
+      "name": "seat_encounter_style_authority_in_field_measures_db",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "4b2f221aea6adea66671a0838231ce929baa1ab16415ee349bd62e772e524d66",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260705190228",
+      "name": "correct_publication_dispatch_and_seat_paragraph_social_link",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "7cdd06e9165ba3fbfa87c180919937101ed5c211c1744a1195a5a54883a5229d",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260706061910",
+      "name": "seat_assessment_and_payment_notification_dispatch",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "2920b5b63a179ed31df839596b6df3cb97173909f65cb6b7f2d4a7006330ebfe",
+      "current_exact": [],
+      "current_name_match": [],
+      "current_version_match": []
+    },
+    {
+      "version": "20260709190108",
+      "name": "record_undrifted_issue001_buffer_manifest_export_standing_v1",
+      "created_by": "contribute2c3communitypartners@gmail.com",
+      "statement_count": 1,
+      "sha256": "e8c648885ce88d7a4b1038174207891d7b5ed5c92f9f72e2e4d83cbfe22c6523",
+      "current_exact": [
+        "supabase/migrations/20260709190000_record_undrifted_issue001_buffer_manifest_export_standing_v1.sql"
+      ],
+      "current_name_match": [
+        "supabase/migrations/20260709190000_record_undrifted_issue001_buffer_manifest_export_standing_v1.sql"
+      ],
+      "current_version_match": []
+    }
+  ]
+}

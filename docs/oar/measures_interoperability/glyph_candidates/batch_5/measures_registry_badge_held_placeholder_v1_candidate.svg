@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Held Placeholder badge: inactive / held / awaiting valid condition — not failed, not rejected -->
+  <!-- Open circle arc: the badge form that is not yet sealed — 30° gap at top position -->
+  <!-- Gap at top = the entry condition has not yet been met. Not an error. A held state. -->
+  <path d="M 57,23 A 28,28 0 1 1 43,23" stroke="currentColor" stroke-width="1"/>
+  <!-- Interior holding mark: neutral baseline — held at a defined level, not active, not void -->
+  <line x1="44" y1="50" x2="56" y2="50" stroke="currentColor" stroke-width="0.75" opacity="0.6"/>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Obsidian: assessment / drift exposure / reduction -->
+  <!-- Outer diamond: precision measurement perimeter -->
+  <polygon points="50,12 88,50 50,88 12,50" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Inner diamond: depth layer — the second assessment pass -->
+  <polygon points="50,28 72,50 50,72 28,50" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Vertical reduction axis: the axis of cutting-through -->
+  <line x1="50" y1="12" x2="50" y2="88" stroke="currentColor" stroke-width="0.75" opacity="0.35"/>
+  <!-- Center cross: the reduction point -->
+  <line x1="43" y1="50" x2="57" y2="50" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="50" y1="43" x2="50" y2="57" stroke="currentColor" stroke-width="1.5"/>
+</svg>

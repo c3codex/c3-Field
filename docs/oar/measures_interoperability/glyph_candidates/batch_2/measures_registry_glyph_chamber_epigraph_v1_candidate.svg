@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Epigraph: opening / signal threshold / orientation -->
+  <!-- Left pillar -->
+  <line x1="32" y1="75" x2="32" y2="45" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Right pillar -->
+  <line x1="68" y1="75" x2="68" y2="45" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Arch: counterclockwise from left to right pillar top, arcing upward -->
+  <path d="M 32,45 A 18,18 0 0 0 68,45" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Ground line: the threshold -->
+  <line x1="22" y1="75" x2="78" y2="75" stroke="currentColor" stroke-width="1.5"/>
+</svg>

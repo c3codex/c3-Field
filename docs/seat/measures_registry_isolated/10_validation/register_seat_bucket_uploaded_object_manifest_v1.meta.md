@@ -1,0 +1,646 @@
+---
+document_type: register_seat_bucket_uploaded_object_manifest
+authority_level: live_bucket_upload_evidence
+system_scope: measures_registry_register_seat_bucket_upload
+title: register_SEAT Bucket Uploaded Object Manifest v1
+status: completed_bucket_upload_confirmed
+version: v1
+operator: op044
+process_key: register_SEAT
+source_oar2: docs/seat/measures_registry_isolated/09_oar/oar2_upload_actual_register_seat_manifest_contents_to_approved_bucket_before_live_db_content_registration_v1.meta.md
+---
+
+# register_SEAT Bucket Uploaded Object Manifest v1
+
+standing:
+  process_key: register_SEAT
+  canonical_manifest_count: 46
+  bucket_name: measures-seed
+  provider: supabase_storage
+  bucket_policy: private
+  retrieval_model: signed_url
+  upload_prefix: measures_registry/seat/register_SEAT/v1/
+  public_exposure_allowed: false
+  target_prefix_collision_count_pre_upload: 0
+  files_uploaded_or_confirmed: 46
+  files_failed: 0
+  all_uploaded_objects_checksum_confirmed_or_source_checksum_preserved: true
+  all_uploaded_objects_signed_url_verified: true
+  final_prefix_object_count: 46
+  bucket_upload_performed: true
+  bucket_overwrite_performed: false
+  bucket_move_performed: false
+  bucket_delete_performed: false
+  live_DB_content_registration_performed: false
+  MAP_payment_migration_performed: false
+  authority_created: false
+
+object_rows:
+  - manifest_row_number: 1
+    source_path: docs/seat/measures_registry_isolated/01_records/canonical_undrifted_lapis_paragraph_publication_path_transfer_payload_v1.meta.md
+    relative_path: 01_records/canonical_undrifted_lapis_paragraph_publication_path_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/canonical_undrifted_lapis_paragraph_publication_path_transfer_payload_v1.meta.md
+    file_size_bytes: 2170
+    sha256_checksum_source: 864E11190E5BCCF16F66B3EB879E690BED92F65DD141369D600A894ED85264CF
+    sha256_checksum_uploaded_or_metadata: 864E11190E5BCCF16F66B3EB879E690BED92F65DD141369D600A894ED85264CF
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 2
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_carryover_state_rule_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_carryover_state_rule_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_carryover_state_rule_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1849
+    sha256_checksum_source: F6D84BA4EBE89721B2AC92CDC1574386A5C8BA2589BFF0DA9125B0F0014ACFC0
+    sha256_checksum_uploaded_or_metadata: F6D84BA4EBE89721B2AC92CDC1574386A5C8BA2589BFF0DA9125B0F0014ACFC0
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 3
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_carryover_surface_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_carryover_surface_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_carryover_surface_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1831
+    sha256_checksum_source: 3E58B6696F57B064A7F3A3486EB0D1902DF11D0E34149B76F5E16C96CD802593
+    sha256_checksum_uploaded_or_metadata: 3E58B6696F57B064A7F3A3486EB0D1902DF11D0E34149B76F5E16C96CD802593
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 4
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_contact_capture_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_contact_capture_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_contact_capture_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1870
+    sha256_checksum_source: 3E700540F798813E41A0F200909CC3404A6DDD6C2E5E8DC3C3EF70D536A27603
+    sha256_checksum_uploaded_or_metadata: 3E700540F798813E41A0F200909CC3404A6DDD6C2E5E8DC3C3EF70D536A27603
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 5
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_logic_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_logic_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_logic_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1751
+    sha256_checksum_source: 5C2DB77BAFA0A7A07F0BE6718FB670630C6763A5D23E97CF5006299201A5D46F
+    sha256_checksum_uploaded_or_metadata: 5C2DB77BAFA0A7A07F0BE6718FB670630C6763A5D23E97CF5006299201A5D46F
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 6
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_orientation_media_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_orientation_media_map_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_orientation_media_map_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1855
+    sha256_checksum_source: 0E0F442BC42A5576D1128264027CE7252A1C73EBC726625A330A445ECD1E0782
+    sha256_checksum_uploaded_or_metadata: 0E0F442BC42A5576D1128264027CE7252A1C73EBC726625A330A445ECD1E0782
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 7
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_assessment_orientation_surface_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_assessment_orientation_surface_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_assessment_orientation_surface_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1843
+    sha256_checksum_source: 08B5D11C33975384B39BE3525E9D940F6055F72EEC9A6B028005FCAD7524AEA0
+    sha256_checksum_uploaded_or_metadata: 08B5D11C33975384B39BE3525E9D940F6055F72EEC9A6B028005FCAD7524AEA0
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 8
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_c2_route_logic_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_c2_route_logic_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_c2_route_logic_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1739
+    sha256_checksum_source: B590311C695B875D560B71D768D994851CC1B882FD7E1179E3FF77E6FFBCC36E
+    sha256_checksum_uploaded_or_metadata: B590311C695B875D560B71D768D994851CC1B882FD7E1179E3FF77E6FFBCC36E
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 9
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_contact_capture_email_sendout_rules_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_contact_capture_email_sendout_rules_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_contact_capture_email_sendout_rules_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1882
+    sha256_checksum_source: B5863BE59A5CE7CE8B3BFA8A31A19EB86855FA23B3B3218E307EC94ECF4FE76F
+    sha256_checksum_uploaded_or_metadata: B5863BE59A5CE7CE8B3BFA8A31A19EB86855FA23B3B3218E307EC94ECF4FE76F
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 10
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_contact_capture_terminology_boundary_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_contact_capture_terminology_boundary_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_contact_capture_terminology_boundary_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1930
+    sha256_checksum_source: 6AABEEA7C61A81BB6E227583334AE0483350659B992582F02A669527B8A80F28
+    sha256_checksum_uploaded_or_metadata: 6AABEEA7C61A81BB6E227583334AE0483350659B992582F02A669527B8A80F28
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 11
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_contact_permission_scope_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_contact_permission_scope_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_contact_permission_scope_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1799
+    sha256_checksum_source: A7EC7D6BD2E6C72ECC9C3961918241B17C1A0C9E52069909FD823287521D31E9
+    sha256_checksum_uploaded_or_metadata: A7EC7D6BD2E6C72ECC9C3961918241B17C1A0C9E52069909FD823287521D31E9
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 12
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_content_records_requirements_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_content_records_requirements_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_content_records_requirements_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1823
+    sha256_checksum_source: FF40EC0513D1E05D00E30F211078DCBD46EBD52A323A71D3B07B8A57927B6CCC
+    sha256_checksum_uploaded_or_metadata: FF40EC0513D1E05D00E30F211078DCBD46EBD52A323A71D3B07B8A57927B6CCC
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 13
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_dependency_state_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_dependency_state_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_dependency_state_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1751
+    sha256_checksum_source: 7094B3328AD64146BF9B8F031C89894990716119A64B7A48AAEA18E10B3F9C45
+    sha256_checksum_uploaded_or_metadata: 7094B3328AD64146BF9B8F031C89894990716119A64B7A48AAEA18E10B3F9C45
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 14
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_email_dispatch_requirements_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_email_dispatch_requirements_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_email_dispatch_requirements_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1817
+    sha256_checksum_source: 86C6D14DFDE1B17821B481F3B682BDB1717E7D797B135C5A5ADD6CE9EB91488A
+    sha256_checksum_uploaded_or_metadata: 86C6D14DFDE1B17821B481F3B682BDB1717E7D797B135C5A5ADD6CE9EB91488A
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 15
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_eyebrow_records_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_eyebrow_records_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_eyebrow_records_transfer_payload_v1.meta.md
+    file_size_bytes: 1703
+    sha256_checksum_source: C80CBE5BFAD724D6C22CFE2C283286E92214B34B43867B4B18CC75043F9B847E
+    sha256_checksum_uploaded_or_metadata: C80CBE5BFAD724D6C22CFE2C283286E92214B34B43867B4B18CC75043F9B847E
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 16
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_launch_landing_pages_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_launch_landing_pages_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_launch_landing_pages_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1793
+    sha256_checksum_source: 07CFC24496CA71641FEFB2CAEBBAF3EB6C6921BDFC0CA542FDEFFE5D0F739464
+    sha256_checksum_uploaded_or_metadata: 07CFC24496CA71641FEFB2CAEBBAF3EB6C6921BDFC0CA542FDEFFE5D0F739464
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 17
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_launch_style_profile_set_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_launch_style_profile_set_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_launch_style_profile_set_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1817
+    sha256_checksum_source: 363F926A58D84B7430515332FCFEFA284E16D291A7FF082E095F04D0E93C146E
+    sha256_checksum_uploaded_or_metadata: 363F926A58D84B7430515332FCFEFA284E16D291A7FF082E095F04D0E93C146E
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 18
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_launch_surface_order_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_launch_surface_order_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_launch_surface_order_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1775
+    sha256_checksum_source: 8CE7D9F849EC059B9619E1DB387655C06FFDC5F3DF1C1C02E0769B15EC171EBB
+    sha256_checksum_uploaded_or_metadata: 8CE7D9F849EC059B9619E1DB387655C06FFDC5F3DF1C1C02E0769B15EC171EBB
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 19
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_c3_7s_disclosure_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_c3_7s_disclosure_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_c3_7s_disclosure_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1801
+    sha256_checksum_source: 21FBDF0A06631B7AB2C3A8FF0F1D184C9FAC3E49C85BDE1D73EE60EBDDEF3F7A
+    sha256_checksum_uploaded_or_metadata: 21FBDF0A06631B7AB2C3A8FF0F1D184C9FAC3E49C85BDE1D73EE60EBDDEF3F7A
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 20
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_dynamic_fields_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_dynamic_fields_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_dynamic_fields_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1897
+    sha256_checksum_source: 57E32D3672F2EC947FE47841D701B3932EF93D4C8000C0D7AD5791589261C079
+    sha256_checksum_uploaded_or_metadata: 57E32D3672F2EC947FE47841D701B3932EF93D4C8000C0D7AD5791589261C079
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 21
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_footer_disclosure_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_footer_disclosure_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_footer_disclosure_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1915
+    sha256_checksum_source: 2DC8A302384D340CC55715B69859900C69848600BF214AA20FDCCC721EF54C38
+    sha256_checksum_uploaded_or_metadata: 2DC8A302384D340CC55715B69859900C69848600BF214AA20FDCCC721EF54C38
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 22
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_layout_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_layout_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_layout_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1849
+    sha256_checksum_source: F7DF68B63F00C6FADCB4706344D64861E82FE24B09AFD883BC327FE618868166
+    sha256_checksum_uploaded_or_metadata: F7DF68B63F00C6FADCB4706344D64861E82FE24B09AFD883BC327FE618868166
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 23
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_media_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_media_map_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_media_map_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1867
+    sha256_checksum_source: CB8AC6F2B828A0B6828FFB844F515D5F5BD00146342509B6DC6E1134BF83DE5B
+    sha256_checksum_uploaded_or_metadata: CB8AC6F2B828A0B6828FFB844F515D5F5BD00146342509B6DC6E1134BF83DE5B
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 24
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_marble_map_payment_scope_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_marble_map_payment_scope_style_profile_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_marble_map_payment_scope_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1891
+    sha256_checksum_source: 0AF18CC5C10830A05C460D9EAEDDC06747A8BFCC4B008785DAFFA8650217FCF3
+    sha256_checksum_uploaded_or_metadata: 0AF18CC5C10830A05C460D9EAEDDC06747A8BFCC4B008785DAFFA8650217FCF3
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 25
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_media_mapping_requirements_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_media_mapping_requirements_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_media_mapping_requirements_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1811
+    sha256_checksum_source: 5954BC06BBB22A287BBAD57FC0CD49AA5A400647DE4931875157A4BEC7DE7DEB
+    sha256_checksum_uploaded_or_metadata: 5954BC06BBB22A287BBAD57FC0CD49AA5A400647DE4931875157A4BEC7DE7DEB
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 26
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_contact_capture_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_contact_capture_style_profile_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_contact_capture_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1957
+    sha256_checksum_source: 48E575A09C6442ACF033B86626075147DCC31910738B57EBA0D71E424D6526E0
+    sha256_checksum_uploaded_or_metadata: 48E575A09C6442ACF033B86626075147DCC31910738B57EBA0D71E424D6526E0
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 27
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_landing_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_landing_style_profile_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_landing_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1909
+    sha256_checksum_source: 2E33C1A8775146349F79D8EC682ABE2D2A7836779CC1B19027CB32A650F73CB4
+    sha256_checksum_uploaded_or_metadata: 2E33C1A8775146349F79D8EC682ABE2D2A7836779CC1B19027CB32A650F73CB4
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 28
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_media_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_media_map_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_media_map_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1837
+    sha256_checksum_source: 193077B28A5A6720B817FD57AB9192AD4CCAD7278BEA6F15E7142D407587B20C
+    sha256_checksum_uploaded_or_metadata: 193077B28A5A6720B817FD57AB9192AD4CCAD7278BEA6F15E7142D407587B20C
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 29
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_question_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_question_style_profile_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_question_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1915
+    sha256_checksum_source: AE43120D5CF8DB1DD84D8CFBF235388CE3B9690D8517D09F8E16939AB369539E
+    sha256_checksum_uploaded_or_metadata: AE43120D5CF8DB1DD84D8CFBF235388CE3B9690D8517D09F8E16939AB369539E
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 30
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_style_profile_set_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_style_profile_set_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_style_profile_set_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1885
+    sha256_checksum_source: 67049A6449E40B0F3FE8DE14FAE816F76E07426FFA5394FDF66617813F6CA46D
+    sha256_checksum_uploaded_or_metadata: 67049A6449E40B0F3FE8DE14FAE816F76E07426FFA5394FDF66617813F6CA46D
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 31
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_obsidian_assessment_surface_sequence_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_obsidian_assessment_surface_sequence_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_obsidian_assessment_surface_sequence_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1879
+    sha256_checksum_source: CDA93B3C930934D5C912BC8A93919D38A5C75E05177A759892FDE738D0914CD8
+    sha256_checksum_uploaded_or_metadata: CDA93B3C930934D5C912BC8A93919D38A5C75E05177A759892FDE738D0914CD8
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 32
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_release_state_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_release_state_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_release_state_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1733
+    sha256_checksum_source: A9DA411B0BBBF3E8EE91F33C9DEB1FC678C53FACCF81644C3AE21E380A7E4963
+    sha256_checksum_uploaded_or_metadata: A9DA411B0BBBF3E8EE91F33C9DEB1FC678C53FACCF81644C3AE21E380A7E4963
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 33
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_seo_metadata_records_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_seo_metadata_records_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_seo_metadata_records_transfer_payload_v1.meta.md
+    file_size_bytes: 1751
+    sha256_checksum_source: 3F687AC8CCA875D420A1ED96E7613C12C9629087AADD2DD519D7F22D64A62335
+    sha256_checksum_uploaded_or_metadata: 3F687AC8CCA875D420A1ED96E7613C12C9629087AADD2DD519D7F22D64A62335
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 34
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_set_ready_directory_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_set_ready_directory_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_set_ready_directory_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1769
+    sha256_checksum_source: 1D903DC9820705654FA03E2BC1821F07A9D2D00C2F004386578F3D7B63EA8E40
+    sha256_checksum_uploaded_or_metadata: 1D903DC9820705654FA03E2BC1821F07A9D2D00C2F004386578F3D7B63EA8E40
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 35
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_social_campaign_asset_route_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_social_campaign_asset_route_map_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_social_campaign_asset_route_map_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1849
+    sha256_checksum_source: 9201D8012CEB51264FA6C3B6CE8D075E582BD2F54D1ADC68CB2C05F7E247D0D3
+    sha256_checksum_uploaded_or_metadata: 9201D8012CEB51264FA6C3B6CE8D075E582BD2F54D1ADC68CB2C05F7E247D0D3
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 36
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_social_campaign_copy_cadence_and_claim_boundary_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_social_campaign_copy_cadence_and_claim_boundary_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_social_campaign_copy_cadence_and_claim_boundary_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1945
+    sha256_checksum_source: 361E210B0A7FB9DD64F731AD7A997D3A82C617E8925B222897D9D15B1BE417DB
+    sha256_checksum_uploaded_or_metadata: 361E210B0A7FB9DD64F731AD7A997D3A82C617E8925B222897D9D15B1BE417DB
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 37
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_social_campaign_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_social_campaign_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_social_campaign_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1763
+    sha256_checksum_source: 66DA68D72900660F7B49A90D9C1D97D33F8E1948682FBE4E2DF2E06F6A25A3C7
+    sha256_checksum_uploaded_or_metadata: 66DA68D72900660F7B49A90D9C1D97D33F8E1948682FBE4E2DF2E06F6A25A3C7
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 38
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_social_media_account_presence_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_social_media_account_presence_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_social_media_account_presence_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1874
+    sha256_checksum_source: 4319304F64FB85F73BFB5AB6181FB6F689EE6DCC78D9CC88BA0AC6A9672DC3C3
+    sha256_checksum_uploaded_or_metadata: 4319304F64FB85F73BFB5AB6181FB6F689EE6DCC78D9CC88BA0AC6A9672DC3C3
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 39
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_survey_intake_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_survey_intake_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_survey_intake_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1733
+    sha256_checksum_source: BEB648D6CB21AA89DE21EFAF5FD3E699BBDDC4F4B3CE719CA425EE50A0669D5F
+    sha256_checksum_uploaded_or_metadata: BEB648D6CB21AA89DE21EFAF5FD3E699BBDDC4F4B3CE719CA425EE50A0669D5F
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 40
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_terminology_replacement_map_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_terminology_replacement_map_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_terminology_replacement_map_transfer_payload_v1.meta.md
+    file_size_bytes: 1775
+    sha256_checksum_source: 6AC9A3057CC63AD59D2727B5F88F5BC4CBF059D5F15BB0A6E5FECA5D8A2A044B
+    sha256_checksum_uploaded_or_metadata: 6AC9A3057CC63AD59D2727B5F88F5BC4CBF059D5F15BB0A6E5FECA5D8A2A044B
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 41
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_article_and_paragraph_integration_record_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_article_and_paragraph_integration_record_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_article_and_paragraph_integration_record_transfer_payload_v1.meta.md
+    file_size_bytes: 1931
+    sha256_checksum_source: 4BCFC3520A5C243B019F4FDA373679196447E588EDC66739F1D7B6488D2BD025
+    sha256_checksum_uploaded_or_metadata: 4BCFC3520A5C243B019F4FDA373679196447E588EDC66739F1D7B6488D2BD025
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 42
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_9x16_style_profile_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_9x16_style_profile_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_9x16_style_profile_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1918
+    sha256_checksum_source: 021AC8F7D537EF02AE59CA8DD49B00C1DF0D4549E6F173DDA4BD533AFA8C3D59
+    sha256_checksum_uploaded_or_metadata: 021AC8F7D537EF02AE59CA8DD49B00C1DF0D4549E6F173DDA4BD533AFA8C3D59
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 43
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_icon_registry_usage_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_icon_registry_usage_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_icon_registry_usage_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1924
+    sha256_checksum_source: 0B6C1B7D8336C80D24F8BEB91D90DAE0C9A79354782CD6A3C99E9555B8FE98C5
+    sha256_checksum_uploaded_or_metadata: 0B6C1B7D8336C80D24F8BEB91D90DAE0C9A79354782CD6A3C99E9555B8FE98C5
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 44
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_leadership_contact_capture_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_leadership_contact_capture_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_leadership_contact_capture_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1966
+    sha256_checksum_source: 160EE1229F6C5D6CFCE4F3882566D09BDA4610E0AD37B8C169C3EBECAAF10BF5
+    sha256_checksum_uploaded_or_metadata: 160EE1229F6C5D6CFCE4F3882566D09BDA4610E0AD37B8C169C3EBECAAF10BF5
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 45
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_media_map_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_media_map_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_media_map_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1864
+    sha256_checksum_source: 187397FDFECA1A18DDE9CA6A4A7145F26629E3725504BFE4F8070E726016EB27
+    sha256_checksum_uploaded_or_metadata: 187397FDFECA1A18DDE9CA6A4A7145F26629E3725504BFE4F8070E726016EB27
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+  - manifest_row_number: 46
+    source_path: docs/seat/measures_registry_isolated/01_records/expanded_undrifted_lapis_video_to_headline_behavior_record_v1_transfer_payload_v1.meta.md
+    relative_path: 01_records/expanded_undrifted_lapis_video_to_headline_behavior_record_v1_transfer_payload_v1.meta.md
+    bucket_name: measures-seed
+    bucket_object_key: measures_registry/seat/register_SEAT/v1/01_records/expanded_undrifted_lapis_video_to_headline_behavior_record_v1_transfer_payload_v1.meta.md
+    file_size_bytes: 1966
+    sha256_checksum_source: 616065521F00D03D668AB8C53192D650B5E9C2CC7713D70F671D2C0F49681D58
+    sha256_checksum_uploaded_or_metadata: 616065521F00D03D668AB8C53192D650B5E9C2CC7713D70F671D2C0F49681D58
+    content_type: text/markdown
+    upload_status: uploaded
+    signed_url_generated: true
+    signed_url_retrieval_verified: true
+    public_url_used: false
+
+boundary:
+  signed_urls_recorded_in_public_copy: false
+  signed_urls_recorded_in_long_lived_DB_content_records: false
+  excluded_files_uploaded: 0
+  objects_uploaded_outside_approved_prefix: 0
+  live_DB_content_registration_performed: false
+  runtime_mutation_performed: false
+  payment_activation_performed: false
+  authority_created: false

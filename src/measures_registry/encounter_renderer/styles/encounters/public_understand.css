@@ -1,0 +1,26 @@
+/* OAR2 "Inventory and Reduce Legacy CSS After Render Authority Seating" — this file
+   previously held ~370 lines of rules scoped to `[data-public-path="understand_environment"]`
+   and `[data-public-path="crystal_chamber"]`, plus bare `.registry-crystal-chamber*`,
+   `.registry-crystal-publication*`, `.registry-structure-passage*`, `.registry-encounter-entry`,
+   and `.registry-public-understand-*` selectors. Verified dead: `data-public-path` is never set
+   by any component in src/ (grep across the full measures_registry tree returns zero matches
+   outside CSS files), and none of those class names are referenced by any live .tsx file —
+   this was an earlier, fully-superseded "public understand environment" page implementation.
+   Only `.registry-public-pathway-list` (used live by PublicAssessmentResult.tsx on
+   marble_chamber_results) is kept. */
+
+.measures-registry-runtime .registry-public-pathway-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.8rem 0 0;
+}
+
+.measures-registry-runtime .registry-public-pathway-list > li {
+  border: 1px solid var(--registry-brand-border);
+  color: var(--registry-brand-secondary-text);
+  padding: 0.35rem 0.75rem;
+  font-size: clamp(0.72rem, 1vw, 0.82rem);
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- 3x33 distribution glyph: governed three-channel distribution structure -->
+  <!-- Governing authority bar: extends beyond outer channels — governing reserve -->
+  <line x1="22" y1="28" x2="78" y2="28" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Three equal distribution channels: equal spacing expresses 33/33/33 -->
+  <line x1="33" y1="28" x2="33" y2="76" stroke="currentColor" stroke-width="1"/>
+  <line x1="50" y1="28" x2="50" y2="76" stroke="currentColor" stroke-width="1"/>
+  <line x1="67" y1="28" x2="67" y2="76" stroke="currentColor" stroke-width="1"/>
+</svg>

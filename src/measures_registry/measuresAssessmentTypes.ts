@@ -1,4 +1,4 @@
-export type EvalStep = "src_capture" | "diagnostic" | "resolving"
+export type EvalStep = "src_capture" | "diagnostic" | "resolving" | "contact_capture"
 
 export type AssessmentMechanicOption = {
   value: string
@@ -10,6 +10,7 @@ export type AssessmentMechanicQuestion = {
   questionKey: string
   question: string
   contextLabel: string
+  contextStatement: string | null
   options: AssessmentMechanicOption[]
 }
 
@@ -24,6 +25,46 @@ export type AssessmentConditionTrace = {
   selected: string
   label: string
   condition_tags: string[]
+}
+
+export type AssessmentEvaluationV2Cell = {
+  cell_key: string
+  row_axis: "system" | "environment" | "change"
+  column_axis: "identify" | "govern" | "verify"
+  standing: "aligned" | "drifted" | "unverified" | "held"
+  evidence_question_keys: string[]
+  evidence_tags: string[]
+  finding: string
+  consequence: string
+  next_action: string
+}
+
+export type AssessmentEvaluationV2 = {
+  assessment_ref?: string
+  evaluation_id: string
+  capture_id?: string
+  matrix_version: string
+  evaluation_standing: string
+  evaluation_standing_key: string
+  reported_conditions?: string[]
+  matrix_cells: AssessmentEvaluationV2Cell[]
+  priority_cells: string[]
+  verification_limits: string[]
+  relational_exposures: string[]
+  system_consequences: string[]
+  map_scope: {
+    map_pathway: "foundational" | "optimization" | "remediation"
+    public_label: string
+    amount_usd: 333 | 777 | 999
+    standing: string
+  }
+  continuation?: {
+    surface: "map_the_environment"
+    label: "MAP the Environment"
+    next_encounter_key: "marble_chamber_orientation"
+    marble_order: string[]
+  }
+  six_touchpoint_chain?: string[]
 }
 
 export type EnvironmentalStandingReport = {
@@ -42,6 +83,7 @@ export type EnvironmentalStandingReport = {
     condition_tags: string[]
     standing_rule: string
   }
+  evaluation_v2?: AssessmentEvaluationV2
 }
 
 export type AssessmentEmailArtifact = {

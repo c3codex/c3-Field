@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- 3x33 distribution glyph rev1: governed 33/33/33 distribution structure within circuit boundary -->
+  <!-- Outer circle: governed circuit boundary — contextualizes the distribution structure -->
+  <circle cx="50" cy="50" r="28" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Inner governing header: single distribution authority from which three channels flow -->
+  <line x1="40" y1="34" x2="60" y2="34" stroke="currentColor" stroke-width="1"/>
+  <!-- Three equal distribution channels: 33/33/33 — equal spacing, equal weight, equal length -->
+  <line x1="40" y1="34" x2="40" y2="70" stroke="currentColor" stroke-width="1"/>
+  <line x1="50" y1="34" x2="50" y2="70" stroke="currentColor" stroke-width="1"/>
+  <line x1="60" y1="34" x2="60" y2="70" stroke="currentColor" stroke-width="1"/>
+  <!-- Governing reserve / completion trace: gentle arc connecting channel endpoints — channels complete into governed destination -->
+  <path d="M 40,70 Q 50,76 60,70" stroke="currentColor" stroke-width="0.75" opacity="0.6"/>
+</svg>

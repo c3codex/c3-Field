@@ -1,0 +1,138 @@
+{
+  "checkedAt": "2026-07-13T15:44:23.894Z",
+  "rawHtml": [
+    {
+      "route": "https://measuresregistry.com/undrifted",
+      "status": 200,
+      "finalUrl": "https://measuresregistry.com/undrifted/?audit=1783957455965",
+      "leaks": [],
+      "scriptCount": 1,
+      "cssCount": 1,
+      "previewMetaLeaks": [],
+      "structuredDataBlocks": 2,
+      "structuredDataLeaks": []
+    },
+    {
+      "route": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "status": 200,
+      "finalUrl": "https://measuresregistry.com/undrifted/field-findings-2026-w28/?audit=1783957456366",
+      "leaks": [],
+      "scriptCount": 1,
+      "cssCount": 1,
+      "previewMetaLeaks": [],
+      "structuredDataBlocks": 1,
+      "structuredDataLeaks": []
+    },
+    {
+      "route": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "status": 200,
+      "finalUrl": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems/?audit=1783957456454",
+      "leaks": [],
+      "scriptCount": 1,
+      "cssCount": 1,
+      "previewMetaLeaks": [],
+      "structuredDataBlocks": 1,
+      "structuredDataLeaks": []
+    }
+  ],
+  "hydrated": [
+    {
+      "route": "https://measuresregistry.com/undrifted",
+      "status": 200,
+      "h1": "AI ISN'T BROKEN. SYSTEMS ARE.",
+      "leaks": [],
+      "hasFieldPublicBody": false,
+      "hasResponseBody": false,
+      "issueLinks": {
+        "field": true,
+        "response": true
+      }
+    },
+    {
+      "route": "https://measuresregistry.com/undrifted/field-findings-2026-w28",
+      "status": 200,
+      "h1": "Field Findings 2026-W28",
+      "leaks": [],
+      "hasFieldPublicBody": true,
+      "hasResponseBody": false,
+      "issueLinks": {
+        "field": true,
+        "response": false
+      }
+    },
+    {
+      "route": "https://measuresregistry.com/undrifted/ai-agents-are-not-entering-empty-systems",
+      "status": 200,
+      "h1": "AI Agents Are Not Entering Empty Systems",
+      "leaks": [],
+      "hasFieldPublicBody": false,
+      "hasResponseBody": true,
+      "issueLinks": {
+        "field": true,
+        "response": true
+      }
+    }
+  ],
+  "assets": [
+    {
+      "url": "https://measuresregistry.com/assets/index-CfRF_fSm.js",
+      "status": 200,
+      "bytes": 488832,
+      "leaks": [],
+      "sourceMapRefs": []
+    },
+    {
+      "url": "https://measuresregistry.com/assets/index-DB6Va_9b.css",
+      "status": 200,
+      "bytes": 267205,
+      "leaks": [],
+      "sourceMapRefs": []
+    }
+  ],
+  "feeds": [
+    {
+      "url": "https://measuresregistry.com/feed.xml",
+      "status": 200,
+      "finalUrl": "https://measuresregistry.com/feed.xml?audit=1783957456676",
+      "leaks": [],
+      "bytes": 4568
+    },
+    {
+      "url": "https://measuresregistry.com/rss.xml",
+      "status": 200,
+      "finalUrl": "https://measuresregistry.com/rss.xml?audit=1783957456730",
+      "leaks": [],
+      "bytes": 4568
+    },
+    {
+      "url": "https://measuresregistry.com/atom.xml",
+      "status": 200,
+      "finalUrl": "https://measuresregistry.com/atom.xml?audit=1783957456779",
+      "leaks": [],
+      "bytes": 4568
+    },
+    {
+      "url": "https://measuresregistry.com/undrifted/feed.xml",
+      "status": 200,
+      "finalUrl": "https://measuresregistry.com/undrifted/feed.xml?audit=1783957456828",
+      "leaks": [],
+      "bytes": 4568
+    },
+    {
+      "url": "https://measuresregistry.com/sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://measuresregistry.com/sitemap.xml?audit=1783957456880",
+      "leaks": [],
+      "bytes": 925
+    }
+  ],
+  "publicApi": {
+    "available": true,
+    "status": 200,
+    "leaks": [],
+    "bytes": 3286,
+    "containsPublicDerivative": true,
+    "containsInternalPath": false,
+    "containsInternalChecksum": false
+  }
+}

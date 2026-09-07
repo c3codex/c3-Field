@@ -1,0 +1,108 @@
+{
+  "checkedAt": "2026-07-13T15:44:50.231Z",
+  "indicators": [
+    "field-findings-2026-w28",
+    "ai-agents-are-not-entering-empty-systems",
+    "Field Findings 2026-W28",
+    "AI Agents Are Not Entering Empty Systems",
+    "Launch Cycle 001"
+  ],
+  "endpoints": [
+    {
+      "identity": "Measures Registry",
+      "platform": "YouTube",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a54740a80cc80cdcaa976d9",
+      "resolved": true,
+      "accountName": "Measures Registry",
+      "workspace": "Measures Registry",
+      "displayName": "Measures Registry",
+      "disconnected": false,
+      "locked": false,
+      "openDraftScheduledErrorCount": 2,
+      "launchCycleMatches": []
+    },
+    {
+      "identity": "Measures Registry",
+      "platform": "Instagram",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "resolved": true,
+      "accountName": "Measures Registry",
+      "workspace": "Measures Registry",
+      "displayName": "measures_registry",
+      "disconnected": false,
+      "locked": false,
+      "openDraftScheduledErrorCount": 1,
+      "launchCycleMatches": []
+    },
+    {
+      "identity": "Measures Registry",
+      "platform": "X",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a23bff1c687a22dd467a0b3",
+      "resolved": true,
+      "accountName": "Measures Registry",
+      "workspace": "Measures Registry",
+      "displayName": "measures_c3",
+      "disconnected": false,
+      "locked": false,
+      "openDraftScheduledErrorCount": 0,
+      "launchCycleMatches": []
+    },
+    {
+      "identity": "Measures Registry",
+      "platform": "Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a54734280cc80cdcaa9743b",
+      "resolved": true,
+      "accountName": "undrifted.editor",
+      "workspace": "My Organization",
+      "displayName": "Measures Registry",
+      "disconnected": false,
+      "locked": false,
+      "openDraftScheduledErrorCount": 0,
+      "launchCycleMatches": []
+    },
+    {
+      "identity": "unDrifted",
+      "platform": "Facebook",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "resolved": true,
+      "accountName": "undrifted.editor",
+      "workspace": "My Organization",
+      "displayName": "UnDrifted",
+      "disconnected": false,
+      "locked": false,
+      "openDraftScheduledErrorCount": 0,
+      "launchCycleMatches": []
+    },
+    {
+      "identity": "unDrifted",
+      "platform": "X",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "resolved": true,
+      "accountName": "undrifted.editor",
+      "workspace": "My Organization",
+      "displayName": "unDrifted_c3",
+      "disconnected": false,
+      "locked": false,
+      "openDraftScheduledErrorCount": 0,
+      "launchCycleMatches": []
+    }
+  ],
+  "authorizedButNotConnected": [
+    {
+      "identity": "unDrifted",
+      "platform": "Instagram",
+      "standing": "no_connected_channel_found_in_authorized_workspaces"
+    },
+    {
+      "identity": "unDrifted",
+      "platform": "YouTube",
+      "standing": "no_connected_channel_found_in_authorized_workspaces"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "document_type": "launch_cycle_001_issue_identity_seating_evidence",
+  "source_oar2": "docs/oar/measures_registry/oar2_activate_undrifted_issue_01_and_complete_launch_cycle_001_distribution_v1.meta.md",
+  "executed_at": "2026-07-13T17:43:00.525Z",
+  "table": "public.measures_encounter_def",
+  "selector": {
+    "encounter_key": "undrifted"
+  },
+  "mutation_scope": [
+    "metadata.issue_record.issue_date",
+    "metadata.issue_record.source_oar2",
+    "updated_at"
+  ],
+  "before_issue_record": {
+    "edition": "Launch Edition",
+    "issue_key": "undrifted_issue_001_launch_edition",
+    "issue_date": "June 2026",
+    "source_oar2": "docs/oar/measures_registry/oar2_seat_canonical_undrifted_issue_001_publication_record_v1.meta.md",
+    "access_state": "visible",
+    "issue_number": "001",
+    "release_state": "released",
+    "surface_route": "/undrifted",
+    "publication_key": "undrifted",
+    "publication_type": "digital magazine",
+    "section_sequence": [
+      "cover_story",
+      "assessment_feature",
+      "agents_with_keys",
+      "fables_and_myths",
+      "role_call",
+      "next_issue"
+    ],
+    "publication_title": "unDrifted"
+  },
+  "after_issue_record": {
+    "edition": "Launch Edition",
+    "issue_key": "undrifted_issue_001_launch_edition",
+    "issue_date": "July 2026",
+    "source_oar2": "docs/oar/measures_registry/oar2_activate_undrifted_issue_01_and_complete_launch_cycle_001_distribution_v1.meta.md",
+    "access_state": "visible",
+    "issue_number": "001",
+    "release_state": "released",
+    "surface_route": "/undrifted",
+    "publication_key": "undrifted",
+    "publication_type": "digital magazine",
+    "section_sequence": [
+      "cover_story",
+      "assessment_feature",
+      "agents_with_keys",
+      "fables_and_myths",
+      "role_call",
+      "next_issue"
+    ],
+    "publication_title": "unDrifted"
+  },
+  "secrets_exposed": false
+}

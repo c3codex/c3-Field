@@ -1,0 +1,1784 @@
+/* unDrifted / lapis_chamber_encounter — launch edition publication cover */
+/* Scoped to [data-layout-contract="undrifted_publication"] */
+/* "Wired meets c3" — editorial, authoritative, collectible, launch edition */
+
+/* ── SHELL ───────────────────────────────────────────────────────────────── */
+
+/* Background/text reconnected to unDrifted's own canonical style_contract (obsidian-family,
+   dark_editorial) per OAR2 "Seat unDrifted Publication Synchronization and Launch-Ready
+   Encounter Projection" — previously fell through to the sitewide lapis material tokens
+   (--registry-brand-field/--registry-brand-primary-text), which is why the page rendered in
+   the generic lapis navy rather than unDrifted's own specified palette. Fallbacks below match
+   measures_publication_registry.metadata.style_contract.tokens exactly, for when the DB value
+   is unavailable (e.g. resolver still loading). */
+.measures-registry-runtime[data-layout-contract="undrifted_publication"] {
+  background: var(--undrifted-bg, #030608);
+  color: var(--undrifted-text, #e8edf2);
+  min-height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.undrifted-article-shell {
+  padding-top: clamp(1.5rem, 3vw, 3rem);
+}
+
+.undrifted-article-return {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--undrifted-muted, #9fb1c0);
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.undrifted-article-return a {
+  color: var(--undrifted-cyan, #59c7ff);
+  text-decoration: none;
+}
+
+.undrifted-article-header {
+  max-width: min(100%, 62rem);
+  margin: 0 auto clamp(2rem, 5vw, 4rem);
+}
+
+.undrifted-article-banner {
+  display: block;
+  width: 100%;
+  max-height: min(58vh, 34rem);
+  object-fit: cover;
+  border: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+}
+
+.undrifted-article-kicker {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--undrifted-cyan, #59c7ff);
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.undrifted-article-header h1 {
+  margin: 0.65rem 0 0;
+  max-width: 17ch;
+  color: var(--undrifted-text, #e8edf2);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.4rem, 8vw, 6.5rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.undrifted-article-subtitle {
+  max-width: 46rem;
+  margin: 1rem 0 0;
+  color: var(--undrifted-text, #e8edf2);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  line-height: 1.5;
+}
+
+.undrifted-article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+  margin-top: 1rem;
+  color: var(--undrifted-muted, #9fb1c0);
+  font-size: 0.9rem;
+}
+
+.undrifted-article-dependency {
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  border-left: 2px solid var(--undrifted-cyan, #59c7ff);
+  background: color-mix(in srgb, var(--undrifted-blue, #1f8cff) 7%, transparent);
+  color: var(--undrifted-text, #e8edf2);
+}
+
+.undrifted-article-dependency a,
+.undrifted-article-body a {
+  color: var(--undrifted-cyan, #59c7ff);
+}
+
+.undrifted-article-body {
+  max-width: min(100%, 48rem);
+  margin: 0 auto;
+  color: var(--undrifted-text, #e8edf2);
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.75;
+}
+
+.undrifted-article-body h1 {
+  margin: 0 0 1.5rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.undrifted-article-body h2,
+.undrifted-article-body h3 {
+  margin: 2.5rem 0 0.8rem;
+  color: var(--undrifted-text, #e8edf2);
+  letter-spacing: 0;
+}
+
+.undrifted-article-body blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.2rem;
+  border-left: 2px solid var(--undrifted-line-strong, rgba(70, 145, 255, 0.55));
+  color: var(--undrifted-text, #e8edf2);
+  font-size: 1.08em;
+}
+
+.undrifted-article-body li + li {
+  margin-top: 0.35rem;
+}
+
+.undrifted-article-body hr {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+}
+
+.undrifted-article-evidence {
+  max-width: min(100%, 48rem);
+  margin: clamp(2.5rem, 6vw, 5rem) auto 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+  color: var(--undrifted-muted, #9fb1c0);
+  font-size: 0.78rem;
+}
+
+.undrifted-article-evidence code {
+  overflow-wrap: anywhere;
+  color: var(--undrifted-text, #e8edf2);
+}
+
+.undrifted-launch-cycle {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  padding: clamp(1.5rem, 4vw, 3rem) 0;
+  border-top: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+  border-bottom: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+}
+
+.undrifted-launch-cycle-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.undrifted-launch-cycle-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+  background: rgba(237, 242, 248, 0.035);
+}
+
+.undrifted-launch-cycle-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.undrifted-launch-cycle-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.undrifted-launch-cycle-card h3 {
+  margin: 0;
+  color: var(--undrifted-text, #e8edf2);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.45rem, 2.5vw, 2.4rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.undrifted-launch-cycle-card p {
+  margin: 0;
+  color: var(--undrifted-muted, #9fb1c0);
+  line-height: 1.55;
+}
+
+.undrifted-launch-cycle-subtitle {
+  color: var(--undrifted-text, #e8edf2) !important;
+}
+
+.undrifted-launch-cycle-card a {
+  margin-top: auto;
+  color: var(--undrifted-cyan, #59c7ff);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.undrifted-shell {
+  display: flex;
+  flex-direction: column;
+  width: min(var(--registry-content-max-width, 70rem), 100%);
+  margin: 0 auto;
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(1rem, 2vw, 1.5rem));
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3rem));
+  box-sizing: border-box;
+}
+
+/* Desktop viewport usage — from Publication Encounter Profile
+   (undrifted_publication_encounter_profile_v1.viewport_contract), per OAR2 "Finalize unDrifted
+   Launch Projection and Encounter Profile" Routed §4 "use more of desktop viewport". Scoped to
+   the profile's own desktop_breakpoint and only overrides width — mobile/tablet keep the
+   standard readable measure above, preserving mobile readability per responsive_rules. */
+@media (min-width: 1024px) {
+  .measures-registry-runtime[data-layout-contract="undrifted_publication"] .undrifted-shell {
+    width: var(--undrifted-desktop-max-width, min(94vw, 96rem));
+  }
+}
+
+/* ── MASTHEAD ────────────────────────────────────────────────────────────── */
+
+.undrifted-masthead {
+  width: 100%;
+}
+
+/* Masthead image — full editorial banner */
+.undrifted-banner {
+  display: block;
+  width: 100%;
+  max-height: clamp(8rem, 22vw, 18rem);
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Nameplate fallback — when no banner image */
+.undrifted-masthead-nameplate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: clamp(0.75rem, 2vw, 1.25rem) 0;
+}
+
+.undrifted-masthead-logo {
+  max-height: clamp(2.5rem, 6vw, 5rem);
+  width: auto;
+  display: block;
+}
+
+/* Large editorial wordmark — OAR2 "Resolve Final Launch Blockers" enlarged this so the
+   masthead reads as a cover, not a page header. */
+.undrifted-wordmark {
+  display: block;
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(4rem, 11vw, 9rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  font-style: italic;
+}
+
+.undrifted-wordmark span {
+  font-weight: 300;
+  opacity: 0.7;
+}
+
+/* Cover slogan — seated verbatim per OAR2 "Resolve Final Launch Blockers" ROUTED §2.
+   Rendered as its own line below the masthead (image banner or text wordmark alike) so
+   it always appears regardless of which masthead variant is active. */
+.undrifted-masthead-slogan {
+  margin: 0.6rem 0 0;
+  font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+  font-weight: 700;
+  color: var(--undrifted-text, #e8edf2);
+  max-width: 34rem;
+  letter-spacing: 0.12em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.undrifted-masthead-slogan span {
+  display: block;
+}
+
+.undrifted-authority-gap {
+  color: rgba(255, 195, 120, 0.78);
+  font-size: clamp(0.72rem, 0.95vw, 0.8rem);
+  letter-spacing: 0.08em;
+}
+
+.undrifted-masthead-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.undrifted-masthead-principles {
+  display: block;
+  font-size: clamp(0.6rem, 0.9vw, 0.7rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.45);
+}
+
+.undrifted-masthead-descriptor {
+  display: block;
+  font-size: clamp(0.7rem, 1vw, 0.8rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(237, 242, 248, 0.55);
+  font-style: italic;
+}
+
+/* ── MASTHEAD RULE ───────────────────────────────────────────────────────── */
+
+.undrifted-masthead-rule {
+  border: none;
+  border-top: 1px solid rgba(237, 242, 248, 0.14);
+  margin: clamp(0.6rem, 1.5vw, 1rem) 0 0;
+}
+
+/* ── ISSUE RAIL ──────────────────────────────────────────────────────────── */
+
+.undrifted-issue-rail {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem clamp(1rem, 3vw, 2rem);
+  padding: clamp(0.5rem, 1vw, 0.7rem) 0;
+  border-bottom: 1px solid rgba(237, 242, 248, 0.08);
+  margin-bottom: clamp(1.5rem, 3.5vw, 2.5rem);
+}
+
+/* Masthead + issue identity unification — from Publication Encounter Profile
+   masthead_behavior. Ties the masthead rule and issue rail together with the canonical
+   accent line color instead of a generic hairline, and tightens the gap between them, so
+   the banner and "ISSUE 001 / JUNE 2026 / LAUNCH EDITION" rail read as one cover unit
+   rather than a banner sitting above an unrelated info strip. */
+.measures-registry-runtime[data-masthead-behavior="unified_with_issue_rail"] .undrifted-masthead-rule {
+  border-top-color: var(--undrifted-line-strong, rgba(70, 145, 255, 0.55));
+}
+
+.measures-registry-runtime[data-masthead-behavior="unified_with_issue_rail"] .undrifted-issue-rail {
+  margin-top: -0.15rem;
+  border-bottom-color: var(--undrifted-line, rgba(180, 210, 255, 0.18));
+}
+
+/* ── ISSUE PAGE MODEL (Editor's Letter teaser, Contents, held-state chrome) ────────────── */
+/* Seated by oar2_seat_undrifted_issue_page_model_and_launch_layout_sequence_v1, rendered by
+   oar2_render_issue001_through_issue_page_model_v1. Deliberately quiet/text-first — these are
+   navigational/front-matter sections, not competing cover features. */
+
+.undrifted-editors-letter {
+  padding: clamp(0.75rem, 2vw, 1.25rem) 0;
+  border-bottom: 1px solid rgba(237, 242, 248, 0.08);
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+.undrifted-editors-letter h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 600;
+  color: var(--undrifted-text, #e8edf2);
+  margin: 0 0 0.35rem;
+}
+
+.undrifted-editors-letter-subtitle {
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  color: rgba(237, 242, 248, 0.58);
+  margin: 0 0 0.5rem;
+}
+
+.undrifted-contents {
+  padding: clamp(0.75rem, 2vw, 1.25rem) 0;
+  border-bottom: 1px solid rgba(237, 242, 248, 0.08);
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+.undrifted-contents h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 600;
+  color: var(--undrifted-text, #e8edf2);
+  margin: 0 0 0.5rem;
+}
+
+.undrifted-contents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.undrifted-contents-list li {
+  font-size: clamp(0.84rem, 1.1vw, 0.94rem);
+  color: rgba(237, 242, 248, 0.72);
+}
+
+.undrifted-contents-list a,
+.undrifted-issue-page-link,
+.undrifted-cover-story-link {
+  color: var(--undrifted-cyan, #59c7ff);
+  text-decoration: none;
+}
+
+.undrifted-contents-list a:hover,
+.undrifted-issue-page-link:hover,
+.undrifted-cover-story-link:hover {
+  text-decoration: underline;
+}
+
+.undrifted-cover-story-link {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: clamp(0.78rem, 1vw, 0.88rem);
+  font-weight: 500;
+}
+
+.undrifted-issue-page-held {
+  font-size: clamp(0.72rem, 0.92vw, 0.8rem);
+  font-style: italic;
+  color: rgba(237, 242, 248, 0.42);
+}
+
+.undrifted-cover-story-status {
+  display: inline-block;
+  margin-top: 0.6rem;
+}
+
+.undrifted-issue-rail-left {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.5rem, 1.5vw, 1rem);
+  flex-wrap: wrap;
+}
+
+.undrifted-issue-rail-right {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.5rem, 1.5vw, 1rem);
+  flex-wrap: wrap;
+}
+
+.undrifted-issue-rail span,
+.undrifted-issue-publisher,
+.undrifted-issue-branch {
+  font-size: clamp(0.66rem, 0.9vw, 0.76rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.62);
+  white-space: nowrap;
+}
+
+.undrifted-issue-rail-right span {
+  color: rgba(237, 242, 248, 0.44);
+}
+
+/* Current Issue 002 hierarchy */
+.undrifted-current-issue {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+}
+
+.undrifted-current-lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: end;
+  max-width: min(100%, 78rem);
+}
+
+.undrifted-current-lead-media {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+  background: rgba(237, 242, 248, 0.035);
+}
+
+.undrifted-current-lead-media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+}
+
+.undrifted-current-lead-copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.6vw, 1.1rem);
+}
+
+.undrifted-current-lead h1 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(2.4rem, 6.8vw, 5.9rem);
+  line-height: 0.98;
+  font-weight: 700;
+  margin: 0;
+  color: var(--undrifted-text, #e8edf2);
+}
+
+.undrifted-current-lead a,
+.undrifted-current-supporting a,
+.undrifted-current-contents a,
+.undrifted-archive a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.undrifted-current-lead a:hover,
+.undrifted-current-supporting a:hover,
+.undrifted-current-contents a:hover,
+.undrifted-archive a:hover {
+  color: var(--undrifted-cyan, #59c7ff);
+}
+
+.undrifted-current-lead p {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--undrifted-muted, #aab4bf);
+  font-size: clamp(0.95rem, 1.3vw, 1.08rem);
+  line-height: 1.58;
+}
+
+.undrifted-current-supporting {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  gap: clamp(1rem, 2.4vw, 1.6rem);
+}
+
+.undrifted-current-supporting article {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(237, 242, 248, 0.1);
+}
+
+.undrifted-current-supporting h2 {
+  margin: 0;
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+  line-height: 1.08;
+  color: var(--undrifted-text, #e8edf2);
+}
+
+.undrifted-current-supporting p,
+.undrifted-desk-card p {
+  margin: 0;
+  color: var(--undrifted-muted, #aab4bf);
+  line-height: 1.55;
+  font-size: clamp(0.84rem, 1.05vw, 0.94rem);
+}
+
+.undrifted-desks-section {
+  padding-top: clamp(0.5rem, 1.5vw, 1rem);
+}
+
+.undrifted-desks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: clamp(0.8rem, 2vw, 1.2rem);
+}
+
+.undrifted-desk-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 9rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border: 1px solid rgba(237, 242, 248, 0.1);
+  background: rgba(237, 242, 248, 0.025);
+}
+
+.undrifted-desk-card h3 {
+  margin: 0;
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.1rem, 1.8vw, 1.45rem);
+  line-height: 1.12;
+  color: var(--undrifted-text, #e8edf2);
+}
+
+.undrifted-current-contents,
+.undrifted-archive-contents {
+  border-top: 1px solid rgba(237, 242, 248, 0.1);
+  padding-top: clamp(1rem, 2vw, 1.4rem);
+}
+
+.undrifted-current-contents h2 {
+  margin: 0 0 0.7rem;
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  color: var(--undrifted-text, #e8edf2);
+}
+
+.undrifted-current-contents ol,
+.undrifted-archive-contents ol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  gap: 0.55rem clamp(1rem, 2vw, 1.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.undrifted-current-contents li,
+.undrifted-archive-contents li {
+  color: rgba(237, 242, 248, 0.72);
+  font-size: clamp(0.84rem, 1.05vw, 0.94rem);
+}
+
+.undrifted-archive {
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  padding-top: clamp(1.5rem, 4vw, 3rem);
+  border-top: 1px solid var(--undrifted-line, rgba(180, 210, 255, 0.18));
+  opacity: 0.82;
+}
+
+/* ── COVER ───────────────────────────────────────────────────────────────── */
+
+.undrifted-cover {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+  border-bottom: 1px solid rgba(237, 242, 248, 0.08);
+}
+
+.undrifted-cover-visual {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.undrifted-cover-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: clamp(20rem, 40vw, 34rem);
+  object-fit: cover;
+}
+
+.undrifted-cover-editorial {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.undrifted-eyebrow {
+  display: block;
+  font-size: clamp(0.6rem, 0.85vw, 0.68rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.42);
+}
+
+.undrifted-cover-editorial h1 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.8rem, 4.5vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0;
+}
+
+/* Cover story dominance — from Publication Encounter Profile cover_story_behavior, per OAR2
+   "Finalize unDrifted Launch Projection and Encounter Profile" Routed §4 "make cover story
+   dominant". Desktop-only (matches the profile's own desktop_breakpoint) so mobile/tablet
+   sizing is untouched. */
+@media (min-width: 1024px) {
+  .measures-registry-runtime[data-cover-story-behavior="dominant_full_width_on_desktop"] .undrifted-cover {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .measures-registry-runtime[data-cover-story-behavior="dominant_full_width_on_desktop"] .undrifted-cover-editorial h1 {
+    font-size: clamp(1.8rem, 5.4vw, 4.6rem);
+  }
+}
+
+/* Cover headline is now the primary "Assess the Environment" entry point
+   (OAR2 "Resolve Final Launch Blockers" ROUTED §2) — reads as editorial text,
+   not a conventional underlined link, until interacted with. */
+.undrifted-cover-headline-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.undrifted-cover-headline-link:hover,
+.undrifted-cover-headline-link:focus-visible {
+  color: var(--undrifted-cover-headline-hover, var(--undrifted-cyan, #59c7ff));
+}
+
+.undrifted-cover-deck {
+  font-size: clamp(0.86rem, 1.2vw, 1rem);
+  color: rgba(237, 242, 248, 0.58);
+  line-height: 1.62;
+  margin: 0;
+}
+
+.undrifted-cover-assessment {
+  margin-top: clamp(0.5rem, 1.5vw, 1rem);
+  padding: clamp(0.75rem, 1.5vw, 1.1rem) clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid rgba(237, 242, 248, 0.1);
+  border-left: 2px solid rgba(237, 242, 248, 0.38);
+  background: rgba(237, 242, 248, 0.02);
+  border-radius: 2px;
+}
+
+.undrifted-cover-assessment p {
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  font-weight: 500;
+  color: rgba(237, 242, 248, 0.62);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── EDITOR'S FEATURE / ASSESSMENT CALLOUT (house-ad style) ─────────────── */
+
+.undrifted-editor-feature {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.5vw, 1rem);
+  padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  border: 1px solid rgba(237, 242, 248, 0.14);
+  border-top: 2px solid rgba(237, 242, 248, 0.65);
+  background: rgba(237, 242, 248, 0.025);
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  border-radius: 2px;
+}
+
+/* Assessment as launch center — from Publication Encounter Profile
+   assessment_feature_behavior, per OAR2 "Finalize unDrifted Launch Projection and Encounter
+   Profile" Routed §4 "make assessment CTA visually primary". Replaces the neutral top border
+   with the canonical accent color and a faint accent wash, so this block reads as the page's
+   primary destination rather than a callout matching every other section's generic border. */
+.measures-registry-runtime[data-assessment-behavior="elevated_accent_primary_cta"] .undrifted-editor-feature {
+  border-top-color: var(--undrifted-cyan, #59c7ff);
+  border-top-width: 3px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--undrifted-blue, #1f8cff) 6%, transparent),
+    rgba(237, 242, 248, 0.025) 60%
+  );
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+
+.undrifted-editor-feature-mark {
+  display: block;
+  height: clamp(1.2rem, 2.2vw, 1.6rem);
+  width: auto;
+  opacity: 0.52;
+  margin-bottom: 0.25rem;
+}
+
+.undrifted-editor-feature h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.35rem, 2.8vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0;
+}
+
+.undrifted-assessment-rating {
+  font-size: clamp(0.7rem, 0.95vw, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.38);
+}
+
+.undrifted-editor-feature p {
+  font-size: clamp(0.84rem, 1.1vw, 0.96rem);
+  color: rgba(237, 242, 248, 0.58);
+  line-height: 1.62;
+  margin: 0;
+}
+
+/* ── PRIMARY CTA ─────────────────────────────────────────────────────────── */
+
+.undrifted-cta-primary {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  padding: 0.6rem 1.35rem;
+  font-size: clamp(0.72rem, 0.95vw, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--registry-brand-field, #060709);
+  background: var(--registry-brand-primary-text, #edf2f8);
+  border-radius: 2px;
+  transition: opacity 0.15s ease;
+}
+
+.undrifted-cta-primary:hover {
+  opacity: 0.88;
+}
+
+/* ── FEATURED ARTICLES (insights grid) ───────────────────────────────────── */
+
+.undrifted-insights {
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+
+.undrifted-insights-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  padding-bottom: clamp(0.75rem, 1.5vw, 1.1rem);
+  border-bottom: 1px solid rgba(237, 242, 248, 0.1);
+}
+
+.undrifted-insights-header h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0;
+}
+
+.undrifted-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.undrifted-insight-card {
+  display: grid;
+  grid-template-columns: clamp(5.5rem, 12vw, 9rem) 1fr;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  align-items: start;
+  padding: clamp(1rem, 2.5vw, 1.5rem) 0;
+  border-top: 1px solid rgba(237, 242, 248, 0.08);
+}
+
+.undrifted-insight-cover {
+  overflow: hidden;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.undrifted-insight-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+/* Editorial spread, not blog cards — from Publication Encounter Profile
+   featured_article_behavior, per OAR2 "Finalize unDrifted Launch Projection and Encounter
+   Profile" Routed §4. Desktop-only: gives each article's cover art materially more room
+   relative to its text column, closer to a magazine spread than a thumbnail+teaser blog list.
+   Forbidden_patterns in the same profile names "uniform_bordered_card_stack" — this is why
+   the cover art grows instead of adding another border/box treatment. */
+@media (min-width: 1024px) {
+  .measures-registry-runtime[data-featured-article-behavior="editorial_spread_large_cover"] .undrifted-insight-card {
+    grid-template-columns: clamp(9rem, 18vw, 13rem) 1fr;
+  }
+}
+
+.undrifted-insight-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.undrifted-insight-body h3 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.008em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0;
+}
+
+.undrifted-insight-teaser {
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  color: rgba(237, 242, 248, 0.54);
+  line-height: 1.62;
+  margin: 0;
+}
+
+.undrifted-insight-body p {
+  font-size: clamp(0.8rem, 1vw, 0.88rem);
+  color: rgba(237, 242, 248, 0.42);
+  line-height: 1.56;
+  margin: 0;
+}
+
+.undrifted-insight-body a {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: clamp(0.72rem, 0.92vw, 0.8rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(237, 242, 248, 0.55);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.undrifted-insight-body a:hover {
+  color: var(--registry-brand-primary-text, #edf2f8);
+}
+
+/* ── ROLE CALL ───────────────────────────────────────────────────────────── */
+
+.undrifted-role-call {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.5vw, 1rem);
+  padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  border: 1px solid rgba(237, 242, 248, 0.1);
+  background: rgba(237, 242, 248, 0.018);
+  border-radius: 2px;
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+
+/* Borderless editorial pull-quote — from Publication Encounter Profile role_call_behavior,
+   per OAR2 "Finalize unDrifted Launch Projection and Encounter Profile" Routed §4 "reduce
+   generic SaaS/card-stack feel". Role Call is a secondary-weight region per the profile's
+   region_weights, so it drops the bordered-box treatment shared with every other section
+   (the literal card-stack pattern the profile's forbidden_patterns names) in favor of a
+   quieter, borderless treatment set off only by an accent rule on the leading edge. */
+.measures-registry-runtime[data-role-call-behavior="borderless_editorial_pullquote"] .undrifted-role-call {
+  border: none;
+  border-left: 2px solid var(--undrifted-line-strong, rgba(70, 145, 255, 0.55));
+  background: transparent;
+  padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.5rem, 3.5vw, 2.5rem);
+  border-radius: 0;
+}
+
+.undrifted-role-call h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0;
+}
+
+.undrifted-role-call-tagline {
+  font-size: clamp(0.88rem, 1.2vw, 1rem);
+  font-weight: 400;
+  color: rgba(237, 242, 248, 0.52);
+  margin: 0;
+  font-style: italic;
+}
+
+.undrifted-role-call-body,
+.undrifted-role-call-story,
+.undrifted-role-call-destination {
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  color: rgba(237, 242, 248, 0.44);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── NEXT ISSUE ──────────────────────────────────────────────────────────── */
+
+.undrifted-next-issue {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: clamp(1.25rem, 3vw, 2rem) 0;
+  border-top: 1px solid rgba(237, 242, 248, 0.1);
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.undrifted-next-issue h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 500;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0;
+}
+
+.undrifted-next-issue p {
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  color: rgba(237, 242, 248, 0.44);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.undrifted-masthead-edition {
+  font-size: clamp(0.6rem, 0.8vw, 0.68rem);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.28);
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* ── SUBSCRIPTION ────────────────────────────────────────────────────────── */
+
+.registry-publication-subscribe-capture {
+  padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  border: 1px solid rgba(237, 242, 248, 0.1);
+  border-radius: 2px;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.registry-publication-subscribe-capture form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-width: 30rem;
+}
+
+.registry-publication-subscribe-capture label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: clamp(0.72rem, 0.95vw, 0.8rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(237, 242, 248, 0.42);
+}
+
+.registry-publication-subscribe-capture input {
+  background: rgba(237, 242, 248, 0.04);
+  border: 1px solid rgba(237, 242, 248, 0.14);
+  border-radius: 2px;
+  padding: 0.6rem 0.85rem;
+  font-size: clamp(0.84rem, 1.05vw, 0.92rem);
+  color: var(--registry-brand-primary-text, #edf2f8);
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.14s ease;
+}
+
+.registry-publication-subscribe-capture input:focus {
+  outline: none;
+  border-color: rgba(237, 242, 248, 0.3);
+}
+
+.registry-publication-subscribe-capture button[type="submit"] {
+  align-self: flex-start;
+  padding: 0.6rem 1.35rem;
+  font-size: clamp(0.72rem, 0.95vw, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--registry-brand-field, #060709);
+  background: rgba(237, 242, 248, 0.82);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.registry-publication-subscribe-capture button[type="submit"]:hover:not(:disabled) {
+  background: rgba(237, 242, 248, 0.95);
+}
+
+.registry-publication-subscribe-capture button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reserve-seat-success {
+  font-size: clamp(0.78rem, 1vw, 0.86rem);
+  color: rgba(120, 200, 140, 0.9);
+  margin: 0;
+}
+
+.reserve-seat-error {
+  font-size: clamp(0.78rem, 1vw, 0.86rem);
+  color: rgba(255, 88, 88, 0.9);
+  margin: 0;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────────────────── */
+
+.undrifted-connect-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: clamp(1.25rem, 3vw, 2rem);
+  border-top: 1px solid rgba(237, 242, 248, 0.08);
+}
+
+.undrifted-footer-line {
+  font-size: clamp(0.6rem, 0.8vw, 0.66rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.22);
+  margin: 0;
+}
+
+/* ── PERSISTENT UNDRIFTED MARK (crystal surfaces) ────────────────────────── */
+
+/* Fixed corner mark — appears on crystal_seat_threshold, orientation, encounter */
+/* Routes to /undrifted as publication return, not browser navigation */
+
+.undrifted-persistent-mark {
+  position: fixed;
+  bottom: clamp(1rem, 2.5vw, 1.5rem);
+  right: clamp(1rem, 2.5vw, 1.5rem);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  padding: 0.75rem 1.1rem;
+  text-decoration: none;
+  border: 1px solid rgba(237, 242, 248, 0.15);
+  border-radius: 4px;
+  background: rgba(6, 7, 9, 0.78);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.undrifted-persistent-mark:hover {
+  border-color: rgba(237, 242, 248, 0.3);
+  background: rgba(6, 7, 9, 0.92);
+}
+
+.undrifted-persistent-mark-label {
+  display: block;
+  font-size: clamp(0.8rem, 1vw, 0.88rem);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: rgba(237, 242, 248, 0.75);
+  font-style: italic;
+  font-family: var(--registry-font-heading, Georgia, serif);
+}
+
+.undrifted-persistent-mark-issue {
+  display: block;
+  font-size: clamp(0.68rem, 0.85vw, 0.74rem);
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.42);
+}
+
+/* ── MOBILE ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 780px) {
+  .undrifted-current-lead {
+    grid-template-columns: 1fr;
+  }
+
+  .undrifted-cover {
+    grid-template-columns: 1fr;
+  }
+
+  .undrifted-cover-visual {
+    order: -1;
+  }
+
+  .undrifted-launch-cycle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .undrifted-insight-card {
+    grid-template-columns: clamp(4.5rem, 18vw, 7rem) 1fr;
+  }
+
+  .undrifted-issue-rail {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .undrifted-issue-rail-right {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+}
+
+/* ── MEASURES REGISTRY HOME (LAPIS-LED) ─────────────────────────────────── */
+
+.measures-registry-runtime[data-surface="measures_registry_home"],
+.measures-registry-runtime[data-surface="measures_registry_faq"] {
+  background: var(--registry-material-lapis-bg, #040913);
+  color: var(--registry-material-lapis-text, #edf2f8);
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+  font-family: var(--registry-font-body, system-ui, -apple-system, sans-serif);
+}
+
+.registry-home-shell {
+  width: min(var(--registry-content-max-width, 70rem), 100%);
+  margin: 0 auto;
+  padding-top: calc(var(--registry-header-height, 3rem) + clamp(1.5rem, 4vw, 3rem));
+  padding-bottom: clamp(3rem, 8vw, 7rem);
+  padding-inline: var(--registry-page-padding-active, clamp(1.25rem, 5vw, 3rem));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 7vw, 6rem);
+}
+
+.registry-home-section-eyebrow {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--registry-accent-lapis-muted, #7290bc);
+  margin-bottom: 0.75rem;
+  font-family: var(--registry-font-heading, Georgia, serif);
+}
+
+.registry-home-core-line {
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  line-height: 1.45;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Hero Section */
+.registry-home-hero {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+  border-bottom: 1px solid rgba(114, 144, 188, 0.15);
+}
+
+.registry-home-category {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--registry-accent-lapis-primary, #92bbf3);
+  margin-bottom: 0.5rem;
+  font-family: var(--registry-font-heading, Georgia, serif);
+}
+
+.registry-home-tagline {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(2.2rem, 6vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0;
+}
+
+.registry-home-hero-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.registry-home-hero-visual-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .registry-home-hero-visual-zone {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.registry-home-seal-wrapper {
+  max-width: 14rem;
+  flex: 1;
+}
+
+.registry-home-seal-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0.9;
+  filter: drop-shadow(0 4px 12px rgba(4, 9, 19, 0.5));
+}
+
+.registry-home-video-wrapper {
+  flex: 1.5;
+  width: 100%;
+  max-width: 32rem;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  background: #000;
+  border: 1px solid rgba(114, 144, 188, 0.25);
+  box-shadow: 0 8px 24px rgba(4, 9, 19, 0.4);
+  overflow: hidden;
+}
+
+.registry-home-video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.registry-home-video-poster {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+.registry-home-video-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.registry-home-video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: rgba(4, 9, 19, 0.75);
+  border: 1px solid rgba(237, 242, 248, 0.5);
+  color: #edf2f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.registry-home-video-play-btn:hover {
+  background: rgba(14, 25, 43, 0.85);
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.registry-home-video-play-btn span {
+  font-size: 1.5rem;
+  margin-left: 4px;
+}
+
+.registry-home-video-activate-btn {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.registry-home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.registry-home-cta-primary {
+  padding: 0.85rem 1.85rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #040913;
+  background: var(--registry-accent-lapis-primary, #92bbf3);
+  border: 1px solid var(--registry-accent-lapis-primary, #92bbf3);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.registry-home-cta-primary:hover {
+  opacity: 0.9;
+}
+
+.registry-home-cta-secondary {
+  padding: 0.85rem 1.85rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  background: transparent;
+  border: 1px solid rgba(146, 187, 243, 0.4);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.registry-home-cta-secondary:hover {
+  background: rgba(146, 187, 243, 0.08);
+  border-color: var(--registry-accent-lapis-primary, #92bbf3);
+}
+
+/* Problem Section */
+.registry-home-problem {
+  max-width: 48rem;
+}
+
+.registry-home-problem h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+
+.registry-home-argument-body {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.6;
+  color: rgba(237, 242, 248, 0.72);
+}
+
+/* Position Section */
+.registry-home-position {
+  max-width: 48rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-left: 2px solid var(--registry-accent-lapis-primary, #92bbf3);
+  background: rgba(146, 187, 243, 0.03);
+}
+
+.registry-home-position h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  margin: 0 0 0.5rem;
+}
+
+/* Mission Section */
+.registry-home-mission {
+  max-width: 42rem;
+}
+
+.registry-home-mission-text {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 400;
+  font-family: var(--registry-font-heading, Georgia, serif);
+  line-height: 1.25;
+  color: var(--registry-brand-primary-text, #edf2f8);
+  margin: 0;
+}
+
+/* Assessment Section */
+.registry-home-assessment {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.registry-home-assessment h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  margin: 0;
+}
+
+.registry-home-assessment-card {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid rgba(114, 144, 188, 0.2);
+  background: rgba(237, 242, 248, 0.02);
+  border-radius: 2px;
+  max-width: 38rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.registry-home-assessment-card h3 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  margin: 0;
+  color: var(--registry-brand-primary-text, #edf2f8);
+}
+
+.registry-home-progression-path {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--registry-accent-lapis-primary, #92bbf3);
+  margin: 0;
+}
+
+.registry-home-evidence-boundary {
+  font-size: 0.85rem;
+  color: rgba(237, 242, 248, 0.55);
+  margin: 0;
+}
+
+.registry-home-evidence-boundary code {
+  color: var(--registry-accent-lapis-primary, #92bbf3);
+}
+
+.registry-home-card-cta {
+  align-self: flex-start;
+  padding: 0.65rem 1.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #040913;
+  background: var(--registry-brand-primary-text, #edf2f8);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.registry-home-card-cta:hover {
+  background-color: var(--registry-accent-lapis-primary, #92bbf3);
+}
+
+/* Alignment Section */
+.registry-home-alignment {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.registry-home-alignment h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  margin: 0;
+}
+
+.registry-home-progression-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.registry-home-progression-step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.registry-home-step-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--registry-accent-lapis-primary, #92bbf3);
+  background: rgba(146, 187, 243, 0.12);
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.registry-home-step-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--registry-brand-primary-text, #edf2f8);
+}
+
+.registry-home-step-arrow {
+  color: rgba(237, 242, 248, 0.3);
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+
+/* Registry & Operations Sections */
+.registry-home-registry,
+.registry-home-operations-relation {
+  max-width: 48rem;
+}
+
+.registry-home-registry h2,
+.registry-home-operations-relation h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  margin: 0 0 1rem;
+}
+
+.registry-home-boundary-desc {
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  line-height: 1.6;
+  color: rgba(237, 242, 248, 0.72);
+  margin: 0;
+}
+
+/* unDrifted Section */
+.registry-home-undrifted {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.registry-home-undrifted-card {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid rgba(114, 144, 188, 0.2);
+  background: rgba(237, 242, 248, 0.02);
+  border-radius: 2px;
+  max-width: 42rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.registry-home-undrifted-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(114, 144, 188, 0.15);
+  padding-bottom: 0.75rem;
+}
+
+.registry-home-undrifted-card h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  margin: 0;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.registry-home-undrifted-card h2 strong {
+  font-weight: 700;
+}
+
+.registry-home-undrifted-issue {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--registry-accent-lapis-primary, #92bbf3);
+}
+
+.registry-home-undrifted-tagline {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(237, 242, 248, 0.6);
+  margin: 0;
+}
+
+.registry-home-undrifted-rhythm {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: rgba(237, 242, 248, 0.8);
+  margin: 0;
+}
+
+.registry-home-undrifted-sections {
+  margin: 0.25rem 0;
+}
+
+.registry-home-undrifted-sections h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.5rem;
+  color: rgba(237, 242, 248, 0.45);
+}
+
+.registry-home-undrifted-sections ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+
+.registry-home-undrifted-sections li {
+  font-size: 0.9rem;
+  color: rgba(237, 242, 248, 0.65);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.registry-home-undrifted-sections li::before {
+  content: "▪";
+  color: var(--registry-accent-lapis-primary, #92bbf3);
+  font-size: 0.65rem;
+}
+
+/* Institutional Relation Section */
+.registry-home-institutional-relation {
+  border-top: 1px solid rgba(114, 144, 188, 0.15);
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.registry-home-institutional-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .registry-home-institutional-layout {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+.registry-home-institutional-copy h2 {
+  font-family: var(--registry-font-heading, Georgia, serif);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  margin: 0 0 1rem;
+}
+
+.registry-home-institutional-copy p {
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.55;
+  color: rgba(237, 242, 248, 0.72);
+  margin: 0;
+}
+
+.registry-home-social-banner-wrapper {
+  width: 100%;
+  max-width: 28rem;
+  border: 1px solid rgba(114, 144, 188, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(4, 9, 19, 0.3);
+}
+
+.registry-home-social-banner {
+  display: block;
+  width: 100%;
+  height: auto;
+}

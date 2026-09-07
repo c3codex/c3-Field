@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-06-07T18:57:17.537Z",
+  "oar2": "docs/oar/c3_field/chamber_directories/lapis/oar2_diagnose_and_correct_assessment_evaluation_seating_failure_v1.meta.md",
+  "target": "public.measures_iis_eval_gate1_capture",
+  "operation": "public anon insert",
+  "browser_anon_failure_before_policy": {
+    "status": 401,
+    "code": "42501",
+    "message": "new row violates row-level security policy for table \"measures_iis_eval_gate1_capture\""
+  },
+  "policy_sql_artifact": "docs/oar/c3_field/chamber_directories/lapis/diagnose-and-correct-assessment-evaluation-seating-failure-v1.sql",
+  "exec_sql_result": {
+    "ok": true
+  },
+  "postgrest_schema": {
+    "required": [
+      "id",
+      "institution_name",
+      "institution_address",
+      "institution_phone",
+      "contact_name",
+      "contact_position",
+      "contact_email",
+      "evaluation_answers",
+      "capture_context",
+      "intent",
+      "eligibility",
+      "campaign_tag",
+      "notification_state",
+      "confirmation_email_state",
+      "metadata",
+      "created_at",
+      "updated_at"
+    ],
+    "properties": {
+      "id": { "type": "string", "format": "uuid", "default": "gen_random_uuid()" },
+      "institution_name": { "type": "string", "format": "text" },
+      "institution_address": { "type": "string", "format": "text" },
+      "institution_phone": { "type": "string", "format": "text" },
+      "contact_name": { "type": "string", "format": "text" },
+      "contact_position": { "type": "string", "format": "text" },
+      "contact_email": { "type": "string", "format": "text" },
+      "evaluation_answers": { "format": "jsonb" },
+      "capture_context": { "type": "string", "format": "text", "default": "iis_eval_gate1" },
+      "intent": { "type": "string", "format": "text", "default": "system_evaluation_request" },
+      "eligibility": { "format": "jsonb" },
+      "campaign_tag": { "type": "string", "format": "text", "default": "iis_eval_gate1" },
+      "notification_state": { "type": "string", "format": "text", "default": "queued" },
+      "confirmation_email_state": { "type": "string", "format": "text", "default": "queued" },
+      "metadata": { "format": "jsonb" },
+      "created_at": { "type": "string", "format": "timestamp with time zone", "default": "now()" },
+      "updated_at": { "type": "string", "format": "timestamp with time zone", "default": "now()" }
+    }
+  },
+  "successful_public_anon_insert": {
+    "status": 201,
+    "row_id": "c6f9c73f-078a-4a60-833a-6ce6ef549a09",
+    "created_at": "2026-06-07T18:50:49.080622+00:00",
+    "contact_email": "oar2-assessment-seating-1780858247476@example.com",
+    "capture_context": "measures_assessment_contact_gated_delivery",
+    "intent": "assessment_result_delivery_request",
+    "answer_count": 7,
+    "standing_key": "oar2_validation_standing",
+    "result_binding_contact_email": "oar2-assessment-seating-1780858247476@example.com",
+    "has_structured_email_artifact": true,
+    "public_internal_boundary_preserved": true
+  },
+  "local_runtime_route_validation": {
+    "local_preview_url": "http://127.0.0.1:4177/ai-operations-assessment",
+    "standing": "held_before_submission",
+    "reason": "local preview rendered governed landing/assessment contract held states; DB seating path validated directly with browser anon key"
+  },
+  "website_field_correction": {
+    "source_file": "src/measures_registry/PublicAssessmentSurface.tsx",
+    "standing": "url field rendered as text with url inputMode so www.example.com is allowed by browser validation",
+    "storage_normalization": "www. values normalize to https://www. in submitIisEvaluation payload"
+  }
+}

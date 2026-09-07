@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Crystal: recognition / pattern visibility — rev1 -->
+  <!-- Triangle 1 (upward): first crystalline plane -->
+  <polygon points="50,12 83,69 17,69" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Triangle 2 (downward): second crystalline plane -->
+  <polygon points="50,88 83,31 17,31" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Inner hexagon: the pattern revealed at the crystalline intersection -->
+  <polygon points="61,31 72,50 61,69 39,69 28,50 39,31" stroke="currentColor" stroke-width="1"/>
+</svg>

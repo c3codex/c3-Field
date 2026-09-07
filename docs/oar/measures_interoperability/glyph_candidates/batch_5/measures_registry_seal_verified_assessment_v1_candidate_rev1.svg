@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Verified Assessment seal rev1: measured confirmation — registry-governed, proof-backed -->
+  <!-- Octagonal outer boundary: formal sealed proof boundary -->
+  <polygon points="50,12 77,23 88,50 77,77 50,88 23,77 12,50 23,23" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Assessment convergence lines: Obsidian narrowing-gate language — the assessment reduced to a point -->
+  <line x1="43" y1="40" x2="50" y2="60" stroke="currentColor" stroke-width="1"/>
+  <line x1="57" y1="40" x2="50" y2="60" stroke="currentColor" stroke-width="1"/>
+  <!-- Apex confirmation mark: the measured result — assessment converged to this registry-confirmed point -->
+  <line x1="47" y1="60" x2="53" y2="60" stroke="currentColor" stroke-width="1"/>
+</svg>

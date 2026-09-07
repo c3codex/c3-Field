@@ -1,0 +1,548 @@
+{
+  "oar2": "OAR/OAR2/publication/oar2_implement_buffer_native_publication_execution_v1.meta.md",
+  "executedAt": "2026-07-13T07:07:10.900Z",
+  "mode": "execute_drafts_only",
+  "credentialPresence": [
+    {
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "present": true,
+      "authenticated": true,
+      "accountName": "Measures Registry",
+      "timezone": "America/Chicago",
+      "channelCount": 3,
+      "errors": []
+    },
+    {
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "present": true,
+      "authenticated": true,
+      "accountName": "undrifted.editor",
+      "timezone": "America/Chicago",
+      "channelCount": 3,
+      "errors": []
+    }
+  ],
+  "workspaceCapabilityInventory": [
+    {
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "accountName": "Measures Registry",
+      "organizations": [
+        {
+          "organizationId": "6a23bebd718b53dcaa0839fc",
+          "organizationName": "Measures Registry",
+          "channelCount": 3
+        }
+      ],
+      "channels": [
+        {
+          "channelId": "6a54740a80cc80cdcaa976d9",
+          "service": "youtube",
+          "type": "channel",
+          "name": "Measures Registry",
+          "displayName": "Measures Registry",
+          "externalLink": "https://www.youtube.com/channel/UC84Jbvswj0ykzd5nuKxoNSA",
+          "isDisconnected": false,
+          "isLocked": false,
+          "timezone": "America/Chicago",
+          "supportsDraft": true,
+          "supportsSchedule": true
+        },
+        {
+          "channelId": "6a23bfc4c687a22dd467a045",
+          "service": "instagram",
+          "type": "business",
+          "name": "measures_registry",
+          "displayName": "measures_registry",
+          "externalLink": "https://instagram.com/measures_registry",
+          "isDisconnected": false,
+          "isLocked": false,
+          "timezone": "America/Chicago",
+          "supportsDraft": true,
+          "supportsSchedule": true
+        },
+        {
+          "channelId": "6a23bff1c687a22dd467a0b3",
+          "service": "twitter",
+          "type": "profile",
+          "name": "measures_c3",
+          "displayName": "measures_c3",
+          "externalLink": "https://twitter.com/measures_c3",
+          "isDisconnected": false,
+          "isLocked": false,
+          "timezone": "America/Chicago",
+          "supportsDraft": true,
+          "supportsSchedule": true
+        }
+      ]
+    },
+    {
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "accountName": "undrifted.editor",
+      "organizations": [
+        {
+          "organizationId": "6a546d1271344fb67de5c6c4",
+          "organizationName": "My Organization",
+          "channelCount": 3
+        }
+      ],
+      "channels": [
+        {
+          "channelId": "6a54761280cc80cdcaa97c9a",
+          "service": "facebook",
+          "type": "page",
+          "name": "UnDrifted",
+          "displayName": "UnDrifted",
+          "externalLink": "https://facebook.com/1241211659068854",
+          "isDisconnected": false,
+          "isLocked": false,
+          "timezone": "America/Chicago",
+          "supportsDraft": true,
+          "supportsSchedule": true
+        },
+        {
+          "channelId": "6a54734280cc80cdcaa9743b",
+          "service": "facebook",
+          "type": "page",
+          "name": "Measures Registry",
+          "displayName": "Measures Registry",
+          "externalLink": "https://facebook.com/1179013795290720",
+          "isDisconnected": false,
+          "isLocked": false,
+          "timezone": "America/Chicago",
+          "supportsDraft": true,
+          "supportsSchedule": true
+        },
+        {
+          "channelId": "6a546f6380cc80cdcaa962f0",
+          "service": "twitter",
+          "type": "profile",
+          "name": "unDrifted_c3",
+          "displayName": "unDrifted_c3",
+          "externalLink": "https://twitter.com/unDrifted_c3",
+          "isDisconnected": false,
+          "isLocked": false,
+          "timezone": "America/Chicago",
+          "supportsDraft": true,
+          "supportsSchedule": true
+        }
+      ]
+    }
+  ],
+  "endpointIdentityMap": [
+    {
+      "registeredEndpoint": "Measures Registry YouTube",
+      "platform": "youtube",
+      "owningSystem": "Measures Registry",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a54740a80cc80cdcaa976d9",
+      "channelDisplayName": "Measures Registry",
+      "publicHandleOrUrl": "https://www.youtube.com/channel/UC84Jbvswj0ykzd5nuKxoNSA",
+      "channelActiveState": true,
+      "channelVerificationDate": "2026-07-13",
+      "resolved": true,
+      "holdReason": null
+    },
+    {
+      "registeredEndpoint": "Measures Registry Instagram",
+      "platform": "instagram",
+      "owningSystem": "Measures Registry",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a23bfc4c687a22dd467a045",
+      "channelDisplayName": "measures_registry",
+      "publicHandleOrUrl": "https://instagram.com/measures_registry",
+      "channelActiveState": true,
+      "channelVerificationDate": "2026-07-13",
+      "resolved": true,
+      "holdReason": null
+    },
+    {
+      "registeredEndpoint": "Measures Registry X",
+      "platform": "x",
+      "owningSystem": "Measures Registry",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a23bff1c687a22dd467a0b3",
+      "channelDisplayName": "measures_c3",
+      "publicHandleOrUrl": "https://twitter.com/measures_c3",
+      "channelActiveState": true,
+      "channelVerificationDate": "2026-07-13",
+      "resolved": true,
+      "holdReason": null
+    },
+    {
+      "registeredEndpoint": "Measures Registry Facebook",
+      "platform": "facebook",
+      "owningSystem": "Measures Registry",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a54734280cc80cdcaa9743b",
+      "channelDisplayName": "Measures Registry",
+      "publicHandleOrUrl": "https://facebook.com/1179013795290720",
+      "channelActiveState": true,
+      "channelVerificationDate": "2026-07-13",
+      "resolved": true,
+      "holdReason": null
+    },
+    {
+      "registeredEndpoint": "unDrifted Facebook",
+      "platform": "facebook",
+      "owningSystem": "unDrifted",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a54761280cc80cdcaa97c9a",
+      "channelDisplayName": "UnDrifted",
+      "publicHandleOrUrl": "https://facebook.com/1241211659068854",
+      "channelActiveState": true,
+      "channelVerificationDate": "2026-07-13",
+      "resolved": true,
+      "holdReason": null
+    },
+    {
+      "registeredEndpoint": "unDrifted X",
+      "platform": "x",
+      "owningSystem": "unDrifted",
+      "credentialRef": "BUFFER_PUB2_KEY",
+      "channelId": "6a546f6380cc80cdcaa962f0",
+      "channelDisplayName": "unDrifted_c3",
+      "publicHandleOrUrl": "https://twitter.com/unDrifted_c3",
+      "channelActiveState": true,
+      "channelVerificationDate": "2026-07-13",
+      "resolved": true,
+      "holdReason": null
+    }
+  ],
+  "duplicateChannelCheck": {
+    "duplicateChannelIds": [],
+    "passed": true
+  },
+  "canonicalYoutubeActions": [
+    {
+      "actionId": "launch_cycle_001__measures_registry__youtube__about_measures_registry__2026-07-14",
+      "title": "About Measures Registry",
+      "storagePath": "about_measures_registry.mp4",
+      "mediaRole": "about_measures_registry_video",
+      "description": "Shared systems governance for institutions deploying AI.",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "proposedTime": "2026-07-14T10:00:00-05:00",
+      "endpoint": "Measures Registry YouTube",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a54740a80cc80cdcaa976d9",
+      "channelDisplayName": "Measures Registry",
+      "sourceStoragePath": "about_measures_registry.mp4",
+      "sourceUrl": "https://media.c3field.online/about_measures_registry.mp4",
+      "mimeType": "video/mp4",
+      "thumbnailStatus": "not_seated_for_this_oar",
+      "publicationVisibility": "buffer_draft_private_pending_operator_review",
+      "operatorAuthorizationStatus": "not_authorized_to_schedule_or_publish",
+      "missing": [],
+      "bufferDraftId": "6a548d6c00357d0bb66cd575",
+      "bufferStatus": "draft",
+      "bufferDueAt": null,
+      "bufferResultType": "ExistingPost",
+      "bufferError": null
+    },
+    {
+      "actionId": "launch_cycle_001__measures_registry__youtube__ai_isnt_broken_intro__2026-07-14",
+      "title": "AI Isn't Broken",
+      "storagePath": "ai_isnt_broken_intro.mp4",
+      "mediaRole": "intro_hook_video",
+      "description": "AI isn't broken. Systems are. Responsible AI deployment requires governable systems.",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "proposedTime": "2026-07-14T10:20:00-05:00",
+      "endpoint": "Measures Registry YouTube",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a54740a80cc80cdcaa976d9",
+      "channelDisplayName": "Measures Registry",
+      "sourceStoragePath": "ai_isnt_broken_intro.mp4",
+      "sourceUrl": "https://media.c3field.online/ai_isnt_broken_intro.mp4",
+      "mimeType": "video/mp4",
+      "thumbnailStatus": "not_seated_for_this_oar",
+      "publicationVisibility": "buffer_draft_private_pending_operator_review",
+      "operatorAuthorizationStatus": "not_authorized_to_schedule_or_publish",
+      "missing": [],
+      "bufferDraftId": null,
+      "bufferStatus": null,
+      "bufferDueAt": null,
+      "bufferResultType": "UnexpectedError",
+      "bufferError": "Invalid post: "
+    },
+    {
+      "actionId": "launch_cycle_001__measures_registry__youtube__crystal_seat_orientation__2026-07-14",
+      "title": "Crystal Seat Orientation",
+      "storagePath": "crystal_seat_orientation.mp4",
+      "mediaRole": "measures_position",
+      "description": "Measures Registry orientation for coherence, resonance, and governed system standing.",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "proposedTime": "2026-07-14T10:40:00-05:00",
+      "endpoint": "Measures Registry YouTube",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a54740a80cc80cdcaa976d9",
+      "channelDisplayName": "Measures Registry",
+      "sourceStoragePath": "crystal_seat_orientation.mp4",
+      "sourceUrl": "https://media.c3field.online/crystal_seat_orientation.mp4",
+      "mimeType": "video/mp4",
+      "thumbnailStatus": "not_seated_for_this_oar",
+      "publicationVisibility": "buffer_draft_private_pending_operator_review",
+      "operatorAuthorizationStatus": "not_authorized_to_schedule_or_publish",
+      "missing": [],
+      "bufferDraftId": "6a548d6d98dc0120703ef8e5",
+      "bufferStatus": "draft",
+      "bufferDueAt": null,
+      "bufferResultType": "ExistingPost",
+      "bufferError": null
+    },
+    {
+      "actionId": "launch_cycle_001__measures_registry__youtube__obsidian_chamber_orientation__2026-07-14",
+      "title": "Obsidian Chamber Orientation",
+      "storagePath": "obsidian_chamber_orientation.mp4",
+      "mediaRole": "obsidian",
+      "description": "Assessment readiness orientation for the conditions that shape AI behavior.",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "proposedTime": "2026-07-14T11:00:00-05:00",
+      "endpoint": "Measures Registry YouTube",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a54740a80cc80cdcaa976d9",
+      "channelDisplayName": "Measures Registry",
+      "sourceStoragePath": "obsidian_chamber_orientation.mp4",
+      "sourceUrl": "https://media.c3field.online/obsidian_chamber_orientation.mp4",
+      "mimeType": "video/mp4",
+      "thumbnailStatus": "not_seated_for_this_oar",
+      "publicationVisibility": "buffer_draft_private_pending_operator_review",
+      "operatorAuthorizationStatus": "not_authorized_to_schedule_or_publish",
+      "missing": [],
+      "bufferDraftId": null,
+      "bufferStatus": null,
+      "bufferDueAt": null,
+      "bufferResultType": "UnexpectedError",
+      "bufferError": "Invalid post: "
+    },
+    {
+      "actionId": "launch_cycle_001__measures_registry__youtube__assessment_report_orientation__2026-07-14",
+      "title": "Assessment Report Orientation",
+      "storagePath": "assessment_report_orientation.mp4",
+      "mediaRole": "assessment_report_orientation",
+      "description": "A brief orientation before reviewing Measures Registry assessment findings.",
+      "playlistRecommendation": "Measures Registry Canonical Orientation",
+      "proposedTime": "2026-07-14T11:20:00-05:00",
+      "endpoint": "Measures Registry YouTube",
+      "credentialRef": "BUFFER_SOCIAL_KEY",
+      "channelId": "6a54740a80cc80cdcaa976d9",
+      "channelDisplayName": "Measures Registry",
+      "sourceStoragePath": "assessment_report_orientation.mp4",
+      "sourceUrl": "https://media.c3field.online/assessment_report_orientation.mp4",
+      "mimeType": "video/mp4",
+      "thumbnailStatus": "not_seated_for_this_oar",
+      "publicationVisibility": "buffer_draft_private_pending_operator_review",
+      "operatorAuthorizationStatus": "not_authorized_to_schedule_or_publish",
+      "missing": [],
+      "bufferDraftId": null,
+      "bufferStatus": null,
+      "bufferDueAt": null,
+      "bufferResultType": "UnexpectedError",
+      "bufferError": "Invalid post: "
+    }
+  ],
+  "launchCycle001ReviewQueue": [
+    {
+      "actionId": "launch_cycle_001__website__undrifted_issue001_da_assessment_website_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_assessment_website_v1",
+      "platform": "website",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": null,
+      "previousPublicationStatus": null,
+      "previousPlatformUrl": null,
+      "payloadTitle": "AI Operations Assessment",
+      "linkDependency": "/ai-operations-assessment",
+      "mediaAttachment": [
+        "measures-registry/obsidian_assessment_surface_visual_v1.webp"
+      ],
+      "heldReason": "not_buffer_endpoint_for_this_oar"
+    },
+    {
+      "actionId": "launch_cycle_001__youtube__undrifted_issue001_da_assessment_youtube_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_assessment_youtube_v1",
+      "platform": "youtube",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": null,
+      "previousPublicationStatus": null,
+      "previousPlatformUrl": null,
+      "payloadTitle": "What Does It Mean to Measure a Governable System?",
+      "linkDependency": "/ai-operations-assessment",
+      "mediaAttachment": [
+        "measures-registry/campaign_derivatives/undrifted_issue001_assessment_short_cut_v1.mp4"
+      ],
+      "heldReason": "requires_endpoint_specific_operator_review_before_new_pub2_or_social_draft"
+    },
+    {
+      "actionId": "launch_cycle_001__instagram__undrifted_issue001_da_cover_story_instagram_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_cover_story_instagram_v1",
+      "platform": "instagram",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": "6a5002b7a9e4eacc31025340",
+      "previousPublicationStatus": "published",
+      "previousPlatformUrl": "https://www.instagram.com/reel/DalofxJmckI/",
+      "payloadTitle": "AI Isn't Broken. Systems Are.",
+      "linkDependency": "https://paragraph.com/@undrifted/ai-isnt-broken-systems-are",
+      "mediaAttachment": [
+        "measures-media/ai_isnt_broken_intro.mp4"
+      ],
+      "heldReason": "already_executed_by_prior_oar_no_duplicate_created"
+    },
+    {
+      "actionId": "launch_cycle_001__linkedin__undrifted_issue001_da_cover_story_quote_linkedin_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_cover_story_quote_linkedin_v1",
+      "platform": "linkedin",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": "6a5002b8321614183a1f1ff5",
+      "previousPublicationStatus": "published",
+      "previousPlatformUrl": "https://www.linkedin.com/feed/update/urn:li:share:7481103989191811072",
+      "payloadTitle": "AI Isn't Broken. Systems Are.",
+      "linkDependency": "https://paragraph.com/@undrifted/ai-isnt-broken-systems-are",
+      "mediaAttachment": [
+        "measures-registry/ai_isnt_broken_landing.webp"
+      ],
+      "heldReason": "already_executed_by_prior_oar_no_duplicate_created"
+    },
+    {
+      "actionId": "launch_cycle_001__x__undrifted_issue001_da_cover_story_quote_x_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_cover_story_quote_x_v1",
+      "platform": "x",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": "6a5002b83c48e2c7b33feafa",
+      "previousPublicationStatus": "published",
+      "previousPlatformUrl": "https://x.com/2063041676583583744/status/2075338250911183123",
+      "payloadTitle": "AI Isn't Broken. Systems Are. — X Thread",
+      "linkDependency": "https://paragraph.com/@undrifted/ai-isnt-broken-systems-are",
+      "mediaAttachment": [],
+      "heldReason": "already_executed_by_prior_oar_no_duplicate_created"
+    },
+    {
+      "actionId": "launch_cycle_001__website__undrifted_issue001_da_cover_story_website_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_cover_story_website_v1",
+      "platform": "website",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": null,
+      "previousPublicationStatus": null,
+      "previousPlatformUrl": null,
+      "payloadTitle": "AI Isn't Broken. Systems Are.",
+      "linkDependency": "/ai-operations-assessment",
+      "mediaAttachment": [
+        "measures-media/ai_isnt_broken_intro.mp4"
+      ],
+      "heldReason": "not_buffer_endpoint_for_this_oar"
+    },
+    {
+      "actionId": "launch_cycle_001__instagram__undrifted_issue001_da_dispatches_instagram_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_dispatches_instagram_v1",
+      "platform": "instagram",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": "6a5002d83c48e2c7b33feb8c",
+      "previousPublicationStatus": "failed",
+      "previousPlatformUrl": null,
+      "payloadTitle": "Dispatches — Issue 001",
+      "linkDependency": "https://paragraph.com/@undrifted/agents-with-keys",
+      "mediaAttachment": [
+        "measures-registry/agents_with_keys.webp",
+        "measures-registry/fables_and_myths.webp"
+      ],
+      "heldReason": "already_executed_by_prior_oar_no_duplicate_created"
+    },
+    {
+      "actionId": "launch_cycle_001__linkedin__undrifted_issue001_da_dispatches_linkedin_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_dispatches_linkedin_v1",
+      "platform": "linkedin",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": "6a5002d93c48e2c7b33feba4",
+      "previousPublicationStatus": "published",
+      "previousPlatformUrl": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7481106451558662144",
+      "payloadTitle": "Two Dispatches from unDrifted Issue 001",
+      "linkDependency": "https://paragraph.com/@undrifted/agents-with-keys",
+      "mediaAttachment": [
+        "measures-registry/agents_with_keys.webp",
+        "measures-registry/fables_and_myths.webp"
+      ],
+      "heldReason": "already_executed_by_prior_oar_no_duplicate_created"
+    },
+    {
+      "actionId": "launch_cycle_001__email__undrifted_issue001_da_editors_letter_email_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_editors_letter_email_v1",
+      "platform": "email",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": null,
+      "previousPublicationStatus": null,
+      "previousPlatformUrl": null,
+      "payloadTitle": "From the Editor — Issue 001",
+      "linkDependency": "https://paragraph.com/@undrifted/from-the-editor",
+      "mediaAttachment": [],
+      "heldReason": "not_buffer_endpoint_for_this_oar"
+    },
+    {
+      "actionId": "launch_cycle_001__paragraph__undrifted_issue001_da_editors_letter_paragraph_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_editors_letter_paragraph_v1",
+      "platform": "paragraph",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": false,
+      "previousBufferDraftId": null,
+      "previousPublicationStatus": null,
+      "previousPlatformUrl": null,
+      "payloadTitle": "From the Editor",
+      "linkDependency": "https://paragraph.com/@undrifted/from-the-editor",
+      "mediaAttachment": [],
+      "heldReason": "not_buffer_endpoint_for_this_oar"
+    },
+    {
+      "actionId": "launch_cycle_001__instagram__undrifted_issue001_da_issue_promotion_instagram_reel_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_issue_promotion_instagram_reel_v1",
+      "platform": "instagram",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": null,
+      "previousPublicationStatus": null,
+      "previousPlatformUrl": null,
+      "payloadTitle": "unDrifted Issue 001 — Launch Reel",
+      "linkDependency": "https://paragraph.com/@undrifted/ai-isnt-broken-systems-are",
+      "mediaAttachment": [],
+      "heldReason": "approved_copy_exists_but_required_media_missing"
+    },
+    {
+      "actionId": "launch_cycle_001__email__undrifted_issue001_da_launch_digest_email_v1",
+      "sourceDistributionAsset": "undrifted_issue001_da_launch_digest_email_v1",
+      "platform": "email",
+      "status": "draft",
+      "reviewStatus": "oar2_authorized",
+      "bufferExportReady": true,
+      "previousBufferDraftId": null,
+      "previousPublicationStatus": null,
+      "previousPlatformUrl": null,
+      "payloadTitle": "unDrifted Issue 001 is here — AI isn't broken. Systems are.",
+      "linkDependency": "/ai-operations-assessment",
+      "mediaAttachment": [
+        "measures-registry/measures_registry_logo.webp"
+      ],
+      "heldReason": "not_buffer_endpoint_for_this_oar"
+    }
+  ],
+  "knownExcludedMediaIssue": {
+    "storagePath": "obsidian-to-marble passage video",
+    "disposition": "excluded_by_oar",
+    "note": "Registered file exists but media-role naming mismatch remains outside this OAR."
+  },
+  "disposition": "PARTIALLY READY - SPECIFIC CHANNELS HELD"
+}

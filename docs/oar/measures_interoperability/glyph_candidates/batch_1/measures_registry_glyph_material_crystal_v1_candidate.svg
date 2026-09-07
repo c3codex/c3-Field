@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Crystal: recognition / pattern visibility -->
+  <!-- Outer hexagon (pointed-top, R=38): the visible crystalline boundary -->
+  <polygon points="50,12 83,31 83,69 50,88 17,69 17,31" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Inner hexagon (R=20): the pattern core -->
+  <polygon points="50,30 67,40 67,60 50,70 33,60 33,40" stroke="currentColor" stroke-width="1"/>
+  <!-- 6 radial lines from center to outer vertices: facet visibility lines -->
+  <line x1="50" y1="50" x2="50" y2="12" stroke="currentColor" stroke-width="0.75" opacity="0.4"/>
+  <line x1="50" y1="50" x2="83" y2="31" stroke="currentColor" stroke-width="0.75" opacity="0.4"/>
+  <line x1="50" y1="50" x2="83" y2="69" stroke="currentColor" stroke-width="0.75" opacity="0.4"/>
+  <line x1="50" y1="50" x2="50" y2="88" stroke="currentColor" stroke-width="0.75" opacity="0.4"/>
+  <line x1="50" y1="50" x2="17" y2="69" stroke="currentColor" stroke-width="0.75" opacity="0.4"/>
+  <line x1="50" y1="50" x2="17" y2="31" stroke="currentColor" stroke-width="0.75" opacity="0.4"/>
+</svg>

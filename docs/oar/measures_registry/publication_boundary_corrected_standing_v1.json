@@ -1,0 +1,72 @@
+{
+  "document_type": "publication_boundary_corrected_standing",
+  "authority": "docs/oar/measures_registry/oar2_immediately_contain_codex_governance_leak_and_restore_publication_boundary_v1.meta.md",
+  "executor": "Cody",
+  "corrected_standing": [
+    "IMMEDIATE EXPOSURE CONTAINED",
+    "PUBLICATION HOLD REMAINS",
+    "EMERGENCY CLOSEOUT INCOMPLETE"
+  ],
+  "unsafe_live_exposure": {
+    "actually_live": true,
+    "confirmed_live_checks": [
+      "2026-07-13T15:32:31.816Z",
+      "2026-07-13T15:32:48.128Z",
+      "2026-07-13T15:33:20.951Z",
+      "2026-07-13T15:33:54.363Z"
+    ],
+    "first_clean_check": "2026-07-13T15:34:27.454Z",
+    "known_confirmed_exposure_window": "at least 2026-07-13T15:32:31.816Z through 2026-07-13T15:33:54.363Z",
+    "maximum_exposure_window": "not proven from available deployment logs",
+    "note": "Unsafe text was confirmed live on Measures Registry before the containment deployment flipped clean."
+  },
+  "cache_purge": {
+    "cloudflare_purge_performed": false,
+    "cloudflare_purge_evidence": "none",
+    "reason": "No valid non-Wrangler Cloudflare purge authority was available in the local environment.",
+    "replacement_evidence": "Cache-busted production URL checks and deployed bundle checks returned zero incident markers after deployment."
+  },
+  "public_derivative": {
+    "path": "Assets/Articles/unDrifted/LaunchCycle001/registered/field_findings_2026_w28_public_article_v2.md",
+    "sha256": "73CDC79845AE7924719680E46DBBA000F17B4ABA2EBF9299EC50DAC79DF37DD3",
+    "asset_registry_status": "staged_for_commit_as_registered_public_derivative"
+  },
+  "removed_sections": [
+    "Ledger Review",
+    "Candidate Relational Points of Contact",
+    "c3_ledger_0001 - Knowledge Becomes Operational Through Governed Relation",
+    "Candidate New Inquiry",
+    "Recommended Institutional Actions",
+    "Longitudinal Baseline",
+    "Standing Impact"
+  ],
+  "removed_sentence": "The OAR and advisory process used to interpret these publications demonstrates how external information can be related to institutional inquiry without automatically changing authority.",
+  "public_surface_audit": {
+    "artifact": "docs/oar/measures_registry/publication_boundary_public_surface_audit_v1.json",
+    "checked_at": "2026-07-13T15:44:23.894Z",
+    "raw_html": "pass_zero_markers",
+    "hydrated_dom": "pass_zero_markers",
+    "bundle": "pass_zero_markers",
+    "source_maps": "no_source_map_references_found",
+    "feeds": "pass_zero_markers",
+    "preview_meta": "pass_zero_markers",
+    "structured_data": "pass_zero_markers",
+    "public_rest_api": "pass_zero_markers_no_internal_path_no_internal_checksum"
+  },
+  "buffer_matrix_audit": {
+    "artifact": "docs/oar/measures_registry/publication_boundary_buffer_endpoint_matrix_audit_v1.json",
+    "checked_at": "2026-07-13T15:44:50.231Z",
+    "connected_endpoints_checked": 6,
+    "launch_cycle_matches_remaining": 0,
+    "unconnected_authorized_endpoints": [
+      "unDrifted Instagram",
+      "unDrifted YouTube"
+    ]
+  },
+  "root_undrifted_surface": {
+    "current_h1": "AI ISN'T BROKEN. SYSTEMS ARE.",
+    "standing": "still_old_cover_not_active_issue_01_projection",
+    "release_impact": "publication_hold_remains"
+  },
+  "recommendation": "release_hold_remains"
+}

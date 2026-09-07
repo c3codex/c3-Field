@@ -1,0 +1,63 @@
+/* Legal document surface — /privacy, /terms */
+.measures-registry-runtime .registry-legal-document {
+  width: min(var(--registry-content-max-width, 64rem), calc(100% - 2 * var(--registry-page-padding-active)));
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) 0 clamp(3rem, 6vw, 5rem);
+  flex: 1;
+}
+
+.measures-registry-runtime .registry-legal-document-body {
+  max-width: 48rem;
+}
+
+.measures-registry-runtime .registry-legal-document-body h1 {
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.35rem;
+  color: var(--registry-brand-heading, inherit);
+}
+
+.measures-registry-runtime .registry-legal-document-body .registry-legal-effective {
+  font-size: 0.8rem;
+  color: var(--registry-brand-muted-text);
+  margin: 0 0 2.5rem;
+}
+
+.measures-registry-runtime .registry-legal-document-body h2 {
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 2rem 0 0.5rem;
+  color: var(--registry-brand-heading, inherit);
+}
+
+.measures-registry-runtime .registry-legal-document-body p {
+  font-size: clamp(0.84rem, 1.1vw, 0.92rem);
+  line-height: 1.65;
+  color: var(--registry-brand-body, inherit);
+  margin: 0 0 0.75rem;
+}
+
+.measures-registry-runtime .registry-legal-document-body ul {
+  margin: 0.25rem 0 0.75rem 1.25rem;
+  padding: 0;
+}
+
+.measures-registry-runtime .registry-legal-document-body li {
+  font-size: clamp(0.84rem, 1.1vw, 0.92rem);
+  line-height: 1.65;
+  color: var(--registry-brand-body, inherit);
+  margin-bottom: 0.3rem;
+}
+
+.measures-registry-runtime .registry-legal-document-body a {
+  color: var(--registry-brand-accent, inherit);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.measures-registry-runtime .registry-legal-document-body a:hover {
+  opacity: 0.8;
+}
