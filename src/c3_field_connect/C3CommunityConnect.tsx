@@ -26,7 +26,7 @@ export default function C3CommunityConnect() {
 
   async function submitCandidate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (submitting.current || !environment?.available) return
+    if (submitting.current || !environment?.available || environment.encounterEnabled === false) return
     const form = new FormData(event.currentTarget)
     if (!event.currentTarget.checkValidity()) return
     submitting.current = true
@@ -118,7 +118,8 @@ export default function C3CommunityConnect() {
       <section id="connect" className="c3-connect-panel c3-connect-width" aria-labelledby="c3-connect-form-title">
         <div className="c3-connect-form-intro"><p className="c3-connect-kicker">CONNECT</p><h2 id="c3-connect-form-title">{copy.encounterIntro}</h2></div>
         <form className="c3-connect-form" onSubmit={submitCandidate} aria-busy={pending}>
-          <fieldset disabled={pending}>
+          {environment.encounterEnabled === false && <p role="status">Connecting is not open yet. Please return later.</p>}
+          <fieldset disabled={pending || environment.encounterEnabled === false}>
             <legend className="c3-connect-sr-only">Your connection</legend>
             <div className="c3-connect-input-pair">
               <label>Name<input name="name" autoComplete="name" minLength={2} maxLength={160} required /></label>

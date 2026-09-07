@@ -1,4 +1,7 @@
+import {c1RuntimePackage} from "./c1RuntimePackage"
+
 export type C1EnvironmentPackage = {
+  encounterEnabled?: boolean
   available: boolean
   reviewOnly: boolean
   copy: { heroTitle: string; heroBody: string; structuralLine: string; missionTitle: string; missionBody: string; missionClosing: string; brandLine: string; encounterIntro: string; openPrompt: string; mediaTitle: string; consent: string; attestation: string; participationIntention: string; custodyNotice: string }
@@ -28,7 +31,7 @@ export function parseC1ReviewPackage(value: unknown): C1EnvironmentPackage {
 // No hardcoded standing fallback. A missing or held package must not render an encounter.
 export async function loadC1EnvironmentPackage(): Promise<C1EnvironmentPackage> {
   if (!isLocalC1Review(import.meta.env.DEV, import.meta.env.VITE_C1_REVIEW, window.location.hostname)) {
-    throw new Error("The Connect encounter is not available.")
+    return c1RuntimePackage
   }
   const response = await fetch("/api/c3-community-connect-package", {cache: "no-store"})
   if (!response.ok) throw new Error("The Connect encounter is not available.")

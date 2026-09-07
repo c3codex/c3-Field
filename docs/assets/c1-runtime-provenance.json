@@ -1,0 +1,92 @@
+{
+  "environment": "env_c3_community_connect",
+  "authority": "Operator direct instruction: WebP derivatives to c3-field-media; videos to R2; deploy from c3field",
+  "package_manifest_drive_id": "1LF5dl07FBvCP2whAfBFqxaNp1XEdCULHHZ-a4RAuusw",
+  "source_custody": "Drive retained as governed source only; never runtime media origin",
+  "images": [
+    {
+      "source_drive_id": "1PQ6UOX3k5Hknr8d3W0Zrw9uX4oq2hzJW",
+      "source_name": "emblem.png",
+      "source_sha256": "2c145855863e040615b4d7883dae9b53e256421a2508681e70942b2a0e8351f2",
+      "derivative_name": "emblem.webp",
+      "derivative_sha256": "fe449ee291096b17dd06ff8ad2e32ff3e0952c645f56b6479df5380b679883c5",
+      "bytes": 1365716,
+      "width": 1402,
+      "height": 1122,
+      "transform": "EXIF orientation; lossless WebP; no resize or crop",
+      "tool": "Pillow 12.2.0",
+      "pixel_equality": true,
+      "bucket": "c3-field-media",
+      "object_key": "c1/fe449ee291096b17dd06ff8ad2e32ff3e0952c645f56b6479df5380b679883c5/emblem.webp",
+      "runtime_url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c1/fe449ee291096b17dd06ff8ad2e32ff3e0952c645f56b6479df5380b679883c5/emblem.webp",
+      "readback_sha256": "fe449ee291096b17dd06ff8ad2e32ff3e0952c645f56b6479df5380b679883c5",
+      "readback_bytes": 1365716
+    },
+    {
+      "source_drive_id": "1wGdPc3s3n9HLALPL12W4xfsziaAoPRJ9",
+      "source_name": "connect-vertical.jpg",
+      "source_sha256": "cc9462a9f43b2466a46aee895f723641ff4f94e4ec0b6a8bdf11d7dc6f77262d",
+      "derivative_name": "connect-vertical.webp",
+      "derivative_sha256": "15bdc6309ff45aa17c3653b21338e06f9b3ed9267b8b9c9553a5250a961739b2",
+      "bytes": 1039706,
+      "width": 1080,
+      "height": 1920,
+      "transform": "EXIF orientation; lossless WebP; no resize or crop",
+      "tool": "Pillow 12.2.0",
+      "pixel_equality": true,
+      "bucket": "c3-field-media",
+      "object_key": "c1/15bdc6309ff45aa17c3653b21338e06f9b3ed9267b8b9c9553a5250a961739b2/connect-vertical.webp",
+      "runtime_url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c1/15bdc6309ff45aa17c3653b21338e06f9b3ed9267b8b9c9553a5250a961739b2/connect-vertical.webp",
+      "readback_sha256": "15bdc6309ff45aa17c3653b21338e06f9b3ed9267b8b9c9553a5250a961739b2",
+      "readback_bytes": 1039706
+    },
+    {
+      "source_drive_id": "1-95y6US5tzfJDShfP1ftm4J-iOymHhIN",
+      "source_name": "connect-square.jpg",
+      "source_sha256": "278d18672878b676f2e83bc25acddc0f87fb0bee327ef243a5be3c4a6da3a2b4",
+      "derivative_name": "connect-square.webp",
+      "derivative_sha256": "46442ffa3ffa4f0597ff758aa2727673504c6cf6ed0592e3d29276160f864c03",
+      "bytes": 770604,
+      "width": 1080,
+      "height": 1080,
+      "transform": "EXIF orientation; lossless WebP; no resize or crop",
+      "tool": "Pillow 12.2.0",
+      "pixel_equality": true,
+      "bucket": "c3-field-media",
+      "object_key": "c1/46442ffa3ffa4f0597ff758aa2727673504c6cf6ed0592e3d29276160f864c03/connect-square.webp",
+      "runtime_url": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c1/46442ffa3ffa4f0597ff758aa2727673504c6cf6ed0592e3d29276160f864c03/connect-square.webp",
+      "readback_sha256": "46442ffa3ffa4f0597ff758aa2727673504c6cf6ed0592e3d29276160f864c03",
+      "readback_bytes": 770604
+    }
+  ],
+  "videos": [
+    {
+      "source_drive_id": "1fjczn5zHd0q94IAyvH0KZA_BXFzqelGJ",
+      "source_sha256": "a68996e801ef91f99fbef19d22a2105fdb64e61b720d79e944fb6e521291a201",
+      "derivative_sha256": "a68996e801ef91f99fbef19d22a2105fdb64e61b720d79e944fb6e521291a201",
+      "derivative_role": "master",
+      "master_drive_id": "1fjczn5zHd0q94IAyvH0KZA_BXFzqelGJ",
+      "transform": "byte-preserving transfer of governed MP4",
+      "runtime_url": "https://field-media.c3field.online/c1/a68996e801ef91f99fbef19d22a2105fdb64e61b720d79e944fb6e521291a201/intro.mp4",
+      "bucket": "c3-field-media",
+      "object_key": "c1/a68996e801ef91f99fbef19d22a2105fdb64e61b720d79e944fb6e521291a201/intro.mp4",
+      "bytes": 38895186,
+      "readback_sha256": "a68996e801ef91f99fbef19d22a2105fdb64e61b720d79e944fb6e521291a201",
+      "range_status": 206
+    },
+    {
+      "source_drive_id": "1ur4DiB7qyXBpku1xz-8opF70Cop9ET3D",
+      "source_sha256": "208063482add26125a8f14e753ef7a5126ecffda027bb026b23c7b97c3b7c867",
+      "derivative_sha256": "208063482add26125a8f14e753ef7a5126ecffda027bb026b23c7b97c3b7c867",
+      "derivative_role": "vertical derivative",
+      "master_drive_id": "1fjczn5zHd0q94IAyvH0KZA_BXFzqelGJ",
+      "transform": "byte-preserving transfer of governed MP4",
+      "runtime_url": "https://field-media.c3field.online/c1/208063482add26125a8f14e753ef7a5126ecffda027bb026b23c7b97c3b7c867/intro-vertical.mp4",
+      "bucket": "c3-field-media",
+      "object_key": "c1/208063482add26125a8f14e753ef7a5126ecffda027bb026b23c7b97c3b7c867/intro-vertical.mp4",
+      "bytes": 13332354,
+      "readback_sha256": "208063482add26125a8f14e753ef7a5126ecffda027bb026b23c7b97c3b7c867",
+      "range_status": 206
+    }
+  ]
+}
