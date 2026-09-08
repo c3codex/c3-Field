@@ -1,4 +1,4 @@
-type Env = {
+﻿type Env = {
   SUPABASE_URL?: string
   VITE_SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
@@ -503,6 +503,284 @@ async function proveDevAdapter(env: Env, args: {
 }
 
 
+
+async function executeBufferAdapter(env: Env, args: {
+  route: RouteRow
+  asset: DistributionAssetRow
+  selectedObject: ReturnType<typeof publicationObject>
+}) {
+  const token = env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN
+  if (!token) {
+    return {
+      ok: false,
+      standing: "held_credentials",
+      external_publication_effects: 0,
+    }
+  }
+
+  const payload = (args.asset.payload ?? {}) as Record<string, unknown>
+  const assetMetadata = ((args.asset as any).metadata ?? {}) as Record<string, unknown>
+  const routeMetadata = (args.route.metadata ?? {}) as Record<string, unknown>
+
+  const channelKey =
+    asString(payload.channel_key) ??
+    asString(routeMetadata.channel_key) ??
+    args.route.outlet_key
+
+  const channelIdentifier =
+    asString(routeMetadata.channel_identifier)
+
+  const derivativeKey =
+    asString(payload.derivative_key) ??
+    asString(assetMetadata.derivative_key)
+
+  const registeredStandingKey =
+    asString(assetMetadata.registered_standing_key)
+
+  const registeredStanding =
+    asString(assetMetadata.registered_standing)
+
+  const text = asString(payload.text)
+
+  const canonicalUrl =
+    asString(payload.canonical_url) ??
+    args.route.canonical_url
+
+  if (
+    !channelKey ||
+    !channelIdentifier ||
+    !derivativeKey ||
+    !registeredStandingKey ||
+    !registeredStanding ||
+    !text ||
+    !canonicalUrl
+  ) {
+    return {
+      ok: false,
+      standing: "held_buffer_portal_inputs_missing",
+      request_identity: null,
+      external_response_code: 409,
+      platform_post_id: null,
+      platform_url: null,
+      external_publication_effects: 0,
+    }
+  }
+
+  const baseUrl =
+    (env.LAPZULI_DISTRIBUTION_WORKER_URL ?? DEFAULT_DIZZY_URL)
+      .replace(/\/$/, "")
+
+  const response = await fetch(`${baseUrl}/buffer/posts`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      publication_object_key:
+        args.selectedObject.publication_object_key,
+
+      derivative_key:
+        derivativeKey,
+
+      distribution_asset_id:
+        args.asset.distribution_asset_key,
+
+      channel_key:
+        channelKey,
+
+      channel_identifier:
+        channelIdentifier,
+
+      executor_key:
+        "buffer",
+
+      registered_standing_key:
+        registeredStandingKey,
+
+      registered_standing:
+        registeredStanding,
+
+      lapzuli_callable:
+        true,
+
+      operator_confirmed:
+        args.route.operator_confirmed === true &&
+        assetMetadata.operator_confirmed === true,
+
+      idempotency_key:
+        `portal:${args.route.route_key}:${args.asset.distribution_asset_key}:live-v1`,
+
+      canonical_url:
+        canonicalUrl,
+
+      text,
+
+      dry_run:
+        false,
+
+      execute:
+        true,
+    }),
+  })
+
+  const body = await response.json().catch(() => ({}))
+
+  const platformPostId =
+    asString(body?.platform_post_id) ??
+    asString(body?.buffer_update_id) ??
+    asString(body?.update_id) ??
+    asString(body?.update?.id) ??
+    null
+
+  const platformUrl =
+    asString(body?.platform_url) ??
+    asString(body?.url) ??
+    null
+
+  return {
+    ok: response.ok && body?.ok === true,
+
+    standing:
+      body?.standing ??
+      (response.ok
+        ? "buffer_post_created"
+        : "held_buffer_external_response"),
+
+    request_identity:
+      body?.request_identity ?? null,
+
+    external_response_code:
+      body?.external_response_code ?? response.status,
+
+    platform_post_id:
+      platformPostId,
+
+    platform_url:
+      platformUrl,
+
+    profile_id:
+      body?.profile_id ?? channelIdentifier,
+
+    channel_key:
+      body?.channel_key ?? channelKey,
+
+    external_publication_effects:
+      body?.external_publication_effects ?? 0,
+  }
+}
+
+
+async function recordBufferDistributionExecution(env: Env, args: {
+  asset: DistributionAssetRow
+  route: RouteRow
+  result: Awaited<ReturnType<typeof executeBufferAdapter>>
+}) {
+  const published =
+    args.result.ok &&
+    args.result.external_publication_effects === 1
+
+  await supabaseFetch(env, "measures_distribution_execution", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      distribution_asset_id:
+        args.asset.distribution_asset_key,
+
+      executor_key:
+        "buffer",
+
+      channel_key:
+        args.route.outlet_key,
+
+      execution_status:
+        published
+          ? "published"
+          : args.result.ok
+            ? "publication_attempted"
+            : "failed",
+
+      execution_mode:
+        "platform_api",
+
+      attempt_number:
+        1,
+
+      executed_at:
+        new Date().toISOString(),
+
+      published_at:
+        published ? new Date().toISOString() : null,
+
+      platform_post_id:
+        args.result.platform_post_id,
+
+      platform_url:
+        args.result.platform_url,
+
+      evidence: {
+        route_key:
+          args.route.route_key,
+
+        request_identity:
+          args.result.request_identity,
+
+        external_response_code:
+          args.result.external_response_code,
+
+        adapter_standing:
+          args.result.standing,
+
+        profile_id:
+          args.result.profile_id,
+
+        channel_key:
+          args.result.channel_key,
+
+        external_publication_effects:
+          args.result.external_publication_effects,
+      },
+
+      error:
+        args.result.ok ? null : args.result.standing,
+
+      source_oar2:
+        args.route.authority_reference,
+
+      created_by_actor_class:
+        "AI",
+
+      created_by_actor_key:
+        "Dizzy",
+
+      approved_by_actor_class:
+        "Human",
+
+      approved_by_actor_key:
+        "op044",
+
+      metadata: {
+        worker_identity:
+          "dizzy_lapzuli_distribution_worker_v1",
+
+        adapter:
+          "buffer_updates_create_v1",
+
+        operator_surface:
+          "/publish-undrifted",
+      },
+
+      optics: {
+        observes:
+          "distribution_event",
+
+        models_individuals_as_primary:
+          false,
+      },
+    }),
+  })
+}
+
 async function executeBlueskyAdapter(env: Env, args: {
   route: RouteRow
   asset: DistributionAssetRow
@@ -749,7 +1027,11 @@ function buildLapzuliStanding(args: {
   executions: ExecutionRow[]
   outletKey?: string | null
 }) {
-  const alreadyDistributed = args.executions.find((row) => row.platform_post_id || row.platform_url)
+  const alreadyDistributed = args.executions.find((row) =>
+    row.execution_status === "published" ||
+    Boolean(row.platform_post_id) ||
+    Boolean(row.platform_url)
+  )
   if (alreadyDistributed) {
     return {
       route_standing: "already_distributed",
@@ -847,11 +1129,32 @@ async function loadControls(env: Env, selection: {
   const objectKey = selectedObject?.publication_object_key ?? null
   const dispatch = await loadDispatch(env, selectedObject?.dispatch_key ?? null)
   const objectProfile = await loadObjectProfile(env, objectKey)
-  const selectedChannel = selectedAllowedChannel(selectedObject, selection.outletKey ?? null)
+  const objectChannel = selectedAllowedChannel(selectedObject, selection.outletKey ?? null)
   const [destinations, routes] = await Promise.all([
     loadDestinations(env, objectProfile?.desk_key ?? selectedObject?.desk_key ?? null),
     loadRoutes(env, objectKey),
   ])
+  const selectedDestination = selection.outletKey
+    ? destinations.find((row) =>
+        row.outlet_key === selection.outletKey &&
+        ["qualified", "qualified_with_constraints"].includes(
+          row.qualification_standing ?? ""
+        )
+      ) ?? null
+    : null
+
+  const selectedChannel =
+    objectChannel ??
+    (selectedDestination
+      ? {
+          outlet_key: selectedDestination.outlet_key,
+          outlet_name: selectedDestination.display_name,
+          distribution_mode: selectedDestination.route_type,
+          standing: selectedDestination.qualification_standing,
+          fit_score: selectedDestination.fit_score,
+          account_standing: selectedDestination.account_state,
+        }
+      : null)
   const selectedRoute = selection.routeKey
     ? routes.find((row) => row.route_key === selection.routeKey) ?? null
     : routes.find((row) =>
@@ -1199,6 +1502,95 @@ async function handleAction(request: Request, env: Env) {
     }, result.ok ? 201 : 502)
   }
 
+  if (
+    selectedRoute?.metadata?.adapter === "buffer_updates_create_v1" &&
+    selectedRoute?.metadata?.executor_key === "buffer"
+  ) {
+    const selectedAsset =
+      state.controls.selected_distribution_asset as DistributionAssetRow | null
+
+    if (!selectedAsset || !selectedObject) {
+      return jsonResponse({
+        ...state,
+        action_result: {
+          action,
+          standing: "held_distribution_asset_missing",
+          mutation_count: 0,
+          external_publication_effects: 0,
+        },
+      }, 409)
+    }
+
+    const result = await executeBufferAdapter(env, {
+      route: selectedRoute,
+      asset: selectedAsset,
+      selectedObject,
+    })
+
+    await recordBufferDistributionExecution(env, {
+      route: selectedRoute,
+      asset: selectedAsset,
+      result,
+    })
+
+    await recordActionEvidence(env, {
+      eventKey,
+      fromStatus: "route_recognized",
+
+      toStatus:
+        result.ok
+          ? result.standing
+          : "held_buffer_execution_failed",
+
+      transitionType:
+        result.ok ? "execution" : "held",
+
+      evidenceReference,
+
+      notes:
+        `Buffer dispatch for ${publicationObjectKey} on ${selectedRoute.outlet_key}: ` +
+        `${result.standing}; external publication effects ` +
+        `${result.external_publication_effects}.`,
+    })
+
+    return jsonResponse({
+      ...state,
+
+      action_result: {
+        action,
+        standing:
+          result.standing,
+
+        mutation_count:
+          2,
+
+        external_publication_effects:
+          result.external_publication_effects,
+
+        evidence_identity:
+          eventKey,
+
+        platform_post_id:
+          result.platform_post_id,
+
+        platform_url:
+          result.platform_url,
+
+        profile_id:
+          result.profile_id,
+
+        selected_publication_object:
+          selectedObject,
+
+        selected_channel:
+          selectedChannel,
+
+        selected_route:
+          selectedRoute,
+      },
+    }, result.ok ? 201 : 502)
+  }
+
   if (selectedRoute?.outlet_key === "dev") {
     const selectedAsset = state.controls.selected_distribution_asset as DistributionAssetRow | null
     if (!selectedAsset || !selectedObject) {
@@ -1309,3 +1701,5 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
 export const onRequest = async () =>
   jsonResponse({ error: "method not allowed" }, 405)
+
+

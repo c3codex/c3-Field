@@ -4,12 +4,12 @@ const AUTHORIZED_CHANNELS = {
   facebook_undrifted: {
     platform: "facebook",
     profile_id: "6a54761280cc80cdcaa97c9a",
-    credential: "BUFFER_PUB2_KEY",
+    credential: "BUFFER_SOCIAL_KEY",
   },
   facebook_measures_registry: {
     platform: "facebook",
     profile_id: "6a54734280cc80cdcaa9743b",
-    credential: "BUFFER_PUB2_KEY",
+    credential: "BUFFER_SOCIAL_KEY",
   },
   linkedin_measures_registry: {
     platform: "linkedin",
@@ -42,7 +42,6 @@ export async function handleBufferRequest(request, env, pathname) {
       standing: "buffer_bindings_checked",
       required_bindings: {
         LAPZULI_DISTRIBUTION_CONTROL_TOKEN: Boolean(env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN),
-        BUFFER_PUB2_KEY: Boolean(env.BUFFER_PUB2_KEY),
         BUFFER_SOCIAL_KEY: Boolean(env.BUFFER_SOCIAL_KEY),
       },
       external_publication_effects: 0,
