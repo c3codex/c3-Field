@@ -1,4 +1,4 @@
-// Runtime media projection. Asset transfer does not open participant passage.
+// Runtime projection. Connect release authorized by op044 controlled-live-passage OAR2 001.
 import type {C1EnvironmentPackage} from "./c1EnvironmentPackage"
 export const c1RuntimePackage: C1EnvironmentPackage = {
   "available": true,
@@ -31,5 +31,5 @@ export const c1RuntimePackage: C1EnvironmentPackage = {
     }
   },
   "initiatives": [],
-  "encounterEnabled": false
+  "encounterEnabled": true
 }

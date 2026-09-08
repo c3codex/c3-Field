@@ -1,4 +1,4 @@
-﻿.c3-connect-shell{--c3-ink:#101315;--c3-paper:#eeece5;--c3-silver:#bbc2cb;min-height:100vh;background:var(--c3-ink);color:var(--c3-paper);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.c3-connect-shell{--c3-ink:#101315;--c3-paper:#eeece5;--c3-silver:#bbc2cb;min-height:100vh;background:var(--c3-ink);color:var(--c3-paper);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
 .c3-connect-shell *{box-sizing:border-box}
 .c3-connect-width{width:min(1240px,calc(100% - 96px));margin-inline:auto}
 .c3-connect-shell a{color:inherit;text-decoration:none}
@@ -59,3 +59,8 @@
 @media(max-width:600px){.c3-connect-width{width:calc(100% - 40px)}.c3-connect-review{font-size:10px;padding-inline:12px}.c3-connect-header{padding-block:19px}.c3-connect-identity{font-size:11px}.c3-connect-identity img{width:42px;height:42px}.c3-connect-nav{font-size:10px;gap:15px}.c3-connect-hero{grid-template-columns:1fr;padding-block:52px 34px;gap:25px;min-height:0}.c3-connect-hero h1{font-size:clamp(44px,11vw,62px);max-width:460px}.c3-connect-kicker{font-size:9px;letter-spacing:.12em;margin-bottom:20px}.c3-connect-lead{font-size:14px;margin-block:24px}.c3-connect-emblem-stage{min-height:0;max-width:230px;width:64%;margin-inline:auto;padding:8px}.c3-connect-structure{font-size:8px;letter-spacing:.13em;padding-block:20px}.c3-connect-mission{padding-block:52px}.c3-connect-mission-grid,.c3-connect-panel{grid-template-columns:1fr;gap:28px}.c3-connect-mission-body{font-size:14px}.c3-connect-media{padding-block:52px}.c3-connect-section-heading{display:block;margin-bottom:25px}.c3-connect-section-heading .c3-connect-kicker{max-width:none;margin-bottom:16px}.c3-connect-video-frame video{aspect-ratio:9/16;max-height:610px}.c3-connect-panel{padding-block:50px 60px;gap:35px}.c3-connect-input-pair{grid-template-columns:1fr}.c3-connect-form fieldset{gap:20px}.c3-connect-footer{flex-direction:column;gap:12px}.c3-connect-button{min-height:50px}}
 @media(prefers-reduced-motion:reduce){.c3-connect-shell *{scroll-behavior:auto!important;transition:none!important}}
 @media(max-width:600px){.c3-connect-media{grid-template-columns:1fr;gap:0}}
+
+/* Keep the Connect form reachable under the legacy fullscreen stylesheet. */
+html:has(.c3-connect-shell),
+body:has(.c3-connect-shell),
+#root:has(.c3-connect-shell){overflow-y:auto}
