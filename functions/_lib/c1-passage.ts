@@ -1,4 +1,3 @@
-import type {CaptureDiagnostic} from "./c1-diagnostic"
 // Server-only orchestration. Governance and dispositions remain in the registered RPCs.
 export const ENV_KEY = "env_c3_community_connect"
 const PROJECT_URL = "https://zfihrspxvennjzazxcbj.supabase.co"
@@ -36,7 +35,7 @@ function configuration(env: PassageEnv) {
       origin.username || origin.password) throw new Error("server_configuration")
   return origin.origin
 }
-function rpcClient(env: PassageEnv, deps: Dependencies = defaults, diagnostic?: CaptureDiagnostic): Rpc {
+function rpcClient(env: PassageEnv, deps: Dependencies = defaults): Rpc {
   return async (name, args) => {
     if (!["capture_relational_candidate","issue_relational_verification","verify_relational_contact",
       "evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship"].includes(name))
@@ -47,8 +46,7 @@ function rpcClient(env: PassageEnv, deps: Dependencies = defaults, diagnostic?: 
         authorization:"Bearer " + env.SUPABASE_SERVICE_ROLE_KEY!},
       body:JSON.stringify(args),
     })
-    if (!response.ok) { await diagnostic?.rpcFailure(name,response); throw new Error("rpc_failed") }
-    diagnostic?.emit(name+"_http_success",response.status)
+    if (!response.ok) throw new Error("rpc_failed")
     const result = await response.json()
     if (!result || typeof result !== "object" || Array.isArray(result)) throw new Error("rpc_shape")
     return result
@@ -74,7 +72,7 @@ async function readReceipt(receipt: string, env: PassageEnv, now: number): Promi
       !Number.isFinite(value.expires) || value.expires <= now) throw new Error("receipt")
   return value.key
 }
-export async function captureCandidate(body: RecordValue, env: PassageEnv, deps: Dependencies = defaults, diagnostic?: CaptureDiagnostic) {
+export async function captureCandidate(body: RecordValue, env: PassageEnv, deps: Dependencies = defaults) {
   let candidate: boolean | null = false
   let stage = "server_configuration"
   try {
@@ -82,10 +80,9 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     // Transport must be configured before collecting candidate evidence.
     if (!env.C3_RESEND_API_KEY || !env.C1_VERIFICATION_FROM || /[\r\n]/.test(env.C1_VERIFICATION_FROM))
       return unavailable()
-    const rpc = rpcClient(env,deps,diagnostic)
+    const rpc = rpcClient(env,deps)
     stage = "capture_unconfirmed"
     candidate = null // A network timeout cannot prove that the transaction did not commit.
-    diagnostic?.emit("capture_rpc_start")
     const captured = await rpc("capture_relational_candidate", {
       p_env_key:ENV_KEY,p_encounter_key:"c3_community_connect",p_primary_email:body.email,
       p_display_name:body.name,p_organization:null,p_consent_scope:"c1_connect_relationship",
@@ -97,7 +94,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
         !/^crs_[a-f0-9]{32}$/.test(captured.relationship_key) ||
         captured.standing_created !== false || captured.current_created !== false || captured.persistence_created !== false)
       return verificationRequired()
-    candidate = true; diagnostic?.emit("candidate_accepted")
+    candidate = true
     stage = "verification_issue"
     const issue = await rpc("issue_relational_verification", {
       p_relationship_key:captured.relationship_key,p_env_key:ENV_KEY,p_ttl_minutes:30,
@@ -108,7 +105,6 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
         !/^[a-f0-9]{48}$/.test(issue.challenge_token) || !Number.isFinite(Date.parse(issue.expires_at)) ||
         Date.parse(issue.expires_at) <= deps.now() || issue.standing_created !== false ||
         issue.current_created !== false || issue.persistence_created !== false) return verificationRequired()
-    diagnostic?.emit("challenge_issued")
     const receipt = await signedReceipt(captured.relationship_key,issue.expires_at,env)
     // Fragment never reaches GET access logs or Referer; explicit POST is the second encounter.
     const link = origin + "/api/c3-community-connect-verify#" + new URLSearchParams({receipt,token:issue.challenge_token})
@@ -121,12 +117,11 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
         subject:"Confirm your c3 Community Partners connection",
         text:"Confirm your email to continue your connection:\n\n" + link + "\n\nThis link expires in 30 minutes. If you did not request it, ignore this email."}),
     })
-    diagnostic?.emit("verification_transport_response",delivered.status)
     const delivery = await delivered.json().catch(() => null)
     if (!delivered.ok || !delivery || typeof delivery !== "object" || !("id" in delivery) ||
         typeof delivery.id !== "string" || !delivery.id) return verificationRequired()
     return verificationRequired()
-  } catch (error) { const kind=error instanceof Error && ["Error","TypeError","AbortError","TimeoutError","SyntaxError"].includes(error.name) ? error.name : "exception_details_withheld"; diagnostic?.emit(stage+"_exception",null,null,kind); return stage === "server_configuration" ? unavailable() : verificationRequired() }
+  } catch { return stage === "server_configuration" ? unavailable() : verificationRequired() }
 }
 export async function verifyCandidate(body: RecordValue, env: PassageEnv, deps: Dependencies = defaults) {
   let stage = "verification"
