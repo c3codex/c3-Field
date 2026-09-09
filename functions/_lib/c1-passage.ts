@@ -41,7 +41,7 @@ function rpcClient(env: PassageEnv, deps: Dependencies = defaults): Rpc {
       "evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship"].includes(name))
       throw new Error("unregistered_call")
     const response = await deps.fetch(PROJECT_URL + "/rest/v1/rpc/" + name, {
-      method:"POST", redirect:"error", signal:AbortSignal.timeout(12000),
+      method:"POST", redirect:"manual", signal:AbortSignal.timeout(12000),
       headers:{"content-type":"application/json",apikey:env.SUPABASE_SERVICE_ROLE_KEY!,
         authorization:"Bearer " + env.SUPABASE_SERVICE_ROLE_KEY!},
       body:JSON.stringify(args),
@@ -110,7 +110,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     const link = origin + "/api/c3-community-connect-verify#" + new URLSearchParams({receipt,token:issue.challenge_token})
     stage = "verification_transport_unconfirmed"
     const delivered = await deps.fetch("https://api.resend.com/emails", {
-      method:"POST",redirect:"error",signal:AbortSignal.timeout(12000),
+      method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
       headers:{"content-type":"application/json",authorization:"Bearer " + env.C3_RESEND_API_KEY,
         "idempotency-key":issue.challenge_key},
       body:JSON.stringify({from:env.C1_VERIFICATION_FROM,to:[body.email],
