@@ -1,4 +1,5 @@
-import { useEffect } from "react"
+import { lazy, Suspense, useEffect } from "react"
+const C2EnvironmentShell = lazy(() => import("../c3_field_contribution/C2EnvironmentShell"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
@@ -358,6 +359,7 @@ export default function App() {
   }
 
   if (isC3Host || mode === "c3field") {
+    if (c3Route.kind === "c2_shell") return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentShell /></Suspense>
     if (c3Route.kind === "operations") return <OarOperationsConsole />
     if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
     return <C3CommunityConnect />

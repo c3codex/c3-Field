@@ -1,9 +1,9 @@
-export type C3FieldRouteKind = "connect" | "operations" | "held_unknown"
+export type C3FieldRouteKind = "connect" | "c2_shell" | "operations" | "held_unknown"
 
 export type C3FieldRouteDecision = {
   kind: C3FieldRouteKind
   pathname: string
-  component: "C3CommunityConnect" | "OarOperationsConsole" | "HeldUnknownC3FieldRoute"
+  component: "C3CommunityConnect" | "C2EnvironmentShell" | "OarOperationsConsole" | "HeldUnknownC3FieldRoute"
   exposesOperationsSpine: boolean
   createsStanding: false
 }
@@ -14,6 +14,7 @@ export function normalizeC3Pathname(pathname: string) {
 
 export function resolveC3FieldRoute(pathname: string): C3FieldRouteDecision {
   const normalized = normalizeC3Pathname(pathname)
+  if (normalized === "/c2") return {kind:"c2_shell", pathname:normalized, component:"C2EnvironmentShell", exposesOperationsSpine:false, createsStanding:false}
   if (normalized === "/") {
     return {
       kind: "connect",
