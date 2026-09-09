@@ -1,3 +1,4 @@
+import {createCaptureDiagnostic, type CaptureDiagnostic} from "../_lib/c1-diagnostic"
 import {captureCandidate, type PassageEnv} from "../_lib/c1-passage"
 import {unable} from "../_lib/c1-abuse"
 const headers = {"content-type": "application/json; charset=utf-8", "cache-control": "no-store"}
@@ -7,7 +8,7 @@ function held(standing: string, message: string, status: number, evidence?: unkn
 }
 const clean = (value: unknown) => typeof value === "string" ? value.trim() : ""
 
-export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) => {
+const handlePost = async ({request, env}: {request: Request; env: PassageEnv}, diagnostic: CaptureDiagnostic) => {
   if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json"))
     return held("held_content_type", "A JSON submission is required.", 415)
   const origin = request.headers.get("origin")
@@ -52,9 +53,18 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) =
   if (env?.C1_PASSAGE_ENABLED === "true") {
     if (origin !== env.C1_PUBLIC_ORIGIN || origin !== new URL(request.url).origin)
       return held("held_origin_mismatch", "The submission could not be verified.", 403)
-    return captureCandidate({name,email,message},env)
+    return captureCandidate({name,email,message},env,undefined,diagnostic)
   }
   return unable()
 }
 export const onRequest: PagesFunction = async () =>
   new Response(JSON.stringify({error:"method not allowed"}), {status:405,headers:{...headers,allow:"POST"}})
+
+export const onRequestPost: PagesFunction<PassageEnv> = async (context) => {
+  const diagnostic=createCaptureDiagnostic()
+  diagnostic.emit("request_received")
+  const response=await handlePost(context,diagnostic)
+  diagnostic.emit("response_returned",response.status)
+  response.headers.set("x-c1-diagnostic-id",diagnostic.correlation_id)
+  return response
+}
