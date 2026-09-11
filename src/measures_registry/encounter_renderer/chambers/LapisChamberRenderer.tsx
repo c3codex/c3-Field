@@ -14,6 +14,7 @@ import {
   asString,
   asStringArray,
 } from "../shared/encounterRendererUtils"
+import { RegistryHomeHero } from "../shared/RegistryHomeHero"
 import { encounterStyleDataAttributes } from "../styles/encounterStyleProfile"
 import {
   launchCycleArticleForPath,
@@ -1075,16 +1076,11 @@ function MeasuresRegistryHome({
   }
 
   // Seated branding and content properties
-  const identity = asRecord(approved.identity)
-  const category = asString(identity?.category) ?? "Computational Systems Governance"
-  const tagline = asString(identity?.tagline) ?? "Governed Systems. Relational Operations."
   const missionText = asString(approved.mission) ?? "Make computational participation governable."
 
   // Hero & Brand media consumed through registered encounter media roles
   const presentationSealRow = encounter.mediaByRole.get("mr_public_presentation_seal_artwork_webp_v1")
-  const socialBannerRow = encounter.mediaByRole.get("mr_public_social_banner_webp_v1")
   const presentationSealUrl = mediaUrl(presentationSealRow)
-  const socialBannerUrl = mediaUrl(socialBannerRow)
 
   // Hero media
   const videoRow = encounter.mediaByRole.get("about_measures_registry_video")
@@ -1096,7 +1092,6 @@ function MeasuresRegistryHome({
   const sectionsArray = asRecordArray(approved.sections)
   const getSection = (key: string) => sectionsArray.find((s) => asString(s.key) === key)
 
-  const heroSection = getSection("hero")
   const problemSection = getSection("problem")
   const positionSection = getSection("position")
   const missionSection = getSection("mission")
@@ -1120,17 +1115,7 @@ function MeasuresRegistryHome({
       {renderHeader({ title: "Measures Registry" })}
 
       <div className="registry-home-shell">
-        {/* 1. HERO SECTION - Approved registered Measures Registry banner as Hero */}
-        {socialBannerUrl ? (
-          <section id="hero" className="registry-home-hero-banner" aria-label="Hero Banner" style={{ width: "100%", overflow: "hidden", borderBottom: "1px solid rgba(114, 144, 188, 0.15)", paddingBottom: "2rem" }}>
-            <img
-              src={socialBannerUrl}
-              alt="Measures Registry — Computational Systems Governance — Governed Systems. Relational Operations."
-              style={{ width: "100%", height: "auto", display: "block" }}
-              loading="eager"
-            />
-          </section>
-        ) : null}
+        <RegistryHomeHero homeHero={encounter.homeHero} />
 
         {/* space / material transition */}
         <div style={{ height: "3rem" }} />
