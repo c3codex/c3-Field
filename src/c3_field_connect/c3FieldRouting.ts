@@ -24,7 +24,10 @@ export function resolveC3FieldRoute(pathname: string): C3FieldRouteDecision {
       createsStanding: false,
     }
   }
-  if (normalized === "/community-potential") {\n    return { kind: "publication", pathname: normalized, component: "PublicWhitePaperLanding", exposesOperationsSpine: false, createsStanding: false }\n  }\n  if (normalized === "/c3ops") {
+  if (normalized === "/community-potential") {
+    return { kind: "publication", pathname: normalized, component: "PublicWhitePaperLanding", exposesOperationsSpine: false, createsStanding: false }
+  }
+  if (normalized === "/c3ops") {
     return {
       kind: "operations",
       pathname: normalized,
