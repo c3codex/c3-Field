@@ -69,6 +69,14 @@ export const c3ProcessFabric: C3ProcessDefinition[] = [
     standing: "structural",
   },
   {
+    key: "external_encounter",
+    label: "External encounter",
+    location: "canopy",
+    calledFrom: "Field / Interoperability",
+    effect: "relate a bounded c3 passage to a non-c3 environment",
+    standing: "structural",
+  },
+  {
     key: "lapzuli_distribution",
     label: "Lapzuli Distribution",
     location: "field",
