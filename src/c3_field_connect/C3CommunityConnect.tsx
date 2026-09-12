@@ -1,8 +1,14 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
+import LapzuliPortal from "./LapzuliPortal"
 import "./c3CommunityConnect.css"
 
 export default function C3CommunityConnect() {
+  if (window.location.hostname === "c3ops.c3field.online") return <LapzuliPortal />
+  return <C3CommunityConnectSurface />
+}
+
+function C3CommunityConnectSurface() {
   const [environment, setEnvironment] = useState<Awaited<ReturnType<typeof loadC1EnvironmentPackage>> | null>(null)
   useEffect(() => {
     let active = true
