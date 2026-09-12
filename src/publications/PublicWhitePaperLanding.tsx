@@ -10,7 +10,18 @@ function isHeading(value: string) {
     /^\d+\.\s/.test(value)
 }
 
+function downloadUrlFor(paper: WhitePaperDocument) {
+  if (paper.canonicalUrl === "https://measuresregistry.com/governed-environments") {
+    return "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/measures-registry/governed_enviroments.pdf"
+  }
+  if (paper.canonicalUrl === "https://c3field.online/community-potential") {
+    return "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c3_Community_Potential_Public_1.0_WARM_MARBLE.pdf"
+  }
+  return null
+}
+
 export default function PublicWhitePaperLanding({ paper }: { paper: WhitePaperDocument }) {
+  const downloadUrl = downloadUrlFor(paper)
   return (
     <main className="wp-shell">
       <article className="wp-paper" itemScope itemType="https://schema.org/TechArticle">
@@ -21,6 +32,7 @@ export default function PublicWhitePaperLanding({ paper }: { paper: WhitePaperDo
           <p className="wp-abstract" itemProp="abstract">{paper.abstract}</p>
           <div className="wp-actions">
             <a className="wp-primary" href="#white-paper">Read the white paper</a>
+            {downloadUrl ? <a href={downloadUrl} target="_blank" rel="noreferrer">Download PDF</a> : null}
             <a href={paper.relatedUrl}>Related paper: {paper.relatedTitle}</a>
           </div>
         </header>
