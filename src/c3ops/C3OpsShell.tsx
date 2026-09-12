@@ -17,6 +17,7 @@ import {
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import { c3Tree, c3TreeLaw, type C3TreeBranchKey } from "./c3TreeModel"
+import { c3ProcessFabric, processLocationLabel } from "./c3ProcessFabric"
 import "./c3OpsShell.css"
 
 type SurfaceKey = "current" | "systems" | "registry" | "evidence" | "build" | "work"
@@ -337,16 +338,44 @@ function SystemsSurface() {
 
 function RegistrySurface() {
   return (
-    <div className="c3ops-object-grid">
-      {["People", "Agents", "Roles", "Systems", "Environments", "Processes", "Sources", "Assets", "Relationships", "Standing"].map((name) => (
-        <article key={name}>
-          <Orbit size={16} />
+    <div className="c3ops-stack">
+      <div className="c3ops-object-grid">
+        {["People", "Agents", "Roles", "Systems", "Environments", "Processes", "Sources", "Assets", "Relationships", "Standing"].map((name) => (
+          <article key={name}>
+            <Orbit size={16} />
+            <div>
+              <span>{name}</span>
+              <small>read model</small>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <section className="c3ops-process-fabric">
+        <div className="c3ops-process-fabric-heading">
           <div>
-            <span>{name}</span>
-            <small>read model</small>
+            <p className="c3ops-eyebrow">Registry / Processes</p>
+            <h2>Tree-aware process fabric</h2>
           </div>
-        </article>
-      ))}
+          <span>structural read model · live resolver pending</span>
+        </div>
+
+        <div className="c3ops-process-fabric-grid">
+          {c3ProcessFabric.map((process) => (
+            <article key={process.key}>
+              <div className="c3ops-process-fabric-title">
+                <strong>{process.label}</strong>
+                <span data-standing={process.standing}>{process.standing}</span>
+              </div>
+              <dl>
+                <div><dt>Tree</dt><dd>{processLocationLabel(process.location)}</dd></div>
+                <div><dt>Called from</dt><dd>{process.calledFrom}</dd></div>
+                <div><dt>Effect</dt><dd>{process.effect}</dd></div>
+              </dl>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
