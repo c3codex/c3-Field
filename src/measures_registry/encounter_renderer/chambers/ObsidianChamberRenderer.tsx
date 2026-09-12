@@ -146,7 +146,11 @@ function ObsidianOrientationThreshold({
   const ctaLabel = asString(contentProfile?.cta_label) ?? "Begin Assessment"
   const next = resolveNextSurface(encounter)
 
-  const videoUrl = mediaUrl(encounter.mediaByRole.get("obsidian"))
+  const orientationVideo = encounter.mediaByRole.get("obsidian")
+  const videoUrl = mediaUrl(orientationVideo)
+  const videoMetadata = asRecord(orientationVideo?.metadata)
+  const captionTrackUrl = asString(videoMetadata?.caption_track_public_url)
+  const captionLanguage = asString(videoMetadata?.caption_language) ?? "en"
   const bgUrl = mediaUrl(encounter.mediaByRole.get("obsidian_orientation_surface"))
 
   function handleContinue() {
@@ -199,7 +203,11 @@ function ObsidianOrientationThreshold({
                   playsInline
                   preload="auto"
                   aria-label={title}
-                />
+                >
+                  {captionTrackUrl ? (
+                    <track kind="captions" src={captionTrackUrl} srcLang={captionLanguage} label="English" default />
+                  ) : null}
+                </video>
               ) : (
                 <div className="registry-obsidian-orientation-media-absent" role="presentation" />
               )}
