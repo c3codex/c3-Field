@@ -1,9 +1,9 @@
-export type C3FieldRouteKind = "connect" | "operations" | "publication" | "held_unknown"
+export type C3FieldRouteKind = "connect" | "operations" | "held_unknown"
 
 export type C3FieldRouteDecision = {
   kind: C3FieldRouteKind
   pathname: string
-  component: "C3CommunityConnect" | "OarOperationsConsole" | "PublicWhitePaperLanding" | "HeldUnknownC3FieldRoute"
+  component: "C3CommunityConnect" | "OarOperationsConsole" | "HeldUnknownC3FieldRoute"
   exposesOperationsSpine: boolean
   createsStanding: false
 }
@@ -23,7 +23,7 @@ export function resolveC3FieldRoute(pathname: string): C3FieldRouteDecision {
       createsStanding: false,
     }
   }
-  if (normalized === "/community-potential") {\n    return {\n      kind: "publication",\n      pathname: normalized,\n      component: "PublicWhitePaperLanding",\n      exposesOperationsSpine: false,\n      createsStanding: false,\n    }\n  }\n  if (normalized === "/c3ops") {
+  if (normalized === "/c3ops") {
     return {
       kind: "operations",
       pathname: normalized,
