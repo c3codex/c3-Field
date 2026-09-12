@@ -460,6 +460,32 @@ async function main() {
   writeWebsiteRouteHead(
     outDir,
     template,
+    "/governed-environments",
+    "Governed Environments | Measures Registry",
+    "Operational Systems Governance for AI and Computational Action. A Measures Registry public white paper on governing the environment in which computational action occurs.",
+  )
+  const governedEnvironmentsPath = path.join(outDir, "governed-environments", "index.html")
+  if (fs.existsSync(governedEnvironmentsPath)) {
+    let governedHtml = fs.readFileSync(governedEnvironmentsPath, "utf8")
+    governedHtml = injectJsonLd(governedHtml, {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: "Governed Environments",
+      alternativeHeadline: "Operational Systems Governance for AI and Computational Action",
+      description: "Reliable AI deployment depends on governing the environment in which computational action occurs, not merely the model, tool, or output.",
+      url: "https://measuresregistry.com/governed-environments",
+      datePublished: "2026-09",
+      version: "1.0",
+      publisher: { "@id": REGISTRY_ORGANIZATION_ID },
+      about: ["operational systems governance", "AI governance", "computational action", "governed environments", "structural drift"],
+      isPartOf: { "@type": "CreativeWorkSeries", name: "People and Systems" },
+      citation: "https://c3field.online/community-potential",
+    })
+    fs.writeFileSync(governedEnvironmentsPath, governedHtml)
+  }
+  writeWebsiteRouteHead(
+    outDir,
+    template,
     "/home",
     "Measures Registry | Computational Systems Governance",
     "Computational Systems Governance for governed systems and relational operations.",
@@ -503,6 +529,7 @@ async function main() {
 
   console.log(
     `Generated governed registry route heads: ${[
+      "/governed-environments",
       "/home",
       "/connect",
       "/publish-undrifted",
