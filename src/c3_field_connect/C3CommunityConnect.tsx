@@ -148,5 +148,5 @@ export default function C3CommunityConnect() {
 }
 
 export function HeldUnknownC3FieldRoute({ pathname }: { pathname: string }) {
-  return <main className="c3-connect-shell c3-connect-held" data-c3-route={pathname} data-operations-exposed="false"><section className="c3-connect-width"><p className="c3-connect-kicker">c3 Community Partners</p><h1>This page is not available yet.</h1><p>Please return later.</p></section></main>
+  return <main className="c3-connect-shell c3-connect-held" data-c3-route={pathname} data-operations-exposed="false"><section className="c3-connect-width"><p className="c3-connect-kicker"><span className="c3-connect-brand-token">c3</span> Community Partners</p><h1>This page is not available yet.</h1><p>Please return later.</p></section></main>
 }
