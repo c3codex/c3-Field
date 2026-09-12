@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
+import { c3Tree, c3TreeLaw, type C3TreeBranchKey } from "./c3TreeModel"
 import "./c3OpsShell.css"
 
 type SurfaceKey = "current" | "systems" | "registry" | "evidence" | "build" | "work"
@@ -32,7 +33,7 @@ type SurfaceDefinition = {
 
 const views: SurfaceDefinition[] = [
   { key: "current", label: "Current", question: "What is true now?", kind: "view", icon: CircleDot, access: "scoped_read" },
-  { key: "systems", label: "Systems", question: "Where does bounded responsibility live?", kind: "view", icon: Boxes, access: "scoped_read" },
+  { key: "systems", label: "Systems", question: "How is the c3 Tree related?", kind: "view", icon: Boxes, access: "scoped_read" },
   { key: "registry", label: "Registry", question: "What does this environment recognize?", kind: "view", icon: Orbit, access: "scoped_read" },
   { key: "evidence", label: "Evidence", question: "Why is this state trusted?", kind: "view", icon: FileStack, access: "scoped_read" },
 ]
@@ -112,12 +113,33 @@ function AccessBoundary({ compact = false }: { compact?: boolean }) {
   )
 }
 
+function TreeCoordinate({
+  branch,
+  operation,
+}: {
+  branch: C3TreeBranchKey
+  operation: string
+}) {
+  const branchDefinition = c3Tree.branches.find((candidate) => candidate.key === branch)
+
+  return (
+    <section className="c3ops-tree-coordinate">
+      <div>
+        <p className="c3ops-eyebrow">c3 Tree coordinate</p>
+        <strong>{c3Tree.roots.label} → {c3Tree.trunk.label} → {branchDefinition?.label ?? branch}</strong>
+      </div>
+      <span>{operation}</span>
+    </section>
+  )
+}
+
 function BuildSurface() {
   const [previewOpen, setPreviewOpen] = useState(false)
 
   return (
     <div className="c3ops-stack">
       <AccessBoundary />
+      <TreeCoordinate branch="field" operation="BUILD · Environment formation" />
 
       <section className="c3ops-call-card" data-secure-operation="true">
         <div className="c3ops-free-mark">FREE</div>
@@ -180,7 +202,7 @@ function BuildSurface() {
               <article>
                 <Network size={18} />
                 <div>
-                  <strong>Material / Interoperability</strong>
+                  <strong>Interoperability trunk</strong>
                   <span>Source, destination, permitted passage, custody, expected return.</span>
                 </div>
               </article>
@@ -248,14 +270,67 @@ function CurrentSurface() {
 
 function SystemsSurface() {
   return (
-    <div className="c3ops-grid">
-      {["Measures Registry", "Measures of Inanna", "c3 Field", "c3 Ops"].map((name) => (
-        <article className="c3ops-card" key={name}>
-          <p className="c3ops-eyebrow">View · bounded responsibility</p>
-          <h3>{name}</h3>
-          <p>Classification, environment relation, and standing will resolve from governed authority.</p>
-        </article>
-      ))}
+    <div className="c3ops-tree-view">
+      <section className="c3ops-tree-optics">
+        <Eye size={16} />
+        <div>
+          <p className="c3ops-eyebrow">Across the whole tree</p>
+          <strong>{c3Tree.optics.label}</strong>
+          <span>{c3Tree.optics.purpose}</span>
+        </div>
+      </section>
+
+      <section className="c3ops-tree-branches" aria-label="c3 Tree branches">
+        {c3Tree.branches.map((branch) => (
+          <article className="c3ops-tree-branch" data-branch={branch.key} key={branch.key}>
+            <p className="c3ops-eyebrow">Branch</p>
+            <h3>{branch.label}</h3>
+            <p>{branch.purpose}</p>
+            <div>
+              {branch.examples.map((example) => <span key={example}>{example}</span>)}
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <section className="c3ops-tree-trunk">
+        <Network size={18} />
+        <div>
+          <p className="c3ops-eyebrow">Trunk</p>
+          <h2>{c3Tree.trunk.label}</h2>
+          <p>{c3Tree.trunk.purpose}</p>
+          <div>
+            {c3Tree.trunk.examples.map((example) => <span key={example}>{example}</span>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="c3ops-tree-roots">
+        <div className="c3ops-tree-root-heading">
+          <Boxes size={18} />
+          <div>
+            <p className="c3ops-eyebrow">Roots</p>
+            <h2>{c3Tree.roots.label}</h2>
+            <p>{c3Tree.roots.purpose}</p>
+          </div>
+        </div>
+        <div className="c3ops-tree-root-grid">
+          {c3Tree.roots.examples.map((system) => (
+            <article key={system}>
+              <strong>{system}</strong>
+              <span>standing + environment relation resolve from Registry authority</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="c3ops-tree-law">
+        <GitBranch size={16} />
+        <div>
+          {c3TreeLaw.map((line) => <span key={line}>{line}</span>)}
+        </div>
+        <small>Structural shell model · relationship resolver not yet wired</small>
+      </section>
     </div>
   )
 }
@@ -415,6 +490,7 @@ function WorkSurface() {
   return (
     <div className="c3ops-stack">
       <AccessBoundary />
+      <TreeCoordinate branch="field" operation="WORK · governed passage" />
       <section className="c3ops-operation-intro">
         <div>
           <p className="c3ops-eyebrow">Operations workspace</p>
@@ -479,7 +555,7 @@ export default function C3OpsShell() {
 
       <div className="c3ops-horizontal">
         <div><Eye size={15} /><strong>c3Optics</strong><span>observe · correlate · verify</span></div>
-        <div><Network size={15} /><strong>Material Layer</strong><span>bounded interoperability</span></div>
+        <div><Network size={15} /><strong>Interoperability</strong><span>trunk · relation · passage · return</span></div>
       </div>
 
       <div className="c3ops-body">
