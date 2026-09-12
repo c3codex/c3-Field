@@ -196,9 +196,9 @@ const C3_FIELD_METADATA = {
 }
 
 const C3_OPS_METADATA = {
-  title: "c3 Field Operations",
-  description: "c3 Field Convergence operations spine.",
-  url: "https://c3field.online/c3ops",
+  title: "c3 Ops | c3 Field",
+  description: "c3 Ops builds, connects, observes, operates, and preserves governed environments.",
+  url: "https://c3ops.c3field.online",
   image: "https://c3field.online/og.jpeg",
   type: "website",
 }
@@ -213,6 +213,10 @@ function isMeasuresOfInannaHost(hostname: string) {
 
 function isC3FieldHost(hostname: string) {
   return hostname === "c3field.online" || hostname === "www.c3field.online"
+}
+
+function isC3OpsHost(hostname: string) {
+  return hostname === "c3ops.c3field.online"
 }
 
 // Cloudflare issues a 308 redirect adding a trailing slash to every non-root route
@@ -313,10 +317,16 @@ export default function App() {
   const isRegistryHost = isMeasuresRegistryHost(hostname)
   const isInannaHost = isMeasuresOfInannaHost(hostname)
   const isC3Host = isC3FieldHost(hostname)
+  const isOpsHost = isC3OpsHost(hostname)
   const c3Route = resolveC3FieldRoute(window.location.pathname)
 
   useEffect(() => {
     let cancelled = false
+
+    if (isOpsHost) {
+      applyPageMetadata(C3_OPS_METADATA)
+      return () => { cancelled = true }
+    }
 
     if (isC3Host || mode === "c3field") {
       applyPageMetadata(c3Route.kind === "operations" ? C3_OPS_METADATA : C3_FIELD_METADATA)
@@ -356,7 +366,7 @@ export default function App() {
       })
 
     return () => { cancelled = true }
-  }, [c3Route.kind, isC3Host, isInannaHost, mode])
+  }, [c3Route.kind, isC3Host, isInannaHost, isOpsHost, mode])
 
   if (isRegistryHost) {
     if (normalizePathname(window.location.pathname) === "/governed-environments") {
@@ -367,6 +377,10 @@ export default function App() {
 
   if (isInannaHost) {
     return <Temple />
+  }
+
+  if (isOpsHost) {
+    return <C3OpsShell />
   }
 
   if (isC3Host || mode === "c3field") {
