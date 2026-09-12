@@ -15,6 +15,7 @@ import {
   Workflow,
 } from "lucide-react"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
+import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import "./c3OpsShell.css"
 
 type SurfaceKey = "current" | "systems" | "registry" | "evidence" | "build" | "work"
