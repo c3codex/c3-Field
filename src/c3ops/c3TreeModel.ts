@@ -22,13 +22,13 @@ export const c3Tree = {
     {
       key: "canopy",
       label: "Canopy",
-      purpose: "Participation, community, communication, access, and contribution.",
-      examples: ["participants", "community", "communication", "contribution"],
+      purpose: "Governed c3-side interaction with environments outside c3 authority.",
+      examples: ["external encounters", "necessary vendors", "platforms", "public APIs"],
     },
     {
       key: "field",
       label: "Field",
-      purpose: "Operational arrangement: environments, processes, BUILD, WORK, and implementation.",
+      purpose: "Operation inside c3-governed environments: environments, processes, BUILD, WORK, and implementation.",
       examples: ["BUILD", "WORK", "processes", "Lapzuli"],
     },
     {
@@ -47,7 +47,8 @@ export const c3Tree = {
 export const c3TreeLaw = [
   "Systems root.",
   "Interoperability connects.",
-  "Canopy gathers.",
-  "Field arranges.",
-  "Boundary governs passage.",
+  "Field operates.",
+  "Boundary permits.",
+  "Canopy encounters.",
+  "c3Optics observes.",
 ] as const
