@@ -6,7 +6,7 @@ const baseUrl = "https://measuresregistry.com"
 
 const publicNav = [
   ["Measures Registry", "/"],
-  ["Connect", "/connect"],
+  ["Governed Environments", "/governed-environments"],\n  ["Connect", "/connect"],
   ["Assess the Environment", "/ai-operations-assessment"],
   ["publish_undrifted", "/publish-undrifted"],
   ["unDrifted", "/undrifted"],
@@ -14,7 +14,7 @@ const publicNav = [
 
 const publicRouteFiles = [
   "index.html",
-  "home/index.html",
+  "home/index.html",\n  "governed-environments/index.html",
   "connect/index.html",
   "publish-undrifted/index.html",
   "ai-operations-assessment/index.html",
