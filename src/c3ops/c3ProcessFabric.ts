@@ -29,6 +29,14 @@ export const c3ProcessFabric: C3ProcessDefinition[] = [
     standing: "structural",
   },
   {
+    key: "role_call_computational_skills",
+    label: "Role Call · computational skills",
+    location: "boundary",
+    calledFrom: "BUILD / WORK / encounter",
+    effect: "resolve role- and environment-qualified computational capability",
+    standing: "registered",
+  },
+  {
     key: "current_binding",
     label: "Current binding",
     location: "boundary",
