@@ -21,6 +21,7 @@ export default function PublicWhitePaperLanding({ paper }: { paper: WhitePaperDo
           <p className="wp-abstract" itemProp="abstract">{paper.abstract}</p>
           <div className="wp-actions">
             <a className="wp-primary" href="#white-paper">Read the white paper</a>
+            {paper.downloadUrl ? <a href={paper.downloadUrl} target="_blank" rel="noreferrer">Download PDF</a> : null}
             <a href={paper.relatedUrl}>Related paper: {paper.relatedTitle}</a>
           </div>
         </header>
