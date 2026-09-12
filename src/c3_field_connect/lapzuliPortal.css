@@ -1,0 +1,131 @@
+.lapzuli-portal {
+  min-height: 100vh;
+  padding: 32px clamp(18px, 4vw, 56px) 56px;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(49, 91, 168, 0.28), transparent 32rem),
+    linear-gradient(180deg, #05070c 0%, #0a0e18 48%, #08070c 100%);
+  color: #ece8df;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.lapzuli-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  gap: 28px;
+  align-items: end;
+  padding: 34px 0 28px;
+  border-bottom: 1px solid rgba(193, 206, 230, 0.22);
+}
+
+.lapzuli-kicker {
+  margin: 0 0 10px;
+  color: #8bbcff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lapzuli-hero h1 {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3.2rem, 8vw, 6.4rem);
+  font-weight: 500;
+  line-height: 0.9;
+}
+
+.lapzuli-hero p:not(.lapzuli-kicker) {
+  max-width: 760px;
+  color: #b8c4d7;
+  line-height: 1.6;
+}
+
+.lapzuli-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin: 0;
+  border: 1px solid rgba(193, 206, 230, 0.18);
+  background: rgba(193, 206, 230, 0.12);
+}
+
+.lapzuli-summary div {
+  padding: 16px;
+  background: rgba(5, 7, 12, 0.82);
+}
+
+.lapzuli-summary dt {
+  color: #9fb8dd;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.lapzuli-summary dd {
+  margin: 8px 0 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 2rem;
+}
+
+.lapzuli-state {
+  margin: 28px 0 0;
+  padding: 18px;
+  border: 1px solid rgba(214, 181, 112, 0.34);
+  background: rgba(96, 63, 19, 0.18);
+}
+
+.lapzuli-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.lapzuli-card {
+  padding: 18px;
+  border: 1px solid rgba(193, 206, 230, 0.18);
+  background: rgba(10, 14, 24, 0.82);
+}
+
+.lapzuli-card > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #9fb8dd;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.lapzuli-card > strong {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 5px 8px;
+  border: 1px solid currentColor;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.lapzuli-card[data-result="ACT"] > strong { color: #a9e6cf; }
+.lapzuli-card[data-result="HLD"] > strong { color: #f0c47a; }
+.lapzuli-card[data-result="DNR"] > strong { color: #e7a4a4; }
+
+.lapzuli-card h2 {
+  margin: 14px 0 8px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.lapzuli-card p {
+  color: #bac2cf;
+  line-height: 1.5;
+}
+
+.lapzuli-card a {
+  color: #a9c8ff;
+}
+
+@media (max-width: 760px) {
+  .lapzuli-hero {
+    grid-template-columns: 1fr;
+  }
+}
