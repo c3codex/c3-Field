@@ -4,7 +4,7 @@ import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import Temple from "../measures_of_inanna/Temple"
-import MeasuresRegistryRuntime from "../measures_registry/encounter_renderer/MeasuresRegistryOrchestrator"
+import MeasuresRegistryRuntime from "../measures_registry/encounter_renderer/MeasuresRegistryOrchestrator"\nimport PublicWhitePaperLanding from "../publications/PublicWhitePaperLanding"\nimport { communityPotential, governedEnvironments } from "../publications/whitePaperContent"
 
 type PageMetadata = {
   title: string
@@ -29,7 +29,7 @@ const REGISTRY_METADATA: PageMetadata = {
 }
 
 const REGISTRY_ROUTE_METADATA: Record<string, PageMetadata> = {
-  "/home": {
+  "/governed-environments": {\n    title: "Governed Environments | Measures Registry",\n    description: "Operational Systems Governance for AI and Computational Action. A Measures Registry public white paper on governing the environment in which computational action occurs.",\n    url: "https://measuresregistry.com/governed-environments",\n    image: "https://measuresregistry.com/og.jpeg",\n    type: "article",\n  },\n  "/home": {
     title: "Measures Registry | Computational Systems Governance",
     description: "Computational Systems Governance for governed systems and relational operations.",
     url: "https://measuresregistry.com/home",
@@ -186,7 +186,7 @@ const C3_FIELD_METADATA = {
   type: "website",
 }
 
-const C3_OPS_METADATA = {
+const C3_COMMUNITY_POTENTIAL_METADATA = {\n  title: "Community Potential | c3 Community Partners",\n  description: "A Systems Model for Participation, Contribution, Creation, and Shared Value. Public white paper from c3 Community Partners.",\n  url: "https://c3field.online/community-potential",\n  image: "https://c3field.online/og.jpeg",\n  type: "article",\n}\n\nconst C3_OPS_METADATA = {
   title: "c3 Field Operations",
   description: "c3 Field Convergence operations spine.",
   url: "https://c3field.online/c3ops",
@@ -310,7 +310,7 @@ export default function App() {
     let cancelled = false
 
     if (isC3Host || mode === "c3field") {
-      applyPageMetadata(c3Route.kind === "operations" ? C3_OPS_METADATA : C3_FIELD_METADATA)
+      applyPageMetadata(c3Route.kind === "operations" ? C3_OPS_METADATA : c3Route.kind === "publication" ? C3_COMMUNITY_POTENTIAL_METADATA : C3_FIELD_METADATA)
       return () => { cancelled = true }
     }
 
@@ -358,7 +358,7 @@ export default function App() {
   }
 
   if (isC3Host || mode === "c3field") {
-    if (c3Route.kind === "operations") return <OarOperationsConsole />
+    if (c3Route.kind === "operations") return <OarOperationsConsole />\n    if (c3Route.kind === "publication") return <PublicWhitePaperLanding paper={communityPotential} />
     if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
     return <C3CommunityConnect />
   }
