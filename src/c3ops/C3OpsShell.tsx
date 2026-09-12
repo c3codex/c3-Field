@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
   Activity,
   Boxes,
@@ -294,6 +294,120 @@ function EvidenceSurface() {
   )
 }
 
+
+type LapzuliProcessRow = {
+  process_key: string
+  title: string | null
+  status: string | null
+  authority_level: string | null
+  metadata: Record<string, unknown> | null
+}
+
+function metadataString(metadata: Record<string, unknown> | null, key: string) {
+  const value = metadata?.[key]
+  return typeof value === "string" ? value : null
+}
+
+function LapzuliOperation() {
+  const [rows, setRows] = useState<LapzuliProcessRow[]>([])
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (supabaseConfigError) {
+      setError("Registry read unavailable")
+      return
+    }
+
+    let active = true
+    void supabase
+      .from("system_process_registry")
+      .select("process_key,title,status,authority_level,metadata")
+      .in("process_key", [
+        "lapzuli_distribution",
+        "dizzy_lapzuli_distribution_worker_v1",
+        "dizzy_worker_scheduler_integration_v1",
+        "publish_undrifted_lapzuli_controls_v1",
+      ])
+      .then(({ data, error: registryError }) => {
+        if (!active) return
+        if (registryError) {
+          setError("Lapzuli Registry standing unavailable")
+          return
+        }
+        setRows((data ?? []) as LapzuliProcessRow[])
+        setError(null)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const lapzuli = rows.find((row) => row.process_key === "lapzuli_distribution") ?? null
+  const dizzy = rows.find((row) => row.process_key === "dizzy_lapzuli_distribution_worker_v1") ?? null
+  const scheduler = rows.find((row) => row.process_key === "dizzy_worker_scheduler_integration_v1") ?? null
+
+  return (
+    <section className="c3ops-lapzuli" aria-labelledby="lapzuli-operation">
+      <div className="c3ops-lapzuli-heading">
+        <div>
+          <p className="c3ops-eyebrow">Secure operation · distribution</p>
+          <h2 id="lapzuli-operation">Lapzuli</h2>
+          <p>
+            Governed distribution of already-authorized publication objects into qualified external environments.
+            c3 Ops owns the operation surface; publication authority remains with the originating publication relation.
+          </p>
+        </div>
+        <div className="c3ops-lapzuli-state">
+          <span>{lapzuli?.status ?? (error ? "held" : "reading Registry")}</span>
+          <small>{metadataString(lapzuli?.metadata ?? null, "activation_standing") ?? "standing unresolved"}</small>
+        </div>
+      </div>
+
+      <div className="c3ops-lapzuli-flow" aria-label="Lapzuli governed passage">
+        {["Authorized object", "Qualification", "Route", "Dizzy", "External encounter", "Return evidence"].map((step) => (
+          <span key={step}>{step}</span>
+        ))}
+      </div>
+
+      <dl className="c3ops-lapzuli-details">
+        <div>
+          <dt>Process</dt>
+          <dd>{lapzuli?.process_key ?? "lapzuli_distribution"}</dd>
+        </div>
+        <div>
+          <dt>Executor</dt>
+          <dd>{metadataString(dizzy?.metadata ?? null, "role_identity") ?? "Dizzy"}</dd>
+        </div>
+        <div>
+          <dt>Worker</dt>
+          <dd>{metadataString(dizzy?.metadata ?? null, "worker_name") ?? "lapzuli-distribution-worker"}</dd>
+        </div>
+        <div>
+          <dt>Scheduling</dt>
+          <dd>{metadataString(scheduler?.metadata ?? null, "scheduling_authority") ?? "attempt timing only"}</dd>
+        </div>
+        <div>
+          <dt>Publication authority</dt>
+          <dd>{metadataString(lapzuli?.metadata ?? null, "publication_authority") ?? "none"}</dd>
+        </div>
+        <div>
+          <dt>External write</dt>
+          <dd>{metadataString(lapzuli?.metadata ?? null, "external_write_authority") ?? "separate authority required"}</dd>
+        </div>
+      </dl>
+
+      <div className="c3ops-lapzuli-boundary">
+        <LockKeyhole size={15} />
+        <span>
+          Route qualification and evidence may resolve computationally. Consequential external dispatch remains
+          separately authority-bound.
+        </span>
+      </div>
+    </section>
+  )
+}
+
 function WorkSurface() {
   const [previewOpen, setPreviewOpen] = useState(false)
 
@@ -315,10 +429,12 @@ function WorkSurface() {
         </button>
       </section>
 
+      <LapzuliOperation />
+
       <section className="c3ops-process-register">
-        <p className="c3ops-eyebrow">Process families</p>
+        <p className="c3ops-eyebrow">Other process families</p>
         <div>
-          {["OAR lifecycle", "Custody resolution", "Transfer", "Registration", "Review", "Publication / distribution"].map((name) => (
+          {["OAR lifecycle", "Custody resolution", "Transfer", "Registration", "Review"].map((name) => (
             <span key={name}>{name}</span>
           ))}
         </div>
