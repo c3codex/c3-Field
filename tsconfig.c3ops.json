@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext", "moduleResolution": "bundler", "jsx": "react-jsx",
+    "noEmit": true, "strict": true, "skipLibCheck": true,
+    "types": ["node", "@cloudflare/workers-types"]
+  },
+  "include": ["src/c3ops/**/*.ts", "src/c3ops/**/*.tsx", "functions/api/c3ops/**/*.ts", "functions/_lib/me-environment.ts", "functions/_middleware.ts"]
+}
