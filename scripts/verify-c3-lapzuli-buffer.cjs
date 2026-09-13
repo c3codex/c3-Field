@@ -68,6 +68,9 @@ function pickChannels(channels) {
   const normalized = channels.map((channel) => ({
     ...channel,
     name_lc: String(channel.name || "").toLowerCase(),
+    name_key: String(channel.name || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ""),
     service_lc: String(channel.service || "").toLowerCase(),
   }));
 
@@ -75,7 +78,7 @@ function pickChannels(channels) {
   const facebook = normalized.filter((channel) => channel.service_lc === "facebook");
 
   const pageCandidates = facebook.filter((channel) =>
-    channel.name_lc.includes("c3 community partners")
+    channel.name_key.includes("c3communitypartners")
   );
   const groupCandidates = facebook.filter((channel) =>
     channel.name_lc.includes("connect") ||
@@ -88,16 +91,16 @@ function pickChannels(channels) {
   const group = groupCandidates.length === 1 ? groupCandidates[0] : null;
   const ig = instagram.length === 1 ? instagram[0] : null;
 
-  if (!page || !group || !ig || page.id === group.id) {
-    const safeChannels = normalized.map(({ name_lc, service_lc, ...channel }) => channel);
-    const error = new Error(
-      "Could not uniquely map c3 Facebook Page, Facebook Group, and Instagram from Buffer discovery."
-    );
-    error.channels = safeChannels;
-    throw error;
+  if (page && group && page.id === group.id) {
+    throw new Error("Facebook Page and Group resolved to the same Buffer channel.");
   }
 
-  return { page, group, instagram: ig };
+  return {
+    page,
+    group,
+    instagram: ig,
+    discovered: normalized.map(({ name_lc, name_key, service_lc, ...channel }) => channel),
+  };
 }
 
 function postBody(channelKey, channel, text, suffix) {
@@ -159,32 +162,43 @@ ${CANONICAL_URL}`,
   const channels = Array.isArray(discovery?.channels) ? discovery.channels : [];
   const selected = pickChannels(channels);
 
-  const pageDryRun = await jsonRequest("/buffer/c3/posts", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(
-      postBody("c3_facebook_page", selected.page, copy.page, "facebook_page")
-    ),
-  });
+  const pageDryRun = selected.page
+    ? await jsonRequest("/buffer/c3/posts", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(
+          postBody("c3_facebook_page", selected.page, copy.page, "facebook_page")
+        ),
+      })
+    : null;
 
-  const groupDryRun = await jsonRequest("/buffer/c3/posts", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(
-      postBody("c3_facebook_group", selected.group, copy.group, "facebook_group")
-    ),
-  });
+  const groupDryRun = selected.group
+    ? await jsonRequest("/buffer/c3/posts", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(
+          postBody("c3_facebook_group", selected.group, copy.group, "facebook_group")
+        ),
+      })
+    : null;
 
-  const instagramDryRun = await jsonRequest("/buffer/c3/posts", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(
-      postBody("c3_instagram", selected.instagram, copy.instagram, "instagram")
-    ),
-  });
+  const instagramDryRun = selected.instagram
+    ? await jsonRequest("/buffer/c3/posts", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(
+          postBody("c3_instagram", selected.instagram, copy.instagram, "instagram")
+        ),
+      })
+    : null;
 
   const result = {
-    standing: "C3_LAPZULI_BUFFER_LIVE_DRY_RUN_COMPLETE",
+    standing:
+      selected.page && selected.group && selected.instagram
+        ? "C3_LAPZULI_BUFFER_LIVE_DRY_RUN_COMPLETE"
+        : selected.page && selected.group
+          ? "C3_LAPZULI_BUFFER_FACEBOOK_DRY_RUN_COMPLETE_INSTAGRAM_HELD"
+          : "HELD_C3_LAPZULI_BUFFER_CHANNEL_MAPPING_INCOMPLETE",
     worker_url: WORKER_URL,
     health: {
       ok: health?.ok === true,
@@ -198,38 +212,51 @@ ${CANONICAL_URL}`,
       image_url: IMAGE_URL,
     },
     channels: {
-      facebook_page: {
-        id: selected.page.id,
-        name: selected.page.name,
-        organization_id: selected.page.organization_id,
-      },
-      facebook_group: {
-        id: selected.group.id,
-        name: selected.group.name,
-        organization_id: selected.group.organization_id,
-      },
-      instagram: {
-        id: selected.instagram.id,
-        name: selected.instagram.name,
-        organization_id: selected.instagram.organization_id,
-      },
+      facebook_page: selected.page
+        ? {
+            id: selected.page.id,
+            name: selected.page.name,
+            organization_id: selected.page.organization_id,
+          }
+        : null,
+      facebook_group: selected.group
+        ? {
+            id: selected.group.id,
+            name: selected.group.name,
+            organization_id: selected.group.organization_id,
+          }
+        : null,
+      instagram: selected.instagram
+        ? {
+            id: selected.instagram.id,
+            name: selected.instagram.name,
+            organization_id: selected.instagram.organization_id,
+          }
+        : null,
+      discovered: selected.discovered,
     },
     dry_runs: {
-      facebook_page: {
-        ok: pageDryRun?.ok === true,
-        standing: pageDryRun?.standing || null,
-        external_publication_effects: pageDryRun?.external_publication_effects ?? null,
-      },
-      facebook_group: {
-        ok: groupDryRun?.ok === true,
-        standing: groupDryRun?.standing || null,
-        external_publication_effects: groupDryRun?.external_publication_effects ?? null,
-      },
-      instagram: {
-        ok: instagramDryRun?.ok === true,
-        standing: instagramDryRun?.standing || null,
-        external_publication_effects: instagramDryRun?.external_publication_effects ?? null,
-      },
+      facebook_page: pageDryRun
+        ? {
+            ok: pageDryRun?.ok === true,
+            standing: pageDryRun?.standing || null,
+            external_publication_effects: pageDryRun?.external_publication_effects ?? null,
+          }
+        : { ok: false, standing: "held_channel_not_mapped", external_publication_effects: 0 },
+      facebook_group: groupDryRun
+        ? {
+            ok: groupDryRun?.ok === true,
+            standing: groupDryRun?.standing || null,
+            external_publication_effects: groupDryRun?.external_publication_effects ?? null,
+          }
+        : { ok: false, standing: "held_channel_not_mapped", external_publication_effects: 0 },
+      instagram: instagramDryRun
+        ? {
+            ok: instagramDryRun?.ok === true,
+            standing: instagramDryRun?.standing || null,
+            external_publication_effects: instagramDryRun?.external_publication_effects ?? null,
+          }
+        : { ok: false, standing: "held_not_returned_by_buffer_api", external_publication_effects: 0 },
     },
   };
 
