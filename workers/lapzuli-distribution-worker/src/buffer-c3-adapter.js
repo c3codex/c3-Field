@@ -173,6 +173,9 @@ async function prepareOrPublishC3Post(request, env) {
     schedulingType: "automatic",
     mode,
     assets: [{ image: { url: clean(body.image_url) } }],
+    metadata: selected.service === "facebook"
+      ? { facebook: { type: "post" } }
+      : { instagram: { type: "post", shouldShareToFeed: true } },
   };
 
   const createMutation = [
