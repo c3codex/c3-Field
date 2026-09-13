@@ -7,6 +7,7 @@ const PROTECTED_PATHS = [
   "/publish-undrifted",
   "/api/publish-undrifted-proof",
   "/api/publish-undrifted-lapzuli-controls",
+  "/api/c3ops",
 ]
 
 function isProtectedPath(pathname: string) {
@@ -76,7 +77,9 @@ function denied(request: Request) {
 
 export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   const pathname = new URL(request.url).pathname.replace(/\/$/, "") || "/"
-  if (!isProtectedPath(pathname)) return next()
+  const c3OpsRoom = new URL(request.url).hostname === "c3ops.c3field.online" &&
+    ["/systems-access", "/relational-operations", "/c3optics"].some(p => pathname === p || pathname.startsWith(p + "/"))
+  if (!isProtectedPath(pathname) && !c3OpsRoom) return next()
   if (!env.OPERATOR_DISPATCH_KEY) {
     return new Response(JSON.stringify({ error: "operator access not configured" }), {
       status: 503,

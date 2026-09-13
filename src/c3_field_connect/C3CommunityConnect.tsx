@@ -1,6 +1,5 @@
 import { FormEvent, useEffect, useState } from "react"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
-import LapzuliPortal from "./LapzuliPortal"
 import "./c3CommunityConnect.css"
 
 type RegistryState = {
@@ -59,7 +58,6 @@ function stateFromRows(registryRow: { display_title: string | null; release_stat
 }
 
 export default function C3CommunityConnect() {
-  if (window.location.hostname === "c3ops.c3field.online") return <LapzuliPortal />
   return <C3CommunityConnectSurface />
 }
 

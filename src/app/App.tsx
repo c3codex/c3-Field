@@ -1,4 +1,6 @@
-import { useEffect } from "react"
+import { lazy, Suspense, useEffect } from "react"
+import { isC3OpsHost } from "../c3ops/c3OpsRoutes"
+const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
@@ -310,6 +312,7 @@ function applyPageMetadata(metadata: PageMetadata) {
 export default function App() {
   const mode = import.meta.env.MODE
   const hostname = window.location.hostname
+  const isOpsHost = isC3OpsHost(hostname)
   const isRegistryHost = isMeasuresRegistryHost(hostname)
   const isInannaHost = isMeasuresOfInannaHost(hostname)
   const isC3Host = isC3FieldHost(hostname)
@@ -317,6 +320,11 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false
+
+    if (isOpsHost) {
+      applyPageMetadata({ ...C3_OPS_METADATA, title: "c3Ops", url: "https://c3ops.c3field.online", canonicalUrl: "https://c3ops.c3field.online" })
+      return () => { cancelled = true }
+    }
 
     if (isC3Host || mode === "c3field") {
       applyPageMetadata(c3Route.kind === "operations" ? C3_OPS_METADATA : C3_FIELD_METADATA)
@@ -356,7 +364,9 @@ export default function App() {
       })
 
     return () => { cancelled = true }
-  }, [c3Route.kind, isC3Host, isInannaHost, mode])
+  }, [c3Route.kind, isC3Host, isInannaHost, isOpsHost, mode])
+
+  if (isOpsHost) return <Suspense fallback={<p role="status">Opening c3Ops…</p>}><C3OpsDoor /></Suspense>
 
   if (isRegistryHost) {
     if (normalizePathname(window.location.pathname) === "/governed-environments") {
