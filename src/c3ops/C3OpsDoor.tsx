@@ -38,13 +38,18 @@ export default function C3OpsDoor() {
     return ()=>controller.abort()
   },[route])
   if(route==="/") return <main className="ops-door">
-    <img
-      className="ops-tree"
-      src="https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c3tree.webp"
-      alt="c3 Tree"
-      onError={()=>setAssetError(true)}
-    />
-    {assetError && <p className="ops-tree-hold" role="alert">HLD — c3 Tree artwork unavailable.</p>}
+    <div className="ops-tree-stage">
+      <img
+        className="ops-tree"
+        src="https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c3tree.webp"
+        alt="c3 Tree"
+        onError={()=>setAssetError(true)}
+      />
+      {assetError && <p className="ops-tree-hold" role="alert">HLD — c3 Tree artwork unavailable.</p>}
+    </div>
+    <nav className="ops-portals" aria-label="c3Ops entrances">
+      {portals.map(p=><a key={p.path} href={p.path}><h2>{p.label}</h2><p>{p.subtitle}</p><span aria-hidden="true">↗</span></a>)}
+    </nav>
   </main>
   return <main className="ops-room">
     <header className="ops-room-header"><a href="/" className="ops-brand">c3Ops</a><nav aria-label="Environment navigation">{portals.map(p=><a key={p.path} href={p.path} aria-current={route?.startsWith(p.path)?"page":undefined}>{p.label}</a>)}</nav></header>
