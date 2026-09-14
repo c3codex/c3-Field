@@ -40,7 +40,7 @@ export default function C3OpsDoor() {
   if(route==="/") return <main className="ops-door">
     <img
       className="ops-tree"
-      src="https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field/c3tree.webp"
+      src="https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c3tree.webp"
       alt="c3 Tree"
       onError={()=>setAssetError(true)}
     />
