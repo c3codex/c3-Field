@@ -1,16 +1,23 @@
-/* c3Ops landing presents the original c3 Tree artwork without interface chrome. */
+/* c3Ops landing: original c3 Tree plus the three operational entrances. */
 .ops-door,.ops-room{font-family:Inter,system-ui,sans-serif;color:#f2eee5;min-height:100svh}
-.ops-door{position:relative;display:grid;place-items:center;background:#000;overflow:hidden}
-.ops-tree{display:block;width:100%;height:100svh;object-fit:contain;object-position:center}
-.ops-tree-hold{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);margin:0;padding:10px 14px;background:rgba(0,0,0,.82);color:#e3c18b;font-size:.8rem}
+.ops-door{position:relative;display:flex;flex-direction:column;align-items:center;background:#000;padding:24px clamp(16px,3vw,40px) 32px;box-sizing:border-box}
+.ops-tree-stage{position:relative;display:grid;place-items:center;width:100%;flex:1;min-height:0}
+.ops-tree{display:block;width:100%;height:min(68svh,760px);object-fit:contain;object-position:center}
+.ops-tree-hold{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);margin:0;padding:10px 14px;background:rgba(0,0,0,.82);color:#e3c18b;font-size:.8rem}
+.ops-portals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:min(1180px,100%);margin-top:18px}
+.ops-portals a{position:relative;display:block;padding:18px 44px 18px 20px;background:rgba(13,27,48,.88);border:1px solid #5f513b;border-radius:4px;color:inherit;text-decoration:none;min-height:96px;box-sizing:border-box}
+.ops-portals a:hover{background:#16283f;border-color:#b99a63}
+.ops-portals h2{font-size:1rem;font-weight:500;margin:0 0 8px}
+.ops-portals p{font-size:.78rem;color:#cec9bd;line-height:1.45;margin:0}
+.ops-portals span{position:absolute;right:18px;top:16px;color:#dfc58a}
 .ops-kicker{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#cdb980}
 .ops-room{background:#0b111b}
-.ops-room a:focus-visible,summary:focus-visible{outline:3px solid #e4c889;outline-offset:5px}
+.ops-door a:focus-visible,.ops-room a:focus-visible,summary:focus-visible{outline:3px solid #e4c889;outline-offset:5px}
 .ops-room{padding:24px clamp(20px,5vw,80px) 70px}.ops-room a{color:#e1c587}.ops-room-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:24px;border-bottom:1px solid #394252}.ops-brand{font:2rem Georgia,serif;text-decoration:none}
 .ops-room nav{display:flex;gap:24px;flex-wrap:wrap}.ops-room nav a{font-size:.9rem;text-decoration:none}.ops-room nav a[aria-current]{text-decoration:underline;text-underline-offset:6px}
 .ops-room h1{font:400 clamp(2rem,4vw,3rem) Georgia,serif;margin:36px 0 14px}.ops-room h2{font:400 1.5rem Georgia,serif}.ops-room h3{font-size:1rem;font-weight:500}
 .ops-caption{color:#aaaeb6;font-size:.8rem;line-height:1.6}.ops-architecture{padding:20px 0}.ops-canopy-link{display:inline-block;margin:10px 0 24px;padding:14px 20px;border:1px solid #82704d}
 .ops-env-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:20px;margin-top:24px}.ops-env{background:#141e2d;border:1px solid #344052;border-radius:4px;padding:24px;min-width:0;overflow-wrap:anywhere}.ops-env dl,.ops-records dl{margin:0;padding:0}.ops-env dl div{padding:7px 0;border-bottom:1px solid #2a3646}.ops-env dt{color:#b6b6ad;font-size:.75rem;text-transform:capitalize}.ops-env dd{margin:4px 0 0;font-size:.9rem}
 .ops-env details{margin-top:20px}.ops-env summary{cursor:pointer;color:#e1c587}.ops-env li{margin:8px 0;font-size:.85rem}.ops-unresolved{color:#e3c18b;line-height:1.6}.ops-records{display:grid;gap:15px}.ops-room p{line-height:1.6}
-@media(max-width:700px){.ops-room-header{align-items:flex-start;flex-direction:column}.ops-room nav{gap:16px}}
+@media(max-width:700px){.ops-door{padding:16px 14px 24px}.ops-tree{height:56svh}.ops-portals{grid-template-columns:1fr}.ops-portals a{min-height:82px;padding:16px 42px 16px 18px}.ops-room-header{align-items:flex-start;flex-direction:column}.ops-room nav{gap:16px}}
 
