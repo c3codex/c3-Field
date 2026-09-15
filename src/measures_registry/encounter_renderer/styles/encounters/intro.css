@@ -1,0 +1,61 @@
+/* Crystal intro passage only.
+   Purpose: play the governed intro media, then hand off to measures_registry_home. */
+
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100svh;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"]::before,
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"]::after {
+  content: none;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] .registry-crystal-intro {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] .registry-crystal-intro-video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  object-fit: cover;
+  object-position: center;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] .registry-crystal-intro-skip {
+  position: absolute;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 5;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid rgba(237, 242, 248, 0.28);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.42);
+  color: rgba(237, 242, 248, 0.82);
+  font: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
