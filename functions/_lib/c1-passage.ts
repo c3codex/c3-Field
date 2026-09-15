@@ -38,7 +38,7 @@ function configuration(env: PassageEnv) {
 function rpcClient(env: PassageEnv, deps: Dependencies = defaults): Rpc {
   return async (name, args) => {
     if (!["capture_relational_candidate","issue_relational_verification","verify_relational_contact",
-      "evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship","form_c1_owner_environment"].includes(name))
+      "evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship","form_c1_owner_environment","resolve_c1_owner_reentry"].includes(name))
       throw new Error("unregistered_call")
     const response = await deps.fetch(PROJECT_URL + "/rest/v1/rpc/" + name, {
       method:"POST", redirect:"manual", signal:AbortSignal.timeout(12000),
@@ -95,7 +95,7 @@ async function sendEnvironmentHandoff(owner: RecordValue, claim: string, origin:
   const response = await deps.fetch("https://api.resend.com/emails", {
     method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
     headers:{"content-type":"application/json",authorization:"Bearer " + env.C3_RESEND_API_KEY,
-      "idempotency-key":"c1-owner-environment-" + owner.envpac_key},
+      "idempotency-key":"c1-owner-environment-" + owner.envpac_key + "-" + crypto.randomUUID()},
     body:JSON.stringify({
       from:env.C1_VERIFICATION_FROM,
       to:[owner.owner_email],
@@ -116,6 +116,13 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     if (!env.C3_RESEND_API_KEY || !env.C1_VERIFICATION_FROM || /[\r\n]/.test(env.C1_VERIFICATION_FROM))
       return unavailable()
     const rpc = rpcClient(env,deps)
+    stage = "owner_reentry"
+    const reentry = await rpc("resolve_c1_owner_reentry", {p_primary_email:body.email})
+    if (reentry.accepted === true) {
+      const claim = await signedOwnerClaim(reentry.relationship_key,reentry.env_key,reentry.envpac_key,env,deps.now())
+      await sendEnvironmentHandoff(reentry,claim,origin,env,deps).catch(()=>false)
+      return verificationRequired()
+    }
     stage = "capture_unconfirmed"
     candidate = null // A network timeout cannot prove that the transaction did not commit.
     const captured = await rpc("capture_relational_candidate", {
