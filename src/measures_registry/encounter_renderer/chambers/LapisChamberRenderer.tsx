@@ -1101,13 +1101,7 @@ function MeasuresRegistryHome({
   const operationsRelationSection = getSection("operations_relation")
   const undriftedSection = getSection("undrifted")
   const institutionalRelationSection = getSection("institutional_relation")
-  const heroVisual = asRecord(encounter.homeHero?.visual_contract)
-  const heroSealUrl = heroVisual?.seal_public_use_approved === true
-    ? resolveRuntimeMediaUrl({
-        bucketName: asString(heroVisual.seal_runtime_destination_bucket),
-        storagePath: asString(heroVisual.seal_runtime_destination_path),
-      })
-    : null
+  const heroBackgroundUrl = mediaUrl(encounter.mediaByRole.get("hero_background"))
 
   return (
     <main
@@ -1123,11 +1117,9 @@ function MeasuresRegistryHome({
 
       <RegistryHomeHero
         homeHero={encounter.homeHero}
-        presentationSealUrl={heroSealUrl}
-        brandName={asString(asRecord(approved.identity)?.name)}
-        ctaLabel={asString(getSection("hero")?.primary_cta)}
-        branchRelation={asString(institutionalRelationSection?.branch_relation)}
-        operatorName={asString(institutionalRelationSection?.operator)}
+        backgroundUrl={heroBackgroundUrl}
+        brandName={asString(asRecord(approved.identity)?.name) ?? "Measures Registry"}
+        ctaLabel={asString(getSection("hero")?.primary_cta) ?? "Assess the Environment"}
         onAssessment={() => onNavigate("obsidian_chamber_orientation")}
       />
       <div className="registry-home-shell">
