@@ -257,6 +257,33 @@ export default function MeasuresRegistryOrchestrator() {
     })
   }, [resolverData.mediaRows])
 
+  const freeHeader = useMemo(() => {
+    const root = resolverData.registryRows.find((r) => r.registry_key === "measures_registry_root")
+    const metadata = root?.metadata as Record<string, unknown> | null
+    const homeHero =
+      metadata?.home_hero && typeof metadata.home_hero === "object" && !Array.isArray(metadata.home_hero)
+        ? metadata.home_hero as Record<string, unknown>
+        : null
+    const value =
+      homeHero?.free_header && typeof homeHero.free_header === "object" && !Array.isArray(homeHero.free_header)
+        ? homeHero.free_header as Record<string, unknown>
+        : null
+
+    if (
+      value?.free_source_authority !== "webpac" ||
+      value?.free_render_mode !== "live_html_css_overlay" ||
+      value?.free_background_baked_allowed !== false
+    ) {
+      return null
+    }
+
+    const label = typeof value.free_label === "string" ? value.free_label.trim() : ""
+    const expanded = typeof value.free_expanded_name === "string" ? value.free_expanded_name.trim() : ""
+    if (!label || !expanded) return null
+
+    return { label, expanded }
+  }, [resolverData.registryRows])
+
   const toneUrlByMaterial = useMemo(() => {
     const map = {} as Record<MaterialIdentity, string | null>
     for (const material of ["crystal", "lapis", "obsidian", "marble"] as MaterialIdentity[]) {
@@ -381,6 +408,27 @@ export default function MeasuresRegistryOrchestrator() {
               }}
             />
           ) : title ? <span>{title}</span> : null}
+          {activeSurface === "measures_registry_home" && freeHeader ? (
+            <div
+              data-free-source="webpac"
+              aria-label={freeHeader.expanded}
+              title={freeHeader.expanded}
+              style={{
+                marginLeft: "0.75rem",
+                paddingLeft: "0.75rem",
+                borderLeft: "1px solid currentColor",
+                display: "inline-flex",
+                alignItems: "center",
+                minHeight: "1.5rem",
+                fontSize: "0.68rem",
+                fontWeight: 700,
+                letterSpacing: "0.14em",
+                lineHeight: 1,
+              }}
+            >
+              {freeHeader.label}
+            </div>
+          ) : null}
         </div>
         <nav className="registry-public-nav" aria-label="Measures Registry navigation">
           <a href="/home" onClick={(e) => { e.preventDefault(); navigate("measures_registry_home") }}>Home</a>
