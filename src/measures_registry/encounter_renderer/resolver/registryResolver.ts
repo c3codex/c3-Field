@@ -97,6 +97,7 @@ const MEDIA_ROLES = [
   "marble_payment_confirmation_background",
   "marble_payment_confirmation_seal",
   "hero_poster",
+  "hero_background",
   "about_hero_poster",
   "mr_public_presentation_seal_artwork_webp_v1",
   "mr_public_social_banner_webp_v1",
