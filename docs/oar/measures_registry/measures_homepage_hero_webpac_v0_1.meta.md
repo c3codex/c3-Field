@@ -64,3 +64,23 @@ intro video
 -> FREE fields from WebPac
 -> governed hero copy
 -> Assess the Environment
+
+
+## Media custody
+
+The homepage logo, mark, banner assets, and background images are held in WebPac package custody.
+
+WebPac records each asset's identity, media role, approved use, standing, source relation, evidence/hash relation when available, and designated runtime bucket/object.
+
+Runtime buckets hold the delivery copies required by the renderer. Bucket presence does not replace WebPac package custody.
+
+Current bindings:
+- measures_registry_logo -> measures-registry/measures_registry_logo.webp
+- registry_mark -> measures-registry/measures_registry_mark.webp
+- hero_background -> measures-registry/campaign_derivatives/hero_background_mr.png
+- header banner image -> held; no image asset selected. FREE currently renders from WebPac fields as live HTML/CSS.
+
+Future banner imagery must be added to the WebPac with an explicit runtime media role and designated bucket before rendering.
+
+Passage:
+WebPac package -> registered media role -> designated runtime bucket -> resolver -> public render
