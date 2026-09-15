@@ -17,6 +17,7 @@
 @import "./encounters/legal.css";
 @import "./encounters/publish-undrifted.css";
 @import "./registry.visual-system.css";
+@import "./encounters/home-hero.css";
 
 /* Site-wide document-scroll contract for Measures Registry public surfaces.
    Legacy fullscreen encounter CSS in src/index.css locks html/body/#root with overflow:hidden.
