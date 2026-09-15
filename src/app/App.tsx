@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from "react"
 import { isC3OpsHost } from "../c3ops/c3OpsRoutes"
 const C2EnvironmentShell = lazy(() => import("../c3_field_contribution/C2EnvironmentShell"))
+const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
@@ -379,6 +380,7 @@ export default function App() {
   }
 
   if (isC3Host || mode === "c3field") {
+    if (c3Route.kind === "environment") return <Suspense fallback={<p>Opening your environment…</p>}><MyEnvironmentEncounter /></Suspense>
     if (c3Route.kind === "c2_shell") return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentShell /></Suspense>
     if (c3Route.kind === "operations") return <OarOperationsConsole />
     if (c3Route.kind === "publication") return <PublicWhitePaperLanding paper={communityPotential} />
