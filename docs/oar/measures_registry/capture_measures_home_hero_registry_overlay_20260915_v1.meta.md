@@ -54,3 +54,12 @@ The approved conversation asset is `hero_background_mr.png` / derived WebP.
 The code is prepared to consume Registry media role `hero_background`. The exact approved asset must be uploaded to the governed Measures media location and seated to that media role before the new background can replace the current `hero_poster` fallback in production.
 
 Do not substitute or regenerate the visual during seating.
+
+
+## Deployment trigger
+
+- requested: 2026-09-15
+- target: measuresregistry.com
+- production branch: measures
+- mechanism: push to origin/measures triggers Cloudflare Pages
+- status: triggered
