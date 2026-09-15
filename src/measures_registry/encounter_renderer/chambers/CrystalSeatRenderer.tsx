@@ -265,6 +265,8 @@ function CrystalIntroSeat({
   registryTokenStyle,
   onNavigate,
 }: CrystalSeatProps) {
+  const [introComplete, setIntroComplete] = useState(false)
+
   const meta = asRecord(encounter.encounterDef?.metadata)
   const introCopy = asRecord(meta?.intro_copy)
 
@@ -274,14 +276,64 @@ function CrystalIntroSeat({
   const body = asString(introCopy?.hero_body)
   const support = asString(introCopy?.hero_support)
   const ctaLabel = asString(introCopy?.hero_primary_cta_label) ?? "Assess the Environment"
+
+  const videoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
+  const posterUrl = mediaUrl(encounter.mediaByRole.get("hero_poster"))
   const backgroundUrl =
     mediaUrl(encounter.mediaByRole.get("hero_background"))
-    ?? mediaUrl(encounter.mediaByRole.get("hero_poster"))
+    ?? posterUrl
 
   function handleAssessment(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault()
     event.stopPropagation()
     onNavigate("obsidian_chamber_encounter_surface")
+  }
+
+  function finishIntro() {
+    setIntroComplete(true)
+  }
+
+  if (!introComplete && videoUrl) {
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="crystal_seat_intro"
+        data-material-family="crystal"
+        data-layout-contract="crystal_intro"
+        data-release-standing="public"
+        {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
+        style={registryTokenStyle}
+      >
+        <section
+          className="registry-crystal-intro registry-crystal-intro--video"
+          aria-label="Measures Registry introduction"
+          onClick={finishIntro}
+        >
+          <video
+            className="registry-crystal-intro-video"
+            src={videoUrl}
+            poster={posterUrl ?? undefined}
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            onEnded={finishIntro}
+            onError={finishIntro}
+            aria-label="Measures Registry introduction"
+          />
+          <button
+            type="button"
+            className="registry-crystal-intro-skip"
+            onClick={(event) => {
+              event.stopPropagation()
+              finishIntro()
+            }}
+          >
+            Skip intro
+          </button>
+        </section>
+      </main>
+    )
   }
 
   return (
