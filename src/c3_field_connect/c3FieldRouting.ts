@@ -1,9 +1,9 @@
-export type C3FieldRouteKind = "connect" | "operations" | "held_unknown"
+export type C3FieldRouteKind = "connect" | "environment" | "operations" | "held_unknown"
 
 export type C3FieldRouteDecision = {
   kind: C3FieldRouteKind
   pathname: string
-  component: "C3CommunityConnect" | "OarOperationsConsole" | "HeldUnknownC3FieldRoute"
+  component: "C3CommunityConnect" | "MyEnvironmentEncounter" | "OarOperationsConsole" | "HeldUnknownC3FieldRoute"
   exposesOperationsSpine: boolean
   createsStanding: false
 }
@@ -19,6 +19,15 @@ export function resolveC3FieldRoute(pathname: string): C3FieldRouteDecision {
       kind: "connect",
       pathname: normalized,
       component: "C3CommunityConnect",
+      exposesOperationsSpine: false,
+      createsStanding: false,
+    }
+  }
+  if (normalized === "/my-environment") {
+    return {
+      kind: "environment",
+      pathname: normalized,
+      component: "MyEnvironmentEncounter",
       exposesOperationsSpine: false,
       createsStanding: false,
     }
