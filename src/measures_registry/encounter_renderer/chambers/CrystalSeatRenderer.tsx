@@ -264,67 +264,24 @@ function CrystalIntroSeat({
   encounter,
   registryTokenStyle,
   onNavigate,
-  renderSystemFooter,
 }: CrystalSeatProps) {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [introAudioEnabled, setIntroAudioEnabled] = useState(false)
-  const [videoActivated, setVideoActivated] = useState(false)
-
   const meta = asRecord(encounter.encounterDef?.metadata)
   const introCopy = asRecord(meta?.intro_copy)
-  const headline = asString(introCopy?.headline) ?? "AI Isn't Broken... Systems Are"
-  const nextSurface = resolveNextSurface(encounter)
 
-  const videoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
-  const posterUrl = mediaUrl(encounter.mediaByRole.get("hero_poster"))
+  const headline = asString(introCopy?.hero_title)
+    ?? asString(introCopy?.headline)
+    ?? "AI Isn't Broken... Systems Are"
+  const body = asString(introCopy?.hero_body)
+  const support = asString(introCopy?.hero_support)
+  const ctaLabel = asString(introCopy?.hero_primary_cta_label) ?? "Assess the Environment"
+  const backgroundUrl =
+    mediaUrl(encounter.mediaByRole.get("hero_background"))
+    ?? mediaUrl(encounter.mediaByRole.get("hero_poster"))
 
-  // OAR2 "Replace Initial Hero Video Load With Poster-First Media Delivery" —
-  // poster paints immediately; the 14MB video is not requested until the page
-  // has settled (load event + idle), so it never competes with initial LCP.
-  useEffect(() => {
-    if (!videoUrl) return
-    let idleId: number | undefined
-    function scheduleActivate() {
-      if (typeof window.requestIdleCallback === "function") {
-        idleId = window.requestIdleCallback(() => setVideoActivated(true), { timeout: 1500 })
-      } else {
-        idleId = window.setTimeout(() => setVideoActivated(true), 200)
-      }
-    }
-    if (document.readyState === "complete") {
-      scheduleActivate()
-    } else {
-      window.addEventListener("load", scheduleActivate, { once: true })
-    }
-    return () => {
-      window.removeEventListener("load", scheduleActivate)
-      if (idleId !== undefined) {
-        if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId)
-        else window.clearTimeout(idleId)
-      }
-    }
-  }, [videoUrl])
-
-  function handleAdvance() {
-    onNavigate("measures_registry_home")
-  }
-
-  function handleIntroAudio(e: MouseEvent) {
-    e.stopPropagation()
-    const video = videoRef.current
-    if (!video) return
-    if (!introAudioEnabled) {
-      video.muted = false
-      video.volume = 1
-      void video.play().catch(() => {
-        video.muted = true
-        setIntroAudioEnabled(false)
-      })
-      setIntroAudioEnabled(true)
-    } else {
-      video.muted = true
-      setIntroAudioEnabled(false)
-    }
+  function handleAssessment(event: MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault()
+    event.stopPropagation()
+    onNavigate("obsidian_chamber_encounter_surface")
   }
 
   return (
@@ -337,131 +294,53 @@ function CrystalIntroSeat({
       {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       style={registryTokenStyle}
     >
-      <section className="registry-crystal-intro" aria-label="Introduction" onClick={handleAdvance}>
-        {videoActivated && videoUrl ? (
-          <video
-            ref={videoRef}
-            className="registry-crystal-intro-video"
-            src={videoUrl}
-            poster={posterUrl ?? undefined}
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            onEnded={handleAdvance}
-            onError={handleAdvance}
-            aria-label={headline}
-          />
-        ) : posterUrl ? (
-          <img
-            className="registry-crystal-intro-video"
-            src={posterUrl}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            fetchPriority="high"
-          />
-        ) : null}
-        <div className="registry-crystal-intro-headline">
+      <section
+        className="registry-crystal-intro registry-crystal-intro--hero"
+        aria-label="Measures Registry"
+        style={backgroundUrl ? { backgroundImage: `url(${backgroundUrl})` } : undefined}
+      >
+        <div className="registry-crystal-intro-shade" aria-hidden="true" />
+        <div className="registry-crystal-intro-content">
+          <div className="registry-crystal-intro-brand">Measures Registry</div>
           <h1>{headline}</h1>
-        </div>
-        {videoActivated && videoUrl ? (
-          <button
-            type="button"
-            className="registry-crystal-intro-audio"
-            onClick={handleIntroAudio}
+          {body ? <p className="registry-crystal-intro-body">{body}</p> : null}
+          {support ? <p className="registry-crystal-intro-support">{support}</p> : null}
+          <a
+            className="registry-crystal-intro-cta"
+            href="/ai-operations-assessment"
+            onClick={handleAssessment}
           >
-            {introAudioEnabled ? "Audio On" : "Enable Audio"}
-          </button>
-        ) : null}
+            {ctaLabel}
+          </a>
+        </div>
+
         <div className="c3-visually-hidden">
           <nav aria-label="Measures Registry navigation">
-            <a href="/" onClick={(e) => e.stopPropagation()}>Home</a>
+            <a href="/">Home</a>
             <a
               href="/about"
-              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("crystal_seat_encounter") }}
+              onClick={(e) => { e.preventDefault(); onNavigate("crystal_seat_encounter") }}
             >
               About
             </a>
             <a
               href="/ai-operations-assessment"
-              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("obsidian_chamber_encounter_surface") }}
+              onClick={(e) => { e.preventDefault(); onNavigate("obsidian_chamber_encounter_surface") }}
             >
               Assess the Environment
             </a>
             <a
               href="/undrifted"
-              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("lapis_chamber_encounter") }}
+              onClick={(e) => { e.preventDefault(); onNavigate("lapis_chamber_encounter") }}
             >
               Understand the Environment
             </a>
           </nav>
           <h2>AI isn&rsquo;t broken. Systems are.</h2>
           <p>
-            Measures Registry is an institutional governance and education platform. AI systems do not
-            fail in isolation — they fail inside institutions that have not defined authority, review
-            pathways, or operating boundaries. Measures Registry treats AI outcomes as a product of the
-            environment an AI system operates within, not solely a property of the model itself.
-          </p>
-          <h2>Institutional Accountability for AI Deployment</h2>
-          <p>
-            AI outcomes are shaped by the systems AI operates within. When responsibility, oversight, and
-            escalation paths are undefined, deployments drift away from their original intent quietly,
-            before anyone notices. Measures Registry supports institutions in designing governable
-            environments — systems where AI use remains accountable to the people and processes
-            responsible for it.
-          </p>
-          <h2>What is Structural Drift?</h2>
-          <p>
-            Structural drift is the measurable gap between how an AI system is intended to behave and how
-            it actually behaves once deployed inside a real institution. Drift is not a defect in the
-            model — it is a symptom of missing structure: undefined roles, absent review pathways, and
-            ungoverned runtime surfaces. Structural drift can be observed, named, and addressed.
-          </p>
-          <h2>What is a Governable Environment?</h2>
-          <p>
-            A governable environment is an institutional system designed so that AI use remains
-            reviewable, accountable, and less prone to drift, through defined authority and oversight —
-            not through changes to the AI model itself. Governable environments can be designed and
-            maintained; they are not an accident of good intentions.
-          </p>
-          <h2>Assess the Environment</h2>
-          <p>
-            The public{" "}
-            <a
-              href="/ai-operations-assessment"
-              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("obsidian_chamber_encounter_surface") }}
-            >
-              operations assessment
-            </a>{" "}
-            is a baseline awareness tool — a first read on where structural drift may already be present
-            in an institution&rsquo;s AI deployment. It does not constitute certification, enrollment, or
-            verified registry standing.
-          </p>
-          <h2>The Measures Alignment Protocol</h2>
-          <p>
-            The Measures Alignment Protocol (MAP) is a later, governed pathway for institutions that have
-            completed the public assessment and are ready to move toward structured alignment. MAP
-            standing and scope are established directly with Measures Registry — they are not
-            self-service claims and are not detailed on this page.
-          </p>
-          <h2>Understand the Environment</h2>
-          <p>
-            <a
-              href="/undrifted"
-              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onNavigate("lapis_chamber_encounter") }}
-            >
-              unDrifted
-            </a>{" "}
-            is the public record of Measures Registry&rsquo;s structural drift findings and governed
-            environment design work, publishing across institutional AI governance, system integrity, and
-            operational outcomes.
-          </p>
-          <h2>Foundational Leadership</h2>
-          <p>
-            Measures Registry is founded by Stephanie Joanne Gaffney, an artist and Measures Registry
-            Instructor, and founder of c3 Community Partners DAO, LLC, the governance framework under
-            which Measures Registry operates.
+            Measures Registry evaluates the operating environment surrounding AI deployment so
+            organizations can understand whether that environment is ready before AI is implemented
+            or expanded.
           </p>
         </div>
       </section>
