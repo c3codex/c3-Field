@@ -265,75 +265,15 @@ function CrystalIntroSeat({
   registryTokenStyle,
   onNavigate,
 }: CrystalSeatProps) {
-  const [introComplete, setIntroComplete] = useState(false)
-
   const meta = asRecord(encounter.encounterDef?.metadata)
   const introCopy = asRecord(meta?.intro_copy)
-
-  const headline = asString(introCopy?.hero_title)
-    ?? asString(introCopy?.headline)
-    ?? "AI Isn't Broken... Systems Are"
-  const body = asString(introCopy?.hero_body)
-  const support = asString(introCopy?.hero_support)
-  const ctaLabel = asString(introCopy?.hero_primary_cta_label) ?? "Assess the Environment"
+  const headline = asString(introCopy?.headline) ?? "AI Isn't Broken... Systems Are"
 
   const videoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
   const posterUrl = mediaUrl(encounter.mediaByRole.get("hero_poster"))
-  const backgroundUrl =
-    mediaUrl(encounter.mediaByRole.get("hero_background"))
-    ?? posterUrl
-
-  function handleAssessment(event: MouseEvent<HTMLAnchorElement>) {
-    event.preventDefault()
-    event.stopPropagation()
-    onNavigate("obsidian_chamber_encounter_surface")
-  }
 
   function finishIntro() {
-    setIntroComplete(true)
-  }
-
-  if (!introComplete && videoUrl) {
-    return (
-      <main
-        className="measures-registry-runtime"
-        data-surface="crystal_seat_intro"
-        data-material-family="crystal"
-        data-layout-contract="crystal_intro"
-        data-release-standing="public"
-        {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
-        style={registryTokenStyle}
-      >
-        <section
-          className="registry-crystal-intro registry-crystal-intro--video"
-          aria-label="Measures Registry introduction"
-          onClick={finishIntro}
-        >
-          <video
-            className="registry-crystal-intro-video"
-            src={videoUrl}
-            poster={posterUrl ?? undefined}
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            onEnded={finishIntro}
-            onError={finishIntro}
-            aria-label="Measures Registry introduction"
-          />
-          <button
-            type="button"
-            className="registry-crystal-intro-skip"
-            onClick={(event) => {
-              event.stopPropagation()
-              finishIntro()
-            }}
-          >
-            Skip intro
-          </button>
-        </section>
-      </main>
-    )
+    onNavigate("measures_registry_home")
   }
 
   return (
@@ -347,54 +287,39 @@ function CrystalIntroSeat({
       style={registryTokenStyle}
     >
       <section
-        className="registry-crystal-intro registry-crystal-intro--hero"
-        aria-label="Measures Registry"
-        style={backgroundUrl ? { backgroundImage: `url(${backgroundUrl})` } : undefined}
+        className="registry-crystal-intro"
+        aria-label="Measures Registry introduction"
       >
-        <div className="registry-crystal-intro-shade" aria-hidden="true" />
-        <div className="registry-crystal-intro-content">
-          <div className="registry-crystal-intro-brand">Measures Registry</div>
-          <h1>{headline}</h1>
-          {body ? <p className="registry-crystal-intro-body">{body}</p> : null}
-          {support ? <p className="registry-crystal-intro-support">{support}</p> : null}
-          <a
-            className="registry-crystal-intro-cta"
-            href="/ai-operations-assessment"
-            onClick={handleAssessment}
-          >
-            {ctaLabel}
-          </a>
-        </div>
-
-        <div className="c3-visually-hidden">
-          <nav aria-label="Measures Registry navigation">
-            <a href="/">Home</a>
-            <a
-              href="/about"
-              onClick={(e) => { e.preventDefault(); onNavigate("crystal_seat_encounter") }}
-            >
-              About
-            </a>
-            <a
-              href="/ai-operations-assessment"
-              onClick={(e) => { e.preventDefault(); onNavigate("obsidian_chamber_encounter_surface") }}
-            >
-              Assess the Environment
-            </a>
-            <a
-              href="/undrifted"
-              onClick={(e) => { e.preventDefault(); onNavigate("lapis_chamber_encounter") }}
-            >
-              Understand the Environment
-            </a>
-          </nav>
-          <h2>AI isn&rsquo;t broken. Systems are.</h2>
-          <p>
-            Measures Registry evaluates the operating environment surrounding AI deployment so
-            organizations can understand whether that environment is ready before AI is implemented
-            or expanded.
-          </p>
-        </div>
+        {videoUrl ? (
+          <video
+            className="registry-crystal-intro-video"
+            src={videoUrl}
+            poster={posterUrl ?? undefined}
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            onEnded={finishIntro}
+            onError={finishIntro}
+            aria-label={headline}
+          />
+        ) : posterUrl ? (
+          <img
+            className="registry-crystal-intro-video"
+            src={posterUrl}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            fetchPriority="high"
+          />
+        ) : null}
+        <button
+          type="button"
+          className="registry-crystal-intro-skip"
+          onClick={finishIntro}
+        >
+          Skip intro
+        </button>
       </section>
     </main>
   )
