@@ -1,86 +1,163 @@
-/* ── CRYSTAL INTRO ────────────────────────────────────────────────────────── */
-/* crystal_seat_intro: full-viewport video, headline left, auto-advance, no controls */
-
+/* ── CRYSTAL INTRO / WEBSITE HERO ───────────────────────────────────────── */
 .measures-registry-runtime[data-layout-contract="crystal_intro"] {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: #000;
+  background: #03070d;
   overflow: hidden;
   z-index: 0;
 }
 
 .registry-crystal-intro {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: flex-end;
-  padding: clamp(2rem, 5vw, 4rem);
+  inset: 0;
   box-sizing: border-box;
-  cursor: pointer;
 }
 
-/* registry.visual-system.css sets position:relative on all > * children.
-   This higher-specificity rule restores the intro section to fill its fixed container. */
 .measures-registry-runtime[data-layout-contract="crystal_intro"] .registry-crystal-intro {
   height: 100%;
 }
 
-.registry-crystal-intro-video {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.registry-crystal-intro--hero {
+  min-height: 100svh;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  isolation: isolate;
 }
 
-.registry-crystal-intro-headline {
+.registry-crystal-intro-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 7, 14, 0.91) 0%,
+      rgba(2, 7, 14, 0.77) 34%,
+      rgba(2, 7, 14, 0.28) 58%,
+      rgba(2, 7, 14, 0.03) 72%
+    ),
+    linear-gradient(180deg, rgba(1, 5, 10, 0.18), rgba(1, 5, 10, 0.26));
+}
+
+.registry-crystal-intro-content {
   position: relative;
   z-index: 1;
-  max-width: 28rem;
+  width: min(44rem, 48vw);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+  padding: clamp(3rem, 7vw, 7rem);
+  padding-right: 0;
+  color: #f4f1eb;
 }
 
-.registry-crystal-intro-audio {
-  position: absolute;
-  bottom: clamp(2rem, 5vw, 4rem);
-  right: clamp(2rem, 5vw, 4rem);
-  padding: 0.3rem 0.75rem;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: rgba(237, 242, 248, 0.55);
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(237, 242, 248, 0.22);
-  border-radius: 2rem;
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-  z-index: 2;
-  backdrop-filter: blur(4px);
-}
-
-.registry-crystal-intro-audio:hover {
-  color: rgba(237, 242, 248, 0.9);
-  border-color: rgba(237, 242, 248, 0.5);
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.registry-crystal-intro-headline h1 {
-  margin: 0;
-  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+.registry-crystal-intro-brand {
+  margin-bottom: clamp(1rem, 2.2vw, 1.8rem);
+  font-size: clamp(0.74rem, 0.95vw, 0.9rem);
   font-weight: 600;
-  line-height: 1.2;
-  color: #edf2f8;
-  letter-spacing: -0.01em;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(225, 235, 247, 0.72);
+}
+
+.registry-crystal-intro-content h1 {
+  margin: 0;
+  max-width: 12ch;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3.3rem, 6.8vw, 6.8rem);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  color: #f6f2ea;
+  text-wrap: balance;
+}
+
+.registry-crystal-intro-body,
+.registry-crystal-intro-support {
+  max-width: 37rem;
+  margin: 0;
+  color: rgba(239, 243, 248, 0.9);
+  line-height: 1.55;
+}
+
+.registry-crystal-intro-body {
+  margin-top: clamp(1.35rem, 2.6vw, 2rem);
+  font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+}
+
+.registry-crystal-intro-support {
+  margin-top: 0.9rem;
+  font-size: clamp(0.9rem, 1.15vw, 1rem);
+  color: rgba(222, 230, 239, 0.74);
+}
+
+.registry-crystal-intro-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(1.5rem, 2.8vw, 2.2rem);
+  min-height: 3rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(218, 230, 244, 0.44);
+  border-radius: 3px;
+  background: rgba(7, 20, 38, 0.58);
+  color: #f5f8fb;
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.registry-crystal-intro-cta:hover,
+.registry-crystal-intro-cta:focus-visible {
+  background: rgba(14, 40, 74, 0.72);
+  border-color: rgba(232, 241, 251, 0.74);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+@media (max-width: 800px) {
+  .registry-crystal-intro--hero {
+    background-position: 58% center;
+  }
+
+  .registry-crystal-intro-shade {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 7, 14, 0.82) 0%,
+        rgba(2, 7, 14, 0.72) 42%,
+        rgba(2, 7, 14, 0.24) 72%,
+        rgba(2, 7, 14, 0.18) 100%
+      );
+  }
+
+  .registry-crystal-intro-content {
+    width: 100%;
+    min-height: 100svh;
+    justify-content: flex-start;
+    padding: max(2rem, env(safe-area-inset-top, 0px)) 1.35rem 42svh;
+  }
+
+  .registry-crystal-intro-content h1 {
+    max-width: 11ch;
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+
+  .registry-crystal-intro-body,
+  .registry-crystal-intro-support {
+    max-width: 32rem;
+  }
 }
 
 /* Crystal Seat Orientation — governed site surface */
