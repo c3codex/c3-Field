@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react"
 import { isC3OpsHost } from "../c3ops/c3OpsRoutes"
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
+import MyEnvironmentEncounter from "../c3_field_connect/MyEnvironmentEncounter"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
@@ -381,6 +382,7 @@ export default function App() {
 
   if (isC3Host || mode === "c3field") {
     if (c3Route.kind === "operations") return <OarOperationsConsole />
+    if (c3Route.kind === "environment") return <MyEnvironmentEncounter />
     if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
     return <C3CommunityConnect />
   }
