@@ -38,7 +38,7 @@ function configuration(env: PassageEnv) {
 function rpcClient(env: PassageEnv, deps: Dependencies = defaults): Rpc {
   return async (name, args) => {
     if (!["capture_relational_candidate","issue_relational_verification","verify_relational_contact",
-      "evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship"].includes(name))
+      "evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship","form_c1_owner_environment"].includes(name))
       throw new Error("unregistered_call")
     const response = await deps.fetch(PROJECT_URL + "/rest/v1/rpc/" + name, {
       method:"POST", redirect:"manual", signal:AbortSignal.timeout(12000),
@@ -72,6 +72,41 @@ async function readReceipt(receipt: string, env: PassageEnv, now: number): Promi
       !Number.isFinite(value.expires) || value.expires <= now) throw new Error("receipt")
   return value.key
 }
+export async function signedOwnerClaim(relationshipKey: string, envKey: string, envpacKey: string, env: PassageEnv, now = Date.now()) {
+  const payload = btoa(JSON.stringify({relationshipKey,envKey,envpacKey,expires:now + 8 * 60 * 60 * 1000}))
+  const signature = hex(await crypto.subtle.sign("HMAC",await signingKey(env.C1_VERIFICATION_SIGNING_KEY!),encoder.encode(payload)))
+  return payload + "." + signature
+}
+export async function readOwnerClaim(claim: string, env: PassageEnv, now = Date.now()) {
+  const [payload,signature,...extra] = claim.split(".")
+  if (extra.length || !payload || !/^[a-f0-9]{64}$/.test(signature || "")) throw new Error("claim")
+  const bytes = Uint8Array.from(signature.match(/../g)!, value => parseInt(value,16))
+  if (!await crypto.subtle.verify("HMAC",await signingKey(env.C1_VERIFICATION_SIGNING_KEY!),bytes,encoder.encode(payload))) throw new Error("claim")
+  const value = JSON.parse(atob(payload))
+  if (!value || typeof value !== "object" || !/^crs_[a-f0-9]{32}$/.test(value.relationshipKey || "") ||
+      !/^env_person_[a-f0-9]{24}$/.test(value.envKey || "") ||
+      !/^c3envpac_person_[a-f0-9]{24}_v0_1$/.test(value.envpacKey || "") ||
+      !Number.isFinite(value.expires) || value.expires <= now) throw new Error("claim")
+  return value as {relationshipKey:string;envKey:string;envpacKey:string;expires:number}
+}
+async function sendEnvironmentHandoff(owner: RecordValue, claim: string, origin: string, env: PassageEnv, deps: Dependencies) {
+  if (!env.C3_RESEND_API_KEY || !env.C1_VERIFICATION_FROM || typeof owner.owner_email !== "string") return false
+  const link = origin + "/my-environment#claim=" + encodeURIComponent(claim)
+  const response = await deps.fetch("https://api.resend.com/emails", {
+    method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
+    headers:{"content-type":"application/json",authorization:"Bearer " + env.C3_RESEND_API_KEY,
+      "idempotency-key":"c1-owner-environment-" + owner.envpac_key},
+    body:JSON.stringify({
+      from:env.C1_VERIFICATION_FROM,
+      to:[owner.owner_email],
+      subject:"Connect your c3 environment",
+      text:"Your c3 Community Partners connection is confirmed.\n\nConnect your environment:\n" + link +
+        "\n\nThis secure link expires in 8 hours."
+    }),
+  })
+  return response.ok
+}
+
 export async function captureCandidate(body: RecordValue, env: PassageEnv, deps: Dependencies = defaults) {
   let candidate: boolean | null = false
   let stage = "server_configuration"
@@ -162,7 +197,20 @@ export async function verifyCandidate(body: RecordValue, env: PassageEnv, deps: 
         typeof persisted.registration_event_key !== "string" || !persisted.registration_event_key ||
         persisted.persistence?.result !== "recoverable_governed_state" ||
         typeof persisted.persistence?.persistence_key !== "string" || !persisted.persistence.persistence_key) return hold(stage,true)
+    stage = "owner_environment"
+    const owner = await rpc("form_c1_owner_environment", {p_relationship_key:key,p_env_key:ENV_KEY})
+    if (owner.accepted !== true || owner.relationship_key !== key ||
+        !/^env_person_[a-f0-9]{24}$/.test(owner.env_key || "") ||
+        !/^c3envpac_person_[a-f0-9]{24}_v0_1$/.test(owner.envpac_key || "") ||
+        owner.standing !== "c1_connected" || owner.c1_standing !== "c1_C1_persisted")
+      return hold(stage,true)
+    const origin = configuration(env)
+    const claim = await signedOwnerClaim(key,owner.env_key,owner.envpac_key,env,deps.now())
+    const handoffEmailSent = await sendEnvironmentHandoff(owner,claim,origin,env,deps).catch(()=>false)
+    const nextUrl = "/my-environment#claim=" + encodeURIComponent(claim)
     // Protected backend provenance stays in RPC event/persistence records; only bounded copy reaches the participant.
-    return json({standing:"connection_recorded",saved:true,message:"Your Connect relationship is confirmed and recorded."})
+    return json({standing:"connection_recorded",saved:true,environment_ready:true,
+      message:"Your Connect relationship is confirmed and recorded. Your environment is ready.",
+      next_url:nextUrl,handoff_email_sent:handoffEmailSent})
   } catch { return hold(stage,true) }
 }
