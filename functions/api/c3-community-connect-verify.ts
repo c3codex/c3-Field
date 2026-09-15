@@ -43,9 +43,13 @@ button.addEventListener("click",async () => {
  try {
   const response=await fetch(location.pathname,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({receipt,token})});
   const value=await response.json();
-  result.textContent=response.ok && value.standing==="connection_recorded" && value.saved===true
-    ? "Your Connect relationship is confirmed and recorded."
+  const recorded=response.ok && value.standing==="connection_recorded" && value.saved===true;
+  result.textContent=recorded
+    ? (value.environment_ready===true ? "Connection confirmed. Opening your environment…" : "Your Connect relationship is confirmed and recorded.")
     : "We could not confirm your connection. Please request a new link or return later.";
+  if(recorded && typeof value.next_url==="string" && value.next_url.startsWith("/my-environment#claim=")){
+    window.setTimeout(()=>location.assign(value.next_url),650);
+  }
  } catch { result.textContent="We could not confirm your connection. Please return later."; }
 });
 </script></body></html>`,{headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store",
