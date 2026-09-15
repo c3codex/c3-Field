@@ -227,9 +227,34 @@ export default function MeasuresRegistryOrchestrator() {
     )
     if (!row) return null
     const meta = row.metadata as Record<string, unknown> | null
-    const publicUrl = typeof meta?.public_url === "string" ? meta.public_url : null
-    const exactUrl = typeof meta?.exact_url_seated === "string" ? meta.exact_url_seated : null
-    return publicUrl ?? exactUrl ?? null
+    return resolveRuntimeMediaUrl({
+      publicUrl:
+        typeof meta?.public_url === "string"
+          ? meta.public_url
+          : typeof meta?.exact_url_seated === "string"
+            ? meta.exact_url_seated
+            : null,
+      bucketName: row.storage_bucket,
+      storagePath: row.storage_path,
+    })
+  }, [resolverData.mediaRows])
+
+  const registryLogoUrl = useMemo(() => {
+    const row = resolverData.mediaRows.find(
+      (r) => r.media_role === "measures_registry_logo" && r.is_active !== false,
+    )
+    if (!row) return null
+    const meta = row.metadata as Record<string, unknown> | null
+    return resolveRuntimeMediaUrl({
+      publicUrl:
+        typeof meta?.public_url === "string"
+          ? meta.public_url
+          : typeof meta?.exact_url_seated === "string"
+            ? meta.exact_url_seated
+            : null,
+      bucketName: row.storage_bucket,
+      storagePath: row.storage_path,
+    })
   }, [resolverData.mediaRows])
 
   const toneUrlByMaterial = useMemo(() => {
@@ -333,8 +358,29 @@ export default function MeasuresRegistryOrchestrator() {
     return (
       <header className="registry-public-header" aria-label={title}>
         <div className="registry-public-brand">
-          {registryMarkUrl ? <img src={registryMarkUrl} alt="" loading="eager" /> : null}
-          {title ? <span>{title}</span> : null}
+          {registryMarkUrl ? (
+            <img
+              src={registryMarkUrl}
+              alt=""
+              loading="eager"
+              width={36}
+              height={36}
+            />
+          ) : null}
+          {registryLogoUrl ? (
+            <img
+              src={registryLogoUrl}
+              alt={title}
+              loading="eager"
+              style={{
+                width: "auto",
+                minWidth: 0,
+                maxWidth: "9rem",
+                height: "1.75rem",
+                objectFit: "contain",
+              }}
+            />
+          ) : title ? <span>{title}</span> : null}
         </div>
         <nav className="registry-public-nav" aria-label="Measures Registry navigation">
           <a href="/home" onClick={(e) => { e.preventDefault(); navigate("measures_registry_home") }}>Home</a>
