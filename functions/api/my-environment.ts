@@ -36,7 +36,7 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
     const rawSession=cookie(request,"c3_env_session")
     if(!rawSession) return json({authenticated:false,standing:"environment_claim_required"},401)
     const session=await runtimeSession(rawSession,env)
-    const [graphRows,envRows,grantRows,ownerRows]=await Promise.all([
+    const [graphRows,envRows,grantRows,ownerRows,presentationRows]=await Promise.all([
       readRows(env,"c3_envpac_effective_graph",
         "envpac_key,registry_env_key,version,envpac_standing,owner_subject_type,custodian_subject_type,custodian_subject_key,custody_provider,portable,environment_bindings,rooted_systems,packages",
         {envpac_key:"eq."+session.envpacKey}),
@@ -48,9 +48,12 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
         {envpac_key:"eq."+session.envpacKey,standing:"eq.active"}),
       readRows(env,"crs_relationship",
         "relationship_key,display_name,is_active",
-        {relationship_key:"eq."+session.relationshipKey,is_active:"eq.true"})
+        {relationship_key:"eq."+session.relationshipKey,is_active:"eq.true"}),
+      readRows(env,"c3_envpac_presentation",
+        "envpac_key,opening_visual_asset_key,opening_visual_url,source_webpac_key,owner_changeable,selection_standing,selected_by_type,selected_by_key,selected_at,updated_at",
+        {envpac_key:"eq."+session.envpacKey,selection_standing:"eq.active"})
     ])
-    const graph=graphRows[0], environment=envRows[0], owner=ownerRows[0]
+    const graph=graphRows[0], environment=envRows[0], owner=ownerRows[0], presentation=presentationRows[0]
     if(!graph || !environment || !owner || graph.envpac_key!==session.envpacKey ||
       environment.env_key!==session.envKey || owner.relationship_key!==session.relationshipKey)
       return json({authenticated:true,standing:"environment_unavailable"},404)
@@ -81,6 +84,15 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
         rooted_systems:graph.rooted_systems,
         packages:graph.packages
       },
+      presentation:presentation?{
+        opening_visual_asset_key:presentation.opening_visual_asset_key,
+        opening_visual_url:presentation.opening_visual_url,
+        source_webpac_key:presentation.source_webpac_key,
+        owner_changeable:presentation.owner_changeable,
+        selection_standing:presentation.selection_standing,
+        selected_at:presentation.selected_at,
+        updated_at:presentation.updated_at
+      }:null,
       access:grantRows.map(row=>({
         grant_key:row.grant_key,
         subject_type:row.subject_type,
