@@ -1,4 +1,4 @@
-import {useEffect,useState} from "react"
+import {useEffect,useState,type CSSProperties} from "react"
 import "./myEnvironmentEncounter.css"
 
 const DEFAULT_OPENING_VISUAL="https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c3_tree_env.webp"
@@ -45,15 +45,15 @@ export default function MyEnvironmentEncounter(){
   if(state!=="ready" || !data?.environment || !data.envpac) return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p><a href="/">Return to Connect</a></section></main>
   const env=data.environment,pac=data.envpac,ownerName=data.owner?.display_name?.trim()||"My Environment"
   const openingVisual=data.presentation?.opening_visual_url||DEFAULT_OPENING_VISUAL
+  const environmentStyle={"--myenv-opening-visual":`url("${openingVisual}")`} as CSSProperties
   return <main className="myenv-shell">
     <aside className="myenv-rail">
       <a href="/" className="myenv-brand"><strong>c3</strong><span>Community Partners</span></a>
       <nav aria-label="My Environment"><a href="#overview" aria-current="page">Overview</a><a href="#systems">Rooted Systems</a><a href="#access">Access</a><span aria-disabled="true">Marketplace · HLD</span></nav>
       <small>CONNECT · CONTRIBUTE · CREATE</small>
     </aside>
-    <section className="myenv-main">
+    <section className="myenv-main" style={environmentStyle}>
       <header id="overview" className="myenv-hero">
-        <img src={openingVisual} alt="" />
         <div><p className="myenv-kicker">My Environment</p><h1>{ownerName}</h1><p>Your environment is connected. You own it; c3 Field holds bounded custody and operating access.</p></div>
       </header>
       <section className="myenv-grid">
