@@ -21,9 +21,7 @@ function projectUrl(env:PassageEnv){
 }
 async function rest(env:PassageEnv,path:string,init:RequestInit={}){
   const response=await fetch(projectUrl(env)+"/rest/v1/"+path,{
-    ...init,
-    redirect:"manual",
-    signal:AbortSignal.timeout(12000),
+    ...init,redirect:"manual",signal:AbortSignal.timeout(12000),
     headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!,...(init.headers||{})}
   })
   if(!response.ok) throw new CanopyError("Canopy controls are temporarily unavailable.",response.status>=500?503:409)
@@ -77,6 +75,14 @@ function referenceKey(value:unknown){if(typeof value!=="string"||!/^[0-9a-f]{8}-
 function sortOrder(value:unknown){if(value===undefined||value===null||value==="")return 0;if(typeof value!=="number"||!Number.isInteger(value)||value<0||value>9999)throw new CanopyError("Canopy order must be a whole number from 0 to 9999.",400,"invalid_canopy_request");return value}
 async function ownedReference(env:PassageEnv,session:EnvironmentSession,key:string){const rows=await readRows(env,"c3_envpac_canopy_reference","reference_key,surface_label,display_label,external_url,handle,sort_order,reference_state",{reference_key:"eq."+key,envpac_key:"eq."+session.envpacKey,owner_subject_key:"eq."+session.subjectKey,reference_state:"eq.active",limit:"1"});if(!rows[0])throw new CanopyError("That Canopy reference is unavailable.",404,"canopy_reference_unavailable");return rows[0]}
 async function event(env:PassageEnv,session:EnvironmentSession,eventType:string,key:string|null,eventData:Row={}){await rest(env,"c3_envpac_canopy_event",{method:"POST",headers:{"content-type":"application/json","prefer":"return=minimal"},body:JSON.stringify({envpac_key:session.envpacKey,reference_key:key,owner_subject_key:session.subjectKey,event_type:eventType,event_data:eventData})})}
+async function environmentShareReference(env:PassageEnv,session:EnvironmentSession){
+  const existing=await readRows(env,"c3_env_share_reference","share_reference,source_env_key,source_envpac_key,owner_subject_key,share_state",{source_env_key:"eq."+session.envKey,source_envpac_key:"eq."+session.envpacKey,owner_subject_key:"eq."+session.subjectKey,share_state:"eq.active",limit:"1"})
+  if(existing[0]?.share_reference)return String(existing[0].share_reference)
+  const response=await rest(env,"c3_env_share_reference",{method:"POST",headers:{"content-type":"application/json","prefer":"return=representation"},body:JSON.stringify({source_env_key:session.envKey,source_envpac_key:session.envpacKey,owner_subject_key:session.subjectKey,metadata:{reference_class:"opaque_encounter_provenance",source_process:"c1me_canopy_reference_controls_v1",relationship_created:false,standing_created:false,public_profile_created:false}})})
+  const rows=await response.json() as Row[]
+  if(!rows[0]?.share_reference)throw new CanopyError("Invite Connection is temporarily unavailable.",503,"invite_connection_unavailable")
+  return String(rows[0].share_reference)
+}
 function errorResponse(error:unknown){if(error instanceof CanopyError)return json({standing:error.standing,message:error.message},error.status);return json({standing:"canopy_control_unavailable",message:"My Canopy is temporarily unavailable."},503)}
 export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{try{const session=await requireCanopyAuthority(request,env);return json({standing:"canopy_ready",references:await activeReferences(env,session)})}catch(error){return errorResponse(error)}}
 export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
@@ -100,8 +106,14 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     if(body.action==="open"){
       assertKeys(body,["action","reference_key"]);const key=referenceKey(body.reference_key);const reference=await ownedReference(env,session,key);await event(env,session,"open_requested",key,{destination_class:"owner_supplied_external_url"});return json({standing:"canopy_open_ready",external_url:reference.external_url})
     }
-    if(body.action==="copy_c3_link"){
-      assertKeys(body,["action"]);await event(env,session,"c3_link_copied",null,{destination_class:"public_c3_connect"});return json({standing:"c3_link_ready",public_url:new URL("/",request.url).toString()})
+    if(body.action==="invite_connection"){
+      assertKeys(body,["action"])
+      const shareReference=await environmentShareReference(env,session)
+      const publicUrl=new URL("/",request.url)
+      publicUrl.searchParams.set("via",shareReference)
+      publicUrl.hash="connect"
+      await event(env,session,"connection_invite_prepared",null,{share_reference:shareReference,reference_class:"opaque_encounter_provenance"})
+      return json({standing:"connection_invite_ready",public_url:publicUrl.toString()})
     }
     throw new CanopyError("That Canopy action is not authorized.",400,"invalid_canopy_request")
   }catch(error){return errorResponse(error)}
