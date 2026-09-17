@@ -106,10 +106,23 @@ export default function MyEnvironmentEncounter(){
     if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(value);return}
     const area=document.createElement("textarea");area.value=value;area.style.position="fixed";area.style.opacity="0";document.body.appendChild(area);area.select();const copied=document.execCommand("copy");area.remove();if(!copied)throw new Error("Copy is unavailable in this browser.")
   }
-  async function copyC3Link(){
-    setCanopyBusy("copy");setCanopyMessage("")
-    try{const result=await canopyAction({action:"copy_c3_link"});if(typeof result.public_url!=="string")throw new Error("The public c3 link is unavailable.");await copyText(result.public_url);setCanopyMessage("c3 Connect link copied. Share it wherever you choose.")}
-    catch(error){setCanopyMessage(error instanceof Error?error.message:"The c3 link could not be copied.")}finally{setCanopyBusy(null)}
+  async function inviteConnection(){
+    setCanopyBusy("invite");setCanopyMessage("")
+    try{
+      const result=await canopyAction({action:"invite_connection"})
+      if(typeof result.public_url!=="string")throw new Error("The connection invitation is unavailable.")
+      if(typeof navigator.share==="function"){
+        try{
+          await navigator.share({title:"c3 Community Partners",text:"Connect with me through c3 Community Partners.",url:result.public_url})
+          setCanopyMessage("Connection invitation shared.")
+          return
+        }catch(error){
+          if(error instanceof DOMException && error.name==="AbortError"){setCanopyMessage("Connection invitation not shared.");return}
+        }
+      }
+      await copyText(result.public_url)
+      setCanopyMessage("Connection invitation copied. Share it wherever you choose.")
+    }catch(error){setCanopyMessage(error instanceof Error?error.message:"The connection invitation could not be prepared.")}finally{setCanopyBusy(null)}
   }
 
   if(state!=="ready" || !data?.environment || !data.envpac) return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p><a href="/">Return to Connect</a></section></main>
@@ -122,7 +135,7 @@ export default function MyEnvironmentEncounter(){
       <header id="overview" className="myenv-hero"><div><p className="myenv-kicker">My Environment</p><h1>{ownerName}</h1><p>Your environment is connected. You own it; c3 Field holds bounded custody and operating access.</p></div></header>
       <section className="myenv-grid"><article><p className="myenv-kicker">Environment</p><h2>{env.environment_name}</h2><dl><div><dt>Standing</dt><dd>{env.standing}</dd></div><div><dt>Class</dt><dd>{env.environment_class}</dd></div><div><dt>Environment</dt><dd><code>{env.env_key}</code></dd></div></dl></article><article><p className="myenv-kicker">c3EnvPac</p><h2>{pac.version}</h2><dl><div><dt>Standing</dt><dd>{pac.standing}</dd></div><div><dt>Owner</dt><dd>{ownerName}</dd></div><div><dt>Custodian</dt><dd>{pac.custodian_subject_key}</dd></div><div><dt>Portable</dt><dd>{pac.portable?"yes":"no"}</dd></div><div><dt>Opening visual</dt><dd>{data.presentation?.owner_changeable?"owner changeable":"default"}</dd></div></dl></article></section>
       <section id="canopy" className="myenv-section myenv-canopy">
-        <div className="myenv-section-heading"><div><p className="myenv-kicker">My Canopy</p><h2>The places you already go</h2><p className="myenv-canopy-intro">These are your references. c3 does not sign in to, read, or operate these accounts. Open takes you to the destination you supplied.</p></div><button type="button" className="myenv-secondary" onClick={()=>void copyC3Link()} disabled={canopyBusy!==null}>Copy c3 link</button></div>
+        <div className="myenv-section-heading"><div><p className="myenv-kicker">My Canopy</p><h2>The places you already go</h2><p className="myenv-canopy-intro">These are your references. c3 does not sign in to, read, or operate these accounts. Open takes you to the destination you supplied.</p></div><button type="button" className="myenv-secondary" onClick={()=>void inviteConnection()} disabled={canopyBusy!==null}>Invite Connection</button></div>
         {canopyState==="loading"&&<p className="myenv-canopy-status">Opening My Canopy…</p>}
         {canopyState==="held"&&<div className="myenv-canopy-held"><p>{canopyMessage||"My Canopy is held under the current environment conditions."}</p><button type="button" className="myenv-secondary" onClick={()=>void loadCanopy()}>Try again</button></div>}
         {canopyState==="ready"&&<><div className="myenv-canopy-list">{canopyReferences.length===0?<p className="myenv-canopy-empty">Your Canopy is empty. Add the first place you want to reach from your environment.</p>:canopyReferences.map(reference=><article className="myenv-canopy-card" key={reference.reference_key}><div><p className="myenv-canopy-surface">{reference.surface_label}</p><h3>{reference.display_label||reference.surface_label}</h3>{reference.handle&&<span>{reference.handle}</span>}<small>{reference.external_url}</small></div><div className="myenv-canopy-actions"><button type="button" className="myenv-primary" onClick={()=>void openCanopy(reference)} disabled={canopyBusy!==null}>Open</button><button type="button" className="myenv-secondary" onClick={()=>editCanopy(reference)} disabled={canopyBusy!==null}>Edit</button><button type="button" className="myenv-text-button" onClick={()=>void removeCanopy(reference)} disabled={canopyBusy!==null}>Remove</button></div></article>)}</div>
