@@ -36,7 +36,7 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
     const rawSession=cookie(request,"c3_env_session")
     if(!rawSession) return json({authenticated:false,standing:"environment_claim_required"},401)
     const session=await runtimeSession(rawSession,env)
-    const [graphRows,envRows,grantRows]=await Promise.all([
+    const [graphRows,envRows,grantRows,ownerRows]=await Promise.all([
       readRows(env,"c3_envpac_effective_graph",
         "envpac_key,registry_env_key,version,envpac_standing,owner_subject_type,custodian_subject_type,custodian_subject_key,custody_provider,portable,environment_bindings,rooted_systems,packages",
         {envpac_key:"eq."+session.envpacKey}),
@@ -45,14 +45,21 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
         {env_key:"eq."+session.envKey}),
       readRows(env,"c3_envpac_access_grant",
         "grant_key,subject_type,relation_role,scope,standing,granted_by_type,granted_by_key,granted_at,expires_at,revoked_at,evidence_ref",
-        {envpac_key:"eq."+session.envpacKey,standing:"eq.active"})
+        {envpac_key:"eq."+session.envpacKey,standing:"eq.active"}),
+      readRows(env,"crs_relationship",
+        "relationship_key,display_name,is_active",
+        {relationship_key:"eq."+session.relationshipKey,is_active:"eq.true"})
     ])
-    const graph=graphRows[0], environment=envRows[0]
-    if(!graph || !environment || graph.envpac_key!==session.envpacKey || environment.env_key!==session.envKey)
+    const graph=graphRows[0], environment=envRows[0], owner=ownerRows[0]
+    if(!graph || !environment || !owner || graph.envpac_key!==session.envpacKey ||
+      environment.env_key!==session.envKey || owner.relationship_key!==session.relationshipKey)
       return json({authenticated:true,standing:"environment_unavailable"},404)
     const response=json({
       authenticated:true,
       standing:"environment_ready",
+      owner:{
+        display_name:typeof owner.display_name==="string" && owner.display_name.trim()?owner.display_name.trim():null
+      },
       environment:{
         env_key:environment.env_key,
         environment_name:environment.environment_name,
