@@ -130,7 +130,11 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
       p_display_name:body.name,p_organization:null,p_consent_scope:"c1_connect_relationship",
       p_consent_granted:true,p_accuracy_attested:true,p_participation_intended:true,
       p_evidence_ref:"c1_capture_" + crypto.randomUUID(),
-      p_metadata:{source_oar2:"oar2_wire_c1ME_live_passage_server_adapter_codex_005",open_response:body.message},
+      p_metadata:{
+        source_oar2:"oar2_wire_c1ME_live_passage_server_adapter_codex_005",
+        open_response:body.message,
+        ...(body.sourceEnvironmentShare?{source_environment_share:body.sourceEnvironmentShare}:{})
+      },
     })
     if (captured.accepted !== true || captured.relationship_standing !== "candidate_unverified" ||
         !/^crs_[a-f0-9]{32}$/.test(captured.relationship_key) ||
