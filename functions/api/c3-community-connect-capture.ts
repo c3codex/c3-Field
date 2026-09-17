@@ -1,11 +1,32 @@
 import {captureCandidate, type PassageEnv} from "../_lib/c1-passage"
 import {unable} from "../_lib/c1-abuse"
 const headers = {"content-type": "application/json; charset=utf-8", "cache-control": "no-store"}
-const allowed = new Set(["name", "email", "message", "consent", "participationIntention", "attestation", "connectAs", "initiativeKey"])
+const allowed = new Set(["name", "email", "message", "consent", "participationIntention", "attestation", "connectAs", "initiativeKey", "shareReference"])
 function held(standing: string, message: string, status: number, evidence?: unknown) {
   return unable(status)
 }
 const clean = (value: unknown) => typeof value === "string" ? value.trim() : ""
+const shareShape = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+async function resolveShareReference(env:PassageEnv,value:unknown){
+  if(value===undefined) return null
+  if(typeof value!=="string" || !shareShape.test(value)) throw new Error("share_reference_shape")
+  if(!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("share_reference_configuration")
+  const url=new URL(env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/c3_env_share_reference")
+  url.searchParams.set("select","share_reference,source_env_key,source_envpac_key,share_state")
+  url.searchParams.set("share_reference","eq."+value)
+  url.searchParams.set("share_state","eq.active")
+  url.searchParams.set("limit","1")
+  const response=await fetch(url.toString(),{
+    headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY},
+    redirect:"manual",signal:AbortSignal.timeout(12000)
+  })
+  if(!response.ok) throw new Error("share_reference_read")
+  const rows=await response.json() as Array<Record<string,unknown>>
+  const row=rows[0]
+  if(!row || row.share_reference!==value || typeof row.source_env_key!=="string" || typeof row.source_envpac_key!=="string") throw new Error("share_reference_unavailable")
+  return {share_reference:value,source_env_key:row.source_env_key,source_envpac_key:row.source_envpac_key,provenance_only:true,relationship_created:false,standing_created:false}
+}
 
 export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) => {
   if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json"))
@@ -52,7 +73,10 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) =
   if (env?.C1_PASSAGE_ENABLED === "true") {
     if (origin !== env.C1_PUBLIC_ORIGIN || origin !== new URL(request.url).origin)
       return held("held_origin_mismatch", "The submission could not be verified.", 403)
-    return captureCandidate({name,email,message},env)
+    let sourceEnvironmentShare:null|Record<string,unknown>=null
+    try{sourceEnvironmentShare=await resolveShareReference(env,body.shareReference)}
+    catch{return held("held_invite_reference_invalid","This connection invitation is not available.",409)}
+    return captureCandidate({name,email,message,...(sourceEnvironmentShare?{sourceEnvironmentShare}: {})},env)
   }
   return unable()
 }
