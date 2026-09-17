@@ -22,6 +22,10 @@ function C3CommunityConnectSurface() {
   const [mediaFailed, setMediaFailed] = useState(false)
   const [emblemFailed, setEmblemFailed] = useState(false)
   const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 600px)").matches)
+  const shareReference = (() => {
+    const value = new URLSearchParams(window.location.search).get("via")
+    return value && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value) ? value : null
+  })()
   useEffect(() => {
     const query = window.matchMedia("(max-width: 600px)")
     const update = () => { setMobile(query.matches); setMediaFailed(false) }
@@ -53,6 +57,7 @@ function C3CommunityConnectSurface() {
           participationIntention: form.get("participationIntention") === "on",
           attestation: form.get("attestation") === "on",
           connectAs,
+          ...(shareReference ? { shareReference } : {}),
           ...(connectAs === "initiative" ? { initiativeKey: form.get("initiativeKey") } : {}),
         }),
       })
