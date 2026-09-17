@@ -1,6 +1,9 @@
 // Server-only orchestration. Governance and dispositions remain in the registered RPCs.
 export const ENV_KEY = "env_c3_community_connect"
 const PROJECT_URL = "https://zfihrspxvennjzazxcbj.supabase.co"
+const FOUNDATIONAL_SET_BUCKET = "measures-seed"
+const FOUNDATIONAL_SET_OBJECT = "c3_foundational_papers_watermarked_20260917_v1.zip"
+const FOUNDATIONAL_SET_TTL_SECONDS = 7 * 24 * 60 * 60
 export interface PassageEnv {
   SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
@@ -89,9 +92,26 @@ export async function readOwnerClaim(claim: string, env: PassageEnv, now = Date.
       !Number.isFinite(value.expires) || value.expires <= now) throw new Error("claim")
   return value as {relationshipKey:string;envKey:string;envpacKey:string;expires:number}
 }
+async function signedFoundationalSetUrl(env: PassageEnv, deps: Dependencies) {
+  const objectPath = FOUNDATIONAL_SET_OBJECT.split("/").map(encodeURIComponent).join("/")
+  const response = await deps.fetch(PROJECT_URL + "/storage/v1/object/sign/" + FOUNDATIONAL_SET_BUCKET + "/" + objectPath, {
+    method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
+    headers:{"content-type":"application/json",apikey:env.SUPABASE_SERVICE_ROLE_KEY!,
+      authorization:"Bearer " + env.SUPABASE_SERVICE_ROLE_KEY!},
+    body:JSON.stringify({expiresIn:FOUNDATIONAL_SET_TTL_SECONDS}),
+  })
+  if (!response.ok) throw new Error("foundational_set_sign_failed")
+  const result = await response.json().catch(() => null)
+  if (!result || typeof result !== "object") throw new Error("foundational_set_sign_shape")
+  const signed = typeof result.signedURL === "string" ? result.signedURL :
+    typeof result.signedUrl === "string" ? result.signedUrl : null
+  if (!signed) throw new Error("foundational_set_sign_shape")
+  return signed.startsWith("http://") || signed.startsWith("https://") ? signed : PROJECT_URL + signed
+}
 async function sendEnvironmentHandoff(owner: RecordValue, claim: string, origin: string, env: PassageEnv, deps: Dependencies) {
   if (!env.C3_RESEND_API_KEY || !env.C1_VERIFICATION_FROM || typeof owner.owner_email !== "string") return false
   const link = origin + "/my-environment#claim=" + encodeURIComponent(claim)
+  const foundationalSetLink = await signedFoundationalSetUrl(env,deps)
   const response = await deps.fetch("https://api.resend.com/emails", {
     method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
     headers:{"content-type":"application/json",authorization:"Bearer " + env.C3_RESEND_API_KEY,
@@ -101,7 +121,13 @@ async function sendEnvironmentHandoff(owner: RecordValue, claim: string, origin:
       to:[owner.owner_email],
       subject:"Connect your c3 environment",
       text:"Your c3 Community Partners connection is confirmed.\n\nConnect your environment:\n" + link +
-        "\n\nThis secure link expires in 8 hours."
+        "\n\nYour c3 foundational set accompanies this Connect confirmation:\n" +
+        "- Community Potential\n" +
+        "- The 21 of Coherence\n" +
+        "- c3 Relational Operations and Systems Governance\n" +
+        "- Governed Environments\n\n" +
+        "Download the private foundational set:\n" + foundationalSetLink +
+        "\n\nThe environment link expires in 8 hours. The foundational-set link expires in 7 days.\n\nConnect · Contribute · Create"
     }),
   })
   return response.ok
