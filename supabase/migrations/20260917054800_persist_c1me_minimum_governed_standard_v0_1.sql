@@ -1,0 +1,117 @@
+insert into public.measures_persistence_state (
+  persistence_key,
+  process_key,
+  oar2_key,
+  environment_key,
+  object_key,
+  object_type,
+  governed_state,
+  source_sha256,
+  evidence,
+  custody,
+  lineage,
+  standing,
+  next_permitted_transition,
+  persisted_by,
+  persisted_at,
+  updated_at
+)
+values (
+  'c1me_minimum_governed_standard_v0_1:persistence',
+  'minimum_governed_standard_v1',
+  'form_c1me_minimum_governed_standard_chazz_001',
+  'env_c3_community_connect',
+  'c1me_minimum_governed_standard_v0_1',
+  'target_bound_minimum_governed_standard',
+  jsonb_build_object(
+    'version','v0.1',
+    'target_class','c1ME.env',
+    'governing_system','c3_field',
+    'canonical_environment_key','env_c3_community_connect',
+    'circuit','c1',
+    'current_result','C1',
+    'standing_distinction','c1ME.env remains environment classification; C1 is persisted Current on qualifying relation',
+    'surface_car',jsonb_build_object('constraint','Identity','agreement','Verification','resolution','Relationship'),
+    'registry_car',jsonb_build_object('constraint','Ownership','agreement','Custody','resolution','Persistence disposition'),
+    'terminal_constraint','Boundary elevation preflight',
+    'touchpoints',jsonb_build_array('Identity','Ownership','Custody','Verification','Relationship','Persistence'),
+    'canopy_rule','owner-controlled external references; no Registry standing; no c3 external-account access or operation',
+    'canopy_open_scope','owner-directed navigation to owner-supplied external URL only',
+    'eligible_c1_control_families_after_satisfied_mgs_and_separate_authority',jsonb_build_array(
+      'view_environment_identity_and_owner_standing',
+      'view_C1_standing',
+      'manage_owner_controlled_selections',
+      'view_c1_connections_and_requests',
+      'view_access_and_boundary_information',
+      'view_participant_activity_and_evidence',
+      'manage_canopy_references',
+      'open_owner_supplied_canopy_destination',
+      'copy_or_prepare_c3_link_for_owner_directed_sharing',
+      'view_c2_eligibility_progression'
+    ),
+    'held_until_c2',jsonb_build_array(
+      'pubpac_capability',
+      'contribution_package_ingestion',
+      'governed_contribution_controls',
+      'canopy_content_import_by_reference',
+      'contribution_asset_or_custody_transfer',
+      'c2_execution'
+    ),
+    'held_until_c3',jsonb_build_array(
+      'publication_execution',
+      'distribution_execution',
+      'autonomous_or_delegated_canopy_posting',
+      'external_provider_message_or_write_activity',
+      'c3_creation_output_functions'
+    ),
+    'implementation_authority_created',false,
+    'runtime_effect_created',false,
+    'mgs_satisfaction_is_execution_authority',false
+  ),
+  null,
+  jsonb_build_object(
+    'operator','op044',
+    'operator_instruction','proceed',
+    'execution_instance_id','form_c1me_minimum_governed_standard_chazz_001',
+    'governance_artifact_path','github-private://c3codex/measures-of-inanna-governance/main/governance/c1me_minimum_governed_standard_v0_1.meta.md',
+    'governance_artifact_commit','8d3cbaf2c422302475ddafcb09b17a77dc399399',
+    'governance_artifact_blob_sha1','6822f8ac7afb24feed5881b512f07e307da74c6c',
+    'source_concordance_control','current_source_concordance_v16',
+    'generic_mgs_process','minimum_governed_standard_v1',
+    'standing_rule','c1me_environment_current_standing_distinction_v1',
+    'canopy_rule','c1me_canopy_reference_boundary_rule_v1'
+  ),
+  jsonb_build_object(
+    'physical_custody','github-private://c3codex/measures-of-inanna-governance/main/governance/c1me_minimum_governed_standard_v0_1.meta.md',
+    'computational_custody','Measures Codex Registry',
+    'public_release',false,
+    'custody_transfer',false,
+    'ownership_transfer',false
+  ),
+  jsonb_build_object(
+    'append_preserving',true,
+    'generic_mgs_process','minimum_governed_standard_v1',
+    'source_concordance_control','current_source_concordance_v16',
+    'material_environment_resolution','source_concordance_v8_material_environment_resolution_mechanism_v2',
+    'material_environment_pair_exclusivity','source_concordance_v8_material_environment_pair_exclusivity_v1',
+    'material_environment_touchpoints','source_concordance_v8_material_environment_touchpoints_v1',
+    'dual_car_convergence','source_concordance_v8_dual_car_same_destination_v1',
+    'standing_distinction','c1me_environment_current_standing_distinction_v1',
+    'canopy_boundary','c1me_canopy_reference_boundary_rule_v1',
+    'source_superseded',false
+  ),
+  'proposed_pending_mgs_review',
+  'c1me_mgs_target_binding_review',
+  'chazz',
+  now(),
+  now()
+)
+on conflict (persistence_key) do update set
+  governed_state = excluded.governed_state,
+  evidence = excluded.evidence,
+  custody = excluded.custody,
+  lineage = excluded.lineage,
+  standing = excluded.standing,
+  next_permitted_transition = excluded.next_permitted_transition,
+  persisted_by = excluded.persisted_by,
+  updated_at = now();
