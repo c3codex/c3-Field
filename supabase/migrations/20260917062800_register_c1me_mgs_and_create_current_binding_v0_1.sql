@@ -167,7 +167,7 @@ values (
   'minimum_governed_standard_v1',
   'register_c1me_mgs_and_create_current_binding_chazz_003',
   'env_c3_community_connect',
-  'c1me_minimum_governed_standard_v0_1',
+  'c1me_minimum_governed_standard_v0_1_registration',
   'minimum_governed_standard_registration',
   jsonb_build_object(
     'version','v0.1',
