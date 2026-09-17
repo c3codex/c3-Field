@@ -48,14 +48,14 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
         {envpac_key:"eq."+session.envpacKey,standing:"eq.active"}),
       readRows(env,"crs_relationship",
         "relationship_key,display_name,is_active",
-        {relationship_key:"eq."+session.relationshipKey,is_active:"eq.true"}),
+        {relationship_key:"eq."+session.subjectKey,is_active:"eq.true"}),
       readRows(env,"c3_envpac_presentation",
         "envpac_key,opening_visual_asset_key,opening_visual_url,source_webpac_key,owner_changeable,selection_standing,selected_by_type,selected_by_key,selected_at,updated_at",
         {envpac_key:"eq."+session.envpacKey,selection_standing:"eq.active"})
     ])
     const graph=graphRows[0], environment=envRows[0], owner=ownerRows[0], presentation=presentationRows[0]
     if(!graph || !environment || !owner || graph.envpac_key!==session.envpacKey ||
-      environment.env_key!==session.envKey || owner.relationship_key!==session.relationshipKey)
+      environment.env_key!==session.envKey || owner.relationship_key!==session.subjectKey)
       return json({authenticated:true,standing:"environment_unavailable"},404)
     const response=json({
       authenticated:true,
