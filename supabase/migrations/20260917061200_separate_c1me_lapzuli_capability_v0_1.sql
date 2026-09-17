@@ -7,6 +7,7 @@ begin;
 insert into public.measures_persistence_state (
   persistence_key,
   process_key,
+  oar2_key,
   environment_key,
   object_key,
   object_type,
@@ -23,6 +24,7 @@ insert into public.measures_persistence_state (
 select
   'c1me_lapzuli_capability_separation_v0_1:persistence',
   'minimum_governed_standard_v1',
+  'c1me_lapzuli_capability_separation_chazz_001',
   'env_person_eea672f5a7676dad4316755b',
   g.capability_key,
   'capability_separation_evidence',
@@ -44,9 +46,11 @@ select
   jsonb_build_object(
     'operator', 'op044',
     'operator_instruction', 'proceed',
+    'execution_instance_id', 'c1me_lapzuli_capability_separation_chazz_001',
     'source_mgs_review', 'c1me_stephanie_target_binding_review_v0_1',
     'governance_artifact', 'c1me_lapzuli_capability_separation_v0_1.meta.md',
-    'governance_artifact_commit', 'a335d4a8530acb150e1b494bc46eb0a07c1071e4',
+    'governance_artifact_commit', '1a6915faa0f4a81c589d26754335763381310d3b',
+    'governance_artifact_blob_sha1', '6d282c236a8c5d13fd7ee2207c917793b5d6d3d0',
     'original_evidence_ref', g.evidence_ref,
     'source_concordance_control', 'current_source_concordance_v16'
   ),
