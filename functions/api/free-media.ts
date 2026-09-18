@@ -5,7 +5,7 @@ type R2ObjectBody={body:ReadableStream|null;size:number;httpEtag?:string;writeHt
 type R2BucketLike={get:(key:string,options?:unknown)=>Promise<R2ObjectBody|null>}
 type FreeMediaEnv=PassageEnv&{C1ME_ENV_READY?:R2BucketLike}
 
-const ALLOWED_ASSETS=new Set(["c3_field_c1me_arrival_video_v1","c3_field_c1me_live_backdrop_v1"])
+const ALLOWED_ASSETS=new Set(["c3_field_c1me_arrival_video_v1","c3_field_c1me_live_backdrop_v1","c3_field_connect_hero_backdrop_v1"])
 
 function cookie(request:Request,name:string){
   const source=request.headers.get("cookie")||""
@@ -61,15 +61,18 @@ async function resolveR2(asset:Record<string,unknown>,env:FreeMediaEnv){
 
 export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
   try{
-    const sessionCookie=cookie(request,"c3_env_session")
-    if(!sessionCookie) return json({standing:"environment_claim_required"},401)
-    await resolveEnvironmentSession(sessionCookie,env)
     const assetKey=new URL(request.url).searchParams.get("asset")||""
     if(!ALLOWED_ASSETS.has(assetKey)) return json({standing:"free_media_not_registered"},404)
     const asset=await readAsset(env,assetKey)
+    const isPublicHero=assetKey==="c3_field_connect_hero_backdrop_v1"&&asset.public_retrieval_standing==="bounded_public_runtime"
+    if(!isPublicHero){
+      const sessionCookie=cookie(request,"c3_env_session")
+      if(!sessionCookie) return json({standing:"environment_claim_required"},401)
+      await resolveEnvironmentSession(sessionCookie,env)
+    }
     if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual") return json({standing:"free_media_standing_held"},409)
     if(assetKey==="c3_field_c1me_arrival_video_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolveR2(asset,env)
-    if(assetKey==="c3_field_c1me_live_backdrop_v1"&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
+    if((assetKey==="c3_field_c1me_live_backdrop_v1"||assetKey==="c3_field_connect_hero_backdrop_v1")&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
     return json({standing:"free_media_provider_not_registered"},409)
   }catch(error){
     const reason=error instanceof Error?error.message:"free_media_unavailable"
