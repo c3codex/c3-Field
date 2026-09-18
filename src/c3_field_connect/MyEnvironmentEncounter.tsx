@@ -9,6 +9,22 @@ type EnvPayload={
   envpac?:{envpac_key:string;version:string;standing:string;owner_subject_type:string;custodian_subject_type:string;custodian_subject_key:string;custody_provider:string;portable:boolean;environment_bindings:unknown;rooted_systems:unknown;packages:unknown}
   presentation?:{opening_visual_asset_key:string;opening_visual_url:string;source_webpac_key:string;owner_changeable:boolean;selection_standing:string;selected_at?:string;updated_at?:string}|null
 }
+type Initiative={
+  initiative_key:string
+  title:string
+  summary:string
+  target_environment_key:string
+  route:string
+  relation_required:boolean
+  connected:boolean
+  participation?:Record<string,unknown>|null
+}
+type InitiativePayload={
+  authenticated:boolean
+  standing:string
+  initiatives?:Initiative[]
+  reason?:string
+}
 
 const ARRIVAL_VIDEO="/api/free-media?asset=c3_field_c1me_arrival_video_v1"
 const LIVE_BACKDROP="/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
@@ -17,6 +33,9 @@ export default function MyEnvironmentEncounter(){
   const [state,setState]=useState<"claiming"|"loading"|"intro"|"ready"|"held">("loading")
   const [data,setData]=useState<EnvPayload|null>(null)
   const [message,setMessage]=useState("Opening your environment…")
+  const [initiatives,setInitiatives]=useState<Initiative[]>([])
+  const [initiativeNotice,setInitiativeNotice]=useState("")
+  const [initiativeBusy,setInitiativeBusy]=useState(false)
 
   useEffect(()=>{
     let active=true
@@ -40,6 +59,11 @@ export default function MyEnvironmentEncounter(){
           return
         }
         setData(body)
+        const initiativeResponse=await fetch("/api/my-environment-initiatives",{headers:{accept:"application/json"}})
+        if(initiativeResponse.ok){
+          const initiativeBody=await initiativeResponse.json() as InitiativePayload
+          if(active&&initiativeBody.initiatives) setInitiatives(initiativeBody.initiatives)
+        }
         document.title=body.owner?.display_name?`${body.owner.display_name} | My Environment | c3 Community Partners`:"My Environment | c3 Community Partners"
         setState(claim?"intro":"ready")
       }catch{
@@ -50,6 +74,23 @@ export default function MyEnvironmentEncounter(){
     void run()
     return()=>{active=false}
   },[])
+
+  async function connectInitiative(initiative:Initiative){
+    setInitiativeBusy(true);setInitiativeNotice("")
+    try{
+      const response=await fetch("/api/my-environment-initiatives",{
+        method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({action:"connect",initiative_key:initiative.initiative_key})
+      })
+      const body=await response.json() as {ok?:boolean;standing?:string;next_url?:string;reason?:string}
+      if(!response.ok||!body.ok) throw new Error(body.reason||body.standing||"The connection could not be formed.")
+      setInitiatives(current=>current.map(item=>item.initiative_key===initiative.initiative_key?{...item,connected:true}:item))
+      setInitiativeNotice("Connected. Opening the Mission…")
+      if(body.next_url) window.location.assign(body.next_url)
+    }catch(error){
+      setInitiativeNotice(error instanceof Error?error.message:"The connection could not be formed.")
+    }finally{setInitiativeBusy(false)}
+  }
 
   if(state==="held"||state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
     return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p>{state==="held"&&<a href="/">Return to Connect</a>}</section></main>
@@ -80,5 +121,21 @@ export default function MyEnvironmentEncounter(){
         <h1>{data.owner?.display_name?.trim()||"My Environment"}</h1>
       </div>
     </section>
+    <aside className="myenv-relations" aria-label="Connected opportunities">
+      <p className="myenv-kicker">CONNECTED POSSIBILITIES</p>
+      <h2>Where do you want to go?</h2>
+      {initiatives.length===0&&<p className="myenv-relations-empty">No initiative passages are available right now.</p>}
+      {initiatives.map(initiative=><article key={initiative.initiative_key} className="myenv-initiative-card">
+        <div>
+          <span>{initiative.target_environment_key}</span>
+          <h3>{initiative.title}</h3>
+          <p>{initiative.summary}</p>
+        </div>
+        {initiative.connected
+          ? <a href={initiative.route}>ENTER MISSION →</a>
+          : <button type="button" disabled={initiativeBusy} onClick={()=>void connectInitiative(initiative)}>CONNECT TO MISSION →</button>}
+      </article>)}
+      {initiativeNotice&&<p className="myenv-initiative-notice" role="status">{initiativeNotice}</p>}
+    </aside>
   </main>
 }
