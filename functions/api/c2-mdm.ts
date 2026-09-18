@@ -75,12 +75,14 @@ async function activeProspect(env:PassageEnv,key:string){
 export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
   try{
     const session=await sessionFor(request,env)
-    const [prospects,evidence,supports,contributions,current]=await Promise.all([
+    const [prospects,evidence,supports,contributions,current,threads,threadEntries]=await Promise.all([
       read(env,"c2_mdm_prospect",{select:"prospect_key,display_name,county,state,standing,prospect_reason_summary,tract_context,demographics_summary,economic_context_summary,history_identity_summary,transportation_access_summary,existing_assets,missing_conditions,public_private_investment,property_place_leads,people_institutions_businesses,open_questions,participant_contribution_needs,current_stage,updated_at",standing:"eq.active_prospect",participant_visible:"eq.true",order:"display_name.asc"}),
       read(env,"c2_mdm_place_evidence",{select:"evidence_key,prospect_key,evidence_type,title,statement,source_name,source_url_or_registry_ref,geography_relation,tract_relation,property_relation,standing,freshness_state,notes,updated_at",participant_visibility:"eq.true",order:"updated_at.desc"}),
       read(env,"c2_mdm_support",{select:"participant_relationship_key,prospect_key,support_status,updated_at",support_status:"eq.active"}),
       read(env,"c2_mdm_contribution",{select:"contribution_key,participant_relationship_key,prospect_key,contribution_type,description,standing,created_at,updated_at",order:"created_at.desc"}),
-      read(env,"c2_mdm_current",{select:"current_key,event_type,prospect_key,participant_relationship_key,contribution_key,statement,standing,evidence_reference,metadata,occurred_at",participant_visible:"eq.true",order:"occurred_at.desc",limit:"100"})
+      read(env,"c2_mdm_current",{select:"current_key,event_type,prospect_key,participant_relationship_key,contribution_key,statement,standing,evidence_reference,metadata,occurred_at",participant_visible:"eq.true",order:"occurred_at.desc",limit:"100"}),
+      read(env,"c2_mdm_ledger_thread",{select:"thread_key,initiative_key,prospect_key,title,purpose,standing,metadata,created_at,updated_at",participant_visible:"eq.true",standing:"eq.active",order:"created_at.asc"}),
+      read(env,"c2_mdm_ledger_thread_entry",{select:"entry_key,thread_key,participant_relationship_key,prospect_key,entry_type,body,source_url,evidence_reference,standing,parent_entry_key,metadata,created_at,updated_at",participant_visible:"eq.true",order:"created_at.asc",limit:"200"})
     ])
     const supportCounts=new Map<string,number>()
     for(const row of supports){
@@ -113,7 +115,11 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
       })),
       my_support:mySupport,
       my_contributions:myContributions,
-      current
+      current,
+      ledger_threads:threads.map(thread=>({
+        ...thread,
+        entries:threadEntries.filter(entry=>entry.thread_key===thread.thread_key)
+      }))
     })
   }catch(error){
     const reason=error instanceof Error?error.message:"c2_mdm_unavailable"
@@ -158,6 +164,41 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
         metadata:{previous_prospect_key:previous}
       },{},"return=minimal")
       return json({ok:true,standing:"support_registered",prospect_key:prospectKey})
+    }
+    if(action==="thread_entry"){
+      const threadKey=String(body.thread_key||"mdm_main_thread")
+      const threadRows=await read(env,"c2_mdm_ledger_thread",{select:"thread_key,standing",thread_key:"eq."+threadKey,standing:"eq.active",participant_visible:"eq.true",limit:"1"})
+      if(threadRows.length!==1) return json({ok:false,standing:"ledger_thread_unavailable"},404)
+      const entryType=String(body.entry_type||"discussion").trim()
+      const allowed=new Set(["discussion","question","local_knowledge","evidence","project_update","proposal"])
+      if(!allowed.has(entryType)) return json({ok:false,standing:"ledger_entry_type_not_supported"},400)
+      const text=String(body.body||"").trim()
+      if(!text) return json({ok:false,standing:"ledger_entry_body_required"},400)
+      const prospectKey=typeof body.prospect_key==="string"&&body.prospect_key?body.prospect_key:null
+      if(prospectKey) await activeProspect(env,prospectKey)
+      const rows=await write(env,"c2_mdm_ledger_thread_entry","POST",{
+        thread_key:threadKey,
+        participant_relationship_key:session.subjectKey,
+        prospect_key:prospectKey,
+        entry_type:entryType,
+        body:text.slice(0,5000),
+        source_url:typeof body.source_url==="string"?body.source_url.slice(0,1000):null,
+        standing:"participant_visible",
+        participant_visible:true,
+        metadata:{source:"connected_participant",submission_is_verification:false}
+      },{},"return=representation")
+      const created=rows[0]
+      await write(env,"c2_mdm_current","POST",{
+        event_type:"ledger_thread_entry_added",
+        prospect_key:prospectKey,
+        participant_relationship_key:session.subjectKey,
+        statement:"A connected participant added an entry to the Million Dollar Mission Ledger Thread.",
+        standing:"registered",
+        participant_visible:true,
+        evidence_reference:created?.entry_key?"ledger_thread_entry:"+String(created.entry_key):null,
+        metadata:{thread_key:threadKey,entry_type:entryType}
+      },{},"return=minimal")
+      return json({ok:true,standing:"ledger_thread_entry_recorded",entry:created})
     }
     if(action==="contribute"){
       const prospectKey=typeof body.prospect_key==="string"&&body.prospect_key?body.prospect_key:null
