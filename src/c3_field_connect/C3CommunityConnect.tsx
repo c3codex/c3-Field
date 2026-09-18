@@ -20,6 +20,7 @@ function C3CommunityConnectSurface() {
   const [pending, setPending] = useState(false)
   const [result, setResult] = useState<string | null>(null)
   const [mediaFailed, setMediaFailed] = useState(false)
+  const [publicStage, setPublicStage] = useState<"intro"|"hero">("intro")
   const [emblemFailed, setEmblemFailed] = useState(false)
   const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 600px)").matches)
   const shareReference = (() => {
@@ -84,8 +85,37 @@ function C3CommunityConnectSurface() {
   if (!environment?.available) return <HeldUnknownC3FieldRoute pathname="/" />
   const { copy, assets, initiatives } = environment
 
+  if(publicStage==="intro"){
+    return (
+      <main className="c3-intro-env" data-c3-environment="env_c3field_public_intro" data-standing-created="false">
+        {environment.reviewOnly && <div className="c3-connect-review" role="note">Implementation preview · Connecting is not open. Submissions are not saved.</div>}
+        <button className="c3-intro-skip" type="button" onClick={() => setPublicStage("hero")}>SKIP <span aria-hidden="true">↗</span></button>
+        {mediaFailed ? (
+          <div className="c3-intro-fallback" role="status">
+            <p>The introduction is temporarily unavailable.</p>
+            <button className="c3-connect-button" type="button" onClick={() => setPublicStage("hero")}>CONTINUE <span aria-hidden="true">↗</span></button>
+          </div>
+        ) : (
+          <video
+            src={mobile && assets.intro.mobileSrc ? assets.intro.mobileSrc : assets.intro.src}
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            poster={assets.intro.poster}
+            aria-label={copy.mediaTitle}
+            onEnded={() => setPublicStage("hero")}
+            onError={() => setMediaFailed(true)}
+          >
+            Your browser does not support this video.
+          </video>
+        )}
+      </main>
+    )
+  }
+
   return (
-    <main className="c3-connect-shell" data-c3-route="/" data-standing-created="false">
+    <main className="c3-connect-shell" data-c3-route="/" data-c3-environment="env_c3field_public_hero" data-standing-created="false">
       <a className="c3-connect-skip" href="#connect">Skip to Connect</a>
       {environment.reviewOnly && <div className="c3-connect-review" role="note">Implementation preview · Connecting is not open. Submissions are not saved.</div>}
 
@@ -96,21 +126,6 @@ function C3CommunityConnectSurface() {
         </a>
         <a className="c3-connect-nav" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
       </header>
-
-      <section id="top" className="c3-connect-intro" aria-label={copy.mediaTitle}>
-        {mediaFailed ? <p className="c3-connect-media-unavailable" role="status">The introduction is temporarily unavailable.</p> :
-          <video
-            src={mobile && assets.intro.mobileSrc ? assets.intro.mobileSrc : assets.intro.src}
-            controls
-            playsInline
-            preload="metadata"
-            poster={assets.intro.poster}
-            aria-label={copy.mediaTitle}
-            onError={() => setMediaFailed(true)}
-          >
-            Your browser does not support this video.
-          </video>}
-      </section>
 
       <section
         className="c3-connect-hero"
