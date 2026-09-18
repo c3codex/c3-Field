@@ -1,6 +1,6 @@
 import "./millionDollarMissionLanding.css"
 
-const VIDEO_URL = "https://field-media.c3field.online/The-Million-Dollar-Mission-One-Small-Town-Proves-Collective-Action-Still-Works%20%281%29.mp4"
+const VIDEO_URL = "/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1"
 const BACKDROP_URL = "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c3field_hero_backdrop.webp"
 
 export default function MillionDollarMissionLanding() {
