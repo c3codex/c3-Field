@@ -20,3 +20,15 @@ html:has(.myenv-shell),body:has(.myenv-shell),#root:has(.myenv-shell){width:100%
 .myenv-held a{display:inline-block;margin-top:12px;color:#f4efe3;text-underline-offset:4px}
 @media(max-width:760px){.myenv-arrival-video{object-fit:cover}.myenv-skip{right:16px;bottom:18px}.myenv-place{padding:22px}.myenv-presence h1{font-size:34px}}
 @media(prefers-reduced-motion:reduce){.myenv-skip,.myenv-presence{transition:none}.myenv-arrival-video{display:none}.myenv-arrival{background-image:url('/api/free-media?asset=c3_field_c1me_live_backdrop_v1');background-size:cover;background-position:center}.myenv-skip{opacity:1}}
+
+.myenv-relations{position:absolute;z-index:3;right:clamp(18px,4vw,54px);top:clamp(82px,9vw,120px);width:min(390px,calc(100vw - 36px));max-height:calc(100vh - 160px);overflow:auto;background:rgba(5,13,18,.72);border:1px solid rgba(244,239,227,.16);backdrop-filter:blur(14px);padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.myenv-relations h2{margin:6px 0 18px;font:400 28px/1.05 Georgia,serif}
+.myenv-relations-empty{margin:0;color:rgba(244,239,227,.62);font-size:13px}
+.myenv-initiative-card{display:grid;gap:16px;border-top:1px solid rgba(244,239,227,.14);padding:18px 0 2px}
+.myenv-initiative-card span{display:block;color:rgba(244,239,227,.5);font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+.myenv-initiative-card h3{margin:5px 0 8px;font:400 22px/1.1 Georgia,serif}
+.myenv-initiative-card p{margin:0;color:rgba(244,239,227,.72);font-size:12px;line-height:1.55}
+.myenv-initiative-card a,.myenv-initiative-card button{justify-self:start;border:1px solid rgba(244,239,227,.34);background:rgba(4,9,13,.42);color:#f4efe3;padding:10px 12px;font:700 9px/1 Inter,system-ui,sans-serif;letter-spacing:.12em;text-decoration:none;cursor:pointer}
+.myenv-initiative-card button:disabled{opacity:.5;cursor:wait}
+.myenv-initiative-notice{margin:14px 0 0;color:#f4efe3;font-size:11px}
+@media(max-width:760px){.myenv-relations{left:18px;right:18px;top:72px;width:auto;max-height:55vh}.myenv-place{padding:22px}.myenv-presence h1{font-size:34px}}
