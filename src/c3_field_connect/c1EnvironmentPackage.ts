@@ -5,7 +5,7 @@ export type C1EnvironmentPackage = {
   available: boolean
   reviewOnly: boolean
   copy: { heroTitle: string; heroBody: string; structuralLine: string; missionTitle: string; missionBody: string; missionClosing: string; brandLine: string; encounterIntro: string; openPrompt: string; mediaTitle: string; consent: string; attestation: string; participationIntention: string; custodyNotice: string }
-  assets: { emblem: {src: string; alt: string}; intro: {src: string; poster?: string; mobileSrc?: string} }
+  assets: { emblem: {src: string; alt: string}; hero?: {src: string; alt: string}; intro: {src: string; poster?: string; mobileSrc?: string} }
   initiatives: {key: string; label: string}[]
 }
 
