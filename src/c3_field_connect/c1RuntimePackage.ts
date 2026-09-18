@@ -4,9 +4,9 @@ export const c1RuntimePackage: C1EnvironmentPackage = {
   "available": true,
   "reviewOnly": false,
   "copy": {
-    "heroTitle": "Together, Our Potential Is Unlimited.",
-    "heroBody": "c3 Community Partners brings people together around a shared mission so community potential can become visible, connected, and useful.",
-    "structuralLine": "AUTHORITY · OPERATIONS · RESPONSIBILITY",
+    "heroTitle": "Communities are broken because systems are.",
+    "heroBody": "",
+    "structuralLine": "CONNECT · CONTRIBUTE · CREATE",
     "missionTitle": "Every community contains more potential than we can see.",
     "missionBody": "c3 Community Partners creates governed ways for people to connect around a shared mission, contribute what they know and can do, and create together.",
     "missionClosing": "CONNECT establishes the participating community.",
@@ -23,6 +23,10 @@ export const c1RuntimePackage: C1EnvironmentPackage = {
     "emblem": {
       "src": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c1/fe449ee291096b17dd06ff8ad2e32ff3e0952c645f56b6479df5380b679883c5/emblem.webp",
       "alt": "c3 Community Partners"
+    },
+    "hero": {
+      "src": "/api/free-media?asset=c3_field_connect_hero_backdrop_v1",
+      "alt": "Handcrafted miniature c3 community environment"
     },
     "intro": {
       "src": "https://field-media.c3field.online/c1/a68996e801ef91f99fbef19d22a2105fdb64e61b720d79e944fb6e521291a201/intro.mp4",
