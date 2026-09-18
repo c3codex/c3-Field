@@ -145,6 +145,41 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
       metadata:{initiative_key:"million_dollar_mission",target_environment_key:"c2ME_env"}
     },{},"return=minimal")
 
+    const connectionThreadKey="connections:"+session.envKey
+    const threadRows=await read(env,"c1_environment_connection_thread",{
+      select:"thread_key",
+      thread_key:"eq."+connectionThreadKey,
+      owner_relationship_key:"eq."+session.subjectKey,
+      limit:"1"
+    })
+    if(!threadRows.length){
+      await write(env,"c1_environment_connection_thread","POST",{
+        thread_key:connectionThreadKey,
+        env_key:session.envKey,
+        envpac_key:session.envpacKey,
+        owner_relationship_key:session.subjectKey,
+        title:"Connections",
+        standing:"active",
+        visibility:"owner_private",
+        metadata:{source:"my_environment",thread_is_authority:false,thread_is_relationship_registry:false}
+      },{},"return=minimal")
+    }
+    const shouldAppendConnection=!existing.length || existing[0]?.standing!=="active" || existing[0]?.passage_standing!=="c2_participation_granted" || Boolean(existing[0]?.revoked_at)
+    if(shouldAppendConnection){
+      await write(env,"c1_environment_connection_thread_entry","POST",{
+        thread_key:connectionThreadKey,
+        owner_relationship_key:session.subjectKey,
+        entry_type:"connection",
+        title:"Connected to The Million Dollar Mission",
+        body:"A participation relation was established from My Environment to the Million Dollar Mission c2ME.env.",
+        related_type:"initiative",
+        related_key:"million_dollar_mission",
+        related_route:"/c2",
+        standing:"active",
+        metadata:{source:"initiative_participation_passage",creates_relationship:false,records_existing_relation:true}
+      },{},"return=minimal")
+    }
+
     return json({ok:true,standing:"c2_participation_granted",next_url:"/c2"})
   }catch(error){
     const reason=error instanceof Error?error.message:"initiative_connect_unavailable"
