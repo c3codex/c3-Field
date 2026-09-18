@@ -122,7 +122,7 @@ No additional authority semantics may be inferred from an entry beyond what it e
 | c3_ledger_0003 | Governance Enables Regeneration | 2026-07-12 | Candidate observation — no Codex standing, principle, or operational authority granted; recommended for continued observation | `c3_ledger_0003_governance_enables_regeneration.meta.md` |
 | c3_ledger_0004 | The System Refused to "Just Make It Work" | 2026-07-14 | confirmed_open — provenance investigation closed (see `oar1_investigate_migration_ledger_provenance_drift_v1`); 18 versions remain held, none repaired | `c3_ledger_0004_the_system_refused_to_just_make_it_work.meta.md` |
 | c3_ledger_0005 | c3 Current as the Governed Present-State Relation | 2026-08-08 | operator_confirmed_implementation_elevated_exact_execution_routed_pending_return | `c3_ledger_0005_c3_current_as_governed_present_state.meta.md` |
-| c3_ledger_0006 | Relational Completeness Is Proven by Required Positions and Conditions, Not Universal Actor Presence | 2026-09-18 | Candidate observation — no universal branch-role matrix, CI requirement, or branch standing granted | `c3_ledger_0006_relational_completeness_required_positions_not_universal_actor_presence.meta.md` |
+| c3_ledger_0006 | Relational Completeness Is Proven by Required Positions and Conditions, Not Universal Actor Presence | 2026-09-18 | operator_confirmed_elevated_inanna_governance_projection — branch-role progression persisted; no individual seats assigned | `c3_ledger_0006_relational_completeness_required_positions_not_universal_actor_presence.meta.md` |
 
 ## Established By
 
