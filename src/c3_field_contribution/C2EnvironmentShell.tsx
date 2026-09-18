@@ -34,6 +34,7 @@ type Payload={
   my_support?:Record<string,unknown>|null
   my_contributions?:Array<Record<string,unknown>>
   current?:Array<Record<string,unknown>>
+  ledger_threads?:Array<Record<string,unknown>>
   reason?:string
 }
 const CONTRIBUTION_TYPES=[
@@ -61,7 +62,9 @@ export default function C2EnvironmentShell(){
   const [notice,setNotice]=useState("")
   const [type,setType]=useState(CONTRIBUTION_TYPES[0])
   const [description,setDescription]=useState("")
-  const [tab,setTab]=useState<"mission"|"places"|"current">("places")
+  const [tab,setTab]=useState<"mission"|"places"|"ledger"|"current">("places")
+  const [ledgerType,setLedgerType]=useState("discussion")
+  const [ledgerBody,setLedgerBody]=useState("")
 
   async function load(){
     const response=await fetch("/api/c2-mdm",{credentials:"same-origin"})
@@ -83,6 +86,27 @@ export default function C2EnvironmentShell(){
       setNotice("Your town support has been recorded.")
       await load()
     }catch(error){setNotice(error instanceof Error?error.message:"Support could not be recorded.")}
+    finally{setBusy(false)}
+  }
+
+  async function addLedgerEntry(event:FormEvent){
+    event.preventDefault()
+    if(!ledgerBody.trim()) return
+    setBusy(true);setNotice("")
+    try{
+      const response=await fetch("/api/c2-mdm",{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({
+        action:"thread_entry",
+        thread_key:"mdm_main_thread",
+        entry_type:ledgerType,
+        body:ledgerBody.trim(),
+        prospect_key:active?.prospect_key||null
+      })})
+      const result=await response.json()
+      if(!response.ok) throw new Error(String(result.reason||result.standing||"Ledger entry could not be recorded."))
+      setLedgerBody("")
+      setNotice("Added to the Mission Ledger Thread.")
+      await load()
+    }catch(error){setNotice(error instanceof Error?error.message:"Ledger entry could not be recorded.")}
     finally{setBusy(false)}
   }
 
@@ -136,6 +160,7 @@ export default function C2EnvironmentShell(){
       <nav className="c2-tabs" aria-label="Million Dollar Mission">
         <button className={tab==="mission"?"active":""} onClick={()=>setTab("mission")}>MISSION</button>
         <button className={tab==="places"?"active":""} onClick={()=>setTab("places")}>PLACES</button>
+        <button className={tab==="ledger"?"active":""} onClick={()=>setTab("ledger")}>LEDGER</button>
         <button className={tab==="current"?"active":""} onClick={()=>setTab("current")}>CURRENT</button>
       </nav>
     </section>
@@ -218,6 +243,43 @@ export default function C2EnvironmentShell(){
         </div>
         {notice&&<p className="c2-notice" role="status">{notice}</p>}
       </article>}
+    </section>}
+
+    {tab==="ledger"&&<section className="c2-panel c2-ledger">
+      <p className="c2-eyebrow">MISSION LEDGER THREAD</p>
+      <h2>Keep the work visible while it is becoming real.</h2>
+      <p className="c2-ledger-intro">Questions, local knowledge, evidence, project updates, and proposals can live here as an append-only mission thread. An entry is preserved as participation; it does not become verified or authoritative just because it was posted.</p>
+      <div className="c2-ledger-layout">
+        <div className="c2-ledger-thread">
+          {((data.ledger_threads?.[0]?.entries as Array<Record<string,unknown>>|undefined)||[]).map((entry,index)=><article key={String(entry.entry_key||index)}>
+            <div className="c2-ledger-meta">
+              <span>{String(entry.entry_type||"discussion").replace(/_/g," ")}</span>
+              {entry.prospect_key&&<span>{String(entry.prospect_key).replace(/^mdm_|_tn$/g,"").replace(/_/g," ")}</span>}
+              <time>{typeof entry.created_at==="string"?new Date(entry.created_at).toLocaleString():""}</time>
+            </div>
+            <p>{String(entry.body||"")}</p>
+          </article>)}
+        </div>
+        <form className="c2-ledger-compose" onSubmit={addLedgerEntry}>
+          <p className="c2-eyebrow">ADD TO THE THREAD</p>
+          <label>Entry type
+            <select value={ledgerType} onChange={e=>setLedgerType(e.target.value)}>
+              <option value="discussion">Discussion</option>
+              <option value="question">Question</option>
+              <option value="local_knowledge">Local knowledge</option>
+              <option value="evidence">Evidence</option>
+              <option value="project_update">Project update</option>
+              <option value="proposal">Proposal</option>
+            </select>
+          </label>
+          <label>What should the Mission know?
+            <textarea value={ledgerBody} onChange={e=>setLedgerBody(e.target.value)} rows={7} maxLength={5000} placeholder="Add a question, observation, local detail, project update, evidence, or proposal." />
+          </label>
+          <button type="submit" disabled={busy||!ledgerBody.trim()}>ADD TO LEDGER THREAD</button>
+          <small>This is the MDM participant thread, not the Codex c3 Ledger and not a governance vote.</small>
+        </form>
+      </div>
+      {notice&&<p className="c2-notice" role="status">{notice}</p>}
     </section>}
 
     {tab==="current"&&<section className="c2-panel">
