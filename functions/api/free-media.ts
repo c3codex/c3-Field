@@ -5,7 +5,7 @@ type R2ObjectBody={body:ReadableStream|null;size:number;httpEtag?:string;writeHt
 type R2BucketLike={get:(key:string,options?:unknown)=>Promise<R2ObjectBody|null>}
 type FreeMediaEnv=PassageEnv&{C1ME_ENV_READY?:R2BucketLike}
 
-const ALLOWED_ASSETS=new Set(["c3_field_c1me_arrival_video_v1","c3_field_c1me_live_backdrop_v1","c3_field_connect_hero_backdrop_v1"])
+const ALLOWED_ASSETS=new Set(["c3_field_c1me_arrival_video_v1","c3_field_c1me_live_backdrop_v1","c3_field_connect_hero_backdrop_v1","c3_field_public_intro_million_dollar_mission_v1"])
 
 function cookie(request:Request,name:string){
   const source=request.headers.get("cookie")||""
@@ -19,7 +19,7 @@ function cookie(request:Request,name:string){
 async function readAsset(env:FreeMediaEnv,assetKey:string){
   if(!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("server_configuration")
   const url=new URL(env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/c3ops_asset_record")
-  url.searchParams.set("select","asset_key,owning_system_key,standing,mime_type,byte_size,content_hash,hash_algorithm,authoritative_custody_provider,authoritative_custody_identifier,authoritative_custody_location,public_retrieval_standing")
+  url.searchParams.set("select","asset_key,owning_system_key,standing,mime_type,byte_size,content_hash,hash_algorithm,authoritative_custody_provider,authoritative_custody_identifier,authoritative_custody_location,public_retrieval_standing,current_free_binding")
   url.searchParams.set("asset_key","eq."+assetKey)
   url.searchParams.set("owning_system_key","eq.c3_field")
   const response=await fetch(url.toString(),{headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY},redirect:"manual",signal:AbortSignal.timeout(12000)})
@@ -59,19 +59,37 @@ async function resolveR2(asset:Record<string,unknown>,env:FreeMediaEnv){
   return new Response(object.body,{status:200,headers})
 }
 
+async function resolvePublicR2(asset:Record<string,unknown>,request:Request){
+  const source=asset.current_free_binding
+  if(typeof source!=="string"||!source.startsWith("https://field-media.c3field.online/")) throw new Error("public_r2_binding_unavailable")
+  const upstreamHeaders=new Headers()
+  const range=request.headers.get("range")
+  if(range) upstreamHeaders.set("range",range)
+  const response=await fetch(source,{headers:upstreamHeaders,redirect:"manual",signal:AbortSignal.timeout(20000)})
+  if((response.status!==200&&response.status!==206)||!response.body) throw new Error("provider_unavailable")
+  const headers=cacheHeaders(asset)
+  for(const name of ["content-length","content-range","accept-ranges","last-modified"]){
+    const value=response.headers.get(name)
+    if(value) headers.set(name,value)
+  }
+  if(response.status===206) headers.set("accept-ranges","bytes")
+  return new Response(response.body,{status:response.status,headers})
+}
+
 export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
   try{
     const assetKey=new URL(request.url).searchParams.get("asset")||""
     if(!ALLOWED_ASSETS.has(assetKey)) return json({standing:"free_media_not_registered"},404)
     const asset=await readAsset(env,assetKey)
-    const isPublicHero=assetKey==="c3_field_connect_hero_backdrop_v1"&&asset.public_retrieval_standing==="bounded_public_runtime"
-    if(!isPublicHero){
+    const isPublicAsset=(assetKey==="c3_field_connect_hero_backdrop_v1"||assetKey==="c3_field_public_intro_million_dollar_mission_v1")&&asset.public_retrieval_standing==="bounded_public_runtime"
+    if(!isPublicAsset){
       const sessionCookie=cookie(request,"c3_env_session")
       if(!sessionCookie) return json({standing:"environment_claim_required"},401)
       await resolveEnvironmentSession(sessionCookie,env)
     }
     if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual") return json({standing:"free_media_standing_held"},409)
     if(assetKey==="c3_field_c1me_arrival_video_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolveR2(asset,env)
+    if(assetKey==="c3_field_public_intro_million_dollar_mission_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
     if((assetKey==="c3_field_c1me_live_backdrop_v1"||assetKey==="c3_field_connect_hero_backdrop_v1")&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
     return json({standing:"free_media_provider_not_registered"},409)
   }catch(error){
