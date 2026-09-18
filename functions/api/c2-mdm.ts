@@ -49,7 +49,22 @@ async function write(env:PassageEnv,table:string,method:"POST"|"PATCH",body:unkn
 async function sessionFor(request:Request,env:PassageEnv){
   const raw=cookie(request,"c3_env_session")
   if(!raw) throw new Error("environment_claim_required")
-  return await resolveEnvironmentSession(raw,env)
+  const session=await resolveEnvironmentSession(raw,env)
+  const relations=await read(env,"c2_mdm_participation_relation",{
+    select:"participation_key,standing,passage_standing,revoked_at,source_env_key,source_envpac_key",
+    participant_relationship_key:"eq."+session.subjectKey,
+    initiative_key:"eq.million_dollar_mission",
+    standing:"eq.active",
+    passage_standing:"eq.c2_participation_granted",
+    revoked_at:"is.null",
+    limit:"1"
+  })
+  const relation=relations[0]
+  if(!relation ||
+    relation.source_env_key!==session.envKey ||
+    relation.source_envpac_key!==session.envpacKey)
+    throw new Error("c2_participation_relation_required")
+  return session
 }
 async function activeProspect(env:PassageEnv,key:string){
   const rows=await read(env,"c2_mdm_prospect",{select:"prospect_key,display_name,standing",prospect_key:"eq."+key,standing:"eq.active_prospect",participant_visible:"eq.true",limit:"1"})
@@ -102,7 +117,7 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
     })
   }catch(error){
     const reason=error instanceof Error?error.message:"c2_mdm_unavailable"
-    const status=reason==="environment_claim_required"?401:reason==="session_expired"?401:503
+    const status=reason==="environment_claim_required"||reason==="session_expired"?401:reason==="c2_participation_relation_required"?403:503
     return json({authenticated:false,standing:"c2_mdm_held",reason},status)
   }
 }
@@ -178,7 +193,7 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     return json({ok:false,standing:"action_not_supported"},400)
   }catch(error){
     const reason=error instanceof Error?error.message:"c2_mdm_unavailable"
-    const status=reason==="environment_claim_required"||reason==="session_expired"?401:reason==="prospect_unavailable"?404:503
+    const status=reason==="environment_claim_required"||reason==="session_expired"?401:reason==="c2_participation_relation_required"?403:reason==="prospect_unavailable"?404:503
     return json({ok:false,standing:"c2_mdm_held",reason},status)
   }
 }
