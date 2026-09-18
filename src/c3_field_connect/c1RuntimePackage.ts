@@ -29,8 +29,8 @@ export const c1RuntimePackage: C1EnvironmentPackage = {
       "alt": "Handcrafted miniature c3 community environment"
     },
     "intro": {
-      "src": "https://field-media.c3field.online/c1/a68996e801ef91f99fbef19d22a2105fdb64e61b720d79e944fb6e521291a201/intro.mp4",
-      "mobileSrc": "https://field-media.c3field.online/c1/208063482add26125a8f14e753ef7a5126ecffda027bb026b23c7b97c3b7c867/intro-vertical.mp4",
+      "src": "https://field-media.c3field.online/The-Million-Dollar-Mission-One-Small-Town-Proves-Collective-Action-Still-Works%20%281%29.mp4",
+      "mobileSrc": "https://field-media.c3field.online/The-Million-Dollar-Mission-One-Small-Town-Proves-Collective-Action-Still-Works%20%281%29.mp4",
       "poster": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c1/15bdc6309ff45aa17c3653b21338e06f9b3ed9267b8b9c9553a5250a961739b2/connect-vertical.webp"
     }
   },
