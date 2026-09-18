@@ -1,4 +1,4 @@
-import {useEffect,useState} from "react"
+import {FormEvent,useEffect,useState} from "react"
 import "./myEnvironmentEncounter.css"
 
 type EnvPayload={
@@ -25,6 +25,23 @@ type InitiativePayload={
   initiatives?:Initiative[]
   reason?:string
 }
+type ConnectionEntry={
+  entry_key:string
+  entry_type:string
+  title?:string|null
+  body:string
+  related_type?:string|null
+  related_key?:string|null
+  related_route?:string|null
+  standing:string
+  created_at:string
+}
+type ConnectionsPayload={
+  authenticated:boolean
+  standing:string
+  entries?:ConnectionEntry[]
+  reason?:string
+}
 
 const ARRIVAL_VIDEO="/api/free-media?asset=c3_field_c1me_arrival_video_v1"
 const LIVE_BACKDROP="/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
@@ -36,6 +53,11 @@ export default function MyEnvironmentEncounter(){
   const [initiatives,setInitiatives]=useState<Initiative[]>([])
   const [initiativeNotice,setInitiativeNotice]=useState("")
   const [initiativeBusy,setInitiativeBusy]=useState(false)
+  const [connections,setConnections]=useState<ConnectionEntry[]>([])
+  const [connectionType,setConnectionType]=useState("note")
+  const [connectionBody,setConnectionBody]=useState("")
+  const [connectionNotice,setConnectionNotice]=useState("")
+  const [connectionBusy,setConnectionBusy]=useState(false)
 
   useEffect(()=>{
     let active=true
@@ -64,6 +86,11 @@ export default function MyEnvironmentEncounter(){
           const initiativeBody=await initiativeResponse.json() as InitiativePayload
           if(active&&initiativeBody.initiatives) setInitiatives(initiativeBody.initiatives)
         }
+        const connectionsResponse=await fetch("/api/my-environment-connections",{headers:{accept:"application/json"}})
+        if(connectionsResponse.ok){
+          const connectionsBody=await connectionsResponse.json() as ConnectionsPayload
+          if(active&&connectionsBody.entries) setConnections(connectionsBody.entries)
+        }
         document.title=body.owner?.display_name?`${body.owner.display_name} | My Environment | c3 Community Partners`:"My Environment | c3 Community Partners"
         setState(claim?"intro":"ready")
       }catch{
@@ -90,6 +117,25 @@ export default function MyEnvironmentEncounter(){
     }catch(error){
       setInitiativeNotice(error instanceof Error?error.message:"The connection could not be formed.")
     }finally{setInitiativeBusy(false)}
+  }
+
+  async function addConnectionEntry(event:FormEvent){
+    event.preventDefault()
+    if(!connectionBody.trim()) return
+    setConnectionBusy(true);setConnectionNotice("")
+    try{
+      const response=await fetch("/api/my-environment-connections",{
+        method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({entry_type:connectionType,body:connectionBody.trim()})
+      })
+      const body=await response.json() as {ok?:boolean;standing?:string;entry?:ConnectionEntry;reason?:string}
+      if(!response.ok||!body.ok||!body.entry) throw new Error(body.reason||body.standing||"The connection entry could not be recorded.")
+      setConnections(current=>[body.entry!,...current])
+      setConnectionBody("")
+      setConnectionNotice("Added to your Connections thread.")
+    }catch(error){
+      setConnectionNotice(error instanceof Error?error.message:"The connection entry could not be recorded.")
+    }finally{setConnectionBusy(false)}
   }
 
   if(state==="held"||state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
@@ -136,6 +182,37 @@ export default function MyEnvironmentEncounter(){
           : <button type="button" disabled={initiativeBusy} onClick={()=>void connectInitiative(initiative)}>CONNECT TO MISSION →</button>}
       </article>)}
       {initiativeNotice&&<p className="myenv-initiative-notice" role="status">{initiativeNotice}</p>}
+      <section className="myenv-connections-thread" aria-label="Connections thread">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">CONNECTIONS THREAD</p>
+          <h2>Connections</h2>
+          <p>Keep introductions, opportunities, follow-ups, and connection notes with your environment.</p>
+        </div>
+        <div className="myenv-thread-entries">
+          {connections.length===0&&<p className="myenv-relations-empty">Your connections thread is ready.</p>}
+          {connections.slice(0,8).map(entry=><article key={entry.entry_key}>
+            <div>
+              <span>{entry.entry_type.replace(/_/g," ")}</span>
+              <time>{new Date(entry.created_at).toLocaleString()}</time>
+            </div>
+            {entry.title&&<h3>{entry.title}</h3>}
+            <p>{entry.body}</p>
+            {entry.related_route&&<a href={entry.related_route}>OPEN CONNECTION →</a>}
+          </article>)}
+        </div>
+        <form className="myenv-thread-compose" onSubmit={addConnectionEntry}>
+          <select aria-label="Connection entry type" value={connectionType} onChange={e=>setConnectionType(e.target.value)}>
+            <option value="note">Note</option>
+            <option value="connection">Connection</option>
+            <option value="introduction">Introduction</option>
+            <option value="opportunity">Opportunity</option>
+            <option value="follow_up">Follow-up</option>
+          </select>
+          <textarea aria-label="Connection note" rows={3} maxLength={5000} value={connectionBody} onChange={e=>setConnectionBody(e.target.value)} placeholder="Add something you want to keep connected to your environment." />
+          <button type="submit" disabled={connectionBusy||!connectionBody.trim()}>ADD TO CONNECTIONS</button>
+        </form>
+        {connectionNotice&&<p className="myenv-initiative-notice" role="status">{connectionNotice}</p>}
+      </section>
     </aside>
   </main>
 }
