@@ -106,18 +106,27 @@ export default function C2EnvironmentShell(){
   if(!data) return <main className="c2-shell"><p className="c2-shell-label">c2ME.env</p><p>Opening the Million Dollar Mission…</p></main>
 
   if(!data.authenticated) return <main className="c2-shell c2-held">
-    <a href="/">c3 Field</a>
+    <nav className="c2-home-nav" aria-label="Environment navigation">
+      <a className="c2-home-link" href="/my-environment">← MY ENVIRONMENT</a>
+      <a href="/">c3 FIELD</a>
+    </nav>
     <p className="c2-shell-label">c2ME.env · Million Dollar Mission</p>
     <h1>Connect before entering the mission.</h1>
     <p>The Million Dollar Mission environment is available after your c1 relationship has been persisted.</p>
-    <a className="c2-primary-link" href="/connect">CONNECT</a>
+    <div className="c2-held-actions">
+      <a className="c2-primary-link" href="/my-environment">GO TO MY ENVIRONMENT</a>
+      <a className="c2-secondary-link" href="/">RETURN TO C3 FIELD</a>
+    </div>
     <p className="c2-small">Standing: {data.standing}{data.reason?" · "+data.reason:""}</p>
   </main>
 
   return <main className="c2-shell" aria-labelledby="c2-title">
     <header className="c2-topbar">
       <a className="c2-brand" href="/"><span>c3</span> Community Partners</a>
-      <p className="c2-shell-label">c2ME.env · connected initiative</p>
+      <div className="c2-topbar-actions">
+        <p className="c2-shell-label">c2ME.env · connected initiative</p>
+        <a className="c2-home-link" href="/my-environment">← MY ENVIRONMENT</a>
+      </div>
     </header>
 
     <section className="c2-mission-head">
