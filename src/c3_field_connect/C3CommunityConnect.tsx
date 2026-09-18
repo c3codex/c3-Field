@@ -88,6 +88,7 @@ function C3CommunityConnectSurface() {
     <main className="c3-connect-shell" data-c3-route="/" data-standing-created="false">
       <a className="c3-connect-skip" href="#connect">Skip to Connect</a>
       {environment.reviewOnly && <div className="c3-connect-review" role="note">Implementation preview · Connecting is not open. Submissions are not saved.</div>}
+
       <header className="c3-connect-header c3-connect-width">
         <a href="#top" className="c3-connect-identity" aria-label="c3 Community Partners home">
           {!emblemFailed && <img src={assets.emblem.src} alt={assets.emblem.alt} onError={() => setEmblemFailed(true)} width="54" height="54" />}
@@ -96,33 +97,31 @@ function C3CommunityConnectSurface() {
         <a className="c3-connect-nav" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
       </header>
 
-      <section id="top" className="c3-connect-hero c3-connect-width" aria-labelledby="c3-connect-title">
-        <div className="c3-connect-hero-copy">
-          <p className="c3-connect-kicker">{copy.brandLine}</p>
-          <h1 id="c3-connect-title">{copy.heroTitle}</h1>
-          <p className="c3-connect-lead">{copy.heroBody}</p>
-          <a className="c3-connect-button" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
-        </div>
-        <div className="c3-connect-emblem-stage" aria-hidden="true">
-          {!emblemFailed && <img src={assets.emblem.src} alt="" onError={() => setEmblemFailed(true)} />}
-        </div>
-      </section>
-      <div className="c3-connect-structure c3-connect-width">{copy.structuralLine}</div>
-
-      <section className="c3-connect-mission" aria-labelledby="c3-connect-mission-title">
-        <div className="c3-connect-width c3-connect-mission-grid">
-          <div><p className="c3-connect-kicker">Our shared mission</p><h2 id="c3-connect-mission-title">{copy.missionTitle}</h2></div>
-          <div className="c3-connect-mission-body"><p>{copy.missionBody}</p><p className="c3-connect-mission-closing">{copy.missionClosing}</p></div>
-        </div>
+      <section id="top" className="c3-connect-intro" aria-label={copy.mediaTitle}>
+        {mediaFailed ? <p className="c3-connect-media-unavailable" role="status">The introduction is temporarily unavailable.</p> :
+          <video
+            src={mobile && assets.intro.mobileSrc ? assets.intro.mobileSrc : assets.intro.src}
+            controls
+            playsInline
+            preload="metadata"
+            poster={assets.intro.poster}
+            aria-label={copy.mediaTitle}
+            onError={() => setMediaFailed(true)}
+          >
+            Your browser does not support this video.
+          </video>}
       </section>
 
-      <section className="c3-connect-media c3-connect-width" aria-labelledby="c3-connect-media-title">
-        <div className="c3-connect-section-heading"><p className="c3-connect-kicker">{copy.brandLine}</p><h2 id="c3-connect-media-title">{copy.mediaTitle}</h2></div>
-        <div className="c3-connect-video-frame">
-          {mediaFailed ? <p className="c3-connect-media-unavailable" role="status">The introduction is temporarily unavailable.</p> :
-            <video src={mobile && assets.intro.mobileSrc ? assets.intro.mobileSrc : assets.intro.src} controls playsInline preload="metadata" poster={assets.intro.poster} aria-label={copy.mediaTitle} onError={() => setMediaFailed(true)}>
-              Your browser does not support this video.
-            </video>}
+      <section
+        className="c3-connect-hero"
+        aria-labelledby="c3-connect-title"
+        style={assets.hero ? {backgroundImage:`linear-gradient(90deg,rgba(9,12,14,.70),rgba(9,12,14,.18)),url("${assets.hero.src}")`} : undefined}
+      >
+        <div className="c3-connect-width c3-connect-hero-inner">
+          <div className="c3-connect-hero-copy">
+            <h1 id="c3-connect-title">{copy.heroTitle}</h1>
+            <a className="c3-connect-button" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
+          </div>
         </div>
       </section>
 
@@ -153,9 +152,11 @@ function C3CommunityConnectSurface() {
           {result && <p className="c3-connect-result" role="status">{result}</p>}
         </form>
       </section>
+
       <footer className="c3-connect-footer c3-connect-width"><span>c3 Community Partners</span><span>{copy.brandLine}</span></footer>
     </main>
   )
+
 }
 
 export function HeldUnknownC3FieldRoute({ pathname }: { pathname: string }) {
