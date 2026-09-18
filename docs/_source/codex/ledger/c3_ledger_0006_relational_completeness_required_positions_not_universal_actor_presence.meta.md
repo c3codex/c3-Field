@@ -9,8 +9,8 @@ date: 2026-09-18
 operator: op044
 executor: Chazz
 confirmation_status: operator_confirmed_capture
-current_standing: candidate_observation
-disposition: preserve_for_cross_environment_and_branch_validation
+current_standing: operator_confirmed_elevated_inanna_governance_projection
+disposition: elevated_and_persisted_under_measures_of_inanna_governance_authority
 related_authorities:
   - c3 Ledger — Registry of Record
   - Material Environment Qualification Grammar v1
@@ -31,6 +31,7 @@ evidence_refs:
   - webpac/c3_governance/relational_operations_systems_governance_webpac_v1_0.meta.md
   - webpac/c2me/c2me_mdm_participation_passage_webpac_v0_5.meta.md
   - webpac/c2me/c2me_mdm_ledger_thread_webpac_v0_6.meta.md
+  - github-private://c3codex/measures-of-inanna-governance/main/governance/chamber_of_epithets_branch_role_progression_v1.meta.md
 ---
 
 # c3 Ledger Entry — c3_ledger_0006
@@ -219,11 +220,25 @@ Each must be represented separately.
 
 ## Current Standing
 
-Candidate observation.
+**operator_confirmed_elevated_inanna_governance_projection**
 
-The finding is captured and related to existing Ledger evidence.
+The finding is captured, elevated, and physically persisted under Measures of Inanna governance authority through:
 
-No universal branch-role matrix is registered.
+`governance/chamber_of_epithets_branch_role_progression_v1.meta.md`
+
+The authoritative lineage confirms that Chamber of Epithets already resolves as a nine-seat 3 / 3 / 3 role chamber, while the role circuit establishes that role-bearing Epithets emerge at c2 / Contribute and stabilize/repeat at c3 / Create without becoming origin authority.
+
+The elevated branch-operational projection now preserves:
+
+- Origin / Foundation / Community as the three role families;
+- three operational positions per family;
+- one experienced Origin Founder + one Foundational Partner + one Community Partner as the branch-formation seed;
+- progression from 1 / 1 / 1 formation to 3 / 3 / 3 operational occupancy;
+- role transition with preserved lineage;
+- computational distinction between missing actor, missing condition, and vacant required position.
+
+No individual seat assignment is created by this elevation.
+No universal branch-role matrix beyond this Inanna-authorized projection is inferred.
 No CI requirement is created.
 No c2 standing is advanced.
 No Crystal standing is advanced.
@@ -232,7 +247,12 @@ No participant, role, authority, or branch is created by this entry.
 
 ## Disposition
 
-Preserve for immediate cross-environment and branch validation.
+Elevated and persisted under Measures of Inanna governance authority.
+
+Physical governance authority:
+`github-private://c3codex/measures-of-inanna-governance@62f3a2126e10b141fa0881ea757b743cf6cc9058/governance/chamber_of_epithets_branch_role_progression_v1.meta.md`
+
+Continue with computational branch-state verification before assigning seats or advancing branch standing.
 
 Next review should test the candidate 3×3 against:
 
