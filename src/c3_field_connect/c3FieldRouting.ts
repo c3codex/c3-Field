@@ -16,7 +16,7 @@ export function resolveC3FieldRoute(pathname: string): C3FieldRouteDecision {
   const normalized = normalizeC3Pathname(pathname)
   if (normalized === "/my-environment") return {kind:"environment", pathname:normalized, component:"MyEnvironmentEncounter", exposesOperationsSpine:false, createsStanding:false}
   if (normalized === "/c2") return {kind:"c2_shell", pathname:normalized, component:"C2EnvironmentShell", exposesOperationsSpine:false, createsStanding:false}
-  if (normalized === "/") {
+  if (normalized === "/" || normalized === "/connect") {
     return {
       kind: "connect",
       pathname: normalized,
