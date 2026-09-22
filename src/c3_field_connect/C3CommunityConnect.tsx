@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
 
-import "./c3CommunityConnect.css"
 
 export default function C3CommunityConnect() {
 
@@ -10,22 +9,6 @@ export default function C3CommunityConnect() {
 
 function C3CommunityConnectSurface() {
   const [environment, setEnvironment] = useState<Awaited<ReturnType<typeof loadC1EnvironmentPackage>> | null>(null)
-  // FREE reads persisted environmental CURRENT before projecting environmental
-  // relations. A held decision never selects a substitute environment.
-  const [steering,setSteering]=useState<"loading"|"resolved"|"held">("loading")
-  useEffect(()=>{
-    let active=true
-    const route=window.location.pathname==="/connect"?"/connect":"/"
-    fetch("/api/free-environment-steering?route="+encodeURIComponent(route),{
-      headers:{accept:"application/json"}
-    }).then(async response=>{
-      const value=await response.json() as {steering?:string;render_permitted?:boolean}
-      if(active)setSteering(response.ok&&value.steering==="environment_resolved"&&
-        value.render_permitted===true?"resolved":"held")
-    }).catch(()=>{if(active)setSteering("held")})
-    return()=>{active=false}
-  },[])
-
   useEffect(() => {
     let active = true
     loadC1EnvironmentPackage().then(value => { if (active) setEnvironment(value) }).catch(() => { if (active) setLoadFailed(true) })
@@ -53,7 +36,7 @@ function C3CommunityConnectSurface() {
 
   async function submitCandidate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (submitting.current || steering!=="resolved" || !environment?.available || environment.encounterEnabled === false) return
+    if (submitting.current || !environment?.available || environment.encounterEnabled === false) return
     const form = new FormData(event.currentTarget)
     if (!event.currentTarget.checkValidity()) return
     submitting.current = true
