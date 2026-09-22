@@ -332,3 +332,44 @@ body:has(.c3-connect-shell),
 .c3-public-doc-footer{border-top:1px solid #ffffff24;padding-top:28px;display:flex;justify-content:space-between;gap:36px;color:#9aa4ae;font-size:10px}
 .c3-public-doc-footer p{margin:4px 0}
 @media(max-width:768px){.c3-connect-public-nav>a:not(.c3-connect-nav){display:none}.c3-connect-footer,.c3-public-doc-header,.c3-public-doc-footer{flex-direction:column;align-items:flex-start}.c3-connect-footer>nav,.c3-public-doc-footer nav{justify-content:flex-start}.c3-public-doc-body{padding-block:52px 64px}}
+
+
+/* v0.17 — single-click Landing → Connect encounter */
+.c3-connect-panel{align-items:start}
+.c3-connect-form-intro{
+  min-height:360px;
+  padding:42px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  background-size:cover;
+  background-position:center;
+}
+.c3-connect-form-intro h1{
+  margin:0;
+  max-width:620px;
+  font:400 clamp(40px,4.8vw,68px)/1.02 Georgia,"Times New Roman",serif;
+  letter-spacing:-.04em;
+  text-wrap:balance;
+}
+.c3-connect-form-lead{
+  max-width:560px;
+  margin:22px 0 0;
+  color:#d5d9dc;
+  font-size:14px;
+  line-height:1.75;
+}
+.c3-connect-form-meaning{
+  max-width:560px;
+  margin:16px 0 0;
+  color:#aeb6bf;
+  font-size:12px;
+  line-height:1.7;
+}
+@media(max-width:768px){
+  .c3-connect-form-intro{min-height:300px;padding:28px}
+  .c3-connect-form-intro h1{font-size:clamp(36px,9vw,52px)}
+}
+@media(max-width:480px){
+  .c3-connect-form-intro{min-height:260px;padding:22px}
+}
