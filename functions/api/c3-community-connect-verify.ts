@@ -31,7 +31,7 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
   const nonce = crypto.randomUUID().replace(/-/g,"")
   // GET has no effect. Email scanners cannot consume a challenge by following the link.
   return new Response(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="referrer" content="no-referrer"><title>Confirm your connection</title>
-<body><main><h1>Confirm your connection</h1><p id="result" role="status">Confirm your email to continue your c3 Community Partners connection.</p><button id="confirm" type="button">Confirm connection</button></main>
+<body><main><h1>Confirm your connection</h1><p id="result" role="status">Confirm your email to continue your c3 Community Partners connection.</p><button id="confirm" type="button">Confirm connection</button><p><a href="/connect">Return to Connect</a></p></main>
 <script nonce="${nonce}">
 const parameters = new URLSearchParams(location.hash.slice(1));
 const receipt = parameters.get("receipt"), token = parameters.get("token");
@@ -46,11 +46,11 @@ button.addEventListener("click",async () => {
   const recorded=response.ok && value.standing==="connection_recorded" && value.saved===true;
   result.textContent=recorded
     ? (value.environment_ready===true ? "Connection confirmed. Opening your environment…" : "Your Connect relationship is confirmed and recorded.")
-    : "We could not confirm your connection. Please request a new link or return later.";
+    : "We could not confirm your connection. Return to Connect to request a fresh confirmation email.";
   if(recorded && typeof value.next_url==="string" && value.next_url.startsWith("/my-environment#claim=")){
     window.setTimeout(()=>location.assign(value.next_url),650);
   }
- } catch { result.textContent="We could not confirm your connection. Please return later."; }
+ } catch { result.textContent="We could not confirm your connection. Return to Connect to request a fresh confirmation email."; }
 });
 </script></body></html>`,{headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store",
     "referrer-policy":"no-referrer","x-content-type-options":"nosniff",
