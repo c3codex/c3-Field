@@ -19,6 +19,7 @@ export type C3PublicPresentation={
   contact_document:C3PublicDocument
   footer:{brand:string;environment_line:string;legal_entity:string;brand_line:string;copyright:string}
   landing:Record<string,string>
+  connect_presentation:{hero_title:string;hero_body:string}
   seo:{title:string;description:string;canonical_url:string;og_image_asset_key:string;og_type:string}
 }
 
