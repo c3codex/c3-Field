@@ -9,7 +9,7 @@ export default function MillionDollarMissionLanding({presentation}:{presentation
   const capacity=media(presentation.media_roles.capacity_projects)
   const serene=media(presentation.media_roles.serene_place)
   const emblem=media(presentation.media_roles.handcrafted_emblem)
-  return <main className="mdm-page">
+  return <main className="mdm-page" data-c3-environment="env_c3_community_connect" data-c3-presentation-state="c3field_public_landing">
     <header className="mdm-header">
       <a className="mdm-brand" href="/" aria-label={presentation.brand+" home"}><img src={emblem} alt="" width="44" height="44"/><span>{presentation.brand}</span></a>
       <nav className="mdm-nav" aria-label="Primary">
