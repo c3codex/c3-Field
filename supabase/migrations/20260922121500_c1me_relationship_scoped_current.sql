@@ -19,6 +19,7 @@ declare
   v_current_count integer;
   v_current text;
   v_hash text;
+  v_event_count integer;
 begin
   if p_relationship_key is null or btrim(p_relationship_key)='' then
     return jsonb_build_object('resolution','auth_required','reason_code','missing_verified_subject');
@@ -62,6 +63,18 @@ begin
   if v_grant_count<>1 or v_evidence_ref is null then
     return jsonb_build_object('resolution','reconciliation_hold',
       'reason_code','owner_grant_missing_or_ambiguous','may_create_personal_environment',false);
+  end if;
+
+  select count(*) into v_event_count
+  from public.crs_relationship_event
+  where event_key=v_evidence_ref
+    and relationship_key=p_relationship_key
+    and event_type='c1_relationship_persisted'
+    and event_standing='c1_C1_persisted';
+
+  if v_event_count<>1 then
+    return jsonb_build_object('resolution','reconciliation_hold',
+      'reason_code','c1_persistence_evidence_invalid','may_create_personal_environment',false);
   end if;
 
   select count(*),min(current_state_key)
