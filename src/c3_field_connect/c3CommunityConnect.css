@@ -309,3 +309,26 @@ body:has(.c3-connect-shell),
   }
   .c3-intro-sound{right:14px;bottom:14px;min-height:36px;padding:8px 10px;font-size:8px}
 }
+
+
+/* v0.14 Registry-projected public chrome and documents */
+.c3-connect-public-nav{display:flex;align-items:center;gap:18px;font-size:9px;letter-spacing:.11em}
+.c3-connect-public-nav>a:not(.c3-connect-nav){color:#b8c0c8}
+.c3-connect-footer>div{display:grid;gap:4px;max-width:700px}
+.c3-connect-footer>nav{display:flex;flex-wrap:wrap;gap:12px 18px;justify-content:flex-end;align-content:start}
+.c3-connect-footer strong{color:#dce0e4;font-weight:600}
+.c3-public-doc{min-height:100vh;background:#101315;color:#eeece5;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:56px}
+.c3-public-doc a{color:inherit}
+.c3-public-doc-header{display:flex;justify-content:space-between;align-items:center;gap:28px;padding-block:20px;border-bottom:1px solid #ffffff24}
+.c3-public-doc-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.c3-public-doc-brand img{object-fit:contain}
+.c3-public-doc-header nav,.c3-public-doc-footer nav{display:flex;flex-wrap:wrap;gap:14px 20px;font-size:10px}
+.c3-public-doc-body{padding-block:72px 88px;max-width:900px}
+.c3-public-doc-body h1{font:400 clamp(42px,6vw,72px)/1.02 Georgia,"Times New Roman",serif;letter-spacing:-.04em;margin:0 0 18px}
+.c3-public-doc-body h2{font:400 clamp(24px,3vw,34px)/1.15 Georgia,"Times New Roman",serif;margin:46px 0 12px}
+.c3-public-doc-body p{color:#c2c8cd;line-height:1.8;font-size:14px}
+.c3-public-doc-meta{font-size:11px!important;color:#8f9aa5!important}
+.c3-public-doc-intro{font-size:18px!important;color:#e5e7e9!important}
+.c3-public-doc-footer{border-top:1px solid #ffffff24;padding-top:28px;display:flex;justify-content:space-between;gap:36px;color:#9aa4ae;font-size:10px}
+.c3-public-doc-footer p{margin:4px 0}
+@media(max-width:768px){.c3-connect-public-nav>a:not(.c3-connect-nav){display:none}.c3-connect-footer,.c3-public-doc-header,.c3-public-doc-footer{flex-direction:column;align-items:flex-start}.c3-connect-footer>nav,.c3-public-doc-footer nav{justify-content:flex-start}.c3-public-doc-body{padding-block:52px 64px}}
