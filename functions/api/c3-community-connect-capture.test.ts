@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import {onRequestPost, onRequest} from "./c3-community-connect-capture"
-import {onRequest as packageRequest} from "./c3-community-connect-package"
+import {onRequestGet as packageGet,onRequest as packageRequest} from "./c3-community-connect-package"
 
 const candidate = {name:"Review Participant",email:"review@example.invalid",message:"Connect local skills.",consent:true,participationIntention:true,attestation:true,connectAs:"individual"}
 const send = (body: unknown, headers: Record<string,string> = {"content-type":"application/json"}) => {
@@ -38,11 +38,17 @@ test("malformed, oversized and cross-origin inputs fail closed", async () => {
   assert.equal((await send(candidate,{"content-type":"text/plain"})).status,415)
   assert.equal((await send(candidate,{"content-type":"application/json",origin:"https://elsewhere.invalid"})).status,403)
 })
-test("method and hosted package routes stay closed regardless of client flags",async () => {
+test("package admission is server-controlled by C1 passage standing",async () => {
   assert.equal((await onRequest({} as any)).status,405)
-  for (const url of ["https://c3field.online/api/c3-community-connect-package?review=1", "http://localhost/api/c3-community-connect-package"]) {
-    const r = await packageRequest({request:new Request(url)} as any)
-    assert.equal(r.status,423)
-    assert.equal((await r.json()).available,false)
-  }
+  assert.equal((await packageRequest({} as any)).status,405)
+  const held=await packageGet({request:new Request("https://c3field.online/api/c3-community-connect-package"),env:{}} as any)
+  assert.equal(held.status,423)
+  assert.equal((await held.json()).available,false)
+  const open=await packageGet({request:new Request("https://c3field.online/api/c3-community-connect-package"),env:{C1_PASSAGE_ENABLED:"true"}} as any)
+  assert.equal(open.status,200)
+  const value=await open.json()
+  assert.equal(value.available,true)
+  assert.equal(value.reviewOnly,false)
+  assert.equal(value.assets.intro.src,"/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1")
+  assert.equal("emblem" in value.assets,false)
 })
