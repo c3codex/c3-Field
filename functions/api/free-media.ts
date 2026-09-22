@@ -60,8 +60,9 @@ async function resolveR2(asset:Record<string,unknown>,env:FreeMediaEnv){
 }
 
 async function resolvePublicR2(asset:Record<string,unknown>,request:Request){
-  const source=asset.current_free_binding
-  if(typeof source!=="string"||!source.startsWith("https://field-media.c3field.online/")) throw new Error("public_r2_binding_unavailable")
+  if(asset.authoritative_custody_identifier!=="field-media"||typeof asset.authoritative_custody_location!=="string") throw new Error("custody_mismatch")
+  const object=asset.authoritative_custody_location.split("/").map(part=>encodeURIComponent(part)).join("/")
+  const source="https://field-media.c3field.online/"+object
   const upstreamHeaders=new Headers()
   const range=request.headers.get("range")
   if(range) upstreamHeaders.set("range",range)
