@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
+import MillionDollarMissionLanding from "./MillionDollarMissionLanding"
 
 
 export default function C3CommunityConnect() {
@@ -19,7 +20,9 @@ function C3CommunityConnectSurface() {
   const [pending, setPending] = useState(false)
   const [result, setResult] = useState<string | null>(null)
   const [mediaFailed, setMediaFailed] = useState(false)
-  const [publicStage, setPublicStage] = useState<"intro"|"hero">("intro")
+  const [publicStage, setPublicStage] = useState<"intro"|"landing"|"connect">(() => window.location.pathname === "/connect" ? "connect" : "intro")
+  const [introMuted, setIntroMuted] = useState(true)
+  const introVideoRef = useRef<HTMLVideoElement | null>(null)
   const [emblemFailed, setEmblemFailed] = useState(false)
   const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 600px)").matches)
   const shareReference = (() => {
@@ -94,33 +97,42 @@ function C3CommunityConnectSurface() {
     return (
       <main className="c3-intro-env" data-c3-environment="env_c3field_public_intro" data-standing-created="false">
         {environment.reviewOnly && <div className="c3-connect-review" role="note">Implementation preview · Connecting is not open. Submissions are not saved.</div>}
-        <button className="c3-intro-skip" type="button" onClick={() => setPublicStage("hero")}>SKIP <span aria-hidden="true">↗</span></button>
+        <button className="c3-intro-skip" type="button" onClick={() => setPublicStage("landing")}>SKIP <span aria-hidden="true">↗</span></button>
         {mediaFailed ? (
           <div className="c3-intro-fallback" role="status">
             <p>The introduction is temporarily unavailable.</p>
-            <button className="c3-connect-button" type="button" onClick={() => setPublicStage("hero")}>CONTINUE <span aria-hidden="true">↗</span></button>
+            <button className="c3-connect-button" type="button" onClick={() => setPublicStage("landing")}>CONTINUE <span aria-hidden="true">↗</span></button>
           </div>
         ) : (
           <video
+            ref={introVideoRef}
             src={mobile && assets.intro.mobileSrc ? assets.intro.mobileSrc : assets.intro.src}
             autoPlay
-            muted
+            muted={introMuted}
             playsInline
             preload="auto"
             poster={assets.intro.poster}
             aria-label={copy.mediaTitle}
-            onEnded={() => setPublicStage("hero")}
+            onEnded={() => setPublicStage("landing")}
             onError={() => setMediaFailed(true)}
           >
             Your browser does not support this video.
           </video>
         )}
+        {!mediaFailed && <button className="c3-intro-sound" type="button" aria-pressed={!introMuted} onClick={() => {
+          const nextMuted = !introMuted
+          setIntroMuted(nextMuted)
+          if (introVideoRef.current) introVideoRef.current.muted = nextMuted
+        }}>{introMuted ? "SOUND ON" : "SOUND OFF"}</button>}
       </main>
     )
   }
 
+  if(publicStage==="landing") return <MillionDollarMissionLanding />
+
   return (
-    <main className="c3-connect-shell" data-c3-route="/" data-c3-environment="env_c3field_public_hero" data-standing-created="false">
+    <main className="c3-connect-shell" data-c3-route="/connect" data-c3-environment="env_c3_community_connect" data-standing-created="false">
+
       <a className="c3-connect-skip" href="#connect">Skip to Connect</a>
       {environment.reviewOnly && <div className="c3-connect-review" role="note">Implementation preview · Connecting is not open. Submissions are not saved.</div>}
 
