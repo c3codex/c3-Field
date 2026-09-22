@@ -17,9 +17,11 @@ as $$
       r.display_name,
       (
         select count(*)::integer
-        from public.crs_relationship_event e
-        where e.relationship_key=r.relationship_key
-          and e.event_type='verification_reminder_sent'
+        from public.crs_verification_challenge rc
+        where rc.relationship_key=r.relationship_key
+          and rc.verification_type='email_control'
+          and coalesce((rc.metadata->>'reminder_number')::integer,0)>0
+          and rc.challenge_state<>'delivery_failed'
       ) as reminders_sent,
       (
         select max(c.expires_at)
