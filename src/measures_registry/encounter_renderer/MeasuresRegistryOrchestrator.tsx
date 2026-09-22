@@ -269,7 +269,14 @@ export default function MeasuresRegistryOrchestrator() {
         ? homeHero.free_header as Record<string, unknown>
         : null
 
+    const sourcePacKey =
+      typeof homeHero?.source_pac_key === "string" ? homeHero.source_pac_key.trim() : ""
+    const headerPacKey =
+      typeof value?.source_pac_key === "string" ? value.source_pac_key.trim() : ""
+
     if (
+      !sourcePacKey ||
+      headerPacKey !== sourcePacKey ||
       value?.free_source_authority !== "webpac" ||
       value?.free_render_mode !== "live_html_css_overlay" ||
       value?.free_background_baked_allowed !== false
@@ -281,7 +288,7 @@ export default function MeasuresRegistryOrchestrator() {
     const expanded = typeof value.free_expanded_name === "string" ? value.free_expanded_name.trim() : ""
     if (!label || !expanded) return null
 
-    return { label, expanded }
+    return { label, expanded, sourcePacKey }
   }, [resolverData.registryRows])
 
   const toneUrlByMaterial = useMemo(() => {
@@ -411,6 +418,7 @@ export default function MeasuresRegistryOrchestrator() {
           {activeSurface === "measures_registry_home" && freeHeader ? (
             <div
               data-free-source="webpac"
+              data-source-pac={freeHeader.sourcePacKey}
               aria-label={freeHeader.expanded}
               title={freeHeader.expanded}
               style={{

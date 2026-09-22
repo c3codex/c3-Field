@@ -43,7 +43,7 @@
   object-position: center;
 }
 
-.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] .registry-crystal-intro-skip {
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] .registry-crystal-intro-control {
   position: absolute;
   right: clamp(1rem, 3vw, 2rem);
   bottom: clamp(1rem, 3vw, 2rem);
@@ -58,4 +58,30 @@
   letter-spacing: 0.06em;
   cursor: pointer;
   backdrop-filter: blur(6px);
+}
+
+
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] .registry-crystal-intro-status {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 4vw, 2.5rem);
+  z-index: 6;
+  transform: translateX(-50%);
+  width: min(34rem, calc(100vw - 2rem));
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(237, 242, 248, 0.22);
+  border-radius: 0.35rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: rgba(237, 242, 248, 0.9);
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] .registry-crystal-intro-status p {
+  margin: 0;
+}
+
+.measures-registry-runtime[data-surface="crystal_seat_intro"][data-layout-contract="crystal_intro"] .registry-crystal-intro-status .registry-crystal-intro-control {
+  position: static;
+  margin-top: 0.75rem;
 }

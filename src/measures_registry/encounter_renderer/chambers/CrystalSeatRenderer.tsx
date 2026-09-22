@@ -265,15 +265,106 @@ function CrystalIntroSeat({
   registryTokenStyle,
   onNavigate,
 }: CrystalSeatProps) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [introFailed, setIntroFailed] = useState(false)
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false)
+  const [audioEnabled, setAudioEnabled] = useState(false)
+
   const meta = asRecord(encounter.encounterDef?.metadata)
   const introCopy = asRecord(meta?.intro_copy)
-  const headline = asString(introCopy?.headline) ?? "AI Isn't Broken... Systems Are"
+  const headline = asString(introCopy?.headline) ?? "Measures Registry"
 
-  const videoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
-  const posterUrl = mediaUrl(encounter.mediaByRole.get("hero_poster"))
+  const sourcePacKey = asString(encounter.homeHero?.source_pac_key)
+  const introPolicy = asRecord(encounter.homeHero?.intro_policy)
+  const videoRow = encounter.mediaByRole.get("intro_hook_video")
+  const posterRow = encounter.mediaByRole.get("hero_poster")
+  const videoMeta = asRecord(videoRow?.metadata)
+  const posterMeta = asRecord(posterRow?.metadata)
+
+  const contractReady =
+    Boolean(sourcePacKey) &&
+    introPolicy?.autoplay === true &&
+    introPolicy?.muted === true &&
+    introPolicy?.plays_inline === true &&
+    introPolicy?.skip_control_allowed === false &&
+    asString(videoMeta?.source_pac_key) === sourcePacKey
+
+  const videoUrl = contractReady ? mediaUrl(videoRow) : null
+  const posterUrl =
+    sourcePacKey && asString(posterMeta?.source_pac_key) === sourcePacKey
+      ? mediaUrl(posterRow)
+      : null
+
+  const entryControlLabel = asString(introPolicy?.entry_control_label)
+  const errorContinueLabel = asString(introPolicy?.error_continue_label)
+
+  useEffect(() => {
+    setIntroFailed(false)
+    setAutoplayBlocked(false)
+    setAudioEnabled(false)
+
+    const video = videoRef.current
+    if (!video || !videoUrl || !contractReady) return
+
+    video.muted = true
+    const attempt = video.play()
+    if (attempt) {
+      void attempt.catch(() => {
+        setAutoplayBlocked(true)
+      })
+    }
+  }, [videoUrl, contractReady])
 
   function finishIntro() {
     onNavigate("measures_registry_home")
+  }
+
+  function enterWithSound() {
+    const video = videoRef.current
+    if (!video) return
+    video.currentTime = 0
+    video.muted = false
+    const attempt = video.play()
+    if (attempt) {
+      void attempt
+        .then(() => {
+          setAudioEnabled(true)
+          setAutoplayBlocked(false)
+        })
+        .catch(() => {
+          setAutoplayBlocked(true)
+        })
+    }
+  }
+
+  if (!contractReady || !videoUrl) {
+    return (
+      <main
+        className="measures-registry-runtime"
+        data-surface="crystal_seat_intro"
+        data-material-family="crystal"
+        data-layout-contract="crystal_intro"
+        data-release-standing="held_webpac_intro_binding"
+        data-source-pac={sourcePacKey ?? undefined}
+        style={registryTokenStyle}
+      >
+        <section className="registry-crystal-intro" aria-label="Measures Registry introduction">
+          {posterUrl ? (
+            <img
+              className="registry-crystal-intro-video"
+              src={posterUrl}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              fetchPriority="high"
+            />
+          ) : null}
+          <div className="registry-crystal-intro-status" role="status">
+            <p>Measures Registry introduction is unavailable.</p>
+          </div>
+        </section>
+      </main>
+    )
   }
 
   return (
@@ -282,25 +373,26 @@ function CrystalIntroSeat({
       data-surface="crystal_seat_intro"
       data-material-family="crystal"
       data-layout-contract="crystal_intro"
-      data-release-standing="public"
-      {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
+      data-release-standing={introFailed ? "media_error" : autoplayBlocked ? "awaiting_user_gesture" : "public"}
+      data-source-pac={sourcePacKey}
       style={registryTokenStyle}
     >
       <section
         className="registry-crystal-intro"
         aria-label="Measures Registry introduction"
       >
-        {videoUrl ? (
+        {!introFailed ? (
           <video
+            ref={videoRef}
             className="registry-crystal-intro-video"
             src={videoUrl}
             poster={posterUrl ?? undefined}
             autoPlay
-            muted
+            muted={!audioEnabled}
             playsInline
             preload="auto"
             onEnded={finishIntro}
-            onError={finishIntro}
+            onError={() => setIntroFailed(true)}
             aria-label={headline}
           />
         ) : posterUrl ? (
@@ -313,13 +405,37 @@ function CrystalIntroSeat({
             fetchPriority="high"
           />
         ) : null}
-        <button
-          type="button"
-          className="registry-crystal-intro-skip"
-          onClick={finishIntro}
-        >
-          Skip intro
-        </button>
+
+        {!introFailed && entryControlLabel && !audioEnabled ? (
+          <button
+            type="button"
+            className="registry-crystal-intro-control"
+            onClick={enterWithSound}
+          >
+            {entryControlLabel}
+          </button>
+        ) : null}
+
+        {autoplayBlocked && !introFailed ? (
+          <div className="registry-crystal-intro-status" role="status">
+            <p>Start the introduction to continue.</p>
+          </div>
+        ) : null}
+
+        {introFailed ? (
+          <div className="registry-crystal-intro-status" role="status">
+            <p>The introduction could not be played.</p>
+            {errorContinueLabel ? (
+              <button
+                type="button"
+                className="registry-crystal-intro-control"
+                onClick={finishIntro}
+              >
+                {errorContinueLabel}
+              </button>
+            ) : null}
+          </div>
+        ) : null}
       </section>
     </main>
   )
