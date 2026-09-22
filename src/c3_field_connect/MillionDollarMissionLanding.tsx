@@ -1,119 +1,62 @@
-const VIDEO_URL = "/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1"
-const BACKDROP_URL = "/api/free-media?asset=c3_field_connect_hero_backdrop_v1"
+import type {C3PublicPresentation} from "./c3PublicPresentation"
 
-export default function MillionDollarMissionLanding() {
-  return (
-    <main className="mdm-page">
-      <header className="mdm-header">
-        <a className="mdm-brand" href="/" aria-label="c3 Community Partners home">
-          <span className="mdm-brand-mark">c3</span>
-          <span>Community Partners</span>
-        </a>
-        <nav className="mdm-nav" aria-label="Primary">
-          <a href="#mission">MISSION</a>
-          <a href="/community-potential">THE MODEL</a>
-          <a className="mdm-nav-cta" href="/connect">CONNECT</a>
-        </nav>
-      </header>
+const VIDEO_URL="/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1"
+const media=(key:string)=>`/api/free-media?asset=${key}`
 
-      <section className="mdm-hero">
-        <div className="mdm-hero-copy">
-          <p className="mdm-kicker">THE MILLION DOLLAR MISSION</p>
-          <h1>What if one small town could prove collective action still works?</h1>
-          <p className="mdm-hero-lead">
-            A live test of the c3 model: connect the people, resources, places, and possibilities already in a community — then see what they can create together.
-          </p>
-          <div className="mdm-actions">
-            <a className="mdm-button mdm-button-primary" href="/connect">CONNECT TO THE MISSION <span aria-hidden="true">↗</span></a>
-            <a className="mdm-button mdm-button-quiet" href="#film">WATCH THE STORY</a>
-          </div>
+export default function MillionDollarMissionLanding({presentation}:{presentation:C3PublicPresentation}){
+  const copy=presentation.landing
+  const center=media(presentation.media_roles.og_master)
+  const capacity=media(presentation.media_roles.capacity_projects)
+  const serene=media(presentation.media_roles.serene_place)
+  const emblem=media(presentation.media_roles.handcrafted_emblem)
+  return <main className="mdm-page">
+    <header className="mdm-header">
+      <a className="mdm-brand" href="/" aria-label={presentation.brand+" home"}><img src={emblem} alt="" width="44" height="44"/><span>{presentation.brand}</span></a>
+      <nav className="mdm-nav" aria-label="Primary">
+        {presentation.navigation.filter(item=>["/community-potential","/privacy","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label.toUpperCase()}</a>)}
+        <a className="mdm-nav-cta" href={presentation.connect_route}>CONNECT</a>
+      </nav>
+    </header>
+
+    <section className="mdm-hero" style={{backgroundImage:`linear-gradient(90deg,rgba(10,12,13,.82),rgba(10,12,13,.12)),url("${center}")`}}>
+      <div className="mdm-hero-copy">
+        <p className="mdm-kicker">{copy.kicker}</p>
+        <h1>{copy.hero_title}</h1>
+        <p className="mdm-hero-lead">{copy.hero_lead}</p>
+        <div className="mdm-actions">
+          <a className="mdm-button mdm-button-primary" href={copy.primary_cta_route}>{copy.primary_cta}<span aria-hidden="true">↗</span></a>
+          <a className="mdm-button mdm-button-quiet" href="#film">WATCH THE STORY</a>
         </div>
+      </div>
+    </section>
 
-        <div className="mdm-video-shell" id="film">
-          <video
-            src={VIDEO_URL}
-            playsInline
-            controls
-            preload="metadata"
-            aria-label="The Million Dollar Mission"
-          >
-            Your browser does not support this video.
-          </video>
-        </div>
-      </section>
+    <section className="mdm-video-section" id="film">
+      <div className="mdm-video-shell"><video src={VIDEO_URL} playsInline controls preload="metadata" aria-label={copy.kicker}>Your browser does not support this video.</video></div>
+    </section>
 
-      <section className="mdm-question" id="mission">
-        <p className="mdm-kicker">THE QUESTION</p>
-        <h2>Can significant capital become more useful when a community can see what it already has?</h2>
-        <p>
-          The Million Dollar Mission is an applied test of c3 Community Partners. The goal is not to drop money into a place and call it transformation. The goal is to organize people, resources, responsibilities, and outcomes so value can stay connected to the community that helps create it.
-        </p>
-      </section>
+    <section className="mdm-question" id="mission">
+      <p className="mdm-kicker">THE QUESTION</p>
+      <h2>{copy.question_title}</h2>
+      <p>{copy.question_body}</p>
+    </section>
 
-      <section className="mdm-c3-grid" aria-label="The c3 model">
-        <article>
-          <span>01</span>
-          <h3>CONNECT</h3>
-          <p>Make people, needs, skills, places, relationships, and resources visible to one another.</p>
-        </article>
-        <article>
-          <span>02</span>
-          <h3>CONTRIBUTE</h3>
-          <p>Give people a clear way to bring time, knowledge, money, tools, labor, property, creativity, or care into a shared effort.</p>
-        </article>
-        <article>
-          <span>03</span>
-          <h3>CREATE</h3>
-          <p>Turn connected contributions into useful outcomes that can be seen, reviewed, and carried forward.</p>
-        </article>
-      </section>
+    <section className="mdm-visual-break" style={{backgroundImage:`linear-gradient(90deg,rgba(10,12,13,.12),rgba(10,12,13,.12)),url("${capacity}")`}} aria-label={copy.capacity_title}>
+      <div className="mdm-visual-break-copy"><h2>{copy.capacity_title}</h2></div>
+    </section>
 
-      <section className="mdm-backdrop" style={{backgroundImage:`linear-gradient(90deg,rgba(11,13,14,.92),rgba(11,13,14,.25)),url("${BACKDROP_URL}")`}}>
-        <div className="mdm-backdrop-copy">
-          <p className="mdm-kicker">ONE TOWN. ONE TEST. REAL OUTCOMES.</p>
-          <h2>The resource is not just the money. The resource is the community.</h2>
-          <p>
-            c3 begins with the premise that potential already exists. The work is to create enough structure for that potential to become visible, connected, useful, and shared.
-          </p>
-          <a className="mdm-button mdm-button-primary" href="/connect">I WANT IN <span aria-hidden="true">↗</span></a>
-        </div>
-      </section>
+    <section className="mdm-c3-grid" aria-label="The c3 model">
+      <article><span>01</span><h3>{copy.connect_title}</h3><p>{copy.connect_body}</p></article>
+      <article><span>02</span><h3>{copy.contribute_title}</h3><p>{copy.contribute_body}</p></article>
+      <article><span>03</span><h3>{copy.create_title}</h3><p>{copy.create_body}</p></article>
+    </section>
 
-      <section className="mdm-outcomes">
-        <div className="mdm-outcomes-intro">
-          <p className="mdm-kicker">WHAT WE ARE TRYING TO PROVE</p>
-          <h2>Not activity. Outcomes people can actually see.</h2>
-        </div>
-        <div className="mdm-outcome-list">
-          <div><strong>Visible participation</strong><span>People can see where they fit and what is happening.</span></div>
-          <div><strong>Meaningful contribution</strong><span>What people bring does not disappear inside the system.</span></div>
-          <div><strong>Local benefit</strong><span>Resources connect to people and places in ways that matter locally.</span></div>
-          <div><strong>Retained value</strong><span>More of what gets created can remain connected to the community.</span></div>
-          <div><strong>Verifiable outcomes</strong><span>Progress is recorded clearly enough to review, learn from, and repeat.</span></div>
-        </div>
-      </section>
+    <section className="mdm-backdrop" style={{backgroundImage:`linear-gradient(90deg,rgba(11,13,14,.84),rgba(11,13,14,.18)),url("${serene}")`}}>
+      <div className="mdm-backdrop-copy"><h2>{copy.core_premise}</h2><a className="mdm-button mdm-button-primary" href={presentation.connect_route}>CONNECT <span aria-hidden="true">↗</span></a></div>
+    </section>
 
-      <section className="mdm-final">
-        <p className="mdm-kicker">CONNECT · CONTRIBUTE · CREATE</p>
-        <h2>Bring a person. Bring a place. Bring a resource. Bring a question.</h2>
-        <p>The mission starts by making what already exists visible.</p>
-        <a className="mdm-button mdm-button-primary" href="/connect">CONNECT TO THE MISSION <span aria-hidden="true">↗</span></a>
-      </section>
-
-      <footer className="mdm-footer">
-        <div>
-          <strong>c3 Community Partners</strong>
-          <span>© 2026 c3 Community Partners DAO, LLC. All rights reserved.</span>
-          <span>c3 Field is operated by c3 Community Partners DAO, LLC.</span>
-        </div>
-        <nav aria-label="Footer">
-          <a href="/community-potential">Community Potential</a>
-          <a href="https://measuresregistry.com/governed-environments">Governed Environments</a>
-          <a href="https://measuresregistry.com/privacy">Privacy</a>
-          <a href="https://measuresregistry.com/terms">Terms</a>
-          <a href="mailto:stephanie.joanne@c3field.com">Contact</a>
-        </nav>
-      </footer>
-    </main>
-  )
+    <footer className="mdm-footer">
+      <div><strong>{presentation.footer.brand}</strong><span>{presentation.footer.environment_line}</span><span>{presentation.footer.copyright}</span></div>
+      <nav aria-label="Footer">{presentation.navigation.filter(item=>["/community-potential","/privacy","/terms","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}</nav>
+    </footer>
+  </main>
 }
