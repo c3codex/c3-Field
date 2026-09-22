@@ -23,6 +23,20 @@ async function readRows(env:PassageEnv,table:string,select:string,filters:Record
   if(!Array.isArray(rows)) throw new Error("read_shape")
   return rows as Record<string,unknown>[]
 }
+
+async function resolveCurrent(session:EnvironmentSession,env:PassageEnv){
+  if(!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("server_configuration")
+  const response=await fetch(env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/rpc/resolve_c1me_current_internal",{
+    method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
+    headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY,"content-type":"application/json"},
+    body:JSON.stringify({p_relationship_key:session.subjectKey})
+  })
+  if(!response.ok) throw new Error("current_read_failed")
+  const current=await response.json() as Record<string,unknown>
+  if(current.resolution!=="existing_c1" || current.relationship_ref!==session.subjectKey || current.envpac_ref!==session.envpacKey || current.env_key!==session.envKey || typeof current.current_ref!=="string") throw new Error("current_mismatch")
+  return current
+}
+
 async function runtimeSession(raw:string,env:PassageEnv):Promise<EnvironmentSession>{
   try{return await resolveEnvironmentSession(raw,env)}catch(error){
     if(!raw.includes(".")) throw error
@@ -36,6 +50,7 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
     const rawSession=cookie(request,"c3_env_session")
     if(!rawSession) return json({authenticated:false,standing:"environment_claim_required"},401)
     const session=await runtimeSession(rawSession,env)
+    const current=await resolveCurrent(session,env)
     const [graphRows,envRows,grantRows,ownerRows,presentationRows]=await Promise.all([
       readRows(env,"c3_envpac_effective_graph",
         "envpac_key,registry_env_key,version,envpac_standing,owner_subject_type,custodian_subject_type,custodian_subject_key,custody_provider,portable,environment_bindings,rooted_systems,packages",
@@ -63,6 +78,7 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
       owner:{
         display_name:typeof owner.display_name==="string" && owner.display_name.trim()?owner.display_name.trim():null
       },
+      current:{current_ref:current.current_ref},
       environment:{
         env_key:environment.env_key,
         environment_name:environment.environment_name,
