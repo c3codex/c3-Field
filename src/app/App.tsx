@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react"
 import { isC3OpsHost } from "../c3ops/c3OpsRoutes"
 const C2EnvironmentShell = lazy(() => import("../c3_field_contribution/C2EnvironmentShell"))
 const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
+const C3PublicDocumentPage = lazy(() => import("../c3_field_connect/C3PublicDocumentPage"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
@@ -384,6 +385,7 @@ export default function App() {
     if (c3Route.kind === "c2_shell") return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentShell /></Suspense>
     if (c3Route.kind === "operations") return <OarOperationsConsole />
     if (c3Route.kind === "publication") return <PublicWhitePaperLanding paper={communityPotential} />
+    if (c3Route.kind === "public_document") return <Suspense fallback={<p>Loading document…</p>}><C3PublicDocumentPage kind={c3Route.pathname === "/privacy" ? "privacy" : c3Route.pathname === "/terms" ? "terms" : "contact"} /></Suspense>
     if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
     return <C3CommunityConnect />
   }
