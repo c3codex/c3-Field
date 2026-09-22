@@ -32,6 +32,7 @@ begin
      'render_permitted',false,'encounter_created',false);
  end if;
  select * into v_env from public.c3_environment where env_key=v_public;
+ -- Source contracts are separate from CURRENT evidence and public-release authority.
  -- Ensure the exact registered architectural source contracts remain persisted.
  select count(*) into v_source_count from public.codex_source_reference
  where source_key in (
@@ -58,7 +59,11 @@ begin
  end if;
  select count(*) into v_evidence_count from public.c3_current_evidence_ref
  where current_state_key=v_current.current_state_key
- and evidence_standing in ('registered','attested','accepted','effective');
+ and (
+ (evidence_class='environment_formation_oar2' and evidence_standing='operator_confirmed_execution_authority'
+  and content_hash=split_part(v_current.formation_authority_ref,'#sha256:',2))
+ or (evidence_class='governed_environment_generation_principle' and evidence_standing='accepted')
+ );
  if v_evidence_count<1 then
    return jsonb_build_object('steering','held','reason_code','current_evidence_unresolved',
      'render_permitted',false,'encounter_created',false);
