@@ -1,5 +1,5 @@
 const VIDEO_URL = "/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1"
-const BACKDROP_URL = "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c3field_hero_backdrop.webp"
+const BACKDROP_URL = "/api/free-media?asset=c3_field_connect_hero_backdrop_v1"
 
 export default function MillionDollarMissionLanding() {
   return (
