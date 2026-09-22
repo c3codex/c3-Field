@@ -20,18 +20,12 @@ export const c1RuntimePackage: C1EnvironmentPackage = {
     "custodyNotice": "The Connect relation remains in governed c3 custody for the individual record."
   },
   "assets": {
-    "emblem": {
-      "src": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c1/fe449ee291096b17dd06ff8ad2e32ff3e0952c645f56b6479df5380b679883c5/emblem.webp",
-      "alt": "c3 Community Partners"
-    },
     "hero": {
       "src": "/api/free-media?asset=c3_field_connect_hero_backdrop_v1",
       "alt": "Handcrafted miniature c3 community environment"
     },
     "intro": {
-      "src": "https://field-media.c3field.online/The-Million-Dollar-Mission-One-Small-Town-Proves-Collective-Action-Still-Works%20%281%29.mp4",
-      "mobileSrc": "https://field-media.c3field.online/The-Million-Dollar-Mission-One-Small-Town-Proves-Collective-Action-Still-Works%20%281%29.mp4",
-      "poster": "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c1/15bdc6309ff45aa17c3653b21338e06f9b3ed9267b8b9c9553a5250a961739b2/connect-vertical.webp"
+      "src": "/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1"
     }
   },
   "initiatives": [],

@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
 
-import "./c3CommunityConnect.css"
 
 export default function C3CommunityConnect() {
 
@@ -67,8 +66,12 @@ function C3CommunityConnectSurface() {
         typeof body.standing === "string" && body.standing.startsWith("held")
       const verificationRequired = response.status === 202 && body && typeof body === "object" &&
         "standing" in body && body.standing === "verification_required"
-      setResult(verificationRequired
-        ? "If your request can be processed, check your email to confirm your connection."
+      const continuationSent = response.status === 202 && body && typeof body === "object" &&
+        "standing" in body && body.standing === "continuation_sent"
+      setResult(continuationSent
+        ? "Check your email to continue to your existing environment."
+        : verificationRequired
+          ? "If your request can be processed, check your email to confirm your connection."
         : held
           ? "We could not confirm your connection. Your information remains in this form."
           : "We could not confirm a saved submission. Your information remains in this form.")
@@ -83,7 +86,9 @@ function C3CommunityConnectSurface() {
 
   if (!environment && !loadFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading…</p></main>
   if (!environment?.available) return <HeldUnknownC3FieldRoute pathname="/" />
-  const { copy, assets, initiatives } = environment
+  const { copy, assets } = environment
+  // Initiative projection remains held until independently registered; ordinary individual Connect stays available.
+  const initiatives: typeof environment.initiatives = []
 
   if(publicStage==="intro"){
     return (
@@ -121,7 +126,7 @@ function C3CommunityConnectSurface() {
 
       <header className="c3-connect-header c3-connect-width">
         <a href="#top" className="c3-connect-identity" aria-label="c3 Community Partners home">
-          {!emblemFailed && <img src={assets.emblem.src} alt={assets.emblem.alt} onError={() => setEmblemFailed(true)} width="54" height="54" />}
+          {assets.emblem && !emblemFailed && <img src={assets.emblem.src} alt={assets.emblem.alt} onError={() => setEmblemFailed(true)} width="54" height="54" />}
           <span>c3 Community<br /><strong>Partners</strong></span>
         </a>
         <a className="c3-connect-nav" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>

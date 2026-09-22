@@ -60,8 +60,9 @@ async function resolveR2(asset:Record<string,unknown>,env:FreeMediaEnv){
 }
 
 async function resolvePublicR2(asset:Record<string,unknown>,request:Request){
-  const source=asset.current_free_binding
-  if(typeof source!=="string"||!source.startsWith("https://field-media.c3field.online/")) throw new Error("public_r2_binding_unavailable")
+  if(asset.authoritative_custody_identifier!=="c3-field-media"||typeof asset.authoritative_custody_location!=="string") throw new Error("custody_mismatch")
+  const object=asset.authoritative_custody_location.split("/").map(part=>encodeURIComponent(part)).join("/")
+  const source="https://field-media.c3field.online/"+object
   const upstreamHeaders=new Headers()
   const range=request.headers.get("range")
   if(range) upstreamHeaders.set("range",range)
@@ -88,7 +89,7 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
       await resolveEnvironmentSession(sessionCookie,env)
     }
     if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual") return json({standing:"free_media_standing_held"},409)
-    if(assetKey==="c3_field_c1me_arrival_video_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolveR2(asset,env)
+    if(assetKey==="c3_field_c1me_arrival_video_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
     if(assetKey==="c3_field_public_intro_million_dollar_mission_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
     if((assetKey==="c3_field_c1me_live_backdrop_v1"||assetKey==="c3_field_connect_hero_backdrop_v1")&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
     return json({standing:"free_media_provider_not_registered"},409)

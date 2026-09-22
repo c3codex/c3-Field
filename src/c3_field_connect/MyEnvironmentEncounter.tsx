@@ -1,5 +1,4 @@
 import {FormEvent,useEffect,useState} from "react"
-import "./myEnvironmentEncounter.css"
 
 type EnvPayload={
   authenticated:boolean

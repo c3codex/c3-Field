@@ -27,6 +27,8 @@ export function hold(stage: string, candidate: boolean | null = null) {
 }
 const verificationRequired = () => json({standing:"verification_required",saved:false,
   message:"If your request can be processed, check your email to confirm your connection."},202)
+const continuationRequired = () => json({standing:"continuation_sent",saved:false,
+  message:"If your existing connection can be resumed, check your email to continue to your environment."},202)
 const unavailable = () => json({standing:"unable_to_process",saved:false,
   message:"We could not process this request. Please try again later."},409)
 function configuration(env: PassageEnv) {
@@ -147,7 +149,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     if (reentry.accepted === true) {
       const claim = await signedOwnerClaim(reentry.relationship_key,reentry.env_key,reentry.envpac_key,env,deps.now())
       await sendEnvironmentHandoff(reentry,claim,origin,env,deps).catch(()=>false)
-      return verificationRequired()
+      return continuationRequired()
     }
     stage = "capture_unconfirmed"
     candidate = null // A network timeout cannot prove that the transaction did not commit.

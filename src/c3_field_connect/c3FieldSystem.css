@@ -1,0 +1,24 @@
+@import "./c3CommunityConnect.css";
+@import "./myEnvironmentEncounter.css";
+@import "./millionDollarMissionLanding.css";
+
+html[data-system="c3-field"],
+html[data-system="c3-field"] body,
+html[data-system="c3-field"] #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+html[data-system="c3-field"] body {
+  background: #101315;
+  color: #eeece5;
+}
+
+html[data-system="c3-field"] button,
+html[data-system="c3-field"] input,
+html[data-system="c3-field"] textarea,
+html[data-system="c3-field"] select {
+  font: inherit;
+}
