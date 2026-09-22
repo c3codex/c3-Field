@@ -83,9 +83,8 @@ function C3CommunityConnectSurface() {
   if (!environment && !loadFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading…</p></main>
   if (!environment?.available) return <HeldUnknownC3FieldRoute pathname="/" />
   const { copy, assets } = environment
-  // The public marketing page is independent of relational rendering.
-  // No initiative option is derived from an unresolved environmental CURRENT.
-  const initiatives=steering==="resolved"?environment.initiatives:[]
+  // Initiative projection remains held until independently registered; ordinary individual Connect stays available.
+  const initiatives: typeof environment.initiatives = []
 
   if(publicStage==="intro"){
     return (
@@ -145,8 +144,8 @@ function C3CommunityConnectSurface() {
       <section id="connect" className="c3-connect-panel c3-connect-width" aria-labelledby="c3-connect-form-title">
         <div className="c3-connect-form-intro"><p className="c3-connect-kicker">CONNECT</p><h2 id="c3-connect-form-title">{copy.encounterIntro}</h2></div>
         <form className="c3-connect-form" onSubmit={submitCandidate} aria-busy={pending}>
-          {(steering!=="resolved" || environment.encounterEnabled === false) && <p role="status">Connecting is not available from the registered environment state yet.</p>}
-          <fieldset disabled={pending || steering!=="resolved" || environment.encounterEnabled === false}>
+          {environment.encounterEnabled === false && <p role="status">Connecting is not open yet. Please return later.</p>}
+          <fieldset disabled={pending || environment.encounterEnabled === false}>
             <legend className="c3-connect-sr-only">Your connection</legend>
             <div className="c3-connect-input-pair">
               <label>Name<input name="name" autoComplete="name" minLength={2} maxLength={160} required /></label>
