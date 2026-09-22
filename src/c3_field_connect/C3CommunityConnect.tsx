@@ -66,8 +66,12 @@ function C3CommunityConnectSurface() {
         typeof body.standing === "string" && body.standing.startsWith("held")
       const verificationRequired = response.status === 202 && body && typeof body === "object" &&
         "standing" in body && body.standing === "verification_required"
-      setResult(verificationRequired
-        ? "If your request can be processed, check your email to confirm your connection."
+      const continuationSent = response.status === 202 && body && typeof body === "object" &&
+        "standing" in body && body.standing === "continuation_sent"
+      setResult(continuationSent
+        ? "Check your email to continue to your existing environment."
+        : verificationRequired
+          ? "If your request can be processed, check your email to confirm your connection."
         : held
           ? "We could not confirm your connection. Your information remains in this form."
           : "We could not confirm a saved submission. Your information remains in this form.")
