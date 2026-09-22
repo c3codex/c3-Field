@@ -160,7 +160,7 @@ function C3CommunityConnectSurface() {
       >
         <div className="c3-connect-width c3-connect-hero-inner">
           <div className="c3-connect-hero-copy">
-            <h1 id="c3-connect-title">{copy.heroTitle}</h1>
+            <h1 id="c3-connect-title">{presentation?.connect_presentation?.hero_title ?? copy.heroTitle}</h1>
             <a className="c3-connect-button" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
           </div>
         </div>
