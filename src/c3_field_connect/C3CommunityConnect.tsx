@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
 import MillionDollarMissionLanding from "./MillionDollarMissionLanding"
+import {loadC3PublicPresentation,type C3PublicPresentation} from "./c3PublicPresentation"
 
 
 export default function C3CommunityConnect() {
@@ -10,9 +11,12 @@ export default function C3CommunityConnect() {
 
 function C3CommunityConnectSurface() {
   const [environment, setEnvironment] = useState<Awaited<ReturnType<typeof loadC1EnvironmentPackage>> | null>(null)
+  const [presentation,setPresentation]=useState<C3PublicPresentation|null>(null)
+  const [presentationFailed,setPresentationFailed]=useState(false)
   useEffect(() => {
     let active = true
     loadC1EnvironmentPackage().then(value => { if (active) setEnvironment(value) }).catch(() => { if (active) setLoadFailed(true) })
+    loadC3PublicPresentation().then(value=>{if(active)setPresentation(value)}).catch(()=>{if(active)setPresentationFailed(true)})
     return () => { active = false }
   }, [])
   const [loadFailed, setLoadFailed] = useState(false)
@@ -89,13 +93,15 @@ function C3CommunityConnectSurface() {
 
   if (!environment && !loadFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading…</p></main>
   if (!environment?.available) return <HeldUnknownC3FieldRoute pathname="/" />
+  if (publicStage!=="intro" && !presentation && !presentationFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading public presentation…</p></main>
+  if (publicStage!=="intro" && (!presentation || presentationFailed)) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Public presentation authority is temporarily unavailable.</p></main>
   const { copy, assets } = environment
   // Initiative projection remains held until independently registered; ordinary individual Connect stays available.
   const initiatives: typeof environment.initiatives = []
 
   if(publicStage==="intro"){
     return (
-      <main className="c3-intro-env" data-c3-environment="env_c3field_public_intro" data-standing-created="false">
+      <main className="c3-intro-env" data-c3-environment="env_c3_community_connect" data-c3-presentation-state="c3field_public_intro" data-standing-created="false">
         {environment.reviewOnly && <div className="c3-connect-review" role="note">Implementation preview · Connecting is not open. Submissions are not saved.</div>}
         <button className="c3-intro-skip" type="button" onClick={() => setPublicStage("landing")}>SKIP <span aria-hidden="true">↗</span></button>
         {mediaFailed ? (
@@ -128,7 +134,7 @@ function C3CommunityConnectSurface() {
     )
   }
 
-  if(publicStage==="landing") return <MillionDollarMissionLanding />
+  if(publicStage==="landing" && presentation) return <MillionDollarMissionLanding presentation={presentation} />
 
   return (
     <main className="c3-connect-shell" data-c3-route="/connect" data-c3-environment="env_c3_community_connect" data-standing-created="false">
@@ -137,17 +143,20 @@ function C3CommunityConnectSurface() {
       {environment.reviewOnly && <div className="c3-connect-review" role="note">Implementation preview · Connecting is not open. Submissions are not saved.</div>}
 
       <header className="c3-connect-header c3-connect-width">
-        <a href="#top" className="c3-connect-identity" aria-label="c3 Community Partners home">
-          {assets.emblem && !emblemFailed && <img src={assets.emblem.src} alt={assets.emblem.alt} onError={() => setEmblemFailed(true)} width="54" height="54" />}
-          <span>c3 Community<br /><strong>Partners</strong></span>
+        <a href="/" className="c3-connect-identity" aria-label={presentation?.brand+" home"}>
+          {presentation?.media_roles.handcrafted_emblem && !emblemFailed && <img src={"/api/free-media?asset="+presentation.media_roles.handcrafted_emblem} alt="" onError={() => setEmblemFailed(true)} width="54" height="54" />}
+          <span>{presentation?.brand}</span>
         </a>
-        <a className="c3-connect-nav" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
+        <nav className="c3-connect-public-nav" aria-label="Public">
+          {presentation?.navigation.filter(item=>["/community-potential","/privacy","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}
+          <a className="c3-connect-nav" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
+        </nav>
       </header>
 
       <section
         className="c3-connect-hero"
         aria-labelledby="c3-connect-title"
-        style={assets.hero ? {backgroundImage:`linear-gradient(90deg,rgba(9,12,14,.70),rgba(9,12,14,.18)),url("${assets.hero.src}")`} : undefined}
+        style={presentation?.media_roles.connect_room ? {backgroundImage:`linear-gradient(90deg,rgba(9,12,14,.68),rgba(9,12,14,.20)),url("/api/free-media?asset=${presentation.media_roles.connect_room}")`} : undefined}
       >
         <div className="c3-connect-width c3-connect-hero-inner">
           <div className="c3-connect-hero-copy">
@@ -185,12 +194,15 @@ function C3CommunityConnectSurface() {
         </form>
       </section>
 
-      <footer className="c3-connect-footer c3-connect-width"><span>c3 Community Partners</span><span>{copy.brandLine}</span></footer>
+      <footer className="c3-connect-footer c3-connect-width">
+        <div><strong>{presentation?.footer.brand}</strong><span>{presentation?.footer.environment_line}</span><span>{presentation?.footer.copyright}</span></div>
+        <nav aria-label="Footer">{presentation?.navigation.filter(item=>["/community-potential","/privacy","/terms","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}</nav>
+      </footer>
     </main>
   )
 
 }
 
 export function HeldUnknownC3FieldRoute({ pathname }: { pathname: string }) {
-  return <main className="c3-connect-shell c3-connect-held" data-c3-route={pathname} data-operations-exposed="false"><section className="c3-connect-width"><p className="c3-connect-kicker"><span className="c3-connect-brand-token">c3</span> Community Partners</p><h1>This page is not available yet.</h1><p>Please return later.</p></section></main>
+  return <main className="c3-connect-shell c3-connect-held" data-c3-route={pathname} data-operations-exposed="false"><section className="c3-connect-width"><h1>This page is not available yet.</h1><p>Please return later.</p></section></main>
 }
