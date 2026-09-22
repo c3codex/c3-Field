@@ -13,6 +13,27 @@ function sessionCookie(request:Request){
   if(!part) return null
   try{return decodeURIComponent(part.slice("c3_env_session=".length))}catch{return null}
 }
+// Pure decision boundary: a current resolved under another owner session is
+// never permission to enter that environment. Client receives no owner IDs.
+export function authorizeResolvedCurrent(
+  session:{subjectKey:string;envKey:string;envpacKey:string},
+  result:Record<string,unknown>
+):Response{
+  if(result.resolution!=="existing_c1")
+    return reply({resolution:"reconciliation_hold",
+      reason_code:typeof result.reason_code==="string"?result.reason_code:"current_unresolved",
+      may_create_personal_environment:false},409)
+  if(result.relationship_ref!==session.subjectKey ||
+    result.envpac_ref!==session.envpacKey ||
+    result.env_key!==session.envKey)
+    return reply({resolution:"reconciliation_hold",reason_code:"session_environment_mismatch",
+      may_create_personal_environment:false},409)
+  if(typeof result.current_ref!=="string"||!result.current_ref)
+    return reply({resolution:"reconciliation_hold",reason_code:"current_unresolved",
+      may_create_personal_environment:false},409)
+  return reply({resolution:"existing_c1",next_encounter:"enter_existing_environment",
+    current_ref:result.current_ref,may_create_personal_environment:false})
+}
 export const onRequestGet:PagesFunction<PassageEnv>=async ({request,env})=>{
   try{
     const raw=sessionCookie(request)
@@ -29,20 +50,8 @@ export const onRequestGet:PagesFunction<PassageEnv>=async ({request,env})=>{
     })
     if(!response.ok) throw new Error("resolver_unavailable")
     const result=await response.json() as Record<string,unknown>
-    if(result.resolution!=="existing_c1")
-      return reply({resolution:"reconciliation_hold",
-        reason_code:typeof result.reason_code==="string"?result.reason_code:"current_unresolved",
-        may_create_personal_environment:false},409)
-    // Never let a verified contact association redirect this session to an
-    // unrelated EnvPac. Switching owners requires a separate, verified claim.
-    if(result.envpac_ref!==session.envpacKey)
-      return reply({resolution:"reconciliation_hold",reason_code:"session_environment_mismatch",
-        may_create_personal_environment:false},409)
-    if(typeof result.current_ref!=="string"||!result.current_ref)
-      return reply({resolution:"reconciliation_hold",reason_code:"current_unresolved",
-        may_create_personal_environment:false},409)
-    return reply({resolution:"existing_c1",next_encounter:"enter_existing_environment",
-      current_ref:result.current_ref,may_create_personal_environment:false})
+    return authorizeResolvedCurrent(session,result)
+
   }catch{
     return reply({resolution:"auth_required",reason_code:"environment_session_or_current_unavailable"},401)
   }
