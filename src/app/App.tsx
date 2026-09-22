@@ -4,7 +4,6 @@ const C2EnvironmentShell = lazy(() => import("../c3_field_contribution/C2Environ
 const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
-import MillionDollarMissionLanding from "../c3_field_connect/MillionDollarMissionLanding"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
@@ -386,7 +385,6 @@ export default function App() {
     if (c3Route.kind === "operations") return <OarOperationsConsole />
     if (c3Route.kind === "publication") return <PublicWhitePaperLanding paper={communityPotential} />
     if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
-    if (c3Route.kind === "connect" && c3Route.pathname === "/") return <MillionDollarMissionLanding />
     return <C3CommunityConnect />
   }
 
