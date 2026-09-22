@@ -17,11 +17,6 @@ async function readOne(env:Env,table:string,params:Record<string,string>){
 
 export const onRequestGet:PagesFunction<Env>=async({env})=>{
   try{
-    const source=await readOne(env,"codex_source_reference",{
-      select:"source_key,version_label,source_status,metadata",
-      source_key:"eq.c3field_public_presentation_authority_v1_0",
-      source_status:"eq.committed"
-    })
     const environment=await readOne(env,"c3_environment",{
       select:"env_key,system_key,standing,is_canonical,is_active,metadata",
       env_key:"eq.env_c3_community_connect",
@@ -30,11 +25,23 @@ export const onRequestGet:PagesFunction<Env>=async({env})=>{
       is_canonical:"eq.true",
       is_active:"eq.true"
     })
-    const sm=source.metadata as Record<string,unknown>|undefined
     const em=environment.metadata as Record<string,unknown>|undefined
-    if(!sm||!em) return json({standing:"public_presentation_authority_missing"},409)
-    if(em.public_presentation_authority_source!==source.source_key) return json({standing:"public_presentation_authority_mismatch"},409)
+    if(!em) return json({standing:"public_presentation_authority_missing"},409)
+    const authoritySource=typeof em.public_presentation_authority_source==="string"
+      ? em.public_presentation_authority_source
+      : ""
+    if(!authoritySource||!/^[a-z0-9_]+$/i.test(authoritySource)) return json({standing:"public_presentation_authority_missing"},409)
     if(em.public_presentation_release_state!=="bounded_public_runtime") return json({standing:"public_presentation_held"},423)
+
+    const source=await readOne(env,"codex_source_reference",{
+      select:"source_key,version_label,source_status,metadata",
+      source_key:"eq."+authoritySource,
+      source_status:"eq.committed"
+    })
+    const sm=source.metadata as Record<string,unknown>|undefined
+    if(!sm) return json({standing:"public_presentation_authority_missing"},409)
+    if(source.source_key!==authoritySource) return json({standing:"public_presentation_authority_mismatch"},409)
+
     return json({
       standing:"bounded_public_runtime",
       sourceKey:source.source_key,
