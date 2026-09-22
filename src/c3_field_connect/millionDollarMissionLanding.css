@@ -178,3 +178,15 @@
   .mdm-footer{flex-direction:column}
   .mdm-footer nav{justify-content:flex-start}
 }
+
+
+/* v0.14 governed visual-family projection */
+.mdm-brand img{width:40px;height:40px;object-fit:contain}
+.mdm-hero{grid-template-columns:1fr;background-size:cover;background-position:center;border-radius:0}
+.mdm-hero-copy{padding:56px 42px;max-width:760px}
+.mdm-video-section{width:min(1180px,calc(100% - 56px));margin:0 auto;padding:72px 0;display:grid;place-items:center}
+.mdm-video-section .mdm-video-shell{justify-self:center}
+.mdm-visual-break{min-height:68svh;background-size:cover;background-position:center;display:flex;align-items:flex-end}
+.mdm-visual-break-copy{width:min(1180px,calc(100% - 56px));margin:0 auto;padding:64px 0}
+.mdm-visual-break h2{max-width:760px;margin:0;font:400 clamp(36px,5vw,68px)/1.02 Georgia,"Times New Roman",serif;letter-spacing:-.04em;text-shadow:0 2px 26px #000}
+@media(max-width:680px){.mdm-hero-copy{padding:42px 22px}.mdm-video-section{width:calc(100% - 40px);padding:52px 0}.mdm-visual-break-copy{width:calc(100% - 40px)}}
