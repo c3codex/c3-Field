@@ -73,25 +73,6 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) =
   if (env?.C1_PASSAGE_ENABLED === "true") {
     if (origin !== env.C1_PUBLIC_ORIGIN || origin !== new URL(request.url).origin)
       return held("held_origin_mismatch", "The submission could not be verified.", 403)
-    // FREE steering is a server-side mutation gate as well as a presentation
-    // gate. A direct POST cannot bypass unresolved environmental CURRENT.
-    try {
-      if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return unable()
-      const steeringResponse=await fetch(env.SUPABASE_URL.replace(/\/$/,"")+
-        "/rest/v1/rpc/free_resolve_public_environment_steering",{
-        method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
-        headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,
-          authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY,
-          "content-type":"application/json"},
-        body:JSON.stringify({p_route:"/"})
-      })
-      if (!steeringResponse.ok) return unable()
-      const steering=await steeringResponse.json() as Record<string,unknown>
-      if (steering.steering!=="environment_resolved" ||
-          steering.render_permitted!==true ||
-          steering.relation_projection!=="registered_public" ||
-          steering.encounter_created!==false) return unable()
-    } catch { return unable() }
     let sourceEnvironmentShare:null|Record<string,unknown>=null
     try{sourceEnvironmentShare=await resolveShareReference(env,body.shareReference)}
     catch{return held("held_invite_reference_invalid","This connection invitation is not available.",409)}
