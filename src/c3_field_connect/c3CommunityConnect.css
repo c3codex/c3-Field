@@ -149,22 +149,6 @@ body:has(.c3-connect-shell),
   object-fit:cover;
   background:#080a0c;
 }
-.c3-intro-skip{
-  position:absolute;
-  z-index:2;
-  top:24px;
-  right:28px;
-  min-height:44px;
-  padding:10px 14px;
-  border:1px solid #ffffff66;
-  background:#10131599;
-  color:#fff;
-  font:700 11px/1 Inter,ui-sans-serif,system-ui,sans-serif;
-  letter-spacing:.14em;
-  cursor:pointer;
-  backdrop-filter:blur(8px);
-}
-.c3-intro-skip:focus-visible{outline:3px solid #91b9f3;outline-offset:4px}
 .c3-intro-fallback{
   min-height:100svh;
   width:min(680px,calc(100% - 40px));
@@ -175,9 +159,6 @@ body:has(.c3-connect-shell),
   font-family:Inter,ui-sans-serif,system-ui,sans-serif;
 }
 .c3-intro-fallback p{margin:0;color:#bbc2cb}
-@media(max-width:600px){
-  .c3-intro-skip{top:16px;right:16px}
-}
 
 
 /* v0.11 responsive scale correction — laptop, tablet, mobile */
@@ -223,14 +204,6 @@ body:has(.c3-connect-shell),
 
 .c3-connect-footer{padding-block:18px 24px;font-size:9px}
 
-.c3-intro-skip{
-  top:18px;
-  right:20px;
-  min-height:38px;
-  padding:8px 11px;
-  font-size:9px;
-}
-
 @media(max-width:1024px){
   .c3-connect-width{width:calc(100% - 48px)}
   .c3-connect-hero{min-height:68svh}
@@ -267,7 +240,6 @@ body:has(.c3-connect-shell),
   .c3-connect-panel{padding-block:36px 44px}
   .c3-connect-form-intro h2{font-size:26px}
   .c3-connect-footer{font-size:8px;padding-block:15px 20px}
-  .c3-intro-skip{top:12px;right:12px;min-height:34px;padding:7px 9px;font-size:8px}
 }
 
 
