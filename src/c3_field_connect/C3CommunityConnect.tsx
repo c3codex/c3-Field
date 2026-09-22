@@ -103,7 +103,6 @@ function C3CommunityConnectSurface() {
     return (
       <main className="c3-intro-env" data-c3-environment="env_c3_community_connect" data-c3-presentation-state="c3field_public_intro" data-standing-created="false">
         {environment.reviewOnly && <div className="c3-connect-review" role="note">Implementation preview · Connecting is not open. Submissions are not saved.</div>}
-        <button className="c3-intro-skip" type="button" onClick={() => setPublicStage("landing")}>SKIP <span aria-hidden="true">↗</span></button>
         {mediaFailed ? (
           <div className="c3-intro-fallback" role="status">
             <p>The introduction is temporarily unavailable.</p>
