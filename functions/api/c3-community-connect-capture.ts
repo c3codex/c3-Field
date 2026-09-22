@@ -77,7 +77,7 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) =
     // gate. A direct POST cannot bypass unresolved environmental CURRENT.
     try {
       if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return unable()
-      const steeringResponse=await fetch(env.SUPABASE_URL.replace(/\\/$/,"")+
+      const steeringResponse=await fetch(env.SUPABASE_URL.replace(/\/$/,"")+
         "/rest/v1/rpc/free_resolve_public_environment_steering",{
         method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
         headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,
