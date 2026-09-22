@@ -153,7 +153,6 @@ export default function MyEnvironmentEncounter(){
         onEnded={()=>setState("ready")}
         onError={()=>setState("ready")}
       />
-      <button className="myenv-skip" type="button" onClick={()=>setState("ready")}>Enter environment</button>
     </main>
   }
 
