@@ -331,7 +331,43 @@ export default function App() {
     }
 
     if (isC3Host || mode === "c3field") {
-      applyPageMetadata(c3Route.kind === "operations" ? C3_OPS_METADATA : c3Route.kind === "publication" ? C3_COMMUNITY_POTENTIAL_METADATA : C3_FIELD_METADATA)
+      if (c3Route.kind === "operations") {
+        applyPageMetadata(C3_OPS_METADATA)
+        return () => { cancelled = true }
+      }
+      if (c3Route.kind === "publication") {
+        applyPageMetadata(C3_COMMUNITY_POTENTIAL_METADATA)
+        return () => { cancelled = true }
+      }
+      applyPageMetadata(C3_FIELD_METADATA)
+      void fetch("/api/c3-public-presentation",{headers:{accept:"application/json"}})
+        .then(response=>response.ok?response.json():null)
+        .then(body=>{
+          if(cancelled||!body?.presentation) return
+          const presentation=body.presentation as Record<string,any>
+          const seo=presentation.seo as Record<string,string>|undefined
+          const navDoc=c3Route.pathname==="/privacy"?presentation.privacy_document:c3Route.pathname==="/terms"?presentation.terms_document:c3Route.pathname==="/contact"?presentation.contact_document:null
+          if(navDoc){
+            applyPageMetadata({
+              title:String(navDoc.title||"c3 Community Partners")+" | c3 Community Partners",
+              description:c3Route.pathname==="/privacy"?"How c3Field handles participant information and governed records.":c3Route.pathname==="/terms"?"Terms governing public site use and participation through c3Field.":"Contact c3 Community Partners.",
+              url:"https://c3field.online"+c3Route.pathname,
+              image:"https://c3field.online/api/free-media?asset="+String(presentation.media_roles?.og_master||"c3_field_mdm_c3_center_og_master_v1"),
+              type:"website",
+            })
+            return
+          }
+          if(seo?.title&&seo?.description&&seo?.canonical_url){
+            applyPageMetadata({
+              title:seo.title,
+              description:seo.description,
+              url:seo.canonical_url,
+              image:"https://c3field.online/api/free-media?asset="+String(seo.og_image_asset_key||presentation.media_roles?.og_master),
+              type:seo.og_type||"website",
+            })
+          }
+        })
+        .catch(()=>{})
       return () => { cancelled = true }
     }
 
