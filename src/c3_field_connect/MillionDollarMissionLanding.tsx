@@ -32,9 +32,6 @@ export default function MillionDollarMissionLanding() {
         <div className="mdm-video-shell" id="film">
           <video
             src={VIDEO_URL}
-            autoPlay
-            muted
-            loop
             playsInline
             controls
             preload="metadata"
