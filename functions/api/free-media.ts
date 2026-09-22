@@ -5,7 +5,20 @@ type R2ObjectBody={body:ReadableStream|null;size:number;httpEtag?:string;writeHt
 type R2BucketLike={get:(key:string,options?:unknown)=>Promise<R2ObjectBody|null>}
 type FreeMediaEnv=PassageEnv&{C1ME_ENV_READY?:R2BucketLike}
 
-const ALLOWED_ASSETS=new Set(["c3_field_c1me_arrival_video_v1","c3_field_c1me_live_backdrop_v1","c3_field_connect_hero_backdrop_v1","c3_field_public_intro_million_dollar_mission_v1"])
+const PUBLIC_SUPABASE_ASSETS=new Set([
+  "c3_field_connect_hero_backdrop_v1",
+  "c3_field_mdm_connect_room_backdrop_v1",
+  "c3_field_mdm_capacity_projects_backdrop_v1",
+  "c3_field_mdm_serene_place_backdrop_v1",
+  "c3_field_mdm_c3_center_og_master_v1",
+  "c3_field_handcrafted_emblem_render_v1",
+])
+const ALLOWED_ASSETS=new Set([
+  "c3_field_c1me_arrival_video_v1",
+  "c3_field_c1me_live_backdrop_v1",
+  "c3_field_public_intro_million_dollar_mission_v1",
+  ...PUBLIC_SUPABASE_ASSETS,
+])
 
 function cookie(request:Request,name:string){
   const source=request.headers.get("cookie")||""
@@ -82,7 +95,7 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
     const assetKey=new URL(request.url).searchParams.get("asset")||""
     if(!ALLOWED_ASSETS.has(assetKey)) return json({standing:"free_media_not_registered"},404)
     const asset=await readAsset(env,assetKey)
-    const isPublicAsset=(assetKey==="c3_field_connect_hero_backdrop_v1"||assetKey==="c3_field_public_intro_million_dollar_mission_v1")&&asset.public_retrieval_standing==="bounded_public_runtime"
+    const isPublicAsset=(PUBLIC_SUPABASE_ASSETS.has(assetKey)||assetKey==="c3_field_public_intro_million_dollar_mission_v1")&&asset.public_retrieval_standing==="bounded_public_runtime"
     if(!isPublicAsset){
       const sessionCookie=cookie(request,"c3_env_session")
       if(!sessionCookie) return json({standing:"environment_claim_required"},401)
@@ -91,7 +104,7 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
     if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual") return json({standing:"free_media_standing_held"},409)
     if(assetKey==="c3_field_c1me_arrival_video_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
     if(assetKey==="c3_field_public_intro_million_dollar_mission_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
-    if((assetKey==="c3_field_c1me_live_backdrop_v1"||assetKey==="c3_field_connect_hero_backdrop_v1")&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
+    if((assetKey==="c3_field_c1me_live_backdrop_v1"||PUBLIC_SUPABASE_ASSETS.has(assetKey))&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
     return json({standing:"free_media_provider_not_registered"},409)
   }catch(error){
     const reason=error instanceof Error?error.message:"free_media_unavailable"
