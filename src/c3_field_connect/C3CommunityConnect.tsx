@@ -153,21 +153,13 @@ function C3CommunityConnectSurface() {
         </nav>
       </header>
 
-      <section
-        className="c3-connect-hero"
-        aria-labelledby="c3-connect-title"
-        style={presentation?.media_roles.connect_room ? {backgroundImage:`linear-gradient(90deg,rgba(9,12,14,.68),rgba(9,12,14,.20)),url("/api/free-media?asset=${presentation.media_roles.connect_room}")`} : undefined}
-      >
-        <div className="c3-connect-width c3-connect-hero-inner">
-          <div className="c3-connect-hero-copy">
-            <h1 id="c3-connect-title">{presentation?.connect_presentation?.hero_title ?? copy.heroTitle}</h1>
-            <a className="c3-connect-button" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
-          </div>
-        </div>
-      </section>
-
       <section id="connect" className="c3-connect-panel c3-connect-width" aria-labelledby="c3-connect-form-title">
-        <div className="c3-connect-form-intro"><p className="c3-connect-kicker">CONNECT</p><h2 id="c3-connect-form-title">{copy.encounterIntro}</h2></div>
+        <div className="c3-connect-form-intro" style={presentation?.media_roles.connect_room ? {backgroundImage:`linear-gradient(90deg,rgba(9,12,14,.88),rgba(9,12,14,.58)),url("/api/free-media?asset=${presentation.media_roles.connect_room}")`} : undefined}>
+          <p className="c3-connect-kicker">CONNECT</p>
+          <h1 id="c3-connect-form-title">{presentation?.connect_presentation?.hero_title ?? copy.heroTitle}</h1>
+          {presentation?.connect_presentation?.hero_body && <p className="c3-connect-form-lead">{presentation.connect_presentation.hero_body}</p>}
+          <p className="c3-connect-form-meaning">{copy.encounterIntro}</p>
+        </div>
         <form className="c3-connect-form" onSubmit={submitCandidate} aria-busy={pending}>
           {environment.encounterEnabled === false && <p role="status">Connecting is not open yet. Please return later.</p>}
           <fieldset disabled={pending || environment.encounterEnabled === false}>
