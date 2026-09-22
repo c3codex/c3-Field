@@ -98,7 +98,8 @@ function friendlyFrom(env:PassageEnv){
   const value=env.C1_VERIFICATION_FROM||""
   return value.includes("<")?value:"c3 Community Partners <"+value+">"
 }
-const esc=(value:string)=>value.replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]||ch))
+const htmlEntities:Record<string,string>={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}
+const esc=(value:string)=>value.replace(/[&<>"']/g,ch=>htmlEntities[ch]||ch)
 async function sendResend(env:PassageEnv,deps:Dependencies,args:{to:string;subject:string;text:string;html:string;idempotencyKey:string}){
   if(!env.C3_RESEND_API_KEY||!env.C1_VERIFICATION_FROM) return false
   const response=await deps.fetch("https://api.resend.com/emails",{
@@ -183,11 +184,12 @@ async function markChallengeDeliveryFailed(env:PassageEnv,deps:Dependencies,chal
 }
 async function recordVerificationReminder(env:PassageEnv,deps:Dependencies,relationshipKey:string,challengeKey:string,reminderNumber:number){
   const eventKey="event_"+crypto.randomUUID().replace(/-/g,"")
-  await deps.fetch(PROJECT_URL+"/rest/v1/crs_relationship_event",{
+  const response=await deps.fetch(PROJECT_URL+"/rest/v1/crs_relationship_event",{
     method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
     headers:{"content-type":"application/json",apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!,"prefer":"return=minimal"},
     body:JSON.stringify({event_key:eventKey,relationship_key:relationshipKey,event_type:"verification_reminder_sent",source_system:"c3_field",source_record_type:"crs_verification_challenge",source_record_ref:challengeKey,event_standing:"candidate_evidence_only",next_permitted_encounter:"contact_verification",metadata:{reminder_number:reminderNumber,standing_effect:"none",current_effect:"none",persistence_effect:"none"}})
   })
+  if(!response.ok) throw new Error("reminder_event")
 }
 async function issueAndSendVerification(relationshipKey:string,email:string,displayName:string|null,reminderNumber:number,env:PassageEnv,deps:Dependencies){
   const origin=configuration(env)
