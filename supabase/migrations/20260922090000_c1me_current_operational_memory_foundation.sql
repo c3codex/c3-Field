@@ -94,7 +94,7 @@ begin
  end if;
  return jsonb_build_object('resolution','existing_c1','next_encounter','enter_existing_environment',
    'individual_ref',v_individual,'relationship_ref',r.relationship_key,
-   'envpac_ref',v_envpac,'current_ref',v_current,
+   'envpac_ref',v_envpac,'env_key',v_env,'current_ref',v_current,
    'may_create_personal_environment',false,'reason_code','resolved_from_registered_current');
 end;$$;
 revoke all on function public.resolve_c1me_current_internal(text) from public, anon, authenticated;
