@@ -94,6 +94,21 @@ export async function readOwnerClaim(claim: string, env: PassageEnv, now = Date.
       !Number.isFinite(value.expires) || value.expires <= now) throw new Error("claim")
   return value as {relationshipKey:string;envKey:string;envpacKey:string;expires:number}
 }
+function friendlyFrom(env:PassageEnv){
+  const value=env.C1_VERIFICATION_FROM||""
+  return value.includes("<")?value:"c3 Community Partners <"+value+">"
+}
+const esc=(value:string)=>value.replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]||ch))
+async function sendResend(env:PassageEnv,deps:Dependencies,args:{to:string;subject:string;text:string;html:string;idempotencyKey:string}){
+  if(!env.C3_RESEND_API_KEY||!env.C1_VERIFICATION_FROM) return false
+  const response=await deps.fetch("https://api.resend.com/emails",{
+    method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
+    headers:{"content-type":"application/json",authorization:"Bearer "+env.C3_RESEND_API_KEY,"idempotency-key":args.idempotencyKey},
+    body:JSON.stringify({from:friendlyFrom(env),to:[args.to],subject:args.subject,text:args.text,html:args.html})
+  })
+  const body=await response.json().catch(()=>null)
+  return response.ok&&!!body&&typeof body==="object"&&"id" in body&&typeof body.id==="string"&&!!body.id
+}
 async function signedFoundationalSetUrl(env: PassageEnv, deps: Dependencies) {
   const objectPath = FOUNDATIONAL_SET_OBJECT.split("/").map(encodeURIComponent).join("/")
   const response = await deps.fetch(PROJECT_URL + "/storage/v1/object/sign/" + FOUNDATIONAL_SET_BUCKET + "/" + objectPath, {
@@ -110,29 +125,117 @@ async function signedFoundationalSetUrl(env: PassageEnv, deps: Dependencies) {
   if (!signed) throw new Error("foundational_set_sign_shape")
   return signed.startsWith("http://") || signed.startsWith("https://") ? signed : PROJECT_URL + signed
 }
-async function sendEnvironmentHandoff(owner: RecordValue, claim: string, origin: string, env: PassageEnv, deps: Dependencies) {
+async function sendEnvironmentHandoff(owner: RecordValue, claim: string, origin: string, env: PassageEnv, deps: Dependencies, mode:"welcome"|"reentry"="welcome") {
   if (!env.C3_RESEND_API_KEY || !env.C1_VERIFICATION_FROM || typeof owner.owner_email !== "string") return false
   const link = origin + "/my-environment#claim=" + encodeURIComponent(claim)
   const foundationalSetLink = await signedFoundationalSetUrl(env,deps)
-  const response = await deps.fetch("https://api.resend.com/emails", {
+  const name=typeof owner.owner_display_name==="string"&&owner.owner_display_name.trim()?owner.owner_display_name.trim():"there"
+  const subject=mode==="welcome"?"Own Your Environment | Welcome to c3Field":"Your c3Field environment link"
+  const intro=mode==="welcome"
+    ?"Your c3 Community Partners connection is confirmed. Welcome to c3Field."
+    :"Your existing c3Field environment is ready to reopen."
+  const text=mode==="welcome"
+    ? `Hi ${name},
+
+${intro}
+
+OWN YOUR ENVIRONMENT
+${link}
+
+The Million Dollar Mission is a live test of what becomes possible when a community can connect the people, places, resources, and possibilities it already has.
+
+WHAT TO DO NEXT
+1. Open My Environment and enter your c1ME.env.
+2. Explore the Million Dollar Mission: ${origin}/
+3. Return to My Environment as new connections and participation paths become available.
+
+Community Potential: ${origin}/community-potential
+
+Your private foundational set:
+${foundationalSetLink}
+
+The environment link expires in 8 hours. The foundational-set link expires in 7 days.
+
+Connect · Contribute · Create`
+    : `Hi ${name},
+
+${intro}
+
+Open My Environment:
+${link}
+
+This secure link expires in 8 hours. You do not need to Connect again.
+
+Connect · Contribute · Create`
+  const html=mode==="welcome"
+    ? `<!doctype html><html><body style="margin:0;background:#111416;color:#f3efe7;font-family:Arial,sans-serif"><div style="max-width:640px;margin:auto;padding:36px 28px"><p style="letter-spacing:.16em;font-size:12px">c3 COMMUNITY PARTNERS</p><h1 style="font-family:Georgia,serif;font-size:42px;font-weight:400">Own Your Environment.</h1><p>Hi ${esc(name)},</p><p>${esc(intro)}</p><p><a href="${esc(link)}" style="display:inline-block;padding:14px 20px;background:#f1eee5;color:#111;text-decoration:none;font-weight:700">OPEN MY ENVIRONMENT →</a></p><hr style="border:0;border-top:1px solid #394047;margin:34px 0"><h2 style="font-family:Georgia,serif;font-weight:400">The Million Dollar Mission</h2><p>A live test of what becomes possible when a community can connect the people, places, resources, and possibilities it already has.</p><p><a href="${esc(origin)}/" style="color:#f3efe7">Explore the mission →</a></p><h2 style="font-family:Georgia,serif;font-weight:400">What to do next</h2><ol style="line-height:1.7"><li>Open My Environment and enter your c1ME.env.</li><li>Explore the Million Dollar Mission and <a href="${esc(origin)}/community-potential" style="color:#f3efe7">Community Potential</a>.</li><li>Return to My Environment as new connections and participation paths become available.</li></ol><p style="font-size:13px;color:#aeb7bd">Your private foundational set is available for 7 days: <a href="${esc(foundationalSetLink)}" style="color:#d7dde1">open the set</a>.</p><p style="font-size:12px;color:#88939b">Your environment link expires in 8 hours.</p><p style="margin-top:38px">Connect · Contribute · Create</p></div></body></html>`
+    : `<!doctype html><html><body style="margin:0;background:#111416;color:#f3efe7;font-family:Arial,sans-serif"><div style="max-width:640px;margin:auto;padding:36px 28px"><p style="letter-spacing:.16em;font-size:12px">c3 COMMUNITY PARTNERS</p><h1 style="font-family:Georgia,serif;font-size:38px;font-weight:400">Your environment is ready.</h1><p>Hi ${esc(name)},</p><p>${esc(intro)}</p><p><a href="${esc(link)}" style="display:inline-block;padding:14px 20px;background:#f1eee5;color:#111;text-decoration:none;font-weight:700">OPEN MY ENVIRONMENT →</a></p><p style="font-size:12px;color:#88939b">This secure link expires in 8 hours. You do not need to Connect again.</p></div></body></html>`
+  return sendResend(env,deps,{to:owner.owner_email,subject,text,html,idempotencyKey:(mode==="welcome"?"c1-welcome-":"c1-reentry-")+owner.envpac_key+"-"+Math.floor(deps.now()/3600000)})
+}
+
+async function markChallengeDeliveryFailed(env:PassageEnv,deps:Dependencies,challengeKey:string){
+  const q=new URLSearchParams({challenge_key:"eq."+challengeKey})
+  await deps.fetch(PROJECT_URL+"/rest/v1/crs_verification_challenge?"+q,{
+    method:"PATCH",redirect:"manual",signal:AbortSignal.timeout(12000),
+    headers:{"content-type":"application/json",apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!,"prefer":"return=minimal"},
+    body:JSON.stringify({challenge_state:"delivery_failed",updated_at:new Date(deps.now()).toISOString()})
+  }).catch(()=>null)
+}
+async function recordVerificationReminder(env:PassageEnv,deps:Dependencies,relationshipKey:string,challengeKey:string,reminderNumber:number){
+  const eventKey="event_"+crypto.randomUUID().replace(/-/g,"")
+  await deps.fetch(PROJECT_URL+"/rest/v1/crs_relationship_event",{
     method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
-    headers:{"content-type":"application/json",authorization:"Bearer " + env.C3_RESEND_API_KEY,
-      "idempotency-key":"c1-owner-environment-" + owner.envpac_key + "-" + crypto.randomUUID()},
-    body:JSON.stringify({
-      from:env.C1_VERIFICATION_FROM,
-      to:[owner.owner_email],
-      subject:"Connect your c3 environment",
-      text:"Your c3 Community Partners connection is confirmed.\n\nConnect your environment:\n" + link +
-        "\n\nYour c3 foundational set accompanies this Connect confirmation:\n" +
-        "- Community Potential\n" +
-        "- The 21 of Coherence\n" +
-        "- c3 Relational Operations and Systems Governance\n" +
-        "- Governed Environments\n\n" +
-        "Download the private foundational set:\n" + foundationalSetLink +
-        "\n\nThe environment link expires in 8 hours. The foundational-set link expires in 7 days.\n\nConnect · Contribute · Create"
-    }),
+    headers:{"content-type":"application/json",apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!,"prefer":"return=minimal"},
+    body:JSON.stringify({event_key:eventKey,relationship_key:relationshipKey,event_type:"verification_reminder_sent",source_system:"c3_field",source_record_type:"crs_verification_challenge",source_record_ref:challengeKey,event_standing:"candidate_evidence_only",next_permitted_encounter:"contact_verification",metadata:{reminder_number:reminderNumber,standing_effect:"none",current_effect:"none",persistence_effect:"none"}})
   })
-  return response.ok
+}
+async function issueAndSendVerification(relationshipKey:string,email:string,displayName:string|null,reminderNumber:number,env:PassageEnv,deps:Dependencies){
+  const origin=configuration(env)
+  const rpc=rpcClient(env,deps)
+  const issue=await rpc("issue_relational_verification",{p_relationship_key:relationshipKey,p_env_key:ENV_KEY,p_ttl_minutes:30,p_metadata:{transport:"resend",source_route:reminderNumber?"/api/c1-email-lifecycle-sweep":"/api/c3-community-connect-capture",reminder_number:reminderNumber||null}})
+  if(issue.accepted!==true||typeof issue.challenge_key!=="string"||!/^[a-f0-9]{48}$/.test(issue.challenge_token||"")||!Number.isFinite(Date.parse(issue.expires_at))) throw new Error("verification_issue")
+  const receipt=await signedReceipt(relationshipKey,issue.expires_at,env)
+  const link=origin+"/api/c3-community-connect-verify#"+new URLSearchParams({receipt,token:issue.challenge_token})
+  const name=displayName?.trim()||"there"
+  const subject=reminderNumber===0?"Confirm your c3Field connection":reminderNumber===1?"Your c3Field connection is waiting":"Last reminder: confirm your c3Field connection"
+  const lead=reminderNumber===0?"Confirm your email to continue your connection.":reminderNumber===1?"Your first confirmation link expired. If you still want to Connect, use this fresh link.":"Your second confirmation window is open. Confirm now if you still want to enter c3Field."
+  const text=`Hi ${name},
+
+${lead}
+
+Confirm connection:
+${link}
+
+This link expires in 30 minutes. If you did not request this connection, ignore this email.
+
+Connect · Contribute · Create`
+  const html=`<!doctype html><html><body style="margin:0;background:#111416;color:#f3efe7;font-family:Arial,sans-serif"><div style="max-width:620px;margin:auto;padding:36px 28px"><p style="letter-spacing:.16em;font-size:12px">c3 COMMUNITY PARTNERS</p><h1 style="font-family:Georgia,serif;font-weight:400">Confirm your connection.</h1><p>Hi ${esc(name)},</p><p>${esc(lead)}</p><p><a href="${esc(link)}" style="display:inline-block;padding:14px 20px;background:#f1eee5;color:#111;text-decoration:none;font-weight:700">CONFIRM CONNECTION →</a></p><p style="font-size:12px;color:#88939b">This link expires in 30 minutes. If you did not request this connection, ignore this email.</p></div></body></html>`
+  const sent=await sendResend(env,deps,{to:email,subject,text,html,idempotencyKey:issue.challenge_key})
+  if(!sent){await markChallengeDeliveryFailed(env,deps,issue.challenge_key);throw new Error("verification_delivery")}
+  if(reminderNumber>0) await recordVerificationReminder(env,deps,relationshipKey,issue.challenge_key,reminderNumber)
+  return issue
+}
+
+export async function sendDueVerificationReminders(env:PassageEnv,deps:Dependencies=defaults){
+  configuration(env)
+  if(!env.C3_RESEND_API_KEY||!env.C1_VERIFICATION_FROM) throw new Error("email_configuration")
+  const response=await deps.fetch(PROJECT_URL+"/rest/v1/rpc/list_due_c1_verification_reminders",{
+    method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
+    headers:{"content-type":"application/json",apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!},
+    body:JSON.stringify({p_limit:25})
+  })
+  if(!response.ok) throw new Error("reminder_list")
+  const rows=await response.json() as Array<{relationship_key:string;primary_email:string;display_name:string|null;reminder_number:number}>
+  const results=[]
+  for(const row of rows){
+    try{
+      await issueAndSendVerification(row.relationship_key,row.primary_email,row.display_name,row.reminder_number,env,deps)
+      results.push({relationship_key:row.relationship_key,reminder_number:row.reminder_number,sent:true})
+    }catch{
+      results.push({relationship_key:row.relationship_key,reminder_number:row.reminder_number,sent:false})
+    }
+  }
+  return results
 }
 
 export async function captureCandidate(body: RecordValue, env: PassageEnv, deps: Dependencies = defaults) {
@@ -148,7 +251,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     const reentry = await rpc("resolve_c1_owner_reentry", {p_primary_email:body.email})
     if (reentry.accepted === true) {
       const claim = await signedOwnerClaim(reentry.relationship_key,reentry.env_key,reentry.envpac_key,env,deps.now())
-      await sendEnvironmentHandoff(reentry,claim,origin,env,deps).catch(()=>false)
+      await sendEnvironmentHandoff(reentry,claim,origin,env,deps,"reentry").catch(()=>false)
       return continuationRequired()
     }
     stage = "capture_unconfirmed"
@@ -170,30 +273,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
       return verificationRequired()
     candidate = true
     stage = "verification_issue"
-    const issue = await rpc("issue_relational_verification", {
-      p_relationship_key:captured.relationship_key,p_env_key:ENV_KEY,p_ttl_minutes:30,
-      p_metadata:{transport:"resend",source_route:"/api/c3-community-connect-capture"},
-    })
-    if (issue.accepted !== true || issue.relationship_key !== captured.relationship_key ||
-        typeof issue.challenge_key !== "string" || !issue.challenge_key ||
-        !/^[a-f0-9]{48}$/.test(issue.challenge_token) || !Number.isFinite(Date.parse(issue.expires_at)) ||
-        Date.parse(issue.expires_at) <= deps.now() || issue.standing_created !== false ||
-        issue.current_created !== false || issue.persistence_created !== false) return verificationRequired()
-    const receipt = await signedReceipt(captured.relationship_key,issue.expires_at,env)
-    // Fragment never reaches GET access logs or Referer; explicit POST is the second encounter.
-    const link = origin + "/api/c3-community-connect-verify#" + new URLSearchParams({receipt,token:issue.challenge_token})
-    stage = "verification_transport_unconfirmed"
-    const delivered = await deps.fetch("https://api.resend.com/emails", {
-      method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
-      headers:{"content-type":"application/json",authorization:"Bearer " + env.C3_RESEND_API_KEY,
-        "idempotency-key":issue.challenge_key},
-      body:JSON.stringify({from:env.C1_VERIFICATION_FROM,to:[body.email],
-        subject:"Confirm your c3 Community Partners connection",
-        text:"Confirm your email to continue your connection:\n\n" + link + "\n\nThis link expires in 30 minutes. If you did not request it, ignore this email."}),
-    })
-    const delivery = await delivered.json().catch(() => null)
-    if (!delivered.ok || !delivery || typeof delivery !== "object" || !("id" in delivery) ||
-        typeof delivery.id !== "string" || !delivery.id) return verificationRequired()
+    await issueAndSendVerification(captured.relationship_key,body.email,body.name,0,env,deps)
     return verificationRequired()
   } catch { return stage === "server_configuration" ? unavailable() : verificationRequired() }
 }
@@ -245,7 +325,7 @@ export async function verifyCandidate(body: RecordValue, env: PassageEnv, deps: 
       return hold(stage,true)
     const origin = configuration(env)
     const claim = await signedOwnerClaim(key,owner.env_key,owner.envpac_key,env,deps.now())
-    const handoffEmailSent = await sendEnvironmentHandoff(owner,claim,origin,env,deps).catch(()=>false)
+    const handoffEmailSent = await sendEnvironmentHandoff(owner,claim,origin,env,deps,"welcome").catch(()=>false)
     const nextUrl = "/my-environment#claim=" + encodeURIComponent(claim)
     // Protected backend provenance stays in RPC event/persistence records; only bounded copy reaches the participant.
     return json({standing:"connection_recorded",saved:true,environment_ready:true,
