@@ -123,7 +123,7 @@ function C3CommunityConnectSurface() {
 
       <header className="c3-connect-header c3-connect-width">
         <a href="#top" className="c3-connect-identity" aria-label="c3 Community Partners home">
-          {!emblemFailed && <img src={assets.emblem.src} alt={assets.emblem.alt} onError={() => setEmblemFailed(true)} width="54" height="54" />}
+          {assets.emblem && !emblemFailed && <img src={assets.emblem.src} alt={assets.emblem.alt} onError={() => setEmblemFailed(true)} width="54" height="54" />}
           <span>c3 Community<br /><strong>Partners</strong></span>
         </a>
         <a className="c3-connect-nav" href="#connect">CONNECT <span aria-hidden="true">↗</span></a>
