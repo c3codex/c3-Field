@@ -60,6 +60,21 @@ export default function MyEnvironmentEncounter(){
 
   useEffect(()=>{
     let active=true
+    async function hydrateSecondary(){
+      const [initiativeResult,connectionsResult]=await Promise.allSettled([
+        fetch("/api/my-environment-initiatives",{headers:{accept:"application/json"}}),
+        fetch("/api/my-environment-connections",{headers:{accept:"application/json"}})
+      ])
+      if(!active)return
+      if(initiativeResult.status==="fulfilled"&&initiativeResult.value.ok){
+        const initiativeBody=await initiativeResult.value.json() as InitiativePayload
+        if(active&&initiativeBody.initiatives) setInitiatives(initiativeBody.initiatives)
+      }
+      if(connectionsResult.status==="fulfilled"&&connectionsResult.value.ok){
+        const connectionsBody=await connectionsResult.value.json() as ConnectionsPayload
+        if(active&&connectionsBody.entries) setConnections(connectionsBody.entries)
+      }
+    }
     async function run(){
       try{
         const params=new URLSearchParams(location.hash.slice(1))
@@ -80,18 +95,9 @@ export default function MyEnvironmentEncounter(){
           return
         }
         setData(body)
-        const initiativeResponse=await fetch("/api/my-environment-initiatives",{headers:{accept:"application/json"}})
-        if(initiativeResponse.ok){
-          const initiativeBody=await initiativeResponse.json() as InitiativePayload
-          if(active&&initiativeBody.initiatives) setInitiatives(initiativeBody.initiatives)
-        }
-        const connectionsResponse=await fetch("/api/my-environment-connections",{headers:{accept:"application/json"}})
-        if(connectionsResponse.ok){
-          const connectionsBody=await connectionsResponse.json() as ConnectionsPayload
-          if(active&&connectionsBody.entries) setConnections(connectionsBody.entries)
-        }
         document.title=body.owner?.display_name?`${body.owner.display_name} | My Environment | c3 Community Partners`:"My Environment | c3 Community Partners"
         setState(claim?"intro":"ready")
+        void hydrateSecondary()
       }catch{
         if(active){setMessage("Your environment link is unavailable or has expired.");setState("held")}
       }
