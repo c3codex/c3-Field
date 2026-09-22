@@ -34,6 +34,7 @@ declare
  v_current text;
  v_current_count integer;
  v_grants integer;
+ v_evidence_count integer;
 begin
  if p_relationship_key is null or btrim(p_relationship_key)='' then
    return jsonb_build_object('resolution','auth_required','reason_code','missing_verified_subject');
@@ -83,6 +84,12 @@ begin
  and superseded_at is null;
  if v_current_count<>1 then
    return jsonb_build_object('resolution','reconciliation_hold','reason_code','personal_current_missing_or_ambiguous',
+       'may_create_personal_environment',false);
+ end if;
+ select count(*) into v_evidence_count from public.c3_current_evidence_ref
+ where current_state_key=v_current and evidence_standing in ('effective','attested','accepted','registered');
+ if v_evidence_count<1 then
+   return jsonb_build_object('resolution','reconciliation_hold','reason_code','current_evidence_missing',
        'may_create_personal_environment',false);
  end if;
  return jsonb_build_object('resolution','existing_c1','next_encounter','enter_existing_environment',
