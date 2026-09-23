@@ -4,8 +4,10 @@ const C2EnvironmentShell = lazy(() => import("../c3_field_contribution/C2Environ
 const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
 const C3PublicDocumentPage = lazy(() => import("../c3_field_connect/C3PublicDocumentPage"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
+const C3InitiativeSurfaceDoor = lazy(() => import("../c3_field_connect/C3InitiativeSurfaceDoor"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
+import { isC3FieldInitiativeHostCandidate } from "../c3_field_connect/initiativeSurfaceHost"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import Temple from "../measures_of_inanna/Temple"
@@ -320,6 +322,7 @@ export default function App() {
   const isRegistryHost = isMeasuresRegistryHost(hostname)
   const isInannaHost = isMeasuresOfInannaHost(hostname)
   const isC3Host = isC3FieldHost(hostname)
+  const isC3InitiativeHost = isC3FieldInitiativeHostCandidate(hostname)
   const c3Route = resolveC3FieldRoute(window.location.pathname)
 
   useEffect(() => {
@@ -330,7 +333,7 @@ export default function App() {
       return () => { cancelled = true }
     }
 
-    if (isC3Host || mode === "c3field") {
+    if (isC3Host || isC3InitiativeHost || mode === "c3field") {
       if (c3Route.kind === "operations") {
         applyPageMetadata(C3_OPS_METADATA)
         return () => { cancelled = true }
@@ -404,7 +407,7 @@ export default function App() {
       })
 
     return () => { cancelled = true }
-  }, [c3Route.kind, isC3Host, isInannaHost, isOpsHost, mode])
+  }, [c3Route.kind, isC3Host, isC3InitiativeHost, isInannaHost, isOpsHost, mode])
 
   if (isOpsHost) return <Suspense fallback={<p role="status">Opening c3Ops…</p>}><C3OpsDoor /></Suspense>
 
@@ -414,6 +417,10 @@ export default function App() {
 
   if (isInannaHost) {
     return <Temple />
+  }
+
+  if (isC3InitiativeHost) {
+    return <Suspense fallback={<p>Resolving initiative surface…</p>}><C3InitiativeSurfaceDoor /></Suspense>
   }
 
   if (isC3Host || mode === "c3field") {
