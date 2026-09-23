@@ -52,13 +52,19 @@ function record(value:unknown):Record<string,unknown>{
 }
 function str(value:unknown){return typeof value==="string"&&value.trim()?value.trim():null}
 
+export const C3_FIELD_PERSONAL_ENVIRONMENT_HOST="my.c3field.online"
+
 export function normalizeInitiativeSurfaceHostname(input:string){
   return input.trim().toLowerCase().replace(/\.+$/g,"")
 }
 
+export function isPersonalEnvironmentSurfaceHostname(input:string){
+  return normalizeInitiativeSurfaceHostname(input)===C3_FIELD_PERSONAL_ENVIRONMENT_HOST
+}
+
 export function isInitiativeSurfaceHostname(input:string){
   const host=normalizeInitiativeSurfaceHostname(input)
-  return host.endsWith(".c3field.online") && host!=="www.c3field.online" && host!=="c3ops.c3field.online"
+  return host.endsWith(".c3field.online") && host!=="www.c3field.online" && host!=="c3ops.c3field.online" && !isPersonalEnvironmentSurfaceHostname(host)
 }
 
 async function readRows(env:InitiativeSurfaceEnv,table:string,select:string,filters:Record<string,string>){
