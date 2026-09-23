@@ -1,5 +1,6 @@
 // Server-only orchestration. Governance and dispositions remain in the registered RPCs.
 export const ENV_KEY = "env_c3_community_connect"
+export const MY_ENVIRONMENT_ORIGIN = "https://my.c3field.online"
 const PROJECT_URL = "https://zfihrspxvennjzazxcbj.supabase.co"
 const FOUNDATIONAL_SET_BUCKET = "measures-seed"
 const FOUNDATIONAL_SET_OBJECT = "c3_foundational_papers_watermarked_20260917_v1.zip"
@@ -126,9 +127,12 @@ async function signedFoundationalSetUrl(env: PassageEnv, deps: Dependencies) {
   if (!signed) throw new Error("foundational_set_sign_shape")
   return signed.startsWith("http://") || signed.startsWith("https://") ? signed : PROJECT_URL + signed
 }
+export function myEnvironmentClaimUrl(claim:string){
+  return MY_ENVIRONMENT_ORIGIN + "/my-environment#claim=" + encodeURIComponent(claim)
+}
 async function sendEnvironmentHandoff(owner: RecordValue, claim: string, origin: string, env: PassageEnv, deps: Dependencies, mode:"welcome"|"reentry"="welcome") {
   if (!env.C3_RESEND_API_KEY || !env.C1_VERIFICATION_FROM || typeof owner.owner_email !== "string") return false
-  const link = origin + "/my-environment#claim=" + encodeURIComponent(claim)
+  const link = myEnvironmentClaimUrl(claim)
   const foundationalSetLink = await signedFoundationalSetUrl(env,deps)
   const name=typeof owner.owner_display_name==="string"&&owner.owner_display_name.trim()?owner.owner_display_name.trim():"there"
   const subject=mode==="welcome"?"Own Your Environment | Welcome to c3Field":"Your c3Field environment link"
@@ -328,7 +332,7 @@ export async function verifyCandidate(body: RecordValue, env: PassageEnv, deps: 
     const origin = configuration(env)
     const claim = await signedOwnerClaim(key,owner.env_key,owner.envpac_key,env,deps.now())
     const handoffEmailSent = await sendEnvironmentHandoff(owner,claim,origin,env,deps,"welcome").catch(()=>false)
-    const nextUrl = "/my-environment#claim=" + encodeURIComponent(claim)
+    const nextUrl = myEnvironmentClaimUrl(claim)
     // Protected backend provenance stays in RPC event/persistence records; only bounded copy reaches the participant.
     return json({standing:"connection_recorded",saved:true,environment_ready:true,
       message:"Your Connect relationship is confirmed and recorded. Your environment is ready.",
