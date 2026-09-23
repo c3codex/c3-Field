@@ -1,4 +1,4 @@
-import {json, readOwnerClaim, type PassageEnv} from "../_lib/c1-passage"
+import {json, MY_ENVIRONMENT_ORIGIN, readOwnerClaim, type PassageEnv} from "../_lib/c1-passage"
 import {createEnvironmentSession,environmentSessionCookie} from "../_lib/env-session"
 
 async function ensureCurrent(relationshipKey:string,env:PassageEnv){
@@ -15,7 +15,8 @@ async function ensureCurrent(relationshipKey:string,env:PassageEnv){
 export const onRequestPost: PagesFunction<PassageEnv> = async ({request,env}) => {
   try {
     const origin=new URL(request.url).origin
-    if(request.headers.get("origin")!==origin || request.headers.get("origin")!==env.C1_PUBLIC_ORIGIN)
+    const requestOrigin=request.headers.get("origin")
+    if(requestOrigin!==origin || (origin!==MY_ENVIRONMENT_ORIGIN && origin!==env.C1_PUBLIC_ORIGIN))
       return json({accepted:false,message:"This environment link could not be verified."},403)
     if(!request.headers.get("content-type")?.toLowerCase().startsWith("application/json"))
       return json({accepted:false,message:"This environment link could not be verified."},415)
