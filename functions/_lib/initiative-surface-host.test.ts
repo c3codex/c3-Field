@@ -1,10 +1,12 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import {InitiativeSurfaceResolutionError,isInitiativeSurfaceHostname,normalizeInitiativeSurfaceHostname,selectInitiativeSurfaceBinding} from "./initiative-surface-host"
+import {InitiativeSurfaceResolutionError,isInitiativeSurfaceHostname,isPersonalEnvironmentSurfaceHostname,normalizeInitiativeSurfaceHostname,selectInitiativeSurfaceBinding} from "./initiative-surface-host"
 
 test("normalizes initiative hostnames",()=>{
   assert.equal(normalizeInitiativeSurfaceHostname(" MDM.C3FIELD.ONLINE. "),"mdm.c3field.online")
   assert.equal(isInitiativeSurfaceHostname("47pct.c3field.online"),true)
+  assert.equal(isPersonalEnvironmentSurfaceHostname("MY.C3FIELD.ONLINE."),true)
+  assert.equal(isInitiativeSurfaceHostname("my.c3field.online"),false)
   assert.equal(isInitiativeSurfaceHostname("c3field.online"),false)
   assert.equal(isInitiativeSurfaceHostname("c3ops.c3field.online"),false)
 })
