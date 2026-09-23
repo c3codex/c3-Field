@@ -15,14 +15,20 @@ export function normalizeC3Hostname(hostname:string){
   return hostname.trim().toLowerCase().replace(/\.+$/g,"")
 }
 
+export const C3_FIELD_PERSONAL_ENVIRONMENT_HOST="my.c3field.online"
+
 export function isC3FieldParentHost(hostname:string){
   const host=normalizeC3Hostname(hostname)
   return host==="c3field.online"||host==="www.c3field.online"
 }
 
+export function isC3FieldPersonalEnvironmentHost(hostname:string){
+  return normalizeC3Hostname(hostname)===C3_FIELD_PERSONAL_ENVIRONMENT_HOST
+}
+
 export function isC3FieldInitiativeHostCandidate(hostname:string){
   const host=normalizeC3Hostname(hostname)
-  return host.endsWith(".c3field.online")&&!isC3FieldParentHost(host)&&host!=="c3ops.c3field.online"
+  return host.endsWith(".c3field.online")&&!isC3FieldParentHost(host)&&host!=="c3ops.c3field.online"&&!isC3FieldPersonalEnvironmentHost(host)
 }
 
 export function isInitiativeSurfacePathAllowed(pathname:string){
