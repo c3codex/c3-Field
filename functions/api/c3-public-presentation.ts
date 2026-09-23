@@ -1,4 +1,4 @@
-import {isInitiativeSurfaceHostname,resolveInitiativeSurfaceHost,type InitiativeSurfaceEnv} from "../_lib/initiative-surface-host"
+import {InitiativeSurfaceResolutionError,isInitiativeSurfaceHostname,resolveInitiativeSurfaceHost,type InitiativeSurfaceEnv} from "../_lib/initiative-surface-host"
 
 type Env=InitiativeSurfaceEnv
 
@@ -107,9 +107,10 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
       presentation
     })
   }catch(error){
+    if(error instanceof InitiativeSurfaceResolutionError)
+      return json({standing:"public_presentation_held",reason:error.reasonCode},error.status)
     const reason=error instanceof Error?error.message:"unavailable"
-    const status=reason.includes("held")?423:503
-    return json({standing:"public_presentation_held",reason},status)
+    return json({standing:"public_presentation_held",reason},503)
   }
 }
 
