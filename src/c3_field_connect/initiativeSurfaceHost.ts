@@ -1,0 +1,39 @@
+export type InitiativeSurfaceRuntime={
+  standing:"resolved"
+  host:string
+  surfaceKey:string
+  initiativeKey:string
+  webpacKey:string
+  canonicalEnvironment:"env_c3_community_connect"
+  canonicalUrl:string
+  route:string
+  connectRoute:string
+  createsStanding:false
+}
+
+export function normalizeC3Hostname(hostname:string){
+  return hostname.trim().toLowerCase().replace(/\.+$/g,"")
+}
+
+export function isC3FieldParentHost(hostname:string){
+  const host=normalizeC3Hostname(hostname)
+  return host==="c3field.online"||host==="www.c3field.online"
+}
+
+export function isC3FieldInitiativeHostCandidate(hostname:string){
+  const host=normalizeC3Hostname(hostname)
+  return host.endsWith(".c3field.online")&&!isC3FieldParentHost(host)&&host!=="c3ops.c3field.online"
+}
+
+export function isInitiativeSurfacePathAllowed(pathname:string){
+  const normalized=pathname.length>1?pathname.replace(/\/$/,""):"/"
+  return normalized==="/"||normalized==="/connect"
+}
+
+export async function loadInitiativeSurfaceHost(){
+  const response=await fetch("/api/c3-initiative-surface",{headers:{accept:"application/json"},cache:"no-store"})
+  const body=await response.json().catch(()=>null) as InitiativeSurfaceRuntime|{standing?:string;reason_code?:string}|null
+  if(!response.ok||!body||body.standing!=="resolved")
+    throw new Error(body&&"reason_code" in body&&typeof body.reason_code==="string"?body.reason_code:"initiative_surface_unavailable")
+  return body as InitiativeSurfaceRuntime
+}
