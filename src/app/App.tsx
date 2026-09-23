@@ -333,7 +333,29 @@ export default function App() {
       return () => { cancelled = true }
     }
 
-    if (isC3Host || isC3InitiativeHost || mode === "c3field") {
+    if (isC3InitiativeHost) {
+      if (c3Route.kind !== "connect") return () => { cancelled = true }
+      void fetch("/api/c3-public-presentation",{headers:{accept:"application/json"}})
+        .then(response=>response.ok?response.json():null)
+        .then(body=>{
+          if(cancelled||!body?.presentation) return
+          const presentation=body.presentation as Record<string,any>
+          const seo=presentation.seo as Record<string,string>|undefined
+          if(seo?.title&&seo?.description&&seo?.canonical_url){
+            applyPageMetadata({
+              title:seo.title,
+              description:seo.description,
+              url:seo.canonical_url,
+              image:"https://c3field.online/api/free-media?asset="+String(seo.og_image_asset_key||presentation.media_roles?.og_master),
+              type:seo.og_type||"website",
+            })
+          }
+        })
+        .catch(()=>{})
+      return () => { cancelled = true }
+    }
+
+    if (isC3Host || mode === "c3field") {
       if (c3Route.kind === "operations") {
         applyPageMetadata(C3_OPS_METADATA)
         return () => { cancelled = true }
