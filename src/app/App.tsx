@@ -7,7 +7,7 @@ const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 const C3InitiativeSurfaceDoor = lazy(() => import("../c3_field_connect/C3InitiativeSurfaceDoor"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
-import { isC3FieldInitiativeHostCandidate } from "../c3_field_connect/initiativeSurfaceHost"
+import { isC3FieldInitiativeHostCandidate, isC3FieldPersonalEnvironmentHost } from "../c3_field_connect/initiativeSurfaceHost"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import Temple from "../measures_of_inanna/Temple"
@@ -322,6 +322,7 @@ export default function App() {
   const isRegistryHost = isMeasuresRegistryHost(hostname)
   const isInannaHost = isMeasuresOfInannaHost(hostname)
   const isC3Host = isC3FieldHost(hostname)
+  const isC3PersonalHost = isC3FieldPersonalEnvironmentHost(hostname)
   const isC3InitiativeHost = isC3FieldInitiativeHostCandidate(hostname)
   const c3Route = resolveC3FieldRoute(window.location.pathname)
 
@@ -330,6 +331,12 @@ export default function App() {
 
     if (isOpsHost) {
       applyPageMetadata({ ...C3_OPS_METADATA, title: "c3Ops", url: "https://c3ops.c3field.online", canonicalUrl: "https://c3ops.c3field.online" })
+      return () => { cancelled = true }
+    }
+
+    if (isC3PersonalHost) {
+      document.title = "My Environment | c3 Community Partners"
+      setCanonical("https://my.c3field.online/")
       return () => { cancelled = true }
     }
 
@@ -429,7 +436,7 @@ export default function App() {
       })
 
     return () => { cancelled = true }
-  }, [c3Route.kind, isC3Host, isC3InitiativeHost, isInannaHost, isOpsHost, mode])
+  }, [c3Route.kind, isC3Host, isC3PersonalHost, isC3InitiativeHost, isInannaHost, isOpsHost, mode])
 
   if (isOpsHost) return <Suspense fallback={<p role="status">Opening c3Ops…</p>}><C3OpsDoor /></Suspense>
 
@@ -439,6 +446,13 @@ export default function App() {
 
   if (isInannaHost) {
     return <Temple />
+  }
+
+  if (isC3PersonalHost) {
+    const personalPath = normalizePathname(window.location.pathname)
+    if (personalPath === "/" || personalPath === "/my-environment")
+      return <Suspense fallback={<p>Opening your environment…</p>}><MyEnvironmentEncounter /></Suspense>
+    return <HeldUnknownC3FieldRoute pathname={personalPath} />
   }
 
   if (isC3InitiativeHost) {
