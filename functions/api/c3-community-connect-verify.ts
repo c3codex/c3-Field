@@ -47,8 +47,13 @@ button.addEventListener("click",async () => {
   result.textContent=recorded
     ? (value.environment_ready===true ? "Connection confirmed. Opening your environment…" : "Your Connect relationship is confirmed and recorded.")
     : "We could not confirm your connection. Return to Connect to request a fresh confirmation email.";
-  if(recorded && typeof value.next_url==="string" && value.next_url.startsWith("/my-environment#claim=")){
-    window.setTimeout(()=>location.assign(value.next_url),650);
+  if(recorded && typeof value.next_url==="string"){
+    try {
+      const next=new URL(value.next_url,location.origin);
+      if(next.origin==="https://my.c3field.online" && next.pathname==="/my-environment" && next.hash.startsWith("#claim=")){
+        window.setTimeout(()=>location.assign(next.href),650);
+      }
+    } catch {}
   }
  } catch { result.textContent="We could not confirm your connection. Return to Connect to request a fresh confirmation email."; }
 });
