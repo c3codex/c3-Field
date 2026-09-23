@@ -49,6 +49,6 @@ test("package admission is server-controlled by C1 passage standing",async () =>
   const value=await open.json()
   assert.equal(value.available,true)
   assert.equal(value.reviewOnly,false)
-  assert.equal(value.assets.intro.src,"/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1")
+  assert.equal(value.assets.intro.src,"/api/free-media?asset=c3_field_public_intro_current_v1")
   assert.equal("emblem" in value.assets,false)
 })

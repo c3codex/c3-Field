@@ -17,6 +17,7 @@ const ALLOWED_ASSETS=new Set([
   "c3_field_c1me_arrival_video_v1",
   "c3_field_c1me_live_backdrop_v1",
   "c3_field_public_intro_million_dollar_mission_v1",
+  "c3_field_public_intro_current_v1",
   ...PUBLIC_SUPABASE_ASSETS,
 ])
 
@@ -95,7 +96,7 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
     const assetKey=new URL(request.url).searchParams.get("asset")||""
     if(!ALLOWED_ASSETS.has(assetKey)) return json({standing:"free_media_not_registered"},404)
     const asset=await readAsset(env,assetKey)
-    const isPublicAsset=(PUBLIC_SUPABASE_ASSETS.has(assetKey)||assetKey==="c3_field_public_intro_million_dollar_mission_v1")&&asset.public_retrieval_standing==="bounded_public_runtime"
+    const isPublicAsset=(PUBLIC_SUPABASE_ASSETS.has(assetKey)||assetKey==="c3_field_public_intro_million_dollar_mission_v1"||assetKey==="c3_field_public_intro_current_v1")&&asset.public_retrieval_standing==="bounded_public_runtime"
     if(!isPublicAsset){
       const sessionCookie=cookie(request,"c3_env_session")
       if(!sessionCookie) return json({standing:"environment_claim_required"},401)
@@ -103,7 +104,7 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
     }
     if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual") return json({standing:"free_media_standing_held"},409)
     if(assetKey==="c3_field_c1me_arrival_video_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
-    if(assetKey==="c3_field_public_intro_million_dollar_mission_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
+    if((assetKey==="c3_field_public_intro_million_dollar_mission_v1"||assetKey==="c3_field_public_intro_current_v1")&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
     if((assetKey==="c3_field_c1me_live_backdrop_v1"||PUBLIC_SUPABASE_ASSETS.has(assetKey))&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
     return json({standing:"free_media_provider_not_registered"},409)
   }catch(error){

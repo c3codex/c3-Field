@@ -25,7 +25,7 @@ export const c1RuntimePackage: C1EnvironmentPackage = {
       "alt": "Handcrafted miniature c3 community environment"
     },
     "intro": {
-      "src": "/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1"
+      "src": "/api/free-media?asset=c3_field_public_intro_current_v1"
     }
   },
   "initiatives": [],
