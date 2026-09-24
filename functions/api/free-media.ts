@@ -1,9 +1,9 @@
 import {json, type PassageEnv} from "../_lib/c1-passage"
 import {resolveEnvironmentSession} from "../_lib/env-session"
 
-type R2ObjectBody={body:ReadableStream|null;size:number;httpEtag?:string;writeHttpMetadata?:(headers:Headers)=>void}
-type R2BucketLike={get:(key:string,options?:unknown)=>Promise<R2ObjectBody|null>}
-type FreeMediaEnv=PassageEnv&{C1ME_ENV_READY?:R2BucketLike}
+type R2ObjectBody={body:ReadableStream|null;size:number;httpEtag?:string;range?:{offset:number;length:number};writeHttpMetadata?:(headers:Headers)=>void}
+type R2BucketLike={get:(key:string,options?:{range?:{offset:number;length:number}})=>Promise<R2ObjectBody|null>}
+type FreeMediaEnv=PassageEnv&{C1ME_ENV_READY?:R2BucketLike;C3_FIELD_MEDIA?:R2BucketLike}
 
 const PUBLIC_SUPABASE_ASSETS=new Set([
   "c3_field_connect_hero_backdrop_v1",
@@ -46,7 +46,7 @@ async function readAsset(env:FreeMediaEnv,assetKey:string){
 function cacheHeaders(asset:Record<string,unknown>){
   const headers=new Headers({"cache-control":"private, max-age=300","x-content-type-options":"nosniff","referrer-policy":"no-referrer"})
   if(typeof asset.mime_type==="string") headers.set("content-type",asset.mime_type)
-  if(typeof asset.content_hash==="string") headers.set("etag",`\"${asset.content_hash}\"`)
+  if(typeof asset.content_hash==="string") headers.set("etag",`"${asset.content_hash}"`)
   return headers
 }
 
@@ -63,32 +63,73 @@ async function resolveSupabase(asset:Record<string,unknown>,env:FreeMediaEnv){
   return new Response(response.body,{status:200,headers})
 }
 
-async function resolveR2(asset:Record<string,unknown>,env:FreeMediaEnv){
-  if(asset.authoritative_custody_identifier!=="c1ME.env_ready"||typeof asset.authoritative_custody_location!=="string") throw new Error("custody_mismatch")
-  if(!env.C1ME_ENV_READY) throw new Error("r2_binding_unavailable")
-  const object=await env.C1ME_ENV_READY.get(asset.authoritative_custody_location)
-  if(!object||!object.body) throw new Error("provider_unavailable")
-  const headers=cacheHeaders(asset)
-  headers.set("content-length",String(object.size))
-  return new Response(object.body,{status:200,headers})
+export type ParsedByteRange=
+  | {kind:"none"}
+  | {kind:"range";offset:number;length:number;end:number}
+  | {kind:"invalid"}
+
+export function parseByteRange(value:string|null,total:number):ParsedByteRange{
+  if(!value) return {kind:"none"}
+  if(!Number.isSafeInteger(total)||total<=0) return {kind:"invalid"}
+  const match=/^bytes=(\d*)-(\d*)$/.exec(value.trim())
+  if(!match||(!match[1]&&!match[2])) return {kind:"invalid"}
+
+  if(!match[1]){
+    const suffix=Number(match[2])
+    if(!Number.isSafeInteger(suffix)||suffix<=0) return {kind:"invalid"}
+    const length=Math.min(suffix,total)
+    const offset=total-length
+    return {kind:"range",offset,length,end:total-1}
+  }
+
+  const offset=Number(match[1])
+  if(!Number.isSafeInteger(offset)||offset<0||offset>=total) return {kind:"invalid"}
+  const requestedEnd=match[2]?Number(match[2]):total-1
+  if(!Number.isSafeInteger(requestedEnd)||requestedEnd<offset) return {kind:"invalid"}
+  const end=Math.min(requestedEnd,total-1)
+  return {kind:"range",offset,length:end-offset+1,end}
 }
 
-async function resolvePublicR2(asset:Record<string,unknown>,request:Request){
-  if(asset.authoritative_custody_identifier!=="c3-field-media"||typeof asset.authoritative_custody_location!=="string") throw new Error("custody_mismatch")
-  const object=asset.authoritative_custody_location.split("/").map(part=>encodeURIComponent(part)).join("/")
-  const source="https://field-media.c3field.online/"+object
-  const upstreamHeaders=new Headers()
-  const range=request.headers.get("range")
-  if(range) upstreamHeaders.set("range",range)
-  const response=await fetch(source,{headers:upstreamHeaders,redirect:"manual",signal:AbortSignal.timeout(20000)})
-  if((response.status!==200&&response.status!==206)||!response.body) throw new Error("provider_unavailable")
+export function r2BindingKey(custodyIdentifier:unknown){
+  if(custodyIdentifier==="c3-field-media") return "C3_FIELD_MEDIA" as const
+  if(custodyIdentifier==="c1ME.env_ready") return "C1ME_ENV_READY" as const
+  return null
+}
+
+async function resolveBoundR2(asset:Record<string,unknown>,env:FreeMediaEnv,request:Request){
+  const object=asset.authoritative_custody_location
+  const bindingKey=r2BindingKey(asset.authoritative_custody_identifier)
+  if(typeof object!=="string"||!bindingKey) throw new Error("custody_mismatch")
+  const bucket=env[bindingKey]
+  if(!bucket) throw new Error("r2_binding_unavailable")
+
+  const total=typeof asset.byte_size==="number"&&Number.isSafeInteger(asset.byte_size)&&asset.byte_size>0
+    ? asset.byte_size
+    : null
+  if(!total) throw new Error("asset_size_unavailable")
+
+  const range=parseByteRange(request.headers.get("range"),total)
   const headers=cacheHeaders(asset)
-  for(const name of ["content-length","content-range","accept-ranges","last-modified"]){
-    const value=response.headers.get(name)
-    if(value) headers.set(name,value)
+  headers.set("accept-ranges","bytes")
+
+  if(range.kind==="invalid"){
+    headers.set("content-range",`bytes */${total}`)
+    headers.set("content-length","0")
+    return new Response(null,{status:416,headers})
   }
-  if(response.status===206) headers.set("accept-ranges","bytes")
-  return new Response(response.body,{status:response.status,headers})
+
+  const options=range.kind==="range"?{range:{offset:range.offset,length:range.length}}:undefined
+  const resolved=await bucket.get(object,options)
+  if(!resolved||!resolved.body) throw new Error("provider_unavailable")
+
+  if(range.kind==="range"){
+    headers.set("content-range",`bytes ${range.offset}-${range.end}/${total}`)
+    headers.set("content-length",String(range.length))
+    return new Response(resolved.body,{status:206,headers})
+  }
+
+  headers.set("content-length",String(total))
+  return new Response(resolved.body,{status:200,headers})
 }
 
 export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
@@ -103,8 +144,7 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
       await resolveEnvironmentSession(sessionCookie,env)
     }
     if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual") return json({standing:"free_media_standing_held"},409)
-    if(assetKey==="c3_field_c1me_arrival_video_v1"&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
-    if((assetKey==="c3_field_public_intro_million_dollar_mission_v1"||assetKey==="c3_field_public_intro_current_v1")&&asset.authoritative_custody_provider==="Cloudflare R2") return await resolvePublicR2(asset,request)
+    if(asset.authoritative_custody_provider==="Cloudflare R2") return await resolveBoundR2(asset,env,request)
     if((assetKey==="c3_field_c1me_live_backdrop_v1"||PUBLIC_SUPABASE_ASSETS.has(assetKey))&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
     return json({standing:"free_media_provider_not_registered"},409)
   }catch(error){
