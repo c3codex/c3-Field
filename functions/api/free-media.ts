@@ -240,6 +240,23 @@ async function requireEligiblePublicPac(env:FreeMediaEnv,pacKey:string){
   return pac
 }
 
+export function pacBindingCustodyMismatch(binding:RegistryRow,assetKey:string,asset:RegistryRow){
+  const metadata=record(binding.metadata)
+  if(metadata.source_asset_key!==assetKey) return "pac_media_asset_mismatch"
+  if(normalizedProvider(binding.provider)!==normalizedProvider(asset.authoritative_custody_provider))
+    return "pac_media_provider_mismatch"
+  if(binding.bucket_name!==asset.authoritative_custody_identifier)
+    return "pac_media_bucket_mismatch"
+  if(binding.object_path!==asset.authoritative_custody_location)
+    return "pac_media_object_mismatch"
+
+  const freeBinding=str(asset.current_free_binding)
+  const runtimeUri=str(binding.runtime_uri)
+  if(runtimeUri&&freeBinding&&runtimeUri!==freeBinding)
+    return "pac_media_runtime_uri_mismatch"
+  return null
+}
+
 async function requirePacRuntimeBinding(env:FreeMediaEnv,pacKey:string,assetKey:string,asset:RegistryRow){
   const rows=await readRows(
     env,
@@ -254,21 +271,8 @@ async function requirePacRuntimeBinding(env:FreeMediaEnv,pacKey:string,assetKey:
   if(rows.length===0) throw new FreeMediaError("pac_media_binding_unavailable",423)
   if(rows.length!==1) throw new FreeMediaError("pac_media_binding_collision",409)
   const binding=rows[0]
-  const metadata=record(binding.metadata)
-
-  if(metadata.source_asset_key!==assetKey) throw new FreeMediaError("pac_media_asset_mismatch")
-  if(normalizedProvider(binding.provider)!==normalizedProvider(asset.authoritative_custody_provider))
-    throw new FreeMediaError("pac_media_provider_mismatch")
-  if(binding.bucket_name!==asset.authoritative_custody_identifier)
-    throw new FreeMediaError("pac_media_bucket_mismatch")
-  if(binding.object_path!==asset.authoritative_custody_location)
-    throw new FreeMediaError("pac_media_object_mismatch")
-
-  const freeBinding=str(asset.current_free_binding)
-  const runtimeUri=str(binding.runtime_uri)
-  if(runtimeUri&&freeBinding&&runtimeUri!==freeBinding)
-    throw new FreeMediaError("pac_media_runtime_uri_mismatch")
-
+  const mismatch=pacBindingCustodyMismatch(binding,assetKey,asset)
+  if(mismatch) throw new FreeMediaError(mismatch)
   return binding
 }
 
