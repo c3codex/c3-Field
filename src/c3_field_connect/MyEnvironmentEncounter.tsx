@@ -301,7 +301,7 @@ export default function MyEnvironmentEncounter(){
         <div className="myenv-thread-heading"><p className="myenv-kicker">C3-NATIVE</p><h2>{primitive.display_label}</h2><p>Accepted c3 connections appear in both environments. Messages here are shared across the connection.</p></div>
         <div className="myenv-thread-entries">
           {nativeConnections.length===0&&<p className="myenv-relations-empty">No c3-native connections yet.</p>}
-          {nativeConnections.map(connection=><article key={connection.connection_key}><div><span>connected</span><time>{new Date(connection.formed_at).toLocaleString()}</time></div><h3>{connection.other.display_name||"Connected environment"}</h3>{connection.messages.slice(-5).map(item=><p key={item.message_key}><strong>{item.sender_relationship_key===data?.envpac?.envpac_key?"You":""}</strong>{item.body}</p>)}</article>)}
+          {nativeConnections.map(connection=><article key={connection.connection_key}><div><span>connected</span><time>{new Date(connection.formed_at).toLocaleString()}</time></div><h3>{connection.other.display_name||"Connected environment"}</h3>{connection.messages.slice(-5).map(item=><p key={item.message_key}><strong>{item.sender_relationship_key===connection.other.relationship_key?(connection.other.display_name||"Connection")+": ":"You: "}</strong>{item.body}</p>)}</article>)}
         </div>
         {nativeConnections.length>0&&<form className="myenv-thread-compose" onSubmit={sendNativeMessage}>
           <select aria-label="Connected environment" value={selectedConnection} onChange={e=>setSelectedConnection(e.target.value)}>
