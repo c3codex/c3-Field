@@ -58,7 +58,9 @@ function campaignTruth(pac:Row){
 }
 
 export const onRequestGet:PagesFunction<Env>=async({request,env})=>{
-  const requestedPac=new URL(request.url).searchParams.get("pac")?.trim()||null
+  const url=new URL(request.url)
+  if(url.hostname!=="c3ops.c3field.online") return json({error:"not_found"},404)
+  const requestedPac=url.searchParams.get("pac")?.trim()||null
   try{
     const pacParams:Record<string,string>={
       select:"pac_key,envpac_key,pac_type,standing,is_effective,source_authority,metadata",
