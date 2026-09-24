@@ -96,12 +96,33 @@ export function r2BindingKey(custodyIdentifier:unknown){
   return null
 }
 
+async function resolvePublicR2Fallback(asset:Record<string,unknown>,request:Request){
+  if(asset.authoritative_custody_identifier!=="c3-field-media"||typeof asset.authoritative_custody_location!=="string") throw new Error("custody_mismatch")
+  const object=asset.authoritative_custody_location.split("/").map(part=>encodeURIComponent(part)).join("/")
+  const source="https://field-media.c3field.online/"+object
+  const upstreamHeaders=new Headers()
+  const range=request.headers.get("range")
+  if(range) upstreamHeaders.set("range",range)
+  const response=await fetch(source,{headers:upstreamHeaders,redirect:"manual",signal:AbortSignal.timeout(20000)})
+  if((response.status!==200&&response.status!==206)||!response.body) throw new Error("provider_unavailable")
+  const headers=cacheHeaders(asset)
+  for(const name of ["content-length","content-range","accept-ranges","last-modified"]){
+    const value=response.headers.get(name)
+    if(value) headers.set(name,value)
+  }
+  if(response.status===206) headers.set("accept-ranges","bytes")
+  return new Response(response.body,{status:response.status,headers})
+}
+
 async function resolveBoundR2(asset:Record<string,unknown>,env:FreeMediaEnv,request:Request){
   const object=asset.authoritative_custody_location
   const bindingKey=r2BindingKey(asset.authoritative_custody_identifier)
   if(typeof object!=="string"||!bindingKey) throw new Error("custody_mismatch")
   const bucket=env[bindingKey]
-  if(!bucket) throw new Error("r2_binding_unavailable")
+  if(!bucket){
+    if(bindingKey==="C3_FIELD_MEDIA") return await resolvePublicR2Fallback(asset,request)
+    throw new Error("r2_binding_unavailable")
+  }
 
   const total=typeof asset.byte_size==="number"&&Number.isSafeInteger(asset.byte_size)&&asset.byte_size>0
     ? asset.byte_size
