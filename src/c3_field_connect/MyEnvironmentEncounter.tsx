@@ -90,7 +90,11 @@ export default function MyEnvironmentEncounter(){
         const body=await response.json() as EnvPayload
         if(!active)return
         if(!response.ok||body.standing!=="environment_ready"||!body.environment||!body.envpac){
-          setMessage("Your environment is not available from this browser yet.")
+          setMessage(
+            response.status===401&&body.standing==="environment_claim_required"
+              ?"This browser has not established its return session yet. Continue through Connect to resume your existing environment."
+              :"Your environment is not available from this browser yet."
+          )
           setState("held")
           return
         }
@@ -144,7 +148,7 @@ export default function MyEnvironmentEncounter(){
   }
 
   if(state==="held"||state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
-    return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p>{state==="held"&&<a href="/">Return to Connect</a>}</section></main>
+    return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p>{state==="held"&&<a href="https://c3field.online/#connect">Resume through Connect</a>}</section></main>
   }
 
   if(state==="intro"){
