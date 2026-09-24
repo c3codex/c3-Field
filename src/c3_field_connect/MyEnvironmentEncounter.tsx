@@ -148,7 +148,7 @@ export default function MyEnvironmentEncounter(){
   }
 
   if(state==="held"||state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
-    return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p>{state==="held"&&<a href="https://c3field.online/#connect">Resume through Connect</a>}</section></main>
+    return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p>{state==="held"&&<a href="https://c3field.online/connect">Resume through Connect</a>}</section></main>
   }
 
   if(state==="intro"){
