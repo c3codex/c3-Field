@@ -2,7 +2,6 @@ import {json,type PassageEnv} from "../_lib/c1-passage"
 import {resolveEnvironmentSession} from "../_lib/env-session"
 
 const PROFILE_HOST="my.c3field.online"
-const ALLOWED_CLASSES=new Set(["individual","organization","initiative","project","place"])
 const ALLOWED_VISIBILITY=new Set(["private","environment","relational","public"])
 
 function cookie(request:Request,name:string){
@@ -39,15 +38,43 @@ async function session(request:Request,env:PassageEnv){
   if(!raw) throw new Error("session_required")
   return resolveEnvironmentSession(raw,env)
 }
+function boundedQuestions(contract:Record<string,any>){
+  const fields=Array.isArray(contract?.intake_schema?.fields)?contract.intake_schema.fields:[]
+  return fields.flatMap((field:Record<string,any>)=>{
+    if(field?.key==="profile.display_label"&&field?.input==="text"){
+      return [{
+        key:"profile.display_label",
+        label:typeof field.label==="string"?field.label:"Display label",
+        input:"text",
+        required:field.required===true,
+        max_length:Number.isInteger(field.max_length)?field.max_length:160,
+        placeholder:typeof field.placeholder==="string"?field.placeholder:""
+      }]
+    }
+    if(field?.key==="profile.visibility_scope"&&field?.input==="select"){
+      const options=Array.isArray(field.options)?field.options.flatMap((option:Record<string,any>)=>
+        typeof option?.value==="string"&&typeof option?.label==="string"&&ALLOWED_VISIBILITY.has(option.value)
+          ? [{value:option.value,label:option.label}]
+          : []
+      ):[]
+      return [{
+        key:"profile.visibility_scope",
+        label:typeof field.label==="string"?field.label:"Visibility",
+        input:"select",
+        required:field.required===true,
+        default:typeof field.default==="string"&&ALLOWED_VISIBILITY.has(field.default)?field.default:"private",
+        options
+      }]
+    }
+    return []
+  })
+}
 function boundedContract(contract:Record<string,any>){
   return {
     pac_type:contract.pac_type,
     contract_version:contract.contract_version,
-    required_fields:Array.isArray(contract.required_fields)?contract.required_fields:[],
-    optional_member_roles:Array.isArray(contract.optional_member_roles)?contract.optional_member_roles:[],
-    authority_effect:contract.authority_effect||"none",
-    resolver_policy:contract.resolver_policy||{},
-    release_policy:contract.release_policy||{}
+    questions:boundedQuestions(contract),
+    authority_effect:contract.authority_effect||"none"
   }
 }
 
@@ -69,6 +96,7 @@ export const onRequestGet:PagesFunction<PassageEnv>=async ({request,env})=>{
       standing:"profile_intake_ready",
       formed:existing?.standing!=="profile_not_formed",
       contract:boundedContract(contract),
+      resolved_profile_class:owner.subjectType==="individual"?"individual":null,
       authority_effect:"none"
     })
   }catch{
@@ -81,16 +109,13 @@ export const onRequestPost:PagesFunction<PassageEnv>=async ({request,env})=>{
   try{
     const owner=await session(request,env)
     const body=await request.json().catch(()=>null) as Record<string,unknown>|null
-    const profileClass=typeof body?.profile_class==="string"?body.profile_class.trim():""
     const displayLabel=typeof body?.display_label==="string"?body.display_label.trim():""
     const visibility=typeof body?.visibility_scope==="string"?body.visibility_scope.trim():"private"
+    const profileClass=owner.subjectType==="individual"?"individual":null
 
-    if(!ALLOWED_CLASSES.has(profileClass)||!displayLabel||displayLabel.length>160||!ALLOWED_VISIBILITY.has(visibility))
+    if(!profileClass) return json({standing:"profile_class_unresolved"},409)
+    if(!displayLabel||displayLabel.length>160||!ALLOWED_VISIBILITY.has(visibility))
       return json({standing:"profile_input_invalid"},400)
-    if(owner.subjectType==="individual"&&profileClass!=="individual")
-      return json({standing:"profile_class_subject_mismatch"},409)
-    if(owner.subjectType!=="individual"&&profileClass==="individual")
-      return json({standing:"profile_class_subject_mismatch"},409)
 
     const result=await rpc(env,"form_profile_pac_v1_internal",{
       p_envpac_key:owner.envpacKey,
