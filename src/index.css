@@ -7864,3 +7864,85 @@ body,
     overflow-wrap: anywhere;
   }
 }
+
+
+/* OYE ProfilePAC — PAC Base Contract v1 */
+.myenv-profile-pac {
+  border: 1px solid rgba(236, 231, 220, 0.28);
+  background: rgba(10, 15, 18, 0.78);
+  color: #f3efe7;
+  padding: clamp(18px, 3vw, 28px);
+  margin: 0 0 28px;
+  backdrop-filter: blur(14px);
+}
+
+.myenv-profile-pac .myenv-kicker,
+.myenv-profile-form > div > span,
+.myenv-profile-card > span {
+  display: block;
+  color: #aabecb;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.myenv-profile-pac h2 {
+  margin: 6px 0 8px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  font-weight: 500;
+}
+
+.myenv-profile-pac p {
+  line-height: 1.55;
+}
+
+.myenv-profile-form {
+  display: grid;
+  gap: 14px;
+}
+
+.myenv-profile-form label {
+  display: grid;
+  gap: 6px;
+  color: #d8d2c6;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.myenv-profile-form input,
+.myenv-profile-form select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(236, 231, 220, 0.25);
+  background: rgba(2, 6, 9, 0.66);
+  color: #f3efe7;
+  padding: 11px 12px;
+  font: inherit;
+}
+
+.myenv-profile-form input[readonly] {
+  color: #9fafb8;
+}
+
+.myenv-profile-form button {
+  justify-self: start;
+  border: 1px solid #e5ddd0;
+  background: #e5ddd0;
+  color: #11161a;
+  padding: 11px 16px;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.myenv-profile-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.myenv-profile-card small {
+  color: #aabecb;
+}
