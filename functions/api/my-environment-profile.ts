@@ -87,6 +87,10 @@ export const onRequestPost:PagesFunction<PassageEnv>=async ({request,env})=>{
 
     if(!ALLOWED_CLASSES.has(profileClass)||!displayLabel||displayLabel.length>160||!ALLOWED_VISIBILITY.has(visibility))
       return json({standing:"profile_input_invalid"},400)
+    if(owner.subjectType==="individual"&&profileClass!=="individual")
+      return json({standing:"profile_class_subject_mismatch"},409)
+    if(owner.subjectType!=="individual"&&profileClass==="individual")
+      return json({standing:"profile_class_subject_mismatch"},409)
 
     const result=await rpc(env,"form_profile_pac_v1_internal",{
       p_envpac_key:owner.envpacKey,
