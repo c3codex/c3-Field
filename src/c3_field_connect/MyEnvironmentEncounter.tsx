@@ -41,16 +41,26 @@ type ConnectionsPayload={
   entries?:ConnectionEntry[]
   reason?:string
 }
+type ProfileQuestion={
+  key:string
+  label:string
+  input:"text"|"select"
+  required:boolean
+  max_length?:number
+  placeholder?:string
+  default?:string
+  options?:Array<{value:string;label:string}>
+}
 type ProfileContract={
   pac_type:string
   contract_version:string
-  required_fields:string[]
-  optional_member_roles:Array<Record<string,unknown>>
+  questions:ProfileQuestion[]
   authority_effect:string
 }
 type ProfileIntakePayload={
   standing:string
   formed?:boolean
+  resolved_profile_class?:string|null
   contract?:ProfileContract
 }
 type ProfileProjectionPayload={
@@ -76,6 +86,7 @@ export default function MyEnvironmentEncounter(){
   const [connectionNotice,setConnectionNotice]=useState("")
   const [connectionBusy,setConnectionBusy]=useState(false)
   const [profileContract,setProfileContract]=useState<ProfileContract|null>(null)
+  const [resolvedProfileClass,setResolvedProfileClass]=useState<string|null>(null)
   const [profile,setProfile]=useState<ProfileProjectionPayload|null>(null)
   const [profileLabel,setProfileLabel]=useState("")
   const [profileVisibility,setProfileVisibility]=useState("private")
@@ -102,7 +113,12 @@ export default function MyEnvironmentEncounter(){
       }
       if(profileContractResult.status==="fulfilled"&&profileContractResult.value.ok){
         const contractBody=await profileContractResult.value.json() as ProfileIntakePayload
-        if(active&&contractBody.contract?.pac_type==="ProfilePAC") setProfileContract(contractBody.contract)
+        if(active&&contractBody.contract?.pac_type==="ProfilePAC"){
+          setProfileContract(contractBody.contract)
+          setResolvedProfileClass(contractBody.resolved_profile_class||null)
+          const visibilityQuestion=contractBody.contract.questions.find(question=>question.key==="profile.visibility_scope")
+          if(visibilityQuestion?.default) setProfileVisibility(visibilityQuestion.default)
+        }
       }
       if(profileResult.status==="fulfilled"&&profileResult.value.ok){
         const profileBody=await profileResult.value.json() as ProfileProjectionPayload
@@ -186,7 +202,6 @@ export default function MyEnvironmentEncounter(){
         method:"POST",
         headers:{"content-type":"application/json"},
         body:JSON.stringify({
-          profile_class:"individual",
           display_label:profileLabel.trim(),
           visibility_scope:profileVisibility
         })
@@ -223,6 +238,9 @@ export default function MyEnvironmentEncounter(){
     </main>
   }
 
+  const profileLabelQuestion=profileContract?.questions.find(question=>question.key==="profile.display_label")
+  const profileVisibilityQuestion=profileContract?.questions.find(question=>question.key==="profile.visibility_scope")
+
   return <main className="myenv-shell myenv-environment" aria-label="My Environment">
     <img className="myenv-backdrop" src={LIVE_BACKDROP} alt="" aria-hidden="true"/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
@@ -250,28 +268,25 @@ export default function MyEnvironmentEncounter(){
               </div>
               <label>
                 Profile type
-                <input value="Individual profile" readOnly aria-readonly="true"/>
+                <input value={resolvedProfileClass==="individual"?"Individual profile":"Resolving registered subject…"} readOnly aria-readonly="true"/>
               </label>
-              <label>
-                Display label
+              {profileLabelQuestion&&<label>
+                {profileLabelQuestion.label}
                 <input
                   value={profileLabel}
                   onChange={event=>setProfileLabel(event.target.value)}
-                  maxLength={160}
-                  placeholder="How should this profile be shown?"
-                  required
+                  maxLength={profileLabelQuestion.max_length||160}
+                  placeholder={profileLabelQuestion.placeholder||""}
+                  required={profileLabelQuestion.required}
                 />
-              </label>
-              <label>
-                Visibility
+              </label>}
+              {profileVisibilityQuestion&&<label>
+                {profileVisibilityQuestion.label}
                 <select value={profileVisibility} onChange={event=>setProfileVisibility(event.target.value)}>
-                  <option value="private">Private</option>
-                  <option value="environment">This environment</option>
-                  <option value="relational">Relational</option>
-                  <option value="public">Public</option>
+                  {(profileVisibilityQuestion.options||[]).map(option=><option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
-              </label>
-              <button type="submit" disabled={profileBusy||!profileContract||!profileLabel.trim()}>
+              </label>}
+              <button type="submit" disabled={profileBusy||!profileContract||resolvedProfileClass!=="individual"||!profileLabelQuestion||!profileVisibilityQuestion||!profileLabel.trim()}>
                 {profileBusy?"REGISTERING…":"REGISTER PROFILE"}
               </button>
             </form>}
