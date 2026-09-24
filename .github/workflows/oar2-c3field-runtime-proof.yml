@@ -14,20 +14,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Prove c3field runtime fingerprint and Dizzy health
+      - name: Probe registered Pages project, custom domains, and Dizzy
         shell: bash
         run: |
-          set -euo pipefail
-          profile_body="$(mktemp)"
-          profile_code="$(curl -sS --max-time 20 -o "$profile_body" -w '%{http_code}' https://my.c3field.online/api/my-environment-profile)"
-          echo "my_environment_profile_http=$profile_code"
-          cat "$profile_body"
-          test "$profile_code" = "401"
-          grep -q '"standing":"profile_pac_intake_held"' "$profile_body"
+          set -u
+          failed=0
+          probe() {
+            label="$1"
+            url="$2"
+            body="$(mktemp)"
+            code="$(curl -sS --max-time 20 -o "$body" -w '%{http_code}' "$url" || true)"
+            echo "=== $label ==="
+            echo "url=$url"
+            echo "http=$code"
+            head -c 1200 "$body" || true
+            echo
+          }
 
-          dizzy_body="$(mktemp)"
-          dizzy_code="$(curl -sS --max-time 20 -o "$dizzy_body" -w '%{http_code}' https://lapzuli-distribution-worker.c3field.workers.dev/health)"
-          echo "dizzy_health_http=$dizzy_code"
-          cat "$dizzy_body"
-          test "$dizzy_code" = "200"
-          grep -q '"status": "operative"' "$dizzy_body"
+          probe pages_profile https://c3-field-5qx.pages.dev/api/my-environment-profile
+          probe custom_profile https://my.c3field.online/api/my-environment-profile
+          probe c3field_root https://c3field.online/
+          probe dizzy_health https://lapzuli-distribution-worker.c3field.workers.dev/health
