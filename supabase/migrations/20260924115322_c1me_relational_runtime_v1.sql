@@ -372,7 +372,7 @@ insert into public.system_process_registry(
   required_oar_type,requires_operator_confirm,requires_preflight,requires_oar1_closeout,created_at,updated_at
 ) values (
   'c1me_relational_runtime_v1','c3_field','c1ME Relational Runtime v1','active',
-  'supabase/migrations/20260924120500_c1me_relational_runtime_v1.sql','operator_confirmed_registered',
+  'supabase/migrations/20260924115322_c1me_relational_runtime_v1.sql','operator_confirmed_registered',
   jsonb_build_object('operator','op044','invite_reference_per_invitation',true,
     'invite_submission_creates_connection',false,'authenticated_target_environment_finalizes_connection',true,
     'native_connection_one_relation_multiple_env_projections',true,'connection_messages_environment_operational_state',true,
