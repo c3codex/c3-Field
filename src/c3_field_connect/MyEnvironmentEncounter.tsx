@@ -92,6 +92,7 @@ export default function MyEnvironmentEncounter(){
   const [profileDisplayLabel,setProfileDisplayLabel]=useState("")
   const [profileVisibility,setProfileVisibility]=useState("private")
   const [profileNotice,setProfileNotice]=useState("")
+  const [profilePresentationAsset,setProfilePresentationAsset]=useState("")
 
   const [inviteMessage,setInviteMessage]=useState("")
   const [inviteInitiative,setInviteInitiative]=useState("")
@@ -178,6 +179,7 @@ export default function MyEnvironmentEncounter(){
         setProfileTruth(body.envpac.profile_pac||null)
         setProfileLoaded(true)
         setProfileDisplayLabel(body.owner?.display_name?.trim()||"")
+        setProfilePresentationAsset(body.presentation?.opening_visual_asset_key||"")
         document.title=body.owner?.display_name?body.owner.display_name+" | My Environment | c3 Community Partners":"My Environment | c3 Community Partners"
         setState(claim?"intro":"ready")
         void hydrateSecondary()
@@ -275,6 +277,21 @@ export default function MyEnvironmentEncounter(){
     }catch(error){setProfileNotice(error instanceof Error?error.message:"Profile-PAC could not be formed.")}
   }
 
+  async function savePresentation(event:FormEvent){
+    event.preventDefault();setProfileNotice("")
+    if(!data?.presentation?.owner_changeable){setProfileNotice("This EnvPAC presentation is not owner-changeable.");return}
+    try{
+      const response=await fetch("/api/my-environment-presentation",{
+        method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({opening_visual_asset_key:profilePresentationAsset.trim()})
+      })
+      const body=await response.json() as {ok?:boolean;standing?:string;reason?:string;presentation?:EnvPayload["presentation"]}
+      if(!response.ok||!body.ok||!body.presentation)throw new Error(body.reason||body.standing||"Environment presentation could not be updated.")
+      setData(current=>current?{...current,presentation:body.presentation||null}:current)
+      setProfileNotice("Environment presentation updated in this EnvPAC.")
+    }catch(error){setProfileNotice(error instanceof Error?error.message:"Environment presentation could not be updated.")}
+  }
+
   async function prepareInvite(event:FormEvent){
     event.preventDefault();setInviteNotice("");setInviteUrl("")
     try{
@@ -305,6 +322,12 @@ export default function MyEnvironmentEncounter(){
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
         <div className="myenv-thread-heading"><p className="myenv-kicker">PROFILE-PAC</p><h2>{primitive.display_label}</h2>
           <p>Complete the bounded profile only when you want a profile to become encounterable beyond this private environment.</p></div>
+        {data?.presentation&&<form className="myenv-thread-compose" onSubmit={savePresentation}>
+          <label>Environment presentation</label>
+          <input aria-label="Opening visual asset key" maxLength={240} value={profilePresentationAsset} onChange={e=>setProfilePresentationAsset(e.target.value)} disabled={!data.presentation.owner_changeable} placeholder="FREE media asset key"/>
+          <p>Current visual: {data.presentation.opening_visual_asset_key}</p>
+          <button type="submit" disabled={!data.presentation.owner_changeable||!profilePresentationAsset.trim()}>SAVE PRESENTATION</button>
+        </form>}
         {!profileLoaded
           ?<p className="myenv-runtime-warning">Profile-PAC state could not be resolved from this EnvPAC.</p>
           :profileHeld
@@ -411,7 +434,7 @@ export default function MyEnvironmentEncounter(){
     ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
     :null
 
-  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v1">
+  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v2">
     <img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
     <section className="myenv-place" aria-label="c1ME environment">
