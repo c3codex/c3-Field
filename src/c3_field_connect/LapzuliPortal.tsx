@@ -1,8 +1,82 @@
 import { useEffect, useState } from "react"
-import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import "./lapzuliPortal.css"
 
 type GovernedResult = "ACT" | "HLD" | "DNR"
+
+type FreeExecution = {
+  executionId: string | null
+  distributionAssetId: string | null
+  executorKey: string | null
+  channelKey: string | null
+  executionStatus: string | null
+  attemptNumber: number | null
+  executedAt: string | null
+  publishedAt: string | null
+  platformPostId: string | null
+  platformUrl: string | null
+  error: string | null
+  createdAt: string | null
+}
+
+type FreeAsset = {
+  distributionAssetKey: string | null
+  campaignId: string | null
+  platform: string | null
+  distributionType: string | null
+  status: string | null
+  bufferExportReady: boolean
+  reviewStatus: string | null
+  updatedAt: string | null
+}
+
+type FreeChannel = {
+  channelKey: string | null
+  executorKey: string | null
+  platform: string | null
+  accountName: string | null
+  channelIdentifier: string | null
+  status: string | null
+  updatedAt: string | null
+}
+
+type FreePac = {
+  pacKey: string
+  envpacKey: string | null
+  standing: string | null
+  isEffective: boolean
+  sourceAuthority: string | null
+  truth: {
+    campaignKey: string | null
+    campaignName: string | null
+    objective: string | null
+    canonicalUrl: string | null
+    lapzuliReady: boolean | null
+    activationState: string | null
+    distributionAuthorized: boolean | null
+    externalExecutionAuthorized: boolean | null
+  }
+  campaign: {
+    campaignKey: string | null
+    campaignName: string | null
+    objective: string | null
+    status: string | null
+    releaseState: string | null
+    reviewStatus: string | null
+    updatedAt: string | null
+  } | null
+  distributionAssets: FreeAsset[]
+  executions: FreeExecution[]
+  channels: FreeChannel[]
+}
+
+type FreeProjection = {
+  standing: string
+  projection?: string
+  authorityCreated?: boolean
+  encounterCreated?: boolean
+  pacs?: FreePac[]
+  reason?: string
+}
 
 type Encounter = {
   key: string
@@ -14,89 +88,129 @@ type Encounter = {
   evidenceUrl: string | null
 }
 
+function executionTime(execution: FreeExecution) {
+  const value=execution.publishedAt??execution.executedAt??execution.createdAt
+  const parsed=value?Date.parse(value):0
+  return Number.isFinite(parsed)?parsed:0
+}
+
+function readableReason(value: string | null) {
+  if(!value) return null
+  try {
+    const parsed=JSON.parse(value)
+    if(Array.isArray(parsed)) return parsed.map(String).join(" · ").replaceAll("_"," ")
+  } catch {
+    // Plain returned executor reason.
+  }
+  return value.replaceAll("_"," ")
+}
+
+function deniedRelease(value: string | null) {
+  const normalized=(value??"").toLowerCase()
+  return normalized.includes("do_not_release") || normalized.includes("dnr") || normalized.includes("rejected")
+}
+
+function encounterForAsset(pac: FreePac, asset: FreeAsset): Encounter {
+  const assetKey=asset.distributionAssetKey??"unresolved_asset"
+  const executions=pac.executions
+    .filter(execution=>execution.distributionAssetId===asset.distributionAssetKey)
+    .sort((a,b)=>executionTime(b)-executionTime(a))
+  const execution=executions[0]??null
+  const channel=execution?.channelKey
+    ? pac.channels.find(item=>item.channelKey===execution.channelKey)??null
+    : null
+
+  let result: GovernedResult="HLD"
+  let reason="Registered distribution asset awaiting bounded encounter"
+
+  if(deniedRelease(pac.campaign?.releaseState??null)){
+    result="DNR"
+    reason="Campaign release state does not permit distribution"
+  }else if(execution?.executionStatus==="published" && execution.platformUrl){
+    result="ACT"
+    reason="Destination evidence returned"
+  }else if(execution?.executionStatus==="held"){
+    reason=readableReason(execution.error)??"Returned execution hold"
+  }else if(execution?.executionStatus==="failed"){
+    reason=readableReason(execution.error)??"Execution attempt failed; authority unchanged"
+  }else if(execution?.executionStatus==="queued" || execution?.executionStatus==="prepared"){
+    reason=`${execution.executionStatus} awaiting returned destination evidence`
+  }else if(asset.status){
+    reason=`${asset.status.replaceAll("_"," ")}; no completed destination evidence`
+  }
+
+  return {
+    key:`${pac.pacKey}:${assetKey}:${execution?.executionId??"pending"}`,
+    surface:channel?.accountName??channel?.channelKey??asset.platform??"unresolved destination",
+    desk:pac.truth.campaignKey??pac.envpacKey??"campaign",
+    title:pac.campaign?.campaignName??pac.truth.campaignName??pac.pacKey,
+    result,
+    reason,
+    evidenceUrl:execution?.platformUrl??null,
+  }
+}
+
+function encountersFromPac(pac: FreePac): Encounter[] {
+  if(pac.distributionAssets.length>0) return pac.distributionAssets.map(asset=>encounterForAsset(pac,asset))
+
+  const distributionHeld=pac.truth.distributionAuthorized===false || pac.truth.externalExecutionAuthorized===false
+  return [{
+    key:`${pac.pacKey}:pac-truth`,
+    surface:"PAC",
+    desk:pac.truth.campaignKey??pac.envpacKey??"campaign",
+    title:pac.campaign?.campaignName??pac.truth.campaignName??pac.pacKey,
+    result:"HLD",
+    reason:distributionHeld
+      ? "PAC truth currently withholds external distribution"
+      : pac.truth.activationState
+        ? pac.truth.activationState.replaceAll("_"," ")
+        : "PAC registered; exact distribution bindings have not resolved",
+    evidenceUrl:null,
+  }]
+}
+
 export default function LapzuliPortal() {
-  const [encounters, setEncounters] = useState<Encounter[]>([])
-  const [error, setError] = useState<string | null>(null)
+  const [encounters,setEncounters]=useState<Encounter[]>([])
+  const [error,setError]=useState<string|null>(null)
 
-  useEffect(() => {
-    document.title = "Lapzuli | c3Ops"
-    if (supabaseConfigError) {
-      setError(supabaseConfigError)
-      return
-    }
+  useEffect(()=>{
+    document.title="Lapzuli | c3Ops"
+    let active=true
 
-    void Promise.all([
-      supabase.from("undrifted_distribution_report_v1").select("publication_object_key,desk_key,title,external_url,source_distribution_hold"),
-      supabase.from("lapzuli_route").select("route_key,publication_object_key,desk_key,outlet_key,metadata"),
-      supabase.from("measures_distribution_execution").select("execution_id,distribution_asset_id,execution_status,platform_url,executed_at,created_at"),
-    ]).then(([publicationResult, routeResult, executionResult]) => {
-      const firstError = publicationResult.error ?? routeResult.error ?? executionResult.error
-      if (firstError) {
-        setError(firstError.message)
-        return
-      }
-
-      const publications = new Map((publicationResult.data ?? []).map((row) => [row.publication_object_key, row]))
-      const executionsByAsset = new Map<string, typeof executionResult.data>()
-      for (const execution of executionResult.data ?? []) {
-        if (!execution.distribution_asset_id) continue
-        const rows = executionsByAsset.get(execution.distribution_asset_id) ?? []
-        rows.push(execution)
-        executionsByAsset.set(execution.distribution_asset_id, rows)
-      }
-
-      const normalized: Encounter[] = []
-      for (const route of routeResult.data ?? []) {
-        const publication = publications.get(route.publication_object_key)
-        if (!publication) continue
-        const metadata = route.metadata && typeof route.metadata === "object" && !Array.isArray(route.metadata) ? route.metadata as Record<string, unknown> : {}
-        const assetKey = typeof metadata.distribution_asset_key === "string" ? metadata.distribution_asset_key : null
-        const executions = assetKey ? executionsByAsset.get(assetKey) ?? [] : []
-        const execution = [...executions].sort((a, b) => Date.parse(b.executed_at ?? b.created_at ?? "") - Date.parse(a.executed_at ?? a.created_at ?? ""))[0] ?? null
-
-        let result: GovernedResult | null = null
-        let reason = ""
-        if (publication.source_distribution_hold === true) {
-          result = "HLD"
-          reason = "Registry source distribution hold"
-        } else if (execution?.execution_status === "held") {
-          result = "HLD"
-          reason = "Returned execution hold"
-        } else if (execution?.execution_status === "failed") {
-          result = "DNR"
-          reason = "Permitted passage did not resolve"
-        } else if (execution?.execution_status === "published" && execution.platform_url) {
-          result = "ACT"
-          reason = "Active Current Trace returned by destination"
+    void fetch("/api/free-lapzuli-pac",{cache:"no-store",headers:{accept:"application/json"}})
+      .then(async response=>{
+        const payload=await response.json() as FreeProjection
+        if(!response.ok || payload.standing!=="free_pac_projection" || !Array.isArray(payload.pacs)){
+          throw new Error(payload.reason??payload.standing??"FREE PAC projection unavailable")
         }
-        if (!result) continue
+        if(payload.authorityCreated!==false || payload.encounterCreated!==false){
+          throw new Error("FREE PAC projection boundary mismatch")
+        }
+        if(!active) return
+        setEncounters(payload.pacs.flatMap(encountersFromPac))
+        setError(null)
+      })
+      .catch((reason:unknown)=>{
+        if(!active) return
+        setEncounters([])
+        setError(reason instanceof Error?reason.message:"FREE PAC projection unavailable")
+      })
 
-        normalized.push({
-          key: `${route.route_key}:${execution?.execution_id ?? publication.publication_object_key}`,
-          surface: route.outlet_key ?? "unresolved_surface",
-          desk: route.desk_key ?? publication.desk_key ?? "unclassified",
-          title: publication.title ?? publication.publication_object_key,
-          result,
-          reason,
-          evidenceUrl: execution?.platform_url ?? publication.external_url,
-        })
-      }
-      setEncounters(normalized)
-    }).catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "Registry-backed Lapzuli readback unavailable"))
-  }, [])
+    return()=>{active=false}
+  },[])
 
-  const counts = encounters.reduce<Record<GovernedResult, number>>((acc, encounter) => {
-    acc[encounter.result] += 1
+  const counts=encounters.reduce<Record<GovernedResult,number>>((acc,encounter)=>{
+    acc[encounter.result]+=1
     return acc
-  }, { ACT: 0, HLD: 0, DNR: 0 })
+  },{ACT:0,HLD:0,DNR:0})
 
   return (
-    <main className="lapzuli-portal" data-result-vocabulary="ACT|HLD|DNR">
+    <main className="lapzuli-portal" data-result-vocabulary="ACT|HLD|DNR" data-truth-source="FREE→PAC">
       <header className="lapzuli-hero">
         <div>
-          <p className="lapzuli-kicker">c3Ops · First Portal</p>
+          <p className="lapzuli-kicker">c3Ops · FREE → PAC</p>
           <h1>Lapzuli</h1>
-          <p>Registry-bound intent → encounter → ACT | HLD | DNR → return evidence → Optics → Current.</p>
+          <p>PAC brings the truth. Runtime computes the projection. Authority stays upstream.</p>
         </div>
         <dl className="lapzuli-summary">
           <div><dt>ACT</dt><dd>{counts.ACT}</dd></div>
@@ -107,10 +221,10 @@ export default function LapzuliPortal() {
 
       {error && <section className="lapzuli-state"><strong>HLD</strong><p>{error}</p></section>}
 
-      <section className="lapzuli-grid" aria-label="Surface Desk Encounter Result Evidence">
-        {encounters.map((encounter) => (
+      <section className="lapzuli-grid" aria-label="PAC Destination Encounter Result Evidence">
+        {encounters.map(encounter=>(
           <article className="lapzuli-card" data-result={encounter.result} key={encounter.key}>
-            <div><span>{encounter.surface}</span><span>{encounter.desk.replaceAll("_", " ")}</span></div>
+            <div><span>{encounter.surface}</span><span>{encounter.desk.replaceAll("_"," ")}</span></div>
             <strong>{encounter.result}</strong>
             <h2>{encounter.title}</h2>
             <p>{encounter.reason}</p>
