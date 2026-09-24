@@ -1,25 +1,35 @@
 import {json, type PassageEnv} from "../_lib/c1-passage"
 import {resolveEnvironmentSession} from "../_lib/env-session"
+import {
+  InitiativeSurfaceResolutionError,
+  isInitiativeSurfaceHostname,
+  normalizeInitiativeSurfaceHostname,
+  resolveInitiativeSurfaceHost,
+} from "../_lib/initiative-surface-host"
 
 type R2ObjectBody={body:ReadableStream|null;size:number;httpEtag?:string;range?:{offset:number;length:number};writeHttpMetadata?:(headers:Headers)=>void}
 type R2BucketLike={get:(key:string,options?:{range?:{offset:number;length:number}})=>Promise<R2ObjectBody|null>}
 type FreeMediaEnv=PassageEnv&{C1ME_ENV_READY?:R2BucketLike;C3_FIELD_MEDIA?:R2BucketLike}
+type RegistryRow=Record<string,unknown>
 
-const PUBLIC_SUPABASE_ASSETS=new Set([
-  "c3_field_connect_hero_backdrop_v1",
-  "c3_field_mdm_connect_room_backdrop_v1",
-  "c3_field_mdm_capacity_projects_backdrop_v1",
-  "c3_field_mdm_serene_place_backdrop_v1",
-  "c3_field_mdm_c3_center_og_master_v1",
-  "c3_field_handcrafted_emblem_render_v1",
-])
-const ALLOWED_ASSETS=new Set([
+const PERSONAL_MEDIA_ASSETS=new Set([
   "c3_field_c1me_arrival_video_v1",
   "c3_field_c1me_live_backdrop_v1",
-  "c3_field_public_intro_million_dollar_mission_v1",
-  "c3_field_public_intro_current_v1",
-  ...PUBLIC_SUPABASE_ASSETS,
 ])
+
+class FreeMediaError extends Error{
+  status:number
+  constructor(reason:string,status=409){
+    super(reason)
+    this.name="FreeMediaError"
+    this.status=status
+  }
+}
+
+function record(value:unknown):Record<string,unknown>{
+  return value && typeof value==="object" && !Array.isArray(value) ? value as Record<string,unknown> : {}
+}
+function str(value:unknown){return typeof value==="string"&&value.trim()?value.trim():null}
 
 function cookie(request:Request,name:string){
   const source=request.headers.get("cookie")||""
@@ -30,33 +40,47 @@ function cookie(request:Request,name:string){
   return null
 }
 
+async function readRows(env:FreeMediaEnv,table:string,select:string,filters:Record<string,string>){
+  if(!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY) throw new FreeMediaError("server_configuration",503)
+  const url=new URL(env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/"+table)
+  url.searchParams.set("select",select)
+  for(const [key,value] of Object.entries(filters)) url.searchParams.set(key,value)
+  const response=await fetch(url.toString(),{
+    headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY},
+    redirect:"manual",
+    signal:AbortSignal.timeout(12000)
+  })
+  if(!response.ok) throw new FreeMediaError("registry_read_failed",503)
+  const rows=await response.json() as unknown
+  if(!Array.isArray(rows)) throw new FreeMediaError("registry_read_failed",503)
+  return rows as RegistryRow[]
+}
+
 async function readAsset(env:FreeMediaEnv,assetKey:string){
-  if(!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("server_configuration")
-  const url=new URL(env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/c3ops_asset_record")
-  url.searchParams.set("select","asset_key,owning_system_key,standing,mime_type,byte_size,content_hash,hash_algorithm,authoritative_custody_provider,authoritative_custody_identifier,authoritative_custody_location,public_retrieval_standing,current_free_binding")
-  url.searchParams.set("asset_key","eq."+assetKey)
-  url.searchParams.set("owning_system_key","eq.c3_field")
-  const response=await fetch(url.toString(),{headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY},redirect:"manual",signal:AbortSignal.timeout(12000)})
-  if(!response.ok) throw new Error("asset_read_failed")
-  const rows=await response.json() as Record<string,unknown>[]
-  if(!Array.isArray(rows)||rows.length!==1) throw new Error("asset_unavailable")
+  const rows=await readRows(
+    env,
+    "c3ops_asset_record",
+    "asset_key,owning_system_key,standing,mime_type,byte_size,content_hash,hash_algorithm,authoritative_custody_provider,authoritative_custody_identifier,authoritative_custody_location,public_retrieval_standing,current_free_binding",
+    {asset_key:"eq."+assetKey,owning_system_key:"eq.c3_field"}
+  )
+  if(rows.length!==1) throw new FreeMediaError("asset_unavailable",404)
   return rows[0]
 }
 
-function cacheHeaders(asset:Record<string,unknown>){
+function cacheHeaders(asset:RegistryRow){
   const headers=new Headers({"cache-control":"private, max-age=300","x-content-type-options":"nosniff","referrer-policy":"no-referrer"})
   if(typeof asset.mime_type==="string") headers.set("content-type",asset.mime_type)
   if(typeof asset.content_hash==="string") headers.set("etag",`"${asset.content_hash}"`)
   return headers
 }
 
-async function resolveSupabase(asset:Record<string,unknown>,env:FreeMediaEnv){
+async function resolveSupabase(asset:RegistryRow,env:FreeMediaEnv){
   const bucket=asset.authoritative_custody_identifier
   const object=asset.authoritative_custody_location
-  if(bucket!=="c3-field-media"||typeof object!=="string"||!env.SUPABASE_URL) throw new Error("custody_mismatch")
+  if(bucket!=="c3-field-media"||typeof object!=="string"||!env.SUPABASE_URL) throw new FreeMediaError("custody_mismatch")
   const url=env.SUPABASE_URL.replace(/\/$/,"")+"/storage/v1/object/public/"+encodeURIComponent(bucket)+"/"+object.split("/").map(encodeURIComponent).join("/")
   const response=await fetch(url,{redirect:"manual",signal:AbortSignal.timeout(12000)})
-  if(!response.ok||!response.body) throw new Error("provider_unavailable")
+  if(!response.ok||!response.body) throw new FreeMediaError("provider_unavailable",503)
   const headers=cacheHeaders(asset)
   const length=response.headers.get("content-length")
   if(length) headers.set("content-length",length)
@@ -96,15 +120,21 @@ export function r2BindingKey(custodyIdentifier:unknown){
   return null
 }
 
-async function resolvePublicR2Fallback(asset:Record<string,unknown>,request:Request){
-  if(asset.authoritative_custody_identifier!=="c3-field-media"||typeof asset.authoritative_custody_location!=="string") throw new Error("custody_mismatch")
+export function normalizedProvider(value:unknown){
+  return typeof value==="string"
+    ? value.trim().toLowerCase().replace(/[\s-]+/g,"_")
+    : ""
+}
+
+async function resolvePublicR2Fallback(asset:RegistryRow,request:Request){
+  if(asset.authoritative_custody_identifier!=="c3-field-media"||typeof asset.authoritative_custody_location!=="string") throw new FreeMediaError("custody_mismatch")
   const object=asset.authoritative_custody_location.split("/").map(part=>encodeURIComponent(part)).join("/")
   const source="https://field-media.c3field.online/"+object
   const upstreamHeaders=new Headers()
   const range=request.headers.get("range")
   if(range) upstreamHeaders.set("range",range)
   const response=await fetch(source,{headers:upstreamHeaders,redirect:"manual",signal:AbortSignal.timeout(20000)})
-  if((response.status!==200&&response.status!==206)||!response.body) throw new Error("provider_unavailable")
+  if((response.status!==200&&response.status!==206)||!response.body) throw new FreeMediaError("provider_unavailable",503)
   const headers=cacheHeaders(asset)
   for(const name of ["content-length","content-range","accept-ranges","last-modified"]){
     const value=response.headers.get(name)
@@ -114,20 +144,20 @@ async function resolvePublicR2Fallback(asset:Record<string,unknown>,request:Requ
   return new Response(response.body,{status:response.status,headers})
 }
 
-async function resolveBoundR2(asset:Record<string,unknown>,env:FreeMediaEnv,request:Request){
+async function resolveBoundR2(asset:RegistryRow,env:FreeMediaEnv,request:Request){
   const object=asset.authoritative_custody_location
   const bindingKey=r2BindingKey(asset.authoritative_custody_identifier)
-  if(typeof object!=="string"||!bindingKey) throw new Error("custody_mismatch")
+  if(typeof object!=="string"||!bindingKey) throw new FreeMediaError("custody_mismatch")
   const bucket=env[bindingKey]
   if(!bucket){
     if(bindingKey==="C3_FIELD_MEDIA") return await resolvePublicR2Fallback(asset,request)
-    throw new Error("r2_binding_unavailable")
+    throw new FreeMediaError("r2_binding_unavailable",503)
   }
 
   const total=typeof asset.byte_size==="number"&&Number.isSafeInteger(asset.byte_size)&&asset.byte_size>0
     ? asset.byte_size
     : null
-  if(!total) throw new Error("asset_size_unavailable")
+  if(!total) throw new FreeMediaError("asset_size_unavailable",503)
 
   const range=parseByteRange(request.headers.get("range"),total)
   const headers=cacheHeaders(asset)
@@ -141,7 +171,7 @@ async function resolveBoundR2(asset:Record<string,unknown>,env:FreeMediaEnv,requ
 
   const options=range.kind==="range"?{range:{offset:range.offset,length:range.length}}:undefined
   const resolved=await bucket.get(object,options)
-  if(!resolved||!resolved.body) throw new Error("provider_unavailable")
+  if(!resolved||!resolved.body) throw new FreeMediaError("provider_unavailable",503)
 
   if(range.kind==="range"){
     headers.set("content-range",`bytes ${range.offset}-${range.end}/${total}`)
@@ -153,22 +183,129 @@ async function resolveBoundR2(asset:Record<string,unknown>,env:FreeMediaEnv,requ
   return new Response(resolved.body,{status:200,headers})
 }
 
+async function resolveNativeCustody(asset:RegistryRow,env:FreeMediaEnv,request:Request){
+  const provider=normalizedProvider(asset.authoritative_custody_provider)
+  if(provider==="cloudflare_r2") return await resolveBoundR2(asset,env,request)
+  if(provider==="supabase") return await resolveSupabase(asset,env)
+  throw new FreeMediaError("free_media_provider_not_registered")
+}
+
+async function canonicalPublicIntroPacKey(env:FreeMediaEnv){
+  const rows=await readRows(
+    env,
+    "c3_environment",
+    "env_key,system_key,standing,is_active,is_canonical,metadata",
+    {
+      env_key:"eq.env_c3_community_connect",
+      system_key:"eq.c3_field",
+      standing:"eq.governed_environment",
+      is_active:"eq.true",
+      is_canonical:"eq.true",
+    }
+  )
+  if(rows.length!==1) throw new FreeMediaError("canonical_c1me_unavailable",503)
+  const key=str(record(rows[0].metadata).public_intro_webpac_key)
+  if(!key) throw new FreeMediaError("public_intro_webpac_unbound",423)
+  return key
+}
+
+async function publicPacKeyForRequest(env:FreeMediaEnv,request:Request){
+  const host=normalizeInitiativeSurfaceHostname(new URL(request.url).hostname)
+  if(isInitiativeSurfaceHostname(host)){
+    return (await resolveInitiativeSurfaceHost(env,host)).webpacKey
+  }
+  if(host==="c3field.online"||host==="www.c3field.online"){
+    return await canonicalPublicIntroPacKey(env)
+  }
+  throw new FreeMediaError("public_media_surface_unregistered",404)
+}
+
+async function requireEligiblePublicPac(env:FreeMediaEnv,pacKey:string){
+  const rows=await readRows(
+    env,
+    "c3_pac",
+    "pac_key,envpac_key,pac_type,version,standing,is_effective,metadata",
+    {pac_key:"eq."+pacKey}
+  )
+  if(rows.length!==1) throw new FreeMediaError("public_webpac_unavailable",423)
+  const pac=rows[0]
+  const metadata=record(pac.metadata)
+  if(
+    pac.pac_type!=="c3WebPac"||
+    pac.is_effective!==true||
+    metadata.completeness!=="pass"||
+    metadata.public_release_authorized!==true||
+    metadata.runtime_release_authorized!==true
+  ) throw new FreeMediaError("public_webpac_held",423)
+  return pac
+}
+
+async function requirePacRuntimeBinding(env:FreeMediaEnv,pacKey:string,assetKey:string,asset:RegistryRow){
+  const rows=await readRows(
+    env,
+    "c3_pac_runtime_binding",
+    "binding_key,pac_key,media_role,provider,bucket_name,object_path,runtime_uri,standing,metadata",
+    {
+      pac_key:"eq."+pacKey,
+      standing:"eq.active",
+      metadata:"cs."+JSON.stringify({source_asset_key:assetKey}),
+    }
+  )
+  if(rows.length===0) throw new FreeMediaError("pac_media_binding_unavailable",423)
+  if(rows.length!==1) throw new FreeMediaError("pac_media_binding_collision",409)
+  const binding=rows[0]
+  const metadata=record(binding.metadata)
+
+  if(metadata.source_asset_key!==assetKey) throw new FreeMediaError("pac_media_asset_mismatch")
+  if(normalizedProvider(binding.provider)!==normalizedProvider(asset.authoritative_custody_provider))
+    throw new FreeMediaError("pac_media_provider_mismatch")
+  if(binding.bucket_name!==asset.authoritative_custody_identifier)
+    throw new FreeMediaError("pac_media_bucket_mismatch")
+  if(binding.object_path!==asset.authoritative_custody_location)
+    throw new FreeMediaError("pac_media_object_mismatch")
+
+  const freeBinding=str(asset.current_free_binding)
+  const runtimeUri=str(binding.runtime_uri)
+  if(runtimeUri&&freeBinding&&runtimeUri!==freeBinding)
+    throw new FreeMediaError("pac_media_runtime_uri_mismatch")
+
+  return binding
+}
+
+function addPacProof(response:Response,pacKey:string,binding:RegistryRow){
+  response.headers.set("x-c3-pac-key",pacKey)
+  if(typeof binding.binding_key==="string") response.headers.set("x-c3-media-binding",binding.binding_key)
+  if(typeof binding.media_role==="string") response.headers.set("x-c3-media-role",binding.media_role)
+  return response
+}
+
 export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
   try{
     const assetKey=new URL(request.url).searchParams.get("asset")||""
-    if(!ALLOWED_ASSETS.has(assetKey)) return json({standing:"free_media_not_registered"},404)
+    if(!assetKey) return json({standing:"free_media_asset_required"},400)
+
     const asset=await readAsset(env,assetKey)
-    const isPublicAsset=(PUBLIC_SUPABASE_ASSETS.has(assetKey)||assetKey==="c3_field_public_intro_million_dollar_mission_v1"||assetKey==="c3_field_public_intro_current_v1")&&asset.public_retrieval_standing==="bounded_public_runtime"
-    if(!isPublicAsset){
-      const sessionCookie=cookie(request,"c3_env_session")
-      if(!sessionCookie) return json({standing:"environment_claim_required"},401)
-      await resolveEnvironmentSession(sessionCookie,env)
+    if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual")
+      return json({standing:"free_media_standing_held"},409)
+
+    const isPublicAsset=asset.public_retrieval_standing==="bounded_public_runtime"
+    if(isPublicAsset){
+      const pacKey=await publicPacKeyForRequest(env,request)
+      await requireEligiblePublicPac(env,pacKey)
+      const binding=await requirePacRuntimeBinding(env,pacKey,assetKey,asset)
+      return addPacProof(await resolveNativeCustody(asset,env,request),pacKey,binding)
     }
-    if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual") return json({standing:"free_media_standing_held"},409)
-    if(asset.authoritative_custody_provider==="Cloudflare R2") return await resolveBoundR2(asset,env,request)
-    if((assetKey==="c3_field_c1me_live_backdrop_v1"||PUBLIC_SUPABASE_ASSETS.has(assetKey))&&asset.authoritative_custody_provider==="supabase") return await resolveSupabase(asset,env)
-    return json({standing:"free_media_provider_not_registered"},409)
+
+    if(!PERSONAL_MEDIA_ASSETS.has(assetKey)) return json({standing:"free_media_not_registered"},404)
+    const sessionCookie=cookie(request,"c3_env_session")
+    if(!sessionCookie) return json({standing:"environment_claim_required"},401)
+    await resolveEnvironmentSession(sessionCookie,env)
+    return await resolveNativeCustody(asset,env,request)
   }catch(error){
+    if(error instanceof InitiativeSurfaceResolutionError)
+      return json({standing:"free_media_held",reason:error.reasonCode},error.status)
+    if(error instanceof FreeMediaError)
+      return json({standing:"free_media_held",reason:error.message},error.status)
     const reason=error instanceof Error?error.message:"free_media_unavailable"
     return json({standing:"free_media_held",reason},503)
   }
