@@ -41,22 +41,20 @@ async function requireCanopyAuthority(request:Request,env:PassageEnv){
   if(!raw) throw new CanopyError("Open your environment again to continue.",401,"environment_session_required")
   let session:EnvironmentSession
   try{session=await resolveEnvironmentSession(raw,env)}catch{throw new CanopyError("Your environment session is no longer available.",401,"environment_session_invalid")}
-  const bindingKey="c1me_mgs_binding:"+session.envKey+":v0_1"
-  const authorityKey="c1me_canopy_reference_controls_v1:implementation_authority:"+session.envKey
-  const [environmentRows,relationshipRows,consentRows,bindingRows,evaluationRows,processRows,authorityRows,capabilityRows]=await Promise.all([
-    readRows(env,"c3_environment","env_key,environment_class,standing,is_active,metadata",{env_key:"eq."+session.envKey,limit:"1"}),
-    readRows(env,"crs_relationship","relationship_key,relationship_standing,is_active",{relationship_key:"eq."+session.subjectKey,is_active:"eq.true",limit:"1"}),
-    readRows(env,"crs_consent","consent_key,consent_scope,consent_state,withdrawn_at",{relationship_key:"eq."+session.subjectKey,consent_scope:"eq.c1_connect_relationship",consent_state:"eq.granted",withdrawn_at:"is.null",order:"granted_at.desc",limit:"1"}),
-    readRows(env,"measures_persistence_state","persistence_key,standing,governed_state",{persistence_key:"eq."+bindingKey,object_type:"eq.minimum_governed_standard_binding",standing:"eq.current",limit:"1"}),
-    readRows(env,"measures_persistence_state","persistence_key,standing,governed_state,persisted_at",{environment_key:"eq."+session.envKey,object_type:"eq.minimum_governed_standard_evaluation",standing:"eq.minimum_governed_standard_satisfied",order:"persisted_at.desc",limit:"1"}),
-    readRows(env,"system_process_registry","process_key,process_status,authority_state,metadata",{process_key:"eq.c1me_canopy_reference_controls_v1",process_status:"eq.active",limit:"1"}),
-    readRows(env,"measures_persistence_state","persistence_key,standing,governed_state",{persistence_key:"eq."+authorityKey,object_type:"eq.bounded_implementation_authority",standing:"eq.authorized_for_bounded_implementation",limit:"1"}),
-    readRows(env,"c3_envpac_capability_grant","capability_key,capability,standing",{envpac_key:"eq."+session.envpacKey,standing:"eq.active"})
-  ])
-  const environment=environmentRows[0],relationship=relationshipRows[0],binding=bindingRows[0],evaluation=evaluationRows[0],process=processRows[0],authority=authorityRows[0]
-  const em=environment?.metadata as Row|undefined,bg=binding?.governed_state as Row|undefined,eg=evaluation?.governed_state as Row|undefined,ag=authority?.governed_state as Row|undefined
-  if(!environment || environment.environment_class!=="c3me_individual_environment" || environment.standing!=="c1_connected" || environment.is_active!==true || em?.current!=="C1" || em?.c1_standing!=="c1_C1_persisted" || em?.c2_standing!=="not_created" || !relationship || relationship.relationship_standing!=="c1_C1_persisted" || relationship.is_active!==true || consentRows.length!==1 || !binding || bg?.mgs_key!=="c1me_minimum_governed_standard_v0_1" || bg?.target_envpac_key!==session.envpacKey || bg?.scope_match!==true || !Array.isArray(bg?.unresolved_holds) || bg.unresolved_holds.length!==0 || !evaluation || eg?.result!=="minimum_governed_standard_satisfied" || eg?.mgs_key!=="c1me_minimum_governed_standard_v0_1" || eg?.target_envpac_key!==session.envpacKey || eg?.requested_progression!=="bounded_c1_implementation" || !process || process.authority_state!=="operator_confirmed_bounded_control_surface" || !authority || ag?.target_envpac_key!==session.envpacKey || ag?.runtime_release_authorized!==true || capabilityRows.length!==0)
-    throw new CanopyError("My Canopy is held because your current c1 conditions no longer match its implementation authority.")
+  const response=await rest(env,"rpc/resolve_c1me_envpac_primitives_internal",{
+    method:"POST",headers:{"content-type":"application/json"},
+    body:JSON.stringify({p_relationship_key:session.subjectKey})
+  })
+  const resolution=await response.json() as Row
+  const primitives=Array.isArray(resolution.primitives)?resolution.primitives as Row[]:[]
+  const canopy=primitives.find(row=>row.primitive_key==="canopy")
+  if(resolution.resolution!=="existing_c1"||
+     resolution.relationship_ref!==session.subjectKey||
+     resolution.env_key!==session.envKey||
+     resolution.envpac_ref!==session.envpacKey||
+     resolution.primitive_resolution!=="envpac_resolved"||
+     !canopy)
+    throw new CanopyError("My Canopy is held because the current EnvPAC does not expose the Canopy primitive.")
   return session
 }
 function assertKeys(body:Row,allowed:string[]){if(Object.keys(body).some(key=>!allowed.includes(key)))throw new CanopyError("That Canopy request contains unsupported fields.",400,"invalid_canopy_request")}
@@ -76,9 +74,14 @@ function sortOrder(value:unknown){if(value===undefined||value===null||value===""
 async function ownedReference(env:PassageEnv,session:EnvironmentSession,key:string){const rows=await readRows(env,"c3_envpac_canopy_reference","reference_key,surface_label,display_label,external_url,handle,sort_order,reference_state",{reference_key:"eq."+key,envpac_key:"eq."+session.envpacKey,owner_subject_key:"eq."+session.subjectKey,reference_state:"eq.active",limit:"1"});if(!rows[0])throw new CanopyError("That Canopy reference is unavailable.",404,"canopy_reference_unavailable");return rows[0]}
 async function event(env:PassageEnv,session:EnvironmentSession,eventType:string,key:string|null,eventData:Row={}){await rest(env,"c3_envpac_canopy_event",{method:"POST",headers:{"content-type":"application/json","prefer":"return=minimal"},body:JSON.stringify({envpac_key:session.envpacKey,reference_key:key,owner_subject_key:session.subjectKey,event_type:eventType,event_data:eventData})})}
 async function environmentShareReference(env:PassageEnv,session:EnvironmentSession){
-  const existing=await readRows(env,"c3_env_share_reference","share_reference,source_env_key,source_envpac_key,owner_subject_key,share_state",{source_env_key:"eq."+session.envKey,source_envpac_key:"eq."+session.envpacKey,owner_subject_key:"eq."+session.subjectKey,share_state:"eq.active",limit:"1"})
-  if(existing[0]?.share_reference)return String(existing[0].share_reference)
-  const response=await rest(env,"c3_env_share_reference",{method:"POST",headers:{"content-type":"application/json","prefer":"return=representation"},body:JSON.stringify({source_env_key:session.envKey,source_envpac_key:session.envpacKey,owner_subject_key:session.subjectKey,metadata:{reference_class:"opaque_encounter_provenance",source_process:"c1me_canopy_reference_controls_v1",relationship_created:false,standing_created:false,public_profile_created:false}})})
+  const response=await rest(env,"c3_env_share_reference",{
+    method:"POST",headers:{"content-type":"application/json","prefer":"return=representation"},
+    body:JSON.stringify({
+      source_env_key:session.envKey,source_envpac_key:session.envpacKey,owner_subject_key:session.subjectKey,
+      metadata:{reference_class:"opaque_encounter_provenance",source_process:"c1me_relational_runtime_v1",
+        relationship_created:false,standing_created:false,public_profile_created:false,personalized_invite:false}
+    })
+  })
   const rows=await response.json() as Row[]
   if(!rows[0]?.share_reference)throw new CanopyError("Invite Connection is temporarily unavailable.",503,"invite_connection_unavailable")
   return String(rows[0].share_reference)

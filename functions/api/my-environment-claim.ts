@@ -12,6 +12,18 @@ async function ensureCurrent(relationshipKey:string,env:PassageEnv){
   return response.json() as Promise<Record<string,unknown>>
 }
 
+
+async function finalizeInviteAcceptance(relationshipKey:string,envKey:string,envpacKey:string,env:PassageEnv){
+  if(!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("server_configuration")
+  const response=await fetch(env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/rpc/finalize_c1me_invite_connections_internal",{
+    method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
+    headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY,"content-type":"application/json"},
+    body:JSON.stringify({p_target_relationship_key:relationshipKey,p_target_env_key:envKey,p_target_envpac_key:envpacKey})
+  })
+  if(!response.ok) throw new Error("invite_acceptance_unavailable")
+  return response.json() as Promise<Record<string,unknown>>
+}
+
 export const onRequestPost: PagesFunction<PassageEnv> = async ({request,env}) => {
   try {
     const origin=new URL(request.url).origin
@@ -27,7 +39,8 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request,env}) =>
     const current=await ensureCurrent(claim.relationshipKey,env)
     if(current.resolution!=="existing_c1" || current.env_key!==claim.envKey || current.envpac_ref!==claim.envpacKey) throw new Error("current_mismatch")
     const session=await createEnvironmentSession(claim,env)
-    const response=json({accepted:true,next_url:"/my-environment"})
+    const inviteAcceptance=await finalizeInviteAcceptance(claim.relationshipKey,claim.envKey,claim.envpacKey,env).catch(()=>({finalized:false,reason_code:"invite_acceptance_unavailable"}))
+    const response=json({accepted:true,next_url:"/my-environment",invite_acceptance:inviteAcceptance})
     response.headers.append("set-cookie",environmentSessionCookie(session.token))
     return response
   } catch {

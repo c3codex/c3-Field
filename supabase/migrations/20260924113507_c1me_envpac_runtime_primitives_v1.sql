@@ -118,7 +118,7 @@ insert into public.system_process_registry(
   required_oar_type,requires_operator_confirm,requires_preflight,requires_oar1_closeout,created_at,updated_at
 ) values (
   'c1me_envpac_primitives_v1','c3_field','c1ME EnvPAC Runtime Primitives v1','active',
-  'supabase/migrations/20260924114000_c1me_envpac_runtime_primitives_v1.sql','operator_confirmed_registered',
+  'supabase/migrations/20260924113507_c1me_envpac_runtime_primitives_v1.sql','operator_confirmed_registered',
   jsonb_build_object(
     'operator','op044','primitive_count',6,
     'primitive_keys',jsonb_build_array('personalize','profile_pac','ledger','canopy','native_connections','invite_connection'),

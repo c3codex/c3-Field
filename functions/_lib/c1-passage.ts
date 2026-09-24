@@ -256,6 +256,12 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     stage = "owner_reentry"
     const reentry = await rpc("resolve_c1_owner_reentry", {p_primary_email:body.email})
     if (reentry.accepted === true) {
+      if(body.sourceEnvironmentShare?.share_reference){
+        await rpc("record_c1me_invite_acceptance_pending",{
+          p_share_reference:body.sourceEnvironmentShare.share_reference,
+          p_target_relationship_key:reentry.relationship_key
+        }).catch(()=>null)
+      }
       const claim = await signedOwnerClaim(reentry.relationship_key,reentry.env_key,reentry.envpac_key,env,deps.now())
       await sendEnvironmentHandoff(reentry,claim,origin,env,deps,"reentry").catch(()=>false)
       return continuationRequired()
@@ -278,6 +284,12 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
         captured.standing_created !== false || captured.current_created !== false || captured.persistence_created !== false)
       return verificationRequired()
     candidate = true
+    if(body.sourceEnvironmentShare?.share_reference){
+      await rpc("record_c1me_invite_acceptance_pending",{
+        p_share_reference:body.sourceEnvironmentShare.share_reference,
+        p_target_relationship_key:captured.relationship_key
+      }).catch(()=>null)
+    }
     stage = "verification_issue"
     await issueAndSendVerification(captured.relationship_key,body.email,body.name,0,env,deps)
     return verificationRequired()
