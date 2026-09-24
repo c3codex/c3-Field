@@ -1,0 +1,29 @@
+name: OAR2 EnvPAC root compile proof
+
+on:
+  push:
+    branches:
+      - oar2/envpac-root-profilepac-oye
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Typecheck app
+        run: npx tsc -p tsconfig.app.json --noEmit
+      - name: Vite build
+        run: npm run build -- --mode c3field --outDir dist
