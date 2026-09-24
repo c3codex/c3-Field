@@ -13,7 +13,7 @@ async function resolveShareReference(env:PassageEnv,value:unknown){
   if(typeof value!=="string" || !shareShape.test(value)) throw new Error("share_reference_shape")
   if(!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("share_reference_configuration")
   const url=new URL(env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/c3_env_share_reference")
-  url.searchParams.set("select","share_reference,source_env_key,source_envpac_key,share_state")
+  url.searchParams.set("select","share_reference,source_env_key,source_envpac_key,owner_subject_key,share_state,metadata")
   url.searchParams.set("share_reference","eq."+value)
   url.searchParams.set("share_state","eq.active")
   url.searchParams.set("limit","1")
@@ -25,7 +25,7 @@ async function resolveShareReference(env:PassageEnv,value:unknown){
   const rows=await response.json() as Array<Record<string,unknown>>
   const row=rows[0]
   if(!row || row.share_reference!==value || typeof row.source_env_key!=="string" || typeof row.source_envpac_key!=="string") throw new Error("share_reference_unavailable")
-  return {share_reference:value,source_env_key:row.source_env_key,source_envpac_key:row.source_envpac_key,provenance_only:true,relationship_created:false,standing_created:false}
+  return {share_reference:value,source_env_key:row.source_env_key,source_envpac_key:row.source_envpac_key,source_owner_subject_key:row.owner_subject_key,invite_metadata:row.metadata||{},provenance_only:true,relationship_created:false,standing_created:false}
 }
 
 export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) => {
