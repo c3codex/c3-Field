@@ -1,0 +1,26 @@
+name: OAR2 Dizzy executor binding proof
+
+on:
+  push:
+    branches:
+      - oar2/envpac-root-profilepac-oye
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bindings:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      HAS_OPERATOR_DISPATCH_KEY: ${{ secrets.OPERATOR_DISPATCH_KEY != '' }}
+      HAS_LAPZULI_CONTROL_TOKEN: ${{ secrets.LAPZULI_DISTRIBUTION_CONTROL_TOKEN != '' }}
+    steps:
+      - name: Report binding presence only
+        run: |
+          echo "operator_dispatch_key_present=$HAS_OPERATOR_DISPATCH_KEY"
+          echo "lapzuli_control_token_present=$HAS_LAPZULI_CONTROL_TOKEN"
+          if [ "$HAS_OPERATOR_DISPATCH_KEY" != "true" ] && [ "$HAS_LAPZULI_CONTROL_TOKEN" != "true" ]; then
+            echo "::notice::No GitHub-held executor credential is present; external effects remain zero."
+          fi
