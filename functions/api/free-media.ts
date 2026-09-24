@@ -159,6 +159,9 @@ async function resolveBoundR2(asset:RegistryRow,env:FreeMediaEnv,request:Request
     : null
   if(!total) throw new FreeMediaError("asset_size_unavailable",503)
 
+  // Browsers commonly probe MP4s with byte ranges before playback. If the Pages
+  // R2 binding is present but its object is stale/missing, preserve the governed
+  // Registry custody path by falling through to the registered public R2 domain.
   const range=parseByteRange(request.headers.get("range"),total)
   const headers=cacheHeaders(asset)
   headers.set("accept-ranges","bytes")
@@ -171,7 +174,10 @@ async function resolveBoundR2(asset:RegistryRow,env:FreeMediaEnv,request:Request
 
   const options=range.kind==="range"?{range:{offset:range.offset,length:range.length}}:undefined
   const resolved=await bucket.get(object,options)
-  if(!resolved||!resolved.body) throw new FreeMediaError("provider_unavailable",503)
+  if(!resolved||!resolved.body){
+    if(bindingKey==="C3_FIELD_MEDIA") return await resolvePublicR2Fallback(asset,request)
+    throw new FreeMediaError("provider_unavailable",503)
+  }
 
   if(range.kind==="range"){
     headers.set("content-range",`bytes ${range.offset}-${range.end}/${total}`)
