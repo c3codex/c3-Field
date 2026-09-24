@@ -1,0 +1,31 @@
+/* Measures Registry host bootstrap.
+   Surface/chamber presentation is owned by the FREE encounter CSS graph imported
+   by MeasuresRegistryOrchestrator. This file intentionally contains only the
+   document/root mechanics required before that renderer mounts. */
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.c3-visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
