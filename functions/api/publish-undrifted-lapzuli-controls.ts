@@ -186,6 +186,13 @@ const CHAMBER_DERIVATIVE_PATH =
   "undrifted/publication-chamber/lapis_antechamber_ops_surface_web_v1.webp"
 const DEFAULT_DIZZY_URL = "https://lapzuli-distribution-worker.c3field.workers.dev"
 const WIZ_DEV_ROUTE_KEY = "lapzuli_route_undrifted_drift_report_005_dev_codex_010"
+const DIZZY_BUFFER_FIRST_WAVE_ASSETS = new Set([
+  "undrifted_dr005_buffer_facebook_undrifted_dist_v1",
+  "undrifted_dr005_buffer_facebook_measures_registry_dist_v1",
+  "undrifted_dr005_buffer_linkedin_measures_registry_dist_v1",
+])
+const CURRENT_DIZZY_EXECUTION_OAR2 =
+  "oar2_compile_deploy_and_spin_dizzy_released_pubpacs_chazz_001_20260924"
 const OAR12_SOURCE_OAR2_PATH =
   "CanCom/codex/oar2_implement_dev_delivery_adapter_wiz_distribution_asset_codex_012"
 
@@ -586,6 +593,123 @@ async function recordBlueskyDistributionExecution(env: Env, args: {
         worker_identity: "dizzy_lapzuli_distribution_worker_v1",
         adapter: "atproto_create_record_v1",
         operator_surface: "/publish-undrifted",
+      },
+      optics: {
+        observes: "distribution_event",
+        models_individuals_as_primary: false,
+      },
+    }),
+  })
+}
+
+async function executeBufferAdapter(env: Env, args: {
+  route: RouteRow
+  asset: DistributionAssetRow
+  selectedObject: ReturnType<typeof publicationObject>
+}) {
+  const token = env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN
+  if (!token) {
+    return { ok: false, standing: "held_credentials", external_publication_effects: 0 }
+  }
+  const payload = args.asset.payload ?? {}
+  const routeMetadata = args.route.metadata ?? {}
+  const assetMetadata = args.asset.metadata ?? {}
+  const channelKey = asString(payload.channel_key) ?? asString(routeMetadata.channel_key)
+  const channelIdentifier = asString(routeMetadata.channel_identifier)
+  const derivativeKey = asString(payload.derivative_key) ?? asString(assetMetadata.derivative_key)
+  const registeredStandingKey = asString(assetMetadata.registered_standing_key)
+  const registeredStanding = asString(assetMetadata.registered_standing)
+  const text = asString(payload.text)
+  const canonicalUrl = asString(payload.canonical_url) ?? args.route.canonical_url
+  const idempotencyKey = `${args.route.route_key}:${args.asset.distribution_asset_key}`
+
+  if (!channelKey || !channelIdentifier || !derivativeKey || !registeredStandingKey ||
+      !registeredStanding || !text || !canonicalUrl) {
+    return { ok: false, standing: "held_buffer_payload_incomplete", external_publication_effects: 0 }
+  }
+
+  const baseUrl = (env.LAPZULI_DISTRIBUTION_WORKER_URL ?? DEFAULT_DIZZY_URL).replace(/\/$/, "")
+  const response = await fetch(`${baseUrl}/buffer/posts`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      dry_run: false,
+      execute: true,
+      publication_object_key: args.selectedObject.publication_object_key,
+      derivative_key: derivativeKey,
+      distribution_asset_id: args.asset.distribution_asset_key,
+      channel_key: channelKey,
+      channel_identifier: channelIdentifier,
+      executor_key: "buffer",
+      registered_standing_key: registeredStandingKey,
+      registered_standing: registeredStanding,
+      idempotency_key: idempotencyKey,
+      text,
+      canonical_url: canonicalUrl,
+      lapzuli_callable: true,
+      operator_confirmed: true,
+    }),
+  })
+  const body = await response.json().catch(() => ({}))
+  return {
+    ok: response.ok && body?.ok === true,
+    standing: body?.standing ?? (response.ok ? "buffer_post_created" : "held_buffer_external_response"),
+    request_identity: body?.request_identity ?? null,
+    external_response_code: body?.external_response_code ?? response.status,
+    buffer_update_id: body?.buffer_update_id ?? null,
+    buffer_post_status: body?.buffer_post_status ?? null,
+    platform_post_id: body?.platform_post_id ?? null,
+    platform_url: body?.platform_url ?? null,
+    channel_key: channelKey,
+    external_publication_effects: body?.external_publication_effects ?? 0,
+  }
+}
+
+async function recordBufferDistributionExecution(env: Env, args: {
+  asset: DistributionAssetRow
+  route: RouteRow
+  result: Awaited<ReturnType<typeof executeBufferAdapter>>
+  attemptNumber: number
+}) {
+  const platformPublished = Boolean(args.result.platform_post_id || args.result.platform_url)
+  const accepted = args.result.ok && args.result.external_publication_effects === 1
+  await supabaseFetch(env, "measures_distribution_execution", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify({
+      distribution_asset_id: args.asset.distribution_asset_key,
+      executor_key: "buffer",
+      channel_key: args.result.channel_key,
+      execution_status: platformPublished ? "published" : (accepted ? "queued" : "failed"),
+      execution_mode: "buffer",
+      attempt_number: args.attemptNumber,
+      executed_at: new Date().toISOString(),
+      published_at: platformPublished ? new Date().toISOString() : null,
+      platform_post_id: args.result.platform_post_id,
+      platform_url: args.result.platform_url,
+      evidence: {
+        route_key: args.route.route_key,
+        request_identity: args.result.request_identity,
+        external_response_code: args.result.external_response_code,
+        buffer_update_id: args.result.buffer_update_id,
+        buffer_post_status: args.result.buffer_post_status,
+        adapter_standing: args.result.standing,
+        external_publication_effects: args.result.external_publication_effects,
+      },
+      error: args.result.ok ? null : args.result.standing,
+      source_oar2: CURRENT_DIZZY_EXECUTION_OAR2,
+      created_by_actor_class: "AI",
+      created_by_actor_key: "Dizzy",
+      approved_by_actor_class: "Human",
+      approved_by_actor_key: "op044",
+      metadata: {
+        worker_identity: "dizzy_lapzuli_distribution_worker_v1",
+        adapter: "buffer_updates_create_v1",
+        operator_surface: "/publish-undrifted",
+        bounded_first_wave: true,
       },
       optics: {
         observes: "distribution_event",
@@ -1145,6 +1269,84 @@ async function handleAction(request: Request, env: Env) {
         evidence_identity: eventKey,
       },
     }, 409)
+  }
+
+  const selectedAsset = state.controls.selected_distribution_asset as DistributionAssetRow | null
+  const routeExecutor = asString(selectedRoute?.metadata?.executor_key)
+  const assetExecutor = asString(selectedAsset?.payload?.executor_key)
+
+  if (selectedRoute && selectedAsset && (routeExecutor === "buffer" || assetExecutor === "buffer")) {
+    const exactFirstWave = DIZZY_BUFFER_FIRST_WAVE_ASSETS.has(selectedAsset.distribution_asset_key)
+    const routeReady = selectedRoute.route_status === "authorized" &&
+      selectedRoute.operator_confirmed === true &&
+      asString(selectedRoute.metadata?.channel_status) === "active"
+    const assetReady = selectedAsset.status === "ready_for_operator_execution" &&
+      selectedAsset.review_status === "operator_approved" &&
+      asString(selectedAsset.metadata?.registered_standing) === "governing_seeded" &&
+      selectedAsset.metadata?.operator_confirmed === true
+
+    if (!exactFirstWave || !routeReady || !assetReady) {
+      await recordActionEvidence(env, {
+        eventKey,
+        fromStatus: "route_recognized",
+        toStatus: "held_buffer_first_wave_preflight",
+        transitionType: "held",
+        evidenceReference,
+        notes:
+          `Held Buffer dispatch for ${publicationObjectKey}: exact first-wave scope or current route/asset standing did not pass; external publication effects 0.`,
+      })
+      return jsonResponse({
+        ...state,
+        action_result: {
+          action,
+          standing: "held_buffer_first_wave_preflight",
+          mutation_count: 1,
+          external_publication_effects: 0,
+          evidence_identity: eventKey,
+        },
+      }, 409)
+    }
+
+    const previousAttempts = (state.lapzuli_distribution.executions as ExecutionRow[])
+      .filter((row) => row.executor_key === "buffer").length
+    const result = await executeBufferAdapter(env, {
+      route: selectedRoute,
+      asset: selectedAsset,
+      selectedObject: selectedObject!,
+    })
+    await recordBufferDistributionExecution(env, {
+      route: selectedRoute,
+      asset: selectedAsset,
+      result,
+      attemptNumber: previousAttempts + 1,
+    })
+    await recordActionEvidence(env, {
+      eventKey,
+      fromStatus: "route_recognized",
+      toStatus: result.ok ? result.standing : "held_buffer_execution_failed",
+      transitionType: result.ok ? "execution" : "held",
+      evidenceReference,
+      notes:
+        `Buffer dispatch for ${publicationObjectKey} / ${selectedAsset.distribution_asset_key}: ${result.standing}; ` +
+        `external publication effects ${result.external_publication_effects}.`,
+    })
+    return jsonResponse({
+      ...state,
+      action_result: {
+        action,
+        standing: result.standing,
+        mutation_count: 2,
+        external_publication_effects: result.external_publication_effects,
+        evidence_identity: eventKey,
+        buffer_update_id: result.buffer_update_id,
+        buffer_post_status: result.buffer_post_status,
+        platform_post_id: result.platform_post_id,
+        platform_url: result.platform_url,
+        selected_publication_object: selectedObject,
+        selected_channel: selectedChannel,
+        selected_route: selectedRoute,
+      },
+    }, result.ok ? 201 : 502)
   }
 
   if (selectedRoute?.outlet_key === "bluesky") {
