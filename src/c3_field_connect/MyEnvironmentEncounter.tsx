@@ -41,6 +41,24 @@ type ConnectionsPayload={
   entries?:ConnectionEntry[]
   reason?:string
 }
+type ProfileContract={
+  pac_type:string
+  contract_version:string
+  required_fields:string[]
+  optional_member_roles:Array<Record<string,unknown>>
+  authority_effect:string
+}
+type ProfileIntakePayload={
+  standing:string
+  formed?:boolean
+  contract?:ProfileContract
+}
+type ProfileProjectionPayload={
+  standing:string
+  profile?:{profile_key:string;profile_class:string;display_label:string;visibility_scope:string}
+  pac?:{pac_key:string;version:string;standing:string;release_state:string;architecture_version:string;authority_effect:string}
+  evaluation?:{completeness_state:string;resolution_state:string}
+}
 
 const ARRIVAL_VIDEO="/api/free-media?asset=c3_field_c1me_arrival_video_v1"
 const LIVE_BACKDROP="/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
@@ -57,13 +75,21 @@ export default function MyEnvironmentEncounter(){
   const [connectionBody,setConnectionBody]=useState("")
   const [connectionNotice,setConnectionNotice]=useState("")
   const [connectionBusy,setConnectionBusy]=useState(false)
+  const [profileContract,setProfileContract]=useState<ProfileContract|null>(null)
+  const [profile,setProfile]=useState<ProfileProjectionPayload|null>(null)
+  const [profileLabel,setProfileLabel]=useState("")
+  const [profileVisibility,setProfileVisibility]=useState("private")
+  const [profileNotice,setProfileNotice]=useState("")
+  const [profileBusy,setProfileBusy]=useState(false)
 
   useEffect(()=>{
     let active=true
     async function hydrateSecondary(){
-      const [initiativeResult,connectionsResult]=await Promise.allSettled([
+      const [initiativeResult,connectionsResult,profileContractResult,profileResult]=await Promise.allSettled([
         fetch("/api/my-environment-initiatives",{headers:{accept:"application/json"}}),
-        fetch("/api/my-environment-connections",{headers:{accept:"application/json"}})
+        fetch("/api/my-environment-connections",{headers:{accept:"application/json"}}),
+        fetch("/api/my-environment-profile",{headers:{accept:"application/json"}}),
+        fetch("/api/free-profile-pac",{headers:{accept:"application/json"}})
       ])
       if(!active)return
       if(initiativeResult.status==="fulfilled"&&initiativeResult.value.ok){
@@ -73,6 +99,14 @@ export default function MyEnvironmentEncounter(){
       if(connectionsResult.status==="fulfilled"&&connectionsResult.value.ok){
         const connectionsBody=await connectionsResult.value.json() as ConnectionsPayload
         if(active&&connectionsBody.entries) setConnections(connectionsBody.entries)
+      }
+      if(profileContractResult.status==="fulfilled"&&profileContractResult.value.ok){
+        const contractBody=await profileContractResult.value.json() as ProfileIntakePayload
+        if(active&&contractBody.contract?.pac_type==="ProfilePAC") setProfileContract(contractBody.contract)
+      }
+      if(profileResult.status==="fulfilled"&&profileResult.value.ok){
+        const profileBody=await profileResult.value.json() as ProfileProjectionPayload
+        if(active&&profileBody.standing==="free_profile_pac_projection") setProfile(profileBody)
       }
     }
     async function run(){
@@ -143,6 +177,33 @@ export default function MyEnvironmentEncounter(){
     }finally{setConnectionBusy(false)}
   }
 
+  async function formProfile(event:FormEvent){
+    event.preventDefault()
+    if(!profileLabel.trim()) return
+    setProfileBusy(true);setProfileNotice("")
+    try{
+      const response=await fetch("/api/my-environment-profile",{
+        method:"POST",
+        headers:{"content-type":"application/json"},
+        body:JSON.stringify({
+          profile_class:"individual",
+          display_label:profileLabel.trim(),
+          visibility_scope:profileVisibility
+        })
+      })
+      const body=await response.json() as {standing?:string;created?:boolean}
+      if(!response.ok) throw new Error(body.standing||"ProfilePAC formation is held.")
+      const projectionResponse=await fetch("/api/free-profile-pac",{headers:{accept:"application/json"}})
+      const projection=await projectionResponse.json() as ProfileProjectionPayload
+      if(!projectionResponse.ok||projection.standing!=="free_profile_pac_projection")
+        throw new Error("ProfilePAC formed but FREE resolution is held.")
+      setProfile(projection)
+      setProfileNotice(body.created===false?"Your registered profile is resolved.":"Your profile is registered to this environment.")
+    }catch(error){
+      setProfileNotice(error instanceof Error?error.message:"ProfilePAC formation is held.")
+    }finally{setProfileBusy(false)}
+  }
+
   if(state==="held"||state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
     return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p>{state==="held"&&<a href="/">Return to Connect</a>}</section></main>
   }
@@ -172,6 +233,50 @@ export default function MyEnvironmentEncounter(){
       </div>
     </section>
     <aside className="myenv-relations" aria-label="Connected opportunities">
+      <section className="myenv-profile-pac" aria-label="Own Your Environment profile">
+        <p className="myenv-kicker">OWN YOUR ENVIRONMENT</p>
+        {profile?.profile
+          ? <div className="myenv-profile-card">
+              <span>ProfilePAC · {profile.pac?.version||"v1"}</span>
+              <h2>{profile.profile.display_label}</h2>
+              <p>{profile.profile.profile_class} · {profile.profile.visibility_scope}</p>
+              <small>{profile.evaluation?.completeness_state==="pass"?"Registered custody complete":"Profile custody held"} · authority remains relational</small>
+            </div>
+          : <form className="myenv-profile-form" onSubmit={formProfile}>
+              <div>
+                <span>ProfilePAC {profileContract?.contract_version||"v1"}</span>
+                <h2>How should you appear here?</h2>
+                <p>The registered PAC contract asks for the profile values it needs. Creating a profile does not create authority.</p>
+              </div>
+              <label>
+                Profile type
+                <input value="Individual profile" readOnly aria-readonly="true"/>
+              </label>
+              <label>
+                Display label
+                <input
+                  value={profileLabel}
+                  onChange={event=>setProfileLabel(event.target.value)}
+                  maxLength={160}
+                  placeholder="How should this profile be shown?"
+                  required
+                />
+              </label>
+              <label>
+                Visibility
+                <select value={profileVisibility} onChange={event=>setProfileVisibility(event.target.value)}>
+                  <option value="private">Private</option>
+                  <option value="environment">This environment</option>
+                  <option value="relational">Relational</option>
+                  <option value="public">Public</option>
+                </select>
+              </label>
+              <button type="submit" disabled={profileBusy||!profileContract||!profileLabel.trim()}>
+                {profileBusy?"REGISTERING…":"REGISTER PROFILE"}
+              </button>
+            </form>}
+        {profileNotice&&<p className="myenv-initiative-notice" role="status">{profileNotice}</p>}
+      </section>
       <p className="myenv-kicker">CONNECTED POSSIBILITIES</p>
       <h2>Where do you want to go?</h2>
       {initiatives.length===0&&<p className="myenv-relations-empty">No initiative passages are available right now.</p>}
