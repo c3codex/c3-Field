@@ -1,0 +1,23 @@
+name: Exact c3field head compile proof
+
+on:
+  push:
+    branches:
+      - proof/c3field-c78fa-compile
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+          cache: npm
+      - run: npm ci
+      - name: Production Vite compile
+        run: npm run build -- --mode c3field --outDir dist
