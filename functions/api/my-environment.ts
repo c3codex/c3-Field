@@ -45,7 +45,7 @@ async function resolveProfileFromEnvpac(session:EnvironmentSession,env:PassageEn
     headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY,"content-type":"application/json"},
     body:JSON.stringify({p_envpac_key:session.envpacKey,p_subject_type:session.subjectType,p_subject_key:session.subjectKey})
   })
-  if(!response.ok) throw new Error("profile_read_failed")
+  if(!response.ok) return {projection_standing:"held",reason:"profile_read_failed",authority_effect:"none"}
   const truth=await response.json() as Record<string,any>
   if(truth.standing==="profile_not_formed") return null
   if(truth.envpac_key!==session.envpacKey||truth.profile?.subject_type!==session.subjectType||truth.profile?.subject_key!==session.subjectKey)
