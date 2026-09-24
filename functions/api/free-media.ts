@@ -209,13 +209,15 @@ async function canonicalPublicIntroPacKey(env:FreeMediaEnv){
   return key
 }
 
-async function publicPacKeyForRequest(env:FreeMediaEnv,request:Request){
+async function publicPacKeysForRequest(env:FreeMediaEnv,request:Request){
   const host=normalizeInitiativeSurfaceHostname(new URL(request.url).hostname)
   if(isInitiativeSurfaceHostname(host)){
-    return (await resolveInitiativeSurfaceHost(env,host)).webpacKey
+    const initiativePac=(await resolveInitiativeSurfaceHost(env,host)).webpacKey
+    const canonicalC1Pac=await canonicalPublicIntroPacKey(env)
+    return initiativePac===canonicalC1Pac?[initiativePac]:[initiativePac,canonicalC1Pac]
   }
   if(host==="c3field.online"||host==="www.c3field.online"){
-    return await canonicalPublicIntroPacKey(env)
+    return [await canonicalPublicIntroPacKey(env)]
   }
   throw new FreeMediaError("public_media_surface_unregistered",404)
 }
@@ -257,7 +259,7 @@ export function pacBindingCustodyMismatch(binding:RegistryRow,assetKey:string,as
   return null
 }
 
-async function requirePacRuntimeBinding(env:FreeMediaEnv,pacKey:string,assetKey:string,asset:RegistryRow){
+async function findPacRuntimeBinding(env:FreeMediaEnv,pacKey:string,assetKey:string,asset:RegistryRow){
   const rows=await readRows(
     env,
     "c3_pac_runtime_binding",
@@ -268,12 +270,22 @@ async function requirePacRuntimeBinding(env:FreeMediaEnv,pacKey:string,assetKey:
       metadata:"cs."+JSON.stringify({source_asset_key:assetKey}),
     }
   )
-  if(rows.length===0) throw new FreeMediaError("pac_media_binding_unavailable",423)
+  if(rows.length===0) return null
   if(rows.length!==1) throw new FreeMediaError("pac_media_binding_collision",409)
   const binding=rows[0]
   const mismatch=pacBindingCustodyMismatch(binding,assetKey,asset)
   if(mismatch) throw new FreeMediaError(mismatch)
   return binding
+}
+
+async function resolvePublicPacBinding(env:FreeMediaEnv,request:Request,assetKey:string,asset:RegistryRow){
+  const candidatePacKeys=await publicPacKeysForRequest(env,request)
+  for(const pacKey of candidatePacKeys){
+    await requireEligiblePublicPac(env,pacKey)
+    const binding=await findPacRuntimeBinding(env,pacKey,assetKey,asset)
+    if(binding) return {pacKey,binding}
+  }
+  throw new FreeMediaError("pac_media_binding_unavailable",423)
 }
 
 function addPacProof(response:Response,pacKey:string,binding:RegistryRow){
@@ -294,9 +306,7 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
 
     const isPublicAsset=asset.public_retrieval_standing==="bounded_public_runtime"
     if(isPublicAsset){
-      const pacKey=await publicPacKeyForRequest(env,request)
-      await requireEligiblePublicPac(env,pacKey)
-      const binding=await requirePacRuntimeBinding(env,pacKey,assetKey,asset)
+      const {pacKey,binding}=await resolvePublicPacBinding(env,request,assetKey,asset)
       return addPacProof(await resolveNativeCustody(asset,env,request),pacKey,binding)
     }
 
