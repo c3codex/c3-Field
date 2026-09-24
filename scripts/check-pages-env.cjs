@@ -31,7 +31,7 @@ function normalizeRepository(value) {
   return value
     .trim()
     .replace(/^git@github\.com:/, "")
-    .replace(/^https?:\/\/github\.com\//, "")
+    .replace(/^https?:\/\/(?:[^/@]+@)?github\.com\//, "")
     .replace(/\.git$/, "")
 }
 
