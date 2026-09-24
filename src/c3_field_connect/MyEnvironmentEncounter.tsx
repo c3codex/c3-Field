@@ -251,7 +251,7 @@ export default function MyEnvironmentEncounter(){
       </div>
     </section>
     <aside className="myenv-relations" aria-label="Connected opportunities">
-      <section className="myenv-profile-pac" aria-label="Own Your Environment profile">
+      {(profile||profileContract)&&<section className="myenv-profile-pac" aria-label="Own Your Environment profile">
         <p className="myenv-kicker">OWN YOUR ENVIRONMENT</p>
         {profile?.profile
           ? <div className="myenv-profile-card">
@@ -291,7 +291,7 @@ export default function MyEnvironmentEncounter(){
               </button>
             </form>}
         {profileNotice&&<p className="myenv-initiative-notice" role="status">{profileNotice}</p>}
-      </section>
+      </section>}
       <p className="myenv-kicker">CONNECTED POSSIBILITIES</p>
       <h2>Where do you want to go?</h2>
       {initiatives.length===0&&<p className="myenv-relations-empty">No initiative passages are available right now.</p>}
