@@ -1,0 +1,33 @@
+name: OAR2 c3field runtime proof
+
+on:
+  push:
+    branches:
+      - oar2/envpac-root-profilepac-oye
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Prove c3field runtime fingerprint and Dizzy health
+        shell: bash
+        run: |
+          set -euo pipefail
+          profile_body="$(mktemp)"
+          profile_code="$(curl -sS --max-time 20 -o "$profile_body" -w '%{http_code}' https://my.c3field.online/api/my-environment-profile)"
+          echo "my_environment_profile_http=$profile_code"
+          cat "$profile_body"
+          test "$profile_code" = "401"
+          grep -q '"standing":"profile_pac_intake_held"' "$profile_body"
+
+          dizzy_body="$(mktemp)"
+          dizzy_code="$(curl -sS --max-time 20 -o "$dizzy_body" -w '%{http_code}' https://lapzuli-distribution-worker.c3field.workers.dev/health)"
+          echo "dizzy_health_http=$dizzy_code"
+          cat "$dizzy_body"
+          test "$dizzy_code" = "200"
+          grep -q '"status": "operative"' "$dizzy_body"
