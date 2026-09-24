@@ -5,7 +5,7 @@ type EnvPayload={
   standing:string
   owner?:{display_name:string|null}
   environment?:{env_key:string;environment_name:string;environment_class:string;standing:string;is_active:boolean;is_canonical:boolean}
-  envpac?:{envpac_key:string;version:string;standing:string;owner_subject_type:string;custodian_subject_type:string;custodian_subject_key:string;custody_provider:string;portable:boolean;environment_bindings:unknown;rooted_systems:unknown;packages:unknown}
+  envpac?:{envpac_key:string;version:string;standing:string;owner_subject_type:string;custodian_subject_type:string;custodian_subject_key:string;custody_provider:string;portable:boolean;environment_bindings:unknown;rooted_systems:unknown;packages:unknown;profile_pac?:ProfileTruth|null}
   presentation?:{opening_visual_asset_key:string;opening_visual_url:string;source_webpac_key:string;owner_changeable:boolean;selection_standing:string;selected_at?:string;updated_at?:string}|null
 }
 type Primitive={
@@ -35,8 +35,25 @@ type NativeConnection={
 type ConnectionsPayload={authenticated:boolean;standing:string;entries?:LedgerEntry[];native_connections?:NativeConnection[]}
 type CanopyReference={reference_key:string;surface_label:string;display_label?:string|null;external_url:string;handle?:string|null;sort_order:number}
 type CanopyPayload={standing:string;references?:CanopyReference[]}
-type ProfileTruth={standing?:string;profile?:{display_label:string;visibility_scope:string;profile_key:string}|null}
-type ProfilePayload={authenticated:boolean;standing:string;truth?:ProfileTruth}
+type ProfileTruth={
+  projection_standing?:string
+  standing?:string
+  pac_key?:string
+  profile?:{display_label:string;visibility_scope:string;profile_key:string;profile_class?:string}|null
+  evaluation?:{completeness_state?:string;resolution_state?:string}
+}
+type ProfileQuestion={
+  key:string
+  label:string
+  input:"text"|"select"
+  required?:boolean
+  max_length?:number
+  placeholder?:string
+  default?:string
+  options?:Array<{value:string;label:string}>
+}
+type ProfileContract={pac_type:string;contract_version:string;questions:ProfileQuestion[];authority_effect:string}
+type ProfileIntakePayload={authenticated:boolean;standing:string;contract?:ProfileContract;resolved_profile_class?:string|null}
 
 const ARRIVAL_VIDEO="/api/free-media?asset=c3_field_c1me_arrival_video_v1"
 const LIVE_BACKDROP="/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
@@ -53,6 +70,7 @@ export default function MyEnvironmentEncounter(){
   const [nativeConnections,setNativeConnections]=useState<NativeConnection[]>([])
   const [canopy,setCanopy]=useState<CanopyReference[]>([])
   const [profileTruth,setProfileTruth]=useState<ProfileTruth|null>(null)
+  const [profileContract,setProfileContract]=useState<ProfileContract|null>(null)
 
   const [ledgerType,setLedgerType]=useState("note")
   const [ledgerBody,setLedgerBody]=useState("")
@@ -127,13 +145,12 @@ export default function MyEnvironmentEncounter(){
         setCanopyLoaded(false)
       }
       if(profileResult.status==="fulfilled"&&profileResult.value.ok){
-        const body=await profileResult.value.json() as ProfilePayload
-        if(active){
-          setProfileTruth(body.truth||null)
-          setProfileLoaded(true)
+        const body=await profileResult.value.json() as ProfileIntakePayload
+        if(active&&body.contract?.pac_type==="ProfilePAC"){
+          setProfileContract(body.contract)
+          const visibilityQuestion=body.contract.questions.find(question=>question.key==="profile.visibility_scope")
+          if(visibilityQuestion?.default)setProfileVisibility(visibilityQuestion.default)
         }
-      }else if(active){
-        setProfileLoaded(false)
       }
     }
     async function run(){
@@ -158,6 +175,8 @@ export default function MyEnvironmentEncounter(){
           return
         }
         setData(body)
+        setProfileTruth(body.envpac.profile_pac||null)
+        setProfileLoaded(true)
         setProfileDisplayLabel(body.owner?.display_name?.trim()||"")
         document.title=body.owner?.display_name?body.owner.display_name+" | My Environment | c3 Community Partners":"My Environment | c3 Community Partners"
         setState(claim?"intro":"ready")
@@ -243,11 +262,16 @@ export default function MyEnvironmentEncounter(){
         method:"POST",headers:{"content-type":"application/json"},
         body:JSON.stringify({display_label:profileDisplayLabel,visibility_scope:profileVisibility})
       })
-      const body=await response.json() as {ok?:boolean;result?:{truth?:ProfileTruth};standing?:string;reason?:string}
+      const body=await response.json() as {ok?:boolean;standing?:string;reason?:string;next_read?:string}
       if(!response.ok||!body.ok)throw new Error(body.reason||body.standing||"Profile-PAC could not be formed.")
-      const truth=body.result?.truth
-      if(truth)setProfileTruth(truth)
-      setProfileNotice("Profile-PAC is complete.")
+      const environmentResponse=await fetch(body.next_read||"/api/my-environment",{headers:{accept:"application/json"}})
+      const environmentBody=await environmentResponse.json() as EnvPayload
+      if(!environmentResponse.ok||environmentBody.standing!=="environment_ready"||!environmentBody.envpac)
+        throw new Error("Profile-PAC formed, but EnvPAC could not be re-resolved.")
+      setData(environmentBody)
+      setProfileTruth(environmentBody.envpac.profile_pac||null)
+      setProfileLoaded(true)
+      setProfileNotice("Profile-PAC is complete in your EnvPAC.")
     }catch(error){setProfileNotice(error instanceof Error?error.message:"Profile-PAC could not be formed.")}
   }
 
@@ -275,17 +299,24 @@ export default function MyEnvironmentEncounter(){
     }
     if(primitive.renderer_key==="c1me.profile_pac"){
       const profile=profileTruth?.profile
+      const profileHeld=profileTruth?.projection_standing==="held"
+      const labelQuestion=profileContract?.questions.find(question=>question.key==="profile.display_label")
+      const visibilityQuestion=profileContract?.questions.find(question=>question.key==="profile.visibility_scope")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
         <div className="myenv-thread-heading"><p className="myenv-kicker">PROFILE-PAC</p><h2>{primitive.display_label}</h2>
           <p>Complete the bounded profile only when you want a profile to become encounterable beyond this private environment.</p></div>
         {!profileLoaded
-          ?<p className="myenv-runtime-warning">Profile-PAC state could not be resolved from this session.</p>
+          ?<p className="myenv-runtime-warning">Profile-PAC state could not be resolved from this EnvPAC.</p>
+          :profileHeld
+          ?<p className="myenv-runtime-warning">Profile-PAC is held inside this EnvPAC.</p>
           :profile
-          ?<article className="myenv-initiative-card"><div><span>{profile.visibility_scope}</span><h3>{profile.display_label}</h3><p>Profile-PAC ready.</p></div></article>
+          ?<article className="myenv-initiative-card"><div><span>{profile.visibility_scope}</span><h3>{profile.display_label}</h3><p>Profile-PAC ready in EnvPAC.</p></div></article>
+          :!labelQuestion||!visibilityQuestion
+          ?<p className="myenv-runtime-warning">Profile-PAC intake contract is unavailable.</p>
           :<form className="myenv-thread-compose" onSubmit={formProfile}>
-            <input aria-label="Profile display label" maxLength={160} value={profileDisplayLabel} onChange={e=>setProfileDisplayLabel(e.target.value)} placeholder="Display label"/>
-            <select aria-label="Profile visibility" value={profileVisibility} onChange={e=>setProfileVisibility(e.target.value)}>
-              <option value="private">Private</option><option value="environment">This environment</option><option value="relational">Relational</option><option value="public">Public</option>
+            <input aria-label={labelQuestion.label} maxLength={labelQuestion.max_length||160} value={profileDisplayLabel} onChange={e=>setProfileDisplayLabel(e.target.value)} placeholder={labelQuestion.placeholder||labelQuestion.label} required={labelQuestion.required}/>
+            <select aria-label={visibilityQuestion.label} value={profileVisibility} onChange={e=>setProfileVisibility(e.target.value)}>
+              {(visibilityQuestion.options||[]).map(option=><option key={option.value} value={option.value}>{option.label}</option>)}
             </select>
             <button type="submit" disabled={!profileDisplayLabel.trim()}>COMPLETE PROFILE-PAC</button>
           </form>}

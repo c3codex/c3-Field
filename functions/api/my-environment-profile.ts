@@ -41,16 +41,25 @@ async function sessionFor(request:Request,env:PassageEnv){
 export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
   try{
     const session=await sessionFor(request,env)
-    const truth=await rpc(env,"resolve_profile_pac_v1_internal",{
-      p_envpac_key:session.envpacKey,
-      p_subject_type:session.subjectType,
-      p_subject_key:session.subjectKey
+    const contract=await rpc(env,"c3_pac_intake_contract",{p_pac_type:"ProfilePAC"})
+    const intake=contract&&typeof contract.intake_schema==="object"&&contract.intake_schema
+      ? contract.intake_schema as Record<string,unknown>
+      : {}
+    return json({
+      authenticated:true,
+      standing:"profile_pac_intake_ready",
+      contract:{
+        pac_type:"ProfilePAC",
+        contract_version:typeof contract.contract_version==="string"?contract.contract_version:"v1",
+        questions:Array.isArray(intake.fields)?intake.fields:[],
+        authority_effect:"none"
+      },
+      resolved_profile_class:session.subjectType==="individual"?"individual":null
     })
-    return json({authenticated:true,standing:"profile_pac_resolved",truth})
   }catch(error){
-    const reason=error instanceof Error?error.message:"profile_pac_unavailable"
+    const reason=error instanceof Error?error.message:"profile_pac_intake_unavailable"
     const status=reason==="environment_claim_required"||reason==="session_expired"?401:503
-    return json({authenticated:false,standing:"profile_pac_held",reason},status)
+    return json({authenticated:false,standing:"profile_pac_intake_held",reason},status)
   }
 }
 
@@ -78,7 +87,13 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
       p_display_label:displayLabel,
       p_visibility_scope:visibility
     })
-    return json({ok:true,standing:"profile_pac_ready",result})
+    return json({
+      ok:true,
+      standing:result.created===false?"profile_pac_existing":"profile_pac_formed",
+      created:result.created===true,
+      next_read:"/api/my-environment",
+      authority_effect:"none"
+    },result.created===true?201:200)
   }catch(error){
     const reason=error instanceof Error?error.message:"profile_pac_unavailable"
     const status=reason==="environment_claim_required"||reason==="session_expired"?401:409

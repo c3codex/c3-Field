@@ -38,6 +38,28 @@ async function resolveCurrent(session:EnvironmentSession,env:PassageEnv){
   return current
 }
 
+async function resolveProfileFromEnvpac(session:EnvironmentSession,env:PassageEnv){
+  if(!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("server_configuration")
+  const response=await fetch(env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/rpc/resolve_profile_pac_v1_internal",{
+    method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
+    headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY,"content-type":"application/json"},
+    body:JSON.stringify({p_envpac_key:session.envpacKey,p_subject_type:session.subjectType,p_subject_key:session.subjectKey})
+  })
+  if(!response.ok) throw new Error("profile_read_failed")
+  const truth=await response.json() as Record<string,any>
+  if(truth.standing==="profile_not_formed") return null
+  if(truth.envpac_key!==session.envpacKey||truth.profile?.subject_type!==session.subjectType||truth.profile?.subject_key!==session.subjectKey)
+    return {projection_standing:"held",reason:"profile_envpac_mismatch",authority_effect:"none"}
+  if(truth.evaluation?.resolution_state!=="pass")
+    return {projection_standing:"held",reason:"profile_resolution_held",authority_effect:"none",
+      evaluation:{completeness_state:truth.evaluation?.completeness_state||"held",resolution_state:truth.evaluation?.resolution_state||"held"}}
+  return {projection_standing:"resolved",pac_key:truth.pac_key,version:truth.version,standing:truth.standing,
+    release_state:truth.release_state,authority_effect:"none",
+    profile:{profile_key:truth.profile.profile_key,profile_class:truth.profile.profile_class,
+      display_label:truth.profile.display_label,visibility_scope:truth.profile.visibility_scope},
+    evaluation:{completeness_state:truth.evaluation.completeness_state,resolution_state:truth.evaluation.resolution_state}}
+}
+
 async function runtimeSession(raw:string,env:PassageEnv):Promise<EnvironmentSession>{
   try{return await resolveEnvironmentSession(raw,env)}catch(error){
     if(!raw.includes(".")) throw error
@@ -56,7 +78,7 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
     if(operatorContext.relationship_ref!==session.subjectKey || operatorContext.env_key!==session.envKey ||
       operatorContext.envpac_ref!==session.envpacKey || operatorContext.current_ref!==current.current_ref)
       throw new Error("operator_context_mismatch")
-    const [graphRows,envRows,grantRows,ownerRows,presentationRows]=await Promise.all([
+    const [graphRows,envRows,grantRows,ownerRows,presentationRows,profileProjection]=await Promise.all([
       readRows(env,"c3_envpac_effective_graph",
         "envpac_key,registry_env_key,version,envpac_standing,owner_subject_type,custodian_subject_type,custodian_subject_key,custody_provider,portable,environment_bindings,rooted_systems,packages",
         {envpac_key:"eq."+session.envpacKey}),
@@ -71,7 +93,8 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
         {relationship_key:"eq."+session.subjectKey,is_active:"eq.true"}),
       readRows(env,"c3_envpac_presentation",
         "envpac_key,opening_visual_asset_key,opening_visual_url,source_webpac_key,owner_changeable,selection_standing,selected_by_type,selected_by_key,selected_at,updated_at",
-        {envpac_key:"eq."+session.envpacKey,selection_standing:"eq.active"})
+        {envpac_key:"eq."+session.envpacKey,selection_standing:"eq.active"}),
+      resolveProfileFromEnvpac(session,env)
     ])
     const graph=graphRows[0], environment=envRows[0], owner=ownerRows[0], presentation=presentationRows[0]
     if(!graph || !environment || !owner || graph.envpac_key!==session.envpacKey ||
@@ -104,7 +127,8 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
         portable:graph.portable,
         environment_bindings:graph.environment_bindings,
         rooted_systems:graph.rooted_systems,
-        packages:graph.packages
+        packages:graph.packages,
+        profile_pac:profileProjection
       },
       presentation:presentation?{
         opening_visual_asset_key:presentation.opening_visual_asset_key,
