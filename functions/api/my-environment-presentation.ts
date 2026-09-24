@@ -32,13 +32,13 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     const current=await rows(env,"c3_envpac_presentation","envpac_key,owner_changeable,selection_standing",{envpac_key:"eq."+session.envpacKey,selection_standing:"eq.active"})
     if(current.length!==1||current[0].envpac_key!==session.envpacKey||current[0].owner_changeable!==true)
       return json({ok:false,standing:"presentation_change_held"},409)
-    const media=await rows(env,"c3ops_asset_record","asset_key,runtime_uri,standing",{asset_key:"eq."+asset})
-    if(media.length!==1||media[0].asset_key!==asset||media[0].standing!=="active"||typeof media[0].runtime_uri!=="string")
+    const media=await rows(env,"c3ops_asset_record","asset_key,current_free_binding,free_eligibility",{asset_key:"eq."+asset})
+    if(media.length!==1||media[0].asset_key!==asset||media[0].free_eligibility!==true||typeof media[0].current_free_binding!=="string")
       return json({ok:false,standing:"free_asset_unavailable"},409)
     const response=await fetch(env.SUPABASE_URL!.replace(/\/$/,"")+"/rest/v1/c3_envpac_presentation?envpac_key=eq."+encodeURIComponent(session.envpacKey)+"&selection_standing=eq.active",{
       method:"PATCH",
       headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!,"content-type":"application/json",prefer:"return=representation"},
-      body:JSON.stringify({opening_visual_asset_key:asset,opening_visual_url:media[0].runtime_uri,selected_by_type:session.subjectType,selected_by_key:session.subjectKey,selected_at:new Date().toISOString(),updated_at:new Date().toISOString()})
+      body:JSON.stringify({opening_visual_asset_key:asset,opening_visual_url:media[0].current_free_binding,selected_by_type:session.subjectType,selected_by_key:session.subjectKey,selected_at:new Date().toISOString(),updated_at:new Date().toISOString()})
     })
     if(!response.ok)throw new Error("presentation_write_failed")
     const changed=await response.json() as Record<string,unknown>[]
