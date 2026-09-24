@@ -79,6 +79,10 @@ export default function MyEnvironmentEncounter(){
   const [inviteInitiative,setInviteInitiative]=useState("")
   const [inviteNotice,setInviteNotice]=useState("")
   const [inviteUrl,setInviteUrl]=useState("")
+  const [activePanel,setActivePanel]=useState<string|null>(null)
+  const [runtimeNotice,setRuntimeNotice]=useState("")
+  const [canopyLoaded,setCanopyLoaded]=useState(false)
+  const [profileLoaded,setProfileLoaded]=useState(false)
 
   useEffect(()=>{
     let active=true
@@ -94,7 +98,12 @@ export default function MyEnvironmentEncounter(){
       const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult]=results
       if(primitiveResult.status==="fulfilled"&&primitiveResult.value.ok){
         const body=await primitiveResult.value.json() as PrimitivePayload
-        if(active&&body.primitives) setPrimitives([...body.primitives].sort((a,b)=>a.sort_order-b.sort_order))
+        if(active&&body.primitives){
+          setPrimitives([...body.primitives].sort((a,b)=>a.sort_order-b.sort_order))
+          setRuntimeNotice("")
+        }
+      }else if(active){
+        setRuntimeNotice("This environment opened, but its EnvPAC components did not resolve.")
       }
       if(initiativeResult.status==="fulfilled"&&initiativeResult.value.ok){
         const body=await initiativeResult.value.json() as InitiativePayload
@@ -110,11 +119,21 @@ export default function MyEnvironmentEncounter(){
       }
       if(canopyResult.status==="fulfilled"&&canopyResult.value.ok){
         const body=await canopyResult.value.json() as CanopyPayload
-        if(active&&body.references) setCanopy(body.references)
+        if(active){
+          setCanopy(body.references||[])
+          setCanopyLoaded(true)
+        }
+      }else if(active){
+        setCanopyLoaded(false)
       }
       if(profileResult.status==="fulfilled"&&profileResult.value.ok){
         const body=await profileResult.value.json() as ProfilePayload
-        if(active&&body.truth) setProfileTruth(body.truth)
+        if(active){
+          setProfileTruth(body.truth||null)
+          setProfileLoaded(true)
+        }
+      }else if(active){
+        setProfileLoaded(false)
       }
     }
     async function run(){
@@ -151,6 +170,15 @@ export default function MyEnvironmentEncounter(){
     void run()
     return()=>{active=false}
   },[])
+
+  useEffect(()=>{
+    if(!activePanel)return
+    const onKeyDown=(event:KeyboardEvent)=>{
+      if(event.key==="Escape")setActivePanel(null)
+    }
+    window.addEventListener("keydown",onKeyDown)
+    return()=>window.removeEventListener("keydown",onKeyDown)
+  },[activePanel])
 
   async function addLedgerEntry(event:FormEvent){
     event.preventDefault()
@@ -250,7 +278,9 @@ export default function MyEnvironmentEncounter(){
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
         <div className="myenv-thread-heading"><p className="myenv-kicker">PROFILE-PAC</p><h2>{primitive.display_label}</h2>
           <p>Complete the bounded profile only when you want a profile to become encounterable beyond this private environment.</p></div>
-        {profile
+        {!profileLoaded
+          ?<p className="myenv-runtime-warning">Profile-PAC state could not be resolved from this session.</p>
+          :profile
           ?<article className="myenv-initiative-card"><div><span>{profile.visibility_scope}</span><h3>{profile.display_label}</h3><p>Profile-PAC ready.</p></div></article>
           :<form className="myenv-thread-compose" onSubmit={formProfile}>
             <input aria-label="Profile display label" maxLength={160} value={profileDisplayLabel} onChange={e=>setProfileDisplayLabel(e.target.value)} placeholder="Display label"/>
@@ -283,7 +313,8 @@ export default function MyEnvironmentEncounter(){
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
         <div className="myenv-thread-heading"><p className="myenv-kicker">MY CANOPY</p><h2>{primitive.display_label}</h2><p>Owner-selected external surfaces remain environment-held and create no Registry standing.</p></div>
         <div className="myenv-thread-entries">
-          {canopy.length===0&&<p className="myenv-relations-empty">No Canopy references yet.</p>}
+          {!canopyLoaded&&<p className="myenv-runtime-warning">Canopy could not be resolved from this session.</p>}
+          {canopyLoaded&&canopy.length===0&&<p className="myenv-relations-empty">No Canopy references yet.</p>}
           {canopy.map(reference=><article key={reference.reference_key}><div><span>{reference.surface_label}</span></div><h3>{reference.display_label||reference.handle||reference.surface_label}</h3>{reference.handle&&<p>{reference.handle}</p>}<p><a href={reference.external_url} target="_blank" rel="noreferrer">OPEN SURFACE →</a></p><button type="button" onClick={()=>void removeCanopyReference(reference.reference_key)}>REMOVE</button></article>)}
         </div>
         <form className="myenv-thread-compose" onSubmit={addCanopyReference}>
@@ -342,19 +373,82 @@ export default function MyEnvironmentEncounter(){
   }
 
   const backdrop=data.presentation?.opening_visual_url||LIVE_BACKDROP
-  return <main className="myenv-shell myenv-environment" aria-label="My Environment">
+  const activePrimitive=activePanel?.startsWith("primitive:")
+    ?primitives.find(primitive=>"primitive:"+primitive.primitive_key===activePanel)
+    :null
+  const activeInitiative=activePanel?.startsWith("initiative:")
+    ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
+    :null
+
+  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v1">
     <img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
-    <section className="myenv-place" aria-label="c1ME environment"><div className="myenv-presence"><p className="myenv-kicker">c1ME.env</p><h1>{data.owner?.display_name?.trim()||"My Environment"}</h1></div></section>
-    <aside className="myenv-relations" aria-label="My Environment components">
-      {initiatives.length>0&&<section className="myenv-connections-thread">
-        <div className="myenv-thread-heading"><p className="myenv-kicker">ENCOUNTERED / INVITED</p><h2>Initiatives</h2><p>Only initiatives evidenced by an encounter or invitation relation appear here.</p></div>
-        {initiatives.flatMap(initiative=>initiative.components.filter(component=>component.renderer_key==="initiative.entry_card").map(component=>{
-          const config=component.config||{}
-          return <article key={initiative.initiative_key+":"+component.component_key} className="myenv-initiative-card"><div><span>{text(config.target_environment_label,initiative.target_environment_key||"initiative")}</span><h3>{text(config.title,initiative.initiative_key)}</h3><p>{text(config.summary)}</p></div>{text(config.route)&&<a href={text(config.route)}>ENTER →</a>}</article>
-        }))}
-      </section>}
-      {primitives.map(renderPrimitive)}
-    </aside>
+    <section className="myenv-place" aria-label="c1ME environment">
+      <div className="myenv-presence">
+        <p className="myenv-kicker">c1ME.env</p>
+        <h1>{data.owner?.display_name?.trim()||"My Environment"}</h1>
+        <p className="myenv-presence-hint">Hover to discover · tap to open</p>
+      </div>
+    </section>
+
+    {runtimeNotice&&<p className="myenv-runtime-notice" role="status">{runtimeNotice}</p>}
+
+    <nav className="myenv-discovery" aria-label="Environment touchpoints">
+      {primitives.map(primitive=><button
+        key={primitive.primitive_key}
+        type="button"
+        className={"myenv-touchpoint myenv-touchpoint--"+primitive.primitive_key.replace(/_/g,"-")}
+        aria-label={"Open "+primitive.display_label}
+        aria-expanded={activePanel==="primitive:"+primitive.primitive_key}
+        onClick={()=>setActivePanel("primitive:"+primitive.primitive_key)}
+      >
+        <span className="myenv-touchpoint-dot" aria-hidden="true"/>
+        <span className="myenv-touchpoint-label">{primitive.display_label}</span>
+      </button>)}
+      {initiatives.map(initiative=>{
+        const entry=initiative.components.find(component=>component.renderer_key==="initiative.entry_card")
+        const label=text(entry?.config?.title,initiative.initiative_key)
+        return <button
+          key={initiative.initiative_key}
+          type="button"
+          className="myenv-touchpoint myenv-touchpoint--initiative"
+          aria-label={"Open "+label}
+          aria-expanded={activePanel==="initiative:"+initiative.initiative_key}
+          onClick={()=>setActivePanel("initiative:"+initiative.initiative_key)}
+        >
+          <span className="myenv-touchpoint-dot" aria-hidden="true"/>
+          <span className="myenv-touchpoint-label">{label}</span>
+        </button>
+      })}
+    </nav>
+
+    {(activePrimitive||activeInitiative)&&<div
+      className="myenv-overlay"
+      role="presentation"
+      onMouseDown={event=>{if(event.currentTarget===event.target)setActivePanel(null)}}
+    >
+      <section className="myenv-panel" role="dialog" aria-modal="true" aria-label={activePrimitive?.display_label||"Initiative"}>
+        <button className="myenv-panel-close" type="button" aria-label="Close" onClick={()=>setActivePanel(null)}>×</button>
+        {activePrimitive&&renderPrimitive(activePrimitive)}
+        {activeInitiative&&<section className="myenv-connections-thread">
+          <div className="myenv-thread-heading">
+            <p className="myenv-kicker">{activeInitiative.visibility_source.toUpperCase()}</p>
+            <h2>Initiative</h2>
+            <p>This initiative is visible because this environment has an evidenced encounter or invitation relation.</p>
+          </div>
+          {activeInitiative.components.filter(component=>component.renderer_key==="initiative.entry_card").map(component=>{
+            const config=component.config||{}
+            return <article key={component.component_key} className="myenv-initiative-card">
+              <div>
+                <span>{text(config.target_environment_label,activeInitiative.target_environment_key||"initiative")}</span>
+                <h3>{text(config.title,activeInitiative.initiative_key)}</h3>
+                <p>{text(config.summary)}</p>
+              </div>
+              {text(config.route)&&<a href={text(config.route)}>ENTER →</a>}
+            </article>
+          })}
+        </section>}
+      </section>
+    </div>}
   </main>
 }

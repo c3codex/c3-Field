@@ -20,29 +20,72 @@
 @media(max-width:760px){.myenv-arrival-video{object-fit:cover}.myenv-skip{right:16px;bottom:18px}.myenv-place{padding:22px}.myenv-presence h1{font-size:34px}}
 @media(prefers-reduced-motion:reduce){.myenv-skip,.myenv-presence{transition:none}.myenv-arrival-video{display:none}.myenv-arrival{background-image:url('/api/free-media?asset=c3_field_c1me_live_backdrop_v1');background-size:cover;background-position:center}.myenv-skip{opacity:1}}
 
-.myenv-relations{position:absolute;z-index:3;right:clamp(18px,4vw,54px);top:clamp(82px,9vw,120px);width:min(390px,calc(100vw - 36px));max-height:calc(100vh - 160px);overflow:auto;background:rgba(5,13,18,.72);border:1px solid rgba(244,239,227,.16);backdrop-filter:blur(14px);padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.22)}
-.myenv-relations h2{margin:6px 0 18px;font:400 28px/1.05 Georgia,serif}
-.myenv-relations-empty{margin:0;color:rgba(244,239,227,.62);font-size:13px}
+.myenv-presence-hint{margin:10px 0 0;font-size:10px;letter-spacing:.08em;color:rgba(244,239,227,.52);opacity:.55;transition:opacity .2s ease}
+.myenv-environment:hover .myenv-presence-hint{opacity:.88}
+
+.myenv-discovery{position:absolute;z-index:5;right:clamp(18px,3vw,42px);top:50%;transform:translateY(-50%);display:grid;gap:9px;align-items:center}
+.myenv-touchpoint{position:relative;width:46px;height:46px;border:0;background:transparent;color:#f4efe3;display:grid;place-items:center;padding:0;cursor:pointer}
+.myenv-touchpoint-dot{display:block;width:11px;height:11px;border-radius:999px;border:1px solid rgba(244,239,227,.72);background:rgba(4,9,13,.42);box-shadow:0 0 0 5px rgba(244,239,227,.04),0 0 20px rgba(244,239,227,.09);transition:transform .18s ease,background .18s ease,box-shadow .18s ease}
+.myenv-touchpoint--initiative .myenv-touchpoint-dot{width:14px;height:14px;border-style:double;border-width:3px;background:rgba(244,239,227,.12)}
+.myenv-touchpoint-label{position:absolute;right:48px;top:50%;transform:translate(8px,-50%);opacity:0;pointer-events:none;white-space:nowrap;padding:7px 10px;border:1px solid rgba(244,239,227,.13);background:rgba(5,13,18,.8);backdrop-filter:blur(10px);font:600 9px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;transition:opacity .16s ease,transform .16s ease}
+.myenv-touchpoint:focus-visible{outline:1px solid rgba(244,239,227,.75);outline-offset:2px;border-radius:999px}
+.myenv-touchpoint:focus-visible .myenv-touchpoint-label,.myenv-touchpoint[aria-expanded="true"] .myenv-touchpoint-label{opacity:1;transform:translate(0,-50%)}
+.myenv-touchpoint[aria-expanded="true"] .myenv-touchpoint-dot{background:rgba(244,239,227,.94);box-shadow:0 0 0 6px rgba(244,239,227,.09),0 0 26px rgba(244,239,227,.18);transform:scale(1.08)}
+@media(hover:hover) and (pointer:fine){
+  .myenv-touchpoint:hover .myenv-touchpoint-label{opacity:1;transform:translate(0,-50%)}
+  .myenv-touchpoint:hover .myenv-touchpoint-dot{background:rgba(244,239,227,.88);transform:scale(1.12);box-shadow:0 0 0 6px rgba(244,239,227,.08),0 0 28px rgba(244,239,227,.18)}
+}
+
+.myenv-overlay{position:absolute;inset:0;z-index:12;display:grid;place-items:center;padding:clamp(18px,4vw,54px);background:rgba(2,7,10,.48);backdrop-filter:blur(7px)}
+.myenv-panel{position:relative;width:min(680px,calc(100vw - 36px));max-height:min(78vh,760px);overflow:auto;border:1px solid rgba(244,239,227,.18);border-radius:18px;background:linear-gradient(180deg,rgba(7,17,24,.94),rgba(4,11,16,.97));box-shadow:0 24px 80px rgba(0,0,0,.42);padding:clamp(22px,4vw,38px)}
+.myenv-panel-close{position:sticky;top:0;float:right;z-index:2;width:42px;height:42px;margin:-8px -8px 8px 18px;border:1px solid rgba(244,239,227,.2);border-radius:999px;background:rgba(4,9,13,.78);color:#f4efe3;font:300 25px/1 Georgia,serif;cursor:pointer;backdrop-filter:blur(8px)}
+.myenv-panel-close:hover,.myenv-panel-close:focus-visible{border-color:rgba(244,239,227,.55);outline:none}
+.myenv-panel .myenv-connections-thread{margin:0;padding:0;border:0}
+.myenv-panel .myenv-thread-heading{padding-right:46px}
+.myenv-thread-heading h2{margin:5px 0 8px;font:400 clamp(28px,5vw,42px)/1 Georgia,serif}
+.myenv-thread-heading>p:last-child{margin:0 0 18px;color:rgba(244,239,227,.66);font-size:12px;line-height:1.55}
+.myenv-relations-empty,.myenv-runtime-warning{margin:0;color:rgba(244,239,227,.62);font-size:13px;line-height:1.5}
+.myenv-runtime-warning{padding:12px 14px;border:1px solid rgba(244,239,227,.14);background:rgba(4,9,13,.28)}
+.myenv-runtime-notice{position:absolute;left:clamp(18px,4vw,54px);top:clamp(18px,4vw,42px);z-index:6;max-width:min(440px,calc(100vw - 36px));margin:0;padding:9px 12px;border:1px solid rgba(244,239,227,.16);background:rgba(5,13,18,.72);backdrop-filter:blur(10px);color:rgba(244,239,227,.8);font-size:11px;line-height:1.45}
+
 .myenv-initiative-card{display:grid;gap:16px;border-top:1px solid rgba(244,239,227,.14);padding:18px 0 2px}
 .myenv-initiative-card span{display:block;color:rgba(244,239,227,.5);font-size:9px;letter-spacing:.14em;text-transform:uppercase}
-.myenv-initiative-card h3{margin:5px 0 8px;font:400 22px/1.1 Georgia,serif}
-.myenv-initiative-card p{margin:0;color:rgba(244,239,227,.72);font-size:12px;line-height:1.55}
-.myenv-initiative-card a,.myenv-initiative-card button{justify-self:start;border:1px solid rgba(244,239,227,.34);background:rgba(4,9,13,.42);color:#f4efe3;padding:10px 12px;font:700 9px/1 Inter,system-ui,sans-serif;letter-spacing:.12em;text-decoration:none;cursor:pointer}
+.myenv-initiative-card h3{margin:5px 0 8px;font:400 23px/1.1 Georgia,serif}
+.myenv-initiative-card p{margin:0;color:rgba(244,239,227,.74);font-size:12px;line-height:1.55}
+.myenv-initiative-card a,.myenv-initiative-card button{justify-self:start;border:1px solid rgba(244,239,227,.3);background:rgba(4,9,13,.38);color:#f4efe3;padding:10px 12px;font:700 9px/1 Inter,system-ui,sans-serif;letter-spacing:.11em;text-decoration:none;cursor:pointer}
 .myenv-initiative-card button:disabled{opacity:.5;cursor:wait}
 .myenv-initiative-notice{margin:14px 0 0;color:#f4efe3;font-size:11px}
-@media(max-width:760px){.myenv-relations{left:18px;right:18px;top:72px;width:auto;max-height:55vh}.myenv-place{padding:22px}.myenv-presence h1{font-size:34px}}
 
-.myenv-connections-thread{margin-top:22px;padding-top:20px;border-top:1px solid rgba(244,239,227,.16)}
-.myenv-thread-heading h2{margin:5px 0 8px;font:400 24px/1 Georgia,serif}
-.myenv-thread-heading>p:last-child{margin:0 0 14px;color:rgba(244,239,227,.64);font-size:11px;line-height:1.5}
-.myenv-thread-entries{display:grid;gap:8px;max-height:260px;overflow:auto;padding-right:4px}
-.myenv-thread-entries article{border:1px solid rgba(244,239,227,.12);background:rgba(4,9,13,.34);padding:11px 12px}
+.myenv-connections-thread{margin:0}
+.myenv-thread-entries{display:grid;gap:9px;max-height:320px;overflow:auto;padding-right:4px}
+.myenv-thread-entries article{border:1px solid rgba(244,239,227,.12);border-radius:10px;background:rgba(4,9,13,.32);padding:12px 13px}
 .myenv-thread-entries article>div{display:flex;justify-content:space-between;gap:12px;color:rgba(244,239,227,.46);font-size:8px;letter-spacing:.1em;text-transform:uppercase}
-.myenv-thread-entries h3{margin:6px 0 3px;font:400 15px/1.2 Georgia,serif}
-.myenv-thread-entries p{margin:5px 0;color:rgba(244,239,227,.76);font-size:11px;line-height:1.45;white-space:pre-wrap}
+.myenv-thread-entries h3{margin:6px 0 3px;font:400 16px/1.2 Georgia,serif}
+.myenv-thread-entries p{margin:5px 0;color:rgba(244,239,227,.76);font-size:11px;line-height:1.48;white-space:pre-wrap}
 .myenv-thread-entries a{display:inline-block;margin-top:6px;color:#f4efe3;font-size:8px;letter-spacing:.1em;text-decoration:none}
-.myenv-thread-compose{display:grid;gap:8px;margin-top:12px}
-.myenv-thread-compose select,.myenv-thread-compose textarea{width:100%;border:1px solid rgba(244,239,227,.18);background:rgba(4,9,13,.5);color:#f4efe3;padding:9px 10px;font:400 11px/1.4 Inter,system-ui,sans-serif}
-.myenv-thread-compose textarea{resize:vertical}
-.myenv-thread-compose button{justify-self:start;border:1px solid rgba(244,239,227,.34);background:rgba(244,239,227,.92);color:#091015;padding:9px 11px;font:700 8px/1 Inter,system-ui,sans-serif;letter-spacing:.11em;cursor:pointer}
+.myenv-thread-entries button{margin-top:7px;border:0;background:transparent;color:rgba(244,239,227,.58);padding:0;font:600 8px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;cursor:pointer}
+
+.myenv-thread-compose{display:grid;gap:9px;margin-top:16px}
+.myenv-thread-compose input,.myenv-thread-compose select,.myenv-thread-compose textarea{width:100%;border:1px solid rgba(244,239,227,.18);border-radius:8px;background:rgba(4,9,13,.48);color:#f4efe3;padding:11px 12px;font:400 12px/1.4 Inter,system-ui,sans-serif}
+.myenv-thread-compose input::placeholder,.myenv-thread-compose textarea::placeholder{color:rgba(244,239,227,.4)}
+.myenv-thread-compose select:focus,.myenv-thread-compose textarea:focus,.myenv-thread-compose input:focus{outline:1px solid rgba(244,239,227,.55);outline-offset:1px}
+.myenv-thread-compose textarea{resize:vertical;min-height:78px}
+.myenv-thread-compose button{justify-self:start;border:1px solid rgba(244,239,227,.3);border-radius:999px;background:rgba(244,239,227,.92);color:#091015;padding:11px 15px;font:700 9px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;cursor:pointer}
 .myenv-thread-compose button:disabled{opacity:.45;cursor:not-allowed}
+
+@media(max-width:760px){
+  .myenv-place{padding:22px 22px 82px}
+  .myenv-presence h1{font-size:34px}
+  .myenv-presence-hint{display:none}
+  .myenv-discovery{left:12px;right:12px;top:auto;bottom:12px;transform:none;display:flex;justify-content:center;gap:3px;padding:7px 8px;border:1px solid rgba(244,239,227,.12);border-radius:999px;background:rgba(5,13,18,.56);backdrop-filter:blur(12px);overflow-x:auto}
+  .myenv-touchpoint{flex:0 0 42px;width:42px;height:42px}
+  .myenv-touchpoint-label{right:auto;left:50%;top:auto;bottom:47px;transform:translate(-50%,6px);max-width:180px;white-space:normal;text-align:center}
+  .myenv-touchpoint:focus-visible .myenv-touchpoint-label,.myenv-touchpoint[aria-expanded="true"] .myenv-touchpoint-label{transform:translate(-50%,0)}
+  .myenv-overlay{place-items:end center;padding:12px 12px 68px}
+  .myenv-panel{width:100%;max-height:72vh;border-radius:18px 18px 12px 12px;padding:22px}
+  .myenv-runtime-notice{top:14px;left:14px;right:14px;max-width:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .myenv-touchpoint-dot,.myenv-touchpoint-label,.myenv-presence-hint{transition:none}
+}
