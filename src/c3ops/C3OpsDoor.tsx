@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { ManifestResponse, LapzuliReadback } from "../../functions/_lib/me-environment"
+import type { ManifestResponse, LapzuliReadback, C3OpsCurrentStateReadback } from "../../functions/_lib/me-environment"
 import { c3OpsRoute, portals } from "./c3OpsRoutes"
 import "./c3OpsDoor.css"
 type Manifest = ManifestResponse["environments"][number]
@@ -13,7 +13,7 @@ function Current({env}:{env:Manifest}) {
 export default function C3OpsDoor() {
   const route=c3OpsRoute(window.location.pathname)
   const [state,setState]=useState<ManifestResponse|null>(null)
-  const [lapzuli,setLapzuli]=useState<LapzuliReadback|null>(null)
+  const [lapzuli,setLapzuli]=useState<LapzuliReadback|null>(null)\n  const [currentState,setCurrentState]=useState<C3OpsCurrentStateReadback|null>(null)
   const [error,setError]=useState("")
   const [assetError,setAssetError]=useState(false)
   useEffect(()=>{
@@ -27,7 +27,7 @@ export default function C3OpsDoor() {
         const body=await response.json() as ManifestResponse
         if(body.contract!=="me_environment_manifest_v1" || !Array.isArray(body.environments)) throw new Error("Registry response is not a manifest.")
         setState(body)
-        if(route==="/relational-operations/lapzuli" || route==="/c3optics"){
+        if(route==="/systems-access/current"){\n          const currentResponse=await fetch("/api/c3ops/manifest?view=current_state",{credentials:"same-origin",signal:controller.signal})\n          if(!currentResponse.ok) throw new Error("c3Ops Current State readback unavailable.")\n          setCurrentState(await currentResponse.json())\n        }\n        if(route==="/relational-operations/lapzuli" || route==="/c3optics"){
           const r=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin",signal:controller.signal})
           if(!r.ok) throw new Error("Lapzuli evidence readback unavailable.")
           setLapzuli(await r.json())
@@ -63,6 +63,17 @@ export default function C3OpsDoor() {
       {route.startsWith("/systems-access") && <nav className="ops-architecture" aria-label="Operational architecture">{[["Current","/systems-access/current"],["Build","/systems-access/build"],["Work","/systems-access/work"],["Systems","/systems-access"],["Registry","/systems-access/registry"],["Evidence","/c3optics"]].map(([label,path])=><a key={path} href={path}>{label}</a>)}</nav>}
       {(route==="/systems-access/build"||route==="/systems-access/work") && <p className="ops-unresolved">HLD — this passage provides environment readback. Formation and work execution require their own routed authority.</p>}
       {route.startsWith("/relational-operations") && <><p>Resolve registered relationships and inspect their returned evidence.</p><a className="ops-canopy-link" href="/relational-operations/lapzuli">Lapzuli → Distribution Canopy</a></>}
+      {route==="/systems-access/current" && currentState && <section aria-label="c3Ops Current State">
+        <h2>c3Ops Current State</h2>
+        <p className="ops-caption">Registry readback {new Date(currentState.observed_at).toLocaleString()} · ACT = Accrued Current Trace · HLD = Held Live Disposition · DNR = Did Not Resolve.</p>
+        <div className="ops-env-grid">{currentState.components.map(component=><article className="ops-env" key={component.key}>
+          <p className="ops-kicker">{component.resolution}</p>
+          <h2>{component.label}</h2>
+          <p>{component.subtitle}</p>
+          <p className="ops-caption">{component.source}</p>
+          <Rows records={component.records}/>
+        </article>)}</div>
+      </section>}
       <section className="ops-env-grid" aria-label="Persisted environment state">{state.environments.map(e=><article className="ops-env" key={text(e.identity.env_key)}>
         <p className="ops-kicker">{text(e.identity.system_key)}</p><h2>{text(e.identity.environment_name)}</h2>
         <dl><div><dt>Environment key</dt><dd>{text(e.identity.env_key)}</dd></div><div><dt>Class</dt><dd>{text(e.identity.environment_class)}</dd></div><div><dt>Standing</dt><dd>{text(e.standing)}</dd></div>{e.formation&&<div><dt>Formation</dt><dd>{e.formation}</dd></div>}<div><dt>Active / canonical</dt><dd>{text(e.active)} / {text(e.canonical)}</dd></div>{e.domain&&<div><dt>Domain</dt><dd>{e.domain}</dd></div>}</dl>
