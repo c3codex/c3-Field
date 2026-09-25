@@ -1,0 +1,38 @@
+name: My Env Live Runtime Probe
+
+on:
+  push:
+    branches:
+      - proof/myenv-live-runtime-20260925
+
+permissions:
+  contents: read
+
+jobs:
+  probe-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Probe live My Env routes
+        shell: bash
+        run: |
+          set -u
+          probe () {
+            name="$1"
+            url="$2"
+            echo "===== $name ====="
+            headers=$(mktemp)
+            body=$(mktemp)
+            code=$(curl -L -sS --max-time 20 -D "$headers" -o "$body" -w "%{http_code}" "$url" || true)
+            echo "HTTP=$code"
+            grep -iE '^(content-type|location|cf-ray|cache-control):' "$headers" || true
+            echo "BODY_PREFIX:"
+            head -c 500 "$body" | tr '\n' ' '
+            echo
+          }
+          probe "MY_ENV_ROOT" "https://my.c3field.online/"
+          probe "MY_ENV_C2_ROUTE" "https://my.c3field.online/c2"
+          probe "C2_API_UNAUTH" "https://my.c3field.online/api/c2-mdm"
+          probe "PROFILE_API_UNAUTH" "https://my.c3field.online/api/my-environment-profile"
+          probe "CHAZZ_API_UNAUTH" "https://my.c3field.online/api/my-environment-chazz"
+          probe "TREE_FREE_UNAUTH" "https://my.c3field.online/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
