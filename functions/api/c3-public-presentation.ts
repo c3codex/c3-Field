@@ -36,6 +36,24 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
     if(!em) return json({standing:"public_presentation_authority_missing"},409)
     if(em.public_presentation_release_state!=="bounded_public_runtime") return json({standing:"public_presentation_held"},423)
 
+    const identitySourceKey=typeof em.public_identity_authority_source==="string"?em.public_identity_authority_source:""
+    if(!identitySourceKey||!/^[a-z0-9_]+$/i.test(identitySourceKey))
+      return json({standing:"public_identity_authority_missing"},409)
+
+    const identitySource=await readOne(env,"codex_source_reference",{
+      select:"source_key,version_label,source_status,metadata",
+      source_key:"eq."+identitySourceKey,
+      source_status:"eq.committed"
+    })
+    const identity=record(identitySource.metadata)
+    const requiredIdentity=[
+      "brand","legal_entity","formal_authority_statement","environment_name","environment_definition",
+      "model_name","model_descriptor","model_path","initiative_label",
+      "contact_email","contact_phone","contact_phone_href","privacy_route","terms_route","contact_route","copyright"
+    ]
+    if(identitySource.source_key!==identitySourceKey||requiredIdentity.some(key=>typeof identity[key]!=="string"||!(identity[key] as string).trim()))
+      return json({standing:"public_identity_authority_incomplete"},409)
+
     const initiativeSurface=isInitiativeSurfaceHostname(requestUrl.hostname)
       ? await resolveInitiativeSurfaceHost(env,requestUrl.hostname)
       : null
@@ -59,9 +77,9 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
     if(!sm) return json({standing:"public_presentation_authority_missing"},409)
     if(source.source_key!==authoritySource) return json({standing:"public_presentation_authority_mismatch"},409)
 
-    let presentation=sm
+    let presentation:Record<string,unknown>={...sm,public_identity:identity}
     if(initiativeSurface){
-      const projected=JSON.parse(JSON.stringify(sm)) as Record<string,unknown>
+      const projected=JSON.parse(JSON.stringify(presentation)) as Record<string,unknown>
       const requestPath=requestUrl.pathname.length>1?requestUrl.pathname.replace(/\/$/,""):"/"
       const rootUrl=initiativeSurface.canonicalUrl.replace(/\/$/,"")
       const canonicalUrl=requestPath===initiativeSurface.connectRoute
@@ -101,6 +119,8 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
       standing:"bounded_public_runtime",
       sourceKey:source.source_key,
       version:source.version_label,
+      identitySourceKey:identitySource.source_key,
+      identityVersion:identitySource.version_label,
       canonicalEnvironment:environment.env_key,
       ...(initiativeSurface?{surface:{
         surfaceKey:initiativeSurface.surfaceKey,
