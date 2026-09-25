@@ -126,6 +126,76 @@ export function normalizedProvider(value:unknown){
     : ""
 }
 
+async function resolvePublicR2Fallback(asset:RegistryRow,request:Request){
+  if(asset.authoritative_custody_identifier!=="c3-field-media"||typeof asset.authoritative_custody_location!=="string") throw new FreeMediaError("custody_mismatch")
+  const object=asset.authoritative_custody_location.split("/").map(part=>encodeURIComponent(part)).join("/")
+  const source="https://field-media.c3field.online/"+object
+  const upstreamHeaders=new Headers()
+  const range=request.headers.get("range")
+  if(range) upstreamHeaders.set("range",range)
+  const response=await fetch(source,{headers:upstreamHeaders,redirect:"manual",signal:AbortSignal.timeout(20000)})
+  if((response.status!==200&&response.status!==206)||!response.body) throw new FreeMediaError("provider_unavailable",503)
+  const headers=cacheHeaders(asset)
+  for(const name of ["content-length","content-range","accept-ranges","last-modified"]){
+    const value=response.headers.get(name)
+    if(value) headers.set(name,value)
+  }
+  if(response.status===206) headers.set("accept-ranges","bytes")
+  return new Response(response.body,{status:response.status,headers})
+}
+
+async function resolveBoundR2(asset:RegistryRow,env:FreeMediaEnv,request:Request){
+  const object=asset.authoritative_custody_location
+  const bindingKey=r2BindingKey(asset.authoritative_custody_identifier)
+  if(typeof object!=="string"||!bindingKey) throw new FreeMediaError("custody_mismatch")
+  const bucket=env[bindingKey]
+  if(!bucket){
+    if(bindingKey==="C3_FIELD_MEDIA") return await resolvePublicR2Fallback(asset,request)
+    throw new FreeMediaError("r2_binding_unavailable",503)
+  }
+
+  const total=typeof asset.byte_size==="number"&&Number.isSafeInteger(asset.byte_size)&&asset.byte_size>0
+    ? asset.byte_size
+    : null
+  if(!total) throw new FreeMediaError("asset_size_unavailable",503)
+
+  // Browsers commonly probe MP4s with byte ranges before playback. If the Pages
+  // R2 binding is present but its object is stale/missing, preserve the governed
+  // Registry custody path by falling through to the registered public R2 domain.
+  const range=parseByteRange(request.headers.get("range"),total)
+  const headers=cacheHeaders(asset)
+  headers.set("accept-ranges","bytes")
+
+  if(range.kind==="invalid"){
+    headers.set("content-range",`bytes */${total}`)
+    headers.set("content-length","0")
+    return new Response(null,{status:416,headers})
+  }
+
+  const options=range.kind==="range"?{range:{offset:range.offset,length:range.length}}:undefined
+  const resolved=await bucket.get(object,options)
+  if(!resolved||!resolved.body){
+    if(bindingKey==="C3_FIELD_MEDIA") return await resolvePublicR2Fallback(asset,request)
+    throw new FreeMediaError("provider_unavailable",503)
+  }
+
+  if(range.kind==="range"){
+    headers.set("content-range",`bytes ${range.offset}-${range.end}/${total}`)
+    headers.set("content-length",String(range.length))
+    return new Response(resolved.body,{status:206,headers})
+  }
+
+  headers.set("content-length",String(total))
+  return new Response(resolved.body,{status:200,headers})
+}
+
+async function resolveNativeCustody(asset:RegistryRow,env:FreeMediaEnv,request:Request){
+  const provider=normalizedProvider(asset.authoritative_custody_provider)
+  if(provider==="cloudflare_r2") return await resolveBoundR2(asset,env,request)
+  if(provider==="supabase") return await resolveSupabase(asset,env)
+  throw new FreeMediaError("free_media_provider_not_registered")
+}
+
 function canonicalDeliveryUri(asset:RegistryRow,binding?:RegistryRow){
   const provider=normalizedProvider(binding?.provider??asset.authoritative_custody_provider)
   const bucket=binding?.bucket_name??asset.authoritative_custody_identifier
