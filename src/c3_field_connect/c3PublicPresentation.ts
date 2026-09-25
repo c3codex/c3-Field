@@ -20,6 +20,7 @@ export type C3PublicIdentity={
   copyright:string
 }
 export type C3PublicPresentation={
+  runtime_media?:{entry_intro?:string;feature_film?:string}
   brand:string
   legal_entity:string
   environment_name:string

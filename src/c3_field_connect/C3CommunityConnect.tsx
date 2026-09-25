@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
+import MdmEntryIntro from "./MdmEntryIntro"
 import MillionDollarMissionLanding from "./MillionDollarMissionLanding"
 import {loadC3PublicPresentation,type C3PublicPresentation} from "./c3PublicPresentation"
 import type {InitiativeSurfaceRuntime} from "./initiativeSurfaceHost"
@@ -187,7 +188,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
       {pct47Footer}
     </main>
   }
-  if(publicStage==="landing" && presentation) return <MillionDollarMissionLanding presentation={presentation} />
+  if(publicStage==="landing" && presentation) return initiativeSurface?.initiativeKey==="million_dollar_mission" ? <MdmEntryIntro src={presentation.runtime_media?.entry_intro}><MillionDollarMissionLanding presentation={presentation} /></MdmEntryIntro> : <MillionDollarMissionLanding presentation={presentation} />
 
   if(initiativeSurface?.initiativeKey==="47pct"){
     const publicPresentation=initiativeSurface.publicPresentation!

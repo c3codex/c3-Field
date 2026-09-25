@@ -1,9 +1,12 @@
+import {useState} from "react"
 import type {C3PublicPresentation} from "./c3PublicPresentation"
 
-const VIDEO_URL="/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1"
+
 const media=(key:string)=>`/api/free-media?asset=${key}`
 
 export default function MillionDollarMissionLanding({presentation}:{presentation:C3PublicPresentation}){
+  const [storyRequested,setStoryRequested]=useState(()=>window.location.hash==="#film")
+  const story= presentation.runtime_media ? presentation.runtime_media.feature_film : "/api/free-media?asset=c3_field_public_intro_million_dollar_mission_v1"
   const copy=presentation.landing
   const center=media(presentation.media_roles.og_master)
   const capacity=media(presentation.media_roles.capacity_projects)
@@ -26,13 +29,13 @@ export default function MillionDollarMissionLanding({presentation}:{presentation
         <p className="mdm-hero-lead">{copy.hero_lead}</p>
         <div className="mdm-actions">
           <a className="mdm-button mdm-button-primary" href={copy.primary_cta_route}>{copy.primary_cta}<span aria-hidden="true">↗</span></a>
-          <a className="mdm-button mdm-button-quiet" href="#film">WATCH THE STORY</a>
+          <a className="mdm-button mdm-button-quiet" href="#film" onClick={()=>setStoryRequested(true)}>WATCH THE STORY</a>
         </div>
       </div>
     </section>
 
     <section className="mdm-video-section" id="film">
-      <div className="mdm-video-shell"><video src={VIDEO_URL} playsInline controls preload="metadata" aria-label={copy.kicker}>Your browser does not support this video.</video></div>
+      <div className="mdm-video-shell">{story && storyRequested ? <video src={story} playsInline controls preload="metadata" aria-label={copy.kicker}>Your browser does not support this video.</video> : !story ? <p role="status">The story film is currently unavailable.</p> : null}</div>
     </section>
 
     <section className="mdm-question" id="mission">

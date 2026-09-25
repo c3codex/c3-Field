@@ -1,4 +1,5 @@
 import {InitiativeSurfaceResolutionError,isInitiativeSurfaceHostname,resolveInitiativeSurfaceHost,type InitiativeSurfaceEnv} from "../_lib/initiative-surface-host"
+import {projectMdmMediaRoles} from "../_lib/mdm-media-roles"
 
 type Env=InitiativeSurfaceEnv
 
@@ -113,6 +114,17 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
         primary_cta_route:initiativeSurface.connectRoute
       }
       presentation=projected
+      if(initiativeSurface.initiativeKey==="million_dollar_mission"){
+        // The host resolver establishes package release. FREE still verifies each asset's custody.
+        const url=new URL(env.SUPABASE_URL!.replace(/\/$/,"")+"/rest/v1/c3_pac_runtime_binding")
+        url.searchParams.set("select","media_role,runtime_uri,standing,metadata")
+        url.searchParams.set("pac_key","eq."+initiativeSurface.webpacKey)
+        const response=await fetch(url,{headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY},signal:AbortSignal.timeout(12000)})
+        if(!response.ok)throw new Error("registry_read_failed")
+        const rows=await response.json()
+        if(!Array.isArray(rows))throw new Error("registry_read_failed")
+        presentation.runtime_media=projectMdmMediaRoles(rows)
+      }
     }
 
     return json({
