@@ -1,0 +1,40 @@
+name: My Env Operational Runtime Proof
+
+on:
+  push:
+    branches:
+      - proof/myenv-operational-runtime-20260925
+
+permissions:
+  contents: read
+
+jobs:
+  prove-operational-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout operational proof
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22.16.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+          cache: 'npm'
+
+      - name: Install locked dependencies
+        run: npm ci --include=dev --ignore-scripts
+
+      - name: Run bounded runtime tests
+        run: node --import tsx --test src/c3_field_connect/c3FieldRouting.test.ts functions/api/my-environment-chazz.test.ts functions/api/free-media.test.ts functions/_lib/c1-passage.test.ts
+
+      - name: Assert operational source bindings
+        run: |
+          grep -q 'personalPath === "/c2"' src/app/App.tsx
+          grep -q 'update_profile_pac_v1_internal' functions/api/my-environment-profile.ts
+          grep -q 'SAVE PROFILE-PAC' src/c3_field_connect/MyEnvironmentEncounter.tsx
+          grep -q 'resolvePublicProfile' functions/api/c2-mdm.ts
+          grep -q 'PUBLIC PROFILE' src/c3_field_contribution/C2EnvironmentShell.tsx
+
+      - name: Build c3field
+        run: npm run build:c3field
