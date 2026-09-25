@@ -168,8 +168,13 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
        webpacMetadata.runtime_release_authorized!==true)
       throw new InitiativeSurfaceResolutionError(423,"webpac_runtime_release_held")
     const presentation=record(webpacMetadata.public_presentation)
-    if(str(presentation.title)!=="4.7%"||str(presentation.primary_cta)!=="CONNECT"||
+    if(str(presentation.title)!=="4.7%"||str(presentation.header_line)!=="A c3 Field Initiative"||
+       str(presentation.primary_cta)!=="CONNECT"||
        !str(presentation.initiative_explanation)||!str(presentation.connect_copy)||
+       !str(presentation.model_descriptor)||!str(presentation.model_path)||!str(presentation.model_body)||
+       !str(presentation.open_question)||!str(presentation.open_question_helper)||
+       !str(presentation.formal_authority_statement)||
+       !str(presentation.og_title)||!str(presentation.og_description)||
        !str(presentation.memorial_name)||!str(presentation.memorial_text)||
        !str(presentation.watermark_runtime_url)||
        presentation.public_surface_protected_primitive_labels_allowed!==false)
