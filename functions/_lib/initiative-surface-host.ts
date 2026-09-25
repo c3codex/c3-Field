@@ -45,6 +45,7 @@ export type InitiativeSurfaceResolution={
   releaseState:"released"
   bindingProcessKey:string
   bindingMetadata:Record<string,unknown>
+  publicPresentation?:Record<string,unknown>
 }
 
 export class InitiativeSurfaceResolutionError extends Error{
@@ -123,6 +124,7 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
     metadata:"cs."+JSON.stringify({canonical_host:host,surface_type:"initiative_connect_surface"})
   })
   const {row:binding,metadata}=selectInitiativeSurfaceBinding(bindingRows as ProcessRow[])
+  let publicPresentation:Record<string,unknown>|undefined
 
   const surfaceKey=str(metadata.surface_key)
   const initiativeKey=str(metadata.initiative_key)
@@ -162,9 +164,17 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
       throw new InitiativeSurfaceResolutionError(409,"webpac_authority_mismatch")
     if(webpacMetadata.parent_envpac!=="c3envpac_c1me_v0_1"||webpacMetadata.parent_environment!=="env_c3_community_connect")
       throw new InitiativeSurfaceResolutionError(409,"webpac_environment_mismatch")
-    if(webpac.release_state!=="public"||webpac.execution_authority_state!=="bounded_renderer"||
+    if(!["public","public_release_authorized"].includes(String(webpac.release_state))||webpac.execution_authority_state!=="bounded_renderer"||
        webpacMetadata.runtime_release_authorized!==true)
       throw new InitiativeSurfaceResolutionError(423,"webpac_runtime_release_held")
+    const presentation=record(webpacMetadata.public_presentation)
+    if(str(presentation.title)!=="4.7%"||str(presentation.primary_cta)!=="CONNECT"||
+       !str(presentation.initiative_explanation)||!str(presentation.connect_copy)||
+       !str(presentation.memorial_name)||!str(presentation.memorial_text)||
+       !str(presentation.watermark_runtime_url)||
+       presentation.public_surface_protected_primitive_labels_allowed!==false)
+      throw new InitiativeSurfaceResolutionError(409,"webpac_public_presentation_incomplete")
+    publicPresentation=presentation
   }else{
     const webpac=requireOne(await readRows(env,"system_process_registry","process_key,status,process_status,metadata",{
       process_key:"eq."+webpacProcessKey
@@ -203,6 +213,7 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
     bindingState:"active",
     releaseState:"released",
     bindingProcessKey:String(binding.process_key),
-    bindingMetadata:metadata
+    bindingMetadata:metadata,
+    ...(publicPresentation?{publicPresentation}:{})
   }
 }

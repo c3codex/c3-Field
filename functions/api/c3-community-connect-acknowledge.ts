@@ -40,9 +40,9 @@ export const onRequestGet:PagesFunction<PassageEnv>=async()=>{
 <p class="kicker">c3 COMMUNITY PARTNERS · 4.7%</p><h1>Before My Environment opens.</h1>
 <div class="flame" aria-label="Eternal Flame memorial"><span aria-hidden="true">◊</span><strong>Eternal Flame</strong><p>For those who died waiting.</p></div>
 <p>This acknowledgment records receipt and recognition only. It does not create authority, support, attendance, contribution, or C2 standing.</p>
-${items("3 Constraints",PCT47_322_CONTRACT.constraints)}
-${items("2 Agreements",PCT47_322_CONTRACT.agreements)}
-${items("2 Resolutions",PCT47_322_CONTRACT.resolutions)}
+${items("Constraints",PCT47_322_CONTRACT.constraints)}
+${items("Agreements",PCT47_322_CONTRACT.agreements)}
+${items("Resolutions",PCT47_322_CONTRACT.resolutions)}
 <div class="ack"><label><input id="ack" type="checkbox"><span>${esc(PCT47_322_CONTRACT.acknowledgmentText)}</span></label>
 <button id="continue" class="action" type="button" disabled>${esc(PCT47_322_CONTRACT.actionLabel)}</button></div>
 <p id="result" role="status"></p><p class="hold"><a href="/connect">Return to Connect</a></p>

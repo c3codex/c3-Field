@@ -34,7 +34,7 @@ export const PCT47_322_CONTRACT={
     "Support and attendance resolve separately.",
     "The record remains bounded to what actually occurred."
   ],
-  acknowledgmentText:"I acknowledge the 3 Constraints, 2 Agreements, and 2 Resolutions above. I understand that My Environment preserves my CURRENT relational state, that peaceful on-ground presence is voluntary, and that support, contribution, connection, and physical attendance are evidenced separately.",
+  acknowledgmentText:"I acknowledge the Constraints, Agreements, and Resolutions above. I understand that peaceful on-ground presence is voluntary, and that support, contribution, connection, and physical attendance are evidenced separately.",
   actionLabel:"ACKNOWLEDGE & ENTER MY ENVIRONMENT"
 } as const
 export const json = (body: RecordValue, status = 200) => new Response(JSON.stringify(body), {
@@ -230,7 +230,7 @@ async function send47pctAcknowledgmentHandoff(owner:RecordValue,ticket:string,re
 
 Your existing c3Field relationship is recognized.
 
-Before 4.7% can appear in My Environment, acknowledge the bounded 3-2-2:
+Before 4.7% can appear in My Environment, review and acknowledge the initiative terms:
 
 ${link}
 
@@ -240,7 +240,7 @@ For those who died waiting.
 This link expires in 8 hours.
 
 Connect · Contribute · Create`
-  const html=`<!doctype html><html><body style="margin:0;background:#111416;color:#f3efe7;font-family:Arial,sans-serif"><div style="max-width:640px;margin:auto;padding:36px 28px"><p style="letter-spacing:.16em;font-size:12px">c3 COMMUNITY PARTNERS · 4.7%</p><h1 style="font-family:Georgia,serif;font-weight:400">Acknowledge to continue.</h1><p>Hi ${esc(name)},</p><p>Your existing c3Field relationship is recognized. The 4.7% relation remains held until the 3-2-2 acknowledgment is recorded.</p><p><a href="${esc(link)}" style="display:inline-block;padding:14px 20px;background:#f1eee5;color:#111;text-decoration:none;font-weight:700">REVIEW 3-2-2 →</a></p><hr style="border:0;border-top:1px solid #394047;margin:34px 0"><p><strong>Eternal Flame</strong><br>For those who died waiting.</p><p style="font-size:12px;color:#88939b">This link expires in 8 hours.</p></div></body></html>`
+  const html=`<!doctype html><html><body style="margin:0;background:#111416;color:#f3efe7;font-family:Arial,sans-serif"><div style="max-width:640px;margin:auto;padding:36px 28px"><p style="letter-spacing:.16em;font-size:12px">c3 COMMUNITY PARTNERS · 4.7%</p><h1 style="font-family:Georgia,serif;font-weight:400">Acknowledge to continue.</h1><p>Hi ${esc(name)},</p><p>Your existing c3Field relationship is recognized. The 4.7% relation remains held until the acknowledgment is recorded.</p><p><a href="${esc(link)}" style="display:inline-block;padding:14px 20px;background:#f1eee5;color:#111;text-decoration:none;font-weight:700">REVIEW ACKNOWLEDGMENT →</a></p><hr style="border:0;border-top:1px solid #394047;margin:34px 0"><p><strong>Eternal Flame</strong><br>For those who died waiting.</p><p style="font-size:12px;color:#88939b">This link expires in 8 hours.</p></div></body></html>`
   return sendResend(env,deps,{to:owner.owner_email,subject,text,html,idempotencyKey:"47pct-322-"+requestEventKey})
 }
 async function send47pctEnvironmentHandoff(owner:RecordValue,claim:string,env:PassageEnv,deps:Dependencies){
@@ -250,7 +250,7 @@ async function send47pctEnvironmentHandoff(owner:RecordValue,claim:string,env:Pa
   const subject="4.7% | Open My Environment"
   const text=`Hi ${name},
 
-Your 4.7% Connect relationship and 3-2-2 acknowledgment are recorded.
+Your 4.7% Connect relationship and acknowledgment are recorded.
 
 OPEN MY ENVIRONMENT
 ${link}
@@ -261,7 +261,7 @@ For those who died waiting.
 This secure link expires in 8 hours.
 
 Connect · Contribute · Create`
-  const html=`<!doctype html><html><body style="margin:0;background:#111416;color:#f3efe7;font-family:Arial,sans-serif"><div style="max-width:640px;margin:auto;padding:36px 28px"><p style="letter-spacing:.16em;font-size:12px">c3 COMMUNITY PARTNERS · 4.7%</p><h1 style="font-family:Georgia,serif;font-weight:400">Open My Environment.</h1><p>Hi ${esc(name)},</p><p>Your 4.7% Connect relationship and 3-2-2 acknowledgment are recorded.</p><p><a href="${esc(link)}" style="display:inline-block;padding:14px 20px;background:#f1eee5;color:#111;text-decoration:none;font-weight:700">OPEN MY ENVIRONMENT →</a></p><hr style="border:0;border-top:1px solid #394047;margin:34px 0"><p><strong>Eternal Flame</strong><br>For those who died waiting.</p><p style="font-size:12px;color:#88939b">This secure link expires in 8 hours.</p></div></body></html>`
+  const html=`<!doctype html><html><body style="margin:0;background:#111416;color:#f3efe7;font-family:Arial,sans-serif"><div style="max-width:640px;margin:auto;padding:36px 28px"><p style="letter-spacing:.16em;font-size:12px">c3 COMMUNITY PARTNERS · 4.7%</p><h1 style="font-family:Georgia,serif;font-weight:400">Open My Environment.</h1><p>Hi ${esc(name)},</p><p>Your 4.7% Connect relationship and acknowledgment are recorded.</p><p><a href="${esc(link)}" style="display:inline-block;padding:14px 20px;background:#f1eee5;color:#111;text-decoration:none;font-weight:700">OPEN MY ENVIRONMENT →</a></p><hr style="border:0;border-top:1px solid #394047;margin:34px 0"><p><strong>Eternal Flame</strong><br>For those who died waiting.</p><p style="font-size:12px;color:#88939b">This secure link expires in 8 hours.</p></div></body></html>`
   return sendResend(env,deps,{to:owner.owner_email,subject,text,html,idempotencyKey:"47pct-env-"+owner.envpac_key+"-"+Math.floor(deps.now()/3600000)})
 }
 

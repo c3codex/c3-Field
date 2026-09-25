@@ -133,40 +133,56 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
     )
   }
 
-  if(publicStage==="landing" && initiativeSurface?.initiativeKey==="47pct") return <main className="c3-connect-shell" data-c3-route="/" data-c3-environment="env_c3_community_connect" data-standing-created="false">
-    <header className="c3-connect-header c3-connect-width">
-      <a href="/" className="c3-connect-identity" aria-label="4.7% home"><span>4.7%</span></a>
-      <nav className="c3-connect-public-nav" aria-label="Public"><button className="c3-connect-nav" type="button" onClick={()=>setPublicStage("connect")}>CONNECT <span aria-hidden="true">↗</span></button></nav>
-    </header>
-    <section className="c3-connect-panel c3-connect-width" aria-labelledby="pct47-title">
-      <div className="c3-connect-form-intro">
-        <p className="c3-connect-kicker">c3 COMMUNITY PARTNERS</p>
-        <h1 id="pct47-title">4.7%</h1>
-        <p>Connect to enter the initiative through your own environment.</p>
-      </div>
-      <div className="c3-connect-form">
-        <section aria-label="Eternal Flame memorial">
-          <p className="c3-connect-kicker">ETERNAL FLAME</p>
-          <h2>For those who died waiting.</h2>
-        </section>
-        <button className="c3-connect-button" type="button" onClick={()=>setPublicStage("connect")}>CONNECT <span aria-hidden="true">↗</span></button>
-      </div>
-    </section>
-    <footer className="c3-connect-footer c3-connect-width"><div><strong>c3 Community Partners</strong><span>4.7%</span></div></footer>
-  </main>
+  if(publicStage==="landing" && initiativeSurface?.initiativeKey==="47pct"){
+    const publicPresentation=initiativeSurface.publicPresentation!
+    const watermarkOpacity=typeof publicPresentation.watermark_opacity==="number"?publicPresentation.watermark_opacity:.12
+    return <main className="c3-connect-shell pct47-surface" data-c3-route="/" data-c3-environment="env_c3_community_connect" data-standing-created="false">
+      {publicPresentation.watermark_runtime_url&&<img className="pct47-watermark" src={publicPresentation.watermark_runtime_url} alt="" aria-hidden="true" style={{opacity:watermarkOpacity}} />}
+      <header className="c3-connect-header c3-connect-width">
+        <a href="/" className="c3-connect-identity" aria-label="4.7% home">
+          {publicPresentation.watermark_runtime_url&&<img src={publicPresentation.watermark_runtime_url} alt="" width="48" height="48" />}
+          <span>{publicPresentation.title}</span>
+        </a>
+        <nav className="c3-connect-public-nav" aria-label="Public"><button className="c3-connect-nav" type="button" onClick={()=>setPublicStage("connect")}>{publicPresentation.primary_cta} <span aria-hidden="true">↗</span></button></nav>
+      </header>
+      <section className="c3-connect-panel c3-connect-width" aria-labelledby="pct47-title">
+        <div className="c3-connect-form-intro">
+          <p className="c3-connect-kicker">{publicPresentation.kicker}</p>
+          <h1 id="pct47-title">{publicPresentation.title}</h1>
+          <p className="c3-connect-form-lead">{publicPresentation.initiative_explanation}</p>
+          {publicPresentation.audience_copy&&<p className="c3-connect-form-meaning">{publicPresentation.audience_copy}</p>}
+        </div>
+        <div className="c3-connect-form">
+          <section aria-label="Eternal Flame memorial">
+            <p className="c3-connect-kicker">{publicPresentation.memorial_name}</p>
+            <h2>{publicPresentation.memorial_text}</h2>
+          </section>
+          <p className="c3-connect-custody">{publicPresentation.connect_copy}</p>
+          <button className="c3-connect-button" type="button" onClick={()=>setPublicStage("connect")}>{publicPresentation.primary_cta} <span aria-hidden="true">↗</span></button>
+        </div>
+      </section>
+      <footer className="c3-connect-footer c3-connect-width"><div><strong>c3 Community Partners</strong><span>{publicPresentation.title}</span></div></footer>
+    </main>
+  }
   if(publicStage==="landing" && presentation) return <MillionDollarMissionLanding presentation={presentation} />
 
-  if(initiativeSurface?.initiativeKey==="47pct") return <main className="c3-connect-shell" data-c3-route="/connect" data-c3-environment="env_c3_community_connect" data-standing-created="false">
+  if(initiativeSurface?.initiativeKey==="47pct"){
+    const publicPresentation=initiativeSurface.publicPresentation!
+    return <main className="c3-connect-shell pct47-surface" data-c3-route="/connect" data-c3-environment="env_c3_community_connect" data-standing-created="false">
+    {publicPresentation.watermark_runtime_url&&<img className="pct47-watermark" src={publicPresentation.watermark_runtime_url} alt="" aria-hidden="true" style={{opacity:Math.max(.05,(publicPresentation.watermark_opacity??.12)*.72)}} />}
     <a className="c3-connect-skip" href="#connect">Skip to Connect</a>
     <header className="c3-connect-header c3-connect-width">
-      <button type="button" className="c3-connect-identity" aria-label="Return to 4.7%" onClick={()=>setPublicStage("landing")}><span>4.7%</span></button>
-      <nav className="c3-connect-public-nav" aria-label="Public"><span>ETERNAL FLAME · For those who died waiting.</span></nav>
+      <button type="button" className="c3-connect-identity" aria-label="Return to 4.7%" onClick={()=>setPublicStage("landing")}>
+        {publicPresentation.watermark_runtime_url&&<img src={publicPresentation.watermark_runtime_url} alt="" width="44" height="44" />}
+        <span>{publicPresentation.title}</span>
+      </button>
+      <nav className="c3-connect-public-nav" aria-label="Public"><span>{publicPresentation.memorial_name} · {publicPresentation.memorial_text}</span></nav>
     </header>
     <section id="connect" className="c3-connect-panel c3-connect-width" aria-labelledby="pct47-connect-title">
       <div className="c3-connect-form-intro">
-        <p className="c3-connect-kicker">CONNECT</p>
-        <h1 id="pct47-connect-title">Enter through your environment.</h1>
-        <p className="c3-connect-form-meaning">Connect establishes the relationship. My Environment opens only after email confirmation and the required 3-2-2 acknowledgment.</p>
+        <p className="c3-connect-kicker">{publicPresentation.primary_cta}</p>
+        <h1 id="pct47-connect-title">{publicPresentation.connect_copy}</h1>
+        <p className="c3-connect-form-meaning">Enter through your own environment. Check your email to continue after Connect.</p>
       </div>
       <form className="c3-connect-form" onSubmit={submitCandidate} aria-busy={pending}>
         {environment.encounterEnabled === false && <p role="status">Connecting is not open yet. Please return later.</p>}
@@ -186,8 +202,9 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
         {result && <p className="c3-connect-result" role="status">{result}</p>}
       </form>
     </section>
-    <footer className="c3-connect-footer c3-connect-width"><div><strong>c3 Community Partners</strong><span>4.7%</span><span>Eternal Flame · For those who died waiting.</span></div></footer>
+    <footer className="c3-connect-footer c3-connect-width"><div><strong>c3 Community Partners</strong><span>{publicPresentation.title}</span><span>{publicPresentation.memorial_name} · {publicPresentation.memorial_text}</span></div></footer>
   </main>
+  }
 
   return (
     <main className="c3-connect-shell" data-c3-route="/connect" data-c3-environment="env_c3_community_connect" data-standing-created="false">

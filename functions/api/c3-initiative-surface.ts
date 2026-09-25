@@ -24,6 +24,7 @@ export const onRequestGet:PagesFunction<InitiativeSurfaceEnv>=async({env,request
       canonicalUrl:resolved.canonicalUrl,
       route:resolved.route,
       connectRoute:resolved.connectRoute,
+      publicPresentation:resolved.publicPresentation,
       createsStanding:false
     })
   }catch(error){
