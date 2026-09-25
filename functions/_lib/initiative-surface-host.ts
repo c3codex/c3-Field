@@ -164,7 +164,7 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
       throw new InitiativeSurfaceResolutionError(409,"webpac_authority_mismatch")
     if(webpacMetadata.parent_envpac!=="c3envpac_c1me_v0_1"||webpacMetadata.parent_environment!=="env_c3_community_connect")
       throw new InitiativeSurfaceResolutionError(409,"webpac_environment_mismatch")
-    if(webpac.release_state!=="public"||webpac.execution_authority_state!=="bounded_renderer"||
+    if(webpac.release_state!=="public_release_authorized"||webpac.execution_authority_state!=="bounded_renderer"||
        webpacMetadata.runtime_release_authorized!==true)
       throw new InitiativeSurfaceResolutionError(423,"webpac_runtime_release_held")
     const presentation=record(webpacMetadata.public_presentation)
