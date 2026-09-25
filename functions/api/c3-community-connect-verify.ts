@@ -43,11 +43,17 @@ button.addEventListener("click",async () => {
  try {
   const response=await fetch(location.pathname,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({receipt,token})});
   const value=await response.json();
+  const acknowledgementRequired=response.ok && value.standing==="322_acknowledgment_required" &&
+    value.saved===true && value.acknowledgment_required===true && typeof value.ack_ticket==="string";
   const recorded=response.ok && value.standing==="connection_recorded" && value.saved===true;
-  result.textContent=recorded
-    ? (value.environment_ready===true ? "Connection confirmed. Opening your environment…" : "Your Connect relationship is confirmed and recorded.")
-    : "We could not confirm your connection. Return to Connect to request a fresh confirmation email.";
-  if(recorded && typeof value.next_url==="string"){
+  result.textContent=acknowledgementRequired
+    ? "Email confirmed. Opening the 3-2-2 acknowledgment…"
+    : recorded
+      ? (value.environment_ready===true ? "Connection confirmed. Opening your environment…" : "Your Connect relationship is confirmed and recorded.")
+      : "We could not confirm your connection. Return to Connect to request a fresh confirmation email.";
+  if(acknowledgementRequired){
+    window.setTimeout(()=>location.assign("/api/c3-community-connect-acknowledge#ticket="+encodeURIComponent(value.ack_ticket)),450);
+  }else if(recorded && typeof value.next_url==="string"){
     try {
       const next=new URL(value.next_url,location.origin);
       if(next.origin==="https://my.c3field.online" && next.pathname==="/my-environment" && next.hash.startsWith("#claim=")){
