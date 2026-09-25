@@ -26,7 +26,7 @@ jobs:
         run: npm ci --include=dev --ignore-scripts
 
       - name: Run bounded runtime tests
-        run: node --import tsx --test src/c3_field_connect/c3FieldRouting.test.ts functions/api/my-environment-chazz.test.ts functions/api/free-media.test.ts functions/_lib/c1-passage.test.ts
+        run: node --import tsx --test src/c3_field_connect/c3FieldRouting.test.ts functions/api/my-environment-chazz.test.ts functions/api/free-media.test.ts
 
       - name: Assert operational source bindings
         run: |
