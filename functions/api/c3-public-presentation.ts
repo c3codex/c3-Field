@@ -68,8 +68,13 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
         ? rootUrl+initiativeSurface.connectRoute
         : initiativeSurface.canonicalUrl
 
+      const initiativePresentation=record(initiativeSurface.publicPresentation)
       projected.seo={
         ...record(projected.seo),
+        ...(initiativeSurface.initiativeKey==="47pct"?{
+          title:initiativePresentation.og_title,
+          description:initiativePresentation.og_description
+        }:{}),
         canonical_url:canonicalUrl,
         og_url:canonicalUrl
       }
