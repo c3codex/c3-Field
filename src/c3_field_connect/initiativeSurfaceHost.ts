@@ -11,7 +11,11 @@ export type InitiativeSurfaceRuntime={
   publicPresentation?:{
     kicker?:string
     title?:string
+    header_line?:string
     initiative_explanation?:string
+    model_descriptor?:string
+    model_path?:string
+    model_body?:string
     connect_copy?:string
     audience_copy?:string
     primary_cta?:string
