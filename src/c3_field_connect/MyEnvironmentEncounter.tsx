@@ -168,8 +168,7 @@ export default function MyEnvironmentEncounter(){
         const body=await profileResult.value.json() as ProfileIntakePayload
         if(active&&body.contract?.pac_type==="ProfilePAC"){
           setProfileContract(body.contract)
-          const visibilityQuestion=body.contract.questions.find(question=>question.key==="profile.visibility_scope")
-          if(visibilityQuestion?.default)setProfileVisibility(visibilityQuestion.default)
+          body.contract.questions.find(question=>question.key==="profile.visibility_scope")
         }
       }
     }
@@ -197,7 +196,8 @@ export default function MyEnvironmentEncounter(){
         setData(body)
         setProfileTruth(body.envpac.profile_pac||null)
         setProfileLoaded(true)
-        setProfileDisplayLabel(body.owner?.display_name?.trim()||"")
+        setProfileDisplayLabel(body.envpac.profile_pac?.profile?.display_label||body.owner?.display_name?.trim()||"")
+        setProfileVisibility(body.envpac.profile_pac?.profile?.visibility_scope||"private")
         setProfilePresentationAsset(body.presentation?.opening_visual_asset_key||"")
         document.title=body.owner?.display_name?body.owner.display_name+" | My Environment | c3 Community Partners":"My Environment | c3 Community Partners"
         setState(claim?"intro":"ready")
@@ -315,8 +315,10 @@ export default function MyEnvironmentEncounter(){
         throw new Error("Profile-PAC formed, but EnvPAC could not be re-resolved.")
       setData(environmentBody)
       setProfileTruth(environmentBody.envpac.profile_pac||null)
+      setProfileDisplayLabel(environmentBody.envpac.profile_pac?.profile?.display_label||profileDisplayLabel)
+      setProfileVisibility(environmentBody.envpac.profile_pac?.profile?.visibility_scope||profileVisibility)
       setProfileLoaded(true)
-      setProfileNotice("Profile-PAC is complete in your EnvPAC.")
+      setProfileNotice("Profile-PAC saved in your EnvPAC.")
     }catch(error){setProfileNotice(error instanceof Error?error.message:"Profile-PAC could not be formed.")}
   }
 
@@ -428,17 +430,18 @@ export default function MyEnvironmentEncounter(){
           ?<p className="myenv-runtime-warning">Profile-PAC state could not be resolved from this EnvPAC.</p>
           :profileHeld
           ?<p className="myenv-runtime-warning">Profile-PAC is held inside this EnvPAC.</p>
-          :profile
-          ?<article className="myenv-initiative-card"><div><span>{profile.visibility_scope}</span><h3>{profile.display_label}</h3><p>Profile-PAC ready in EnvPAC.</p></div></article>
           :!labelQuestion||!visibilityQuestion
           ?<p className="myenv-runtime-warning">Profile-PAC intake contract is unavailable.</p>
-          :<form className="myenv-thread-compose" onSubmit={formProfile}>
-            <input aria-label={labelQuestion.label} maxLength={labelQuestion.max_length||160} value={profileDisplayLabel} onChange={e=>setProfileDisplayLabel(e.target.value)} placeholder={labelQuestion.placeholder||labelQuestion.label} required={labelQuestion.required}/>
-            <select aria-label={visibilityQuestion.label} value={profileVisibility} onChange={e=>setProfileVisibility(e.target.value)}>
-              {(visibilityQuestion.options||[]).map(option=><option key={option.value} value={option.value}>{option.label}</option>)}
-            </select>
-            <button type="submit" disabled={!profileDisplayLabel.trim()}>COMPLETE PROFILE-PAC</button>
-          </form>}
+          :<>
+            {profile&&<article className="myenv-initiative-card"><div><span>{profile.visibility_scope}</span><h3>{profile.display_label}</h3><p>Profile-PAC ready in EnvPAC.</p></div></article>}
+            <form className="myenv-thread-compose" onSubmit={formProfile}>
+              <input aria-label={labelQuestion.label} maxLength={labelQuestion.max_length||160} value={profileDisplayLabel} onChange={e=>setProfileDisplayLabel(e.target.value)} placeholder={labelQuestion.placeholder||labelQuestion.label} required={labelQuestion.required}/>
+              <select aria-label={visibilityQuestion.label} value={profileVisibility} onChange={e=>setProfileVisibility(e.target.value)}>
+                {(visibilityQuestion.options||[]).map(option=><option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+              <button type="submit" disabled={!profileDisplayLabel.trim()}>{profile?"SAVE PROFILE-PAC":"COMPLETE PROFILE-PAC"}</button>
+            </form>
+          </>}
         {profileNotice&&<p className="myenv-initiative-notice" role="status">{profileNotice}</p>}
       </section>
     }
