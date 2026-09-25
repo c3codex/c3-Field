@@ -8,6 +8,20 @@ export type InitiativeSurfaceRuntime={
   canonicalUrl:string
   route:string
   connectRoute:string
+  publicPresentation?:{
+    kicker?:string
+    title?:string
+    initiative_explanation?:string
+    connect_copy?:string
+    audience_copy?:string
+    primary_cta?:string
+    memorial_name?:string
+    memorial_text?:string
+    watermark_asset_key?:string
+    watermark_runtime_url?:string
+    watermark_opacity?:number
+    public_surface_protected_primitive_labels_allowed?:boolean
+  }
   createsStanding:false
 }
 
