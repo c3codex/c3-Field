@@ -13,7 +13,8 @@ function Current({env}:{env:Manifest}) {
 export default function C3OpsDoor() {
   const route=c3OpsRoute(window.location.pathname)
   const [state,setState]=useState<ManifestResponse|null>(null)
-  const [lapzuli,setLapzuli]=useState<LapzuliReadback|null>(null)\n  const [currentState,setCurrentState]=useState<C3OpsCurrentStateReadback|null>(null)
+  const [lapzuli,setLapzuli]=useState<LapzuliReadback|null>(null)
+  const [currentState,setCurrentState]=useState<C3OpsCurrentStateReadback|null>(null)
   const [error,setError]=useState("")
   const [assetError,setAssetError]=useState(false)
   useEffect(()=>{
@@ -27,7 +28,12 @@ export default function C3OpsDoor() {
         const body=await response.json() as ManifestResponse
         if(body.contract!=="me_environment_manifest_v1" || !Array.isArray(body.environments)) throw new Error("Registry response is not a manifest.")
         setState(body)
-        if(route==="/systems-access/current"){\n          const currentResponse=await fetch("/api/c3ops/manifest?view=current_state",{credentials:"same-origin",signal:controller.signal})\n          if(!currentResponse.ok) throw new Error("c3Ops Current State readback unavailable.")\n          setCurrentState(await currentResponse.json())\n        }\n        if(route==="/relational-operations/lapzuli" || route==="/c3optics"){
+        if(route==="/systems-access/current"){
+          const currentResponse=await fetch("/api/c3ops/manifest?view=current_state",{credentials:"same-origin",signal:controller.signal})
+          if(!currentResponse.ok) throw new Error("c3Ops Current State readback unavailable.")
+          setCurrentState(await currentResponse.json())
+        }
+        if(route==="/relational-operations/lapzuli" || route==="/c3optics"){
           const r=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin",signal:controller.signal})
           if(!r.ok) throw new Error("Lapzuli evidence readback unavailable.")
           setLapzuli(await r.json())
