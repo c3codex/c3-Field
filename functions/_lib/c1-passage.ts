@@ -340,7 +340,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
     if (!env.C3_RESEND_API_KEY || !env.C1_VERIFICATION_FROM || /[\r\n]/.test(env.C1_VERIFICATION_FROM))
       return unavailable()
     const rpc = rpcClient(env,deps)
-    if(body.sourceInitiative?.initiativeKey){
+    if(body.sourceInitiative?.initiativeKey===PCT47_322_CONTRACT.initiativeKey){
       stage="initiative_reentry_lookup"
       const existing=await rpc("resolve_c1_existing_relationship_for_initiative",{p_primary_email:body.email})
       if(existing.accepted===true){
@@ -389,7 +389,7 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
         captured.standing_created !== false || captured.current_created !== false || captured.persistence_created !== false)
       return verificationRequired()
     candidate = true
-    if(body.sourceInitiative?.initiativeKey){
+    if(body.sourceInitiative?.initiativeKey===PCT47_322_CONTRACT.initiativeKey){
       stage="initiative_ack_request"
       const requested=await rpc("record_c1_initiative_connect_requested",{
         p_relationship_key:captured.relationship_key,
