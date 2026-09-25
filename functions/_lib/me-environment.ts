@@ -77,3 +77,74 @@ export async function readLapzuli(read: ReadRows) {
     current_status:"unresolved_without_explicit_current_relation", mutation_authority:false,external_effects:0}
 }
 export type LapzuliReadback = Awaited<ReturnType<typeof readLapzuli>>
+
+
+export async function readC3OpsCurrentState(read: ReadRows) {
+  const readProcess = (processKey: string) => read(
+    "system_process_registry",
+    "process_key,process_family,title,status,process_status,authority_state,authority_level,updated_at",
+    {process_key:"eq."+processKey},
+  )
+  const [
+    prism,
+    lapzuli,
+    opticsProcess,
+    mgs,
+    passage,
+    chazzRoleCall,
+    chazzCapability,
+    current,
+    opticsObservation,
+  ] = await Promise.all([
+    readProcess("prism_publication_operations_v1"),
+    readProcess("lapzuli_distribution"),
+    readProcess("c3_optics_operational_proof_output_v1"),
+    readProcess("minimum_governed_standard_v1"),
+    readProcess("governed_object_passage_process_v4"),
+    readProcess("c3ops_role_call_computational_skills_v1"),
+    readProcess("ai_execution_capability_profile_chazz_chatgpt_connected_v1"),
+    read(
+      "c3_current_state",
+      "current_state_key,env_key,state_version,standing,effective_at,is_current,formation_authority_ref,advance_disposition_ref,source_grammar_key,created_by,created_at",
+      {env_key:"eq.env_c3ops",is_current:"eq.true"},
+    ),
+    read(
+      "c3_optics_observation",
+      "observation_key,optics_key,source_registry_process_key,initiative_key,surface_key,standing,observed_at",
+      {observation_key:"eq.optics432:operational_proof:c3_system_baseline_v1"},
+    ),
+  ])
+  const component = (key: string, label: string, subtitle: string, source: string, records: Row[]) => ({
+    key,label,subtitle,source,records,
+    resolution: records.length ? "represented" : "DNR",
+  })
+  return {
+    contract:"c3ops_current_state_v1",
+    observed_at:new Date().toISOString(),
+    components:[
+      component("prism","Prism","Publication operations","system_process_registry:prism_publication_operations_v1",prism),
+      component("lapzuli","Lapzuli","Distribution rail","system_process_registry:lapzuli_distribution",lapzuli),
+      component("optics","Optics","Operational proof",[
+        "system_process_registry:c3_optics_operational_proof_output_v1",
+        "c3_optics_observation:optics432:operational_proof:c3_system_baseline_v1",
+      ].join(" + "),[...opticsProcess,...opticsObservation]),
+      component("c3_model","c3 Model","MGS + governed passage",[
+        "system_process_registry:minimum_governed_standard_v1",
+        "system_process_registry:governed_object_passage_process_v4",
+      ].join(" + "),[...mgs,...passage]),
+      component("current","CURRENT","c3Ops governed present state","c3_current_state:env_c3ops/is_current=true",current),
+      component("chazz","Chazz","Capability + c3Ops role-call; capability is not authority",[
+        "system_process_registry:c3ops_role_call_computational_skills_v1",
+        "system_process_registry:ai_execution_capability_profile_chazz_chatgpt_connected_v1",
+      ].join(" + "),[...chazzRoleCall,...chazzCapability]),
+    ],
+    standing_definitions:{
+      ACT:"Accrued Current Trace",
+      HLD:"Held Live Disposition",
+      DNR:"Did Not Resolve",
+    },
+    mutation_authority:false,
+    external_effects:0,
+  }
+}
+export type C3OpsCurrentStateReadback = Awaited<ReturnType<typeof readC3OpsCurrentState>>
