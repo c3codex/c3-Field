@@ -79,7 +79,7 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     if(!["private","environment","relational","public"].includes(visibility))
       return json({ok:false,standing:"profile_pac_visibility_invalid"},400)
 
-    const result=await rpc(env,"form_profile_pac_v1_internal",{
+    const formed=await rpc(env,"form_profile_pac_v1_internal",{
       p_envpac_key:session.envpacKey,
       p_subject_type:session.subjectType,
       p_subject_key:session.subjectKey,
@@ -87,13 +87,22 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
       p_display_label:displayLabel,
       p_visibility_scope:visibility
     })
+    const created=formed.created===true
+    const result=created?formed:await rpc(env,"update_profile_pac_v1_internal",{
+      p_envpac_key:session.envpacKey,
+      p_subject_type:session.subjectType,
+      p_subject_key:session.subjectKey,
+      p_display_label:displayLabel,
+      p_visibility_scope:visibility
+    })
     return json({
       ok:true,
-      standing:result.created===false?"profile_pac_existing":"profile_pac_formed",
-      created:result.created===true,
+      standing:created?"profile_pac_formed":"profile_pac_updated",
+      created,
+      updated:!created&&result.updated===true,
       next_read:"/api/my-environment",
       authority_effect:"none"
-    },result.created===true?201:200)
+    },created?201:200)
   }catch(error){
     const reason=error instanceof Error?error.message:"profile_pac_unavailable"
     const status=reason==="environment_claim_required"||reason==="session_expired"?401:409
