@@ -2,29 +2,29 @@ import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
 import MillionDollarMissionLanding from "./MillionDollarMissionLanding"
 import {loadC3PublicPresentation,type C3PublicPresentation} from "./c3PublicPresentation"
+import type {InitiativeSurfaceRuntime} from "./initiativeSurfaceHost"
 
 
-export default function C3CommunityConnect() {
-
-  return <C3CommunityConnectSurface />
+export default function C3CommunityConnect({initiativeSurface=null}:{initiativeSurface?:InitiativeSurfaceRuntime|null}={}) {
+  return <C3CommunityConnectSurface initiativeSurface={initiativeSurface} />
 }
 
-function C3CommunityConnectSurface() {
+function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:InitiativeSurfaceRuntime|null}) {
   const [environment, setEnvironment] = useState<Awaited<ReturnType<typeof loadC1EnvironmentPackage>> | null>(null)
   const [presentation,setPresentation]=useState<C3PublicPresentation|null>(null)
   const [presentationFailed,setPresentationFailed]=useState(false)
   useEffect(() => {
     let active = true
     loadC1EnvironmentPackage().then(value => { if (active) setEnvironment(value) }).catch(() => { if (active) setLoadFailed(true) })
-    loadC3PublicPresentation().then(value=>{if(active)setPresentation(value)}).catch(()=>{if(active)setPresentationFailed(true)})
+    if(!initiativeSurface) loadC3PublicPresentation().then(value=>{if(active)setPresentation(value)}).catch(()=>{if(active)setPresentationFailed(true)})
     return () => { active = false }
-  }, [])
+  }, [initiativeSurface])
   const [loadFailed, setLoadFailed] = useState(false)
   const [connectAs, setConnectAs] = useState("individual")
   const [pending, setPending] = useState(false)
   const [result, setResult] = useState<string | null>(null)
   const [mediaFailed, setMediaFailed] = useState(false)
-  const [publicStage, setPublicStage] = useState<"intro"|"landing"|"connect">(() => window.location.pathname === "/connect" ? "connect" : "intro")
+  const [publicStage, setPublicStage] = useState<"intro"|"landing"|"connect">(() => initiativeSurface ? (window.location.pathname === "/connect" ? "connect" : "landing") : (window.location.pathname === "/connect" ? "connect" : "intro"))
   const [introMuted, setIntroMuted] = useState(true)
   const introVideoRef = useRef<HTMLVideoElement | null>(null)
   const [emblemFailed, setEmblemFailed] = useState(false)
@@ -93,8 +93,8 @@ function C3CommunityConnectSurface() {
 
   if (!environment && !loadFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading…</p></main>
   if (!environment?.available) return <HeldUnknownC3FieldRoute pathname="/" />
-  if (publicStage!=="intro" && !presentation && !presentationFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading public presentation…</p></main>
-  if (publicStage!=="intro" && (!presentation || presentationFailed)) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Public presentation authority is temporarily unavailable.</p></main>
+  if (!initiativeSurface && publicStage!=="intro" && !presentation && !presentationFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading public presentation…</p></main>
+  if (!initiativeSurface && publicStage!=="intro" && (!presentation || presentationFailed)) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Public presentation authority is temporarily unavailable.</p></main>
   const { copy, assets } = environment
   // Initiative projection remains held until independently registered; ordinary individual Connect stays available.
   const initiatives: typeof environment.initiatives = []
@@ -133,7 +133,61 @@ function C3CommunityConnectSurface() {
     )
   }
 
+  if(publicStage==="landing" && initiativeSurface?.initiativeKey==="47pct") return <main className="c3-connect-shell" data-c3-route="/" data-c3-environment="env_c3_community_connect" data-standing-created="false">
+    <header className="c3-connect-header c3-connect-width">
+      <a href="/" className="c3-connect-identity" aria-label="4.7% home"><span>4.7%</span></a>
+      <nav className="c3-connect-public-nav" aria-label="Public"><button className="c3-connect-nav" type="button" onClick={()=>setPublicStage("connect")}>CONNECT <span aria-hidden="true">↗</span></button></nav>
+    </header>
+    <section className="c3-connect-panel c3-connect-width" aria-labelledby="pct47-title">
+      <div className="c3-connect-form-intro">
+        <p className="c3-connect-kicker">c3 COMMUNITY PARTNERS</p>
+        <h1 id="pct47-title">4.7%</h1>
+        <p>Connect to enter the initiative through your own environment.</p>
+      </div>
+      <div className="c3-connect-form">
+        <section aria-label="Eternal Flame memorial">
+          <p className="c3-connect-kicker">ETERNAL FLAME</p>
+          <h2>For those who died waiting.</h2>
+        </section>
+        <button className="c3-connect-button" type="button" onClick={()=>setPublicStage("connect")}>CONNECT <span aria-hidden="true">↗</span></button>
+      </div>
+    </section>
+    <footer className="c3-connect-footer c3-connect-width"><div><strong>c3 Community Partners</strong><span>4.7%</span></div></footer>
+  </main>
   if(publicStage==="landing" && presentation) return <MillionDollarMissionLanding presentation={presentation} />
+
+  if(initiativeSurface?.initiativeKey==="47pct") return <main className="c3-connect-shell" data-c3-route="/connect" data-c3-environment="env_c3_community_connect" data-standing-created="false">
+    <a className="c3-connect-skip" href="#connect">Skip to Connect</a>
+    <header className="c3-connect-header c3-connect-width">
+      <button type="button" className="c3-connect-identity" aria-label="Return to 4.7%" onClick={()=>setPublicStage("landing")}><span>4.7%</span></button>
+      <nav className="c3-connect-public-nav" aria-label="Public"><span>ETERNAL FLAME · For those who died waiting.</span></nav>
+    </header>
+    <section id="connect" className="c3-connect-panel c3-connect-width" aria-labelledby="pct47-connect-title">
+      <div className="c3-connect-form-intro">
+        <p className="c3-connect-kicker">CONNECT</p>
+        <h1 id="pct47-connect-title">Enter through your environment.</h1>
+        <p className="c3-connect-form-meaning">Connect establishes the relationship. My Environment opens only after email confirmation and the required 3-2-2 acknowledgment.</p>
+      </div>
+      <form className="c3-connect-form" onSubmit={submitCandidate} aria-busy={pending}>
+        {environment.encounterEnabled === false && <p role="status">Connecting is not open yet. Please return later.</p>}
+        <fieldset disabled={pending || environment.encounterEnabled === false}>
+          <legend className="c3-connect-sr-only">Your connection</legend>
+          <div className="c3-connect-input-pair">
+            <label>Name<input name="name" autoComplete="name" minLength={2} maxLength={160} required /></label>
+            <label>Email<input name="email" autoComplete="email" type="email" maxLength={254} required /></label>
+          </div>
+          <label>{copy.openPrompt}<textarea name="message" rows={5} maxLength={4000} /></label>
+          <p className="c3-connect-custody">{copy.custodyNotice}</p>
+          <label className="c3-connect-check"><input name="consent" type="checkbox" required /><span>{copy.consent}</span></label>
+          <label className="c3-connect-check"><input name="attestation" type="checkbox" required /><span>{copy.attestation}</span></label>
+          <label className="c3-connect-check"><input name="participationIntention" type="checkbox" required /><span>{copy.participationIntention}</span></label>
+          <button className="c3-connect-button" type="submit">{pending ? "Sending…" : "CONNECT"}<span aria-hidden="true">↗</span></button>
+        </fieldset>
+        {result && <p className="c3-connect-result" role="status">{result}</p>}
+      </form>
+    </section>
+    <footer className="c3-connect-footer c3-connect-width"><div><strong>c3 Community Partners</strong><span>4.7%</span><span>Eternal Flame · For those who died waiting.</span></div></footer>
+  </main>
 
   return (
     <main className="c3-connect-shell" data-c3-route="/connect" data-c3-environment="env_c3_community_connect" data-standing-created="false">
