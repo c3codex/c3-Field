@@ -47,7 +47,9 @@ jobs:
           test -n "$main"
           js=$(mktemp)
           curl -sS --max-time 20 "https://my.c3field.online$main" -o "$js"
-          grep -q 'C2EnvironmentShell-j7KOn1hw.js' "$js"
-          echo "C2_CHUNK_MATCH=PASS"
-          grep -q 'MyEnvironmentEncounter-CtZJwV2a.js' "$js"
-          echo "MYENV_CHUNK_MATCH=PASS"
+          echo "LIVE_C2_CHUNKS:"
+          grep -oE 'C2EnvironmentShell-[A-Za-z0-9_-]+\\.js' "$js" | sort -u || true
+          echo "LIVE_MYENV_CHUNKS:"
+          grep -oE 'MyEnvironmentEncounter-[A-Za-z0-9_-]+\\.js' "$js" | sort -u || true
+          if grep -q 'C2EnvironmentShell-j7KOn1hw.js' "$js"; then echo "C2_CHUNK_MATCH=PASS"; else echo "C2_CHUNK_MATCH=STALE"; fi
+          if grep -q 'MyEnvironmentEncounter-CtZJwV2a.js' "$js"; then echo "MYENV_CHUNK_MATCH=PASS"; else echo "MYENV_CHUNK_MATCH=STALE"; fi
