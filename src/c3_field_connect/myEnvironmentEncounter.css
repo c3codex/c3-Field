@@ -47,6 +47,10 @@
 .myenv-relations-empty,.myenv-runtime-warning{margin:0;color:rgba(244,239,227,.62);font-size:13px;line-height:1.5}
 .myenv-runtime-warning{padding:12px 14px;border:1px solid rgba(244,239,227,.14);background:rgba(4,9,13,.28)}
 .myenv-runtime-notice{position:absolute;left:clamp(18px,4vw,54px);top:clamp(18px,4vw,42px);z-index:6;max-width:min(440px,calc(100vw - 36px));margin:0;padding:9px 12px;border:1px solid rgba(244,239,227,.16);background:rgba(5,13,18,.72);backdrop-filter:blur(10px);color:rgba(244,239,227,.8);font-size:11px;line-height:1.45}
+.myenv-eternal-flame{padding:8px 12px;background:rgba(5,13,18,.62)}
+.myenv-eternal-flame .eternal-flame figcaption{max-width:220px}
+.myenv-initiative-memorial{padding-block:20px}
+.myenv-initiative-memorial>.eternal-flame{margin-top:4px}
 
 .myenv-initiative-card{display:grid;gap:16px;border-top:1px solid rgba(244,239,227,.14);padding:18px 0 2px}
 .myenv-initiative-card span{display:block;color:rgba(244,239,227,.5);font-size:9px;letter-spacing:.14em;text-transform:uppercase}
