@@ -98,3 +98,16 @@ set version_label='v1.3',
          ),
     updated_at=now()
 where source_key='c3field_public_presentation_authority_v1_2';
+
+
+update public.c3_pac
+set metadata=jsonb_set(
+  metadata,
+  '{footer_contract,source_key}',
+  to_jsonb('c3field_public_identity_authority_v1_0'::text),
+  true
+) || jsonb_build_object(
+  'public_identity_authority_source','c3field_public_identity_authority_v1_0'
+),
+updated_at=now()
+where pac_key='47pct_c1_connect_c3webpac_v1';
