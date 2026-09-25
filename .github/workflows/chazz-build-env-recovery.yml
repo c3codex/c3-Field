@@ -1,0 +1,42 @@
+name: Chazz Build Environment Recovery
+
+on:
+  push:
+    branches:
+      - proof/chazz-build-env-recovery-20260925
+
+permissions:
+  contents: read
+
+jobs:
+  prove-build-environment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact proof branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22.16.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+          cache: 'npm'
+
+      - name: Runtime identity
+        run: |
+          node --version
+          npm --version
+          npm config get registry
+          npm ping
+
+      - name: Install locked dependencies
+        run: npm ci --include=dev --ignore-scripts
+
+      - name: Prove Vite materialized
+        run: |
+          test -x node_modules/.bin/vite
+          ./node_modules/.bin/vite --version
+          npm ls vite --depth=0
+
+      - name: Build c3field
+        run: npm run build:c3field
