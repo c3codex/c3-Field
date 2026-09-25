@@ -9,6 +9,18 @@ type ProcessRow={
   metadata?:unknown
 }
 
+type PacRow={
+  pac_key?:unknown
+  pac_type?:unknown
+  standing?:unknown
+  is_effective?:unknown
+  release_state?:unknown
+  execution_authority_state?:unknown
+  formation_state?:unknown
+  source_authority?:unknown
+  metadata?:unknown
+}
+
 type EnvironmentRow={
   env_key?:unknown
   system_key?:unknown
@@ -24,7 +36,6 @@ export type InitiativeSurfaceResolution={
   initiativeKey:string
   initiativeProcessKey:string
   webpacKey:string
-  webpacProcessKey:string
   canonicalEnvironment:string
   canonicalUrl:string
   route:string
@@ -117,10 +128,9 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
   const initiativeKey=str(metadata.initiative_key)
   const initiativeProcessKey=str(metadata.initiative_process_key)
   const webpacKey=str(metadata.webpac_key)
-  const webpacProcessKey=str(metadata.webpac_process_key)??webpacKey
   const canonicalUrl=str(metadata.canonical_url)
   const route=str(metadata.route)
-  if(!surfaceKey||!initiativeKey||!initiativeProcessKey||!webpacKey||!webpacProcessKey||!canonicalUrl||!route)
+  if(!surfaceKey||!initiativeKey||!initiativeProcessKey||!webpacKey||!canonicalUrl||!route)
     throw new InitiativeSurfaceResolutionError(409,"initiative_surface_binding_incomplete")
 
   let boundUrl:URL
@@ -137,14 +147,21 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
   const registeredInitiative=str(initiativeMetadata.initiative)??str(initiativeMetadata.initiative_key)
   if(registeredInitiative!==initiativeKey) throw new InitiativeSurfaceResolutionError(409,"initiative_identity_mismatch")
 
-  const webpac=requireOne(await readRows(env,"system_process_registry","process_key,status,process_status,metadata",{
-    process_key:"eq."+webpacProcessKey
-  }),"webpac_identity_unavailable") as ProcessRow
+  const webpac=requireOne(await readRows(env,"c3_pac","pac_key,pac_type,standing,is_effective,release_state,execution_authority_state,formation_state,source_authority,metadata",{
+    pac_key:"eq."+webpacKey,
+    pac_type:"eq.c3WebPac"
+  }),"webpac_identity_unavailable") as PacRow
   const webpacMetadata=record(webpac.metadata)
-  if(webpac.status!=="active"||webpac.process_status!=="active") throw new InitiativeSurfaceResolutionError(423,"webpac_inactive")
-  const registeredWebpac=str(webpacMetadata.pac_key)??str(webpacMetadata.webpac_key)??str(webpac.process_key)
-  if(registeredWebpac!==webpacKey) throw new InitiativeSurfaceResolutionError(409,"webpac_identity_mismatch")
-  if(webpacMetadata.public_release_authorized!==true||webpacMetadata.runtime_release_authorized!==true)
+  if(webpac.pac_key!==webpacKey||webpac.pac_type!=="c3WebPac")
+    throw new InitiativeSurfaceResolutionError(409,"webpac_identity_mismatch")
+  if(webpac.is_effective!==true||webpac.formation_state!=="formed")
+    throw new InitiativeSurfaceResolutionError(423,"webpac_inactive")
+  if(webpac.source_authority!==initiativeProcessKey)
+    throw new InitiativeSurfaceResolutionError(409,"webpac_authority_mismatch")
+  if(webpacMetadata.parent_envpac!=="c3envpac_c1me_v0_1"||webpacMetadata.parent_environment!=="env_c3_community_connect")
+    throw new InitiativeSurfaceResolutionError(409,"webpac_environment_mismatch")
+  if(webpac.release_state!=="public"||webpac.execution_authority_state!=="bounded_renderer"||
+     webpacMetadata.runtime_release_authorized!==true)
     throw new InitiativeSurfaceResolutionError(423,"webpac_runtime_release_held")
 
   const environment=requireOne(await readRows(env,"c3_environment","env_key,system_key,standing,is_canonical,is_active,metadata",{
@@ -165,7 +182,6 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
     initiativeKey,
     initiativeProcessKey,
     webpacKey,
-    webpacProcessKey,
     canonicalEnvironment:"env_c3_community_connect",
     canonicalUrl,
     route,
