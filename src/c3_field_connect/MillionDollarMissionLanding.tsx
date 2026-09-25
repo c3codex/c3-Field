@@ -9,9 +9,10 @@ export default function MillionDollarMissionLanding({presentation}:{presentation
   const capacity=media(presentation.media_roles.capacity_projects)
   const serene=media(presentation.media_roles.serene_place)
   const emblem=media(presentation.media_roles.handcrafted_emblem)
+  const identity=presentation.public_identity
   return <main className="mdm-page" data-c3-environment="env_c3_community_connect" data-c3-presentation-state="c3field_public_landing">
     <header className="mdm-header">
-      <a className="mdm-brand" href="/" aria-label={presentation.brand+" home"}><img src={emblem} alt="" width="44" height="44"/><span>{presentation.brand}</span></a>
+      <a className="mdm-brand" href="/" aria-label={identity.brand+" home"}><img src={emblem} alt="" width="44" height="44"/><span>{identity.brand}</span></a>
       <nav className="mdm-nav" aria-label="Primary">
         {presentation.navigation.filter(item=>["/community-potential","/privacy","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label.toUpperCase()}</a>)}
         <a className="mdm-nav-cta" href={presentation.connect_route}>CONNECT</a>
@@ -55,7 +56,7 @@ export default function MillionDollarMissionLanding({presentation}:{presentation
     </section>
 
     <footer className="mdm-footer">
-      <div><strong>{presentation.footer.brand}</strong><span>{presentation.footer.environment_line}</span><span>{presentation.footer.copyright}</span></div>
+      <div><strong>{identity.brand}</strong><span>{identity.environment_definition}</span><span>{identity.formal_authority_statement}</span><span><a href={`mailto:${identity.contact_email}`}>{identity.contact_email}</a> · <a href={identity.contact_phone_href}>{identity.contact_phone}</a></span><span>{identity.copyright}</span></div>
       <nav aria-label="Footer">{presentation.navigation.filter(item=>["/community-potential","/privacy","/terms","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}</nav>
     </footer>
   </main>
