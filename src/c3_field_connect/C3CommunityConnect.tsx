@@ -115,6 +115,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
     <div>
       <strong>{pct47Presentation.header_line}</strong>
       <span>{presentation.footer.environment_line}</span>
+      <span>{pct47Presentation.formal_authority_statement}</span>
       <span>{presentation.footer.copyright}</span>
     </div>
     <nav aria-label="Footer">
@@ -207,7 +208,8 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
             <label>Name<input name="name" autoComplete="name" minLength={2} maxLength={160} required /></label>
             <label>Email<input name="email" autoComplete="email" type="email" maxLength={254} required /></label>
           </div>
-          <label>{copy.openPrompt}<textarea name="message" rows={5} maxLength={4000} /></label>
+          <label>{publicPresentation.open_question}<textarea name="message" rows={5} maxLength={4000} aria-describedby="pct47-open-question-helper" /></label>
+          <p id="pct47-open-question-helper" className="c3-connect-custody">{publicPresentation.open_question_helper}</p>
           <p className="c3-connect-custody">Your Connect relation remains in governed c3 custody for your individual record.</p>
           <label className="c3-connect-check"><input name="consent" type="checkbox" required /><span>I agree to share this information with c3 Community Partners for the purpose of participating in the 4.7% Initiative.</span></label>
           <label className="c3-connect-check"><input name="attestation" type="checkbox" required /><span>{copy.attestation}</span></label>
