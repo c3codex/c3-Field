@@ -6,9 +6,10 @@ set metadata =
     coalesce(metadata->'public_presentation','{}'::jsonb)
       || jsonb_build_object(
            'header_line','A c3 Field Initiative',
+           'initiative_explanation','4.7% makes the distance between recognized harm, allowed compensation, and actual payment publicly visible.',
            'model_descriptor','A structured participation model.',
            'model_path','Connect · Contribute · Create',
-           'model_body','The c3 Model gives people a shared structure to connect, contribute according to their capacity, and create bounded action together.',
+           'model_body','The c3 Model gives people a shared structure to enter an initiative, participate at the level available to them, and turn individual capacity into coordinated action without requiring everyone to participate in the same way.',
            'open_question','What brings you to 4.7%, and how would you like to participate?',
            'open_question_helper','Share only what you choose. You do not need to disclose survivor details to Connect.',
            'formal_authority_statement','c3 Community Partners DAO, LLC operating within computational systems governance.',
