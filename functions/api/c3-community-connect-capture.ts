@@ -1,5 +1,6 @@
 import {captureCandidate, type PassageEnv} from "../_lib/c1-passage"
 import {unable} from "../_lib/c1-abuse"
+import {isInitiativeSurfaceHostname,resolveInitiativeSurfaceHost} from "../_lib/initiative-surface-host"
 const headers = {"content-type": "application/json; charset=utf-8", "cache-control": "no-store"}
 const allowed = new Set(["name", "email", "message", "consent", "participationIntention", "attestation", "connectAs", "initiativeKey", "shareReference"])
 function held(standing: string, message: string, status: number, evidence?: unknown) {
@@ -71,12 +72,35 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) =
   if (body.connectAs !== "individual" || body.initiativeKey !== undefined)
     return held("held_initiative_binding_missing", "This connection context is not available.", 409)
   if (env?.C1_PASSAGE_ENABLED === "true") {
-    if (origin !== env.C1_PUBLIC_ORIGIN || origin !== new URL(request.url).origin)
-      return held("held_origin_mismatch", "The submission could not be verified.", 403)
+    const requestUrl=new URL(request.url)
+    let sourceInitiative:null|{initiativeKey:string;sourceHost:string;surfaceKey:string;webpacKey:string}=null
+    if(origin!==env.C1_PUBLIC_ORIGIN){
+      try{
+        if(!origin||origin!==requestUrl.origin||!isInitiativeSurfaceHostname(requestUrl.hostname))
+          return held("held_origin_mismatch","The submission could not be verified.",403)
+        const resolved=await resolveInitiativeSurfaceHost(env,requestUrl.hostname)
+        if(new URL(resolved.canonicalUrl).origin!==origin)
+          return held("held_origin_mismatch","The submission could not be verified.",403)
+        sourceInitiative={
+          initiativeKey:resolved.initiativeKey,
+          sourceHost:resolved.host,
+          surfaceKey:resolved.surfaceKey,
+          webpacKey:resolved.webpacKey
+        }
+      }catch{
+        return held("held_initiative_surface_unavailable","This initiative connection is not available.",423)
+      }
+    }else if(origin!==requestUrl.origin){
+      return held("held_origin_mismatch","The submission could not be verified.",403)
+    }
     let sourceEnvironmentShare:null|Record<string,unknown>=null
     try{sourceEnvironmentShare=await resolveShareReference(env,body.shareReference)}
     catch{return held("held_invite_reference_invalid","This connection invitation is not available.",409)}
-    return captureCandidate({name,email,message,...(sourceEnvironmentShare?{sourceEnvironmentShare}: {})},env)
+    return captureCandidate({
+      name,email,message,
+      ...(sourceEnvironmentShare?{sourceEnvironmentShare}: {}),
+      ...(sourceInitiative?{sourceInitiative}: {})
+    },env)
   }
   return unable()
 }

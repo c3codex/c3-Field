@@ -446,6 +446,7 @@ export default function MyEnvironmentEncounter(){
     </section>
 
     {runtimeNotice&&<p className="myenv-runtime-notice" role="status">{runtimeNotice}</p>}
+    {initiatives.some(initiative=>initiative.initiative_key==="47pct")&&<aside className="myenv-runtime-notice" aria-label="Eternal Flame memorial"><strong>Eternal Flame</strong> · For those who died waiting.</aside>}
 
     <nav className="myenv-discovery" aria-label="Environment touchpoints">
       {primitives.map(primitive=><button
@@ -490,15 +491,19 @@ export default function MyEnvironmentEncounter(){
             <h2>Initiative</h2>
             <p>This initiative is visible because this environment has an evidenced encounter or invitation relation.</p>
           </div>
+          {activeInitiative.initiative_key==="47pct"&&<article className="myenv-initiative-card" aria-label="Eternal Flame memorial"><div><span>MEMORIAL</span><h3>Eternal Flame</h3><p>For those who died waiting.</p></div></article>}
           {activeInitiative.components.filter(component=>component.renderer_key==="initiative.entry_card").map(component=>{
             const config=component.config||{}
-            return <article key={component.component_key} className="myenv-initiative-card">
+            const held=config.display_state==="held"||config.interaction_enabled===false
+            const holdReasons=Array.isArray(config.hold_reasons)?config.hold_reasons.filter((value):value is string=>typeof value==="string"):[]
+            return <article key={component.component_key} className="myenv-initiative-card" aria-disabled={held||undefined} style={held?{opacity:.58,filter:"grayscale(1)"}:undefined}>
               <div>
-                <span>{text(config.target_environment_label,activeInitiative.target_environment_key||"initiative")}</span>
+                <span>{held?text(config.status_label,"HOLD"):text(config.target_environment_label,activeInitiative.target_environment_key||"initiative")}</span>
                 <h3>{text(config.title,activeInitiative.initiative_key)}</h3>
-                <p>{text(config.summary)}</p>
+                {text(config.summary)&&<p>{text(config.summary)}</p>}
+                {held&&holdReasons.length>0&&<ul>{holdReasons.map(reason=><li key={reason}>{reason}</li>)}</ul>}
               </div>
-              {text(config.route)&&<a href={text(config.route)}>ENTER →</a>}
+              {!held&&text(config.route)&&<a href={text(config.route)}>ENTER →</a>}
             </article>
           })}
         </section>}

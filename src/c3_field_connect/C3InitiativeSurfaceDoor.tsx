@@ -21,5 +21,5 @@ export default function C3InitiativeSurfaceDoor(){
 
   if(!isInitiativeSurfacePathAllowed(pathname)||held) return <HeldUnknownC3FieldRoute pathname={pathname} />
   if(!surface) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Resolving initiative surface…</p></main>
-  return <C3CommunityConnect />
+  return <C3CommunityConnect initiativeSurface={surface} />
 }
