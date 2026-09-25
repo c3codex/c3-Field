@@ -105,7 +105,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   const pct47Header=pct47Presentation&&presentation?<header className="c3-connect-header c3-connect-width pct47-header">
     <button type="button" className="c3-connect-identity pct47-identity" aria-label="Return to 4.7% initiative" onClick={()=>setPublicStage("landing")}>
       {pct47Presentation.watermark_runtime_url&&<img src={pct47Presentation.watermark_runtime_url} alt="" width="72" height="72" />}
-      <span>{pct47Presentation.header_line}</span>
+      <span>{identity?.initiative_label}</span>
     </button>
     <nav className="c3-connect-public-nav" aria-label="Public">
       {publicStage==="connect"&&<span>{pct47Presentation.memorial_name} · {pct47Presentation.memorial_text}</span>}
@@ -114,7 +114,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   </header>:null
   const pct47Footer=pct47Presentation&&presentation&&identity?<footer className="c3-connect-footer c3-connect-width pct47-footer">
     <div>
-      <strong>{pct47Presentation.header_line}</strong>
+      <strong>{identity.initiative_label}</strong>
       <span>{identity.environment_definition}</span>
       <span>{identity.formal_authority_statement}</span>
       <span><a href={`mailto:${identity.contact_email}`}>{identity.contact_email}</a> · <a href={identity.contact_phone_href}>{identity.contact_phone}</a></span>
@@ -172,8 +172,8 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
           <p className="c3-connect-form-lead">{publicPresentation.initiative_explanation}</p>
           <section className="pct47-model" aria-labelledby="pct47-model-title">
             <p className="c3-connect-kicker">THE c3 MODEL</p>
-            <h2 id="pct47-model-title">{publicPresentation.model_descriptor}</h2>
-            <p className="pct47-model-path">{publicPresentation.model_path}</p>
+            <h2 id="pct47-model-title">{identity?.model_descriptor}</h2>
+            <p className="pct47-model-path">{identity?.model_path}</p>
             <p className="c3-connect-form-meaning">{publicPresentation.model_body}</p>
           </section>
           {publicPresentation.audience_copy&&<p className="c3-connect-form-meaning">{publicPresentation.audience_copy}</p>}
