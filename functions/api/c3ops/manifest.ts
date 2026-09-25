@@ -31,7 +31,8 @@ export async function handleRead(request: Request, env: Env) {
   if(envKey && !/^[a-zA-Z0-9_-]{1,160}$/.test(envKey)) return new Response(JSON.stringify({error:"invalid_env_key"}),{status:400,headers})
   try {
     const read = createRegistryReader(env)
-    const view=params.get("view")\n    const result = view==="lapzuli" ? await readLapzuli(read) : view==="current_state" ? await readC3OpsCurrentState(read) : await resolveMEEnvironments(read,envKey)
+    const view=params.get("view")
+    const result = view==="lapzuli" ? await readLapzuli(read) : view==="current_state" ? await readC3OpsCurrentState(read) : await resolveMEEnvironments(read,envKey)
     return new Response(JSON.stringify(result),{headers})
   } catch {
     return new Response(JSON.stringify({standing:"HLD",error:"Registry readback unavailable",external_effects:0}),{status:503,headers})
