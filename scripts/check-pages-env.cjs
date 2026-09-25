@@ -179,10 +179,16 @@ async function loadRegisteredProjectDeployment(processKey) {
 
 function compareDeploymentIdentity(expected, observed, processKey) {
   const mismatches = []
+  const pagesPreview = process.env.CF_PAGES === "1" &&
+    typeof process.env.CF_PAGES_URL === "string" &&
+    process.env.CF_PAGES_URL.endsWith(".pages.dev") &&
+    observed.production_branch !== expected.production_branch
   for (const key of Object.keys(expected)) {
     if (!expected[key]) mismatches.push(`${key}: registered value missing`)
     else if (!observed[key]) mismatches.push(`${key}: observed value missing (expected ${expected[key]})`)
-    else if (String(observed[key]) !== String(expected[key])) {
+    else if (key === "production_branch" && pagesPreview) {
+      console.log(`[deployment-preflight] PREVIEW branch accepted: ${observed.production_branch} (production identity remains ${expected.production_branch})`)
+    } else if (String(observed[key]) !== String(expected[key])) {
       mismatches.push(`${key}: expected ${expected[key]} observed ${observed[key]}`)
     }
   }
