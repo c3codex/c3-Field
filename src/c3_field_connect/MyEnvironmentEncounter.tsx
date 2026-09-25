@@ -55,6 +55,8 @@ type ProfileQuestion={
 }
 type ProfileContract={pac_type:string;contract_version:string;questions:ProfileQuestion[];authority_effect:string}
 type ProfileIntakePayload={authenticated:boolean;standing:string;contract?:ProfileContract;resolved_profile_class?:string|null}
+type ChazzMessage={role:"user"|"assistant";text:string}
+type ChazzPayload={standing:string;runtime?:string;reason?:string;message?:string;messages?:ChazzMessage[]}
 
 const ARRIVAL_VIDEO="/api/free-media?asset=c3_field_c1me_arrival_video_v1"
 const LIVE_BACKDROP="/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
@@ -103,6 +105,11 @@ export default function MyEnvironmentEncounter(){
   const [runtimeNotice,setRuntimeNotice]=useState("")
   const [canopyLoaded,setCanopyLoaded]=useState(false)
   const [profileLoaded,setProfileLoaded]=useState(false)
+  const [chazzMessages,setChazzMessages]=useState<ChazzMessage[]>([])
+  const [chazzInput,setChazzInput]=useState("")
+  const [chazzNotice,setChazzNotice]=useState("")
+  const [chazzBusy,setChazzBusy]=useState(false)
+  const [chazzLoaded,setChazzLoaded]=useState(false)
 
   useEffect(()=>{
     let active=true
@@ -201,6 +208,30 @@ export default function MyEnvironmentEncounter(){
     window.addEventListener("keydown",onKeyDown)
     return()=>window.removeEventListener("keydown",onKeyDown)
   },[activePanel])
+
+  useEffect(()=>{
+    if(activePanel!=="primitive:chazz"||chazzLoaded)return
+    let active=true
+    async function loadChazz(){
+      setChazzNotice("")
+      try{
+        const response=await fetch("/api/my-environment-chazz",{headers:{accept:"application/json"}})
+        const body=await response.json() as ChazzPayload
+        if(!active)return
+        if(response.ok&&body.standing==="ACT"){
+          setChazzMessages(body.messages||[])
+        }else{
+          setChazzNotice(body.reason||"Chazz is held in this environment.")
+        }
+      }catch{
+        if(active)setChazzNotice("Chazz could not resolve from this environment.")
+      }finally{
+        if(active)setChazzLoaded(true)
+      }
+    }
+    void loadChazz()
+    return()=>{active=false}
+  },[activePanel,chazzLoaded])
 
   async function addLedgerEntry(event:FormEvent){
     event.preventDefault()
@@ -306,7 +337,60 @@ export default function MyEnvironmentEncounter(){
     }catch(error){setInviteNotice(error instanceof Error?error.message:"The invitation could not be prepared.")}
   }
 
+  async function sendChazz(event:FormEvent){
+    event.preventDefault()
+    const message=chazzInput.trim()
+    if(!message||chazzBusy)return
+    setChazzBusy(true);setChazzNotice("");setChazzInput("")
+    setChazzMessages(current=>[...current,{role:"user",text:message}])
+    try{
+      const response=await fetch("/api/my-environment-chazz",{
+        method:"POST",
+        headers:{"content-type":"application/json"},
+        body:JSON.stringify({message})
+      })
+      const body=await response.json() as ChazzPayload
+      if(!response.ok||body.standing!=="ACT"||!body.message)throw new Error(body.reason||"Chazz did not resolve this turn.")
+      setChazzMessages(current=>[...current,{role:"assistant",text:body.message!}])
+    }catch(error){
+      setChazzNotice(error instanceof Error?error.message:"Chazz did not resolve this turn.")
+    }finally{
+      setChazzBusy(false)
+    }
+  }
+
   function renderPrimitive(primitive:Primitive){
+    if(primitive.renderer_key==="c1me.chazz"){
+      return <section key={primitive.primitive_key} className="myenv-connections-thread myenv-chazz">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">C3OPS · CURRENT RESOLVED</p>
+          <h2>{primitive.display_label}</h2>
+          <p>Work with Chazz inside this environment. Conversation can resolve context and prepare work; it does not create authority.</p>
+        </div>
+        <div className="myenv-chazz-boundary">
+          <span>CAPABILITY</span>
+          <strong>conversation · CURRENT-aware reasoning</strong>
+          <small>No Registry mutation, publication, distribution, messaging, payment, or external effect is granted by this runtime.</small>
+        </div>
+        <div className="myenv-chazz-transcript" aria-live="polite">
+          {!chazzLoaded&&!chazzNotice&&<p className="myenv-relations-empty">Resolving Chazz from this EnvPAC…</p>}
+          {chazzLoaded&&!chazzMessages.length&&!chazzNotice&&<article className="myenv-chazz-message myenv-chazz-message--assistant"><span>CHAZZ</span><p>CURRENT is resolved. What are we working on?</p></article>}
+          {chazzMessages.map((message,index)=><article key={index} className={"myenv-chazz-message myenv-chazz-message--"+message.role}>
+            <span>{message.role==="assistant"?"CHAZZ":"YOU"}</span>
+            <p>{message.text}</p>
+          </article>)}
+          {chazzBusy&&<article className="myenv-chazz-message myenv-chazz-message--assistant myenv-chazz-thinking"><span>CHAZZ</span><p>Resolving…</p></article>}
+        </div>
+        {chazzNotice&&<p className="myenv-runtime-warning" role="status">{chazzNotice}</p>}
+        <form className="myenv-thread-compose myenv-chazz-compose" onSubmit={sendChazz}>
+          <textarea aria-label="Message Chazz" rows={3} maxLength={12000} value={chazzInput} onChange={event=>setChazzInput(event.target.value)} placeholder="Work with Chazz in this environment…" disabled={chazzBusy}/>
+          <div className="myenv-chazz-compose-actions">
+            <small>CURRENT → c3Ops → evidence</small>
+            <button type="submit" disabled={chazzBusy||!chazzInput.trim()}>{chazzBusy?"RESOLVING…":"SEND TO CHAZZ"}</button>
+          </div>
+        </form>
+      </section>
+    }
     if(primitive.renderer_key==="c1me.personalize"){
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
         <div className="myenv-thread-heading"><p className="myenv-kicker">ENVIRONMENT</p><h2>{primitive.display_label}</h2>
