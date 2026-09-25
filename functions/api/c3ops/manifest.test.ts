@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { resolveMEEnvironments, readLapzuli, type ReadRows } from "../../_lib/me-environment"
+import { resolveMEEnvironments, readLapzuli, readC3OpsCurrentState, type ReadRows } from "../../_lib/me-environment"
 import { handleRead, createRegistryReader } from "./manifest"
 import { onRequest as middleware } from "../../_middleware"
 import { c3OpsRoute, isC3OpsHost } from "../../../src/c3ops/c3OpsRoutes"
@@ -43,6 +43,25 @@ test("route evidence preserves history without turning publication into Current"
  assert.equal(r.evidence.length,2)
  assert.equal(r.current_status,"unresolved_without_explicit_current_relation")
  assert.equal(r.mutation_authority,false)
+})
+test("current state projection resolves only its six registered authority groups",async()=>{
+ const calls:{table:string,filters?:Record<string,string>}[]=[]
+ const read:ReadRows=async(table,_select,filters)=>{
+  calls.push({table,filters})
+  if(table==="system_process_registry") return [{process_key:filters?.process_key?.replace("eq.",""),status:"active",process_status:"active",authority_state:"registered"}]
+  if(table==="c3_current_state") return [{current_state_key:"current_env_c3ops_v1",env_key:"env_c3ops",standing:"governed_environment",is_current:true}]
+  if(table==="c3_optics_observation") return [{observation_key:"optics432:operational_proof:c3_system_baseline_v1",standing:"HLD"}]
+  return []
+ }
+ const r=await readC3OpsCurrentState(read)
+ assert.deepEqual(r.components.map(c=>c.key),["prism","lapzuli","optics","c3_model","current","chazz"])
+ assert.equal(r.mutation_authority,false);assert.equal(r.external_effects,0)
+ assert.equal(r.standing_definitions.ACT,"Accrued Current Trace")
+ assert.ok(calls.some(c=>c.table==="c3_current_state"&&c.filters?.env_key==="eq.env_c3ops"&&c.filters?.is_current==="eq.true"))
+ assert.ok(calls.some(c=>c.table==="system_process_registry"&&c.filters?.process_key==="eq.prism_publication_operations_v1"))
+ assert.ok(calls.some(c=>c.table==="system_process_registry"&&c.filters?.process_key==="eq.lapzuli_distribution"))
+ assert.ok(calls.some(c=>c.table==="system_process_registry"&&c.filters?.process_key==="eq.minimum_governed_standard_v1"))
+ assert.ok(calls.some(c=>c.table==="system_process_registry"&&c.filters?.process_key==="eq.c3ops_role_call_computational_skills_v1"))
 })
 test("absent required environments are gaps, never invented rows",async()=>{
  const r=await resolveMEEnvironments(async()=>[])

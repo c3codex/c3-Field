@@ -1,4 +1,4 @@
-import { resolveMEEnvironments, readLapzuli, type ReadRows } from "../../_lib/me-environment"
+import { resolveMEEnvironments, readLapzuli, readC3OpsCurrentState, type ReadRows } from "../../_lib/me-environment"
 export type Env = { SUPABASE_URL?: string; VITE_SUPABASE_URL?: string; SUPABASE_SERVICE_ROLE_KEY?: string }
 const headers = {"content-type":"application/json; charset=utf-8","cache-control":"private, no-store"}
 export function createRegistryReader(env: Env): ReadRows {
@@ -31,7 +31,8 @@ export async function handleRead(request: Request, env: Env) {
   if(envKey && !/^[a-zA-Z0-9_-]{1,160}$/.test(envKey)) return new Response(JSON.stringify({error:"invalid_env_key"}),{status:400,headers})
   try {
     const read = createRegistryReader(env)
-    const result = params.get("view")==="lapzuli" ? await readLapzuli(read) : await resolveMEEnvironments(read,envKey)
+    const view=params.get("view")
+    const result = view==="lapzuli" ? await readLapzuli(read) : view==="current_state" ? await readC3OpsCurrentState(read) : await resolveMEEnvironments(read,envKey)
     return new Response(JSON.stringify(result),{headers})
   } catch {
     return new Response(JSON.stringify({standing:"HLD",error:"Registry readback unavailable",external_effects:0}),{status:503,headers})
