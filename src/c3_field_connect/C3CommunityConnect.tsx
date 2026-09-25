@@ -104,7 +104,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   const pct47Header=pct47Presentation&&presentation?<header className="c3-connect-header c3-connect-width pct47-header">
     <button type="button" className="c3-connect-identity pct47-identity" aria-label="Return to 4.7% initiative" onClick={()=>setPublicStage("landing")}>
       {pct47Presentation.watermark_runtime_url&&<img src={pct47Presentation.watermark_runtime_url} alt="" width="72" height="72" />}
-      <span>A c3 Field Initiative</span>
+      <span>{pct47Presentation.header_line}</span>
     </button>
     <nav className="c3-connect-public-nav" aria-label="Public">
       {publicStage==="connect"&&<span>{pct47Presentation.memorial_name} · {pct47Presentation.memorial_text}</span>}
@@ -113,7 +113,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   </header>:null
   const pct47Footer=pct47Presentation&&presentation?<footer className="c3-connect-footer c3-connect-width pct47-footer">
     <div>
-      <strong>A c3 Field Initiative</strong>
+      <strong>{pct47Presentation.header_line}</strong>
       <span>{presentation.footer.environment_line}</span>
       <span>{presentation.footer.copyright}</span>
     </div>
