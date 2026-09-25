@@ -46,6 +46,21 @@ async function write(env:PassageEnv,table:string,method:"POST"|"PATCH",body:unkn
   const rows=await response.json()
   return Array.isArray(rows)?rows as Row[]:[]
 }
+async function resolvePublicProfile(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){
+  try{
+    const response=await fetch(base(env)+"/rest/v1/rpc/resolve_profile_pac_v1_internal",{
+      method:"POST",
+      headers:headers(env,{"content-type":"application/json"}),
+      body:JSON.stringify({p_envpac_key:session.envpacKey,p_subject_type:session.subjectType,p_subject_key:session.subjectKey}),
+      signal:AbortSignal.timeout(12000)
+    })
+    if(!response.ok) return null
+    const truth=await response.json() as Record<string,any>
+    const profile=truth.profile
+    if(truth.release_state!=="public"||!profile||profile.visibility_scope!=="public") return null
+    return {profile_key:profile.profile_key,display_label:profile.display_label,visibility_scope:"public"}
+  }catch{return null}
+}
 async function sessionFor(request:Request,env:PassageEnv){
   const raw=cookie(request,"c3_env_session")
   if(!raw) throw new Error("environment_claim_required")
@@ -75,14 +90,15 @@ async function activeProspect(env:PassageEnv,key:string){
 export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
   try{
     const session=await sessionFor(request,env)
-    const [prospects,evidence,supports,contributions,current,threads,threadEntries]=await Promise.all([
+    const [prospects,evidence,supports,contributions,current,threads,threadEntries,publicProfile]=await Promise.all([
       read(env,"c2_mdm_prospect",{select:"prospect_key,display_name,county,state,standing,prospect_reason_summary,tract_context,demographics_summary,economic_context_summary,history_identity_summary,transportation_access_summary,existing_assets,missing_conditions,public_private_investment,property_place_leads,people_institutions_businesses,open_questions,participant_contribution_needs,current_stage,updated_at",standing:"eq.active_prospect",participant_visible:"eq.true",order:"display_name.asc"}),
       read(env,"c2_mdm_place_evidence",{select:"evidence_key,prospect_key,evidence_type,title,statement,source_name,source_url_or_registry_ref,geography_relation,tract_relation,property_relation,standing,freshness_state,notes,updated_at",participant_visibility:"eq.true",order:"updated_at.desc"}),
       read(env,"c2_mdm_support",{select:"participant_relationship_key,prospect_key,support_status,updated_at",support_status:"eq.active"}),
       read(env,"c2_mdm_contribution",{select:"contribution_key,participant_relationship_key,prospect_key,contribution_type,description,standing,created_at,updated_at",order:"created_at.desc"}),
       read(env,"c2_mdm_current",{select:"current_key,event_type,prospect_key,participant_relationship_key,contribution_key,statement,standing,evidence_reference,metadata,occurred_at",participant_visible:"eq.true",order:"occurred_at.desc",limit:"100"}),
       read(env,"c2_mdm_ledger_thread",{select:"thread_key,initiative_key,prospect_key,title,purpose,standing,metadata,created_at,updated_at",participant_visible:"eq.true",standing:"eq.active",order:"created_at.asc"}),
-      read(env,"c2_mdm_ledger_thread_entry",{select:"entry_key,thread_key,participant_relationship_key,prospect_key,entry_type,body,source_url,evidence_reference,standing,parent_entry_key,metadata,created_at,updated_at",participant_visible:"eq.true",order:"created_at.asc",limit:"200"})
+      read(env,"c2_mdm_ledger_thread_entry",{select:"entry_key,thread_key,participant_relationship_key,prospect_key,entry_type,body,source_url,evidence_reference,standing,parent_entry_key,metadata,created_at,updated_at",participant_visible:"eq.true",order:"created_at.asc",limit:"200"}),
+      resolvePublicProfile(env,session)
     ])
     const supportCounts=new Map<string,number>()
     for(const row of supports){
@@ -101,7 +117,7 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
     return json({
       authenticated:true,
       standing:"c2_mdm_participation_surface_ready",
-      participant:{relationship_key:session.subjectKey},
+      participant:{relationship_key:session.subjectKey,profile:publicProfile},
       mission:{
         title:"The Million Dollar Mission",
         working_form:"One small town / One million dollars / 90 days",
