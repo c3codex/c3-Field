@@ -1,5 +1,24 @@
 export type C3PublicDocumentSection={heading:string;body:string}
-export type C3PublicDocument={title:string;route:string;effective_date?:string;intro?:string;body?:string;email?:string;sections?:C3PublicDocumentSection[]}
+export type C3PublicDocument={title:string;route:string;effective_date?:string;intro?:string;body?:string;email?:string;phone?:string;sections?:C3PublicDocumentSection[]}
+export type C3PublicIdentity={
+  public_identity:C3PublicIdentity
+  brand:string
+  legal_entity:string
+  formal_authority_statement:string
+  environment_name:string
+  environment_definition:string
+  model_name:string
+  model_descriptor:string
+  model_path:string
+  initiative_label:string
+  contact_email:string
+  contact_phone:string
+  contact_phone_href:string
+  privacy_route:string
+  terms_route:string
+  contact_route:string
+  copyright:string
+}
 export type C3PublicPresentation={
   brand:string
   legal_entity:string

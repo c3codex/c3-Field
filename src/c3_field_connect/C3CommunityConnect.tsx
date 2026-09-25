@@ -100,23 +100,25 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   // Initiative projection remains held until independently registered; ordinary individual Connect stays available.
   const initiatives: typeof environment.initiatives = []
 
+  const identity=presentation?.public_identity
   const pct47Presentation=initiativeSurface?.initiativeKey==="47pct"?initiativeSurface.publicPresentation:null
   const pct47Header=pct47Presentation&&presentation?<header className="c3-connect-header c3-connect-width pct47-header">
     <button type="button" className="c3-connect-identity pct47-identity" aria-label="Return to 4.7% initiative" onClick={()=>setPublicStage("landing")}>
       {pct47Presentation.watermark_runtime_url&&<img src={pct47Presentation.watermark_runtime_url} alt="" width="72" height="72" />}
-      <span>{pct47Presentation.header_line}</span>
+      <span>{identity?.initiative_label}</span>
     </button>
     <nav className="c3-connect-public-nav" aria-label="Public">
       {publicStage==="connect"&&<span>{pct47Presentation.memorial_name} · {pct47Presentation.memorial_text}</span>}
       {publicStage!=="connect"&&<button className="c3-connect-nav" type="button" onClick={()=>setPublicStage("connect")}>{pct47Presentation.primary_cta} <span aria-hidden="true">↗</span></button>}
     </nav>
   </header>:null
-  const pct47Footer=pct47Presentation&&presentation?<footer className="c3-connect-footer c3-connect-width pct47-footer">
+  const pct47Footer=pct47Presentation&&presentation&&identity?<footer className="c3-connect-footer c3-connect-width pct47-footer">
     <div>
-      <strong>{pct47Presentation.header_line}</strong>
-      <span>{presentation.footer.environment_line}</span>
-      <span>{pct47Presentation.formal_authority_statement}</span>
-      <span>{presentation.footer.copyright}</span>
+      <strong>{identity.initiative_label}</strong>
+      <span>{identity.environment_definition}</span>
+      <span>{identity.formal_authority_statement}</span>
+      <span><a href={`mailto:${identity.contact_email}`}>{identity.contact_email}</a> · <a href={identity.contact_phone_href}>{identity.contact_phone}</a></span>
+      <span>{identity.copyright}</span>
     </div>
     <nav aria-label="Footer">
       {presentation.navigation.filter(item=>["/privacy","/terms","/contact"].some(route=>item.route.endsWith(route))).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}
@@ -170,8 +172,8 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
           <p className="c3-connect-form-lead">{publicPresentation.initiative_explanation}</p>
           <section className="pct47-model" aria-labelledby="pct47-model-title">
             <p className="c3-connect-kicker">THE c3 MODEL</p>
-            <h2 id="pct47-model-title">{publicPresentation.model_descriptor}</h2>
-            <p className="pct47-model-path">{publicPresentation.model_path}</p>
+            <h2 id="pct47-model-title">{identity?.model_descriptor}</h2>
+            <p className="pct47-model-path">{identity?.model_path}</p>
             <p className="c3-connect-form-meaning">{publicPresentation.model_body}</p>
           </section>
           {publicPresentation.audience_copy&&<p className="c3-connect-form-meaning">{publicPresentation.audience_copy}</p>}
@@ -274,7 +276,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
       </section>
 
       <footer className="c3-connect-footer c3-connect-width">
-        <div><strong>{presentation?.footer.brand}</strong><span>{presentation?.footer.environment_line}</span><span>{presentation?.footer.copyright}</span></div>
+        <div><strong>{identity?.brand}</strong><span>{identity?.environment_definition}</span><span>{identity?.formal_authority_statement}</span><span>{identity&&<><a href={`mailto:${identity.contact_email}`}>{identity.contact_email}</a> · <a href={identity.contact_phone_href}>{identity.contact_phone}</a></>}</span><span>{identity?.copyright}</span></div>
         <nav aria-label="Footer">{presentation?.navigation.filter(item=>["/community-potential","/privacy","/terms","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}</nav>
       </footer>
     </main>
