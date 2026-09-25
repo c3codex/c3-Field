@@ -36,3 +36,18 @@ jobs:
           probe "PROFILE_API_UNAUTH" "https://my.c3field.online/api/my-environment-profile"
           probe "CHAZZ_API_UNAUTH" "https://my.c3field.online/api/my-environment-chazz"
           probe "TREE_FREE_UNAUTH" "https://my.c3field.online/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
+
+      - name: Match deployed operational chunks
+        shell: bash
+        run: |
+          html=$(mktemp)
+          curl -sS --max-time 20 "https://my.c3field.online/" -o "$html"
+          main=$(grep -oE '/assets/index-[A-Za-z0-9_-]+\.js' "$html" | head -1)
+          echo "MAIN_ASSET=$main"
+          test -n "$main"
+          js=$(mktemp)
+          curl -sS --max-time 20 "https://my.c3field.online$main" -o "$js"
+          grep -q 'C2EnvironmentShell-j7KOn1hw.js' "$js"
+          echo "C2_CHUNK_MATCH=PASS"
+          grep -q 'MyEnvironmentEncounter-CtZJwV2a.js' "$js"
+          echo "MYENV_CHUNK_MATCH=PASS"
