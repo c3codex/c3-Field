@@ -28,7 +28,7 @@ type Prospect={
 type Payload={
   authenticated:boolean
   standing:string
-  participant?:{relationship_key:string}
+  participant?:{relationship_key:string;profile?:{profile_key:string;display_label:string;visibility_scope:"public"}|null}
   mission?:{title:string;working_form:string;question:string}
   prospects?:Prospect[]
   my_support?:Record<string,unknown>|null
@@ -155,6 +155,7 @@ export default function C2EnvironmentShell(){
 
     <section className="c2-mission-head">
       <p className="c2-eyebrow">THE MILLION DOLLAR MISSION</p>
+      {data.participant?.profile&&<p className="c2-shell-label">PUBLIC PROFILE · {data.participant.profile.display_label}</p>}
       <h1 id="c2-title">{data.mission?.working_form||"One small town / One million dollars / 90 days"}</h1>
       <p>{data.mission?.question}</p>
       <nav className="c2-tabs" aria-label="Million Dollar Mission">
