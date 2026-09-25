@@ -48,7 +48,7 @@ test("current state projection resolves only its six registered authority groups
  const calls:{table:string,filters?:Record<string,string>}[]=[]
  const read:ReadRows=async(table,_select,filters)=>{
   calls.push({table,filters})
-  if(table==="system_process_registry") return [{process_key:filters?.process_key?.replace(/^eq\\./,""),status:"active",process_status:"active",authority_state:"registered"}]
+  if(table==="system_process_registry") return [{process_key:filters?.process_key?.replace("eq.",""),status:"active",process_status:"active",authority_state:"registered"}]
   if(table==="c3_current_state") return [{current_state_key:"current_env_c3ops_v1",env_key:"env_c3ops",standing:"governed_environment",is_current:true}]
   if(table==="c3_optics_observation") return [{observation_key:"optics432:operational_proof:c3_system_baseline_v1",standing:"HLD"}]
   return []
