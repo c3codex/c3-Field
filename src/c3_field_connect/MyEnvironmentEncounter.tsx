@@ -58,6 +58,17 @@ type ProfileIntakePayload={authenticated:boolean;standing:string;contract?:Profi
 type ChazzMessage={role:"user"|"assistant";text:string}
 type ChazzPayload={standing:string;runtime?:string;reason?:string;message?:string;messages?:ChazzMessage[]}
 
+async function readChazzJson(response:Response):Promise<ChazzPayload>{
+  const contentType=(response.headers.get("content-type")||"").toLowerCase()
+  if(!contentType.includes("application/json")){
+    await response.text().catch(()=>"")
+    throw new Error(response.ok
+      ?"Chazz runtime is held because the API route did not resolve as JSON."
+      :"Chazz runtime is unavailable from this environment.")
+  }
+  return await response.json() as ChazzPayload
+}
+
 const ARRIVAL_VIDEO="/api/free-media?asset=c3_field_c1me_arrival_video_v1"
 const LIVE_BACKDROP="/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
 
@@ -216,7 +227,7 @@ export default function MyEnvironmentEncounter(){
       setChazzNotice("")
       try{
         const response=await fetch("/api/my-environment-chazz",{headers:{accept:"application/json"}})
-        const body=await response.json() as ChazzPayload
+        const body=await readChazzJson(response)
         if(!active)return
         if(response.ok&&body.standing==="ACT"){
           setChazzMessages(body.messages||[])
@@ -349,7 +360,7 @@ export default function MyEnvironmentEncounter(){
         headers:{"content-type":"application/json"},
         body:JSON.stringify({message})
       })
-      const body=await response.json() as ChazzPayload
+      const body=await readChazzJson(response)
       if(!response.ok||body.standing!=="ACT"||!body.message)throw new Error(body.reason||"Chazz did not resolve this turn.")
       setChazzMessages(current=>[...current,{role:"assistant",text:body.message!}])
     }catch(error){
