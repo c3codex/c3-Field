@@ -452,6 +452,8 @@ export default function App() {
     const personalPath = normalizePathname(window.location.pathname)
     if (personalPath === "/" || personalPath === "/my-environment")
       return <Suspense fallback={<p>Opening your environment…</p>}><MyEnvironmentEncounter /></Suspense>
+    if (personalPath === "/c2")
+      return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentShell /></Suspense>
     return <HeldUnknownC3FieldRoute pathname={personalPath} />
   }
 
