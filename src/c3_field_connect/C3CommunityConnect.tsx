@@ -3,6 +3,7 @@ import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
 import MillionDollarMissionLanding from "./MillionDollarMissionLanding"
 import {loadC3PublicPresentation,type C3PublicPresentation} from "./c3PublicPresentation"
 import type {InitiativeSurfaceRuntime} from "./initiativeSurfaceHost"
+import EternalFlame from "./EternalFlame"
 
 
 export default function C3CommunityConnect({initiativeSurface=null}:{initiativeSurface?:InitiativeSurfaceRuntime|null}={}) {
@@ -153,10 +154,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
           {publicPresentation.audience_copy&&<p className="c3-connect-form-meaning">{publicPresentation.audience_copy}</p>}
         </div>
         <div className="c3-connect-form">
-          <section aria-label="Eternal Flame memorial">
-            <p className="c3-connect-kicker">{publicPresentation.memorial_name}</p>
-            <h2>{publicPresentation.memorial_text}</h2>
-          </section>
+          <EternalFlame label={publicPresentation.memorial_name} text={publicPresentation.memorial_text} />
           <p className="c3-connect-custody">{publicPresentation.connect_copy}</p>
           <button className="c3-connect-button" type="button" onClick={()=>setPublicStage("connect")}>{publicPresentation.primary_cta} <span aria-hidden="true">↗</span></button>
         </div>
@@ -183,6 +181,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
         <p className="c3-connect-kicker">{publicPresentation.primary_cta}</p>
         <h1 id="pct47-connect-title">{publicPresentation.connect_copy}</h1>
         <p className="c3-connect-form-meaning">Enter through your own environment. Check your email to continue after Connect.</p>
+        <EternalFlame compact label={publicPresentation.memorial_name} text={publicPresentation.memorial_text} className="pct47-connect-flame" />
       </div>
       <form className="c3-connect-form" onSubmit={submitCandidate} aria-busy={pending}>
         {environment.encounterEnabled === false && <p role="status">Connecting is not open yet. Please return later.</p>}

@@ -1,4 +1,5 @@
 import {FormEvent,useEffect,useState} from "react"
+import EternalFlame from "./EternalFlame"
 
 type EnvPayload={
   authenticated:boolean
@@ -446,7 +447,7 @@ export default function MyEnvironmentEncounter(){
     </section>
 
     {runtimeNotice&&<p className="myenv-runtime-notice" role="status">{runtimeNotice}</p>}
-    {initiatives.some(initiative=>initiative.initiative_key==="47pct")&&<aside className="myenv-runtime-notice" aria-label="Eternal Flame memorial"><strong>Eternal Flame</strong> · For those who died waiting.</aside>}
+    {initiatives.some(initiative=>initiative.initiative_key==="47pct")&&<aside className="myenv-runtime-notice myenv-eternal-flame" aria-label="Eternal Flame memorial"><EternalFlame compact /></aside>}
 
     <nav className="myenv-discovery" aria-label="Environment touchpoints">
       {primitives.map(primitive=><button
@@ -491,7 +492,7 @@ export default function MyEnvironmentEncounter(){
             <h2>Initiative</h2>
             <p>This initiative is visible because this environment has an evidenced encounter or invitation relation.</p>
           </div>
-          {activeInitiative.initiative_key==="47pct"&&<article className="myenv-initiative-card" aria-label="Eternal Flame memorial"><div><span>MEMORIAL</span><h3>Eternal Flame</h3><p>For those who died waiting.</p></div></article>}
+          {activeInitiative.initiative_key==="47pct"&&<article className="myenv-initiative-card myenv-initiative-memorial" aria-label="Eternal Flame memorial"><span>MEMORIAL</span><EternalFlame /></article>}
           {activeInitiative.components.filter(component=>component.renderer_key==="initiative.entry_card").map(component=>{
             const config=component.config||{}
             const held=config.display_state==="held"||config.interaction_enabled===false

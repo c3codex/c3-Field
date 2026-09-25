@@ -4,6 +4,8 @@
 .pct47-surface>.pct47-watermark{position:absolute;left:50%;top:50%;width:min(70vw,760px);height:auto;transform:translate(-50%,-48%);pointer-events:none;user-select:none;filter:saturate(.72);z-index:0}
 .pct47-surface>:not(.pct47-watermark){position:relative;z-index:1}
 .pct47-surface .c3-connect-form-lead{max-width:560px}
+.pct47-connect-flame{margin-top:28px;align-self:flex-start}
+.pct47-surface .c3-connect-form>.eternal-flame{margin-bottom:20px}
 .c3-connect-width{width:min(1240px,calc(100% - 96px));margin-inline:auto}
 .c3-connect-shell a{color:inherit;text-decoration:none}
 .c3-connect-shell a:focus-visible,.c3-connect-shell button:focus-visible,.c3-connect-shell input:focus-visible,.c3-connect-shell textarea:focus-visible,.c3-connect-shell select:focus-visible{outline:3px solid #91b9f3;outline-offset:5px}
