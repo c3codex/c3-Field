@@ -84,20 +84,39 @@ async function nativeConnections(env:PassageEnv,subjectKey:string){
     }
   }))
 }
+async function initiativeConnections(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){
+  return read(env,"c3_env_initiative_visibility",{
+    select:"visibility_key,initiative_key,initiative_envpac_key,target_environment_key,visibility_source,source_ref,standing,visible_at,metadata",
+    relationship_key:"eq."+session.subjectKey,
+    env_key:"eq."+session.envKey,
+    envpac_key:"eq."+session.envpacKey,
+    standing:"eq.active",
+    revoked_at:"is.null",
+    order:"visible_at.desc"
+  })
+}
 
 export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
   try{
     const session=await sessionFor(request,env)
     const thread=await ensureThread(env,session)
-    const [entries,connections]=await Promise.all([
+    const [entries,connections,initiativeConnectionsRows]=await Promise.all([
       read(env,"c1_environment_connection_thread_entry",{
         select:"entry_key,entry_type,title,body,related_type,related_key,related_route,standing,metadata,created_at,updated_at",
         thread_key:"eq."+String(thread.thread_key),owner_relationship_key:"eq."+session.subjectKey,
         order:"created_at.desc",limit:"200"
       }),
-      nativeConnections(env,session.subjectKey)
+      nativeConnections(env,session.subjectKey),
+      initiativeConnections(env,session)
     ])
-    return json({authenticated:true,standing:"connections_ready",thread,entries,native_connections:connections})
+    return json({
+      authenticated:true,
+      standing:"connections_ready",
+      thread,
+      entries,
+      native_connections:connections,
+      initiative_connections:initiativeConnectionsRows
+    })
   }catch(error){
     const reason=error instanceof Error?error.message:"connections_unavailable"
     const status=reason==="environment_claim_required"||reason==="session_expired"?401:503
