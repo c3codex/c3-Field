@@ -84,6 +84,7 @@ const states: Record<string,any>={
  evaluate_relational_car:{accepted:true,relationship_key:key,env_key:ENV_KEY,car_state:"pass",relationship_state:"car_passed_candidate",next_permitted_encounter:"boundary"},
  evaluate_c1_relational_boundary:{accepted:true,relationship_key:key,env_key:ENV_KEY,boundary_result:{boundary_state:"pass",relationship_state:"boundary_passed_candidate",next_permitted_encounter:"registration"},notchazz_evaluation:{flag_count:0,final_disposition_authority:false}},
  register_and_persist_c1_relationship:{accepted:true,relationship_key:key,rrt_provenance_key:key,relationship_standing:"c1_C1_persisted",current_resolution:"C1",next_permitted_encounter:"c2_eligibility_review",current_created_as_separate_record:false,c2_created:false,public_release_created:false,registration_event_key:"event_test",persistence:{result:"recoverable_governed_state",persistence_key:ENV_KEY+":"+key}},
+ resolve_pending_c1_initiative_connect:{pending:false,relationship_key:key},
 }
 function harness(overrides:Record<string,any>={}) {
  const calls:string[]=[], requests:any[]=[]
