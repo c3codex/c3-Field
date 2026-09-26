@@ -189,8 +189,10 @@ async function callC3Ops(request:Request,env:ChazzEnv,ctx:RuntimeContext,message
 
   const response=await fetch(upstream.toString(),init)
   const payload=await response.json().catch(()=>null) as Record<string,unknown>|null
-  if(!response.ok||!payload||typeof payload!=="object")throw new Error("c3ops_runtime_held")
-  if(!["ACT","HLD","DNR"].includes(String(payload.standing||"")))throw new Error("c3ops_contract_invalid")
+  if(!payload||typeof payload!=="object")throw new Error("c3ops_runtime_held")
+  const standing=String(payload.standing||"")
+  if(!["ACT","HLD","DNR"].includes(standing))throw new Error("c3ops_contract_invalid")
+  if(!response.ok&&standing==="ACT")throw new Error("c3ops_contract_invalid")
   return payload
 }
 
