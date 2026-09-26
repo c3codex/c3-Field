@@ -41,7 +41,7 @@ async function write(env:PassageEnv,table:string,body:unknown){
 function record(value:unknown):Row{
   return value&&typeof value==="object"&&!Array.isArray(value)?value as Row:{}
 }
-async function initiativeConnectUrl(env:PassageEnv,initiativeKey:string){
+async function initiativeEntryUrl(env:PassageEnv,initiativeKey:string){
   const rows=await read(env,"system_process_registry",{
     select:"process_key,status,process_status,metadata",
     process_family:"eq.c3_field",
@@ -58,7 +58,7 @@ async function initiativeConnectUrl(env:PassageEnv,initiativeKey:string){
   if(!host) throw new Error("initiative_surface_not_resolved")
   const resolved=await resolveInitiativeSurfaceHost(env,host)
   if(resolved.initiativeKey!==initiativeKey) throw new Error("initiative_surface_mismatch")
-  return new URL(resolved.connectRoute,resolved.canonicalUrl)
+  return new URL(resolved.route,resolved.canonicalUrl)
 }
 async function sessionFor(request:Request,env:PassageEnv){
   const raw=cookie(request,"c3_env_session")
@@ -124,8 +124,8 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     if(!rows[0]?.share_reference) throw new Error("invite_reference_unavailable")
     const shareReference=String(rows[0].share_reference)
     const publicUrl=initiative
-      ?await initiativeConnectUrl(env,initiative.source_initiative_key)
-      :new URL("/connect",env.C1_PUBLIC_ORIGIN||"https://c3field.online")
+      ?await initiativeEntryUrl(env,initiative.source_initiative_key)
+      :new URL("/",env.C1_PUBLIC_ORIGIN||"https://c3field.online")
     publicUrl.searchParams.set("via",shareReference)
     const copyText=[message||null,"Connect here:\n"+publicUrl.toString()].filter(Boolean).join("\n\n")
     return json({
