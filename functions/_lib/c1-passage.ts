@@ -483,6 +483,31 @@ export async function verifyCandidate(body: RecordValue, env: PassageEnv, deps: 
   } catch { return hold(stage,true) }
 }
 
+export async function beginExistingInitiative322(args:{relationshipKey:string;initiativeKey:string;sourceHost:string;metadata?:RecordValue},env:PassageEnv,deps:Dependencies=defaults){
+  const origin=configuration(env)
+  if(args.initiativeKey!==PCT47_322_CONTRACT.initiativeKey)throw new Error("initiative_not_supported")
+  const rpc=rpcClient(env,deps)
+  const requested=await rpc("record_c1_initiative_connect_requested",{
+    p_relationship_key:args.relationshipKey,
+    p_initiative_key:args.initiativeKey,
+    p_source_host:args.sourceHost,
+    p_metadata:{source_route:"/api/my-environment-initiative-connect",...(args.metadata||{})}
+  })
+  if(requested.accepted!==true||typeof requested.request_event_key!=="string"||!requested.request_event_key)
+    throw new Error("initiative_ack_request")
+  const ticket=await signed322Ticket(args.relationshipKey,requested.request_event_key,env,deps.now())
+  return {
+    standing:"322_acknowledgment_required",
+    saved:true,
+    acknowledgment_required:true,
+    initiative_key:args.initiativeKey,
+    request_event_key:requested.request_event_key,
+    ack_ticket:ticket,
+    ack_contract:PCT47_322_CONTRACT,
+    acknowledgment_url:origin+"/api/c3-community-connect-acknowledge#ticket="+encodeURIComponent(ticket)
+  }
+}
+
 export async function acknowledgeInitiative322(body:RecordValue,env:PassageEnv,deps:Dependencies=defaults){
   let stage="322_ticket"
   try{
