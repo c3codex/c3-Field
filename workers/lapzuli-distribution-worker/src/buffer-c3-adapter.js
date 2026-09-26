@@ -246,7 +246,7 @@ function validateC3Request(body) {
   if (body?.operator_confirmed !== true) missing.push("operator_confirmed_true");
   if (clean(body?.registered_standing).toLowerCase() !== "registered") missing.push("registered_standing_registered");
   if (!clean(body?.registered_standing_key).endsWith("_registered")) missing.push("registered_standing_key_valid");
-  if (!clean(body?.canonical_url).startsWith("https://c3field.online/")) missing.push("canonical_url_c3field");
+  if (!isAllowedC3CanonicalUrl(body?.canonical_url)) missing.push("canonical_url_c3field");
   if (!clean(body?.image_url).startsWith("https://")) missing.push("image_url_https");
 
   const mode = clean(body?.buffer_mode) || "shareNow";
@@ -355,6 +355,26 @@ async function bufferGraphql(credential, query, variables = undefined) {
     payload,
     error: graphErrors[0]?.message || (!response.ok ? "buffer_http_error" : null),
   };
+}
+
+const C3_CANONICAL_HOSTS = new Set([
+  "c3field.online",
+  "mdm.c3field.online",
+  "47pct.c3field.online",
+]);
+
+function isAllowedC3CanonicalUrl(value) {
+  try {
+    const url = new URL(clean(value));
+    return (
+      url.protocol === "https:" &&
+      !url.username &&
+      !url.password &&
+      C3_CANONICAL_HOSTS.has(url.hostname.toLowerCase())
+    );
+  } catch {
+    return false;
+  }
 }
 
 function readC3Credential(env) {
