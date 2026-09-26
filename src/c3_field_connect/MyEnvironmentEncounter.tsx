@@ -1,5 +1,6 @@
 import {FormEvent,useEffect,useState} from "react"
 import EternalFlame from "./EternalFlame"
+import ProfilePacPanel,{type ProfileContract} from "./ProfilePacPanel"
 
 type EnvPayload={
   authenticated:boolean
@@ -51,20 +52,9 @@ type ProfileTruth={
   projection_standing?:string
   standing?:string
   pac_key?:string
-  profile?:{display_label:string;visibility_scope:string;profile_key:string;profile_class?:string}|null
+  profile?:{display_label:string;visibility_scope:string;profile_key:string;profile_class?:string;about?:string|null;interests?:string|null;open_to?:string[];location_region?:string|null}|null
   evaluation?:{completeness_state?:string;resolution_state?:string}
 }
-type ProfileQuestion={
-  key:string
-  label:string
-  input:"text"|"select"
-  required?:boolean
-  max_length?:number
-  placeholder?:string
-  default?:string
-  options?:Array<{value:string;label:string}>
-}
-type ProfileContract={pac_type:string;contract_version:string;questions:ProfileQuestion[];authority_effect:string}
 type ProfileIntakePayload={authenticated:boolean;standing:string;contract?:ProfileContract;resolved_profile_class?:string|null}
 type ChazzMessage={role:"user"|"assistant";text:string}
 type ChazzPayload={standing:string;runtime?:string;reason?:string;message?:string;messages?:ChazzMessage[]}
@@ -487,34 +477,22 @@ export default function MyEnvironmentEncounter(){
     if(primitive.renderer_key==="c1me.profile_pac"){
       const profile=profileTruth?.profile
       const profileHeld=profileTruth?.projection_standing==="held"
-      const labelQuestion=profileContract?.questions.find(question=>question.key==="profile.display_label")
-      const visibilityQuestion=profileContract?.questions.find(question=>question.key==="profile.visibility_scope")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
         <div className="myenv-thread-heading"><p className="myenv-kicker">PROFILE-PAC</p><h2>{primitive.display_label}</h2>
-          <p>Complete the bounded profile only when you want a profile to become encounterable beyond this private environment.</p></div>
+          <p>Shape what this environment says about you. Profile-PAC does not create standing, authority, membership, or initiative relations.</p></div>
         {data?.presentation&&<form className="myenv-thread-compose" onSubmit={savePresentation}>
           <label>Environment presentation</label>
           <input aria-label="Opening visual asset key" maxLength={240} value={profilePresentationAsset} onChange={e=>setProfilePresentationAsset(e.target.value)} disabled={!data.presentation.owner_changeable} placeholder="FREE media asset key"/>
           <p>Current visual: {data.presentation.opening_visual_asset_key}</p>
           <button type="submit" disabled={!data.presentation.owner_changeable||!profilePresentationAsset.trim()}>SAVE PRESENTATION</button>
         </form>}
-        {!profileLoaded
-          ?<p className="myenv-runtime-warning">Profile-PAC state could not be resolved from this EnvPAC.</p>
-          :profileHeld
-          ?<p className="myenv-runtime-warning">Profile-PAC is held inside this EnvPAC.</p>
-          :!labelQuestion||!visibilityQuestion
-          ?<p className="myenv-runtime-warning">Profile-PAC intake contract is unavailable.</p>
-          :<>
-            {profile&&<article className="myenv-initiative-card"><div><span>{profile.visibility_scope}</span><h3>{profile.display_label}</h3><p>Profile-PAC ready in EnvPAC.</p></div></article>}
-            <form className="myenv-thread-compose" onSubmit={formProfile}>
-              <input aria-label={labelQuestion.label} maxLength={labelQuestion.max_length||160} value={profileDisplayLabel} onChange={e=>setProfileDisplayLabel(e.target.value)} placeholder={labelQuestion.placeholder||labelQuestion.label} required={labelQuestion.required}/>
-              <select aria-label={visibilityQuestion.label} value={profileVisibility} onChange={e=>setProfileVisibility(e.target.value)}>
-                {(visibilityQuestion.options||[]).map(option=><option key={option.value} value={option.value}>{option.label}</option>)}
-              </select>
-              <button type="submit" disabled={!profileDisplayLabel.trim()}>{profile?"SAVE PROFILE-PAC":"COMPLETE PROFILE-PAC"}</button>
-            </form>
-          </>}
-        {profileNotice&&<p className="myenv-initiative-notice" role="status">{profileNotice}</p>}
+        <ProfilePacPanel
+          initialProfile={profile||null}
+          contract={profileContract}
+          loaded={profileLoaded}
+          held={profileHeld}
+          onSaved={saved=>setProfileTruth(current=>current?{...current,profile:{...(current.profile||{}),...saved,profile_key:current.profile?.profile_key||"",profile_class:current.profile?.profile_class}}:current)}
+        />
       </section>
     }
     if(primitive.renderer_key==="c1me.ledger"){
