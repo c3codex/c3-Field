@@ -1,6 +1,6 @@
 import {FormEvent,useEffect,useState} from "react"
 import EternalFlame from "./EternalFlame"
-import ProfilePacPanel,{type ProfileContract} from "./ProfilePacPanel"
+import ProfilePacPanel,{type ProfileContract} from "./ProfilePacPanel"\nimport CurrentConstellation,{type CurrentToken} from "./CurrentConstellation"
 
 type EnvPayload={
   authenticated:boolean
@@ -57,7 +57,7 @@ type ProfileTruth={
 }
 type ProfileIntakePayload={authenticated:boolean;standing:string;contract?:ProfileContract;resolved_profile_class?:string|null}
 type ChazzMessage={role:"user"|"assistant";text:string}
-type ChazzPayload={standing:string;runtime?:string;reason?:string;message?:string;messages?:ChazzMessage[]}
+type ChazzPayload={standing:string;runtime?:string;reason?:string;message?:string;messages?:ChazzMessage[]}\ntype CurrentPayload={authenticated:boolean;standing:string;semantics?:string;current_state_ref?:string|null;token_count?:number;tokens?:CurrentToken[]}
 
 async function readChazzJson(response:Response):Promise<ChazzPayload>{
   const contentType=(response.headers.get("content-type")||"").toLowerCase()
@@ -126,7 +126,7 @@ export default function MyEnvironmentEncounter(){
   const [chazzInput,setChazzInput]=useState("")
   const [chazzNotice,setChazzNotice]=useState("")
   const [chazzBusy,setChazzBusy]=useState(false)
-  const [chazzLoaded,setChazzLoaded]=useState(false)
+  const [chazzLoaded,setChazzLoaded]=useState(false)\n  const [currentTokens,setCurrentTokens]=useState<CurrentToken[]>([])\n  const [currentLoaded,setCurrentLoaded]=useState(false)
 
   useEffect(()=>{
     let active=true
@@ -139,7 +139,7 @@ export default function MyEnvironmentEncounter(){
         fetch("/api/my-environment-profile",{headers:{accept:"application/json"}})
       ])
       if(!active)return
-      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult]=results
+      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult,currentResult]=results
       if(primitiveResult.status==="fulfilled"&&primitiveResult.value.ok){
         const body=await primitiveResult.value.json() as PrimitivePayload
         if(active&&body.primitives){
@@ -171,7 +171,7 @@ export default function MyEnvironmentEncounter(){
       }else if(active){
         setCanopyLoaded(false)
       }
-      if(profileResult.status==="fulfilled"&&profileResult.value.ok){
+      if(currentResult.status==="fulfilled"&&currentResult.value.ok){\n        const body=await currentResult.value.json() as CurrentPayload\n        if(active){setCurrentTokens(body.tokens||[]);setCurrentLoaded(true)}\n      }else if(active){\n        setCurrentLoaded(false)\n      }\n      if(profileResult.status==="fulfilled"&&profileResult.value.ok){
         const body=await profileResult.value.json() as ProfileIntakePayload
         if(active&&body.contract?.pac_type==="ProfilePAC"){
           setProfileContract(body.contract)
@@ -569,9 +569,8 @@ export default function MyEnvironmentEncounter(){
   }
 
   const has47pct=initiatives.some(initiative=>initiative.initiative_key==="47pct")
-  const genericBackdrop=!data.presentation||data.presentation.opening_visual_asset_key==="c3_field_c1me_live_backdrop_v1"
-  const use47pctBackdrop=has47pct&&genericBackdrop
-  const backdrop=use47pctBackdrop?"/assets/47pct/47pct-emblem-watermark-v1.svg":(data.presentation?.opening_visual_url||LIVE_BACKDROP)
+  const genericBackdrop=!data.presentation||["c3_field_c1me_live_backdrop_v1","c3_field_environment_opening_visual_v1"].includes(data.presentation.opening_visual_asset_key)
+  const backdrop=genericBackdrop?"":(data.presentation?.opening_visual_url||"")
   const activePrimitive=activePanel?.startsWith("primitive:")
     ?primitives.find(primitive=>"primitive:"+primitive.primitive_key===activePanel)
     :null
