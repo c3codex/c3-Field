@@ -56,7 +56,10 @@ async function resolveProfileFromEnvpac(session:EnvironmentSession,env:PassageEn
   return {projection_standing:"resolved",pac_key:truth.pac_key,version:truth.version,standing:truth.standing,
     release_state:truth.release_state,authority_effect:"none",
     profile:{profile_key:truth.profile.profile_key,profile_class:truth.profile.profile_class,
-      display_label:truth.profile.display_label,visibility_scope:truth.profile.visibility_scope},
+      display_label:truth.profile.display_label,visibility_scope:truth.profile.visibility_scope,
+      about:truth.profile.about??null,interests:truth.profile.interests??null,
+      open_to:Array.isArray(truth.profile.open_to)?truth.profile.open_to:[],
+      location_region:truth.profile.location_region??null},
     evaluation:{completeness_state:truth.evaluation.completeness_state,resolution_state:truth.evaluation.resolution_state}}
 }
 
