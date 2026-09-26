@@ -11,7 +11,7 @@ type EternalFlameProps={
 export default function EternalFlame({
   compact=false,
   label="Eternal Flame",
-  text="For those who died waiting.",
+  text="For those who were never heard.",
   className=""
 }:EternalFlameProps){
   const id=useId().replace(/:/g,"")
