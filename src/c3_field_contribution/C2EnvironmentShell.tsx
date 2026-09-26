@@ -1,5 +1,6 @@
 import {FormEvent, useEffect, useMemo, useState} from "react"
 import "./c2Environment.css"
+import CurrentConstellation,{type CurrentToken} from "../c3_field_connect/CurrentConstellation"
 
 type Prospect={
   prospect_key:string
@@ -62,9 +63,10 @@ export default function C2EnvironmentShell(){
   const [notice,setNotice]=useState("")
   const [type,setType]=useState(CONTRIBUTION_TYPES[0])
   const [description,setDescription]=useState("")
-  const [tab,setTab]=useState<"mission"|"places"|"ledger"|"current">("places")
+  const [tab,setTab]=useState<"mission"|"places"|"ledger"|"state"|"current">("places")
   const [ledgerType,setLedgerType]=useState("discussion")
   const [ledgerBody,setLedgerBody]=useState("")
+  const [currentTokens,setCurrentTokens]=useState<CurrentToken[]>([])
 
   async function load(){
     const response=await fetch("/api/c2-mdm",{credentials:"same-origin"})
@@ -73,6 +75,14 @@ export default function C2EnvironmentShell(){
     if(payload.prospects?.length && !selected) setSelected(payload.prospects[0].prospect_key)
   }
   useEffect(()=>{void load()},[])
+  useEffect(()=>{
+    let cancelled=false
+    void fetch("/api/my-environment-current",{credentials:"same-origin",headers:{accept:"application/json"}})
+      .then(async response=>response.ok?await response.json():null)
+      .then(body=>{if(!cancelled&&body&&Array.isArray(body.tokens))setCurrentTokens(body.tokens as CurrentToken[])})
+      .catch(()=>{})
+    return()=>{cancelled=true}
+  },[])
   const prospects=data?.prospects||[]
   const active=useMemo(()=>prospects.find(p=>p.prospect_key===selected)||prospects[0], [prospects,selected])
   const mySupport=typeof data?.my_support?.prospect_key==="string"?data?.my_support?.prospect_key:null
@@ -145,6 +155,7 @@ export default function C2EnvironmentShell(){
   </main>
 
   return <main className="c2-shell" aria-labelledby="c2-title">
+    <CurrentConstellation tokens={currentTokens} mode="c2"/>
     <header className="c2-topbar">
       <a className="c2-brand" href="/"><span>c3</span> Community Partners</a>
       <div className="c2-topbar-actions">
@@ -162,6 +173,7 @@ export default function C2EnvironmentShell(){
         <button className={tab==="mission"?"active":""} onClick={()=>setTab("mission")}>MISSION</button>
         <button className={tab==="places"?"active":""} onClick={()=>setTab("places")}>PLACES</button>
         <button className={tab==="ledger"?"active":""} onClick={()=>setTab("ledger")}>LEDGER</button>
+        <button className={tab==="state"?"active":""} onClick={()=>setTab("state")}>CURRENT STATE</button>
         <button className={tab==="current"?"active":""} onClick={()=>setTab("current")}>CURRENT</button>
       </nav>
     </section>
@@ -283,9 +295,9 @@ export default function C2EnvironmentShell(){
       {notice&&<p className="c2-notice" role="status">{notice}</p>}
     </section>}
 
-    {tab==="current"&&<section className="c2-panel">
-      <p className="c2-eyebrow">CURRENT</p>
-      <h2>What has actually changed.</h2>
+    {tab==="state"&&<section className="c2-panel">
+      <p className="c2-eyebrow">CURRENT STATE</p>
+      <h2>What is operative now.</h2>
       <div className="c2-current-list">
         {(data.current||[]).map((row,index)=><article key={String(row.current_key||index)}>
           <span>{String(row.standing||"registered")}</span>
@@ -295,9 +307,22 @@ export default function C2EnvironmentShell(){
       </div>
     </section>}
 
+    {tab==="current"&&<section className="c2-panel">
+      <p className="c2-eyebrow">CURRENT</p>
+      <h2>What this environment has retained from relationship.</h2>
+      <div className="c2-current-list">
+        {currentTokens.map(token=><article key={token.current_token_key}>
+          <span>{token.token_class.replace(/_/g," ")}</span>
+          <p>{token.relation_standing==="active"?"Retained relation · active":"Retained relation · "+token.relation_standing}</p>
+          <time>{new Date(token.retained_at).toLocaleString()}</time>
+        </article>)}
+        {currentTokens.length===0&&<article><span>retained relation</span><p>No CURRENT tokens resolve for this environment yet.</p></article>}
+      </div>
+    </section>}
+
     <footer className="c2-footer">
       <span>c2ME.env · Million Dollar Mission</span>
-      <span>Support is not selection · Submission is not verification · Current is readback</span>
+      <span>Support is not selection · Submission is not verification · Current state is readback · CURRENT is retained relation</span>
     </footer>
   </main>
 }
