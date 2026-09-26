@@ -68,6 +68,27 @@ type ProfileContract={pac_type:string;contract_version:string;questions:ProfileQ
 type ProfileIntakePayload={authenticated:boolean;standing:string;contract?:ProfileContract;resolved_profile_class?:string|null}
 type ChazzMessage={role:"user"|"assistant";text:string}
 type ChazzPayload={standing:string;runtime?:string;reason?:string;message?:string;messages?:ChazzMessage[]}
+type ExternalAction={
+  distribution_asset_id:string
+  campaign_asset_key?:string
+  campaign_id?:string
+  target_key?:string
+  destination_label?:string
+  canonical_url?:string
+  caption?:string
+  state:string
+}
+type ExternalActionPayload={
+  standing:string
+  runtime?:string
+  reason?:string
+  actions?:ExternalAction[]
+  action_state?:string
+  executor?:string
+  distribution_asset_id?:string
+  evidence?:Record<string,unknown>
+  external_effects?:number
+}
 
 async function readChazzJson(response:Response):Promise<ChazzPayload>{
   const contentType=(response.headers.get("content-type")||"").toLowerCase()
@@ -140,6 +161,10 @@ export default function MyEnvironmentEncounter(){
   const [chazzNotice,setChazzNotice]=useState("")
   const [chazzBusy,setChazzBusy]=useState(false)
   const [chazzLoaded,setChazzLoaded]=useState(false)
+  const [externalActions,setExternalActions]=useState<ExternalAction[]>([])
+  const [externalActionNotice,setExternalActionNotice]=useState("")
+  const [externalActionBusy,setExternalActionBusy]=useState("")
+  const [externalActionsLoaded,setExternalActionsLoaded]=useState(false)
 
   useEffect(()=>{
     let active=true
@@ -263,6 +288,58 @@ export default function MyEnvironmentEncounter(){
     void loadChazz()
     return()=>{active=false}
   },[activePanel,chazzLoaded])
+
+
+  useEffect(()=>{
+    if(activePanel!=="primitive:external_actions"||externalActionsLoaded)return
+    let active=true
+    async function loadExternalActions(){
+      setExternalActionNotice("")
+      try{
+        const response=await fetch("/api/my-environment-chazz?runtime=external_action",{headers:{accept:"application/json"}})
+        const body=await response.json() as ExternalActionPayload
+        if(!active)return
+        if(response.ok&&body.standing==="ACT"){
+          setExternalActions(body.actions||[])
+        }else{
+          setExternalActionNotice(body.reason||"External Actions are held in this environment.")
+        }
+      }catch{
+        if(active)setExternalActionNotice("External Actions could not resolve from this environment.")
+      }finally{
+        if(active)setExternalActionsLoaded(true)
+      }
+    }
+    void loadExternalActions()
+    return()=>{active=false}
+  },[activePanel,externalActionsLoaded])
+
+  async function executeExternalAction(action:ExternalAction){
+    if(externalActionBusy)return
+    setExternalActionBusy(action.distribution_asset_id)
+    setExternalActionNotice("")
+    try{
+      const response=await fetch("/api/my-environment-chazz",{
+        method:"POST",
+        headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({external_action:{
+          distribution_asset_id:action.distribution_asset_id,
+          idempotency_key:action.distribution_asset_id+":myenv:v1",
+          operator_confirmed:true,
+          execute:true
+        }})
+      })
+      const body=await response.json() as ExternalActionPayload
+      if(!response.ok||body.standing!=="ACT")throw new Error(body.reason||"External Action did not complete.")
+      const url=typeof body.evidence?.platform_url==="string"?body.evidence.platform_url:""
+      setExternalActions(current=>current.filter(item=>item.distribution_asset_id!==action.distribution_asset_id))
+      setExternalActionNotice(url?"ACT · "+url:"ACT · external action completed.")
+    }catch(error){
+      setExternalActionNotice(error instanceof Error?error.message:"External Action did not complete.")
+    }finally{
+      setExternalActionBusy("")
+    }
+  }
 
   async function addLedgerEntry(event:FormEvent){
     event.preventDefault()
@@ -445,6 +522,36 @@ export default function MyEnvironmentEncounter(){
   }
 
   function renderPrimitive(primitive:Primitive){
+    if(primitive.renderer_key==="c1me.external_actions"){
+      return <section key={primitive.primitive_key} className="myenv-connections-thread myenv-external-actions">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">C3OPS · EXTERNAL ACTION</p>
+          <h2>{primitive.display_label}</h2>
+          <p>Only actions already released by their governed source appear here. My Environment confirms and dispatches; the named executor performs the external effect and returns evidence.</p>
+        </div>
+        <div className="myenv-chazz-boundary">
+          <span>BOUNDARY</span>
+          <strong>CURRENT → authority → named executor → return evidence</strong>
+          <small>No provider credential is exposed to this browser.</small>
+        </div>
+        <div className="myenv-thread-entries">
+          {!externalActionsLoaded&&!externalActionNotice&&<p className="myenv-relations-empty">Resolving available actions…</p>}
+          {externalActionsLoaded&&externalActions.length===0&&!externalActionNotice&&<p className="myenv-relations-empty">No external action is currently released for execution.</p>}
+          {externalActions.map(action=><article key={action.distribution_asset_id} className="myenv-initiative-card">
+            <div>
+              <span>{action.state||"READY"}</span>
+              <h3>{action.destination_label||action.target_key||"External action"}</h3>
+              {action.caption&&<p>{action.caption}</p>}
+              {action.canonical_url&&<p>{action.canonical_url}</p>}
+            </div>
+            <button type="button" onClick={()=>void executeExternalAction(action)} disabled={!!externalActionBusy}>
+              {externalActionBusy===action.distribution_asset_id?"EXECUTING…":"CONFIRM & EXECUTE"}
+            </button>
+          </article>)}
+        </div>
+        {externalActionNotice&&<p className="myenv-runtime-warning" role="status">{externalActionNotice}</p>}
+      </section>
+    }
     if(primitive.renderer_key==="c1me.chazz"){
       return <section key={primitive.primitive_key} className="myenv-connections-thread myenv-chazz">
         <div className="myenv-thread-heading">
