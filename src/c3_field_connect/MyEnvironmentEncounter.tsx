@@ -20,7 +20,7 @@ type Primitive={
 }
 type PrimitivePayload={authenticated:boolean;standing:string;primitives?:Primitive[]}
 type InitiativeComponent={component_key:string;renderer_key:string;sort_order:number;config?:Record<string,unknown>}
-type Initiative={initiative_key:string;initiative_envpac_key:string;target_environment_key?:string|null;visibility_source:string;components:InitiativeComponent[]}
+type Initiative={initiative_key:string;initiative_envpac_key:string;target_environment_key?:string|null;visibility_source:string;context_class?:string;context_classes?:string[];initiative_operator_binding_key?:string|null;operator_class?:string|null;operator_role?:string|null;invite_context_allowed?:boolean;components:InitiativeComponent[]}
 type InitiativePayload={authenticated:boolean;standing:string;initiatives?:Initiative[]}
 type LedgerEntry={entry_key:string;entry_type:string;title?:string|null;body:string;related_route?:string|null;standing:string;created_at:string}
 type ConnectionMessage={message_key:string;sender_relationship_key:string;message_type:string;body:string;created_at:string}
@@ -84,6 +84,11 @@ const ARRIVAL_VIDEO="/api/free-media?asset=c3_field_c1me_arrival_video_v1"
 const LIVE_BACKDROP="/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
 
 function text(value:unknown,fallback=""){return typeof value==="string"?value:fallback}
+function initiativeLabel(initiative:Initiative){
+  const entry=initiative.components.find(component=>component.renderer_key==="initiative.entry_card")
+  const base=initiative.initiative_key==="47pct"?"4.7%":text(entry?.config?.title,initiative.initiative_key)
+  return initiative.context_class==="operator"?base+" · Operator":base
+}
 
 export default function MyEnvironmentEncounter(){
   const [state,setState]=useState<"claiming"|"loading"|"intro"|"ready"|"held">("loading")
@@ -567,7 +572,7 @@ export default function MyEnvironmentEncounter(){
           <textarea aria-label="Invitation message" rows={3} maxLength={1200} value={inviteMessage} onChange={e=>setInviteMessage(e.target.value)} placeholder="Add a personal invitation message."/>
           <select aria-label="Initiative context" value={inviteInitiative} onChange={e=>setInviteInitiative(e.target.value)}>
             <option value="">No initiative context</option>
-            {initiatives.map(initiative=><option key={initiative.initiative_key} value={initiative.initiative_key}>{text(initiative.components?.[0]?.config?.title,initiative.initiative_key)}</option>)}
+            {initiatives.map(initiative=><option key={initiative.initiative_key} value={initiative.initiative_key}>{initiativeLabel(initiative)}</option>)}
           </select>
           <button type="submit">PREPARE INVITE</button>
         </form>
@@ -620,8 +625,7 @@ export default function MyEnvironmentEncounter(){
         <span className="myenv-touchpoint-label">{primitive.display_label}</span>
       </button>)}
       {initiatives.map(initiative=>{
-        const entry=initiative.components.find(component=>component.renderer_key==="initiative.entry_card")
-        const label=text(entry?.config?.title,initiative.initiative_key)
+        const label=initiativeLabel(initiative)
         return <button
           key={initiative.initiative_key}
           type="button"
@@ -646,9 +650,11 @@ export default function MyEnvironmentEncounter(){
         {activePrimitive&&renderPrimitive(activePrimitive)}
         {activeInitiative&&<section className="myenv-connections-thread">
           <div className="myenv-thread-heading">
-            <p className="myenv-kicker">{activeInitiative.visibility_source.toUpperCase()}</p>
-            <h2>Initiative</h2>
-            <p>This initiative is visible because this environment has an evidenced encounter or invitation relation.</p>
+            <p className="myenv-kicker">{(activeInitiative.context_class==="operator"?"operator":activeInitiative.visibility_source).toUpperCase()}</p>
+            <h2>{initiativeLabel(activeInitiative)}</h2>
+            <p>{activeInitiative.context_class==="operator"
+              ?"This initiative is available because this environment carries an active initiative-operator binding. Operator context does not create participant standing."
+              :"This initiative is visible because this environment has an evidenced encounter or invitation relation."}</p>
           </div>
           {activeInitiative.initiative_key==="47pct"&&<article className="myenv-initiative-card myenv-initiative-memorial" aria-label="Eternal Flame memorial"><span>MEMORIAL</span><EternalFlame /></article>}
           {activeInitiative.components.filter(component=>component.renderer_key==="initiative.entry_card").map(component=>{
