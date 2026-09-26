@@ -6,6 +6,7 @@
 .myenv-skip:hover,.myenv-skip:focus-visible{opacity:1;transform:translateY(-1px);outline:none}
 .myenv-environment{isolation:isolate;background:#061018}
 .myenv-backdrop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:0}
+.myenv-backdrop--47pct{inset:50% auto auto 50%;width:min(72vw,760px);height:min(72vh,760px);transform:translate(-50%,-50%);object-fit:contain;object-position:center;opacity:.56;filter:drop-shadow(0 20px 50px rgba(0,0,0,.34)) saturate(.9)}
 .myenv-environment-wash{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(2,8,12,.05) 0%,rgba(2,8,12,.02) 55%,rgba(2,8,12,.18) 100%);pointer-events:none}
 .myenv-place{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;justify-content:flex-start;padding:clamp(22px,4vw,54px);pointer-events:none}
 .myenv-presence{opacity:.72;text-shadow:0 2px 18px rgba(0,0,0,.55);transition:opacity .2s ease}
@@ -47,8 +48,11 @@
 .myenv-relations-empty,.myenv-runtime-warning{margin:0;color:rgba(244,239,227,.62);font-size:13px;line-height:1.5}
 .myenv-runtime-warning{padding:12px 14px;border:1px solid rgba(244,239,227,.14);background:rgba(4,9,13,.28)}
 .myenv-runtime-notice{position:absolute;left:clamp(18px,4vw,54px);top:clamp(18px,4vw,42px);z-index:6;max-width:min(440px,calc(100vw - 36px));margin:0;padding:9px 12px;border:1px solid rgba(244,239,227,.16);background:rgba(5,13,18,.72);backdrop-filter:blur(10px);color:rgba(244,239,227,.8);font-size:11px;line-height:1.45}
-.myenv-eternal-flame{padding:8px 12px;background:rgba(5,13,18,.62)}
-.myenv-eternal-flame .eternal-flame figcaption{max-width:220px}
+.myenv-eternal-flame{padding:6px 9px;background:rgba(5,13,18,.58)}
+.myenv-eternal-flame .eternal-flame{--ef-scale:.4;gap:8px}
+.myenv-eternal-flame .eternal-flame figcaption{max-width:190px;gap:2px}
+.myenv-eternal-flame .eternal-flame figcaption strong{font-size:14px}
+.myenv-eternal-flame .eternal-flame figcaption span{font-size:9px;line-height:1.35}
 .myenv-initiative-memorial{padding-block:20px}
 .myenv-initiative-memorial>.eternal-flame{margin-top:4px}
 
@@ -78,6 +82,7 @@
 .myenv-thread-compose button:disabled{opacity:.45;cursor:not-allowed}
 
 @media(max-width:760px){
+  .myenv-backdrop--47pct{width:min(84vw,620px);height:min(62vh,620px);opacity:.48}
   .myenv-place{padding:22px 22px 82px}
   .myenv-presence h1{font-size:34px}
   .myenv-presence-hint{display:none}
