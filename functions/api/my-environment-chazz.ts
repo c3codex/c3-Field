@@ -67,18 +67,18 @@ async function resolveCurrent(session:EnvironmentSession,env:ChazzEnv){
   return current
 }
 
-async function resolveCapability(session:EnvironmentSession,env:ChazzEnv){
+async function resolveCapability(session:EnvironmentSession,env:ChazzEnv,capability:string,errorCode="capability_held"){
   const q=new URLSearchParams({
     select:"capability_key,scope,standing",
     envpac_key:"eq."+session.envpacKey,
     system_key:"eq.c3ops",
-    capability:"eq.chazz_conversation",
+    capability:"eq."+capability,
     standing:"eq.active",
     limit:"1"
   })
   const rows=await (await dbFetch(env,"c3_envpac_capability_grant?"+q)).json() as Array<Record<string,unknown>>
   const row=rows[0]
-  if(!row||!row.scope||typeof row.scope!=="object"||Array.isArray(row.scope))throw new Error("capability_held")
+  if(!row||!row.scope||typeof row.scope!=="object"||Array.isArray(row.scope))throw new Error(errorCode)
   return row.scope as Record<string,unknown>
 }
 
@@ -110,7 +110,7 @@ async function runtime(request:Request,env:ChazzEnv):Promise<RuntimeContext>{
   const [current,operatorContext,capability,root]=await Promise.all([
     resolveCurrent(session,env),
     resolveC1MeOperatorContext(session.subjectKey,env),
-    resolveCapability(session,env),
+    resolveCapability(session,env,"chazz_conversation"),
     resolveRoot(session,env)
   ])
 
@@ -141,6 +141,42 @@ async function runtime(request:Request,env:ChazzEnv):Promise<RuntimeContext>{
   }
 }
 
+
+async function externalRuntime(request:Request,env:ChazzEnv):Promise<RuntimeContext>{
+  if(new URL(request.url).hostname!=="my.c3field.online")throw new Error("host_boundary")
+  const raw=cookie(request,"c3_env_session")
+  if(!raw)throw new Error("session_required")
+  const session=await resolveEnvironmentSession(raw,env)
+  if(session.subjectType!=="individual")throw new Error("subject_type_invalid")
+  const [current,operatorContext,capability]=await Promise.all([
+    resolveCurrent(session,env),
+    resolveC1MeOperatorContext(session.subjectKey,env),
+    resolveCapability(session,env,"external_action","external_capability_held")
+  ])
+  if(operatorContext.resolution!=="operator_context_resolved"||
+     operatorContext.relationship_ref!==session.subjectKey||
+     operatorContext.env_key!==session.envKey||
+     operatorContext.envpac_ref!==session.envpacKey||
+     operatorContext.current_ref!==current.current_ref||
+     !operatorContext.operator_count||
+     !operatorContext.operators?.length)throw new Error("operator_context_held")
+  const operatorIdentifiers=operatorContext.operators
+    .map(row=>row.operator_identifier)
+    .filter((value):value is string=>typeof value==="string"&&!!value)
+  if(!operatorIdentifiers.length)throw new Error("operator_context_held")
+  if(!env.OPERATOR_DISPATCH_KEY)throw new Error("c3ops_credential_missing")
+  return{
+    relationship_ref:session.subjectKey,
+    env_key:session.envKey,
+    envpac_ref:session.envpacKey,
+    current_ref:String(current.current_ref),
+    operator_identifiers:operatorIdentifiers,
+    capability_scope:capability,
+    rooted_system_key:"c3ops",
+    runtime_ref:C3OPS_ORIGIN+"/api/c3ops/external-action"
+  }
+}
+
 function publicHold(error:unknown){
   const code=error instanceof Error?error.message:"runtime_unavailable"
   if(code==="session_required"||code==="session_expired"||code==="session_shape"||code==="owner_grant"||code==="owner_grant_expired")
@@ -151,6 +187,8 @@ function publicHold(error:unknown){
     return{standing:"HLD",reason:"c3Ops operator context is not active for this environment.",status:403}
   if(code==="capability_held"||code==="runtime_root_held"||code==="runtime_root_invalid")
     return{standing:"HLD",reason:"Chazz is not admitted to this EnvPAC.",status:409}
+  if(code==="external_capability_held")
+    return{standing:"HLD",reason:"External Action is not admitted to this EnvPAC.",status:409}
   if(code==="c3ops_credential_missing")
     return{standing:"HLD",reason:"c3Ops runtime authentication is not configured.",status:503}
   return{standing:"HLD",reason:"The c3Ops Chazz runtime did not resolve.",status:502}
@@ -196,8 +234,58 @@ async function callC3Ops(request:Request,env:ChazzEnv,ctx:RuntimeContext,message
   return payload
 }
 
+
+async function callExternalAction(env:ChazzEnv,ctx:RuntimeContext,action?:Record<string,unknown>){
+  const upstream=new URL("/api/c3ops/external-action",C3OPS_ORIGIN)
+  const init:RequestInit={
+    method:action?"POST":"GET",
+    redirect:"manual",
+    signal:AbortSignal.timeout(120000),
+    headers:{
+      accept:"application/json",
+      "x-operator-dispatch-key":env.OPERATOR_DISPATCH_KEY!,
+      "x-c3-current-ref":ctx.current_ref,
+      "x-c3-envpac-ref":ctx.envpac_ref,
+      "x-c3-relationship-ref":ctx.relationship_ref,
+      "x-c3-env-key":ctx.env_key,
+      "x-c3-operator-identifiers":ctx.operator_identifiers.join(",")
+    }
+  }
+  if(action){
+    ;(init.headers as Record<string,string>)["content-type"]="application/json"
+    init.body=JSON.stringify({
+      contract:"c3ops_myenv_external_action_v1",
+      context:{
+        relationship_ref:ctx.relationship_ref,
+        env_key:ctx.env_key,
+        envpac_ref:ctx.envpac_ref,
+        current_ref:ctx.current_ref,
+        operator_identifiers:ctx.operator_identifiers
+      },
+      action
+    })
+  }
+  const response=await fetch(upstream.toString(),init)
+  const payload=await response.json().catch(()=>null) as Record<string,unknown>|null
+  if(!payload||!["ACT","HLD","DNR"].includes(String(payload.standing)))throw new Error("c3ops_contract_invalid")
+  return payload
+}
+
 export const onRequestGet:PagesFunction<ChazzEnv>=async({request,env})=>{
   try{
+    if(new URL(request.url).searchParams.get("runtime")==="external_action"){
+      const ctx=await externalRuntime(request,env)
+      const payload=await callExternalAction(env,ctx)
+      const standing=String(payload.standing)
+      return json({
+        standing,
+        runtime:"myenv_external_action_v1",
+        actions:Array.isArray(payload.actions)?payload.actions:[],
+        current:"resolved",
+        capability:"external_action",
+        external_effect_authority:false
+      },standing==="ACT"?200:409)
+    }
     const ctx=await runtime(request,env)
     const payload=await callC3Ops(request,env,ctx)
     return json({
@@ -221,6 +309,30 @@ export const onRequestPost:PagesFunction<ChazzEnv>=async({request,env})=>{
     if((request.headers.get("content-type")||"").split(";")[0].trim()!=="application/json")
       return json({standing:"DNR",reason:"Expected JSON input."},415)
     const body=await request.json() as Record<string,unknown>
+    if(Object.keys(body).length===1&&body.external_action&&typeof body.external_action==="object"&&!Array.isArray(body.external_action)){
+      const action=body.external_action as Record<string,unknown>
+      if(typeof action.distribution_asset_id!=="string"||!action.distribution_asset_id.trim()||
+         typeof action.idempotency_key!=="string"||!action.idempotency_key.trim()||
+         action.operator_confirmed!==true||action.execute!==true)
+        return json({standing:"DNR",reason:"External Action request did not resolve to the bounded contract."},400)
+      const ctx=await externalRuntime(request,env)
+      const payload=await callExternalAction(env,ctx,{
+        distribution_asset_id:action.distribution_asset_id.trim(),
+        idempotency_key:action.idempotency_key.trim(),
+        operator_confirmed:true,
+        execute:true
+      })
+      const standing=String(payload.standing)
+      return json({
+        standing,
+        runtime:"myenv_external_action_v1",
+        action_state:payload.action_state,
+        executor:payload.executor,
+        distribution_asset_id:payload.distribution_asset_id,
+        evidence:payload.evidence,
+        external_effects:payload.external_effects??0
+      },standing==="ACT"?200:409)
+    }
     if(Object.keys(body).some(key=>key!=="message")||typeof body.message!=="string"||!body.message.trim()||body.message.length>12000)
       return json({standing:"DNR",reason:"Message did not resolve to the bounded Chazz input contract."},400)
 
