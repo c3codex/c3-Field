@@ -112,9 +112,6 @@ export default function MyEnvironmentEncounter(){
   const [canopyHandle,setCanopyHandle]=useState("")
   const [canopyNotice,setCanopyNotice]=useState("")
 
-  const [profileDisplayLabel,setProfileDisplayLabel]=useState("")
-  const [profileVisibility,setProfileVisibility]=useState("private")
-  const [profileNotice,setProfileNotice]=useState("")
   const [profilePresentationAsset,setProfilePresentationAsset]=useState("")
 
   const [inviteMessage,setInviteMessage]=useState("")
@@ -206,8 +203,6 @@ export default function MyEnvironmentEncounter(){
         setData(body)
         setProfileTruth(body.envpac.profile_pac||null)
         setProfileLoaded(true)
-        setProfileDisplayLabel(body.envpac.profile_pac?.profile?.display_label||body.owner?.display_name?.trim()||"")
-        setProfileVisibility(body.envpac.profile_pac?.profile?.visibility_scope||"private")
         setProfilePresentationAsset(body.presentation?.opening_visual_asset_key||"")
         document.title=body.owner?.display_name?body.owner.display_name+" | My Environment | c3 Community Partners":"My Environment | c3 Community Partners"
         setState(claim?"intro":"ready")
@@ -337,28 +332,6 @@ export default function MyEnvironmentEncounter(){
       if(!response.ok)throw new Error("The Canopy reference could not be removed.")
       setCanopy(current=>current.filter(reference=>reference.reference_key!==referenceKey))
     }catch(error){setCanopyNotice(error instanceof Error?error.message:"The Canopy reference could not be removed.")}
-  }
-
-  async function formProfile(event:FormEvent){
-    event.preventDefault();setProfileNotice("")
-    try{
-      const response=await fetch("/api/my-environment-profile",{
-        method:"POST",headers:{"content-type":"application/json"},
-        body:JSON.stringify({display_label:profileDisplayLabel,visibility_scope:profileVisibility})
-      })
-      const body=await response.json() as {ok?:boolean;standing?:string;reason?:string;next_read?:string}
-      if(!response.ok||!body.ok)throw new Error(body.reason||body.standing||"Profile-PAC could not be formed.")
-      const environmentResponse=await fetch(body.next_read||"/api/my-environment",{headers:{accept:"application/json"}})
-      const environmentBody=await environmentResponse.json() as EnvPayload
-      if(!environmentResponse.ok||environmentBody.standing!=="environment_ready"||!environmentBody.envpac)
-        throw new Error("Profile-PAC formed, but EnvPAC could not be re-resolved.")
-      setData(environmentBody)
-      setProfileTruth(environmentBody.envpac.profile_pac||null)
-      setProfileDisplayLabel(environmentBody.envpac.profile_pac?.profile?.display_label||profileDisplayLabel)
-      setProfileVisibility(environmentBody.envpac.profile_pac?.profile?.visibility_scope||profileVisibility)
-      setProfileLoaded(true)
-      setProfileNotice("Profile-PAC saved in your EnvPAC.")
-    }catch(error){setProfileNotice(error instanceof Error?error.message:"Profile-PAC could not be formed.")}
   }
 
   async function savePresentation(event:FormEvent){
