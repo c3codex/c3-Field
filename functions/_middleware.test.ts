@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 
-import { onRequest } from "./_middleware"
+import { onRequest, rewriteInitiativeSocialHead } from "./_middleware"
 
 const env = { OPERATOR_DISPATCH_KEY: "operator-test-key" }
 
@@ -119,4 +119,36 @@ test("holds protected surfaces when operator key is not configured", async () =>
 
   assert.equal(response.status, 503)
   assert.deepEqual(await response.json(), { error: "operator access not configured" })
+})
+
+
+test("rewrites crawler-visible MDM social head without Measures Registry fallback", () => {
+  const html = `<!doctype html><html><head>
+    <title>Measures Registry</title>
+    <meta name="description" content="Computational Systems Governance." />
+    <link rel="canonical" href="https://measuresregistry.com/" />
+    <meta property="og:title" content="Measures Registry" />
+    <meta property="og:description" content="Computational Systems Governance." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://measuresregistry.com/" />
+    <meta property="og:image" content="https://measuresregistry.com/og.jpeg" />
+    <meta property="og:image:alt" content="Measures Registry" />
+    <meta name="twitter:title" content="Measures Registry" />
+    <meta name="twitter:description" content="Computational Systems Governance." />
+    <meta name="twitter:image" content="https://measuresregistry.com/og.jpeg" />
+  </head><body></body></html>`
+
+  const result = rewriteInitiativeSocialHead(html, {
+    title: "The Million Dollar Mission | c3 Community Partners",
+    description: "The Million Dollar Mission is a live test of what becomes possible when a community can connect what it already has.",
+    canonicalUrl: "https://mdm.c3field.online/",
+    ogType: "website",
+    ogImageUrl: "https://mdm.c3field.online/api/free-media?asset=c3_field_mdm_c3_center_og_master_v1",
+  })
+
+  assert.match(result, /<title>The Million Dollar Mission \| c3 Community Partners<\/title>/)
+  assert.match(result, /property="og:url" content="https:\/\/mdm\.c3field\.online\/"/)
+  assert.match(result, /property="og:image" content="https:\/\/mdm\.c3field\.online\/api\/free-media\?asset=c3_field_mdm_c3_center_og_master_v1"/)
+  assert.match(result, /name="twitter:title" content="The Million Dollar Mission \| c3 Community Partners"/)
+  assert.doesNotMatch(result, /Measures Registry/)
 })
