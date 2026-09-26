@@ -46,7 +46,7 @@ async function resolveCurrent(session:EnvironmentSession,env:PassageEnv){
 
 function held(message:string,status=401){
   return new Response(
-    `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>My Environment</title><body style="font-family:system-ui;background:#111416;color:#f3efe7;margin:0"><main style="max-width:640px;margin:12vh auto;padding:32px"><p style="letter-spacing:.14em;font-size:12px">c3 COMMUNITY PARTNERS</p><h1 style="font-family:Georgia,serif;font-weight:400">My Environment</h1><p>${message}</p><p><a style="color:#f3efe7" href="https://my.c3field.online/">Return to My Environment</a></p></main></body></html>`,
+    `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>My Environment</title><body style="font-family:system-ui;background:#111416;color:#f3efe7;margin:0"><main style="max-width:640px;margin:12vh auto;padding:32px"><p style="letter-spacing:.14em;font-size:12px">c3 COMMUNITY PARTNERS</p><h1 style="font-family:Georgia,serif;font-weight:400">My Environment</h1><p>${message}</p><p><a style="color:#f3efe7" href="https://my.c3field.online/api/my-environment-access-link">Email me a secure access link</a></p><p><a style="color:#f3efe7" href="https://my.c3field.online/">Return to My Environment</a></p></main></body></html>`,
     {status,headers:{...headers,"content-type":"text/html; charset=utf-8"}}
   )
 }
