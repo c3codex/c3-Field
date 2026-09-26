@@ -1,0 +1,22 @@
+.current-constellation{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:
+radial-gradient(circle at 50% 46%,rgba(93,126,149,.08),transparent 30%),
+radial-gradient(circle at 50% 100%,rgba(201,174,118,.045),transparent 42%)}
+.current-constellation-svg{position:absolute;inset:0;width:100%;height:100%}
+.current-branch{fill:none;stroke:rgba(194,211,224,.16);stroke-width:.18;vector-effect:non-scaling-stroke}
+.current-branch--inactive{stroke-dasharray:1.2 1.8;opacity:.38}
+.current-tree{fill:none;stroke:rgba(197,214,223,.28);stroke-width:.34;vector-effect:non-scaling-stroke;transition:opacity 1.2s ease}
+.current-tree path{fill:none}
+.current-light-halo{fill:rgba(218,232,240,.08);stroke:rgba(226,238,245,.13);stroke-width:.12;vector-effect:non-scaling-stroke;animation:currentGlow 4.8s ease-in-out infinite}
+.current-light{fill:#edf5f7;filter:drop-shadow(0 0 4px rgba(207,232,245,.8));animation:currentPulse 3.8s ease-in-out infinite}
+.current-light--inactive{opacity:.3;animation:none}
+.current-constellation--c2{position:fixed;background:
+radial-gradient(circle at 48% 42%,rgba(109,141,150,.08),transparent 34%),
+linear-gradient(rgba(7,16,22,.08),rgba(7,16,22,.18))}
+.current-ground-map{position:absolute;left:8%;top:12%;width:84%;height:68%;opacity:.16}
+.current-ground-map path{fill:none;stroke:rgba(199,214,218,.42);stroke-width:.28;vector-effect:non-scaling-stroke}
+.current-ground-map path:first-child{fill:rgba(122,151,157,.025);stroke-width:.42}
+@keyframes currentPulse{0%,100%{opacity:.58}50%{opacity:1}}
+@keyframes currentGlow{0%,100%{transform-origin:center;opacity:.55}50%{opacity:1}}
+.c2-shell,.pct47-c2{position:relative;isolation:isolate}
+.c2-shell>:not(.current-constellation),.pct47-c2>:not(.current-constellation){position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.current-light,.current-light-halo,.current-tree{animation:none;transition:none}}
