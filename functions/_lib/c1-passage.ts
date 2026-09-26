@@ -331,6 +331,28 @@ export async function sendDueVerificationReminders(env:PassageEnv,deps:Dependenc
   return results
 }
 
+export async function requestEnvironmentAccessLink(emailInput: unknown, env: PassageEnv, deps: Dependencies = defaults) {
+  try {
+    const origin = configuration(env)
+    if (!env.C3_RESEND_API_KEY || !env.C1_VERIFICATION_FROM || /[\r\n]/.test(env.C1_VERIFICATION_FROM))
+      return unavailable()
+    const email = typeof emailInput === "string" ? emailInput.trim().toLowerCase() : ""
+    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return json({standing:"invalid_request",saved:false,message:"Enter the email address you used to Connect."},400)
+    const rpc = rpcClient(env,deps)
+    const reentry = await rpc("resolve_c1_owner_reentry",{p_primary_email:email})
+    if (reentry.accepted === true) {
+      const claim = await signedOwnerClaim(reentry.relationship_key,reentry.env_key,reentry.envpac_key,env,deps.now())
+      await sendEnvironmentHandoff(reentry,claim,origin,env,deps,"reentry").catch(()=>false)
+    }
+    // Deliberately identical response whether or not a matching relationship exists.
+    return continuationRequired()
+  } catch {
+    // Preserve account privacy: lookup outcome is never disclosed.
+    return continuationRequired()
+  }
+}
+
 export async function captureCandidate(body: RecordValue, env: PassageEnv, deps: Dependencies = defaults) {
   let candidate: boolean | null = false
   let stage = "server_configuration"
