@@ -30,12 +30,26 @@ function point(token:CurrentToken,index:number){
   const base=POSITIONS[(seed+index)%POSITIONS.length]
   const dx=((seed>>>8)%7)-3
   const dy=((seed>>>16)%7)-3
-  return {x:Math.max(8,Math.min(92,base[0]+dx)),y:Math.max(10,Math.min(82,base[1]+dy))}
+  return {x:Math.max(8,Math.min(92,base[0]+dx)),y:Math.max(10,Math.min(82,base[1]+dy)),located:false}
+}
+function c2Point(token:CurrentToken,index:number){
+  const anchor=token.metadata?.map_anchor
+  if(anchor&&typeof anchor==="object"){
+    const row=anchor as Record<string,unknown>
+    const x=typeof row.x==="number"?row.x:null
+    const y=typeof row.y==="number"?row.y:null
+    const standing=typeof row.standing==="string"?row.standing:""
+    if(x!==null&&y!==null&&["location_consented","registered_ground"].includes(standing)){
+      return {x:Math.max(8,Math.min(92,x)),y:Math.max(16,Math.min(76,y)),located:true}
+    }
+  }
+  const seed=hash(token.current_token_key)
+  return {x:14+((seed+index*17)%72),y:7+((seed>>>12)%5),located:false}
 }
 
 export default function CurrentConstellation({tokens,mode="c1"}:Props){
   const retained=[...tokens].filter(token=>token.retention_standing==="retained").sort((a,b)=>a.retained_at.localeCompare(b.retained_at))
-  const points=retained.map(point)
+  const points=retained.map((token,index)=>mode==="c2"?c2Point(token,index):point(token,index))
   const treeOpacity=Math.min(.48,Math.max(0,(retained.length-1)*.11))
   return <div className={"current-constellation current-constellation--"+mode} aria-hidden="true" data-current-count={retained.length}>
     {mode==="c2"&&<svg className="current-ground-map" viewBox="0 0 100 60" preserveAspectRatio="xMidYMid meet">
@@ -54,8 +68,8 @@ export default function CurrentConstellation({tokens,mode="c1"}:Props){
         const origin=mode==="c1"?{x:50,y:88}:{x:50,y:54}
         return <g key={retained[index].current_token_key}>
           <path className={"current-branch"+(inactive?" current-branch--inactive":"")} d={`M${origin.x} ${origin.y} Q50 58 ${p.x} ${p.y}`}/>
-          <circle className={"current-light-halo"+(inactive?" current-light--inactive":"")} cx={p.x} cy={p.y} r="2.8"/>
-          <circle className={"current-light"+(inactive?" current-light--inactive":"")} cx={p.x} cy={p.y} r="0.72"/>
+          <circle className={"current-light-halo"+(inactive?" current-light--inactive":"")+(mode==="c2"&&!p.located?" current-light--unlocated":"")} cx={p.x} cy={p.y} r="2.8"/>
+          <circle className={"current-light"+(inactive?" current-light--inactive":"")+(mode==="c2"&&!p.located?" current-light--unlocated":"")} cx={p.x} cy={p.y} r="0.72"/>
         </g>
       })}
     </svg>
