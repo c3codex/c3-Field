@@ -130,7 +130,7 @@ export default function MyEnvironmentEncounter(){
   const [inviteMessage,setInviteMessage]=useState("")
   const [inviteInitiative,setInviteInitiative]=useState("")
   const [inviteNotice,setInviteNotice]=useState("")
-  const [inviteUrl,setInviteUrl]=useState("")
+  const [inviteCopy,setInviteCopy]=useState("")
   const [activePanel,setActivePanel]=useState<string|null>(null)
   const [runtimeNotice,setRuntimeNotice]=useState("")
   const [canopyLoaded,setCanopyLoaded]=useState(false)
@@ -387,16 +387,39 @@ export default function MyEnvironmentEncounter(){
   }
 
   async function prepareInvite(event:FormEvent){
-    event.preventDefault();setInviteNotice("");setInviteUrl("")
+    event.preventDefault();setInviteNotice("");setInviteCopy("")
     try{
       const response=await fetch("/api/my-environment-invite",{
         method:"POST",headers:{"content-type":"application/json"},
         body:JSON.stringify({message:inviteMessage,...(inviteInitiative?{source_initiative_key:inviteInitiative}:{})})
       })
-      const body=await response.json() as {ok?:boolean;public_url?:string;standing?:string;reason?:string}
-      if(!response.ok||!body.ok||!body.public_url)throw new Error(body.reason||body.standing||"The invitation could not be prepared.")
-      setInviteUrl(body.public_url);setInviteNotice("Personalized invitation ready.")
+      const body=await response.json() as {ok?:boolean;public_url?:string;copy_text?:string;standing?:string;reason?:string}
+      if(!response.ok||!body.ok||!body.public_url||!body.copy_text)throw new Error(body.reason||body.standing||"The invitation could not be prepared.")
+      setInviteCopy(body.copy_text);setInviteNotice("Personalized invitation ready to copy.")
     }catch(error){setInviteNotice(error instanceof Error?error.message:"The invitation could not be prepared.")}
+  }
+
+  async function copyPreparedInvite(){
+    if(!inviteCopy)return
+    try{
+      if(navigator.clipboard?.writeText){
+        await navigator.clipboard.writeText(inviteCopy)
+      }else{
+        const field=document.createElement("textarea")
+        field.value=inviteCopy
+        field.setAttribute("readonly","")
+        field.style.position="fixed"
+        field.style.opacity="0"
+        document.body.appendChild(field)
+        field.select()
+        const copied=document.execCommand("copy")
+        field.remove()
+        if(!copied)throw new Error("copy_unavailable")
+      }
+      setInviteNotice("Invitation copied. Send it in the channel you choose.")
+    }catch{
+      setInviteNotice("Copy was unavailable. Select the prepared invitation text and copy it manually.")
+    }
   }
 
   async function sendChazz(event:FormEvent){
@@ -577,7 +600,11 @@ export default function MyEnvironmentEncounter(){
           <button type="submit">PREPARE INVITE</button>
         </form>
         {inviteNotice&&<p className="myenv-initiative-notice" role="status">{inviteNotice}</p>}
-        {inviteUrl&&<article className="myenv-initiative-card"><div><span>personalized invite</span><h3>Invitation ready</h3>{inviteMessage&&<p>{inviteMessage}</p>}<p><a href={inviteUrl}>OPEN INVITATION →</a></p></div></article>}
+        {inviteCopy&&<article className="myenv-initiative-card">
+          <div><span>personalized invite</span><h3>Copy & send</h3><p>The link carries this invitation's opaque provenance into the selected initiative Connect surface.</p></div>
+          <textarea aria-label="Prepared invitation" rows={7} readOnly value={inviteCopy} onFocus={event=>event.currentTarget.select()}/>
+          <button type="button" onClick={()=>void copyPreparedInvite()}>COPY INVITATION</button>
+        </article>}
       </section>
     }
     return null
