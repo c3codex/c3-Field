@@ -1,5 +1,6 @@
 import {json,type PassageEnv} from "../_lib/c1-passage"
 import {resolveEnvironmentSession} from "../_lib/env-session"
+import {resolveInitiativeSurfaceHost} from "../_lib/initiative-surface-host"
 
 type Row=Record<string,unknown>
 
@@ -36,6 +37,28 @@ async function write(env:PassageEnv,table:string,body:unknown){
   const rows=await response.json()
   if(!Array.isArray(rows)) throw new Error("write_shape")
   return rows as Row[]
+}
+function record(value:unknown):Row{
+  return value&&typeof value==="object"&&!Array.isArray(value)?value as Row:{}
+}
+async function initiativeConnectUrl(env:PassageEnv,initiativeKey:string){
+  const rows=await read(env,"system_process_registry",{
+    select:"process_key,status,process_status,metadata",
+    process_family:"eq.c3_field",
+    metadata:"cs."+JSON.stringify({initiative_key:initiativeKey,surface_type:"initiative_connect_surface"}),
+    limit:"2"
+  })
+  if(rows.length!==1) throw new Error("initiative_surface_not_resolved")
+  const metadata=record(rows[0].metadata)
+  if(rows[0].status!=="active"||rows[0].process_status!=="active"||
+     metadata.canonical!==true||metadata.binding_state!=="active"||
+     metadata.release_state!=="released"||metadata.access_state!=="public")
+    throw new Error("initiative_surface_not_resolved")
+  const host=typeof metadata.canonical_host==="string"?metadata.canonical_host:""
+  if(!host) throw new Error("initiative_surface_not_resolved")
+  const resolved=await resolveInitiativeSurfaceHost(env,host)
+  if(resolved.initiativeKey!==initiativeKey) throw new Error("initiative_surface_mismatch")
+  return new URL(resolved.connectRoute,resolved.canonicalUrl)
 }
 async function sessionFor(request:Request,env:PassageEnv){
   const raw=cookie(request,"c3_env_session")
@@ -100,16 +123,20 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     })
     if(!rows[0]?.share_reference) throw new Error("invite_reference_unavailable")
     const shareReference=String(rows[0].share_reference)
-    const publicOrigin=env.C1_PUBLIC_ORIGIN||"https://c3field.online"
-    const publicUrl=new URL("/connect",publicOrigin)
+    const publicUrl=initiative
+      ?await initiativeConnectUrl(env,initiative.source_initiative_key)
+      :new URL("/connect",env.C1_PUBLIC_ORIGIN||"https://c3field.online")
     publicUrl.searchParams.set("via",shareReference)
+    const copyText=[message||null,"Connect here:\n"+publicUrl.toString()].filter(Boolean).join("\n\n")
     return json({
       ok:true,
       standing:"connection_invite_ready",
       public_url:publicUrl.toString(),
+      copy_text:copyText,
       message:message||null,
       initiative_provenance:initiative,
       share_reference_class:"opaque_encounter_provenance",
+      share_reference:shareReference,
       relationship_created:false,
       standing_created:false
     })

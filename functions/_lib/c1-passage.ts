@@ -64,7 +64,7 @@ function rpcClient(env: PassageEnv, deps: Dependencies = defaults): Rpc {
   return async (name, args) => {
     if (!["capture_relational_candidate","issue_relational_verification","verify_relational_contact",
       "evaluate_relational_car","evaluate_c1_relational_boundary","register_and_persist_c1_relationship","form_c1_owner_environment","resolve_c1_owner_reentry",
-      "resolve_c1_existing_relationship_for_initiative","record_c1_initiative_connect_requested","resolve_pending_c1_initiative_connect","acknowledge_c1_322_and_open_environment"].includes(name))
+      "record_c1me_invite_acceptance_pending","resolve_c1_existing_relationship_for_initiative","record_c1_initiative_connect_requested","resolve_pending_c1_initiative_connect","acknowledge_c1_322_and_open_environment"].includes(name))
       throw new Error("unregistered_call")
     const response = await deps.fetch(PROJECT_URL + "/rest/v1/rpc/" + name, {
       method:"POST", redirect:"manual", signal:AbortSignal.timeout(12000),
@@ -344,12 +344,23 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
       stage="initiative_reentry_lookup"
       const existing=await rpc("resolve_c1_existing_relationship_for_initiative",{p_primary_email:body.email})
       if(existing.accepted===true){
+        if(body.sourceEnvironmentShare?.share_reference){
+          await rpc("record_c1me_invite_acceptance_pending",{
+            p_share_reference:body.sourceEnvironmentShare.share_reference,
+            p_target_relationship_key:existing.relationship_key
+          }).catch(()=>null)
+        }
         stage="initiative_ack_request"
         const requested=await rpc("record_c1_initiative_connect_requested",{
           p_relationship_key:existing.relationship_key,
           p_initiative_key:body.sourceInitiative.initiativeKey,
           p_source_host:body.sourceInitiative.sourceHost,
-          p_metadata:{surface_key:body.sourceInitiative.surfaceKey,webpac_key:body.sourceInitiative.webpacKey}
+          p_metadata:{
+            surface_key:body.sourceInitiative.surfaceKey,
+            webpac_key:body.sourceInitiative.webpacKey,
+            ...(body.sourceEnvironmentShare?.share_reference
+              ?{invite_share_reference:body.sourceEnvironmentShare.share_reference}:{})
+          }
         })
         if(requested.accepted!==true||typeof requested.request_event_key!=="string")return unavailable()
         const ticket=await signed322Ticket(existing.relationship_key,requested.request_event_key,env,deps.now())
@@ -395,7 +406,12 @@ export async function captureCandidate(body: RecordValue, env: PassageEnv, deps:
         p_relationship_key:captured.relationship_key,
         p_initiative_key:body.sourceInitiative.initiativeKey,
         p_source_host:body.sourceInitiative.sourceHost,
-        p_metadata:{surface_key:body.sourceInitiative.surfaceKey,webpac_key:body.sourceInitiative.webpacKey}
+        p_metadata:{
+          surface_key:body.sourceInitiative.surfaceKey,
+          webpac_key:body.sourceInitiative.webpacKey,
+          ...(body.sourceEnvironmentShare?.share_reference
+            ?{invite_share_reference:body.sourceEnvironmentShare.share_reference}:{})
+        }
       })
       if(requested.accepted!==true||typeof requested.request_event_key!=="string")return verificationRequired()
     }

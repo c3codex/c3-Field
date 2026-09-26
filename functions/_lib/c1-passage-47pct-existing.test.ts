@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import {beginExistingInitiative322,type PassageEnv} from "./c1-passage"
+import {beginExistingInitiative322,captureCandidate,type PassageEnv} from "./c1-passage"
 
 const relationshipKey="crs_"+"a".repeat(32)
 const requestEventKey="event_"+"d".repeat(32)
@@ -59,6 +59,70 @@ test("existing My Env owner starts 47pct through acknowledgment-pending passage 
   assert.equal("attendance" in result,false)
   assert.equal("contribution" in result,false)
   assert.equal("c2" in result,false)
+})
+
+test("existing 47pct invite persists inviter provenance before 322 reentry",async()=>{
+  const shareReference="11111111-1111-4111-8111-111111111111"
+  const calls:Array<{url:string;args:Record<string,unknown>}>=[]
+
+  const response=await captureCandidate({
+    name:"Michael",
+    email:"michael@example.invalid",
+    sourceInitiative:{
+      initiativeKey:"47pct",
+      sourceHost:"47pct.c3field.online",
+      surfaceKey:"47pct_c1me_surface",
+      webpacKey:"47pct_c1_connect_c3webpac_v1"
+    },
+    sourceEnvironmentShare:{share_reference:shareReference}
+  },env,{
+    now:()=>Date.parse("2026-09-26T00:45:00-05:00"),
+    fetch:async(input:RequestInfo|URL,init?:RequestInit)=>{
+      const url=String(input)
+      const args=JSON.parse(String(init?.body||"{}")) as Record<string,unknown>
+      calls.push({url,args})
+
+      if(url.endsWith("/rest/v1/rpc/resolve_c1_existing_relationship_for_initiative")){
+        return new Response(JSON.stringify({
+          accepted:true,
+          relationship_key:relationshipKey,
+          owner_email:"michael@example.invalid",
+          owner_display_name:"Michael"
+        }),{status:200,headers:{"content-type":"application/json"}})
+      }
+      if(url.endsWith("/rest/v1/rpc/record_c1me_invite_acceptance_pending")){
+        assert.equal(args.p_share_reference,shareReference)
+        assert.equal(args.p_target_relationship_key,relationshipKey)
+        return new Response(JSON.stringify({accepted:true,acceptance_state:"pending"}),{status:200,headers:{"content-type":"application/json"}})
+      }
+      if(url.endsWith("/rest/v1/rpc/record_c1_initiative_connect_requested")){
+        assert.equal(args.p_relationship_key,relationshipKey)
+        assert.equal(args.p_initiative_key,"47pct")
+        assert.equal(args.p_source_host,"47pct.c3field.online")
+        assert.equal((args.p_metadata as Record<string,unknown>).invite_share_reference,shareReference)
+        return new Response(JSON.stringify({
+          accepted:true,
+          relationship_key:relationshipKey,
+          initiative_key:"47pct",
+          request_event_key:requestEventKey,
+          standing:"acknowledgment_pending",
+          next_permitted_encounter:"322_acknowledge"
+        }),{status:200,headers:{"content-type":"application/json"}})
+      }
+      if(url==="https://api.resend.com/emails"){
+        return new Response(JSON.stringify({id:"mail_47pct_invite"}),{status:200,headers:{"content-type":"application/json"}})
+      }
+      throw new Error("unexpected fetch "+url)
+    }
+  })
+
+  assert.equal(response.status,202)
+  const body=await response.json() as Record<string,unknown>
+  assert.equal(body.standing,"continuation_sent")
+  const pendingIndex=calls.findIndex(call=>call.url.endsWith("/record_c1me_invite_acceptance_pending"))
+  const requestIndex=calls.findIndex(call=>call.url.endsWith("/record_c1_initiative_connect_requested"))
+  assert.ok(pendingIndex>0)
+  assert.ok(requestIndex>pendingIndex)
 })
 
 test("existing-owner helper cannot start an unregistered initiative contract",async()=>{
