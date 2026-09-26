@@ -617,7 +617,10 @@ export default function MyEnvironmentEncounter(){
     return <main className="myenv-shell myenv-arrival" aria-label="Entering your environment"><video className="myenv-arrival-video" src={ARRIVAL_VIDEO} autoPlay muted playsInline preload="auto" onEnded={()=>setState("ready")} onError={()=>setState("ready")}/></main>
   }
 
-  const backdrop=data.presentation?.opening_visual_url||LIVE_BACKDROP
+  const has47pct=initiatives.some(initiative=>initiative.initiative_key==="47pct")
+  const genericBackdrop=!data.presentation||data.presentation.opening_visual_asset_key==="c3_field_c1me_live_backdrop_v1"
+  const use47pctBackdrop=has47pct&&genericBackdrop
+  const backdrop=use47pctBackdrop?"/assets/47pct/47pct-emblem-watermark-v1.svg":(data.presentation?.opening_visual_url||LIVE_BACKDROP)
   const activePrimitive=activePanel?.startsWith("primitive:")
     ?primitives.find(primitive=>"primitive:"+primitive.primitive_key===activePanel)
     :null
@@ -626,7 +629,7 @@ export default function MyEnvironmentEncounter(){
     :null
 
   return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v2">
-    <img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>
+    <img className={"myenv-backdrop"+(use47pctBackdrop?" myenv-backdrop--47pct":"")} src={backdrop} alt="" aria-hidden="true"/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
     <section className="myenv-place" aria-label="c1ME environment">
       <div className="myenv-presence">
