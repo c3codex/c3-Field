@@ -47,23 +47,28 @@ async function sessionFor(request:Request,env:PassageEnv){
 async function initiativeContext(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>,value:unknown){
   if(value===undefined||value===null||value==="") return null
   if(typeof value!=="string"||value.length>160) throw new Error("initiative_context_invalid")
-  const rows=await read(env,"c3_env_initiative_visibility",{
-    select:"initiative_key,initiative_envpac_key,target_environment_key,visibility_source",
-    relationship_key:"eq."+session.subjectKey,
-    env_key:"eq."+session.envKey,
-    envpac_key:"eq."+session.envpacKey,
-    initiative_key:"eq."+value,
-    standing:"eq.active",
-    revoked_at:"is.null",
-    limit:"1"
+  const response=await fetch(base(env)+"/rest/v1/rpc/resolve_c1me_visible_initiatives_internal",{
+    method:"POST",headers:headers(env,{"content-type":"application/json"}),
+    body:JSON.stringify({p_relationship_key:session.subjectKey}),signal:AbortSignal.timeout(12000)
   })
-  const row=rows[0]
+  if(!response.ok) throw new Error("initiative_context_not_resolved")
+  const result=await response.json() as Row
+  if(result.resolution!=="existing_c1"||result.relationship_ref!==session.subjectKey||
+     result.env_key!==session.envKey||result.envpac_ref!==session.envpacKey||
+     result.initiative_resolution!=="envpac_resolved") throw new Error("initiative_context_not_resolved")
+  const initiatives=Array.isArray(result.initiatives)?result.initiatives as Row[]:[]
+  const row=initiatives.find(item=>item.initiative_key===value)
   if(!row) throw new Error("initiative_context_not_resolved")
+  const contextClass=typeof row.context_class==="string"?row.context_class:"participant"
+  if(contextClass==="operator"&&row.invite_context_allowed!==true) throw new Error("initiative_operator_invite_not_authorized")
   return {
     source_initiative_key:String(row.initiative_key),
     initiative_envpac_key:String(row.initiative_envpac_key),
     target_environment_key:typeof row.target_environment_key==="string"?row.target_environment_key:null,
-    source_visibility_class:String(row.visibility_source||"encounter")
+    source_context_class:contextClass,
+    source_visibility_class:String(row.visibility_source||contextClass),
+    ...(typeof row.initiative_operator_binding_key==="string"
+      ?{source_operator_binding_key:row.initiative_operator_binding_key}:{})
   }
 }
 
