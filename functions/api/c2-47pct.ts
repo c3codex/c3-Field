@@ -94,7 +94,10 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
       "council_settlement_contribution","council_program_service_income",
       "trust_financial_flow","non_scout_paid_use","planned_outside_group_rental"
     ])
-    const moneyAssertions=assertions.filter(row=>moneyTypes.has(String(row.assertion_type||"")))
+    const moneyAssertions=assertions.filter(row=>
+      moneyTypes.has(String(row.assertion_type||"")) &&
+      String(row.property_key||"").startsWith("47prop_mtc_")
+    )
     const evidenceMeta=obj(evidencePac[0]?.metadata)
 
     return json({
