@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from "react"
 import { isC3OpsHost } from "../c3ops/c3OpsRoutes"
-const C2EnvironmentShell = lazy(() => import("../c3_field_contribution/C2EnvironmentShell"))
+const C2EnvironmentDoor = lazy(() => import("../c3_field_contribution/C2EnvironmentDoor"))
 const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
 const C3PublicDocumentPage = lazy(() => import("../c3_field_connect/C3PublicDocumentPage"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
@@ -453,7 +453,7 @@ export default function App() {
     if (personalPath === "/" || personalPath === "/my-environment")
       return <Suspense fallback={<p>Opening your environment…</p>}><MyEnvironmentEncounter /></Suspense>
     if (personalPath === "/c2")
-      return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentShell /></Suspense>
+      return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentDoor /></Suspense>
     return <HeldUnknownC3FieldRoute pathname={personalPath} />
   }
 
@@ -463,7 +463,7 @@ export default function App() {
 
   if (isC3Host || mode === "c3field") {
     if (c3Route.kind === "environment") return <Suspense fallback={<p>Opening your environment…</p>}><MyEnvironmentEncounter /></Suspense>
-    if (c3Route.kind === "c2_shell") return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentShell /></Suspense>
+    if (c3Route.kind === "c2_shell") return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentDoor /></Suspense>
     if (c3Route.kind === "operations") return <OarOperationsConsole />
     if (c3Route.kind === "publication") return <PublicWhitePaperLanding paper={communityPotential} />
     if (c3Route.kind === "public_document") return <Suspense fallback={<p>Loading document…</p>}><C3PublicDocumentPage kind={c3Route.pathname === "/privacy" ? "privacy" : c3Route.pathname === "/terms" ? "terms" : "contact"} /></Suspense>
