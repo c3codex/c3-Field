@@ -1,6 +1,7 @@
 import {FormEvent,useEffect,useState} from "react"
 import EternalFlame from "./EternalFlame"
 import ProfilePacPanel,{type ProfileContract} from "./ProfilePacPanel"
+import CurrentConstellation,{type CurrentToken} from "./CurrentConstellation"
 
 type EnvPayload={
   authenticated:boolean
@@ -58,6 +59,7 @@ type ProfileTruth={
 type ProfileIntakePayload={authenticated:boolean;standing:string;contract?:ProfileContract;resolved_profile_class?:string|null}
 type ChazzMessage={role:"user"|"assistant";text:string}
 type ChazzPayload={standing:string;runtime?:string;reason?:string;message?:string;messages?:ChazzMessage[]}
+type CurrentPayload={authenticated:boolean;standing:string;semantics?:string;current_state_ref?:string|null;token_count?:number;tokens?:CurrentToken[]}
 
 async function readChazzJson(response:Response):Promise<ChazzPayload>{
   const contentType=(response.headers.get("content-type")||"").toLowerCase()
@@ -127,6 +129,8 @@ export default function MyEnvironmentEncounter(){
   const [chazzNotice,setChazzNotice]=useState("")
   const [chazzBusy,setChazzBusy]=useState(false)
   const [chazzLoaded,setChazzLoaded]=useState(false)
+  const [currentTokens,setCurrentTokens]=useState<CurrentToken[]>([])
+  const [currentLoaded,setCurrentLoaded]=useState(false)
 
   useEffect(()=>{
     let active=true
@@ -136,10 +140,11 @@ export default function MyEnvironmentEncounter(){
         fetch("/api/my-environment-initiatives",{headers:{accept:"application/json"}}),
         fetch("/api/my-environment-connections",{headers:{accept:"application/json"}}),
         fetch("/api/my-environment-canopy",{headers:{accept:"application/json"}}),
-        fetch("/api/my-environment-profile",{headers:{accept:"application/json"}})
+        fetch("/api/my-environment-profile",{headers:{accept:"application/json"}}),
+        fetch("/api/my-environment-current",{headers:{accept:"application/json"}})
       ])
       if(!active)return
-      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult]=results
+      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult,currentResult]=results
       if(primitiveResult.status==="fulfilled"&&primitiveResult.value.ok){
         const body=await primitiveResult.value.json() as PrimitivePayload
         if(active&&body.primitives){
@@ -170,6 +175,12 @@ export default function MyEnvironmentEncounter(){
         }
       }else if(active){
         setCanopyLoaded(false)
+      }
+      if(currentResult.status==="fulfilled"&&currentResult.value.ok){
+        const body=await currentResult.value.json() as CurrentPayload
+        if(active){setCurrentTokens(body.tokens||[]);setCurrentLoaded(true)}
+      }else if(active){
+        setCurrentLoaded(false)
       }
       if(profileResult.status==="fulfilled"&&profileResult.value.ok){
         const body=await profileResult.value.json() as ProfileIntakePayload
@@ -408,6 +419,24 @@ export default function MyEnvironmentEncounter(){
   }
 
   function renderPrimitive(primitive:Primitive){
+    if(primitive.renderer_key==="c1me.current"){
+      return <section key={primitive.primitive_key} className="myenv-connections-thread">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">RETAINED RELATIONAL ENVIRONMENT TOKEN</p>
+          <h2>CURRENT</h2>
+          <p>CURRENT retains qualifying relational value from this environment. It is distinct from current state and creates no score, money, ownership, or authority.</p>
+        </div>
+        {!currentLoaded&&<p className="myenv-runtime-warning">CURRENT could not be resolved from this session.</p>}
+        {currentLoaded&&currentTokens.length===0&&<p className="myenv-relations-empty">No relational value has been retained yet. The field begins dark.</p>}
+        <div className="myenv-thread-entries">
+          {currentTokens.map(token=><article key={token.current_token_key}>
+            <div><span>{token.token_class.replace(/_/g," ")}</span><time>{new Date(token.retained_at).toLocaleString()}</time></div>
+            <h3>{token.token_class==="initiative"?text(token.metadata?.initiative_key,"Initiative relation"):"Retained relation"}</h3>
+            <p>{token.relation_standing==="active"?"Relation presently active.":"Relation retained · present effect "+token.relation_standing+"."}</p>
+          </article>)}
+        </div>
+      </section>
+    }
     if(primitive.renderer_key==="c1me.chazz"){
       return <section key={primitive.primitive_key} className="myenv-connections-thread myenv-chazz">
         <div className="myenv-thread-heading">
@@ -569,9 +598,8 @@ export default function MyEnvironmentEncounter(){
   }
 
   const has47pct=initiatives.some(initiative=>initiative.initiative_key==="47pct")
-  const genericBackdrop=!data.presentation||data.presentation.opening_visual_asset_key==="c3_field_c1me_live_backdrop_v1"
-  const use47pctBackdrop=has47pct&&genericBackdrop
-  const backdrop=use47pctBackdrop?"/assets/47pct/47pct-emblem-watermark-v1.svg":(data.presentation?.opening_visual_url||LIVE_BACKDROP)
+  const genericBackdrop=!data.presentation||["c3_field_c1me_live_backdrop_v1","c3_field_environment_opening_visual_v1"].includes(data.presentation.opening_visual_asset_key)
+  const backdrop=genericBackdrop?"":(data.presentation?.opening_visual_url||"")
   const activePrimitive=activePanel?.startsWith("primitive:")
     ?primitives.find(primitive=>"primitive:"+primitive.primitive_key===activePanel)
     :null
@@ -579,8 +607,9 @@ export default function MyEnvironmentEncounter(){
     ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
     :null
 
-  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v3">
-    <img className={"myenv-backdrop"+(use47pctBackdrop?" myenv-backdrop--47pct":"")} src={backdrop} alt="" aria-hidden="true"/>
+  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v3+CURRENT_v1">
+    {backdrop&&<img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>}
+    <CurrentConstellation tokens={currentTokens}/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
     <section className="myenv-place" aria-label="c1ME environment">
       <div className="myenv-presence">
