@@ -11,6 +11,11 @@ export default function C3CommunityConnect({initiativeSurface=null}:{initiativeS
   return <C3CommunityConnectSurface initiativeSurface={initiativeSurface} />
 }
 
+function shareReferenceFromLocation(){
+  const value = new URLSearchParams(window.location.search).get("via")
+  return value && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value) ? value : null
+}
+
 function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:InitiativeSurfaceRuntime|null}) {
   const [environment, setEnvironment] = useState<Awaited<ReturnType<typeof loadC1EnvironmentPackage>> | null>(null)
   const [presentation,setPresentation]=useState<C3PublicPresentation|null>(null)
@@ -26,15 +31,18 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   const [pending, setPending] = useState(false)
   const [result, setResult] = useState<string | null>(null)
   const [mediaFailed, setMediaFailed] = useState(false)
-  const [publicStage, setPublicStage] = useState<"intro"|"landing"|"connect">(() => initiativeSurface ? (window.location.pathname === "/connect" ? "connect" : "landing") : (window.location.pathname === "/connect" ? "connect" : "intro"))
+  const shareReference = shareReferenceFromLocation()
+  const [publicStage, setPublicStage] = useState<"intro"|"landing"|"connect">(() =>
+    shareReference
+      ? "intro"
+      : initiativeSurface
+        ? (window.location.pathname === "/connect" ? "connect" : "landing")
+        : (window.location.pathname === "/connect" ? "connect" : "intro")
+  )
   const [introMuted, setIntroMuted] = useState(true)
   const introVideoRef = useRef<HTMLVideoElement | null>(null)
   const [emblemFailed, setEmblemFailed] = useState(false)
   const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 600px)").matches)
-  const shareReference = (() => {
-    const value = new URLSearchParams(window.location.search).get("via")
-    return value && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value) ? value : null
-  })()
   useEffect(() => {
     const query = window.matchMedia("(max-width: 600px)")
     const update = () => { setMobile(query.matches); setMediaFailed(false) }
