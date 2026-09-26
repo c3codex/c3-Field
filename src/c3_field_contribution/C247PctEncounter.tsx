@@ -28,11 +28,6 @@ type Payload={
 }
 type Tab="ground"|"money"|"evidence"|"ledger"|"current"
 
-function money(value:unknown){
-  return typeof value==="number"&&Number.isFinite(value)
-    ?new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(value)
-    :""
-}
 function dedupeAssertions(rows:MoneyAssertion[]){
   const seen=new Set<string>()
   return rows.filter(row=>{
@@ -118,7 +113,6 @@ export default function C247PctEncounter(){
           <p className="pct47-c2-address">{active.address}</p>
           <p>{active.summary}</p>
           <div className="pct47-c2-facts">
-            {active.acreage!=null&&<span><b>{active.acreage.toLocaleString()}</b> acres</span>}
             {active.transaction_state&&<span><b>{active.transaction_state.replace(/_/g," ")}</b> transaction state</span>}
             {active.current_use_state&&<span><b>{active.current_use_state.replace(/_/g," ")}</b> current use</span>}
           </div>
@@ -173,7 +167,7 @@ export default function C247PctEncounter(){
           <span>{String(source.authority_class||"source").replace(/_/g," ")}</span>
           <p><strong>{sourceLabel(source)}</strong></p>
           <p>{String(source.scope_description||"")}</p>
-          {source.source_date&&<time>{String(source.source_date)}</time>}
+{typeof source.source_date==="string"&&<time>{source.source_date}</time>}
         </article>)}
       </div>
       <p className="pct47-c2-rule">The corpus is open and incomplete. Allegation is not finding. Historical is not current. Survivor testimony owns occurrence.</p>
@@ -194,7 +188,7 @@ export default function C247PctEncounter(){
           <span>{String(row.resolution_standing||"resolved")}</span>
           <h3>{String(row.current_state_key||"CURRENT")}</h3>
           <p>{String(row.standing||"")}</p>
-          {row.effective_at&&<time>{new Date(String(row.effective_at)).toLocaleString()}</time>}
+{typeof row.effective_at==="string"&&<time>{new Date(row.effective_at).toLocaleString()}</time>}
         </article>)}
       </div>
     </section>}
