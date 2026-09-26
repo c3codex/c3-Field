@@ -1,0 +1,30 @@
+name: My Env 47pct Initiative Passage Proof
+
+on:
+  push:
+    branches:
+      - proof/myenv-47pct-initiative-connections-20260925
+
+permissions:
+  contents: read
+
+jobs:
+  prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+          cache: 'npm'
+      - name: Install locked dependencies
+        run: npm ci --include=dev --ignore-scripts
+      - name: Prove Vite
+        run: |
+          test -x node_modules/.bin/vite
+          ./node_modules/.bin/vite --version
+      - name: Run bounded passage/runtime tests
+        run: node --import tsx --test functions/_lib/c1-passage.test.ts functions/api/my-environment-chazz.test.ts functions/api/free-media.test.ts
+      - name: Build c3field
+        run: npm run build:c3field
