@@ -33,11 +33,13 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   const [mediaFailed, setMediaFailed] = useState(false)
   const shareReference = shareReferenceFromLocation()
   const [publicStage, setPublicStage] = useState<"intro"|"landing"|"connect">(() =>
-    shareReference
-      ? "intro"
-      : initiativeSurface
-        ? (window.location.pathname === "/connect" ? "connect" : "landing")
-        : (window.location.pathname === "/connect" ? "connect" : "intro")
+    shareReference && initiativeSurface?.initiativeKey==="47pct"
+      ? "landing"
+      : shareReference
+        ? "intro"
+        : initiativeSurface
+          ? (window.location.pathname === "/connect" ? "connect" : "landing")
+          : (window.location.pathname === "/connect" ? "connect" : "intro")
   )
   const [introMuted, setIntroMuted] = useState(true)
   const introVideoRef = useRef<HTMLVideoElement | null>(null)
