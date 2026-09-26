@@ -628,7 +628,7 @@ export default function MyEnvironmentEncounter(){
     ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
     :null
 
-  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v2">
+  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v3">
     <img className={"myenv-backdrop"+(use47pctBackdrop?" myenv-backdrop--47pct":"")} src={backdrop} alt="" aria-hidden="true"/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
     <section className="myenv-place" aria-label="c1ME environment">
