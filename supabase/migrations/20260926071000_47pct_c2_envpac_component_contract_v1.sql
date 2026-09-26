@@ -94,7 +94,10 @@ begin
   ),updated_at=now() where envpac_key=p_envpac_key;
 
   return jsonb_build_object('seeded',true,'envpac_key',p_envpac_key,'primitive_contract','c1me_env_primitives_v3','primitive_count',4);
-end $$;
+end $;
+
+revoke all on function public.seed_c1me_envpac_primitives_internal(text) from public,anon,authenticated;
+grant execute on function public.seed_c1me_envpac_primitives_internal(text) to service_role;
 
 update public.c3_envpac_runtime_primitive
 set standing='retired',
