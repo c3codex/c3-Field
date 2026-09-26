@@ -1,6 +1,7 @@
 import {useEffect,useMemo,useState} from "react"
 import EternalFlame from "../c3_field_connect/EternalFlame"
 import "./c247PctEncounter.css"
+import CurrentConstellation,{type CurrentToken} from "../c3_field_connect/CurrentConstellation"
 
 type Row=Record<string,unknown>
 type ComponentRow={component_key:string;renderer_key:string;sort_order:number;standing:string;config:Row}
@@ -26,7 +27,7 @@ type Payload={
   current?:Row[]
   ledger?:{standing:string;writable:boolean}
 }
-type Tab="ground"|"money"|"evidence"|"ledger"|"current"
+type Tab="ground"|"money"|"evidence"|"ledger"|"state"|"current"
 
 function dedupeAssertions(rows:MoneyAssertion[]){
   const seen=new Set<string>()
@@ -44,6 +45,7 @@ export default function C247PctEncounter(){
   const [data,setData]=useState<Payload|null>(null)
   const [tab,setTab]=useState<Tab>("ground")
   const [selected,setSelected]=useState<string|null>(null)
+  const [currentTokens,setCurrentTokens]=useState<CurrentToken[]>([])
 
   useEffect(()=>{
     let cancelled=false
@@ -53,6 +55,14 @@ export default function C247PctEncounter(){
         if(!cancelled)setData(body)
       })
       .catch(()=>{if(!cancelled)setData({authenticated:false,standing:"47pct_c2_held",reason:"encounter_unavailable"})})
+    return()=>{cancelled=true}
+  },[])
+  useEffect(()=>{
+    let cancelled=false
+    void fetch("/api/my-environment-current",{credentials:"same-origin",headers:{accept:"application/json"}})
+      .then(async response=>response.ok?await response.json():null)
+      .then(body=>{if(!cancelled&&body&&Array.isArray(body.tokens))setCurrentTokens(body.tokens as CurrentToken[])})
+      .catch(()=>{})
     return()=>{cancelled=true}
   },[])
 
@@ -76,6 +86,7 @@ export default function C247PctEncounter(){
   </main>
 
   return <main className="pct47-c2">
+    <CurrentConstellation tokens={currentTokens} mode="c2"/>
     <header className="pct47-c2-topbar">
       <div><p className="pct47-c2-kicker">c2ME.env · 4.7%</p><h1>Ground · Money · Evidence</h1></div>
       <a href="/">← MY ENVIRONMENT</a>
@@ -88,8 +99,8 @@ export default function C247PctEncounter(){
     </section>
 
     <nav className="pct47-c2-tabs" aria-label="4.7% encounter">
-      {(["ground","money","evidence","ledger","current"] as Tab[]).map(value=>
-        <button key={value} type="button" className={tab===value?"active":""} onClick={()=>setTab(value)}>{value.toUpperCase()}</button>
+      {(["ground","money","evidence","ledger","state","current"] as Tab[]).map(value=>
+        <button key={value} type="button" className={tab===value?"active":""} onClick={()=>setTab(value)}>{value==="state"?"CURRENT STATE":value.toUpperCase()}</button>
       )}
     </nav>
 
@@ -180,23 +191,37 @@ export default function C247PctEncounter(){
       <span>Standing: {data.ledger?.standing||"held"}</span>
     </section>}
 
-    {tab==="current"&&<section className="pct47-c2-panel">
-      <p className="pct47-c2-eyebrow">CURRENT</p>
+    {tab==="state"&&<section className="pct47-c2-panel">
+      <p className="pct47-c2-eyebrow">CURRENT STATE</p>
       <h2>What the C2 environment presently resolves.</h2>
       <div className="pct47-c2-current">
         {(data.current||[]).map((row,index)=><article key={String(row.current_state_key||index)}>
           <span>{String(row.resolution_standing||"resolved")}</span>
-          <h3>{String(row.current_state_key||"CURRENT")}</h3>
+          <h3>{String(row.current_state_key||"STATE")}</h3>
           <p>{String(row.standing||"")}</p>
 {typeof row.effective_at==="string"&&<time>{new Date(row.effective_at).toLocaleString()}</time>}
         </article>)}
       </div>
     </section>}
 
+    {tab==="current"&&<section className="pct47-c2-panel">
+      <p className="pct47-c2-eyebrow">CURRENT</p>
+      <h2>What this environment has retained from relationship.</h2>
+      <div className="pct47-c2-current">
+        {currentTokens.map(token=><article key={token.current_token_key}>
+          <span>{token.token_class.replace(/_/g," ")}</span>
+          <h3>{token.token_class==="initiative"&&typeof token.metadata?.initiative_key==="string"?token.metadata.initiative_key:"Retained relation"}</h3>
+          <p>{token.relation_standing==="active"?"Retained relation · active":"Retained relation · "+token.relation_standing}</p>
+          <time>{new Date(token.retained_at).toLocaleString()}</time>
+        </article>)}
+        {currentTokens.length===0&&<article><span>retained relation</span><h3>No CURRENT tokens yet.</h3></article>}
+      </div>
+    </section>}
+
     <aside className="pct47-c2-flame" aria-label="Eternal Flame memorial"><EternalFlame compact /></aside>
     <footer className="pct47-c2-footer">
       <span>4.7% · c2ME.env</span>
-      <span>Evidence_PAC is factual authority · CURRENT is present-state authority</span>
+      <span>Evidence_PAC is factual authority · Current state is operative now · CURRENT retains relational continuity</span>
     </footer>
   </main>
 }
