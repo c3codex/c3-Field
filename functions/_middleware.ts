@@ -8,6 +8,7 @@ const PROTECTED_PATHS = [
   "/api/publish-undrifted-proof",
   "/api/publish-undrifted-lapzuli-controls",
   "/api/c3ops",
+  "/api/chazz",
 ]
 
 function isProtectedPath(pathname: string) {
