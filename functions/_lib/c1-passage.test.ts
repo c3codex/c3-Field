@@ -65,7 +65,7 @@ test("H: generated secret canaries never appear in public results or ordinary lo
  assert.ok(secretValues.every(secret=>!output.join("").includes(secret) && !logs.join("").includes(secret)),"secret canaries must remain redacted")
  assert.equal(logs.length,0)
 })
-import {captureCandidate,verifyCandidate,ENV_KEY,type PassageEnv} from "./c1-passage"
+import {beginExistingInitiative322,captureCandidate,verifyCandidate,ENV_KEY,type PassageEnv} from "./c1-passage"
 import {onRequestPost as captureRoute} from "../api/c3-community-connect-capture"
 import {onRequestPost as verifyRoute,onRequestGet} from "../api/c3-community-connect-verify"
 const key="crs_"+"a".repeat(32), token="b".repeat(48)
@@ -185,4 +185,43 @@ test("callback GET is inert and contains no token; POST rejects cross-origin and
   const r=await verifyRoute({env,request:edgeRequest("https://example.invalid/api/c3-community-connect-verify",{method:"POST",headers:{origin,"content-type":"application/json"},body})} as any)
   assert.equal(r.status,status)
  }
+})
+
+
+test("existing My Env 47pct passage creates acknowledgment-pending request only",async()=>{
+ const requestEvent="event_"+"d".repeat(32)
+ const h=harness({record_c1_initiative_connect_requested:{
+  accepted:true,
+  relationship_key:key,
+  initiative_key:"47pct",
+  request_event_key:requestEvent,
+  standing:"acknowledgment_pending",
+  next_permitted_encounter:"322_acknowledge",
+  existing:false
+ }})
+ const result:any=await beginExistingInitiative322({
+  relationshipKey:key,
+  initiativeKey:"47pct",
+  sourceHost:"47pct.c3field.online",
+  metadata:{source_envpac_key:"c3envpac_person_test_v0_1"}
+ },env,h.deps)
+ assert.deepEqual(h.calls,["record_c1_initiative_connect_requested"])
+ assert.equal(result.standing,"322_acknowledgment_required")
+ assert.equal(result.saved,true)
+ assert.equal(result.acknowledgment_required,true)
+ assert.equal(result.initiative_key,"47pct")
+ assert.equal(result.request_event_key,requestEvent)
+ assert.equal(result.ack_contract.contractKey,"47pct_pre_my_env_322_v1")
+ const next=new URL(result.acknowledgment_url)
+ assert.equal(next.origin,"https://example.invalid")
+ assert.equal(next.pathname,"/api/c3-community-connect-acknowledge")
+ assert.ok(next.hash.startsWith("#ticket="))
+ const args=h.requests[0].args
+ assert.equal(args.p_relationship_key,key)
+ assert.equal(args.p_initiative_key,"47pct")
+ assert.equal(args.p_source_host,"47pct.c3field.online")
+ assert.equal(args.p_metadata.source_route,"/api/my-environment-initiative-connect")
+ assert.equal("support" in result,false)
+ assert.equal("contribution" in result,false)
+ assert.equal("c2" in result,false)
 })
