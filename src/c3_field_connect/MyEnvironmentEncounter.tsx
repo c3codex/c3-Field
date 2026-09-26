@@ -33,7 +33,18 @@ type NativeConnection={
   other:{relationship_key:string;display_name:string|null}
   messages:ConnectionMessage[]
 }
-type ConnectionsPayload={authenticated:boolean;standing:string;entries?:LedgerEntry[];native_connections?:NativeConnection[]}
+type InitiativeConnection={
+  visibility_key:string
+  initiative_key:string
+  initiative_envpac_key:string
+  target_environment_key?:string|null
+  visibility_source:string
+  source_ref:string
+  standing:string
+  visible_at:string
+  metadata?:Record<string,unknown>
+}
+type ConnectionsPayload={authenticated:boolean;standing:string;entries?:LedgerEntry[];native_connections?:NativeConnection[];initiative_connections?:InitiativeConnection[]}
 type CanopyReference={reference_key:string;surface_label:string;display_label?:string|null;external_url:string;handle?:string|null;sort_order:number}
 type CanopyPayload={standing:string;references?:CanopyReference[]}
 type ProfileTruth={
@@ -82,6 +93,9 @@ export default function MyEnvironmentEncounter(){
   const [initiatives,setInitiatives]=useState<Initiative[]>([])
   const [ledgerEntries,setLedgerEntries]=useState<LedgerEntry[]>([])
   const [nativeConnections,setNativeConnections]=useState<NativeConnection[]>([])
+  const [initiativeConnections,setInitiativeConnections]=useState<InitiativeConnection[]>([])
+  const [initiativeConnectionBusy,setInitiativeConnectionBusy]=useState(false)
+  const [initiativeConnectionNotice,setInitiativeConnectionNotice]=useState("")
   const [canopy,setCanopy]=useState<CanopyReference[]>([])
   const [profileTruth,setProfileTruth]=useState<ProfileTruth|null>(null)
   const [profileContract,setProfileContract]=useState<ProfileContract|null>(null)
@@ -152,6 +166,7 @@ export default function MyEnvironmentEncounter(){
         if(active){
           setLedgerEntries(body.entries||[])
           setNativeConnections(body.native_connections||[])
+          setInitiativeConnections(body.initiative_connections||[])
           setSelectedConnection(current=>current||(body.native_connections?.[0]?.connection_key||""))
         }
       }
@@ -258,6 +273,35 @@ export default function MyEnvironmentEncounter(){
       setLedgerEntries(current=>[body.entry!,...current]);setLedgerBody("");setLedgerNotice("Added to your Ledger.")
     }catch(error){setLedgerNotice(error instanceof Error?error.message:"The ledger entry could not be recorded.")}
     finally{setLedgerBusy(false)}
+  }
+
+  async function begin47pctConnection(){
+    if(initiativeConnectionBusy)return
+    setInitiativeConnectionBusy(true)
+    setInitiativeConnectionNotice("")
+    try{
+      const response=await fetch("/api/my-environment-initiative-connect",{
+        method:"POST",
+        headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({initiative_key:"47pct"})
+      })
+      const body=await response.json().catch(()=>null) as {ok?:boolean;standing?:string;reason?:string;acknowledgment_url?:string}|null
+      if(!response.ok||!body?.ok)throw new Error(body?.reason||body?.standing||"The 4.7% passage could not be prepared.")
+      if(body.standing==="initiative_connection_active"){
+        setInitiativeConnectionNotice("4.7% is already connected to this environment.")
+        return
+      }
+      if(body.standing!=="322_acknowledgment_required"||typeof body.acknowledgment_url!=="string")
+        throw new Error("The 4.7% acknowledgment passage did not resolve.")
+      const next=new URL(body.acknowledgment_url,location.origin)
+      if(next.origin!=="https://c3field.online"||next.pathname!=="/api/c3-community-connect-acknowledge"||!next.hash.startsWith("#ticket="))
+        throw new Error("The 4.7% acknowledgment route did not resolve.")
+      location.assign(next.href)
+    }catch(error){
+      setInitiativeConnectionNotice(error instanceof Error?error.message:"The 4.7% passage could not be prepared.")
+    }finally{
+      setInitiativeConnectionBusy(false)
+    }
   }
 
   async function sendNativeMessage(event:FormEvent){
@@ -481,12 +525,28 @@ export default function MyEnvironmentEncounter(){
       </section>
     }
     if(primitive.renderer_key==="c1me.native_connections"){
+      const has47pct=initiativeConnections.some(connection=>connection.initiative_key==="47pct")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
-        <div className="myenv-thread-heading"><p className="myenv-kicker">C3-NATIVE</p><h2>{primitive.display_label}</h2><p>Accepted c3 connections appear in both environments. Messages here are shared across the connection.</p></div>
+        <div className="myenv-thread-heading"><p className="myenv-kicker">C3-NATIVE</p><h2>{primitive.display_label}</h2><p>People and initiative relations appear here only after their governed passage resolves.</p></div>
         <div className="myenv-thread-entries">
-          {nativeConnections.length===0&&<p className="myenv-relations-empty">No c3-native connections yet.</p>}
-          {nativeConnections.map(connection=><article key={connection.connection_key}><div><span>connected</span><time>{new Date(connection.formed_at).toLocaleString()}</time></div><h3>{connection.other.display_name||"Connected environment"}</h3>{connection.messages.slice(-5).map(item=><p key={item.message_key}><strong>{item.sender_relationship_key===connection.other.relationship_key?(connection.other.display_name||"Connection")+": ":"You: "}</strong>{item.body}</p>)}</article>)}
+          {initiativeConnections.map(connection=>{
+            const initiative=initiatives.find(item=>item.initiative_key===connection.initiative_key)
+            const entry=initiative?.components.find(component=>component.renderer_key==="initiative.entry_card")
+            const label=connection.initiative_key==="47pct"?"4.7%":text(entry?.config?.title,connection.initiative_key)
+            return <article key={connection.visibility_key}>
+              <div><span>initiative connection</span><time>{new Date(connection.visible_at).toLocaleString()}</time></div>
+              <h3>{label}</h3>
+              <p>{connection.visibility_source} → {connection.target_environment_key||"connected environment"}</p>
+            </article>
+          })}
+          {!has47pct&&<article className="myenv-initiative-card">
+            <div><span>available passage</span><h3>4.7%</h3><p>Connect this environment to the 4.7% initiative through its required 3-2-2 acknowledgment. Starting the passage does not create support, attendance, contribution, or C2 standing.</p></div>
+            <button type="button" onClick={()=>void begin47pctConnection()} disabled={initiativeConnectionBusy}>{initiativeConnectionBusy?"PREPARING…":"CONNECT TO 4.7%"}</button>
+          </article>}
+          {nativeConnections.length===0&&initiativeConnections.length===0&&<p className="myenv-relations-empty">No active c3 connections yet.</p>}
+          {nativeConnections.map(connection=><article key={connection.connection_key}><div><span>person connection</span><time>{new Date(connection.formed_at).toLocaleString()}</time></div><h3>{connection.other.display_name||"Connected environment"}</h3>{connection.messages.slice(-5).map(item=><p key={item.message_key}><strong>{item.sender_relationship_key===connection.other.relationship_key?(connection.other.display_name||"Connection")+": ":"You: "}</strong>{item.body}</p>)}</article>)}
         </div>
+        {initiativeConnectionNotice&&<p className="myenv-initiative-notice" role="status">{initiativeConnectionNotice}</p>}
         {nativeConnections.length>0&&<form className="myenv-thread-compose" onSubmit={sendNativeMessage}>
           <select aria-label="Connected environment" value={selectedConnection} onChange={e=>setSelectedConnection(e.target.value)}>
             {nativeConnections.map(connection=><option key={connection.connection_key} value={connection.connection_key}>{connection.other.display_name||"Connected environment"}</option>)}
