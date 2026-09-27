@@ -20,8 +20,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: clamp(0.75rem, 1.8vw, 1.1rem) clamp(1.25rem, 3vw, 2.5rem);
-  height: var(--registry-header-height, 3rem);
+  padding: clamp(1rem, 2vw, 1.35rem) clamp(1.5rem, 3.5vw, 3.25rem);
+  min-height: 4.25rem;
+  height: var(--registry-header-height, 4.25rem);
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -38,6 +39,11 @@
    links inherit none and become unclickable sitewide (OAR2 "Resolve Final Launch Blockers"). */
 .measures-registry-runtime .registry-public-nav {
   pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.2vw, 2rem);
+  font-size: clamp(0.76rem, 0.9vw, 0.9rem);
+  letter-spacing: 0.035em;
 }
 
 .measures-registry-runtime .registry-public-brand img {
@@ -54,8 +60,9 @@
 }
 
 .measures-registry-runtime .registry-public-brand > span {
-  font-size: 0.7rem;
-  letter-spacing: 0.13em;
+  font-size: clamp(0.82rem, 1vw, 0.95rem);
+  font-weight: 650;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--registry-brand-muted-text);
 }
