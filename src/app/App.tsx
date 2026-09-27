@@ -341,19 +341,41 @@ export default function App() {
     }
 
     if (isC3InitiativeHost) {
-      if (c3Route.kind !== "connect") return () => { cancelled = true }
-      void fetch("/api/c3-public-presentation",{headers:{accept:"application/json"}})
+      void fetch("/api/c3-initiative-surface",{headers:{accept:"application/json"},cache:"no-store"})
         .then(response=>response.ok?response.json():null)
-        .then(body=>{
-          if(cancelled||!body?.presentation) return
-          const presentation=body.presentation as Record<string,any>
+        .then(async body=>{
+          if(cancelled||!body||body.standing!=="resolved") return
+          if(body.initiativeKey==="47pct"&&body.publicPresentation){
+            const presentation=body.publicPresentation as Record<string,any>
+            const title=String(presentation.og_title||"4.7% | A c3 Field Initiative")
+            const description=String(presentation.og_description||presentation.initiative_explanation||"")
+            const canonical=String(body.canonicalUrl||window.location.origin+"/")
+            const assetKey=String(presentation.og_image_asset_key||"")
+            if(title&&description&&canonical&&assetKey){
+              applyPageMetadata({
+                title,
+                description,
+                url:canonical,
+                canonicalUrl:canonical,
+                image:window.location.origin+"/api/free-media?asset="+encodeURIComponent(assetKey),
+                type:"website",
+              })
+            }
+            return
+          }
+
+          const response=await fetch("/api/c3-public-presentation",{headers:{accept:"application/json"}})
+          if(!response.ok)return
+          const presentationBody=await response.json()
+          if(cancelled||!presentationBody?.presentation)return
+          const presentation=presentationBody.presentation as Record<string,any>
           const seo=presentation.seo as Record<string,string>|undefined
           if(seo?.title&&seo?.description&&seo?.canonical_url){
             applyPageMetadata({
               title:seo.title,
               description:seo.description,
               url:seo.canonical_url,
-              image:"https://c3field.online/api/free-media?asset="+String(seo.og_image_asset_key||presentation.media_roles?.og_master),
+              image:window.location.origin+"/api/free-media?asset="+String(seo.og_image_asset_key||presentation.media_roles?.og_master),
               type:seo.og_type||"website",
             })
           }

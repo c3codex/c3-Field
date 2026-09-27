@@ -12,6 +12,7 @@ type ProcessRow={
 type PacRow={
   pac_key?:unknown
   pac_type?:unknown
+  envpac_key?:unknown
   standing?:unknown
   is_effective?:unknown
   release_state?:unknown
@@ -151,7 +152,7 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
   if(registeredInitiative!==initiativeKey) throw new InitiativeSurfaceResolutionError(409,"initiative_identity_mismatch")
 
   if(initiativeKey==="47pct"){
-    const webpac=requireOne(await readRows(env,"c3_pac","pac_key,pac_type,standing,is_effective,release_state,execution_authority_state,formation_state,source_authority,metadata",{
+    const webpac=requireOne(await readRows(env,"c3_pac","pac_key,pac_type,envpac_key,standing,is_effective,release_state,execution_authority_state,formation_state,source_authority,metadata",{
       pac_key:"eq."+webpacKey,
       pac_type:"eq.c3WebPac"
     }),"webpac_identity_unavailable") as PacRow
@@ -162,7 +163,38 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
       throw new InitiativeSurfaceResolutionError(423,"webpac_inactive")
     if(webpac.source_authority!==initiativeProcessKey)
       throw new InitiativeSurfaceResolutionError(409,"webpac_authority_mismatch")
-    if(webpacMetadata.parent_envpac!=="c3envpac_c1me_v0_1"||webpacMetadata.parent_environment!=="env_c3_community_connect")
+
+    // WebPAC custody and runtime environment are distinct. The WebPAC may be held in
+    // an effective Persisted Asset Custody EnvPAC while its governed public execution
+    // relation remains rooted in canonical c1ME. Do not infer execution environment
+    // from the custody EnvPAC.
+    const custodyEnvpacKey=str(webpac.envpac_key)
+    if(!custodyEnvpacKey||webpacMetadata.custody_envpac!==custodyEnvpacKey)
+      throw new InitiativeSurfaceResolutionError(409,"webpac_custody_mismatch")
+
+    requireOne(await readRows(env,"c3_pac_relation","relation_key,source_pac_key,relation_type,target_kind,target_key,standing,metadata",{
+      source_pac_key:"eq."+webpacKey,
+      relation_type:"eq.held_in",
+      target_kind:"eq.envpac",
+      target_key:"eq."+custodyEnvpacKey,
+      standing:"eq.active"
+    }),"webpac_custody_relation_unavailable")
+
+    requireOne(await readRows(env,"c3_envpac","envpac_key,standing,is_effective",{
+      envpac_key:"eq."+custodyEnvpacKey,
+      standing:"eq.effective",
+      is_effective:"eq.true"
+    }),"webpac_custody_envpac_unavailable",503)
+
+    requireOne(await readRows(env,"c3_pac_relation","relation_key,source_pac_key,relation_type,target_kind,target_key,standing,metadata",{
+      source_pac_key:"eq."+webpacKey,
+      relation_type:"eq.owned_by_envpac",
+      target_kind:"eq.envpac",
+      target_key:"eq.c3envpac_c1me_v0_1",
+      standing:"eq.active"
+    }),"webpac_c1_root_relation_unavailable")
+
+    if(webpacMetadata.parent_environment!=="env_c3_community_connect")
       throw new InitiativeSurfaceResolutionError(409,"webpac_environment_mismatch")
     if(!["public","public_release_authorized"].includes(String(webpac.release_state))||webpac.execution_authority_state!=="bounded_renderer"||
        webpacMetadata.runtime_release_authorized!==true)
