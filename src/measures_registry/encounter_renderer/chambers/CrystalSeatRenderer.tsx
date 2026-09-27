@@ -311,9 +311,15 @@ function CrystalIntroSeat({
     video.volume = 1
     const attempt = video.play()
     if (attempt) {
-      void attempt.catch(() => {
-        setAutoplayBlocked(true)
-      })
+      void attempt
+        .then(() => {
+          setAudioEnabled(true)
+          setAutoplayBlocked(false)
+        })
+        .catch(() => {
+          setAudioEnabled(false)
+          setAutoplayBlocked(true)
+        })
     }
   }, [videoUrl, contractReady])
 
@@ -351,16 +357,6 @@ function CrystalIntroSeat({
         style={registryTokenStyle}
       >
         <section className="registry-crystal-intro" aria-label="Measures Registry introduction">
-          {posterUrl ? (
-            <img
-              className="registry-crystal-intro-video"
-              src={posterUrl}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              fetchPriority="high"
-            />
-          ) : null}
           <div className="registry-crystal-intro-status" role="status">
             <p>Measures Registry introduction is unavailable.</p>
           </div>
