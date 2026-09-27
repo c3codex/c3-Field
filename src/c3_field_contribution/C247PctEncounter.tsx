@@ -2,7 +2,7 @@ import {useEffect,useMemo,useState} from "react"
 import EternalFlame from "../c3_field_connect/EternalFlame"
 import "./c247PctEncounter.css"
 import CurrentConstellation,{type CurrentToken} from "../c3_field_connect/CurrentConstellation"
-import C247GroundSectorMap,{type PropertyPoint} from "./C247GroundSectorMap"
+import C247GroundSectorMap,{type GroundSector,type PropertyPoint} from "./C247GroundSectorMap"
 
 type Row=Record<string,unknown>
 type ComponentRow={component_key:string;renderer_key:string;sort_order:number;standing:string;config:Row}
@@ -16,7 +16,7 @@ type Payload={
   environment?:{env_key:string;envpac_key:string;label:string;access_role:string}
   evidence?:{pac_key:string;standing:string;corpus_state:string;quantifier_gate:string}
   components?:ComponentRow[]
-  ground?:{resolution:string;map_points:PropertyPoint[];sectors?:Row[];universe_sources:Row[]}
+  ground?:{resolution:string;map_points:PropertyPoint[];sectors?:GroundSector[];universe_sources:Row[]}
   money?:{assertions:MoneyAssertion[];rule:string}
   current?:Row[]
   ledger?:{standing:string;writable:boolean}
@@ -101,6 +101,7 @@ export default function C247PctEncounter(){
     {tab==="ground"&&<section className="pct47-c2-ground">
       <C247GroundSectorMap
         points={groundPoints}
+        sectors={data.ground?.sectors||[]}
         selectedKey={active?.property_key||null}
         onSelect={setSelected}
       />
