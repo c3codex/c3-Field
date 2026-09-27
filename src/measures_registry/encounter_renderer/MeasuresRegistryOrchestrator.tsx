@@ -321,7 +321,8 @@ export default function MeasuresRegistryOrchestrator() {
   function renderHeader({ title }: { title: string }) {
     return (
       <header className="registry-public-header" aria-label={title}>
-        <div className="registry-public-brand">{title ? <span>{title}</span> : null}</div>\n        <nav className="registry-public-nav" aria-label="Measures Registry navigation">
+        <div className="registry-public-brand">{title ? <span>{title}</span> : null}</div>
+        <nav className="registry-public-nav" aria-label="Measures Registry navigation">
           <a href="/home" onClick={(e) => { e.preventDefault(); navigate("measures_registry_home") }}>Home</a>
           <a href="/connect" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Connect</a>
           <a
