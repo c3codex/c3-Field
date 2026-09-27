@@ -1261,6 +1261,40 @@
   font-weight: 500;
 }
 
+.registry-home-hero-backdrop {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(114, 144, 188, 0.15);
+  background: #040913;
+}
+
+.registry-home-hero-backdrop-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.registry-home-hero-logo {
+  position: absolute;
+  z-index: 2;
+  top: 8%;
+  right: 2.5%;
+  width: clamp(5.5rem, 14vw, 10rem);
+  max-height: 24%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.48));
+}
+
+@media (max-width: 700px) {
+  .registry-home-hero-logo {
+    top: 5%;
+    right: 2%;
+    width: clamp(4rem, 17vw, 6.5rem);
+  }
+}
+
 /* Hero Section */
 .registry-home-hero {
   display: flex;
