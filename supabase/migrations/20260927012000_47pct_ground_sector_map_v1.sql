@@ -143,7 +143,7 @@ set latitude=excluded.latitude,
     updated_at=now();
 
 update public.c3_47pct_property_asset a
-set geocode_state='coordinate_resolved',updated_at=now()
+set geocode_state='coordinates_resolved',updated_at=now()
 where exists (
   select 1 from public.c3_47pct_property_geocode g
   where g.property_key=a.property_key
