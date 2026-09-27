@@ -85,12 +85,14 @@ export function RegistryHomeHero({
           style={{
             position: "absolute",
             zIndex: 3,
-            top: "5%",
-            right: "2.5%",
-            width: "clamp(8rem, 20vw, 15rem)",
-            maxHeight: "32%",
+            top: "8%",
+            right: "3.5%",
+            width: "clamp(7.5rem, 17vw, 12.5rem)",
+            maxHeight: "27%",
             objectFit: "contain",
-            filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.48))",
+            borderRadius: "50%",
+            clipPath: "circle(48% at 50% 50%)",
+            filter: "drop-shadow(0 8px 18px rgba(0,0,0,0.58))",
           }}
         />
       ) : null}
