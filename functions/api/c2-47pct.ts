@@ -128,6 +128,11 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
       ground:{
         resolution:groundResolved.resolution,
         map_points:Array.isArray(property.map_points)?property.map_points:[],
+        sectors:Array.isArray(property.sectors)?property.sectors:[],
+        map_population_rule:property.map_population_rule||null,
+        sector_rule:property.sector_rule||null,
+        coordinate_rule:property.coordinate_rule||null,
+        survivor_occurrence_inference_allowed:false,
         universe_sources:Array.isArray(groundResolved.universe_sources)?groundResolved.universe_sources:[]
       },
       money:{
