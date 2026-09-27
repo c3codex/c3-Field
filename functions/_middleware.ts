@@ -101,6 +101,73 @@ async function resolveMdmSeo(request: Request): Promise<InitiativeSeoProjection>
   return { title, description, canonicalUrl, ogType, ogImageUrl: ogImageUrl.toString() }
 }
 
+async function resolve47PctSeo(request: Request): Promise<InitiativeSeoProjection> {
+  const surfaceUrl = new URL("/api/c3-initiative-surface", request.url)
+  const response = await fetch(surfaceUrl.toString(), {
+    headers: { accept: "application/json" },
+    redirect: "manual",
+    signal: AbortSignal.timeout(12000),
+  })
+  if (!response.ok) throw new Error("47pct_social_metadata_authority_unavailable")
+
+  const body = record(await response.json())
+  const presentation = record(body.publicPresentation)
+
+  if (body.standing !== "resolved" || body.initiativeKey !== "47pct")
+    throw new Error("47pct_social_metadata_authority_mismatch")
+
+  const title = stringValue(presentation.og_title)
+  const description = stringValue(presentation.og_description)
+  const canonicalUrl = stringValue(body.canonicalUrl)
+  const ogImageAssetKey = stringValue(presentation.og_image_asset_key)
+
+  if (!title || !description || !canonicalUrl || !ogImageAssetKey || !/^[a-z0-9_]+$/i.test(ogImageAssetKey))
+    throw new Error("47pct_social_metadata_authority_incomplete")
+
+  const canonical = new URL(canonicalUrl)
+  if (canonical.protocol !== "https:" || canonical.hostname !== "47pct.c3field.online")
+    throw new Error("47pct_social_metadata_canonical_mismatch")
+
+  const ogImageUrl = new URL("/api/free-media", canonical.origin)
+  ogImageUrl.searchParams.set("asset", ogImageAssetKey)
+
+  return { title, description, canonicalUrl, ogType: "website", ogImageUrl: ogImageUrl.toString() }
+}
+
+async function project47PctSocialHead(request: Request, response: Response) {
+  const url = new URL(request.url)
+  const pathname = url.pathname.replace(/\/$/, "") || "/"
+  const contentType = response.headers.get("content-type")?.toLowerCase() ?? ""
+  if (
+    url.hostname !== "47pct.c3field.online" ||
+    !["/", "/connect"].includes(pathname) ||
+    !contentType.includes("text/html") ||
+    !response.ok
+  ) return response
+
+  try {
+    const seo = await resolve47PctSeo(request)
+    const html = await response.text()
+    const headers = new Headers(response.headers)
+    headers.delete("content-length")
+    headers.set("x-c3-social-head", "47pct-webpac-projected")
+    return new Response(rewriteInitiativeSocialHead(html, seo), {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    })
+  } catch {
+    return new Response("4.7% presentation temporarily unavailable", {
+      status: 503,
+      headers: {
+        "content-type": "text/plain; charset=utf-8",
+        "cache-control": "no-store",
+        "x-c3-social-head": "47pct-held",
+      },
+    })
+  }
+}
+
 async function projectMdmSocialHead(request: Request, response: Response) {
   const url = new URL(request.url)
   const pathname = url.pathname.replace(/\/$/, "") || "/"
@@ -203,7 +270,8 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
     ["/systems-access", "/relational-operations", "/c3optics"].some(p => pathname === p || pathname.startsWith(p + "/"))
 
   if (!isProtectedPath(pathname) && !c3OpsRoom) {
-    return projectMdmSocialHead(request, await next())
+    const response = await next()
+    return project47PctSocialHead(request, await projectMdmSocialHead(request, response))
   }
   if (!env.OPERATOR_DISPATCH_KEY) {
     return new Response(JSON.stringify({ error: "operator access not configured" }), {
