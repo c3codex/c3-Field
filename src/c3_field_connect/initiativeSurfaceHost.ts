@@ -26,6 +26,13 @@ export type InitiativeSurfaceRuntime={
     watermark_opacity?:number
     public_surface_protected_primitive_labels_allowed?:boolean
   }
+  publicFooter?:{
+    copyright?:string
+    environment_line?:string
+    formal_authority_statement?:string
+    initiative_relation_line?:string
+    required_routes?:Record<string,string>
+  }
   createsStanding:false
 }
 

@@ -105,34 +105,37 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
 
   if (!environment && !loadFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading…</p></main>
   if (!environment?.available) return <HeldUnknownC3FieldRoute pathname="/" />
-  if (publicStage!=="intro" && !presentation && !presentationFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading public presentation…</p></main>
-  if (publicStage!=="intro" && (!presentation || presentationFailed)) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Public presentation authority is temporarily unavailable.</p></main>
+  const pct47StandaloneReady=initiativeSurface?.initiativeKey==="47pct"&&!!initiativeSurface.publicPresentation
+  if (publicStage!=="intro" && !pct47StandaloneReady && !presentation && !presentationFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading public presentation…</p></main>
+  if (publicStage!=="intro" && !pct47StandaloneReady && (!presentation || presentationFailed)) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Public presentation authority is temporarily unavailable.</p></main>
   const { copy, assets } = environment
   // Initiative projection remains held until independently registered; ordinary individual Connect stays available.
   const initiatives: typeof environment.initiatives = []
 
   const identity=presentation?.public_identity
   const pct47Presentation=initiativeSurface?.initiativeKey==="47pct"?initiativeSurface.publicPresentation:null
-  const pct47Header=pct47Presentation&&presentation?<header className="c3-connect-header c3-connect-width pct47-header">
+  const pct47FooterContract=initiativeSurface?.initiativeKey==="47pct"?initiativeSurface.publicFooter:null
+  const pct47Header=pct47Presentation?<header className="c3-connect-header c3-connect-width pct47-header">
     <button type="button" className="c3-connect-identity pct47-identity" aria-label="Return to 4.7% initiative" onClick={()=>setPublicStage("landing")}>
       {pct47Presentation.watermark_runtime_url&&<img src={pct47Presentation.watermark_runtime_url} alt="" width="72" height="72" />}
-      <span>{identity?.initiative_label}</span>
+      <span>{pct47Presentation.header_line||identity?.initiative_label||"A c3 Field Initiative"}</span>
     </button>
     <nav className="c3-connect-public-nav" aria-label="Public">
       {publicStage==="connect"&&<span>{pct47Presentation.memorial_name} · {pct47Presentation.memorial_text}</span>}
       {publicStage!=="connect"&&<button className="c3-connect-nav" type="button" onClick={()=>setPublicStage("connect")}>{pct47Presentation.primary_cta} <span aria-hidden="true">↗</span></button>}
     </nav>
   </header>:null
-  const pct47Footer=pct47Presentation&&presentation&&identity?<footer className="c3-connect-footer c3-connect-width pct47-footer">
+  const pct47Routes=pct47FooterContract?.required_routes||{}
+  const pct47Footer=pct47Presentation?<footer className="c3-connect-footer c3-connect-width pct47-footer">
     <div>
-      <strong>{identity.initiative_label}</strong>
-      <span>{identity.environment_definition}</span>
-      <span>{identity.formal_authority_statement}</span>
-      <span><a href={`mailto:${identity.contact_email}`}>{identity.contact_email}</a> · <a href={identity.contact_phone_href}>{identity.contact_phone}</a></span>
-      <span>{identity.copyright}</span>
+      <strong>{pct47FooterContract?.initiative_relation_line||pct47Presentation.header_line||"A c3 Field Initiative"}</strong>
+      {pct47FooterContract?.environment_line&&<span>{pct47FooterContract.environment_line}</span>}
+      <span>{pct47FooterContract?.formal_authority_statement||pct47Presentation.formal_authority_statement}</span>
+      {identity&&<span><a href={`mailto:${identity.contact_email}`}>{identity.contact_email}</a> · <a href={identity.contact_phone_href}>{identity.contact_phone}</a></span>}
+      {pct47FooterContract?.copyright&&<span>{pct47FooterContract.copyright}</span>}
     </div>
     <nav aria-label="Footer">
-      {presentation.navigation.filter(item=>["/privacy","/terms","/contact"].some(route=>item.route.endsWith(route))).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}
+      {Object.entries(pct47Routes).map(([label,route])=><a key={route} href={route}>{label}</a>)}
     </nav>
   </footer>:null
 
@@ -183,8 +186,8 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
           <p className="c3-connect-form-lead">{publicPresentation.initiative_explanation}</p>
           <section className="pct47-model" aria-labelledby="pct47-model-title">
             <p className="c3-connect-kicker">THE c3 MODEL</p>
-            <h2 id="pct47-model-title">{identity?.model_descriptor}</h2>
-            <p className="pct47-model-path">{identity?.model_path}</p>
+            <h2 id="pct47-model-title">{publicPresentation.model_descriptor||identity?.model_descriptor}</h2>
+            <p className="pct47-model-path">{publicPresentation.model_path||identity?.model_path}</p>
             <p className="c3-connect-form-meaning">{publicPresentation.model_body}</p>
           </section>
           {publicPresentation.audience_copy&&<p className="c3-connect-form-meaning">{publicPresentation.audience_copy}</p>}
