@@ -333,7 +333,6 @@ export default function MeasuresRegistryOrchestrator() {
     return (
       <header className="registry-public-header" aria-label={title}>
         <div className="registry-public-brand">
-          {registryMarkUrl ? <img src={registryMarkUrl} alt="" loading="eager" /> : null}
           {title ? <span>{title}</span> : null}
         </div>
         <nav className="registry-public-nav" aria-label="Measures Registry navigation">
