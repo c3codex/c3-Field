@@ -221,76 +221,6 @@ export default function MeasuresRegistryOrchestrator() {
     return style as CSSProperties
   }, [resolverData.designTokenRows])
 
-  const registryMarkUrl = useMemo(() => {
-    const row = resolverData.mediaRows.find(
-      (r) => r.media_role === "registry_mark" && r.is_active !== false,
-    )
-    if (!row) return null
-    const meta = row.metadata as Record<string, unknown> | null
-    return resolveRuntimeMediaUrl({
-      publicUrl:
-        typeof meta?.public_url === "string"
-          ? meta.public_url
-          : typeof meta?.exact_url_seated === "string"
-            ? meta.exact_url_seated
-            : null,
-      bucketName: row.storage_bucket,
-      storagePath: row.storage_path,
-    })
-  }, [resolverData.mediaRows])
-
-  const registryLogoUrl = useMemo(() => {
-    const row = resolverData.mediaRows.find(
-      (r) => r.media_role === "measures_registry_logo" && r.is_active !== false,
-    )
-    if (!row) return null
-    const meta = row.metadata as Record<string, unknown> | null
-    return resolveRuntimeMediaUrl({
-      publicUrl:
-        typeof meta?.public_url === "string"
-          ? meta.public_url
-          : typeof meta?.exact_url_seated === "string"
-            ? meta.exact_url_seated
-            : null,
-      bucketName: row.storage_bucket,
-      storagePath: row.storage_path,
-    })
-  }, [resolverData.mediaRows])
-
-  const freeHeader = useMemo(() => {
-    const root = resolverData.registryRows.find((r) => r.registry_key === "measures_registry_root")
-    const metadata = root?.metadata as Record<string, unknown> | null
-    const homeHero =
-      metadata?.home_hero && typeof metadata.home_hero === "object" && !Array.isArray(metadata.home_hero)
-        ? metadata.home_hero as Record<string, unknown>
-        : null
-    const value =
-      homeHero?.free_header && typeof homeHero.free_header === "object" && !Array.isArray(homeHero.free_header)
-        ? homeHero.free_header as Record<string, unknown>
-        : null
-
-    const sourcePacKey =
-      typeof homeHero?.source_pac_key === "string" ? homeHero.source_pac_key.trim() : ""
-    const headerPacKey =
-      typeof value?.source_pac_key === "string" ? value.source_pac_key.trim() : ""
-
-    if (
-      !sourcePacKey ||
-      headerPacKey !== sourcePacKey ||
-      value?.free_source_authority !== "webpac" ||
-      value?.free_render_mode !== "live_html_css_overlay" ||
-      value?.free_background_baked_allowed !== false
-    ) {
-      return null
-    }
-
-    const label = typeof value.free_label === "string" ? value.free_label.trim() : ""
-    const expanded = typeof value.free_expanded_name === "string" ? value.free_expanded_name.trim() : ""
-    if (!label || !expanded) return null
-
-    return { label, expanded, sourcePacKey }
-  }, [resolverData.registryRows])
-
   const toneUrlByMaterial = useMemo(() => {
     const map = {} as Record<MaterialIdentity, string | null>
     for (const material of ["crystal", "lapis", "obsidian", "marble"] as MaterialIdentity[]) {
@@ -391,54 +321,7 @@ export default function MeasuresRegistryOrchestrator() {
   function renderHeader({ title }: { title: string }) {
     return (
       <header className="registry-public-header" aria-label={title}>
-        <div className="registry-public-brand">
-          {registryMarkUrl ? (
-            <img
-              src={registryMarkUrl}
-              alt=""
-              loading="eager"
-              width={36}
-              height={36}
-            />
-          ) : null}
-          {registryLogoUrl ? (
-            <img
-              src={registryLogoUrl}
-              alt={title}
-              loading="eager"
-              style={{
-                width: "auto",
-                minWidth: 0,
-                maxWidth: "9rem",
-                height: "1.75rem",
-                objectFit: "contain",
-              }}
-            />
-          ) : title ? <span>{title}</span> : null}
-          {activeSurface === "measures_registry_home" && freeHeader ? (
-            <div
-              data-free-source="webpac"
-              data-source-pac={freeHeader.sourcePacKey}
-              aria-label={freeHeader.expanded}
-              title={freeHeader.expanded}
-              style={{
-                marginLeft: "0.75rem",
-                paddingLeft: "0.75rem",
-                borderLeft: "1px solid currentColor",
-                display: "inline-flex",
-                alignItems: "center",
-                minHeight: "1.5rem",
-                fontSize: "0.68rem",
-                fontWeight: 700,
-                letterSpacing: "0.14em",
-                lineHeight: 1,
-              }}
-            >
-              {freeHeader.label}
-            </div>
-          ) : null}
-        </div>
-        <nav className="registry-public-nav" aria-label="Measures Registry navigation">
+        <div className="registry-public-brand">{title ? <span>{title}</span> : null}</div>\n        <nav className="registry-public-nav" aria-label="Measures Registry navigation">
           <a href="/home" onClick={(e) => { e.preventDefault(); navigate("measures_registry_home") }}>Home</a>
           <a href="/connect" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Connect</a>
           <a
