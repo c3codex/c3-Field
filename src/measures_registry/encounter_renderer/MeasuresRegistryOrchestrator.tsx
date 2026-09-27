@@ -512,7 +512,7 @@ export default function MeasuresRegistryOrchestrator() {
     )
   }
 
-  function handleEnableTone() {
+  if (mrPacResolution !== "resolved") {\n    return (\n      <main className="measures-registry-runtime" data-release-standing={mrPacResolution === "pending" ? "pending" : "dnr"} aria-live="polite">\n        <section className="encounter-unavailable">\n          <p>{mrPacResolution === "pending" ? "Resolving registered Measures Registry state…" : "This registered encounter is not currently resolvable."}</p>\n        </section>\n      </main>\n    )\n  }\n\n  function handleEnableTone() {
     const el = ambientAudioRef.current
     if (!el || !activeToneUrl) return
     el.volume = 0
