@@ -1081,10 +1081,8 @@ function MeasuresRegistryHome({
   const missionText = asString(approved.mission) ?? "Make computational participation governable."
 
   // Hero & Brand media consumed through registered encounter media roles
-  const presentationSealRow = encounter.mediaByRole.get("mr_public_presentation_seal_artwork_webp_v1")
-  const socialBannerRow = encounter.mediaByRole.get("mr_public_social_banner_webp_v1")
-  const presentationSealUrl = mediaUrl(presentationSealRow)
-  const socialBannerUrl = mediaUrl(socialBannerRow)
+  const heroBackgroundUrl = mediaUrl(encounter.mediaByRole.get("hero_background"))
+  const registryLogoUrl = mediaUrl(encounter.mediaByRole.get("measures_registry_logo"))
 
   // Hero media
   const videoRow = encounter.mediaByRole.get("about_measures_registry_video")
@@ -1120,15 +1118,25 @@ function MeasuresRegistryHome({
       {renderHeader({ title: "Measures Registry" })}
 
       <div className="registry-home-shell">
-        {/* 1. HERO SECTION - Approved registered Measures Registry banner as Hero */}
-        {socialBannerUrl ? (
-          <section id="hero" className="registry-home-hero-banner" aria-label="Hero Banner" style={{ width: "100%", overflow: "hidden", borderBottom: "1px solid rgba(114, 144, 188, 0.15)", paddingBottom: "2rem" }}>
+        {/* 1. HERO SECTION — PAC-resolved institutional backdrop + logo. */}
+        {heroBackgroundUrl ? (
+          <section id="hero" className="registry-home-hero-backdrop" aria-label="Measures Registry">
             <img
-              src={socialBannerUrl}
-              alt="Measures Registry — Computational Systems Governance — Governed Systems. Relational Operations."
-              style={{ width: "100%", height: "auto", display: "block" }}
+              className="registry-home-hero-backdrop-image"
+              src={heroBackgroundUrl}
+              alt=""
+              aria-hidden="true"
               loading="eager"
+              fetchPriority="high"
             />
+            {registryLogoUrl ? (
+              <img
+                className="registry-home-hero-logo"
+                src={registryLogoUrl}
+                alt="Measures Registry"
+                loading="eager"
+              />
+            ) : null}
           </section>
         ) : null}
 
