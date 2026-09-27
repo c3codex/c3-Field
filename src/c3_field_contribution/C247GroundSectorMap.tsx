@@ -111,15 +111,15 @@ export default function C247GroundSectorMap({points,selectedKey,onSelect}:Props)
     </div>
 
     <div className="pct47-ground-coordinate-field" role="img" aria-label={`Coordinate map of ${sectorLabel}. Pins represent Registry-qualified Scouting properties only.`}>
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <rect x="0" y="0" width="100" height="100" className="pct47-ground-frame"/>
+      <svg viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
+        <rect x="0" y="0" width="1000" height="500" className="pct47-ground-frame"/>
         {LON_GRID.map(lon=>{
           const x=((lon-LON_MIN)/(LON_MAX-LON_MIN))*100
-          return <g key={lon}><line x1={x} x2={x} y1="0" y2="100" className="pct47-ground-gridline"/><text x={x+0.5} y="97.5" className="pct47-ground-gridlabel">{Math.abs(lon)}°W</text></g>
+          return <g key={lon}><line x1={x*10} x2={x*10} y1="0" y2="500" className="pct47-ground-gridline"/><text x={x*10+7} y="486" className="pct47-ground-gridlabel">{Math.abs(lon)}°W</text></g>
         })}
         {LAT_GRID.map(lat=>{
           const y=((LAT_MAX-lat)/(LAT_MAX-LAT_MIN))*100
-          return <g key={lat}><line x1="0" x2="100" y1={y} y2={y} className="pct47-ground-gridline"/><text x="1.2" y={Math.max(3,y-1)} className="pct47-ground-gridlabel">{lat}°N</text></g>
+          return <g key={lat}><line x1="0" x2="1000" y1={y*5} y2={y*5} className="pct47-ground-gridline"/><text x="12" y={Math.max(18,y*5-7)} className="pct47-ground-gridlabel">{lat}°N</text></g>
         })}
       </svg>
       {points.map(point=>{
