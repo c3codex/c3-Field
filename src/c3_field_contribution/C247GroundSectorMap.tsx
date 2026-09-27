@@ -41,8 +41,18 @@ export type PropertyPoint={
   sources?:GroundSource[]
 }
 
+export type GroundSector={
+  sector_key:string
+  sector_label:string
+  state:string
+  property_count:number
+  verified_coordinate_count?:number
+  qualified_coordinate_count?:number
+}
+
 type Props={
   points:PropertyPoint[]
+  sectors:GroundSector[]
   selectedKey:string|null
   onSelect:(propertyKey:string)=>void
 }
@@ -67,30 +77,22 @@ function readable(value?:string){
   return value?value.replace(/_/g," "):"not recorded"
 }
 
-export default function C247GroundSectorMap({points,selectedKey,onSelect}:Props){
-  const sectors=useMemo(()=>{
-    const index=new Map<string,{key:string;label:string;state:string;count:number}>()
-    for(const point of points){
-      const state=point.state||"—"
-      const key=point.sector_key||`US-${state}`
-      const label=point.sector_label||state
-      const row=index.get(key)
-      if(row)row.count+=1
-      else index.set(key,{key,label,state,count:1})
-    }
-    return [...index.values()].sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label))
-  },[points])
+export default function C247GroundSectorMap({points,sectors,selectedKey,onSelect}:Props){
+  const sectorRows=useMemo(
+    ()=>[...sectors].sort((a,b)=>b.property_count-a.property_count||a.sector_label.localeCompare(b.sector_label)),
+    [sectors]
+  )
   const selectedPoint=useMemo(()=>points.find(point=>point.property_key===selectedKey)||null,[points,selectedKey])
   const [sector,setSector]=useState<string>("ALL")
 
   useEffect(()=>{
     if(selectedPoint?.sector_key)setSector(selectedPoint.sector_key)
-    else if(sectors.some(item=>item.key==="US-TN"))setSector("US-TN")
-    else if(sectors[0])setSector(sectors[0].key)
-  },[selectedPoint?.sector_key,sectors])
+    else if(sectorRows.some(item=>item.sector_key==="US-TN"))setSector("US-TN")
+    else if(sectorRows[0])setSector(sectorRows[0].sector_key)
+  },[selectedPoint?.sector_key,sectorRows])
 
   const visible=sector==="ALL"?points:points.filter(point=>(point.sector_key||`US-${point.state||"—"}`)===sector)
-  const sectorLabel=sector==="ALL"?"All registered ground":sectors.find(item=>item.key===sector)?.label||"Registered ground"
+  const sectorLabel=sector==="ALL"?"All registered ground":sectorRows.find(item=>item.sector_key===sector)?.sector_label||"Registered ground"
   function chooseSector(key:string){
     setSector(key)
     if(key==="ALL")return
@@ -111,12 +113,12 @@ export default function C247GroundSectorMap({points,selectedKey,onSelect}:Props)
       <button type="button" className={sector==="ALL"?"selected":""} onClick={()=>chooseSector("ALL")}>
         ALL <small>{points.length}</small>
       </button>
-      {sectors.map(item=><button type="button" key={item.key} className={sector===item.key?"selected":""} onClick={()=>chooseSector(item.key)}>
-        {item.label.toUpperCase()} <small>{item.count}</small>
+      {sectorRows.map(item=><button type="button" key={item.sector_key} className={sector===item.sector_key?"selected":""} onClick={()=>chooseSector(item.sector_key)}>
+        {item.sector_label.toUpperCase()} <small>{item.property_count}</small>
       </button>)}
     </div>
 
-    <div className="pct47-ground-coordinate-field" role="img" aria-label={`Coordinate map of ${sectorLabel}. Pins represent Registry-qualified Scouting properties only.`}>
+    <div className="pct47-ground-coordinate-field" aria-label={`Coordinate map of ${sectorLabel}. Pins represent Registry-qualified Scouting properties only.`}>
       <svg viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
         <rect x="0" y="0" width="1000" height="500" className="pct47-ground-frame"/>
         {LON_GRID.map(lon=>{
