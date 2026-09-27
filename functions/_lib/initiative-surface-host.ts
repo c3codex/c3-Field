@@ -47,6 +47,7 @@ export type InitiativeSurfaceResolution={
   bindingProcessKey:string
   bindingMetadata:Record<string,unknown>
   publicPresentation?:Record<string,unknown>
+  publicFooter?:Record<string,unknown>
 }
 
 export class InitiativeSurfaceResolutionError extends Error{
@@ -126,6 +127,7 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
   })
   const {row:binding,metadata}=selectInitiativeSurfaceBinding(bindingRows as ProcessRow[])
   let publicPresentation:Record<string,unknown>|undefined
+  let publicFooter:Record<string,unknown>|undefined
 
   const surfaceKey=str(metadata.surface_key)
   const initiativeKey=str(metadata.initiative_key)
@@ -212,6 +214,14 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
        presentation.public_surface_protected_primitive_labels_allowed!==false)
       throw new InitiativeSurfaceResolutionError(409,"webpac_public_presentation_incomplete")
     publicPresentation=presentation
+    const footer=record(webpacMetadata.footer_contract)
+    if(
+      !str(footer.copyright)||
+      !str(footer.environment_line)||
+      !str(footer.formal_authority_statement)||
+      !str(footer.initiative_relation_line)
+    ) throw new InitiativeSurfaceResolutionError(409,"webpac_footer_contract_incomplete")
+    publicFooter=footer
   }else{
     const webpac=requireOne(await readRows(env,"system_process_registry","process_key,status,process_status,metadata",{
       process_key:"eq."+webpacProcessKey
@@ -251,6 +261,7 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
     releaseState:"released",
     bindingProcessKey:String(binding.process_key),
     bindingMetadata:metadata,
-    ...(publicPresentation?{publicPresentation}:{})
+    ...(publicPresentation?{publicPresentation}:{}),
+    ...(publicFooter?{publicFooter}:{})
   }
 }
