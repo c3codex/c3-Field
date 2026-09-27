@@ -279,12 +279,13 @@ function CrystalIntroSeat({
   const videoRow = encounter.mediaByRole.get("intro_hook_video")
   const posterRow = encounter.mediaByRole.get("hero_poster")
   const videoMeta = asRecord(videoRow?.metadata)
+  const captionTrackUrl = asString(videoMeta?.caption_track_public_url)
   const posterMeta = asRecord(posterRow?.metadata)
 
   const contractReady =
     Boolean(sourcePacKey) &&
     introPolicy?.autoplay === true &&
-    introPolicy?.muted === true &&
+    introPolicy?.muted === false &&
     introPolicy?.plays_inline === true &&
     introPolicy?.skip_control_allowed === false &&
     asString(videoMeta?.source_pac_key) === sourcePacKey
@@ -306,12 +307,19 @@ function CrystalIntroSeat({
     const video = videoRef.current
     if (!video || !videoUrl || !contractReady) return
 
-    video.muted = true
+    video.muted = false
+    video.volume = 1
     const attempt = video.play()
     if (attempt) {
-      void attempt.catch(() => {
-        setAutoplayBlocked(true)
-      })
+      void attempt
+        .then(() => {
+          setAudioEnabled(true)
+          setAutoplayBlocked(false)
+        })
+        .catch(() => {
+          setAudioEnabled(false)
+          setAutoplayBlocked(true)
+        })
     }
   }, [videoUrl, contractReady])
 
@@ -349,16 +357,6 @@ function CrystalIntroSeat({
         style={registryTokenStyle}
       >
         <section className="registry-crystal-intro" aria-label="Measures Registry introduction">
-          {posterUrl ? (
-            <img
-              className="registry-crystal-intro-video"
-              src={posterUrl}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              fetchPriority="high"
-            />
-          ) : null}
           <div className="registry-crystal-intro-status" role="status">
             <p>Measures Registry introduction is unavailable.</p>
           </div>
@@ -386,15 +384,18 @@ function CrystalIntroSeat({
             ref={videoRef}
             className="registry-crystal-intro-video"
             src={videoUrl}
-            poster={posterUrl ?? undefined}
             autoPlay
-            muted={!audioEnabled}
+            muted={false}
             playsInline
             preload="auto"
             onEnded={finishIntro}
             onError={() => setIntroFailed(true)}
             aria-label={headline}
-          />
+          >
+            {captionTrackUrl ? (
+              <track kind="subtitles" src={captionTrackUrl} srcLang="en" label="English" default />
+            ) : null}
+          </video>
         ) : posterUrl ? (
           <img
             className="registry-crystal-intro-video"
