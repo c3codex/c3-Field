@@ -269,6 +269,7 @@ function CrystalIntroSeat({
   const videoRef = useRef<HTMLVideoElement>(null)
   const [introAudioEnabled, setIntroAudioEnabled] = useState(false)
   const [videoActivated, setVideoActivated] = useState(false)
+  const [videoFailed, setVideoFailed] = useState(false)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
   const introCopy = asRecord(meta?.intro_copy)
@@ -349,7 +350,7 @@ function CrystalIntroSeat({
             playsInline
             preload="auto"
             onEnded={handleAdvance}
-            onError={handleAdvance}
+            onError={() => { setVideoFailed(true); setVideoActivated(false) }}
             aria-label={headline}
           />
         ) : posterUrl ? (
@@ -371,7 +372,15 @@ function CrystalIntroSeat({
             className="registry-crystal-intro-audio"
             onClick={handleIntroAudio}
           >
-            {introAudioEnabled ? "Audio On" : "Enable Audio"}
+            {introAudioEnabled ? "Mute" : "Enter with sound"}
+          </button>
+        ) : videoFailed && videoUrl ? (
+          <button
+            type="button"
+            className="registry-crystal-intro-audio"
+            onClick={(e) => { e.stopPropagation(); setVideoFailed(false); setVideoActivated(true) }}
+          >
+            Retry introduction
           </button>
         ) : null}
         <div className="c3-visually-hidden">
