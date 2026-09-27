@@ -242,24 +242,32 @@ begin
     and r.registry_standing in ('registered_map','registered_map_qualified');
 
   select coalesce(jsonb_agg(jsonb_build_object(
-    'sector_key','US-'||a.state,
-    'sector_label',case a.state when 'TN' then 'Tennessee' when 'AR' then 'Arkansas' when 'IA' then 'Iowa' else a.state end,
-    'state',a.state,
-    'property_count',count(*),
-    'verified_coordinate_count',count(*) filter (where g.standing='registered_verified'),
-    'qualified_coordinate_count',count(*) filter (where g.standing='registered_qualified')
-  ) order by count(*) desc,a.state),'[]'::jsonb)
+    'sector_key','US-'||sector.state,
+    'sector_label',sector.sector_label,
+    'state',sector.state,
+    'property_count',sector.property_count,
+    'verified_coordinate_count',sector.verified_coordinate_count,
+    'qualified_coordinate_count',sector.qualified_coordinate_count
+  ) order by sector.property_count desc,sector.state),'[]'::jsonb)
   into v_sectors
-  from public.c3_47pct_property_asset a
-  join public.c3_47pct_property_resolution r using(property_key)
-  join public.c3_47pct_property_geocode g
-    on g.property_key=a.property_key
-   and g.standing in ('registered_verified','registered_qualified')
-   and g.public_projection_allowed=true
-  where a.evidence_pac_key='evidence_pac_47pct_v1'
-    and r.map_eligible=true
-    and r.registry_standing in ('registered_map','registered_map_qualified')
-  group by a.state;
+  from (
+    select
+      a.state,
+      case a.state when 'TN' then 'Tennessee' when 'AR' then 'Arkansas' when 'IA' then 'Iowa' else a.state end as sector_label,
+      count(*) as property_count,
+      count(*) filter (where g.standing='registered_verified') as verified_coordinate_count,
+      count(*) filter (where g.standing='registered_qualified') as qualified_coordinate_count
+    from public.c3_47pct_property_asset a
+    join public.c3_47pct_property_resolution r using(property_key)
+    join public.c3_47pct_property_geocode g
+      on g.property_key=a.property_key
+     and g.standing in ('registered_verified','registered_qualified')
+     and g.public_projection_allowed=true
+    where a.evidence_pac_key='evidence_pac_47pct_v1'
+      and r.map_eligible=true
+      and r.registry_standing in ('registered_map','registered_map_qualified')
+    group by a.state
+  ) sector;
 
   return jsonb_build_object(
     'resolution','registry_resolved',
