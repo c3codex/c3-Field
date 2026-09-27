@@ -85,10 +85,10 @@ export function RegistryHomeHero({
           style={{
             position: "absolute",
             zIndex: 3,
-            top: "8%",
-            right: "4%",
-            width: "clamp(5rem, 14vw, 10rem)",
-            maxHeight: "22%",
+            top: "5%",
+            right: "2.5%",
+            width: "clamp(8rem, 20vw, 15rem)",
+            maxHeight: "32%",
             objectFit: "contain",
             filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.48))",
           }}
