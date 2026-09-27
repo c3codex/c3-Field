@@ -2,16 +2,10 @@ import {useEffect,useMemo,useState} from "react"
 import EternalFlame from "../c3_field_connect/EternalFlame"
 import "./c247PctEncounter.css"
 import CurrentConstellation,{type CurrentToken} from "../c3_field_connect/CurrentConstellation"
+import C247GroundSectorMap,{type PropertyPoint} from "./C247GroundSectorMap"
 
 type Row=Record<string,unknown>
 type ComponentRow={component_key:string;renderer_key:string;sort_order:number;standing:string;config:Row}
-type PropertyPoint={
-  property_key:string;name:string;council_name:string;location_label:string;address:string
-  summary?:string;qualification?:string;registry_standing?:string;transaction_class?:string
-  transaction_state?:string;current_use_state?:string;current_as_of?:string;acreage?:number|null
-  settlement_cash?:number|null;settlement_property?:number|null
-  sources?:Array<{assertion_key?:string;type?:string;status?:string;statement?:string;source_name?:string;source_url?:string;source_date?:string}>
-}
 type MoneyAssertion={
   assertion_key:string;property_key:string;assertion_type:string;statement:string;source_name:string
   source_url:string;source_date?:string;observed_date?:string;attribution?:string;assertion_status?:string
@@ -22,7 +16,7 @@ type Payload={
   environment?:{env_key:string;envpac_key:string;label:string;access_role:string}
   evidence?:{pac_key:string;standing:string;corpus_state:string;quantifier_gate:string}
   components?:ComponentRow[]
-  ground?:{resolution:string;map_points:PropertyPoint[];universe_sources:Row[]}
+  ground?:{resolution:string;map_points:PropertyPoint[];sectors?:Row[];universe_sources:Row[]}
   money?:{assertions:MoneyAssertion[];rule:string}
   current?:Row[]
   ledger?:{standing:string;writable:boolean}
@@ -66,13 +60,13 @@ export default function C247PctEncounter(){
     return()=>{cancelled=true}
   },[])
 
-  const tennessee=useMemo(
-    ()=>data?.ground?.map_points.filter(point=>point.council_name==="Middle Tennessee Council"||/\bTN\b|Tennessee/i.test(point.address+" "+point.location_label))||[],
-    [data]
-  )
+  const groundPoints=useMemo(()=>data?.ground?.map_points||[],[data])
   const active=useMemo(
-    ()=>tennessee.find(point=>point.property_key===selected)||tennessee[0]||null,
-    [tennessee,selected]
+    ()=>groundPoints.find(point=>point.property_key===selected)
+      ||groundPoints.find(point=>point.sector_key==="US-TN")
+      ||groundPoints[0]
+      ||null,
+    [groundPoints,selected]
   )
   const moneyAssertions=useMemo(()=>dedupeAssertions(data?.money?.assertions||[]),[data])
 
@@ -105,31 +99,38 @@ export default function C247PctEncounter(){
     </nav>
 
     {tab==="ground"&&<section className="pct47-c2-ground">
-      <aside className="pct47-c2-maprail">
-        <p className="pct47-c2-eyebrow">TENNESSEE GROUND</p>
-        <h2>Registered Scouting ground</h2>
-        <p>Property identity and disposition are shown from Evidence_PAC. A property pin never implies abuse occurred there.</p>
-        <div className="pct47-c2-ground-list">
-          {tennessee.map(point=><button key={point.property_key} className={active?.property_key===point.property_key?"selected":""} onClick={()=>setSelected(point.property_key)}>
-            <strong>{point.name}</strong>
-            <span>{point.location_label}</span>
-            <small>{point.registry_standing}</small>
-          </button>)}
-        </div>
-      </aside>
+      <C247GroundSectorMap
+        points={groundPoints}
+        selectedKey={active?.property_key||null}
+        onSelect={setSelected}
+      />
       <article className="pct47-c2-dossier">
-        {!active?<p>No Tennessee property currently resolves for this layer.</p>:<>
-          <p className="pct47-c2-eyebrow">GROUND RECORD</p>
+        {!active?<p>No Registry-qualified property currently resolves for this layer.</p>:<>
+          <p className="pct47-c2-eyebrow">PROPERTY EVIDENCE CARD</p>
           <h2>{active.name}</h2>
           <p className="pct47-c2-address">{active.address}</p>
+          <div className="pct47-c2-coordinate-line">
+            <span>{active.sector_label||active.state||"Ground"}</span>
+            {typeof active.latitude==="number"&&typeof active.longitude==="number"&&
+              <code>{active.latitude.toFixed(5)}, {active.longitude.toFixed(5)}</code>}
+          </div>
           <p>{active.summary}</p>
           <div className="pct47-c2-facts">
             {active.transaction_state&&<span><b>{active.transaction_state.replace(/_/g," ")}</b> transaction state</span>}
             {active.current_use_state&&<span><b>{active.current_use_state.replace(/_/g," ")}</b> current use</span>}
+            {active.coordinate_precision&&<span><b>{active.coordinate_precision.replace(/_/g," ")}</b> map precision</span>}
           </div>
           {active.qualification&&<div className="pct47-c2-hold"><strong>Qualification</strong><p>{active.qualification}</p></div>}
+          {active.geocode_source_name&&<div className="pct47-c2-map-source">
+            <strong>Map coordinate</strong>
+            <p>The coordinate locates this registered property record. It is not a parcel boundary and has no survivor-occurrence effect.</p>
+            {active.geocode_source_url
+              ?<a href={active.geocode_source_url} target="_blank" rel="noreferrer">{active.geocode_source_name} ↗</a>
+              :<span>{active.geocode_source_name}</span>}
+            {active.geocode_standing&&<small>{active.geocode_standing.replace(/_/g," ")}</small>}
+          </div>}
           <section className="pct47-c2-sources">
-            <h3>Sources</h3>
+            <h3>Property evidence</h3>
             {(active.sources||[]).map(source=><article key={source.assertion_key||source.statement}>
               <span>{source.status||"registered"}</span>
               <p>{source.statement}</p>
