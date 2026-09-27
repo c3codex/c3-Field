@@ -91,6 +91,12 @@ export default function C247GroundSectorMap({points,selectedKey,onSelect}:Props)
 
   const visible=sector==="ALL"?points:points.filter(point=>(point.sector_key||`US-${point.state||"—"}`)===sector)
   const sectorLabel=sector==="ALL"?"All registered ground":sectors.find(item=>item.key===sector)?.label||"Registered ground"
+  function chooseSector(key:string){
+    setSector(key)
+    if(key==="ALL")return
+    const first=points.find(point=>(point.sector_key||`US-${point.state||"—"}`)===key)
+    if(first)onSelect(first.property_key)
+  }
 
   return <section className="pct47-ground-map" aria-labelledby="pct47-ground-map-title">
     <header className="pct47-ground-map-heading">
@@ -102,10 +108,10 @@ export default function C247GroundSectorMap({points,selectedKey,onSelect}:Props)
     </header>
 
     <div className="pct47-ground-sector-nav" aria-label="Ground sectors">
-      <button type="button" className={sector==="ALL"?"selected":""} onClick={()=>setSector("ALL")}>
+      <button type="button" className={sector==="ALL"?"selected":""} onClick={()=>chooseSector("ALL")}>
         ALL <small>{points.length}</small>
       </button>
-      {sectors.map(item=><button type="button" key={item.key} className={sector===item.key?"selected":""} onClick={()=>setSector(item.key)}>
+      {sectors.map(item=><button type="button" key={item.key} className={sector===item.key?"selected":""} onClick={()=>chooseSector(item.key)}>
         {item.label.toUpperCase()} <small>{item.count}</small>
       </button>)}
     </div>
