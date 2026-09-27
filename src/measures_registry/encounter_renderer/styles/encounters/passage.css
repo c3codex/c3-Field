@@ -20,9 +20,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: clamp(1rem, 2vw, 1.35rem) clamp(1.5rem, 3.5vw, 3.25rem);
-  min-height: 4.25rem;
-  height: var(--registry-header-height, 4.25rem);
+  padding: clamp(1.15rem, 2.2vw, 1.55rem) clamp(1.75rem, 4vw, 3.75rem);
+  min-height: 4.75rem;
+  height: var(--registry-header-height, 4.75rem);
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -42,8 +42,9 @@
   display: flex;
   align-items: center;
   gap: clamp(1rem, 2.2vw, 2rem);
-  font-size: clamp(0.76rem, 0.9vw, 0.9rem);
-  letter-spacing: 0.035em;
+  font-size: clamp(0.82rem, 0.98vw, 0.96rem);
+  font-weight: 560;
+  letter-spacing: 0.045em;
 }
 
 .measures-registry-runtime .registry-public-brand img {
@@ -60,8 +61,8 @@
 }
 
 .measures-registry-runtime .registry-public-brand > span {
-  font-size: clamp(0.82rem, 1vw, 0.95rem);
-  font-weight: 650;
+  font-size: clamp(0.9rem, 1.08vw, 1.02rem);
+  font-weight: 700;
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--registry-brand-muted-text);
