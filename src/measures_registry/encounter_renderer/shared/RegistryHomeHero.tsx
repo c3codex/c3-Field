@@ -1,6 +1,7 @@
 type Props = {
   homeHero?: Record<string, unknown> | null
   backgroundUrl?: string | null
+  logoUrl?: string | null
   onAssessment?: () => void
 }
 
@@ -11,6 +12,7 @@ const record = (v: unknown): Record<string, unknown> | null =>
 export function RegistryHomeHero({
   homeHero,
   backgroundUrl,
+  logoUrl,
   onAssessment,
 }: Props) {
   const sourcePacKey = homeHero?.source_pac_key
@@ -64,9 +66,34 @@ export function RegistryHomeHero({
       data-source-pac={sourcePacKey as string}
       data-stage-mode={visual.architectural_stage_mode as string}
       data-cta-route={ctaRoute as string}
-      style={{ backgroundImage: `url(${backgroundUrl})` }}
+      style={{
+        position: "relative",
+        backgroundImage: `url(${backgroundUrl})`,
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center top",
+        backgroundColor: "#040913",
+        aspectRatio: "4 / 3",
+      }}
     >
       <div className="measures-home-hero-shade" aria-hidden="true" />
+      {logoUrl ? (
+        <img
+          src={logoUrl}
+          alt="Measures Registry"
+          loading="eager"
+          style={{
+            position: "absolute",
+            zIndex: 3,
+            top: "8%",
+            right: "4%",
+            width: "clamp(5rem, 14vw, 10rem)",
+            maxHeight: "22%",
+            objectFit: "contain",
+            filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.48))",
+          }}
+        />
+      ) : null}
       <div className="hero-content">
         <p className="hero-brand">{brandName as string}</p>
         <h1 id="registry-home-headline">{headline as string}</h1>

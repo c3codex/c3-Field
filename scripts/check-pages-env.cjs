@@ -129,6 +129,22 @@ async function loadRegisteredDeployment(envKey) {
   return { identity, processKey }
 }
 
+function enforceSurfaceBranchContract() {
+  if (!process.env.CF_PAGES) return
+  const branch = observedBranch()
+  const event = process.env.npm_lifecycle_event || ""
+
+  if (event === "build:registry" && branch === "c3field") {
+    hold("MEASURES REGISTRY / C3 FIELD BRANCH COLLISION", "build:registry may not execute from the c3field production branch.")
+  }
+  if (event === "build:registry" && branch !== "measures") {
+    console.log(`[deployment-preflight] PREVIEW branch accepted for Measures Registry: ${branch || "unresolved"} (production identity remains measures)`)
+  }
+  if (event === "build:c3field" && branch === "measures") {
+    hold("C3 FIELD / MEASURES REGISTRY BRANCH COLLISION", "build:c3field may not execute as the Measures Registry production branch.")
+  }
+}
+
 async function enforceDeploymentIdentity() {
   const inferredProject = inferPagesProject(process.env.CF_PAGES_URL)
   const explicitTarget = process.env.C3_DEPLOYMENT_ENV_KEY || ""
@@ -196,6 +212,8 @@ console.log(
     ? "env"
     : "public-fallback",
 )
+
+enforceSurfaceBranchContract()
 
 enforceDeploymentIdentity().catch((error) => {
   hold("Deployment preflight execution failed", error instanceof Error ? error.message : String(error))

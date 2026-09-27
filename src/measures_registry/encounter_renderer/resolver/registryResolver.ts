@@ -203,6 +203,19 @@ export function useRegistryResolver(): RegistryResolverData {
       const rawMediaRows = (mediaResult.data ?? []) as EncounterMediaRow[]
       const mediaRows = await Promise.all(
         rawMediaRows.map(async (row) => {
+          if (row.storage_bucket === "measures-registry" && row.is_active !== false) {
+            const { data } = supabase.storage.from(row.storage_bucket).getPublicUrl(row.storage_path)
+            if (data?.publicUrl) {
+              return {
+                ...row,
+                metadata: {
+                  ...(row.metadata as Record<string, unknown>),
+                  public_url: data.publicUrl,
+                  exact_url_seated: data.publicUrl,
+                },
+              }
+            }
+          }
           if (row.storage_bucket === "measures-seed" && row.is_active !== false) {
             try {
               const { data } = await supabase.storage.from(row.storage_bucket).createSignedUrl(row.storage_path, 86400)
