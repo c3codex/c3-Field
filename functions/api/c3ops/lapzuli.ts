@@ -352,7 +352,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     return {status:409,body:{standing:"HLD",reason:"resolved_payload_incomplete",external_publication_effects:0}}
   }
   const outboundText=textValue.includes(canonicalUrl) ? textValue : `${textValue}\n\n${canonicalUrl}`
-  if (str(asset.platform) === "x" && Array.from(outboundText).length > 280) {
+  if (str(asset?.platform) === "x" && Array.from(outboundText).length > 280) {
     return {status:409,body:{standing:"HLD",reason:"x_payload_exceeds_280_characters",text_length:Array.from(outboundText).length,external_publication_effects:0}}
   }
 
