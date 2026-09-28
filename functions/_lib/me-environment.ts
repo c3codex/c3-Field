@@ -68,13 +68,191 @@ export async function resolveMEEnvironments(read: ReadRows, envKey?: string) {
 export type ManifestResponse = Awaited<ReturnType<typeof resolveMEEnvironments>>
 
 export async function readLapzuli(read: ReadRows) {
-  const [routes,evidence] = await Promise.all([
-    read("lapzuli_route","route_key,publication_object_key,desk_key,outlet_key,route_status"),
+  const [
+    campaigns,
+    distributionAssets,
+    derivatives,
+    callableRows,
+    executions,
+    routes,
+    evidence,
+    channels,
+    executors,
+  ] = await Promise.all([
+    read("measures_publication_campaign","campaign_key,publication_key,issue_id,campaign_name,campaign_objective,status,release_state,review_status,metadata,created_at,updated_at"),
+    read("measures_publication_distribution_asset","distribution_asset_key,campaign_asset_id,publication_asset_id,campaign_id,platform,distribution_type,status,review_status,payload,metadata,created_at,updated_at"),
+    read("measures_publication_derivative_asset","derivative_key,publication_asset_id,derivative_type,title,format,source_reference,generation_status,approval_status,release_state,review_status,metadata,updated_at"),
+    read("lapzuli_derivative_execution_view_v1","publication_asset_id,derivative_key,distribution_asset_key,platform,distribution_type,distribution_status,distribution_review_status,registered_standing_key,registered_standing,registered_validation_status,lapzuli_callable,channel_key,account_name,channel_identifier,channel_url,channel_status,executor_key,executor_name,executor_status,supports_publish,payload,canonical_url,purpose,operator_confirmed,preflight_result"),
+    read("measures_distribution_execution","execution_id,distribution_asset_id,executor_key,channel_key,execution_status,execution_mode,attempt_number,executed_at,published_at,platform_post_id,platform_url,evidence,error,metadata,created_at"),
+    read("lapzuli_route","route_key,publication_object_key,desk_key,outlet_key,distribution_mode,route_status,authority_reference,operator_confirmed,canonical_url,payload_reference,metadata,created_at,updated_at"),
     read("lapzuli_encounter_evidence","encounter_id,route_key,observed_outcome,observed_reason,external_id,external_url,observed_at"),
+    read("measures_distribution_channel","channel_key,platform,account_name,channel_identifier,channel_url,status,metadata"),
+    read("measures_distribution_executor","executor_key,executor_name,executor_type,platform,execution_mode,status,supports_publish,supports_scheduling,metadata"),
   ])
-  return {source:"lapzuli_route -> lapzuli_encounter_evidence.route_key",routes,evidence,
-    unresolved:["Lane-to-environment bindings for unDrifted, Measures Registry, and Registrar / c3 Community Partners are not established by this route/evidence projection."],
-    current_status:"unresolved_without_explicit_current_relation", mutation_authority:false,external_effects:0}
+
+  const derivativeByKey = new Map(derivatives.map(row => [str(row.derivative_key) ?? "", row]))
+  const callableByAsset = new Map(callableRows.map(row => [str(row.distribution_asset_key) ?? "", row]))
+  const channelByKey = new Map(channels.map(row => [str(row.channel_key) ?? "", row]))
+  const executorByKey = new Map(executors.map(row => [str(row.executor_key) ?? "", row]))
+  const executionsByAsset = new Map<string, Row[]>()
+  for (const execution of executions) {
+    const key = str(execution.distribution_asset_id)
+    if (!key) continue
+    const rows = executionsByAsset.get(key) ?? []
+    rows.push(execution)
+    executionsByAsset.set(key, rows)
+  }
+
+  const routeByAsset = new Map<string, Row>()
+  for (const route of routes) {
+    const metadata = record(route.metadata)
+    const direct = str(metadata.distribution_asset_key)
+    const ref = str(route.payload_reference)
+    const referenced = ref?.startsWith("measures_publication_distribution_asset:")
+      ? ref.slice("measures_publication_distribution_asset:".length).split(":")[0]
+      : ref
+    const key = direct ?? referenced
+    if (key && !routeByAsset.has(key)) routeByAsset.set(key, route)
+  }
+
+  const normalizedAssets = distributionAssets.map(asset => {
+    const assetKey = str(asset.distribution_asset_key) ?? "unresolved_asset"
+    const metadata = record(asset.metadata)
+    const payload = record(asset.payload)
+    const derivativeKey =
+      str(metadata.derivative_key) ??
+      str(metadata.caption_derivative_key) ??
+      str(payload.caption_derivative_key)
+    const derivative = derivativeKey ? derivativeByKey.get(derivativeKey) ?? null : null
+    const callable = callableByAsset.get(assetKey) ?? null
+    const route = routeByAsset.get(assetKey) ?? null
+    const channelKey = str(metadata.channel_key) ?? str(callable?.channel_key)
+    const executorKey =
+      str(metadata.executor_key) ??
+      str(metadata.transport_executor) ??
+      str(callable?.executor_key)
+    const channel = channelKey ? channelByKey.get(channelKey) ?? null : null
+    const executor = executorKey ? executorByKey.get(executorKey) ?? null : null
+    const assetExecutions = [...(executionsByAsset.get(assetKey) ?? [])].sort((a,b) => {
+      const aa = Date.parse(str(a.executed_at) ?? str(a.created_at) ?? "") || 0
+      const bb = Date.parse(str(b.executed_at) ?? str(b.created_at) ?? "") || 0
+      return bb-aa
+    })
+    const latestExecution = assetExecutions[0] ?? null
+    const distributed = Boolean(
+      latestExecution &&
+      (latestExecution.execution_status === "published" || latestExecution.platform_url)
+    )
+    const accepted = Boolean(
+      !distributed &&
+      latestExecution &&
+      (
+        latestExecution.execution_status === "queued" ||
+        latestExecution.platform_post_id ||
+        record(latestExecution.evidence).external_publication_effects === 1
+      )
+    )
+    const isCallable = callable?.lapzuli_callable === true
+    const blockers: string[] = []
+    if (!distributed && !accepted) {
+      if (!derivative) blockers.push("derivative_unresolved")
+      if (derivative && derivative.approval_status !== "operator_approved") blockers.push("derivative_not_operator_approved")
+      if (derivative && derivative.release_state !== "released") blockers.push("derivative_not_released")
+      if (asset.status !== "ready_for_operator_execution") blockers.push("distribution_asset_not_ready")
+      if (asset.review_status !== "operator_approved") blockers.push("distribution_asset_not_operator_approved")
+      if (!str(metadata.registered_standing_key)) blockers.push("registered_standing_unresolved")
+      if (!route || route.route_status !== "authorized" || route.operator_confirmed !== true) blockers.push("authorized_route_unresolved")
+      if (!channel || channel.status !== "active") blockers.push("active_channel_unresolved")
+      if (!executor || executor.status !== "available" || executor.supports_publish !== true) blockers.push("callable_executor_unresolved")
+      if (!isCallable && blockers.length === 0) blockers.push("lapzuli_callable_contract_unresolved")
+    }
+    return {
+      distribution_asset_key: assetKey,
+      campaign_id: asset.campaign_id,
+      campaign_asset_id: asset.campaign_asset_id,
+      publication_asset_id: asset.publication_asset_id,
+      platform: asset.platform,
+      distribution_type: asset.distribution_type,
+      distribution_status: asset.status,
+      review_status: asset.review_status,
+      derivative_key: derivativeKey,
+      derivative: derivative ? fields(derivative,["derivative_key","derivative_type","title","format","source_reference","generation_status","approval_status","release_state","review_status"]) : null,
+      channel_key: channelKey,
+      channel: channel ? fields(channel,["channel_key","platform","account_name","channel_identifier","channel_url","status"]) : null,
+      executor_key: executorKey,
+      executor: executor ? fields(executor,["executor_key","executor_name","executor_type","execution_mode","status","supports_publish","supports_scheduling"]) : null,
+      route: route ? fields(route,["route_key","publication_object_key","desk_key","outlet_key","distribution_mode","route_status","authority_reference","operator_confirmed","canonical_url"]) : null,
+      registered_standing_key: str(metadata.registered_standing_key),
+      callable_contract: callable,
+      lapzuli_callable: isCallable,
+      payload,
+      latest_execution: latestExecution,
+      execution_count: assetExecutions.length,
+      distribution_state: distributed ? "distributed" : accepted ? "accepted_pending_platform_proof" : isCallable ? "ready_for_operator_execution" : "held",
+      blockers,
+    }
+  })
+
+  const campaignCards = campaigns
+    .filter(campaign => !["archived","superseded"].includes(str(campaign.status) ?? ""))
+    .map(campaign => {
+      const campaignKey = str(campaign.campaign_key) ?? "unresolved_campaign"
+      const assets = normalizedAssets.filter(asset => asset.campaign_id === campaignKey)
+      const distributedCount = assets.filter(asset => asset.distribution_state === "distributed").length
+      const acceptedCount = assets.filter(asset => asset.distribution_state === "accepted_pending_platform_proof").length
+      const readyCount = assets.filter(asset => asset.distribution_state === "ready_for_operator_execution").length
+      const heldCount = assets.filter(asset => asset.distribution_state === "held").length
+      const metadata = record(campaign.metadata)
+      const releaseState = str(campaign.release_state)
+      const reviewStatus = str(campaign.review_status)
+      const campaignStanding = distributedCount > 0
+        ? "active_trace"
+        : acceptedCount > 0
+          ? "provider_accepted_pending_platform_proof"
+        : readyCount > 0
+          ? "ready_for_operator_execution"
+          : reviewStatus === "operator_approved" && Boolean(releaseState?.startsWith("authorized_"))
+            ? "awaiting_lapzuli_resolution"
+            : "held"
+      return {
+        campaign_key: campaignKey,
+        publication_key: campaign.publication_key,
+        issue_id: campaign.issue_id,
+        campaign_name: campaign.campaign_name,
+        campaign_objective: campaign.campaign_objective,
+        status: campaign.status,
+        release_state: campaign.release_state,
+        review_status: campaign.review_status,
+        campaign_pac_key: str(metadata.campaign_pac_key) ?? str(metadata.pac_key),
+        canonical_url: str(metadata.canonical_url),
+        standing: campaignStanding,
+        counts: {
+          assets: assets.length,
+          distributed: distributedCount,
+          accepted: acceptedCount,
+          ready: readyCount,
+          held: heldCount,
+        },
+        assets,
+      }
+    })
+
+  return {
+    contract:"lapzuli_distribution_desk_v1",
+    source:"CampaignPAC / publication campaign -> derivative -> distribution asset -> registered standing -> route/channel/executor -> execution evidence",
+    observed_at:new Date().toISOString(),
+    campaigns:campaignCards,
+    routes,
+    evidence,
+    channels,
+    executors,
+    unresolved:campaignCards
+      .filter(campaign => campaign.standing === "awaiting_lapzuli_resolution" || campaign.standing === "held")
+      .map(campaign => `${campaign.campaign_key}: ${campaign.standing}`),
+    current_status:"registry_backed_distribution_readback",
+    mutation_authority:"protected_c3ops_action_required",
+    external_effects:0,
+  }
 }
 export type LapzuliReadback = Awaited<ReturnType<typeof readLapzuli>>
 

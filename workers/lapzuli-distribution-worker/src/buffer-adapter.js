@@ -16,6 +16,16 @@ const AUTHORIZED_CHANNELS = {
     profile_id: "6a23c027c687a22dd467a132",
     credential: "BUFFER_SOCIAL_KEY",
   },
+  instagram_measures_registry: {
+    platform: "instagram",
+    profile_id: "6a23bfc4c687a22dd467a045",
+    credential: "BUFFER_SOCIAL_KEY",
+  },
+  x_measures_c3: {
+    platform: "x",
+    profile_id: "6a23bff1c687a22dd467a0b3",
+    credential: "BUFFER_SOCIAL_KEY",
+  },
 };
 
 export async function handleBufferRequest(request, env, pathname) {
@@ -101,6 +111,8 @@ async function prepareOrPublishBufferPost(request, env) {
       registered_standing_key: body.registered_standing_key,
       text_length: Array.from(payload.get("text") || "").length,
       canonical_url: body.canonical_url,
+      image_url: clean(body.image_url) || null,
+      media_attached: Boolean(clean(body.image_url)),
       external_publication_effects: 0,
     });
   }
@@ -178,6 +190,7 @@ function validateBufferRequest(body) {
   if (body?.operator_confirmed !== true) missing.push("operator_confirmed_true");
   if (!clean(body?.registered_standing_key).endsWith("_registered")) missing.push("registered_standing_key_valid");
   if (!clean(body?.canonical_url).startsWith("https://measuresregistry.com/")) missing.push("canonical_url_measures_registry");
+  if (body?.image_url != null && !clean(body.image_url).startsWith("https://")) missing.push("image_url_https");
 
   return { ok: missing.length === 0, missing };
 }
@@ -188,6 +201,7 @@ function buildBufferPayload(body, profileId) {
   params.set("text", clean(body.text));
   params.set("now", "true");
   params.set("shorten", "false");
+  if (clean(body.image_url)) params.set("media[photo]", clean(body.image_url));
   return params;
 }
 
