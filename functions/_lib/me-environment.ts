@@ -141,16 +141,20 @@ export async function readLapzuli(read: ReadRows) {
     const latestExecution = assetExecutions[0] ?? null
     const distributed = Boolean(
       latestExecution &&
+      (latestExecution.execution_status === "published" || latestExecution.platform_url)
+    )
+    const accepted = Boolean(
+      !distributed &&
+      latestExecution &&
       (
-        latestExecution.execution_status === "published" ||
-        latestExecution.platform_url ||
+        latestExecution.execution_status === "queued" ||
         latestExecution.platform_post_id ||
         record(latestExecution.evidence).external_publication_effects === 1
       )
     )
     const isCallable = callable?.lapzuli_callable === true
     const blockers: string[] = []
-    if (!distributed) {
+    if (!distributed && !accepted) {
       if (!derivative) blockers.push("derivative_unresolved")
       if (derivative && derivative.approval_status !== "operator_approved") blockers.push("derivative_not_operator_approved")
       if (derivative && derivative.release_state !== "released") blockers.push("derivative_not_released")
@@ -184,7 +188,7 @@ export async function readLapzuli(read: ReadRows) {
       payload,
       latest_execution: latestExecution,
       execution_count: assetExecutions.length,
-      distribution_state: distributed ? "distributed" : isCallable ? "ready_for_operator_execution" : "held",
+      distribution_state: distributed ? "distributed" : accepted ? "accepted_pending_platform_proof" : isCallable ? "ready_for_operator_execution" : "held",
       blockers,
     }
   })
@@ -195,6 +199,7 @@ export async function readLapzuli(read: ReadRows) {
       const campaignKey = str(campaign.campaign_key) ?? "unresolved_campaign"
       const assets = normalizedAssets.filter(asset => asset.campaign_id === campaignKey)
       const distributedCount = assets.filter(asset => asset.distribution_state === "distributed").length
+      const acceptedCount = assets.filter(asset => asset.distribution_state === "accepted_pending_platform_proof").length
       const readyCount = assets.filter(asset => asset.distribution_state === "ready_for_operator_execution").length
       const heldCount = assets.filter(asset => asset.distribution_state === "held").length
       const metadata = record(campaign.metadata)
@@ -202,6 +207,8 @@ export async function readLapzuli(read: ReadRows) {
       const reviewStatus = str(campaign.review_status)
       const campaignStanding = distributedCount > 0
         ? "active_trace"
+        : acceptedCount > 0
+          ? "provider_accepted_pending_platform_proof"
         : readyCount > 0
           ? "ready_for_operator_execution"
           : reviewStatus === "operator_approved" && Boolean(releaseState?.startsWith("authorized_"))
@@ -222,6 +229,7 @@ export async function readLapzuli(read: ReadRows) {
         counts: {
           assets: assets.length,
           distributed: distributedCount,
+          accepted: acceptedCount,
           ready: readyCount,
           held: heldCount,
         },
