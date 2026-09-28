@@ -2,24 +2,6 @@ begin;
 
 update public.c3_pac
 set metadata=jsonb_set(
-      metadata,
-      '{open_graph_contract}',
-      coalesce(metadata->'open_graph_contract','{}'::jsonb) || jsonb_build_object(
-        'social_delivery_uri','https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/47pct_%20initiative.webp?v=3d4f34a9efc6b810',
-        'social_delivery_provider','supabase_public_storage',
-        'social_delivery_cache_key','3d4f34a9efc6b810',
-        'image_mime_type','image/webp',
-        'image_width',1672,
-        'image_height',941,
-        'facebook_debugger_state','direct_social_delivery_seated_pending_rescrape',
-        'runtime_uri','/api/free-media?asset=47pct_my_env_og_v1',
-        'runtime_uri_role','governed_application_runtime',
-        'social_delivery_role','external_open_graph_crawler_delivery',
-        'frontend_fallback_allowed',false
-      ),
-      true
-    ),
-    metadata=jsonb_set(
       jsonb_set(
         metadata,
         '{open_graph_contract}',
