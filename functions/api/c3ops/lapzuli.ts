@@ -189,6 +189,7 @@ async function resolveCampaign(env: Env, campaignKey: string) {
         campaign_key:campaignKey,
         campaign_pac_key:pacKey,
         publication_key:campaign.publication_key,
+        desk_key:"campaign_distribution",
         registered_for:"lapzuli",
         distribution_assets:eligible.map(item=>item.asset.distribution_asset_key),
         channels:eligible.map(item=>item.channelKey),
@@ -255,7 +256,7 @@ async function resolveCampaign(env: Env, campaignKey: string) {
       body:JSON.stringify({
         route_key:routeKey,
         publication_object_key:str(item.asset.publication_asset_id) ?? str(item.asset.campaign_asset_id) ?? assetKey,
-        desk_key:str(campaign.publication_key) ?? str(campaign.issue_id) ?? "campaign",
+        desk_key:"campaign_distribution",
         outlet_key:item.channelKey,
         distribution_mode:str(item.asset.distribution_type) ?? "campaign_distribution",
         route_status:"authorized",
