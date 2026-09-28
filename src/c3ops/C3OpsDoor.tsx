@@ -5,6 +5,8 @@ import "./c3OpsDoor.css"
 
 type Manifest = ManifestResponse["environments"][number]
 type CurrentStateComponent = C3OpsCurrentStateReadback["components"][number]
+type LapzuliCampaign = LapzuliReadback["campaigns"][number]
+type LapzuliAsset = LapzuliCampaign["assets"][number]
 
 const text = (x: unknown) => x == null ? "unresolved" : typeof x === "string" ? x : String(x)
 
@@ -39,6 +41,111 @@ function Station({component}:{component:CurrentStateComponent}) {
   </article>
 }
 
+function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>Promise<void>}) {
+  const [busy,setBusy]=useState("")
+  const [actionResult,setActionResult]=useState<{standing?:string;reason?:string;action?:string;external_publication_effects?:number}|null>(null)
+  const [actionError,setActionError]=useState("")
+
+  async function run(action:"resolve_campaign"|"preflight_asset"|"dispatch_asset", key:string) {
+    setBusy(action+":"+key)
+    setActionError("")
+    setActionResult(null)
+    try {
+      const response=await fetch("/api/c3ops/lapzuli",{
+        method:"POST",
+        credentials:"same-origin",
+        headers:{"content-type":"application/json"},
+        body:JSON.stringify(action==="resolve_campaign"?{action,campaign_key:key}:{action,distribution_asset_key:key}),
+      })
+      const body=await response.json()
+      setActionResult(body)
+      if(!response.ok) throw new Error(body.reason??body.error??"Lapzuli action held.")
+      await onRefresh()
+    } catch(e) {
+      setActionError(e instanceof Error?e.message:"Lapzuli action held.")
+    } finally {
+      setBusy("")
+    }
+  }
+
+  const totals=lapzuli.campaigns.reduce((sum,campaign)=>({
+    assets:sum.assets+campaign.counts.assets,
+    ready:sum.ready+campaign.counts.ready,
+    accepted:sum.accepted+campaign.counts.accepted,
+    distributed:sum.distributed+campaign.counts.distributed,
+    held:sum.held+campaign.counts.held,
+  }),{assets:0,ready:0,accepted:0,distributed:0,held:0})
+
+  return <section className="lapzuli-desk" aria-label="Lapzuli distribution desk">
+    <div className="lapzuli-desk-mast">
+      <div><p className="ops-kicker">REGISTRY-BACKED DISTRIBUTION</p><h2>What can move now?</h2><p>{lapzuli.source}</p></div>
+      <dl className="lapzuli-desk-totals">
+        <div><dt>Campaigns</dt><dd>{lapzuli.campaigns.length}</dd></div>
+        <div><dt>Ready</dt><dd>{totals.ready}</dd></div>
+        <div><dt>Accepted</dt><dd>{totals.accepted}</dd></div>
+        <div><dt>Published</dt><dd>{totals.distributed}</dd></div>
+        <div><dt>Held</dt><dd>{totals.held}</dd></div>
+      </dl>
+    </div>
+
+    {(actionResult||actionError)&&<div className={"lapzuli-action-result "+(actionError?"is-held":"is-act")} role="status">
+      <strong>{actionError?"HLD":text(actionResult?.standing)}</strong>
+      <span>{actionError||text(actionResult?.action)}</span>
+      {actionResult?.external_publication_effects ? <span>External effects: {actionResult.external_publication_effects}</span> : <span>External effects: 0</span>}
+    </div>}
+
+    <div className="lapzuli-campaigns">
+      {lapzuli.campaigns.map((campaign:LapzuliCampaign)=><article className="lapzuli-campaign" key={text(campaign.campaign_key)} data-standing={campaign.standing}>
+        <header>
+          <div>
+            <p className="ops-kicker">{text(campaign.publication_key)} · {text(campaign.release_state)}</p>
+            <h3>{text(campaign.campaign_name)}</h3>
+            <p>{text(campaign.campaign_objective)}</p>
+          </div>
+          <strong className="lapzuli-standing">{text(campaign.standing)}</strong>
+        </header>
+        <div className="lapzuli-counts">
+          <span>{campaign.counts.assets} assets</span><span>{campaign.counts.ready} ready</span><span>{campaign.counts.accepted} accepted</span><span>{campaign.counts.distributed} published</span><span>{campaign.counts.held} held</span>
+        </div>
+        {campaign.standing==="awaiting_lapzuli_resolution"&&<button
+          className="lapzuli-action"
+          disabled={Boolean(busy)}
+          onClick={()=>void run("resolve_campaign",text(campaign.campaign_key))}
+        >{busy==="resolve_campaign:"+text(campaign.campaign_key)?"Resolving…":"Resolve CampaignPAC → Lapzuli"}</button>}
+
+        <details>
+          <summary>Inspect distribution assets</summary>
+          <div className="lapzuli-assets">
+            {campaign.assets.map((asset:LapzuliAsset)=><article className="lapzuli-asset" key={text(asset.distribution_asset_key)} data-state={asset.distribution_state}>
+              <div className="lapzuli-asset-head">
+                <div><strong>{text(asset.platform)}</strong><small>{text(asset.channel_key)}</small></div>
+                <span>{text(asset.distribution_state)}</span>
+              </div>
+              <p>{text(asset.distribution_asset_key)}</p>
+              <dl>
+                <div><dt>Derivative</dt><dd>{text(asset.derivative_key)}</dd></div>
+                <div><dt>Executor</dt><dd>{text(asset.executor_key)}</dd></div>
+                <div><dt>Route</dt><dd>{text(asset.route?.route_key)}</dd></div>
+              </dl>
+              {asset.blockers.length>0&&<ul className="lapzuli-blockers">{asset.blockers.map(blocker=><li key={blocker}>{blocker.replace(/_/g," ")}</li>)}</ul>}
+              {asset.distribution_state==="ready_for_operator_execution"&&<div className="lapzuli-asset-actions">
+                <button disabled={Boolean(busy)} onClick={()=>void run("preflight_asset",text(asset.distribution_asset_key))}>
+                  {busy==="preflight_asset:"+text(asset.distribution_asset_key)?"Checking…":"Preflight"}
+                </button>
+                <button className="is-live" disabled={Boolean(busy)} onClick={()=>void run("dispatch_asset",text(asset.distribution_asset_key))}>
+                  {busy==="dispatch_asset:"+text(asset.distribution_asset_key)?"Dispatching…":"Dispatch now"}
+                </button>
+              </div>}
+              {asset.latest_execution&&<details><summary>Latest execution evidence</summary><Rows records={[asset.latest_execution]}/></details>}
+            </article>)}
+            {!campaign.assets.length&&<p className="ops-unresolved">DNR — no distribution assets are bound to this campaign.</p>}
+          </div>
+        </details>
+      </article>)}
+    </div>
+  </section>
+}
+
 export default function C3OpsDoor() {
   const route=c3OpsRoute(window.location.pathname)
   const [state,setState]=useState<ManifestResponse|null>(null)
@@ -46,6 +153,14 @@ export default function C3OpsDoor() {
   const [currentState,setCurrentState]=useState<C3OpsCurrentStateReadback|null>(null)
   const [error,setError]=useState("")
   const [assetError,setAssetError]=useState(false)
+
+  async function refreshLapzuli() {
+    const response=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin"})
+    if(!response.ok) throw new Error("Lapzuli evidence readback unavailable.")
+    const body=await response.json() as LapzuliReadback
+    if(body.contract!=="lapzuli_distribution_desk_v1") throw new Error("Lapzuli distribution contract unresolved.")
+    setLapzuli(body)
+  }
 
   useEffect(()=>{
     document.title="c3Ops"
@@ -70,7 +185,9 @@ export default function C3OpsDoor() {
         if(route==="/relational-operations/lapzuli" || route==="/c3optics"){
           const r=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin",signal:controller.signal})
           if(!r.ok) throw new Error("Lapzuli evidence readback unavailable.")
-          setLapzuli(await r.json())
+          const lapzuliBody=await r.json() as LapzuliReadback
+          if(lapzuliBody.contract!=="lapzuli_distribution_desk_v1") throw new Error("Lapzuli distribution contract unresolved.")
+          setLapzuli(lapzuliBody)
         }
       } catch(e) {
         if(!controller.signal.aborted) setError(e instanceof Error?e.message:"Readback unavailable.")
@@ -184,7 +301,7 @@ export default function C3OpsDoor() {
           </footer>
         </section>}
 
-        {route!=="/systems-access/current" && <section className="ops-env-grid" aria-label="Persisted environment state">{state.environments.map(e=><article className="ops-env" key={text(e.identity.env_key)}>
+        {route!=="/systems-access/current" && route!=="/relational-operations/lapzuli" && <section className="ops-env-grid" aria-label="Persisted environment state">{state.environments.map(e=><article className="ops-env" key={text(e.identity.env_key)}>
           <p className="ops-kicker">{text(e.identity.system_key)}</p><h2>{text(e.identity.environment_name)}</h2>
           <dl><div><dt>Environment key</dt><dd>{text(e.identity.env_key)}</dd></div><div><dt>Class</dt><dd>{text(e.identity.environment_class)}</dd></div><div><dt>Standing</dt><dd>{text(e.standing)}</dd></div>{e.formation&&<div><dt>Formation</dt><dd>{e.formation}</dd></div>}<div><dt>Active / canonical</dt><dd>{text(e.active)} / {text(e.canonical)}</dd></div>{e.domain&&<div><dt>Domain</dt><dd>{e.domain}</dd></div>}</dl>
           {route==="/c3optics" ? <Current env={e}/> : <>
@@ -195,7 +312,8 @@ export default function C3OpsDoor() {
           <h3>Open holds</h3><Rows records={[e.holds]}/><Current env={e}/><h3>Unresolved coverage</h3><ul>{e.unresolved.map(u=><li key={u}>{u}</li>)}</ul></details></>}
         </article>)}</section>}
 
-        {lapzuli && <section aria-label="Lapzuli returned encounters"><h2>Returned encounters</h2><ul className="ops-unresolved">{lapzuli.unresolved.map(u=><li key={u}>{u}</li>)}</ul><p>Source: {lapzuli.source}. Provider outcomes are evidence; resulting Current requires its own registered relation.</p><div className="ops-env-grid">{lapzuli.routes.map(r=><article className="ops-env" key={text(r.route_key)}><p className="ops-kicker">{text(r.desk_key)} · {text(r.outlet_key)}</p><h3>{text(r.publication_object_key)}</h3><p>Route: {text(r.route_key)} · {text(r.route_status)}</p><Rows records={lapzuli.evidence.filter(e=>e.route_key===r.route_key)}/><p className="ops-unresolved">Current: unresolved without an explicit proof relation.</p></article>)}</div>{!lapzuli.routes.length&&<p>No registered routes returned.</p>}</section>}
+        {lapzuli && route==="/relational-operations/lapzuli" && <LapzuliDesk lapzuli={lapzuli} onRefresh={refreshLapzuli}/>}
+        {lapzuli && route==="/c3optics" && <section aria-label="Lapzuli returned encounters"><h2>Lapzuli returned encounters</h2><p>Provider outcomes are evidence; resulting Current requires its own registered relation.</p><div className="ops-env-grid">{lapzuli.routes.map(r=><article className="ops-env" key={text(r.route_key)}><p className="ops-kicker">{text(r.desk_key)} · {text(r.outlet_key)}</p><h3>{text(r.publication_object_key)}</h3><p>Route: {text(r.route_key)} · {text(r.route_status)}</p><Rows records={lapzuli.evidence.filter(e=>e.route_key===r.route_key)}/></article>)}</div></section>}
       </>}
     </>}
   </main>
