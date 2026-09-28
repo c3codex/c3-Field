@@ -43,7 +43,7 @@ function Station({component}:{component:CurrentStateComponent}) {
 
 function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>Promise<void>}) {
   const [busy,setBusy]=useState("")
-  const [actionResult,setActionResult]=useState<{standing?:string;reason?:string;action?:string;external_publication_effects?:number}|null>(null)
+  const [actionResult,setActionResult]=useState<{standing?:string;reason?:string;action?:string;external_publication_effects?:number|null}|null>(null)
   const [actionError,setActionError]=useState("")
 
   async function run(action:"resolve_campaign"|"preflight_asset"|"dispatch_asset", key:string) {
@@ -91,7 +91,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
     {(actionResult||actionError)&&<div className={"lapzuli-action-result "+(actionError?"is-held":"is-act")} role="status">
       <strong>{actionError?"HLD":text(actionResult?.standing)}</strong>
       <span>{actionError||text(actionResult?.action)}</span>
-      {actionResult?.external_publication_effects ? <span>External effects: {actionResult.external_publication_effects}</span> : <span>External effects: 0</span>}
+      <span>External effects: {actionResult?.external_publication_effects == null ? "UNKNOWN" : actionResult.external_publication_effects}</span>
     </div>}
 
     <div className="lapzuli-campaigns">
