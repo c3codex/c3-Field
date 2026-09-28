@@ -33,6 +33,16 @@ export type InitiativeSurfaceRuntime={
     initiative_relation_line?:string
     required_routes?:Record<string,string>
   }
+  openGraphContract?:{
+    image_asset_key?:string
+    runtime_uri?:string
+    social_delivery_uri?:string
+    image_mime_type?:string
+    image_width?:number
+    image_height?:number
+    image_integrity_sha256?:string
+    frontend_fallback_allowed?:boolean
+  }
   createsStanding:false
 }
 
