@@ -48,6 +48,7 @@ export type InitiativeSurfaceResolution={
   bindingMetadata:Record<string,unknown>
   publicPresentation?:Record<string,unknown>
   publicFooter?:Record<string,unknown>
+  openGraphContract?:Record<string,unknown>
 }
 
 export class InitiativeSurfaceResolutionError extends Error{
@@ -128,6 +129,7 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
   const {row:binding,metadata}=selectInitiativeSurfaceBinding(bindingRows as ProcessRow[])
   let publicPresentation:Record<string,unknown>|undefined
   let publicFooter:Record<string,unknown>|undefined
+  let openGraphContract:Record<string,unknown>|undefined
 
   const surfaceKey=str(metadata.surface_key)
   const initiativeKey=str(metadata.initiative_key)
@@ -222,6 +224,17 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
       !str(footer.initiative_relation_line)
     ) throw new InitiativeSurfaceResolutionError(409,"webpac_footer_contract_incomplete")
     publicFooter=footer
+    const og=record(webpacMetadata.open_graph_contract)
+    if(
+      og.required!==true||
+      !str(og.image_asset_key)||
+      !str(og.runtime_uri)||
+      !str(og.social_delivery_uri)||
+      og.frontend_fallback_allowed!==false
+    ) throw new InitiativeSurfaceResolutionError(409,"webpac_open_graph_contract_incomplete")
+    if(str(og.image_asset_key)!==str(presentation.og_image_asset_key))
+      throw new InitiativeSurfaceResolutionError(409,"webpac_open_graph_asset_mismatch")
+    openGraphContract=og
   }else{
     const webpac=requireOne(await readRows(env,"system_process_registry","process_key,status,process_status,metadata",{
       process_key:"eq."+webpacProcessKey
@@ -262,6 +275,7 @@ export async function resolveInitiativeSurfaceHost(env:InitiativeSurfaceEnv,host
     bindingProcessKey:String(binding.process_key),
     bindingMetadata:metadata,
     ...(publicPresentation?{publicPresentation}:{}),
-    ...(publicFooter?{publicFooter}:{})
+    ...(publicFooter?{publicFooter}:{}),
+    ...(openGraphContract?{openGraphContract}:{})
   }
 }

@@ -26,6 +26,7 @@ export const onRequestGet:PagesFunction<InitiativeSurfaceEnv>=async({env,request
       connectRoute:resolved.connectRoute,
       publicPresentation:resolved.publicPresentation,
       publicFooter:resolved.publicFooter,
+      openGraphContract:resolved.openGraphContract,
       createsStanding:false
     })
   }catch(error){

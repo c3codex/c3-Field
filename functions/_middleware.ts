@@ -17,6 +17,9 @@ type InitiativeSeoProjection = {
   canonicalUrl: string
   ogType: string
   ogImageUrl: string
+  ogImageType?: string
+  ogImageWidth?: number
+  ogImageHeight?: number
 }
 
 function isProtectedPath(pathname: string) {
@@ -35,12 +38,20 @@ function replaceHeadTag(html: string, pattern: RegExp, replacement: string) {
   return pattern.test(html) ? html.replace(pattern, replacement) : html
 }
 
+function upsertHeadTag(html: string, pattern: RegExp, replacement: string) {
+  if (pattern.test(html)) return html.replace(pattern, replacement)
+  return html.replace(/<\/head>/i, `  ${replacement}\n</head>`)
+}
+
 export function rewriteInitiativeSocialHead(html: string, seo: InitiativeSeoProjection) {
   const title = escapeHtml(seo.title)
   const description = escapeHtml(seo.description)
   const canonicalUrl = escapeHtml(seo.canonicalUrl)
   const ogType = escapeHtml(seo.ogType)
   const ogImageUrl = escapeHtml(seo.ogImageUrl)
+  const ogImageType = escapeHtml(seo.ogImageType ?? "image/jpeg")
+  const ogImageWidth = Number.isFinite(seo.ogImageWidth) ? String(seo.ogImageWidth) : null
+  const ogImageHeight = Number.isFinite(seo.ogImageHeight) ? String(seo.ogImageHeight) : null
 
   let out = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${title}</title>`)
   out = replaceHeadTag(out, /<meta\s+name="description"[\s\S]*?>/i, `<meta name="description" content="${description}" />`)
@@ -50,6 +61,10 @@ export function rewriteInitiativeSocialHead(html: string, seo: InitiativeSeoProj
   out = replaceHeadTag(out, /<meta\s+property="og:type"[\s\S]*?>/i, `<meta property="og:type" content="${ogType}" />`)
   out = replaceHeadTag(out, /<meta\s+property="og:url"[\s\S]*?>/i, `<meta property="og:url" content="${canonicalUrl}" />`)
   out = replaceHeadTag(out, /<meta\s+property="og:image"[\s\S]*?>/i, `<meta property="og:image" content="${ogImageUrl}" />`)
+  out = upsertHeadTag(out, /<meta\s+property="og:image:secure_url"[\s\S]*?>/i, `<meta property="og:image:secure_url" content="${ogImageUrl}" />`)
+  out = upsertHeadTag(out, /<meta\s+property="og:image:type"[\s\S]*?>/i, `<meta property="og:image:type" content="${ogImageType}" />`)
+  if (ogImageWidth) out = upsertHeadTag(out, /<meta\s+property="og:image:width"[\s\S]*?>/i, `<meta property="og:image:width" content="${ogImageWidth}" />`)
+  if (ogImageHeight) out = upsertHeadTag(out, /<meta\s+property="og:image:height"[\s\S]*?>/i, `<meta property="og:image:height" content="${ogImageHeight}" />`)
   out = replaceHeadTag(out, /<meta\s+property="og:image:alt"[\s\S]*?>/i, `<meta property="og:image:alt" content="${title}" />`)
   out = replaceHeadTag(out, /<meta\s+name="twitter:title"[\s\S]*?>/i, `<meta name="twitter:title" content="${title}" />`)
   out = replaceHeadTag(out, /<meta\s+name="twitter:description"[\s\S]*?>/i, `<meta name="twitter:description" content="${description}" />`)
@@ -112,6 +127,7 @@ async function resolve47PctSeo(request: Request): Promise<InitiativeSeoProjectio
 
   const body = record(await response.json())
   const presentation = record(body.publicPresentation)
+  const og = record(body.openGraphContract)
 
   if (body.standing !== "resolved" || body.initiativeKey !== "47pct")
     throw new Error("47pct_social_metadata_authority_mismatch")
@@ -120,18 +136,32 @@ async function resolve47PctSeo(request: Request): Promise<InitiativeSeoProjectio
   const description = stringValue(presentation.og_description)
   const canonicalUrl = stringValue(body.canonicalUrl)
   const ogImageAssetKey = stringValue(presentation.og_image_asset_key)
+  const socialDeliveryUri = stringValue(og.social_delivery_uri)
+  const ogImageType = stringValue(og.image_mime_type) ?? "image/webp"
+  const ogImageWidth = typeof og.image_width === "number" ? og.image_width : undefined
+  const ogImageHeight = typeof og.image_height === "number" ? og.image_height : undefined
 
-  if (!title || !description || !canonicalUrl || !ogImageAssetKey || !/^[a-z0-9_]+$/i.test(ogImageAssetKey))
+  if (!title || !description || !canonicalUrl || !ogImageAssetKey || !socialDeliveryUri || !/^[a-z0-9_]+$/i.test(ogImageAssetKey))
     throw new Error("47pct_social_metadata_authority_incomplete")
 
   const canonical = new URL(canonicalUrl)
   if (canonical.protocol !== "https:" || canonical.hostname !== "47pct.c3field.online")
     throw new Error("47pct_social_metadata_canonical_mismatch")
 
-  const ogImageUrl = new URL("/api/free-media", canonical.origin)
-  ogImageUrl.searchParams.set("asset", ogImageAssetKey)
+  const delivery = new URL(socialDeliveryUri)
+  if (delivery.protocol !== "https:")
+    throw new Error("47pct_social_image_delivery_mismatch")
 
-  return { title, description, canonicalUrl, ogType: "website", ogImageUrl: ogImageUrl.toString() }
+  return {
+    title,
+    description,
+    canonicalUrl,
+    ogType: "website",
+    ogImageUrl: delivery.toString(),
+    ogImageType,
+    ogImageWidth,
+    ogImageHeight,
+  }
 }
 
 async function project47PctSocialHead(request: Request, response: Response) {
