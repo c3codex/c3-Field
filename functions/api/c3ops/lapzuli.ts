@@ -23,6 +23,7 @@ const C3_BUFFER_CHANNELS = new Set([
 ])
 
 const DEFAULT_WORKER_URL = "https://lapzuli-distribution-worker.c3field.workers.dev"
+const C3OPS_HOST = "c3ops.c3field.online"
 const jsonHeaders = {"content-type":"application/json; charset=utf-8","cache-control":"private, no-store"}
 
 const record = (value: unknown): Row =>
@@ -339,19 +340,27 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     `measures_distribution_execution?distribution_asset_id=eq.${encodeURIComponent(distributionAssetKey)}&select=*&order=created_at.desc&limit=20`)
   const priorEffect=prior.find(row =>
     row.execution_status === "published" ||
+    row.execution_status === "queued" ||
+    row.execution_status === "publication_uncertain" ||
     row.platform_url ||
+    row.platform_post_id ||
     record(row.evidence).external_publication_effects === 1
   )
   if (priorEffect && !dryRun) {
-    return {status:409,body:{standing:"HLD",reason:"distribution_asset_already_has_external_effect",distribution_asset_key:distributionAssetKey,execution_id:priorEffect.execution_id,platform_url:priorEffect.platform_url,external_publication_effects:0}}
+    return {status:409,body:{standing:"HLD",reason:"distribution_asset_already_has_or_may_have_external_effect",distribution_asset_key:distributionAssetKey,execution_id:priorEffect.execution_id,platform_url:priorEffect.platform_url,external_publication_effects:0}}
   }
 
   const channelKey=str(callable.channel_key)
   const executorKey=str(callable.executor_key)
+  const operatorKey=str(callable.registered_operator)
   const adapter=adapterFor(channelKey,executorKey)
   if (!adapter) {
     return {status:409,body:{standing:"HLD",reason:"worker_adapter_not_callable",channel_key:channelKey,executor_key:executorKey,external_publication_effects:0}}
   }
+  if (!channelKey || !executorKey || !operatorKey) {
+    return {status:409,body:{standing:"HLD",reason:"execution_identity_unresolved",channel_key:channelKey,executor_key:executorKey,operator_key:operatorKey,external_publication_effects:0}}
+  }
+
   const canonicalUrl=str(callable.canonical_url) ?? str(payload.canonical_url) ?? str(route.canonical_url)
   const textValue=str(payload.text) ?? str(payload.caption)
   const imageUrl=str(payload.image_url) ?? publicMediaUrl(env,payload)
@@ -382,26 +391,91 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     image_url:imageUrl,
     buffer_mode:"shareNow",
   }
-  const called=await workerCall(env,adapter,requestBody)
+
+  let executionId:string|null=null
+  let attemptNumber:number|null=null
+  if (!dryRun) {
+    const claims=await supabaseFetch<Row[]>(env,"rpc/claim_lapzuli_distribution_execution_v1",{
+      method:"POST",
+      body:JSON.stringify({
+        p_distribution_asset_id:distributionAssetKey,
+        p_executor_key:executorKey,
+        p_channel_key:channelKey,
+        p_route_key:str(route.route_key),
+        p_operator:operatorKey,
+      }),
+    })
+    const claim=claims[0]
+    if (!claim || claim.claimed !== true) {
+      return {status:409,body:{
+        standing:"HLD",
+        reason:str(claim?.reason) ?? "dispatch_claim_not_acquired",
+        distribution_asset_key:distributionAssetKey,
+        execution_id:claim?.execution_id ?? null,
+        external_publication_effects:0,
+      }}
+    }
+    executionId=str(claim.execution_id)
+    attemptNumber=typeof claim.attempt_number === "number" ? claim.attempt_number : null
+    if (!executionId) {
+      return {status:500,body:{standing:"HLD",reason:"dispatch_claim_execution_id_unresolved",distribution_asset_key:distributionAssetKey,external_publication_effects:0}}
+    }
+  }
+
+  let called:{response:Response|null;body:Row}
+  try {
+    called=await workerCall(env,adapter,requestBody)
+  } catch(error) {
+    if (executionId) {
+      await supabaseFetch(env,`measures_distribution_execution?execution_id=eq.${encodeURIComponent(executionId)}`,{
+        method:"PATCH",
+        headers:{Prefer:"return=minimal"},
+        body:JSON.stringify({
+          execution_status:"publication_uncertain",
+          error:"lapzuli_worker_transport_outcome_uncertain",
+          evidence:{
+            route_key:route.route_key,
+            adapter_path:adapter,
+            effect_state:"unknown",
+            external_publication_effects:null,
+          },
+          metadata:{
+            worker_identity:"dizzy_lapzuli_distribution_worker_v1",
+            operator_surface:"/relational-operations/lapzuli",
+            registered_standing_key:callable.registered_standing_key,
+            requires_operator_resolution:true,
+            automatic_retry_allowed:false,
+          },
+          updated_at:new Date().toISOString(),
+        }),
+      })
+    }
+    return {status:502,body:{
+      standing:"HLD",
+      reason:"worker_transport_outcome_uncertain",
+      distribution_asset_key:distributionAssetKey,
+      execution_id:executionId,
+      error:error instanceof Error?error.message:"unknown worker transport error",
+      external_publication_effects:null,
+    }}
+  }
+
   const body=called.body
   const ok=called.response?.ok === true && body.ok === true
   const effects=typeof body.external_publication_effects === "number" ? body.external_publication_effects : 0
 
-  if (!dryRun) {
+  if (!dryRun && executionId) {
     const platformUrl=str(body.platform_url)
     const platformPostId=str(body.platform_post_id)
     const providerPostId=str(body.buffer_post_id) ?? str(body.buffer_update_id)
-    const executionStatus=ok && effects === 1 ? (platformUrl ? "published" : "queued") : "failed"
-    await supabaseFetch(env,"measures_distribution_execution",{
-      method:"POST",
+    const executionStatus=effects === 1
+      ? (platformUrl ? "published" : "queued")
+      : "failed"
+    await supabaseFetch(env,`measures_distribution_execution?execution_id=eq.${encodeURIComponent(executionId)}`,{
+      method:"PATCH",
       headers:{Prefer:"return=minimal"},
       body:JSON.stringify({
-        distribution_asset_id:distributionAssetKey,
-        executor_key:executorKey,
-        channel_key:channelKey,
         execution_status:executionStatus,
-        execution_mode:"lapzuli_worker",
-        attempt_number:prior.length+1,
         executed_at:new Date().toISOString(),
         published_at:executionStatus === "published" ? new Date().toISOString() : null,
         platform_post_id:platformPostId,
@@ -414,18 +488,17 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
           provider_post_id:providerPostId,
           external_response_code:body.external_response_code,
           external_publication_effects:effects,
+          effect_state:effects === 1 ? "provider_effect_confirmed" : "no_external_effect_confirmed",
         },
         error:ok ? null : str(body.error) ?? str(body.standing) ?? "lapzuli_worker_execution_failed",
-        created_by_actor_class:"AI",
-        created_by_actor_key:"Chazz",
-        approved_by_actor_class:"Human",
-        approved_by_actor_key:"op044",
         metadata:{
           worker_identity:"dizzy_lapzuli_distribution_worker_v1",
           operator_surface:"/relational-operations/lapzuli",
           registered_standing_key:callable.registered_standing_key,
+          dispatch_claim:"atomic_v1",
+          automatic_retry_allowed:effects === 0,
         },
-        optics:{observes:"distribution_event",models_individuals_as_primary:false},
+        updated_at:new Date().toISOString(),
       }),
     })
   }
@@ -434,16 +507,21 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     standing:ok ? (dryRun ? "ACT_PREFLIGHT" : "ACT") : "HLD",
     action:dryRun ? "preflight_asset" : "dispatch_asset",
     distribution_asset_key:distributionAssetKey,
+    execution_id:executionId,
+    attempt_number:attemptNumber,
     adapter,
     worker_result:body,
     external_publication_effects:dryRun ? 0 : effects,
   }}
 }
 
-export const onRequestGet: PagesFunction<Env> = async () =>
-  json({contract:"lapzuli_distribution_actions_v1",actions:["resolve_campaign","preflight_asset","dispatch_asset"],external_publication_effects:0})
+export const onRequestGet: PagesFunction<Env> = async ({request}) => {
+  if (new URL(request.url).hostname !== C3OPS_HOST) return json({error:"not_found"},404)
+  return json({contract:"lapzuli_distribution_actions_v1",actions:["resolve_campaign","preflight_asset","dispatch_asset"],external_publication_effects:0})
+}
 
 export const onRequestPost: PagesFunction<Env> = async ({request,env}) => {
+  if (new URL(request.url).hostname !== C3OPS_HOST) return json({error:"not_found"},404)
   try {
     const body=record(await request.json().catch(()=>({})))
     const action=str(body.action)
