@@ -39,14 +39,13 @@ async function supabaseFetch<T>(env: Env, path: string, init: RequestInit = {}):
   const base = env.SUPABASE_URL ?? env.VITE_SUPABASE_URL
   const key = env.SUPABASE_SERVICE_ROLE_KEY
   if (!base || !key) throw new Error("Supabase server credentials are not configured")
+  const headers=new Headers(init.headers)
+  headers.set("apikey",key)
+  headers.set("authorization",`Bearer ${key}`)
+  headers.set("content-type","application/json")
   const response = await fetch(`${base.replace(/\/$/,"")}/rest/v1/${path}`,{
     ...init,
-    headers:{
-      apikey:key,
-      authorization:`Bearer ${key}`,
-      "content-type":"application/json",
-      ...(init.headers ?? {}),
-    },
+    headers,
   })
   const body = await response.text()
   if (!response.ok) throw new Error(body || `Supabase request failed: ${response.status}`)
