@@ -113,12 +113,19 @@ async function resolveCampaign(env: Env, campaignKey: string) {
   const derivativeMap = new Map(derivatives.map(row=>[str(row.derivative_key) ?? "",row]))
   const channelMap = new Map(channels.map(row=>[str(row.channel_key) ?? "",row]))
   const executorMap = new Map(executors.map(row=>[str(row.executor_key) ?? "",row]))
+  const activeAssetKeys = Array.isArray(campaignMetadata.lapzuli_active_asset_keys)
+    ? new Set(campaignMetadata.lapzuli_active_asset_keys.map(str).filter((key): key is string=>Boolean(key)))
+    : null
 
   const eligible: Array<{asset:Row; derivative:Row; channel:Row; executor:Row; derivativeKey:string; channelKey:string; executorKey:string; adapter:string; canonicalUrl:string; imageUrl:string|null; text:string}> = []
   const held: Array<Record<string,unknown>> = []
 
   for (const asset of assets) {
     const assetKey = str(asset.distribution_asset_key) ?? "unresolved_asset"
+    if (activeAssetKeys?.size && !activeAssetKeys.has(assetKey)) {
+      held.push({distribution_asset_key:assetKey,blockers:["outside_active_distribution_scope"]})
+      continue
+    }
     const metadata = record(asset.metadata)
     const payload = record(asset.payload)
     const derivativeKey = str(metadata.derivative_key) ?? str(metadata.caption_derivative_key) ?? str(payload.caption_derivative_key)
