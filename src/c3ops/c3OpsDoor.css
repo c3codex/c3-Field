@@ -21,3 +21,37 @@
 .ops-env details{margin-top:20px}.ops-env summary{cursor:pointer;color:#e1c587}.ops-env li{margin:8px 0;font-size:.85rem}.ops-unresolved{color:#e3c18b;line-height:1.6}.ops-records{display:grid;gap:15px}.ops-room p{line-height:1.6}
 @media(max-width:700px){.ops-door{padding:16px 14px 24px}.ops-tree{height:56svh}.ops-portals{grid-template-columns:1fr}.ops-portals a{min-height:82px;padding:16px 42px 16px 18px}.ops-room-header{align-items:flex-start;flex-direction:column}.ops-room nav{gap:16px}}
 
+
+
+/* Lapzuli distribution desk */
+.lapzuli-desk{margin-top:28px}
+.lapzuli-desk-mast{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;padding:24px;border:1px solid #3b4a61;background:#101a28}
+.lapzuli-desk-mast h2{margin:.25rem 0 .5rem}.lapzuli-desk-mast p{max-width:760px;color:#b9bec7}
+.lapzuli-desk-totals{display:grid;grid-template-columns:repeat(5,minmax(74px,1fr));gap:8px;margin:0;min-width:min(100%,500px)}
+.lapzuli-desk-totals div{padding:10px;border:1px solid #344052;background:#141e2d;text-align:center}
+.lapzuli-desk-totals dt{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#9da6b4}
+.lapzuli-desk-totals dd{margin:4px 0 0;font:400 1.4rem Georgia,serif}
+.lapzuli-action-result{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;padding:12px 14px;border:1px solid #506d59;background:#122219}
+.lapzuli-action-result.is-held{border-color:#80623d;background:#251e14;color:#e6c892}
+.lapzuli-campaigns{display:grid;gap:18px;margin-top:18px}
+.lapzuli-campaign{padding:22px;border:1px solid #344052;background:#141e2d}
+.lapzuli-campaign>header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+.lapzuli-campaign>header h3{font:400 1.35rem Georgia,serif;margin:.3rem 0}.lapzuli-campaign>header p{max-width:820px;color:#c2c5ca}
+.lapzuli-standing{max-width:240px;text-align:right;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:#dfc58a}
+.lapzuli-counts{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.lapzuli-counts span{padding:5px 8px;border:1px solid #354457;color:#b9c0ca;font-size:.72rem}
+.lapzuli-action,.lapzuli-asset-actions button{appearance:none;border:1px solid #8c784f;background:#192539;color:#f2eee5;padding:10px 14px;cursor:pointer;font:inherit}
+.lapzuli-action:hover,.lapzuli-asset-actions button:hover{border-color:#dfc58a}.lapzuli-action:disabled,.lapzuli-asset-actions button:disabled{opacity:.45;cursor:not-allowed}
+.lapzuli-asset-actions button.is-live{background:#332514;border-color:#b58a4c}
+.lapzuli-campaign>details{margin-top:16px}.lapzuli-campaign summary{cursor:pointer;color:#e1c587}
+.lapzuli-assets{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px;margin-top:14px}
+.lapzuli-asset{padding:15px;border:1px solid #303d50;background:#0e1723;min-width:0;overflow-wrap:anywhere}
+.lapzuli-asset[data-state="ready_for_operator_execution"]{border-color:#526c58}.lapzuli-asset[data-state="distributed"]{border-color:#6e855b}.lapzuli-asset[data-state="accepted_pending_platform_proof"]{border-color:#776e48}
+.lapzuli-asset-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.lapzuli-asset-head div{display:grid;gap:3px}.lapzuli-asset-head strong{text-transform:uppercase}.lapzuli-asset-head small{color:#9ea7b4}
+.lapzuli-asset-head>span{font-size:.68rem;text-transform:uppercase;text-align:right;color:#cdb980}
+.lapzuli-asset>p{font-size:.72rem;color:#8995a6}
+.lapzuli-asset dl{margin:0}.lapzuli-asset dl div{display:grid;grid-template-columns:88px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #263344}
+.lapzuli-asset dt{font-size:.7rem;color:#8e9bad}.lapzuli-asset dd{margin:0;font-size:.75rem}
+.lapzuli-blockers{padding-left:18px;color:#e3c18b;font-size:.75rem}.lapzuli-blockers li{margin:5px 0}
+.lapzuli-asset-actions{display:flex;gap:8px;margin-top:12px}
+@media(max-width:900px){.lapzuli-desk-mast,.lapzuli-campaign>header{flex-direction:column}.lapzuli-desk-totals{grid-template-columns:repeat(2,minmax(0,1fr));width:100%;min-width:0}.lapzuli-standing{text-align:left}}
