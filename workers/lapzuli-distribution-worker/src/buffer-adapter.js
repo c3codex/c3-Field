@@ -40,6 +40,10 @@ export async function handleBufferRequest(request, env, pathname) {
       status: "operative",
       supported_channels: Object.keys(AUTHORIZED_CHANNELS),
       buffer_pub2_key_present: Boolean(env.BUFFER_PUB2_KEY),
+      c3_community_partners_buffer_key_present: Boolean(
+        env.c3_COMMUNITY_PARTNERS_BUFFER_KEY || env.C3_COMMUNITY_PARTNERS_BUFFER_KEY
+      ),
+      legacy_facebook_credential_present: Boolean(readBufferCredential(env, "BUFFER_PUB2_KEY")),
       buffer_social_key_present: Boolean(env.BUFFER_SOCIAL_KEY),
       dry_run_default: true,
       external_publication_effects: 0,
@@ -52,8 +56,11 @@ export async function handleBufferRequest(request, env, pathname) {
       standing: "buffer_bindings_checked",
       required_bindings: {
         LAPZULI_DISTRIBUTION_CONTROL_TOKEN: Boolean(env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN),
-        BUFFER_PUB2_KEY: Boolean(env.BUFFER_PUB2_KEY),
+        LEGACY_FACEBOOK_BUFFER_CREDENTIAL: Boolean(readBufferCredential(env, "BUFFER_PUB2_KEY")),
         BUFFER_SOCIAL_KEY: Boolean(env.BUFFER_SOCIAL_KEY),
+        c3_COMMUNITY_PARTNERS_BUFFER_KEY: Boolean(
+          env.c3_COMMUNITY_PARTNERS_BUFFER_KEY || env.C3_COMMUNITY_PARTNERS_BUFFER_KEY
+        ),
       },
       external_publication_effects: 0,
     });
@@ -206,7 +213,13 @@ function buildBufferPayload(body, profileId) {
 }
 
 function readBufferCredential(env, key) {
-  if (key === "BUFFER_PUB2_KEY") return env.BUFFER_PUB2_KEY;
+  if (key === "BUFFER_PUB2_KEY") {
+    return (
+      env.BUFFER_PUB2_KEY ||
+      env.c3_COMMUNITY_PARTNERS_BUFFER_KEY ||
+      env.C3_COMMUNITY_PARTNERS_BUFFER_KEY
+    );
+  }
   if (key === "BUFFER_SOCIAL_KEY") return env.BUFFER_SOCIAL_KEY;
   return null;
 }
