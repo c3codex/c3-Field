@@ -67,6 +67,10 @@ export default {
           MEASURES_BLUESKY_HANDLE: Boolean(env.MEASURES_BLUESKY_HANDLE),
           UNDRIFTED_APP_PASSWORD: Boolean(env.UNDRIFTED_APP_PASSWORD),
           UNDRIFTED_BLUESKY_HANDLE: Boolean(env.UNDRIFTED_BLUESKY_HANDLE),
+          C3_FIELD_APP_PASSWORD: Boolean(env.C3_FIELD_APP_PASSWORD),
+          C3_FIELD_BLUESKY_HANDLE: Boolean(env.C3_FIELD_BLUESKY_HANDLE),
+          C3_PARTNERS_APP_PASSWORD: Boolean(env.C3_PARTNERS_APP_PASSWORD),
+          C3_PARTNERS_BLUESKY_HANDLE: Boolean(env.C3_PARTNERS_BLUESKY_HANDLE),
           BROWSER_EXECUTOR: Boolean(env.BROWSER_EXECUTOR),
         },
         external_publication_effects: 0,
@@ -115,6 +119,16 @@ export default {
     if (url.pathname === "/verify/bluesky/undrifted") {
       if (!isAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401);
       return verifyBluesky(env.UNDRIFTED_BLUESKY_HANDLE, env.UNDRIFTED_APP_PASSWORD);
+    }
+
+    if (url.pathname === "/verify/bluesky/c3-field") {
+      if (!isAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401);
+      return verifyBluesky(env.C3_FIELD_BLUESKY_HANDLE, env.C3_FIELD_APP_PASSWORD);
+    }
+
+    if (url.pathname === "/verify/bluesky/c3-partners") {
+      if (!isAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401);
+      return verifyBluesky(env.C3_PARTNERS_BLUESKY_HANDLE, env.C3_PARTNERS_APP_PASSWORD);
     }
 
     return json({ ok: false, error: "not_found" }, 404);
