@@ -132,7 +132,17 @@ async function prepareOrPublishBufferPost(request, env) {
       channel_key: body.channel_key,
       channel_identifier: channel.profile_id,
       credential_reference: channel.credential,
+      authenticated_account_name: discovered.account_name || null,
       discovered_channel_ids: discovered.channels.map((item) => item.id),
+      discovered_channels: discovered.channels.map((item) => ({
+        id: item.id,
+        service: item.service,
+        name: item.name,
+        display_name: item.displayName || null,
+        external_link: item.externalLink || null,
+        organization_id: item.organization_id,
+        organization_name: item.organization_name,
+      })),
       external_publication_effects: 0,
     }, 409);
   }
