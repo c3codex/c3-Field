@@ -96,7 +96,16 @@ function injectStaticRepresentation(html, filePath) {
     filePath,
   )
 
-  if (!canonical.startsWith(baseUrl)) {
+  const expectedCanonicalOrigin =
+    filePath === "undrifted/index.html"
+      ? "https://undrifted.measuresregistry.com/"
+      : baseUrl
+
+  if (
+    filePath === "undrifted/index.html"
+      ? canonical !== expectedCanonicalOrigin
+      : !canonical.startsWith(expectedCanonicalOrigin)
+  ) {
     throw new Error(`${filePath} has unexpected canonical URL: ${canonical}`)
   }
 
