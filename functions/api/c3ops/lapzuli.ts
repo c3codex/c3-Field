@@ -16,6 +16,8 @@ const LEGACY_BUFFER_CHANNELS = new Set([
   "x_measures_c3",
 ])
 
+const BLUESKY_CHANNELS = new Set(["bluesky_measures_registry","bluesky_undrifted","bluesky_c3_field","bluesky_c3_partners"])
+
 const C3_BUFFER_CHANNELS = new Set([
   "c3_facebook_page",
   "c3_facebook_group",
@@ -54,7 +56,9 @@ async function supabaseFetch<T>(env: Env, path: string, init: RequestInit = {}):
 }
 
 function adapterFor(channelKey: string | null, executorKey: string | null) {
-  if (executorKey !== "buffer" || !channelKey) return null
+  if (!channelKey) return null
+  if (executorKey === "bluesky_api" && BLUESKY_CHANNELS.has(channelKey)) return "/bluesky/posts"
+  if (executorKey !== "buffer") return null
   if (LEGACY_BUFFER_CHANNELS.has(channelKey)) return "/buffer/posts"
   if (C3_BUFFER_CHANNELS.has(channelKey)) return "/buffer/c3/posts"
   return null
@@ -75,6 +79,7 @@ function canonicalAllowed(adapter: string, value: string) {
     const url = new URL(value)
     if (url.protocol !== "https:") return false
     if (adapter === "/buffer/posts") return url.hostname === "measuresregistry.com"
+    if (adapter === "/bluesky/posts") return ["measuresregistry.com","c3field.online","mdm.c3field.online","47pct.c3field.online"].includes(url.hostname)
     return ["c3field.online","mdm.c3field.online","47pct.c3field.online"].includes(url.hostname)
   } catch {
     return false
@@ -404,6 +409,10 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     executor_key:executorKey,
     registered_standing_key:callable.registered_standing_key,
     registered_standing:adapter === "/buffer/c3/posts" ? "registered" : callable.registered_standing,
+    authority_reference:route.authority_reference,
+    route_key:route.route_key,
+    channel_identifier:callable.channel_identifier,
+    operator_confirmed:true,
     lapzuli_callable:true,
     operator_confirmed:true,
     idempotency_key:`${distributionAssetKey}:${callable.registered_standing_key}`,
