@@ -51,13 +51,16 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
     setActionError("")
     setActionResult(null)
     try {
-      const response=await fetch("/api/c3ops/lapzuli",{
+      const response=await fetch("/api/c3ops/manifest?view=lapzuli_action",{
         method:"POST",
         credentials:"same-origin",
-        headers:{"content-type":"application/json"},
+        headers:{"content-type":"application/json","accept":"application/json"},
         body:JSON.stringify(action==="resolve_campaign"?{action,campaign_key:key}:{action,distribution_asset_key:key}),
       })
-      const body=await response.json()
+      const contentType=response.headers.get("content-type")??""
+      const raw=await response.text()
+      if(!contentType.includes("application/json")) throw new Error("Lapzuli action route did not resolve to JSON.")
+      const body=JSON.parse(raw) as {standing?:string;reason?:string;error?:string;action?:string;external_publication_effects?:number|null}
       setActionResult(body)
       if(!response.ok) throw new Error(body.reason??body.error??"Lapzuli action held.")
       await onRefresh()
@@ -136,7 +139,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
                   {busy==="dispatch_asset:"+text(asset.distribution_asset_key)?"Dispatching…":"Dispatch now"}
                 </button>
               </div>}
-              {asset.latest_execution&&<details><summary>Latest execution evidence</summary><Rows records={[asset.latest_execution]}/></details>}
+              {asset.latest_execution&&<details><summary>Recorded execution evidence</summary><Rows records={[asset.latest_execution]}/></details>}
             </article>)}
             {!campaign.assets.length&&<p className="ops-unresolved">DNR — no distribution assets are bound to this campaign.</p>}
           </div>
