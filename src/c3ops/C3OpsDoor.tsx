@@ -83,7 +83,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
 
   return <section className="lapzuli-desk" aria-label="Lapzuli distribution desk">
     <div className="lapzuli-desk-mast">
-      <div><p className="ops-kicker">REGISTRY-BACKED DISTRIBUTION</p><h2>What can move now?</h2><p>{lapzuli.source}</p><button className="lapzuli-action" disabled={Boolean(busy)} onClick={()=>void run("verify_bluesky_identities")}>{busy==="verify_bluesky_identities:"?"Verifying Bluesky…":"Verify Bluesky identities"}</button></div>
+      <div><p className="ops-kicker">REGISTRY-BACKED DISTRIBUTION</p><h2>What can move now?</h2><p>{lapzuli.source}</p><details><summary>Provider identity checks</summary><button className="lapzuli-action" disabled={Boolean(busy)} onClick={()=>void run("verify_bluesky_identities")}>{busy==="verify_bluesky_identities"?"Verifying Bluesky…":"Re-verify Bluesky identities"}</button></details></div>
       <dl className="lapzuli-desk-totals">
         <div><dt>Campaigns</dt><dd>{lapzuli.campaigns.length}</dd></div>
         <div><dt>Ready</dt><dd>{totals.ready}</dd></div>
@@ -117,7 +117,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
         <div className="lapzuli-counts">
           <span>{campaign.counts.assets} assets</span><span>{campaign.counts.ready} ready</span><span>{campaign.counts.accepted} accepted</span><span>{campaign.counts.distributed} published</span><span>{campaign.counts.held} held</span>
         </div>
-        {campaign.standing==="awaiting_lapzuli_resolution"&&<button
+        {campaign.assets.some((asset:LapzuliAsset)=>asset.distribution_state==="awaiting_lapzuli_resolution" || asset.distribution_state==="ready_for_lapzuli_resolution")&&<button
           className="lapzuli-action"
           disabled={Boolean(busy)}
           onClick={()=>void run("resolve_campaign",text(campaign.campaign_key))}
