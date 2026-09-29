@@ -389,7 +389,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
 
   const canonicalUrl=str(callable.canonical_url) ?? str(payload.canonical_url) ?? str(route.canonical_url)
   const textValue=str(payload.text) ?? str(payload.caption)
-  const imageUrl=str(payload.image_url) ?? publicMediaUrl(env,payload)
+  const imageUrl=str(payload.image_url) ?? str(record(payload.media).runtime_uri) ?? publicMediaUrl(env,payload)
   if (!canonicalUrl || !textValue) {
     return {status:409,body:{standing:"HLD",reason:"resolved_payload_incomplete",external_publication_effects:0}}
   }
