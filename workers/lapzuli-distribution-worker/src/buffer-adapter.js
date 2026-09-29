@@ -5,13 +5,13 @@ const AUTHORIZED_CHANNELS = {
     platform: "facebook",
     service: "facebook",
     profile_id: "6a54761280cc80cdcaa97c9a",
-    credential: "BUFFER_PUB2_KEY",
+    credential: "BUFFER_SOCIAL_KEY",
   },
   facebook_measures_registry: {
     platform: "facebook",
     service: "facebook",
     profile_id: "6a54734280cc80cdcaa9743b",
-    credential: "BUFFER_PUB2_KEY",
+    credential: "BUFFER_SOCIAL_KEY",
   },
   linkedin_measures_registry: {
     platform: "linkedin",
@@ -19,17 +19,11 @@ const AUTHORIZED_CHANNELS = {
     profile_id: "6a23c027c687a22dd467a132",
     credential: "BUFFER_SOCIAL_KEY",
   },
-  instagram_measures_registry: {
-    platform: "instagram",
-    service: "instagram",
-    profile_id: "6a23bfc4c687a22dd467a045",
-    credential: "BUFFER_SOCIAL_KEY",
-  },
   x_measures_c3: {
     platform: "x",
     service: "twitter",
     profile_id: "6a23bff1c687a22dd467a0b3",
-    credential: "BUFFER_SOCIAL_KEY",
+    credential: "BUFFER_3_SOCIAL_KEY",
   },
 };
 
@@ -50,8 +44,8 @@ export async function handleBufferRequest(request, env, pathname) {
       c3_community_partners_buffer_key_present: Boolean(
         env.c3_COMMUNITY_PARTNERS_BUFFER_KEY || env.C3_COMMUNITY_PARTNERS_BUFFER_KEY
       ),
-      legacy_facebook_credential_present: Boolean(readBufferCredential(env, "BUFFER_PUB2_KEY")),
       buffer_social_key_present: Boolean(env.BUFFER_SOCIAL_KEY),
+      buffer_3_social_key_present: Boolean(env.BUFFER_3_SOCIAL_KEY),
       dry_run_verifies_provider_identity: true,
       external_publication_effects: 0,
     });
@@ -63,8 +57,8 @@ export async function handleBufferRequest(request, env, pathname) {
       standing: "buffer_bindings_checked",
       required_bindings: {
         LAPZULI_DISTRIBUTION_CONTROL_TOKEN: Boolean(env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN),
-        LEGACY_FACEBOOK_BUFFER_CREDENTIAL: Boolean(readBufferCredential(env, "BUFFER_PUB2_KEY")),
         BUFFER_SOCIAL_KEY: Boolean(env.BUFFER_SOCIAL_KEY),
+        BUFFER_3_SOCIAL_KEY: Boolean(env.BUFFER_3_SOCIAL_KEY),
         c3_COMMUNITY_PARTNERS_BUFFER_KEY: Boolean(
           env.c3_COMMUNITY_PARTNERS_BUFFER_KEY || env.C3_COMMUNITY_PARTNERS_BUFFER_KEY
         ),
@@ -395,14 +389,8 @@ async function bufferGraphql(credential, query, variables = undefined) {
 }
 
 function readBufferCredential(env, key) {
-  if (key === "BUFFER_PUB2_KEY") {
-    return (
-      env.BUFFER_PUB2_KEY ||
-      env.c3_COMMUNITY_PARTNERS_BUFFER_KEY ||
-      env.C3_COMMUNITY_PARTNERS_BUFFER_KEY
-    );
-  }
   if (key === "BUFFER_SOCIAL_KEY") return env.BUFFER_SOCIAL_KEY;
+  if (key === "BUFFER_3_SOCIAL_KEY") return env.BUFFER_3_SOCIAL_KEY;
   return null;
 }
 
