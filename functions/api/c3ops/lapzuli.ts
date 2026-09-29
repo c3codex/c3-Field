@@ -503,13 +503,22 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     })
   }
 
+  const workerReason =
+    str(body.reason) ??
+    str(body.error) ??
+    (!ok ? str(body.standing) : null) ??
+    (!ok ? `worker_http_${called.response?.status ?? 502}` : null)
+
   return {status:ok ? (dryRun?200:201) : (called.response?.status ?? 502),body:{
     standing:ok ? (dryRun ? "ACT_PREFLIGHT" : "ACT") : "HLD",
+    reason:workerReason,
     action:dryRun ? "preflight_asset" : "dispatch_asset",
     distribution_asset_key:distributionAssetKey,
     execution_id:executionId,
     attempt_number:attemptNumber,
     adapter,
+    worker_http_status:called.response?.status ?? null,
+    worker_standing:str(body.standing),
     worker_result:body,
     external_publication_effects:dryRun ? 0 : effects,
   }}
