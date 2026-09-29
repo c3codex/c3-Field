@@ -210,6 +210,10 @@ function isMeasuresRegistryHost(hostname: string) {
   return hostname === "measuresregistry.com" || hostname === "www.measuresregistry.com"
 }
 
+function isUndriftedHost(hostname: string) {
+  return hostname === "undrifted.measuresregistry.com"
+}
+
 function isMeasuresOfInannaHost(hostname: string) {
   return hostname === "measuresofinanna.com" || hostname === "www.measuresofinanna.com"
 }
@@ -315,6 +319,7 @@ export default function App() {
   const hostname = window.location.hostname
   const isOpsHost = isC3OpsHost(hostname)
   const isRegistryHost = isMeasuresRegistryHost(hostname)
+  const isUndriftedPublicationHost = isUndriftedHost(hostname)
   const isInannaHost = isMeasuresOfInannaHost(hostname)
   const isC3Host = isC3FieldHost(hostname)
   const c3Route = resolveC3FieldRoute(window.location.pathname)
@@ -336,6 +341,10 @@ export default function App() {
       applyPageMetadata(INANNA_METADATA)
       return () => { cancelled = true }
     }
+
+    // The dedicated unDrifted host receives its static head from the governed
+    // WebPAC build projection. Do not overwrite that canonical/OG state in the client.
+    if (isUndriftedPublicationHost) return () => { cancelled = true }
 
     const pathname = normalizePathname(window.location.pathname)
     const routeUnit = REGISTRY_ROUTE_UNITS[pathname]
@@ -365,12 +374,12 @@ export default function App() {
       })
 
     return () => { cancelled = true }
-  }, [c3Route.kind, isC3Host, isInannaHost, isOpsHost, mode])
+  }, [c3Route.kind, isC3Host, isInannaHost, isOpsHost, isUndriftedPublicationHost, mode])
 
   if (isOpsHost) return <Suspense fallback={<p role="status">Opening c3Ops…</p>}><C3OpsDoor /></Suspense>
 
-  if (isRegistryHost) {
-    if (normalizePathname(window.location.pathname) === "/governed-environments") {
+  if (isRegistryHost || isUndriftedPublicationHost) {
+    if (isRegistryHost && normalizePathname(window.location.pathname) === "/governed-environments") {
       return <PublicWhitePaperLanding paper={governedEnvironments} />
     }
     return <MeasuresRegistryRuntime />
