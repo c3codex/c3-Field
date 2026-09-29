@@ -304,16 +304,37 @@ async function resolveCampaign(env: Env, campaignKey: string) {
   }}
 }
 
-async function workerCall(env: Env, path: string, payload: Row) {
+async function workerRequest(env: Env, path: string, method: "GET"|"POST" = "POST", payload?: Row) {
   const token = env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN
   if (!token) return {response:null,body:{ok:false,standing:"held_lapzuli_control_token_missing",external_publication_effects:0}}
   const base=(env.LAPZULI_DISTRIBUTION_WORKER_URL ?? DEFAULT_WORKER_URL).replace(/\/$/,"")
   const response=await fetch(base+path,{
-    method:"POST",
-    headers:{authorization:`Bearer ${token}`,"content-type":"application/json"},
-    body:JSON.stringify(payload),
+    method,
+    headers:{authorization:`Bearer ${token}`,...(method==="POST"?{"content-type":"application/json"}:{})},
+    ...(method==="POST"?{body:JSON.stringify(payload ?? {})}:{}),
   })
   return {response,body:record(await response.json().catch(()=>({})))}
+}
+
+async function verifyBlueskyIdentities(env: Env) {
+  const identities = [
+    ["measures_registry","/verify/bluesky/measures"],
+    ["undrifted","/verify/bluesky/undrifted"],
+    ["c3_field","/verify/bluesky/c3-field"],
+    ["c3_community_partners","/verify/bluesky/c3-partners"],
+  ] as const
+  const results=[]
+  for (const [identity,path] of identities) {
+    const called=await workerRequest(env,path,"GET")
+    const body=called.body
+    results.push({identity,ok:called.response?.ok===true && body.ok===true,handle:str(body.handle),did:str(body.did),worker_http_status:called.response?.status ?? null,external_publication_effects:0})
+  }
+  const allVerified=results.every(result=>result.ok)
+  return {status:allVerified?200:409,body:{standing:allVerified?"ACT":"HLD",action:"verify_bluesky_identities",verified_count:results.filter(result=>result.ok).length,total_count:results.length,identities:results,external_publication_effects:0}}
+}
+
+async function workerCall(env: Env, path: string, payload: Row) {
+  return workerRequest(env,path,"POST",payload)
 }
 
 async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boolean) {
@@ -526,7 +547,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
 
 export const onRequestGet: PagesFunction<Env> = async ({request}) => {
   if (new URL(request.url).hostname !== C3OPS_HOST) return json({error:"not_found"},404)
-  return json({contract:"lapzuli_distribution_actions_v1",actions:["resolve_campaign","preflight_asset","dispatch_asset"],external_publication_effects:0})
+  return json({contract:"lapzuli_distribution_actions_v1",actions:["verify_bluesky_identities","resolve_campaign","preflight_asset","dispatch_asset"],external_publication_effects:0})
 }
 
 export async function handleLapzuliAction(request: Request, env: Env) {
@@ -534,6 +555,10 @@ export async function handleLapzuliAction(request: Request, env: Env) {
   try {
     const body=record(await request.json().catch(()=>({})))
     const action=str(body.action)
+    if (action === "verify_bluesky_identities") {
+      const result=await verifyBlueskyIdentities(env)
+      return json(result.body,result.status)
+    }
     if (action === "resolve_campaign") {
       const campaignKey=str(body.campaign_key)
       if (!campaignKey) return json({standing:"HLD",reason:"campaign_key_required",external_publication_effects:0},400)
