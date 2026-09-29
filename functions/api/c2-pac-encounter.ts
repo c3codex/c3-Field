@@ -108,7 +108,25 @@ async function pacRows(env:PassageEnv,subjectKey:string,pacKey?:string|null){
 }
 
 async function projectPac(env:PassageEnv,row:Row){
-  const evaluation=await rpc(env,"c3_pac_evaluate",{p_pac_key:String(row.pac_key||"")})
+  const pacKey=String(row.pac_key||"")
+  const [evaluation,members]=await Promise.all([
+    rpc(env,"c3_pac_evaluate",{p_pac_key:pacKey}),
+    read(env,"c3_pac_member",{
+      select:"member_key,member_kind,member_role,required,release_scope,runtime_uri,standing",
+      pac_key:"eq."+pacKey,
+      standing:"eq.active",
+      release_scope:"eq.registered"
+    })
+  ])
+  const runtimeBlockers=members.filter(member=>
+    member.required===true &&
+    ["asset","media","derivative"].includes(String(member.member_kind||"")) &&
+    (typeof member.runtime_uri!=="string"||!member.runtime_uri.trim())
+  ).map(member=>({
+    member_key:member.member_key,
+    member_role:member.member_role,
+    reason:"required_runtime_uri_missing"
+  }))
   const metadata=(row.metadata&&typeof row.metadata==="object"&&!Array.isArray(row.metadata))
     ? row.metadata as Record<string,unknown>
     : {}
@@ -137,7 +155,9 @@ async function projectPac(env:PassageEnv,row:Row){
       runtime_state:workflow.runtime_state||"HELD"
     },
     registered_content_sha256:metadata.registered_content_sha256||null,
-    registry_registration_state:metadata.registry_registration_state||null
+    registry_registration_state:metadata.registry_registration_state||null,
+    runtime_binding_ready:runtimeBlockers.length===0,
+    runtime_blockers:runtimeBlockers
   }
 }
 
