@@ -520,7 +520,7 @@ export const onRequestGet: PagesFunction<Env> = async ({request}) => {
   return json({contract:"lapzuli_distribution_actions_v1",actions:["resolve_campaign","preflight_asset","dispatch_asset"],external_publication_effects:0})
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({request,env}) => {
+export async function handleLapzuliAction(request: Request, env: Env) {
   if (new URL(request.url).hostname !== C3OPS_HOST) return json({error:"not_found"},404)
   try {
     const body=record(await request.json().catch(()=>({})))
@@ -542,5 +542,7 @@ export const onRequestPost: PagesFunction<Env> = async ({request,env}) => {
     return json({standing:"HLD",reason:"lapzuli_action_runtime_error",error:error instanceof Error?error.message:"unknown error",external_publication_effects:0},500)
   }
 }
+
+export const onRequestPost: PagesFunction<Env> = ({request,env}) => handleLapzuliAction(request,env)
 
 export const onRequest = async () => json({error:"method not allowed"},405)
