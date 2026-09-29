@@ -567,6 +567,31 @@ export default function MyEnvironmentEncounter(){
         <p className="myenv-runtime-warning">These records support discovery only. ProWorx decides whether any candidate is worth contacting or belongs in its environment.</p>
       </section>
     }
+    if(primitive.renderer_key==="c1me.pipeline"){
+      const config=primitive.config||{}
+      const stages=Array.isArray(config.pipeline_stages)?config.pipeline_stages.filter((item):item is string=>typeof item==="string"):[]
+      const records=Array.isArray(config.records)?config.records.filter((item):item is Record<string,unknown>=>!!item&&typeof item==="object"):[]
+      return <section key={primitive.primitive_key} className="myenv-connections-thread">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">PRIVATE OPERATOR VIEW · EVIDENCE-RESOLVED</p>
+          <h2>{primitive.display_label}</h2>
+          <p>{text(config.summary,"Relationship work projected from Registry evidence. Pipeline state does not create consent, standing, CURRENT, or authority.")}</p>
+        </div>
+        {stages.length>0&&<article className="myenv-initiative-card"><div><span>PIPELINE</span><h3>{stages.join(" → ")}</h3></div></article>}
+        <div className="myenv-thread-entries">
+          {records.length===0&&<p className="myenv-relations-empty">No pipeline records resolved.</p>}
+          {records.map((record,index)=><article key={text(record.relationship_key,text(record.email,String(index)))}>
+            <div><span>{text(record.stage,"CAPTURE")}</span>{text(record.last_touch)&&<time>{text(record.last_touch)}</time>}</div>
+            <h3>{text(record.organization,text(record.display_name,"Relationship"))}</h3>
+            {text(record.display_name)&&<p><strong>Contact:</strong> {text(record.display_name)}</p>}
+            {text(record.signal)&&<p><strong>Signal:</strong> {text(record.signal)}</p>}
+            <p><strong>Next:</strong> {text(record.next_encounter,"reply or discovery conversation")}</p>
+            <p><strong>Observed problem:</strong> {text(record.observed_problem,"Not yet established")}</p>
+          </article>)}
+        </div>
+        <p className="myenv-runtime-warning">Progress only from evidenced replies and discovery. Outreach alone does not establish a problem or relationship standing.</p>
+      </section>
+    }
     if(primitive.renderer_key==="c1me.native_connections"){
       const has47pct=initiativeConnections.some(connection=>connection.initiative_key==="47pct")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
