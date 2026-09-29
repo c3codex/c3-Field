@@ -532,6 +532,41 @@ export default function MyEnvironmentEncounter(){
         {canopyNotice&&<p className="myenv-initiative-notice" role="status">{canopyNotice}</p>}
       </section>
     }
+    if(primitive.renderer_key==="c1me.discovery"){
+      const config=primitive.config||{}
+      const request=(config.request&&typeof config.request==="object"?config.request:{}) as Record<string,unknown>
+      const candidates=Array.isArray(config.candidates)?config.candidates.filter((item):item is Record<string,unknown>=>!!item&&typeof item==="object"):[]
+      return <section key={primitive.primitive_key} className="myenv-connections-thread">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">REGISTRY DISCOVERY · EVIDENCE ONLY</p>
+          <h2>{primitive.display_label}</h2>
+          <p>{text(config.summary,"Evidence-backed candidates surfaced for human evaluation. Registry does not recommend, certify, or create trust.")}</p>
+        </div>
+        <article className="myenv-initiative-card">
+          <div><span>REQUEST</span><h3>{text(request.capacity,"Requested capacity")}</h3>
+            <p>{[text(request.location),text(request.customer_type)].filter(Boolean).join(" · ")}</p>
+          </div>
+        </article>
+        <div className="myenv-thread-entries">
+          {candidates.map((candidate,index)=>{
+            const evidence=Array.isArray(candidate.evidence)?candidate.evidence.filter((item):item is Record<string,unknown>=>!!item&&typeof item==="object"):[]
+            const unknowns=Array.isArray(candidate.unknowns)?candidate.unknowns.filter((item):item is string=>typeof item==="string"):[]
+            return <article key={text(candidate.candidate_key,String(index))}>
+              <div><span>{text(candidate.registry_state,"candidate · evidence only")}</span></div>
+              <h3>{text(candidate.display_name,"Candidate")}</h3>
+              {text(candidate.location)&&<p><strong>Location:</strong> {text(candidate.location)}</p>}
+              {text(candidate.capacity)&&<p><strong>Capacity:</strong> {text(candidate.capacity)}</p>}
+              {text(candidate.experience)&&<p><strong>Experience:</strong> {text(candidate.experience)}</p>}
+              {text(candidate.story)&&<p><strong>Story:</strong> {text(candidate.story)}</p>}
+              {text(candidate.reviews)&&<p><strong>Reviews:</strong> {text(candidate.reviews)}</p>}
+              {unknowns.length>0&&<p><strong>Not established:</strong> {unknowns.join(" · ")}</p>}
+              {evidence.length>0&&<p><strong>Evidence:</strong> {evidence.map((item,evidenceIndex)=><span key={evidenceIndex}>{evidenceIndex>0?" · ":""}<a href={text(item.url)} target="_blank" rel="noreferrer">{text(item.label,"source")}</a></span>)}</p>}
+            </article>
+          })}
+        </div>
+        <p className="myenv-runtime-warning">These records support discovery only. ProWorx decides whether any candidate is worth contacting or belongs in its environment.</p>
+      </section>
+    }
     if(primitive.renderer_key==="c1me.native_connections"){
       const has47pct=initiativeConnections.some(connection=>connection.initiative_key==="47pct")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
