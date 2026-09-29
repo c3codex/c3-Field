@@ -158,6 +158,8 @@ export default function MyEnvironmentEncounter(){
   const [calendarLocation,setCalendarLocation]=useState("")
   const [calendarNotes,setCalendarNotes]=useState("")
   const [calendarRelationship,setCalendarRelationship]=useState("")
+  const [calendarContextType,setCalendarContextType]=useState("")
+  const [calendarContextKey,setCalendarContextKey]=useState("")
   const [calendarNotice,setCalendarNotice]=useState("")
   const [calendarBusy,setCalendarBusy]=useState(false)
 
@@ -454,6 +456,24 @@ export default function MyEnvironmentEncounter(){
     }
   }
 
+  function sendPipelineRecordToCalendar(record:Record<string,unknown>){
+    const organization=text(record.organization,text(record.display_name,"Relationship"))
+    const contact=text(record.display_name)
+    setCalendarTitle((contact?contact+" · ":"")+organization+" discovery")
+    setCalendarType("encounter")
+    setCalendarRelationship(text(record.relationship_key))
+    setCalendarContextType("pipeline")
+    setCalendarContextKey("measures_registry_nec_cohort")
+    setCalendarNotes([
+      "NEC / Measures Pipeline",
+      text(record.signal)?("Signal: "+text(record.signal)):"",
+      "Pipeline stage: "+text(record.stage,"CONNECT"),
+      "Observed problem: "+text(record.observed_problem,"Not yet established")
+    ].filter(Boolean).join("\n"))
+    setCalendarNotice("Pipeline context loaded. Add the confirmed date and time, then save it to your c3 Calendar.")
+    setActivePanel("primitive:calendar")
+  }
+
   async function createCalendarEvent(event:FormEvent){
     event.preventDefault()
     if(!calendarTitle.trim()||!calendarStart||!calendarEnd)return
@@ -466,13 +486,15 @@ export default function MyEnvironmentEncounter(){
           start_at:new Date(calendarStart).toISOString(),end_at:new Date(calendarEnd).toISOString(),
           timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"America/Chicago",
           related_relationship_key:calendarRelationship.trim()||null,
+          related_context_type:calendarContextType||null,
+          related_context_key:calendarContextKey||null,
           location_text:calendarLocation.trim()||null,notes:calendarNotes.trim()||null
         })
       })
       const body=await response.json() as {ok?:boolean;event?:CalendarEvent;message?:string;standing?:string}
       if(!response.ok||!body.ok||!body.event)throw new Error(body.message||body.standing||"The event could not be created.")
       setCalendarEvents(current=>[...current,body.event!].sort((a,b)=>new Date(a.start_at).getTime()-new Date(b.start_at).getTime()))
-      setCalendarTitle("");setCalendarStart("");setCalendarEnd("");setCalendarLocation("");setCalendarNotes("");setCalendarRelationship("")
+      setCalendarTitle("");setCalendarStart("");setCalendarEnd("");setCalendarLocation("");setCalendarNotes("");setCalendarRelationship("");setCalendarContextType("");setCalendarContextKey("")
       setCalendarNotice("Added to your c3 Calendar.")
     }catch(error){setCalendarNotice(error instanceof Error?error.message:"The event could not be created.")}
     finally{setCalendarBusy(false)}
@@ -705,6 +727,7 @@ export default function MyEnvironmentEncounter(){
             {text(record.signal)&&<p><strong>Signal:</strong> {text(record.signal)}</p>}
             <p><strong>Next:</strong> {text(record.next_encounter,"reply or discovery conversation")}</p>
             <p><strong>Observed problem:</strong> {text(record.observed_problem,"Not yet established")}</p>
+            <button type="button" onClick={()=>sendPipelineRecordToCalendar(record)}>SEND TO CALENDAR</button>
           </article>)}
         </div>
         <p className="myenv-runtime-warning">Progress only from evidenced replies and discovery. Outreach alone does not establish a problem or relationship standing.</p>
