@@ -116,3 +116,75 @@
 .myenv-chazz-compose-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .myenv-chazz-compose-actions small{color:rgba(183,199,221,.44);font-size:9px;letter-spacing:.08em}
 @media(max-width:760px){.myenv-chazz-message{max-width:96%}.myenv-chazz-compose-actions{align-items:flex-start;flex-direction:column}}
+
+
+/* Environment Index — visible inventory of the EnvPAC-resolved My Env surface. */
+.myenv-index-toggle{
+  position:absolute;z-index:8;right:16px;bottom:16px;display:none;align-items:center;gap:10px;
+  border:1px solid rgba(244,239,227,.2);border-radius:999px;background:rgba(5,13,18,.82);
+  color:#f4efe3;padding:10px 13px;font:700 9px/1 Inter,system-ui,sans-serif;letter-spacing:.12em;
+  backdrop-filter:blur(12px);cursor:pointer
+}
+.myenv-index-toggle strong{
+  min-width:22px;height:22px;border-radius:999px;display:grid;place-items:center;
+  background:rgba(244,239,227,.12);font-size:9px
+}
+.myenv-index{
+  position:absolute;z-index:7;right:clamp(16px,2.2vw,34px);top:50%;transform:translateY(-50%);
+  width:min(278px,calc(100vw - 40px));max-height:min(78vh,760px);overflow:auto;
+  border:1px solid rgba(244,239,227,.16);border-radius:17px;
+  background:linear-gradient(180deg,rgba(5,13,18,.78),rgba(4,10,15,.9));
+  box-shadow:0 18px 58px rgba(0,0,0,.25);backdrop-filter:blur(16px);
+  padding:12px
+}
+.myenv-index-head{
+  display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;
+  padding:7px 7px 11px;border-bottom:1px solid rgba(244,239,227,.1)
+}
+.myenv-index-head>div{display:grid;gap:3px}
+.myenv-index-head span{font:600 8px/1 Inter,system-ui,sans-serif;letter-spacing:.16em;color:rgba(244,239,227,.47)}
+.myenv-index-head strong{font:400 17px/1.15 Georgia,serif}
+.myenv-index-head small{font-size:9px;color:rgba(244,239,227,.5);white-space:nowrap}
+.myenv-index-head>button{
+  display:none;width:32px;height:32px;border:1px solid rgba(244,239,227,.16);border-radius:999px;
+  background:transparent;color:#f4efe3;font-size:20px;cursor:pointer
+}
+.myenv-index-group{display:grid;gap:4px;padding:11px 2px 3px}
+.myenv-index-group>p{
+  margin:0 7px 4px;font:700 8px/1 Inter,system-ui,sans-serif;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(244,239,227,.38)
+}
+.myenv-index-item{
+  width:100%;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;text-align:left;
+  border:1px solid transparent;border-radius:10px;background:transparent;color:#f4efe3;
+  padding:10px 10px;cursor:pointer;transition:background .15s ease,border-color .15s ease
+}
+.myenv-index-item>span{font:500 12px/1.2 Inter,system-ui,sans-serif}
+.myenv-index-item>small{max-width:106px;text-align:right;font-size:8px;line-height:1.25;color:rgba(244,239,227,.42)}
+.myenv-index-item:hover,.myenv-index-item:focus-visible{
+  border-color:rgba(244,239,227,.14);background:rgba(244,239,227,.055);outline:none
+}
+.myenv-index-item[aria-current="page"]{
+  border-color:rgba(244,239,227,.26);background:rgba(244,239,227,.09)
+}
+.myenv-index-item--initiative>span:before{
+  content:"";display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:999px;
+  border:1px solid rgba(244,239,227,.65);box-shadow:0 0 0 3px rgba(244,239,227,.04)
+}
+
+@media(max-width:760px){
+  .myenv-index-toggle{display:flex}
+  .myenv-index{
+    position:fixed;left:10px;right:10px;top:auto;bottom:10px;transform:translateY(calc(100% + 24px));
+    width:auto;max-height:68vh;opacity:0;pointer-events:none;transition:transform .2s ease,opacity .2s ease;
+    z-index:20;border-radius:18px
+  }
+  .myenv-index--open{transform:none;opacity:1;pointer-events:auto}
+  .myenv-index-head>button{display:grid;place-items:center}
+  .myenv-index-item{padding:11px 10px}
+  .myenv-index-toggle{bottom:14px;right:14px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .myenv-index,.myenv-index-item{transition:none}
+}
