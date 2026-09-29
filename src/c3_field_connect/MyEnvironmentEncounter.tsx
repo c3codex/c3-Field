@@ -21,6 +21,7 @@ type Primitive={
   config?:Record<string,unknown>
 }
 type PrimitivePayload={authenticated:boolean;standing:string;primitives?:Primitive[]}
+type PrimitiveGroupKey="core"|"work"|"relations"|"other"
 type InitiativeComponent={component_key:string;renderer_key:string;sort_order:number;config?:Record<string,unknown>}
 type Initiative={initiative_key:string;initiative_envpac_key:string;target_environment_key?:string|null;visibility_source:string;context_class?:string;context_classes?:string[];initiative_operator_binding_key?:string|null;operator_class?:string|null;operator_role?:string|null;invite_context_allowed?:boolean;components:InitiativeComponent[]}
 type InitiativePayload={authenticated:boolean;standing:string;initiatives?:Initiative[]}
@@ -99,6 +100,24 @@ function initiativeLabel(initiative:Initiative){
   const base=initiative.initiative_key==="47pct"?"4.7%":text(entry?.config?.title,initiative.initiative_key)
   return initiative.context_class==="operator"?base+" · Operator":base
 }
+function primitiveGroup(primitive:Primitive):PrimitiveGroupKey{
+  if(["chazz","current","profile_pac","canopy","calendar"].includes(primitive.primitive_key))return "core"
+  if(["native_connections","invite_connection"].includes(primitive.primitive_key))return "relations"
+  if(primitive.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline")return "work"
+  return "other"
+}
+function primitiveMeta(primitive:Primitive){
+  if(primitive.primitive_key==="current")return "retained relation"
+  if(primitive.primitive_key==="profile_pac")return "profile & presentation"
+  if(primitive.primitive_key==="calendar")return "c3-native schedule"
+  if(primitive.primitive_key==="native_connections")return "people & initiative relations"
+  if(primitive.primitive_key==="invite_connection")return "relational passage"
+  if(primitive.renderer_key==="c1me.discovery")return "evidence encounter"
+  if(primitive.renderer_key==="c1me.pipeline")return "private operator view"
+  if(primitive.primitive_key==="chazz")return "CURRENT-aware work"
+  if(primitive.primitive_key==="canopy")return "external surfaces"
+  return primitive.primitive_class.replace(/_/g," ")
+}
 
 export default function MyEnvironmentEncounter(){
   const [state,setState]=useState<"claiming"|"loading"|"intro"|"ready"|"held">("loading")
@@ -139,6 +158,7 @@ export default function MyEnvironmentEncounter(){
   const [inviteNotice,setInviteNotice]=useState("")
   const [inviteCopy,setInviteCopy]=useState("")
   const [activePanel,setActivePanel]=useState<string|null>(null)
+  const [environmentIndexOpen,setEnvironmentIndexOpen]=useState(false)
   const [runtimeNotice,setRuntimeNotice]=useState("")
   const [canopyLoaded,setCanopyLoaded]=useState(false)
   const [profileLoaded,setProfileLoaded]=useState(false)
@@ -807,6 +827,13 @@ export default function MyEnvironmentEncounter(){
   const activeInitiative=activePanel?.startsWith("initiative:")
     ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
     :null
+  const groupedPrimitives={
+    core:primitives.filter(primitive=>primitiveGroup(primitive)==="core"),
+    work:primitives.filter(primitive=>primitiveGroup(primitive)==="work"),
+    relations:primitives.filter(primitive=>primitiveGroup(primitive)==="relations"),
+    other:primitives.filter(primitive=>primitiveGroup(primitive)==="other")
+  }
+  const environmentItemCount=primitives.length+initiatives.length
 
   return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v3+CURRENT_v1">
     {backdrop&&<img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>}
@@ -816,39 +843,63 @@ export default function MyEnvironmentEncounter(){
       <div className="myenv-presence">
         <p className="myenv-kicker">c1ME.env</p>
         <h1>{data.owner?.display_name?.trim()||"My Environment"}</h1>
-        <p className="myenv-presence-hint">Hover to discover · tap to open</p>
+        <p className="myenv-presence-hint">{environmentItemCount} things are available in this environment · open the Environment Index</p>
       </div>
     </section>
 
     {runtimeNotice&&<p className="myenv-runtime-notice" role="status">{runtimeNotice}</p>}
     {initiatives.some(initiative=>initiative.initiative_key==="47pct")&&<aside className="myenv-runtime-notice myenv-eternal-flame" aria-label="Eternal Flame memorial"><EternalFlame compact /></aside>}
 
-    <nav className="myenv-discovery" aria-label="Environment touchpoints">
-      {primitives.map(primitive=><button
-        key={primitive.primitive_key}
-        type="button"
-        className={"myenv-touchpoint myenv-touchpoint--"+primitive.primitive_key.replace(/_/g,"-")}
-        aria-label={"Open "+primitive.display_label}
-        aria-expanded={activePanel==="primitive:"+primitive.primitive_key}
-        onClick={()=>setActivePanel("primitive:"+primitive.primitive_key)}
-      >
-        <span className="myenv-touchpoint-dot" aria-hidden="true"/>
-        <span className="myenv-touchpoint-label">{primitive.display_label}</span>
-      </button>)}
-      {initiatives.map(initiative=>{
-        const label=initiativeLabel(initiative)
-        return <button
-          key={initiative.initiative_key}
+    <button
+      type="button"
+      className="myenv-index-toggle"
+      aria-expanded={environmentIndexOpen}
+      aria-controls="myenv-environment-index"
+      onClick={()=>setEnvironmentIndexOpen(value=>!value)}
+    >
+      <span>ENVIRONMENT INDEX</span><strong>{environmentItemCount}</strong>
+    </button>
+
+    <nav id="myenv-environment-index" className={"myenv-index"+(environmentIndexOpen?" myenv-index--open":"")} aria-label="Environment Index">
+      <div className="myenv-index-head">
+        <div><span>MY ENVIRONMENT</span><strong>Environment Index</strong></div>
+        <small>{environmentItemCount} available</small>
+        <button type="button" aria-label="Close Environment Index" onClick={()=>setEnvironmentIndexOpen(false)}>×</button>
+      </div>
+      {([
+        ["core","Core",groupedPrimitives.core],
+        ["work","Work",groupedPrimitives.work],
+        ["relations","Relations",groupedPrimitives.relations],
+        ["other","Other",groupedPrimitives.other]
+      ] as Array<[PrimitiveGroupKey,string,Primitive[]]>).map(([key,label,items])=>items.length>0&&<section className="myenv-index-group" key={key}>
+        <p>{label}</p>
+        {items.map(primitive=><button
+          key={primitive.primitive_key}
           type="button"
-          className="myenv-touchpoint myenv-touchpoint--initiative"
-          aria-label={"Open "+label}
-          aria-expanded={activePanel==="initiative:"+initiative.initiative_key}
-          onClick={()=>setActivePanel("initiative:"+initiative.initiative_key)}
+          className="myenv-index-item"
+          aria-current={activePanel==="primitive:"+primitive.primitive_key?"page":undefined}
+          onClick={()=>{setActivePanel("primitive:"+primitive.primitive_key);setEnvironmentIndexOpen(false)}}
         >
-          <span className="myenv-touchpoint-dot" aria-hidden="true"/>
-          <span className="myenv-touchpoint-label">{label}</span>
-        </button>
-      })}
+          <span>{primitive.display_label}</span>
+          <small>{primitiveMeta(primitive)}</small>
+        </button>)}
+      </section>)}
+      {initiatives.length>0&&<section className="myenv-index-group">
+        <p>Initiatives</p>
+        {initiatives.map(initiative=>{
+          const label=initiativeLabel(initiative)
+          return <button
+            key={initiative.initiative_key}
+            type="button"
+            className="myenv-index-item myenv-index-item--initiative"
+            aria-current={activePanel==="initiative:"+initiative.initiative_key?"page":undefined}
+            onClick={()=>{setActivePanel("initiative:"+initiative.initiative_key);setEnvironmentIndexOpen(false)}}
+          >
+            <span>{label}</span>
+            <small>{initiative.target_environment_key||"initiative relation"}</small>
+          </button>
+        })}
+      </section>}
     </nav>
 
     {(activePrimitive||activeInitiative)&&<div
