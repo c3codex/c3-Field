@@ -43,7 +43,7 @@ function Station({component}:{component:CurrentStateComponent}) {
 
 function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>Promise<void>}) {
   const [busy,setBusy]=useState("")
-  const [actionResult,setActionResult]=useState<{standing?:string;reason?:string;action?:string;external_publication_effects?:number|null}|null>(null)
+  const [actionResult,setActionResult]=useState<Record<string,unknown>|null>(null)
   const [actionError,setActionError]=useState("")
 
   async function run(action:"resolve_campaign"|"preflight_asset"|"dispatch_asset", key:string) {
@@ -60,9 +60,11 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
       const contentType=response.headers.get("content-type")??""
       const raw=await response.text()
       if(!contentType.includes("application/json")) throw new Error("Lapzuli action route did not resolve to JSON.")
-      const body=JSON.parse(raw) as {standing?:string;reason?:string;error?:string;action?:string;external_publication_effects?:number|null}
+      const body=JSON.parse(raw) as Record<string,unknown>
       setActionResult(body)
-      if(!response.ok) throw new Error(body.reason??body.error??"Lapzuli action held.")
+      const reason=typeof body.reason==="string"?body.reason:null
+      const error=typeof body.error==="string"?body.error:null
+      if(!response.ok) throw new Error(reason??error??"Lapzuli action held.")
       await onRefresh()
     } catch(e) {
       setActionError(e instanceof Error?e.message:"Lapzuli action held.")
@@ -94,7 +96,11 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
     {(actionResult||actionError)&&<div className={"lapzuli-action-result "+(actionError?"is-held":"is-act")} role="status">
       <strong>{actionError?"HLD":text(actionResult?.standing)}</strong>
       <span>{actionError||text(actionResult?.action)}</span>
-      <span>External effects: {actionResult?.external_publication_effects == null ? "UNKNOWN" : actionResult.external_publication_effects}</span>
+      <span>External effects: {actionResult?.external_publication_effects == null ? "UNKNOWN" : text(actionResult.external_publication_effects)}</span>
+      {actionResult && typeof actionResult.worker_result==="object" && actionResult.worker_result!==null && <details>
+        <summary>Provider preflight evidence</summary>
+        <Rows records={[actionResult.worker_result as Record<string,unknown>]}/>
+      </details>}
     </div>}
 
     <div className="lapzuli-campaigns">
