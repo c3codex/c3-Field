@@ -21,6 +21,8 @@ type PacTruth={
   }
   registry_registration_state?:string|null
   registered_content_sha256?:string|null
+  runtime_binding_ready?:boolean
+  runtime_blockers?:Array<{member_key?:unknown;member_role?:unknown;reason?:unknown}>
 }
 type Payload={
   authenticated:boolean
@@ -100,6 +102,7 @@ export default function C2PacEncounter(){
         const approved=pac.workflow?.operator_encounter_approval==="APPROVED"
         const registered=pac.registry_registration_state==="REGISTERED"
         const complete=pac.evaluation?.completeness_state==="pass"
+        const runtimeReady=pac.runtime_binding_ready===true
         return <article key={pac.pac_key} className="c2-evidence-block">
           <p className="c2-eyebrow">SEPARATELY CUSTODIED PAC</p>
           <h2>{pac.title||pac.pac_key}</h2>
@@ -110,6 +113,7 @@ export default function C2PacEncounter(){
             <article><span>contract</span><p>{complete?"PASS":"HELD"} · {pac.evaluation?.resolution_state||"held"}</p></article>
             <article><span>NI approval</span><p>{approved?"APPROVED":"PENDING"}</p></article>
             <article><span>Registry</span><p>{registered?"REGISTERED":pac.workflow?.registry_submission_state||"NOT SUBMITTED"}</p></article>
+            <article><span>runtime bindings</span><p>{runtimeReady?"READY":"HELD"}</p></article>
             <article><span>FREE</span><p>{pac.workflow?.free_resolution_state||"BLOCKED"}</p></article>
           </div>
 
@@ -121,9 +125,16 @@ export default function C2PacEncounter(){
 
           {approved&&!registered&&<button
             type="button"
-            disabled={busy||!complete}
+            disabled={busy||!complete||!runtimeReady}
             onClick={()=>void act("register_public_encounter",pac.pac_key)}
           >REGISTER APPROVED PAC</button>}
+
+          {!runtimeReady&&<div className="c2-notice">
+            <strong>HELD — required public runtime binding incomplete.</strong>
+            {(pac.runtime_blockers||[]).map((blocker,index)=><p key={index}>
+              {String(blocker.member_role||blocker.member_key||"required member")} · {String(blocker.reason||"runtime binding required")}
+            </p>)}
+          </div>}
 
           {registered&&<p className="c2-notice">REGISTERED · {pac.registered_content_sha256}</p>}
           {pac.canonical_host&&<p className="c2-small">Public host: {pac.canonical_host}</p>}
