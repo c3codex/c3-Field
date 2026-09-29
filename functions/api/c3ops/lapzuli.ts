@@ -263,7 +263,7 @@ async function resolveCampaign(env: Env, campaignKey: string) {
         route_key:routeKey,
         publication_object_key:str(item.asset.publication_asset_id) ?? str(item.asset.campaign_asset_id) ?? assetKey,
         desk_key:"campaign_distribution",
-        outlet_key:item.channelKey,
+        outlet_key:item.adapter === "/bluesky/posts" ? "bluesky" : item.channelKey,
         distribution_mode:str(item.asset.distribution_type) ?? "campaign_distribution",
         route_status:"authorized",
         qualification_snapshot:{
