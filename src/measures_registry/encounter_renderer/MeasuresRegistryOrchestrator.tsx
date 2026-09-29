@@ -113,6 +113,7 @@ function surfaceForPathname(pathname: string): OrchestratorSurface | null {
 function initialSurface(): OrchestratorSurface {
   const url = new URL(window.location.href)
   const pathname = normalizePathname(url.pathname)
+  if (url.hostname === "undrifted.measuresregistry.com" && pathname === "/") return "lapis_chamber_encounter"
   if (url.searchParams.get("payment") === "success") return "marble_chamber_C2_resolution"
   const mapped = surfaceForPathname(pathname)
   if (mapped) return mapped
@@ -127,6 +128,10 @@ function initialSurface(): OrchestratorSurface {
 
 function historyUrl(surface: OrchestratorSurface): string {
   const url = new URL(window.location.href)
+  // The dedicated publication host's root is the canonical unDrifted encounter.
+  if (url.hostname === "undrifted.measuresregistry.com" && surface === "lapis_chamber_encounter" && normalizePathname(url.pathname) === "/") {
+    return `${url.pathname}${url.search}${url.hash}`
+  }
   // Preserve a publication-object URL while the visitor remains inside the unDrifted
   // encounter. Registry state, not a frontend route list, resolves the object.
   if (surface === "lapis_chamber_encounter" && normalizePathname(url.pathname).startsWith("/undrifted/")) {
