@@ -51,7 +51,7 @@ export async function handleBufferRequest(request, env, pathname) {
     });
   }
 
-  if (pathname === "/buffer/verify-bindings") {
+  if (pathname === "/buffer/channels") {\n    if (request.method !== "GET") return json({ ok: false, error: "method_not_allowed", external_publication_effects: 0 }, 405);\n    const evidence = {};\n    for (const credentialReference of ["BUFFER_SOCIAL_KEY", "BUFFER_3_SOCIAL_KEY"]) {\n      const credential = readBufferCredential(env, credentialReference);\n      if (!credential) { evidence[credentialReference] = { ok: false, standing: "credential_missing", external_publication_effects: 0 }; continue; }\n      const discovered = await discoverBufferWorkspace(credential);\n      evidence[credentialReference] = discovered.ok ? { ok: true, standing: "provider_inventory_resolved", account_name: discovered.account_name, organizations: discovered.organizations, channels: discovered.channels, external_publication_effects: 0 } : { ok: false, standing: "provider_inventory_failed", error: discovered.error, external_response_code: discovered.status, external_publication_effects: 0 };\n    }\n    return json({ ok: true, standing: "buffer_provider_inventory", credentials: evidence, external_publication_effects: 0 });\n  }\n  if (pathname === "/buffer/verify-bindings") {
     return json({
       ok: true,
       standing: "buffer_bindings_checked",
