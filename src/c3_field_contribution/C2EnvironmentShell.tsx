@@ -141,7 +141,7 @@ export default function C2EnvironmentShell(){
 
   if(!data.authenticated) return <main className="c2-shell c2-held">
     <nav className="c2-home-nav" aria-label="Environment navigation">
-      <a href="/c2?mode=pacs">PAC ENCOUNTERS</a>\n        <a className="c2-home-link" href="/my-environment">← MY ENVIRONMENT</a>
+      <a className="c2-home-link" href="/my-environment">← MY ENVIRONMENT</a>
       <a href="/">c3 FIELD</a>
     </nav>
     <p className="c2-shell-label">c2ME.env · Million Dollar Mission</p>
@@ -160,6 +160,7 @@ export default function C2EnvironmentShell(){
       <a className="c2-brand" href="/"><span>c3</span> Community Partners</a>
       <div className="c2-topbar-actions">
         <p className="c2-shell-label">c2ME.env · connected initiative</p>
+        <a href="/c2?mode=pacs">PAC ENCOUNTERS</a>
         <a className="c2-home-link" href="/my-environment">← MY ENVIRONMENT</a>
       </div>
     </header>
