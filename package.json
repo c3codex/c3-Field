@@ -29,7 +29,8 @@
     "contracts:compile": "hardhat compile",
     "contracts:test": "hardhat test",
     "contracts:clean": "hardhat clean",
-    "contracts:deploy:base-sepolia": "hardhat run contracts/c3-key/deploy-c3-key.ts --network baseSepolia"
+    "contracts:deploy:base-sepolia": "hardhat run contracts/c3-key/deploy-c3-key.ts --network baseSepolia",
+    "build:undrifted": "node scripts/check-pages-env.cjs && vite build --mode registry --outDir dist-undrifted && node scripts/generate-undrifted-host-head.cjs dist-undrifted"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
