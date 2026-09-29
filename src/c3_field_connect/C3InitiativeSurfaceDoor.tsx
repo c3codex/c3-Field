@@ -16,7 +16,14 @@ export default function C3InitiativeSurfaceDoor(){
       return()=>{active=false}
     }
 
-    const registeredPacRequest=pathname==="/"\n      ? fetch("/api/free-registered-pac",{headers:{accept:"application/json"},cache:"no-store"})\n      : Promise.resolve(new Response(JSON.stringify({standing:"DNR"}),{status:409,headers:{"content-type":"application/json"}}))\n\n    void registeredPacRequest
+    const registeredPacRequest=pathname==="/"
+      ? fetch("/api/free-registered-pac",{headers:{accept:"application/json"},cache:"no-store"})
+      : Promise.resolve(new Response(JSON.stringify({standing:"DNR"}),{
+          status:409,
+          headers:{"content-type":"application/json"}
+        }))
+
+    void registeredPacRequest
       .then(async response=>await response.json().catch(()=>null))
       .then(body=>{
         if(!active)return
