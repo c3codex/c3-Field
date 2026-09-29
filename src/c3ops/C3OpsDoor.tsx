@@ -46,7 +46,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
   const [actionResult,setActionResult]=useState<Record<string,unknown>|null>(null)
   const [actionError,setActionError]=useState("")
 
-  async function run(action:"resolve_campaign"|"preflight_asset"|"dispatch_asset", key:string) {
+  async function run(action:"verify_bluesky_identities"|"resolve_campaign"|"preflight_asset"|"dispatch_asset", key="") {
     setBusy(action+":"+key)
     setActionError("")
     setActionResult(null)
@@ -55,7 +55,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
         method:"POST",
         credentials:"same-origin",
         headers:{"content-type":"application/json","accept":"application/json"},
-        body:JSON.stringify(action==="resolve_campaign"?{action,campaign_key:key}:{action,distribution_asset_key:key}),
+        body:JSON.stringify(action==="verify_bluesky_identities"?{action}:action==="resolve_campaign"?{action,campaign_key:key}:{action,distribution_asset_key:key}),
       })
       const contentType=response.headers.get("content-type")??""
       const raw=await response.text()
@@ -83,7 +83,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
 
   return <section className="lapzuli-desk" aria-label="Lapzuli distribution desk">
     <div className="lapzuli-desk-mast">
-      <div><p className="ops-kicker">REGISTRY-BACKED DISTRIBUTION</p><h2>What can move now?</h2><p>{lapzuli.source}</p></div>
+      <div><p className="ops-kicker">REGISTRY-BACKED DISTRIBUTION</p><h2>What can move now?</h2><p>{lapzuli.source}</p><button className="lapzuli-action" disabled={Boolean(busy)} onClick={()=>void run("verify_bluesky_identities")}>{busy==="verify_bluesky_identities:"?"Verifying Bluesky…":"Verify Bluesky identities"}</button></div>
       <dl className="lapzuli-desk-totals">
         <div><dt>Campaigns</dt><dd>{lapzuli.campaigns.length}</dd></div>
         <div><dt>Ready</dt><dd>{totals.ready}</dd></div>
@@ -97,6 +97,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
       <strong>{actionError?"HLD":text(actionResult?.standing)}</strong>
       <span>{actionError||text(actionResult?.action)}</span>
       <span>External effects: {actionResult?.external_publication_effects == null ? "UNKNOWN" : text(actionResult.external_publication_effects)}</span>
+      {actionResult && Array.isArray(actionResult.identities) && <details open><summary>Bluesky identity proof</summary><Rows records={actionResult.identities as Record<string,unknown>[]}/></details>}
       {actionResult && typeof actionResult.worker_result==="object" && actionResult.worker_result!==null && <details>
         <summary>Provider preflight evidence</summary>
         <Rows records={[actionResult.worker_result as Record<string,unknown>]}/>
