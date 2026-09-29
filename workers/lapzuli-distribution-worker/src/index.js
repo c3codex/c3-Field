@@ -27,12 +27,11 @@ const DEV_ROUTE = {
   distribution_mode: "canonical_crosspost",
 };
 
-const BLUESKY_ROUTE = {
-  route_key: "lapzuli_route_undrifted_drift_report_005_bluesky_thread_001",
-  publication_object_key: "undrifted_drift_report_005",
-  dispatch_key: "drift_report_005_the_wiz_behind_the_curtain",
-  outlet_key: "bluesky",
-  distribution_mode: "social_source_link_distribution",
+const BLUESKY_IDENTITIES = {
+  bluesky_measures_registry: { handle: "MEASURES_BLUESKY_HANDLE", password: "MEASURES_APP_PASSWORD" },
+  bluesky_undrifted: { handle: "UNDRIFTED_BLUESKY_HANDLE", password: "UNDRIFTED_APP_PASSWORD" },
+  bluesky_c3_field: { handle: "C3FIELD_BLUESKY_HANDLE", password: "C3FIELD_BLUESKY_APP_PASSWORD" },
+  bluesky_c3_partners: { handle: "C3PARTNERS_BLUESKY_HANDLE", password: "C3PARTNERS_BLUESKY_APP_PASSWORD" },
 };
 
 export default {
@@ -176,130 +175,44 @@ async function verifyBluesky(identifier, password) {
 async function prepareOrPublishBlueskyPost(request, env) {
   const body = await request.json().catch(() => ({}));
   const missing = [];
-  for (const key of [
-    "route_key",
-    "publication_object_key",
-    "dispatch_key",
-    "distribution_asset_id",
-    "text",
-    "canonical_url",
-    "authority_reference",
-    "idempotency_key",
-  ]) {
+  for (const key of ["route_key","publication_object_key","distribution_asset_id","channel_key","text","canonical_url","authority_reference","idempotency_key"]) {
     if (!cleanSecret(body?.[key])) missing.push(key);
   }
-  if (body?.route_key !== BLUESKY_ROUTE.route_key) missing.push("authorized_route_key_match");
-  if (body?.publication_object_key !== BLUESKY_ROUTE.publication_object_key) {
-    missing.push("authorized_publication_object_key_match");
-  }
-  if (body?.dispatch_key !== BLUESKY_ROUTE.dispatch_key) missing.push("authorized_dispatch_key_match");
-  if (body?.outlet_key !== BLUESKY_ROUTE.outlet_key) missing.push("authorized_outlet_key_match");
-  if (body?.distribution_mode !== BLUESKY_ROUTE.distribution_mode) missing.push("authorized_distribution_mode_match");
-  if (!body?.constraints?.canonical_required) missing.push("canonical_required");
-  if (!body?.constraints?.source_link_required) missing.push("source_link_required");
-  if (!body?.constraints?.operator_confirmation_required) missing.push("operator_confirmation_required");
+  if (body?.operator_confirmed !== true) missing.push("operator_confirmed");
+  if (body?.lapzuli_callable !== true) missing.push("lapzuli_callable");
+  const identity = BLUESKY_IDENTITIES[cleanSecret(body?.channel_key)];
+  if (!identity) missing.push("registered_bluesky_identity");
+  if (missing.length) return json({ok:false,standing:"held_bluesky_request_invalid",missing,external_publication_effects:0},422);
 
-  if (missing.length) {
-    return json({
-      ok: false,
-      standing: "held_bluesky_request_invalid",
-      missing,
-      external_publication_effects: 0,
-    }, 422);
+  const identifier = identity ? env[identity.handle] : null;
+  const password = identity ? env[identity.password] : null;
+  if (!identifier || !password) return json({ok:false,standing:"held_bluesky_credentials_missing",channel_key:body.channel_key,external_publication_effects:0},409);
+  if (cleanSecret(body.channel_identifier) && cleanSecret(body.channel_identifier) !== cleanSecret(identifier)) {
+    return json({ok:false,standing:"held_bluesky_registered_identity_mismatch",channel_key:body.channel_key,registered_identifier:cleanSecret(body.channel_identifier),provider_identifier:cleanSecret(identifier),external_publication_effects:0},409);
   }
 
-  const identifier = env.UNDRIFTED_BLUESKY_HANDLE;
-  const password = env.UNDRIFTED_APP_PASSWORD;
-  if (!identifier || !password) {
-    return json({
-      ok: false,
-      standing: "held_bluesky_credentials_missing",
-      external_publication_effects: 0,
-    }, 409);
-  }
+  const canonicalUrl=cleanSecret(body.canonical_url);
+  const baseText=cleanSecret(body.text);
+  const finalText=baseText.includes(canonicalUrl)?baseText:`${baseText}\n\n${canonicalUrl}`;
+  const requestIdentity=`${body.route_key}:${body.distribution_asset_id}:${body.idempotency_key}`;
+  if (Array.from(finalText).length > 300) return json({ok:false,standing:"held_bluesky_text_exceeds_300_characters",text_length:Array.from(finalText).length,external_publication_effects:0},422);
 
-  const canonicalUrl = cleanSecret(body.canonical_url);
-  const baseText = cleanSecret(body.text);
-  const disclosure = "AI-assisted editorial.";
-  const finalText = `${baseText}\n\n${canonicalUrl}\n\n${disclosure}`;
-  const requestIdentity = `${body.route_key}:${body.distribution_asset_id}:${body.idempotency_key}`;
+  if (body.dry_run !== false) return json({ok:true,standing:"bluesky_adapter_ready_dry_run",adapter:"atproto_create_record_v2",request_identity:requestIdentity,account_handle:cleanSecret(identifier),channel_key:body.channel_key,text_length:Array.from(finalText).length,external_publication_effects:0});
 
-  if (body.dry_run !== false) {
-    return json({
-      ok: true,
-      standing: "bluesky_adapter_ready_dry_run",
-      adapter: "atproto_create_record_v1",
-      request_identity: requestIdentity,
-      account_handle: cleanSecret(identifier),
-      text_length: Array.from(finalText).length,
-      external_publication_effects: 0,
-    });
-  }
+  const sessionResponse=await fetch(`${PDS_URL}/xrpc/com.atproto.server.createSession`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({identifier:cleanSecret(identifier),password:cleanSecret(password)})});
+  const session=await sessionResponse.json().catch(()=>({}));
+  if(!sessionResponse.ok||!session?.accessJwt||!session?.did) return json({ok:false,standing:"held_bluesky_session_failed",external_response_code:sessionResponse.status,external_publication_effects:0},502);
 
-  const sessionResponse = await fetch(`${PDS_URL}/xrpc/com.atproto.server.createSession`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      identifier: cleanSecret(identifier),
-      password: cleanSecret(password),
-    }),
-  });
-  const session = await sessionResponse.json().catch(() => ({}));
-  if (!sessionResponse.ok || !session?.accessJwt || !session?.did) {
-    return json({
-      ok: false,
-      standing: "held_bluesky_session_failed",
-      external_response_code: sessionResponse.status,
-      external_publication_effects: 0,
-    }, 502);
-  }
-
-  const encoder = new TextEncoder();
-  const prefix = `${baseText}\n\n`;
-  const byteStart = encoder.encode(prefix).length;
-  const byteEnd = byteStart + encoder.encode(canonicalUrl).length;
-
-  const record = {
-    $type: "app.bsky.feed.post",
-    text: finalText,
-    createdAt: new Date().toISOString(),
-    facets: [{
-      index: { byteStart, byteEnd },
-      features: [{
-        $type: "app.bsky.richtext.facet#link",
-        uri: canonicalUrl,
-      }],
-    }],
-  };
-
-  const createResponse = await fetch(`${PDS_URL}/xrpc/com.atproto.repo.createRecord`, {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${session.accessJwt}`,
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      repo: session.did,
-      collection: "app.bsky.feed.post",
-      record,
-    }),
-  });
-  const data = await createResponse.json().catch(() => ({}));
-  const rkey = typeof data?.uri === "string" ? data.uri.split("/").pop() : null;
-  const publicUrl = rkey
-    ? `https://bsky.app/profile/${encodeURIComponent(cleanSecret(identifier))}/post/${encodeURIComponent(rkey)}`
-    : null;
-
-  return json({
-    ok: createResponse.ok,
-    standing: createResponse.ok ? "bluesky_post_created" : "held_bluesky_external_response",
-    request_identity: requestIdentity,
-    external_response_code: createResponse.status,
-    platform_post_id: data?.uri ?? null,
-    platform_cid: data?.cid ?? null,
-    platform_url: publicUrl,
-    external_publication_effects: createResponse.ok ? 1 : 0,
-  }, createResponse.ok ? 201 : 502);
+  const encoder=new TextEncoder();
+  const urlIndex=finalText.indexOf(canonicalUrl);
+  const byteStart=encoder.encode(finalText.slice(0,urlIndex)).length;
+  const byteEnd=byteStart+encoder.encode(canonicalUrl).length;
+  const record={$type:"app.bsky.feed.post",text:finalText,createdAt:new Date().toISOString(),facets:[{index:{byteStart,byteEnd},features:[{$type:"app.bsky.richtext.facet#link",uri:canonicalUrl}]}]};
+  const createResponse=await fetch(`${PDS_URL}/xrpc/com.atproto.repo.createRecord`,{method:"POST",headers:{authorization:`Bearer ${session.accessJwt}`,"content-type":"application/json"},body:JSON.stringify({repo:session.did,collection:"app.bsky.feed.post",record})});
+  const data=await createResponse.json().catch(()=>({}));
+  const rkey=typeof data?.uri==="string"?data.uri.split("/").pop():null;
+  const publicUrl=rkey?`https://bsky.app/profile/${encodeURIComponent(cleanSecret(identifier))}/post/${encodeURIComponent(rkey)}`:null;
+  return json({ok:createResponse.ok,standing:createResponse.ok?"bluesky_post_created":"held_bluesky_external_response",request_identity:requestIdentity,account_handle:cleanSecret(identifier),channel_key:body.channel_key,external_response_code:createResponse.status,platform_post_id:data?.uri??null,platform_cid:data?.cid??null,platform_url:publicUrl,external_publication_effects:createResponse.ok?1:0},createResponse.ok?201:502);
 }
 
 async function prepareOrPublishDevArticle(request, env) {
