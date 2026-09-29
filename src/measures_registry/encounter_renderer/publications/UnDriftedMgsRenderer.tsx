@@ -128,22 +128,39 @@ function issueLabel(issueId: string, fallback?: string | null): string {
   return match ? `Issue ${match[1].padStart(3, "0")}` : issueId
 }
 
+function canonicalDeskKey(value: string | null): string | null {
+  if (!value) return null
+  if (value === "current" || value === "current_state") return "current_state"
+  if (value === "structural_standings" || value === "structural_standing") return "structural_standing"
+  return value
+}
+
 function latestDeskPage(
   deskKey: string,
-  activePages: EncounterIssuePageRow[],
+  eligiblePages: EncounterIssuePageRow[],
   dispatches: EncounterPublicationDispatchRow[],
+  preferredPageKey?: string | null,
 ): { page: EncounterIssuePageRow; dispatch: EncounterPublicationDispatchRow | null } | null {
-  const candidates = activePages
-    .filter((page) => asString(asRecord(page.metadata)?.desk_key) === deskKey)
-    .filter((page) => asRecord(page.metadata)?.featured_article !== true)
+  const canonicalKey = canonicalDeskKey(deskKey)
+  const candidates = eligiblePages
+    .filter((page) => canonicalDeskKey(asString(asRecord(page.metadata)?.desk_key)) === canonicalKey)
     .map((page) => ({ page, dispatch: dispatchForPage(page, dispatches) }))
     .filter(({ dispatch }) => !dispatch || dispatch.status === "published")
+
+  const publishedCandidates = candidates
+    .filter(({ dispatch }) => Boolean(dispatch?.published_at))
     .sort((a, b) => {
       const aTime = a.dispatch?.published_at ? Date.parse(a.dispatch.published_at) : 0
       const bTime = b.dispatch?.published_at ? Date.parse(b.dispatch.published_at) : 0
       return bTime - aTime || b.page.page_number - a.page.page_number
     })
-  return candidates[0] ?? null
+
+  if (publishedCandidates[0]) return publishedCandidates[0]
+  if (preferredPageKey) {
+    const preferred = candidates.find(({ page }) => page.page_key === preferredPageKey)
+    if (preferred) return preferred
+  }
+  return candidates.sort((a, b) => b.page.page_number - a.page.page_number)[0] ?? null
 }
 
 function ArticleView({
@@ -248,8 +265,9 @@ export default function UnDriftedMgsRenderer({
   const activeIssueKey = activeRelease?.issue_id ?? asString(issueRecord?.issue_key)
   const activeIssueNumber = asString(activeReleaseMeta?.issue_number) ?? asString(issueRecord?.issue_number)
   const activeIssueDate = asString(activeReleaseMeta?.issue_date) ?? asString(issueRecord?.issue_date)
-  const activePages = encounter.issuePages.filter(
-    (page) => page.issue_id === activeIssueKey && isEligibleIssuePage(page),
+  const eligiblePages = encounter.issuePages.filter(isEligibleIssuePage)
+  const activePages = eligiblePages.filter(
+    (page) => page.issue_id === activeIssueKey,
   )
   const archivedIssueIds = new Set(
     encounter.publicationReleases
@@ -257,7 +275,9 @@ export default function UnDriftedMgsRenderer({
       .map((release) => release.issue_id),
   )
   const pastPages = encounter.issuePages.filter((page) => archivedIssueIds.has(page.issue_id) && isEligibleIssuePage(page))
+  const featuredPageKey = asString(activeReleaseMeta?.featured_article_object_key)
   const featuredPage =
+    (featuredPageKey ? activePages.find((page) => page.page_key === featuredPageKey) : null) ??
     activePages.find((page) => asRecord(page.metadata)?.featured_article === true) ??
     activePages.find((page) => page.page_role === "cover_story") ??
     activePages[0] ??
@@ -267,6 +287,23 @@ export default function UnDriftedMgsRenderer({
   const title = asString(brandCopy?.header) ?? "unDrifted"
   const primaryLine = asString(brandCopy?.primary_line)
   const principles = asString(brandCopy?.principles_line)
+
+  const currentDeskPageKey = asString(activeReleaseMeta?.current_desk_object_key)
+  const resolvedDeskPages = new Map<string, { page: EncounterIssuePageRow; dispatch: EncounterPublicationDispatchRow | null }>()
+  for (const desk of desks) {
+    const configuredKey = canonicalDeskKey(asString(desk.key))
+    if (!configuredKey) continue
+    const latest = latestDeskPage(
+      configuredKey,
+      eligiblePages,
+      encounter.publicationDispatches,
+      configuredKey === "current_state" ? currentDeskPageKey : null,
+    )
+    if (latest) resolvedDeskPages.set(configuredKey, latest)
+  }
+  const surfacedPageKeys = new Set<string>()
+  if (featuredPage) surfacedPageKeys.add(featuredPage.page_key)
+  for (const { page } of resolvedDeskPages.values()) surfacedPageKeys.add(page.page_key)
 
   const archivedByIssue = new Map<string, EncounterIssuePageRow[]>()
   for (const page of pastPages) {
@@ -339,9 +376,9 @@ export default function UnDriftedMgsRenderer({
           </div>
           <div className="undrifted-desks-grid">
             {desks.map((desk, index) => {
-              const deskKey = asString(desk.key)
+              const deskKey = canonicalDeskKey(asString(desk.key))
               if (!deskKey) return null
-              const latest = latestDeskPage(deskKey, activePages, encounter.publicationDispatches)
+              const latest = resolvedDeskPages.get(deskKey) ?? null
               const href = latest ? pageHref(latest.page) : null
               const banner = latest
                 ? dispatchBanner(latest.dispatch) ?? pageMediaUrl(latest.page)
@@ -373,7 +410,7 @@ export default function UnDriftedMgsRenderer({
           </div>
           <div className="undrifted-current-supporting">
             {activePages.map((page) => {
-              if (featuredPage && page.page_key === featuredPage.page_key) return null
+              if (surfacedPageKeys.has(page.page_key)) return null
               const dispatch = dispatchForPage(page, encounter.publicationDispatches)
               const href = pageHref(page)
               const deskTitle = asString(asRecord(page.metadata)?.desk_title)
