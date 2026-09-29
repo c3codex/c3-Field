@@ -49,6 +49,24 @@ type InitiativeConnection={
 type ConnectionsPayload={authenticated:boolean;standing:string;entries?:LedgerEntry[];native_connections?:NativeConnection[];initiative_connections?:InitiativeConnection[]}
 type CanopyReference={reference_key:string;surface_label:string;display_label?:string|null;external_url:string;handle?:string|null;sort_order:number}
 type CanopyPayload={standing:string;references?:CanopyReference[]}
+type CalendarEvent={
+  event_key:string
+  title:string
+  event_type:string
+  start_at:string
+  end_at:string
+  timezone:string
+  event_state:string
+  related_relationship_key?:string|null
+  related_context_type?:string|null
+  related_context_key?:string|null
+  location_text?:string|null
+  notes?:string|null
+  external_projection_state:string
+  google_event_url?:string|null
+  meet_url?:string|null
+}
+type CalendarPayload={authenticated:boolean;standing:string;authority?:string;external_projection?:string;events?:CalendarEvent[]}
 type ProfileTruth={
   projection_standing?:string
   standing?:string
@@ -131,6 +149,17 @@ export default function MyEnvironmentEncounter(){
   const [chazzLoaded,setChazzLoaded]=useState(false)
   const [currentTokens,setCurrentTokens]=useState<CurrentToken[]>([])
   const [currentLoaded,setCurrentLoaded]=useState(false)
+  const [calendarEvents,setCalendarEvents]=useState<CalendarEvent[]>([])
+  const [calendarLoaded,setCalendarLoaded]=useState(false)
+  const [calendarTitle,setCalendarTitle]=useState("")
+  const [calendarType,setCalendarType]=useState("meeting")
+  const [calendarStart,setCalendarStart]=useState("")
+  const [calendarEnd,setCalendarEnd]=useState("")
+  const [calendarLocation,setCalendarLocation]=useState("")
+  const [calendarNotes,setCalendarNotes]=useState("")
+  const [calendarRelationship,setCalendarRelationship]=useState("")
+  const [calendarNotice,setCalendarNotice]=useState("")
+  const [calendarBusy,setCalendarBusy]=useState(false)
 
   useEffect(()=>{
     let active=true
@@ -141,10 +170,11 @@ export default function MyEnvironmentEncounter(){
         fetch("/api/my-environment-connections",{headers:{accept:"application/json"}}),
         fetch("/api/my-environment-canopy",{headers:{accept:"application/json"}}),
         fetch("/api/my-environment-profile",{headers:{accept:"application/json"}}),
-        fetch("/api/my-environment-current",{headers:{accept:"application/json"}})
+        fetch("/api/my-environment-current",{headers:{accept:"application/json"}}),
+        fetch("/api/my-environment-calendar",{headers:{accept:"application/json"}})
       ])
       if(!active)return
-      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult,currentResult]=results
+      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult,currentResult,calendarResult]=results
       if(primitiveResult.status==="fulfilled"&&primitiveResult.value.ok){
         const body=await primitiveResult.value.json() as PrimitivePayload
         if(active&&body.primitives){
@@ -181,6 +211,12 @@ export default function MyEnvironmentEncounter(){
         if(active){setCurrentTokens(body.tokens||[]);setCurrentLoaded(true)}
       }else if(active){
         setCurrentLoaded(false)
+      }
+      if(calendarResult.status==="fulfilled"&&calendarResult.value.ok){
+        const body=await calendarResult.value.json() as CalendarPayload
+        if(active){setCalendarEvents(body.events||[]);setCalendarLoaded(true)}
+      }else if(active){
+        setCalendarLoaded(false)
       }
       if(profileResult.status==="fulfilled"&&profileResult.value.ok){
         const body=await profileResult.value.json() as ProfileIntakePayload
@@ -418,6 +454,47 @@ export default function MyEnvironmentEncounter(){
     }
   }
 
+  async function createCalendarEvent(event:FormEvent){
+    event.preventDefault()
+    if(!calendarTitle.trim()||!calendarStart||!calendarEnd)return
+    setCalendarBusy(true);setCalendarNotice("")
+    try{
+      const response=await fetch("/api/my-environment-calendar",{
+        method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({
+          action:"create",title:calendarTitle.trim(),event_type:calendarType,
+          start_at:new Date(calendarStart).toISOString(),end_at:new Date(calendarEnd).toISOString(),
+          timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"America/Chicago",
+          related_relationship_key:calendarRelationship.trim()||null,
+          location_text:calendarLocation.trim()||null,notes:calendarNotes.trim()||null
+        })
+      })
+      const body=await response.json() as {ok?:boolean;event?:CalendarEvent;message?:string;standing?:string}
+      if(!response.ok||!body.ok||!body.event)throw new Error(body.message||body.standing||"The event could not be created.")
+      setCalendarEvents(current=>[...current,body.event!].sort((a,b)=>new Date(a.start_at).getTime()-new Date(b.start_at).getTime()))
+      setCalendarTitle("");setCalendarStart("");setCalendarEnd("");setCalendarLocation("");setCalendarNotes("");setCalendarRelationship("")
+      setCalendarNotice("Added to your c3 Calendar.")
+    }catch(error){setCalendarNotice(error instanceof Error?error.message:"The event could not be created.")}
+    finally{setCalendarBusy(false)}
+  }
+
+  async function calendarAction(eventKey:string,action:"complete"|"cancel"|"prepare_google_projection"){
+    setCalendarNotice("")
+    try{
+      const response=await fetch("/api/my-environment-calendar",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action,event_key:eventKey})})
+      const body=await response.json() as {ok?:boolean;google_url?:string;message?:string;standing?:string}
+      if(!response.ok||!body.ok)throw new Error(body.message||body.standing||"The calendar action could not be completed.")
+      if(action==="prepare_google_projection"&&body.google_url){
+        setCalendarEvents(current=>current.map(item=>item.event_key===eventKey?{...item,external_projection_state:"prepared",google_event_url:body.google_url}:item))
+        window.open(body.google_url,"_blank","noopener,noreferrer")
+        setCalendarNotice("Google projection prepared from the c3 event. c3 remains the calendar authority.")
+        return
+      }
+      if(action==="cancel")setCalendarEvents(current=>current.filter(item=>item.event_key!==eventKey))
+      if(action==="complete")setCalendarEvents(current=>current.map(item=>item.event_key===eventKey?{...item,event_state:"completed"}:item))
+    }catch(error){setCalendarNotice(error instanceof Error?error.message:"The calendar action could not be completed.")}
+  }
+
   function renderPrimitive(primitive:Primitive){
     if(primitive.renderer_key==="c1me.current"){
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
@@ -530,6 +607,47 @@ export default function MyEnvironmentEncounter(){
           <button type="submit" disabled={!canopySurface.trim()||!canopyUrl.trim()}>ADD TO CANOPY</button>
         </form>
         {canopyNotice&&<p className="myenv-initiative-notice" role="status">{canopyNotice}</p>}
+      </section>
+    }
+    if(primitive.renderer_key==="c1me.calendar"){
+      return <section key={primitive.primitive_key} className="myenv-connections-thread">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">C3-NATIVE · PRIMARY CALENDAR</p>
+          <h2>{primitive.display_label}</h2>
+          <p>Schedule here first. Only events you explicitly choose are projected to Google Calendar.</p>
+        </div>
+        <div className="myenv-thread-entries">
+          {!calendarLoaded&&<p className="myenv-runtime-warning">Calendar could not be resolved from this session.</p>}
+          {calendarLoaded&&calendarEvents.length===0&&<p className="myenv-relations-empty">Your c3 Calendar is ready.</p>}
+          {calendarEvents.map(item=><article key={item.event_key}>
+            <div><span>{item.event_type.replace(/_/g," ")} · {item.event_state}</span><time>{new Date(item.start_at).toLocaleString()}</time></div>
+            <h3>{item.title}</h3>
+            <p>{new Date(item.start_at).toLocaleString()} → {new Date(item.end_at).toLocaleString()}</p>
+            {item.location_text&&<p><strong>Where:</strong> {item.location_text}</p>}
+            {item.notes&&<p>{item.notes}</p>}
+            {item.related_relationship_key&&<p><strong>Relation:</strong> {item.related_relationship_key}</p>}
+            <p><strong>Google:</strong> {item.external_projection_state==="none"?"not projected":item.external_projection_state}</p>
+            <div className="myenv-chazz-compose-actions">
+              {item.event_state==="scheduled"&&<button type="button" onClick={()=>void calendarAction(item.event_key,"prepare_google_projection")}>SEND TO GOOGLE</button>}
+              {item.event_state==="scheduled"&&<button type="button" onClick={()=>void calendarAction(item.event_key,"complete")}>COMPLETE</button>}
+              {item.event_state==="scheduled"&&<button type="button" onClick={()=>void calendarAction(item.event_key,"cancel")}>CANCEL</button>}
+            </div>
+          </article>)}
+        </div>
+        <form className="myenv-thread-compose" onSubmit={createCalendarEvent}>
+          <input aria-label="Event title" maxLength={240} value={calendarTitle} onChange={e=>setCalendarTitle(e.target.value)} placeholder="Event"/>
+          <select aria-label="Event type" value={calendarType} onChange={e=>setCalendarType(e.target.value)}>
+            <option value="meeting">Meeting</option><option value="encounter">Encounter</option><option value="follow_up">Follow-up</option><option value="deadline">Deadline</option><option value="task">Task</option><option value="other">Other</option>
+          </select>
+          <label>Starts</label><input aria-label="Starts" type="datetime-local" value={calendarStart} onChange={e=>setCalendarStart(e.target.value)}/>
+          <label>Ends</label><input aria-label="Ends" type="datetime-local" value={calendarEnd} onChange={e=>setCalendarEnd(e.target.value)}/>
+          <input aria-label="Related relationship key" maxLength={160} value={calendarRelationship} onChange={e=>setCalendarRelationship(e.target.value)} placeholder="Relationship key (optional)"/>
+          <input aria-label="Location or link" maxLength={500} value={calendarLocation} onChange={e=>setCalendarLocation(e.target.value)} placeholder="Location / link (optional)"/>
+          <textarea aria-label="Event notes" rows={3} maxLength={5000} value={calendarNotes} onChange={e=>setCalendarNotes(e.target.value)} placeholder="Prep, purpose, context…"/>
+          <button type="submit" disabled={calendarBusy||!calendarTitle.trim()||!calendarStart||!calendarEnd}>{calendarBusy?"ADDING…":"ADD TO C3 CALENDAR"}</button>
+        </form>
+        {calendarNotice&&<p className="myenv-initiative-notice" role="status">{calendarNotice}</p>}
+        <p className="myenv-runtime-warning">Google is downstream only. Automatic Google Meet creation remains held until a provider executor is explicitly connected.</p>
       </section>
     }
     if(primitive.renderer_key==="c1me.discovery"){
