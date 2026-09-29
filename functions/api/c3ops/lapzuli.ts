@@ -142,7 +142,7 @@ async function resolveCampaign(env: Env, campaignKey: string) {
     const executor = executorKey ? executorMap.get(executorKey) : null
     const adapter = adapterFor(channelKey,executorKey)
     const canonicalUrl = str(payload.canonical_url) ?? str(metadata.canonical_url) ?? str(campaignMetadata.canonical_url)
-    const imageUrl = str(payload.image_url) ?? publicMediaUrl(env,payload)
+    const imageUrl = str(payload.image_url) ?? str(record(payload.media).runtime_uri) ?? publicMediaUrl(env,payload)
     const textValue = str(payload.text) ?? str(payload.caption) ?? (derivative ? str(record(derivative.metadata).caption_text) : null)
     const blockers: string[] = []
     if (metadata.operator_confirmed !== true) blockers.push("asset_operator_confirmation_missing")
