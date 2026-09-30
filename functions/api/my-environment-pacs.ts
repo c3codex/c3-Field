@@ -62,46 +62,69 @@ async function personalPacs(env:PassageEnv,session:EnvironmentSession){
     order:"updated_at.desc"
   })
   const rows=await (await rest(env,"c3_pac?"+query)).json() as Row[]
-  return rows
-    .filter(row=>{
-      const metadata=record(row.metadata)
-      const custody=record(metadata.custody_model)
-      const ownership=record(metadata.ownership_model)
-      return custody.custody_class==="personal_pac_custody"
-        && ownership.owner_subject_type==="individual"
-        && ownership.owner_subject_key===session.subjectKey
-    })
-    .map(row=>{
-      const metadata=record(row.metadata)
-      const presentation=record(metadata.public_presentation)
-      const approval=record(metadata.custody_approval)
-      const projection=record(metadata.encounter_projection)
-      return {
-        pac_key:row.pac_key,
-        pac_type:row.pac_type,
-        version:row.version,
-        standing:row.standing,
-        release_state:row.release_state,
-        custody_uri:row.custody_uri,
-        custody_provider:row.custody_provider,
-        title:typeof presentation.title==="string"?presentation.title:
-          row.pac_type==="ProfilePAC"?"ProfilePAC":String(row.pac_key||"PAC"),
-        subtitle:typeof presentation.subtitle==="string"?presentation.subtitle:null,
-        approval:{
-          standing:typeof approval.standing==="string"?approval.standing:"PENDING",
-          resolved_at:typeof approval.resolved_at==="string"?approval.resolved_at:null
-        },
-        encounter_projection:{
-          standing:typeof projection.standing==="string"?projection.standing:"PENDING",
-          encounter_key:typeof projection.encounter_key==="string"?projection.encounter_key:"c3envpac_c2me_v0_1",
-          authorized_by_owner:projection.authorized_by_owner===true,
-          presentation_scope:typeof projection.presentation_scope==="string"?projection.presentation_scope:"c3field_only",
-          surface_projections:Array.isArray(projection.surface_projections)?projection.surface_projections:[],
-          resolved_at:typeof projection.resolved_at==="string"?projection.resolved_at:null
-        },
-        custody_model:metadata.custody_model
-      }
-    })
+  const personal=rows.filter(row=>{
+    const metadata=record(row.metadata)
+    const custody=record(metadata.custody_model)
+    const ownership=record(metadata.ownership_model)
+    return custody.custody_class==="personal_pac_custody"
+      && ownership.owner_subject_type==="individual"
+      && ownership.owner_subject_key===session.subjectKey
+  })
+
+  return await Promise.all(personal.map(async row=>{
+    const metadata=record(row.metadata)
+    const presentation=record(metadata.public_presentation)
+    const approval=record(metadata.custody_approval)
+    const projection=record(metadata.encounter_projection)
+    const review=record(metadata.review_resolution)
+    const distribution=record(metadata.distribution_resolution)
+    const candidate=await rpc(env,"c3_pac_review_candidate_v1",{p_pac_key:row.pac_key})
+    const snapshotHash=typeof candidate.snapshot_hash==="string"?candidate.snapshot_hash:""
+    const reviewHash=typeof review.review_snapshot_hash==="string"?review.review_snapshot_hash:
+      typeof review.current_snapshot_hash==="string"?review.current_snapshot_hash:null
+    return {
+      pac_key:row.pac_key,
+      pac_type:row.pac_type,
+      version:row.version,
+      standing:row.standing,
+      release_state:row.release_state,
+      custody_uri:row.custody_uri,
+      custody_provider:row.custody_provider,
+      title:typeof presentation.title==="string"?presentation.title:
+        row.pac_type==="ProfilePAC"?"ProfilePAC":String(row.pac_key||"PAC"),
+      subtitle:typeof presentation.subtitle==="string"?presentation.subtitle:null,
+      review:{
+        standing:typeof review.standing==="string"?review.standing:"REQUIRED",
+        snapshot_hash:snapshotHash,
+        reviewed_snapshot_hash:reviewHash,
+        current:review.standing==="REVIEWED"&&!!snapshotHash&&reviewHash===snapshotHash,
+        reviewed_at:typeof review.reviewed_at==="string"?review.reviewed_at:null,
+        candidate_payload:record(candidate.payload)
+      },
+      approval:{
+        standing:typeof approval.standing==="string"?approval.standing:"PENDING",
+        snapshot_hash:typeof approval.approval_snapshot_hash==="string"?approval.approval_snapshot_hash:null,
+        current:approval.standing==="APPROVED"
+          && typeof approval.approval_snapshot_hash==="string"
+          && approval.approval_snapshot_hash===snapshotHash,
+        resolved_at:typeof approval.resolved_at==="string"?approval.resolved_at:null
+      },
+      encounter_projection:{
+        standing:typeof projection.standing==="string"?projection.standing:"PENDING",
+        encounter_key:typeof projection.encounter_key==="string"?projection.encounter_key:"c3envpac_c2me_v0_1",
+        authorized_by_owner:projection.authorized_by_owner===true,
+        presentation_scope:typeof projection.presentation_scope==="string"?projection.presentation_scope:"c3field_only",
+        surface_projections:Array.isArray(projection.surface_projections)?projection.surface_projections:[],
+        authorization_snapshot_hash:typeof projection.authorization_snapshot_hash==="string"?projection.authorization_snapshot_hash:null,
+        resolved_at:typeof projection.resolved_at==="string"?projection.resolved_at:null
+      },
+      distribution:{
+        standing:typeof distribution.standing==="string"?distribution.standing:"HLD_PENDING_REVIEW",
+        reason:typeof distribution.reason==="string"?distribution.reason:null
+      },
+      custody_model:metadata.custody_model
+    }
+  }))
 }
 
 export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
@@ -137,6 +160,20 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     const pacKey=typeof body.pac_key==="string"?body.pac_key:""
     const action=typeof body.action==="string"?body.action:"custody_disposition"
     if(!pacKey)return json({standing:"DNR",reason:"invalid_request"},400)
+
+    if(action==="review_snapshot"){
+      const disposition=typeof body.review_disposition==="string"?body.review_disposition:""
+      const candidateHash=typeof body.candidate_hash==="string"?body.candidate_hash:""
+      if(!["REVIEWED","HLD"].includes(disposition)||!candidateHash)
+        return json({standing:"DNR",reason:"invalid_review_resolution"},400)
+      const result=await rpc(env,"c3_pac_set_personal_review_v1",{
+        p_pac_key:pacKey,
+        p_subject_key:session.subjectKey,
+        p_disposition:disposition,
+        p_candidate_hash:candidateHash
+      })
+      return json(result,result.standing==="ACT"||result.standing==="HLD"?200:409)
+    }
 
     if(action==="custody_disposition"){
       const disposition=typeof body.disposition==="string"?body.disposition:""
