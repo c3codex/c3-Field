@@ -75,6 +75,7 @@ async function personalPacs(env:PassageEnv,session:EnvironmentSession){
       const metadata=record(row.metadata)
       const presentation=record(metadata.public_presentation)
       const approval=record(metadata.custody_approval)
+      const projection=record(metadata.encounter_projection)
       return {
         pac_key:row.pac_key,
         pac_type:row.pac_type,
@@ -88,8 +89,13 @@ async function personalPacs(env:PassageEnv,session:EnvironmentSession){
         subtitle:typeof presentation.subtitle==="string"?presentation.subtitle:null,
         approval:{
           standing:typeof approval.standing==="string"?approval.standing:"PENDING",
-          resolved_at:typeof approval.resolved_at==="string"?approval.resolved_at:null,
-          c2_projection_eligible:approval.c2_projection_eligible===true
+          resolved_at:typeof approval.resolved_at==="string"?approval.resolved_at:null
+        },
+        encounter_projection:{
+          standing:typeof projection.standing==="string"?projection.standing:"PENDING",
+          encounter_key:typeof projection.encounter_key==="string"?projection.encounter_key:"c3envpac_c2me_v0_1",
+          authorized_by_owner:projection.authorized_by_owner===true,
+          resolved_at:typeof projection.resolved_at==="string"?projection.resolved_at:null
         },
         custody_model:metadata.custody_model
       }
@@ -105,7 +111,7 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
       standing:"my_pacs_ready",
       custody_class:"personal_pac_custody",
       approval_surface:"my_pacs",
-      c2_projection_rule:"approved_pacs_only",
+      c2_projection_rule:"approved_and_owner_authorized_for_encounter",
       pacs
     })
   }catch(error){
@@ -127,18 +133,38 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     if(!body) return json({standing:"DNR",reason:"invalid_request"},400)
 
     const pacKey=typeof body.pac_key==="string"?body.pac_key:""
-    const disposition=typeof body.disposition==="string"?body.disposition:""
-    const note=typeof body.note==="string"?body.note.slice(0,1000):null
-    if(!pacKey||!["APPROVED","HLD"].includes(disposition))
-      return json({standing:"DNR",reason:"invalid_disposition"},400)
+    const action=typeof body.action==="string"?body.action:"custody_disposition"
+    if(!pacKey)return json({standing:"DNR",reason:"invalid_request"},400)
 
-    const result=await rpc(env,"c3_pac_set_personal_disposition_v1",{
-      p_pac_key:pacKey,
-      p_subject_key:session.subjectKey,
-      p_disposition:disposition,
-      p_note:note
-    })
-    return json(result,result.standing==="ACT"||result.standing==="HLD"?200:409)
+    if(action==="custody_disposition"){
+      const disposition=typeof body.disposition==="string"?body.disposition:""
+      const note=typeof body.note==="string"?body.note.slice(0,1000):null
+      if(!["APPROVED","HLD"].includes(disposition))
+        return json({standing:"DNR",reason:"invalid_disposition"},400)
+      const result=await rpc(env,"c3_pac_set_personal_disposition_v1",{
+        p_pac_key:pacKey,
+        p_subject_key:session.subjectKey,
+        p_disposition:disposition,
+        p_note:note
+      })
+      return json(result,result.standing==="ACT"||result.standing==="HLD"?200:409)
+    }
+
+    if(action==="encounter_projection"){
+      const projectionAction=typeof body.projection_action==="string"?body.projection_action:""
+      const encounterKey=typeof body.encounter_key==="string"&&body.encounter_key?body.encounter_key:"c3envpac_c2me_v0_1"
+      if(!["AUTHORIZE","REVOKE"].includes(projectionAction))
+        return json({standing:"DNR",reason:"invalid_projection_action"},400)
+      const result=await rpc(env,"c3_pac_set_personal_encounter_projection_v1",{
+        p_pac_key:pacKey,
+        p_subject_key:session.subjectKey,
+        p_action:projectionAction,
+        p_encounter_key:encounterKey
+      })
+      return json(result,result.standing==="ACT"||result.standing==="HLD"?200:409)
+    }
+
+    return json({standing:"DNR",reason:"unsupported_action"},400)
   }catch(error){
     const reason=error instanceof Error?error.message:"my_pacs_unavailable"
     const status=reason==="environment_claim_required"||reason==="session_expired"?401:
