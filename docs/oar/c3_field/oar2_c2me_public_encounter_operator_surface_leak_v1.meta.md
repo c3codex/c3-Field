@@ -47,6 +47,9 @@ Observed failure:
 ## Concrete consequence
 
 Run Aground WebPAC:
+- remained correctly in the owner's personal custody
+- continued to supply the Run Aground primary encounter
+- projects to Canopy and runaground.c3field.online without custody transfer
 - was approved from the improperly surfaced participant-facing C2 placement
 - was registered before the operator-system provenance requirement existed
 - was later returned to private/held/unregistered
