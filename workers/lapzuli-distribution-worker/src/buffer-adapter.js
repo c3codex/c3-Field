@@ -227,8 +227,7 @@ async function prepareOrPublishBufferPost(request, env) {
     "    ... on MutationError { message }",
     "  }",
     "}",
-  ].join("
-");
+  ].join("\n");
 
   const created = await bufferGraphql(credential, createMutation, { input: createInput });
   const action = created.payload?.data?.createPost || null;
