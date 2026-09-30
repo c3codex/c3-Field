@@ -199,3 +199,16 @@
 .myenv-index-system-link>span{
   letter-spacing:.04em
 }
+
+
+.myenv-profile-pac-nested{
+  margin-top:18px;padding-top:18px;border-top:1px solid rgba(244,239,227,.12)
+}
+.myenv-pac-status{
+  display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px
+}
+.myenv-pac-status span{
+  border:1px solid rgba(244,239,227,.14);border-radius:999px;
+  padding:6px 9px;font:700 8px/1 Inter,system-ui,sans-serif;
+  letter-spacing:.1em;text-transform:uppercase;color:rgba(244,239,227,.7)
+}
