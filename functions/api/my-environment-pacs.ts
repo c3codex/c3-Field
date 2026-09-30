@@ -63,7 +63,14 @@ async function personalPacs(env:PassageEnv,session:EnvironmentSession){
   })
   const rows=await (await rest(env,"c3_pac?"+query)).json() as Row[]
   return rows
-    .filter(row=>record(record(row.metadata).custody_model).custody_class==="personal_pac_custody")
+    .filter(row=>{
+      const metadata=record(row.metadata)
+      const custody=record(metadata.custody_model)
+      const ownership=record(metadata.ownership_model)
+      return custody.custody_class==="personal_pac_custody"
+        && ownership.owner_subject_type==="individual"
+        && ownership.owner_subject_key===session.subjectKey
+    })
     .map(row=>{
       const metadata=record(row.metadata)
       const presentation=record(metadata.public_presentation)
