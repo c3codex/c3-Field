@@ -7,3 +7,5 @@ Entry point: `src/entry.js`
 Deploy command: `npx wrangler deploy`
 
 This marker was added to establish a fresh Git-triggered deployment after Cloudflare Git Builds connection on 2026-09-28. It creates no external publication effect.
+
+Deployment trigger: 2026-09-30 — refresh Cloudflare production build from current c3field head after Worker source newline repair.
