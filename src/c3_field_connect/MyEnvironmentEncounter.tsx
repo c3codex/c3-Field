@@ -1,6 +1,7 @@
 import {FormEvent,useEffect,useState} from "react"
 import EternalFlame from "./EternalFlame"
-import ProfilePacPanel,{type ProfileContract} from "./ProfilePacPanel"
+import {type ProfileContract} from "./ProfilePacPanel"
+import MyPacsPanel from "./MyPacsPanel"
 import CurrentConstellation,{type CurrentToken} from "./CurrentConstellation"
 
 type EnvPayload={
@@ -106,14 +107,14 @@ function initiativeLabel(initiative:Initiative){
   return initiative.context_class==="operator"?base+" · Operator":base
 }
 function primitiveGroup(primitive:Primitive):PrimitiveGroupKey{
-  if(["chazz","current","profile_pac","canopy","calendar"].includes(primitive.primitive_key))return "core"
+  if(["chazz","current","my_pacs","canopy","calendar"].includes(primitive.primitive_key))return "core"
   if(["native_connections","invite_connection"].includes(primitive.primitive_key))return "relations"
   if(primitive.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline")return "work"
   return "other"
 }
 function primitiveMeta(primitive:Primitive){
   if(primitive.primitive_key==="current")return "retained relation"
-  if(primitive.primitive_key==="profile_pac")return "profile & presentation"
+  if(primitive.primitive_key==="my_pacs")return "personal custody & approval"
   if(primitive.primitive_key==="calendar")return "c3-native schedule"
   if(primitive.primitive_key==="native_connections")return "people & initiative relations"
   if(primitive.primitive_key==="invite_connection")return "relational passage"
@@ -600,26 +601,24 @@ export default function MyEnvironmentEncounter(){
         </div>
       </section>
     }
-    if(primitive.renderer_key==="c1me.profile_pac"){
+    if(primitive.renderer_key==="c1me.my_pacs"){
       const profile=profileTruth?.profile
       const profileHeld=profileTruth?.projection_standing==="held"
-      return <section key={primitive.primitive_key} className="myenv-connections-thread">
-        <div className="myenv-thread-heading"><p className="myenv-kicker">PROFILE-PAC</p><h2>{primitive.display_label}</h2>
-          <p>Shape what this environment says about you. Profile-PAC does not create standing, authority, membership, or initiative relations.</p></div>
-        {data?.presentation&&<form className="myenv-thread-compose" onSubmit={savePresentation}>
-          <label>Environment presentation</label>
-          <input aria-label="Opening visual asset key" maxLength={240} value={profilePresentationAsset} onChange={e=>setProfilePresentationAsset(e.target.value)} disabled={!data.presentation.owner_changeable} placeholder="FREE media asset key"/>
-          <p>Current visual: {data.presentation.opening_visual_asset_key}</p>
-          <button type="submit" disabled={!data.presentation.owner_changeable||!profilePresentationAsset.trim()}>SAVE PRESENTATION</button>
-        </form>}
-        <ProfilePacPanel
-          initialProfile={profile||null}
-          contract={profileContract}
-          loaded={profileLoaded}
-          held={profileHeld}
-          onSaved={saved=>setProfileTruth(current=>current?{...current,profile:{...(current.profile||{}),...saved,profile_key:current.profile?.profile_key||"",profile_class:current.profile?.profile_class}}:current)}
-        />
-      </section>
+      return <MyPacsPanel
+        key={primitive.primitive_key}
+        initialProfile={profile||null}
+        profileContract={profileContract}
+        profileLoaded={profileLoaded}
+        profileHeld={profileHeld}
+        onProfileSaved={saved=>setProfileTruth(current=>current?{...current,profile:{...(current.profile||{}),...saved,profile_key:current.profile?.profile_key||"",profile_class:current.profile?.profile_class}}:current)}
+        presentation={data?.presentation?{
+          opening_visual_asset_key:data.presentation.opening_visual_asset_key,
+          owner_changeable:data.presentation.owner_changeable
+        }:null}
+        presentationAsset={profilePresentationAsset}
+        onPresentationAssetChange={setProfilePresentationAsset}
+        onSavePresentation={savePresentation}
+      />
     }
     if(primitive.renderer_key==="c1me.ledger"){
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
