@@ -1,6 +1,14 @@
 import {useEffect,useState,type FormEvent} from "react"
 import ProfilePacPanel,{type ProfileContract,type ProfileShape} from "./ProfilePacPanel"
 
+type ReviewState={
+  standing:string
+  snapshot_hash:string
+  reviewed_snapshot_hash?:string|null
+  current:boolean
+  reviewed_at?:string|null
+  candidate_payload:Record<string,unknown>
+}
 type PersonalPac={
   pac_key:string
   pac_type:string
@@ -11,15 +19,18 @@ type PersonalPac={
   custody_provider?:string|null
   title:string
   subtitle?:string|null
-  approval:{standing:string;resolved_at?:string|null}
+  review:ReviewState
+  approval:{standing:string;snapshot_hash?:string|null;current:boolean;resolved_at?:string|null}
   encounter_projection:{
     standing:string
     encounter_key:string
     authorized_by_owner:boolean
     presentation_scope:string
     surface_projections:string[]
+    authorization_snapshot_hash?:string|null
     resolved_at?:string|null
   }
+  distribution:{standing:string;reason?:string|null}
   custody_model?:Record<string,unknown>
 }
 type Payload={
@@ -46,6 +57,51 @@ type Props={
   onSavePresentation:(event:FormEvent)=>void
 }
 
+function record(value:unknown){
+  return value&&typeof value==="object"&&!Array.isArray(value)?value as Record<string,unknown>:{}
+}
+function text(value:unknown){
+  return typeof value==="string"?value:""
+}
+function textArray(value:unknown){
+  return Array.isArray(value)?value.filter((item):item is string=>typeof item==="string"):[]
+}
+function ReviewPreview({pac}:{pac:PersonalPac}){
+  const payload=pac.review.candidate_payload
+  const presentation=record(payload.public_presentation)
+  const proposal=record(payload.proposal_projection)
+  const profile=record(payload.profile)
+  const members=Array.isArray(payload.members)?payload.members.filter((item):item is Record<string,unknown>=>!!item&&typeof item==="object"):[]
+  const cover=members.find(member=>member.member_role==="cover_master")
+  const coverUrl=text(cover?.runtime_uri)
+  const title=text(presentation.title)||text(profile.display_label)||pac.title
+  const subtitle=text(presentation.subtitle)||pac.subtitle||""
+  const thesis=text(presentation.thesis)
+  const overview=textArray(proposal.overview)
+  const readerPromise=textArray(proposal.reader_promise)
+
+  return <section className="myenv-pac-review-preview">
+    <div className="myenv-thread-heading">
+      <p className="myenv-kicker">PRIVATE REVIEW CANDIDATE</p>
+      <h3>{title}</h3>
+      {subtitle&&<p>{subtitle}</p>}
+      <p>This preview resolves from snapshot <code>{pac.review.snapshot_hash.slice(0,16)}…</code>. Approval binds to this exact snapshot.</p>
+    </div>
+    {coverUrl&&<img className="myenv-pac-review-cover" src={coverUrl} alt={title+" review cover"}/>}
+    {thesis&&<p><strong>{thesis}</strong></p>}
+    {profile.visibility_scope&&<p><strong>Visibility:</strong> {text(profile.visibility_scope)}</p>}
+    {overview.map((paragraph,index)=><p key={"overview-"+index}>{paragraph}</p>)}
+    {readerPromise.length>0&&<div className="myenv-pac-review-copy">
+      <h4>Reader promise</h4>
+      {readerPromise.map((paragraph,index)=><p key={"promise-"+index}>{paragraph}</p>)}
+    </div>}
+    <details className="myenv-pac-review-data">
+      <summary>Exact review snapshot data</summary>
+      <pre>{JSON.stringify(payload,null,2)}</pre>
+    </details>
+  </section>
+}
+
 export default function MyPacsPanel({
   initialProfile,profileContract,profileLoaded,profileHeld,onProfileSaved,
   presentation,presentationAsset,onPresentationAssetChange,onSavePresentation
@@ -54,6 +110,7 @@ export default function MyPacsPanel({
   const [loaded,setLoaded]=useState(false)
   const [notice,setNotice]=useState("")
   const [busy,setBusy]=useState("")
+  const [previewPac,setPreviewPac]=useState("")
 
   async function load(){
     try{
@@ -71,6 +128,48 @@ export default function MyPacsPanel({
 
   useEffect(()=>{void load()},[])
 
+  async function reviewSnapshot(pac:PersonalPac,next:"REVIEWED"|"HLD"){
+    if(busy)return
+    setBusy(pac.pac_key);setNotice("")
+    try{
+      const response=await fetch("/api/my-environment-pacs",{
+        method:"POST",
+        headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({
+          action:"review_snapshot",
+          pac_key:pac.pac_key,
+          review_disposition:next,
+          candidate_hash:pac.review.snapshot_hash
+        })
+      })
+      const body=await response.json().catch(()=>null) as {
+        standing?:string;reason?:string;review_standing?:string;review_snapshot_hash?:string;reviewed_at?:string
+      }|null
+      if(!response.ok||!body||!["ACT","HLD"].includes(String(body.standing||"")))
+        throw new Error(body?.reason||body?.standing||"Review resolution did not persist.")
+      setPacs(current=>current.map(item=>item.pac_key===pac.pac_key?{
+        ...item,
+        review:{
+          ...item.review,
+          standing:body.review_standing||next,
+          reviewed_snapshot_hash:body.review_snapshot_hash||item.review.snapshot_hash,
+          current:next==="REVIEWED",
+          reviewed_at:body.reviewed_at||new Date().toISOString()
+        },
+        approval:{...item.approval,current:false},
+        distribution:{
+          standing:next==="REVIEWED"?"HLD_APPROVAL_REFRESH_REQUIRED":"HLD_REVIEW",
+          reason:next==="REVIEWED"?"review_complete_exact_approval_required":"owner_held_after_review"
+        }
+      }:item))
+      setNotice(next==="REVIEWED"
+        ?"Exact review snapshot recorded. Approve this reviewed version to bind approval to what you saw."
+        :"PAC held at review.")
+    }catch(error){
+      setNotice(error instanceof Error?error.message:"Review resolution did not persist.")
+    }finally{setBusy("")}
+  }
+
   async function disposition(pacKey:string,next:"APPROVED"|"HLD"){
     if(busy)return
     setBusy(pacKey);setNotice("")
@@ -81,7 +180,7 @@ export default function MyPacsPanel({
         body:JSON.stringify({action:"custody_disposition",pac_key:pacKey,disposition:next})
       })
       const body=await response.json().catch(()=>null) as {
-        standing?:string;reason?:string;resolved_at?:string;encounter_projection_standing?:string
+        standing?:string;reason?:string;resolved_at?:string;encounter_projection_standing?:string;approval_snapshot_hash?:string
       }|null
       if(!response.ok||!body||!["ACT","HLD"].includes(String(body.standing||"")))
         throw new Error(body?.reason||body?.standing||"PAC disposition did not resolve.")
@@ -89,6 +188,8 @@ export default function MyPacsPanel({
         ...pac,
         approval:{
           standing:next,
+          snapshot_hash:body.approval_snapshot_hash||null,
+          current:next==="APPROVED",
           resolved_at:body.resolved_at||new Date().toISOString()
         },
         encounter_projection:{
@@ -96,16 +197,19 @@ export default function MyPacsPanel({
           standing:body.encounter_projection_standing|| (next==="APPROVED"?"PENDING":"HLD"),
           authorized_by_owner:false,
           resolved_at:null
+        },
+        distribution:{
+          standing:next==="APPROVED"?"HLD_OWNER_DISTRIBUTION_DECISION_REQUIRED":"HLD_PAC",
+          reason:next==="APPROVED"?"approval_does_not_authorize_distribution":"pac_not_approved_in_custody"
         }
       }:pac))
       setNotice(next==="APPROVED"
-        ?"PAC approved in your custody. Encounter use remains a separate owner decision."
+        ?"Reviewed PAC approved in your custody. Encounter and distribution remain separate owner decisions."
         :"PAC held in your custody.")
     }catch(error){
       setNotice(error instanceof Error?error.message:"PAC disposition did not resolve.")
     }finally{setBusy("")}
   }
-
 
   async function encounterProjection(
     pacKey:string,
@@ -127,9 +231,10 @@ export default function MyPacsPanel({
         })
       })
       const body=await response.json().catch(()=>null) as {
-        standing?:string;reason?:string;resolved_at?:string;
-        encounter_projection_standing?:string;authorized_by_owner?:boolean;
+        standing?:string;reason?:string;resolved_at?:string
+        encounter_projection_standing?:string;authorized_by_owner?:boolean
         presentation_scope?:string;surface_projections?:string[]
+        authorization_snapshot_hash?:string
       }|null
       if(!response.ok||!body||!["ACT","HLD"].includes(String(body.standing||"")))
         throw new Error(body?.reason||body?.standing||"Encounter decision did not resolve.")
@@ -141,17 +246,51 @@ export default function MyPacsPanel({
           authorized_by_owner:body.authorized_by_owner===true,
           presentation_scope:body.presentation_scope||surfaceScope,
           surface_projections:Array.isArray(body.surface_projections)?body.surface_projections:[],
+          authorization_snapshot_hash:body.authorization_snapshot_hash||null,
           resolved_at:body.resolved_at||new Date().toISOString()
         }
       }:pac))
       setNotice(action==="AUTHORIZE"
         ?(surfaceScope==="c3field_plus_canopy"
-          ?"Owner authorized this approved PAC for the encounter on c3 Field and Canopy."
-          :"Owner authorized this approved PAC for the encounter on c3 Field only.")
+          ?"Owner authorized this reviewed PAC for the encounter on c3 Field and Canopy."
+          :"Owner authorized this reviewed PAC for the encounter on c3 Field only.")
         :"Encounter projection authorization revoked. PAC remains in your custody.")
     }catch(error){
       setNotice(error instanceof Error?error.message:"Encounter decision did not resolve.")
     }finally{setBusy("")}
+  }
+
+  function reviewControls(pac:PersonalPac){
+    const previewOpen=previewPac===pac.pac_key
+    const approvalReady=pac.review.current
+    return <>
+      <div className="myenv-pac-status">
+        <span>Review · {pac.review.current?"current":pac.review.standing.toLowerCase()}</span>
+        <span>Approval · {pac.approval.current?"current":pac.approval.standing.toLowerCase()}</span>
+        <span>Distribution · {pac.distribution.standing.replace(/_/g," ").toLowerCase()}</span>
+      </div>
+      <div className="myenv-chazz-compose-actions">
+        <button type="button" onClick={()=>setPreviewPac(previewOpen?"":pac.pac_key)}>
+          {previewOpen?"CLOSE PREVIEW":"PREVIEW / REVIEW"}
+        </button>
+        {previewOpen&&<button type="button" disabled={busy===pac.pac_key} onClick={()=>void reviewSnapshot(pac,"REVIEWED")}>
+          {busy===pac.pac_key?"RESOLVING…":"I REVIEWED THIS VERSION"}
+        </button>}
+        {previewOpen&&<button type="button" disabled={busy===pac.pac_key} onClick={()=>void reviewSnapshot(pac,"HLD")}>HOLD AT REVIEW</button>}
+      </div>
+      {previewOpen&&<ReviewPreview pac={pac}/>}
+      <div className="myenv-chazz-compose-actions">
+        <button
+          type="button"
+          disabled={busy===pac.pac_key||!approvalReady}
+          onClick={()=>void disposition(pac.pac_key,"APPROVED")}
+        >
+          {busy===pac.pac_key?"RESOLVING…":"APPROVE REVIEWED VERSION"}
+        </button>
+        <button type="button" disabled={busy===pac.pac_key} onClick={()=>void disposition(pac.pac_key,"HLD")}>HOLD PAC</button>
+      </div>
+      {!approvalReady&&<p className="myenv-runtime-warning">Preview and review the current snapshot before approval. A changed snapshot requires review again.</p>}
+    </>
   }
 
   const profilePac=pacs.find(pac=>pac.pac_type==="ProfilePAC")
@@ -161,7 +300,7 @@ export default function MyPacsPanel({
     <div className="myenv-thread-heading">
       <p className="myenv-kicker">PERSONAL CUSTODY</p>
       <h2>My PACs</h2>
-      <p>PACs in your personal custody are reviewed here. Approval accepts the PAC in your custody. Use in an encounter is a separate owner decision. Governed branch and initiative PACs are excluded.</p>
+      <p>Review the exact candidate before approval. Approval binds to the reviewed snapshot. Encounter use, discoverability, projection, and wider distribution remain separate decisions.</p>
     </div>
 
     {!loaded&&<p className="myenv-runtime-warning">{notice||"Resolving personal PAC custody…"}</p>}
@@ -172,11 +311,6 @@ export default function MyPacsPanel({
         <p className="myenv-kicker">MY PACS · PROFILEPAC</p>
         <h3>{profilePac.title}</h3>
         <p>ProfilePAC is part of your personal PAC custody. It remains subject-owned and owner-editable; it does not create standing, authority, membership, or initiative relations.</p>
-      </div>
-      <div className="myenv-pac-status">
-        <span>{profilePac.approval.standing}</span>
-        <span>Encounter · {profilePac.encounter_projection.standing.toLowerCase()}</span>
-        {profilePac.encounter_projection.authorized_by_owner&&<span>Surface · {profilePac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field"}</span>}
       </div>
       {presentation&&<form className="myenv-thread-compose" onSubmit={onSavePresentation}>
         <label>Environment presentation</label>
@@ -198,23 +332,22 @@ export default function MyPacsPanel({
         held={profileHeld}
         onSaved={onProfileSaved}
       />
-      <div className="myenv-chazz-compose-actions">
-        <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void disposition(profilePac.pac_key,"APPROVED")}>
-          {busy===profilePac.pac_key?"RESOLVING…":"APPROVE PROFILEPAC"}
-        </button>
-        <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void disposition(profilePac.pac_key,"HLD")}>HOLD</button>
-        {profilePac.approval.standing==="APPROVED"&&!profilePac.encounter_projection.authorized_by_owner&&<>
-          <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void encounterProjection(profilePac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
-          <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void encounterProjection(profilePac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
-        </>}
-        {profilePac.approval.standing==="APPROVED"&&profilePac.encounter_projection.authorized_by_owner&&<button
-          type="button"
-          disabled={busy===profilePac.pac_key}
-          onClick={()=>void encounterProjection(profilePac.pac_key,"REVOKE",profilePac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
-        >
-          REMOVE FROM ENCOUNTER
-        </button>}
+      {reviewControls(profilePac)}
+      <div className="myenv-pac-status">
+        <span>Encounter · {profilePac.encounter_projection.standing.toLowerCase()}</span>
+        {profilePac.encounter_projection.authorized_by_owner&&<span>Surface · {profilePac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field"}</span>}
       </div>
+      {profilePac.approval.current&&!profilePac.encounter_projection.authorized_by_owner&&<div className="myenv-chazz-compose-actions">
+        <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void encounterProjection(profilePac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
+        <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void encounterProjection(profilePac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
+      </div>}
+      {profilePac.encounter_projection.authorized_by_owner&&<button
+        type="button"
+        disabled={busy===profilePac.pac_key}
+        onClick={()=>void encounterProjection(profilePac.pac_key,"REVOKE",profilePac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
+      >
+        REMOVE FROM ENCOUNTER
+      </button>}
     </section>}
 
     {otherPacs.length>0&&<div className="myenv-thread-entries">
@@ -226,25 +359,20 @@ export default function MyPacsPanel({
         <h3>{pac.title}</h3>
         {pac.subtitle&&<p>{pac.subtitle}</p>}
         <p><strong>Custody:</strong> personal · {pac.custody_provider||"c3 Field"}</p>
+        {reviewControls(pac)}
         <p><strong>Encounter:</strong> {pac.encounter_projection.standing.toLowerCase()}</p>
         {pac.encounter_projection.authorized_by_owner&&<p><strong>Surface:</strong> {pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field only"}</p>}
-        <div className="myenv-chazz-compose-actions">
-          <button type="button" disabled={busy===pac.pac_key} onClick={()=>void disposition(pac.pac_key,"APPROVED")}>
-            {busy===pac.pac_key?"RESOLVING…":"APPROVE"}
-          </button>
-          <button type="button" disabled={busy===pac.pac_key} onClick={()=>void disposition(pac.pac_key,"HLD")}>HOLD</button>
-          {pac.approval.standing==="APPROVED"&&!pac.encounter_projection.authorized_by_owner&&<>
-            <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
-            <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
-          </>}
-          {pac.approval.standing==="APPROVED"&&pac.encounter_projection.authorized_by_owner&&<button
-            type="button"
-            disabled={busy===pac.pac_key}
-            onClick={()=>void encounterProjection(pac.pac_key,"REVOKE",pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
-          >
-            REMOVE FROM ENCOUNTER
-          </button>}
-        </div>
+        {pac.approval.current&&!pac.encounter_projection.authorized_by_owner&&<div className="myenv-chazz-compose-actions">
+          <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
+          <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
+        </div>}
+        {pac.encounter_projection.authorized_by_owner&&<button
+          type="button"
+          disabled={busy===pac.pac_key}
+          onClick={()=>void encounterProjection(pac.pac_key,"REVOKE",pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
+        >
+          REMOVE FROM ENCOUNTER
+        </button>}
       </article>)}
     </div>}
 
