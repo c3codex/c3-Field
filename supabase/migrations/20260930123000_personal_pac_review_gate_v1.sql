@@ -558,6 +558,16 @@ set metadata=coalesce(metadata,'{}'::jsonb)
   updated_at=now()
 where process_key='c1me_envpac_primitives_v1';
 
+update public.c3_envpac_runtime_primitive
+set config=coalesce(config,'{}'::jsonb)
+  || jsonb_build_object(
+    'review_gate','personal_pac_review_gate_v1',
+    'approval_requires_current_review',true,
+    'review_surface','my_pacs_preview'
+  ),
+  updated_at=now()
+where primitive_key='my_pacs' and standing='active';
+
 revoke all on function public.c3_pac_review_payload_v1(text) from public,anon,authenticated;
 grant execute on function public.c3_pac_review_payload_v1(text) to service_role;
 revoke all on function public.c3_pac_review_sha256_v1(text) from public,anon,authenticated;
