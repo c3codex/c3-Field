@@ -390,30 +390,43 @@ export default function MyPacsPanel({
       </button>}
     </section>}
 
-    {otherPacs.length>0&&<div className="myenv-thread-entries">
-      {otherPacs.map(pac=><article key={pac.pac_key}>
-        <div>
-          <span>{pac.pac_type} · {pac.approval.standing}</span>
-          {pac.approval.resolved_at&&<time>{new Date(pac.approval.resolved_at).toLocaleString()}</time>}
-        </div>
-        <h3>{pac.title}</h3>
-        {pac.subtitle&&<p>{pac.subtitle}</p>}
-        <p><strong>Custody:</strong> personal · {pac.custody_provider||"c3 Field"}</p>
-        {reviewControls(pac)}
-        <p><strong>Encounter:</strong> {pac.encounter_projection.standing.toLowerCase()}</p>
-        {pac.encounter_projection.authorized_by_owner&&<p><strong>Surface:</strong> {pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field only"}</p>}
-        {pac.approval.current&&!pac.encounter_projection.authorized_by_owner&&<div className="myenv-chazz-compose-actions">
-          <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
-          <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
-        </div>}
-        {pac.encounter_projection.authorized_by_owner&&<button
-          type="button"
-          disabled={busy===pac.pac_key}
-          onClick={()=>void encounterProjection(pac.pac_key,"REVOKE",pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
-        >
-          REMOVE FROM ENCOUNTER
-        </button>}
-      </article>)}
+    {otherPacs.length>0&&<div className="myenv-personal-pac-cards">
+      {otherPacs.map(pac=>{
+        const previewOpen=previewPac===pac.pac_key
+        return <section className="myenv-personal-pac-card" key={pac.pac_key}>
+          <div className="myenv-personal-pac-card-head">
+            <div>
+              <p className="myenv-kicker">MY PACS · {pac.pac_type}</p>
+              <h3>{pac.title}</h3>
+              {pac.subtitle&&<p>{pac.subtitle}</p>}
+            </div>
+            <button
+              className="myenv-pac-preview-primary"
+              type="button"
+              onClick={()=>setPreviewPac(previewOpen?"":pac.pac_key)}
+            >
+              {previewOpen?"CLOSE PREVIEW":"PREVIEW / REVIEW"}
+            </button>
+          </div>
+          <p><strong>Custody:</strong> personal · {pac.custody_provider||"c3 Field"}</p>
+          {reviewControls(pac)}
+          <div className="myenv-pac-status">
+            <span>Encounter · {pac.encounter_projection.standing.toLowerCase()}</span>
+            {pac.encounter_projection.authorized_by_owner&&<span>Surface · {pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field only"}</span>}
+          </div>
+          {pac.approval.current&&!pac.encounter_projection.authorized_by_owner&&<div className="myenv-chazz-compose-actions">
+            <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
+            <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
+          </div>}
+          {pac.encounter_projection.authorized_by_owner&&<button
+            type="button"
+            disabled={busy===pac.pac_key}
+            onClick={()=>void encounterProjection(pac.pac_key,"REVOKE",pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
+          >
+            REMOVE FROM ENCOUNTER
+          </button>}
+        </section>
+      })}
     </div>}
 
     {notice&&loaded&&<p className="myenv-initiative-notice" role="status">{notice}</p>}
