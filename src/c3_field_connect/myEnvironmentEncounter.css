@@ -264,3 +264,10 @@
   padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.05);
   font:600 10px/1.1 Inter,system-ui,sans-serif
 }
+
+
+.myenv-native-pac-review{
+  margin:16px 0 18px;max-height:72vh;overflow:auto;
+  border:1px solid rgba(244,239,227,.16);border-radius:14px;
+  background:rgba(255,255,255,.025)
+}
