@@ -312,8 +312,7 @@ async function discoverBufferWorkspace(credential) {
     "    organizations { id name channelCount }",
     "  }",
     "}",
-  ].join("
-");
+  ].join("\n");
   const account = await bufferGraphql(credential, accountQuery);
   if (!account.ok || !account.payload?.data?.account) {
     return {
@@ -349,8 +348,7 @@ async function discoverBufferWorkspace(credential) {
       "    allowedActions",
       "  }",
       "}",
-    ].join("
-");
+    ].join("\n");
     const response = await bufferGraphql(credential, channelsQuery, { input: { organizationId } });
     if (!response.ok) {
       return {
