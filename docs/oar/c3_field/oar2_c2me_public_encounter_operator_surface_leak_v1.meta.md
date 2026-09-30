@@ -20,6 +20,8 @@ This is the system-level fracture.
 
 The specific PAC approval and registration of Run Aground was a concrete consequence of the fracture, not the whole finding.
 
+Run Aground PAC custody itself was correct throughout. The PAC remains in the owner's personal custody and supplies the Run Aground primary encounter. Canopy and runaground.c3field.online are projections of that owner-custodied encounter; neither surface takes custody.
+
 ## Boundary that failed
 
 Expected separation:
