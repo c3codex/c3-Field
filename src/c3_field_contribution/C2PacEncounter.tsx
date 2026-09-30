@@ -70,13 +70,13 @@ export default function C2PacEncounter(){
     }finally{setBusy(false)}
   }
 
-  if(!data) return <main className="c2-shell"><p className="c2-shell-label">C2ME_env · PAC encounter</p><p>Resolving governed encounter…</p></main>
+  if(!data) return <main className="c2-shell"><p className="c2-shell-label">C2ME_env · operator PAC governance</p><p>Resolving governed encounter…</p></main>
 
   if(!data.authenticated||data.standing==="DNR") return <main className="c2-shell c2-held">
-    <nav className="c2-home-nav"><a className="c2-home-link" href="/my-environment">← MY ENVIRONMENT</a><a href="/">c3 FIELD</a></nav>
-    <p className="c2-shell-label">C2ME_env · PAC encounter</p>
+    <nav className="c2-home-nav"><a className="c2-home-link" href="/c3ops">← C3OPS</a><a href="/">c3 FIELD</a></nav>
+    <p className="c2-shell-label">C2ME_env · operator PAC governance</p>
     <h1>Encounter did not resolve.</h1>
-    <p>{data.reason||"Persisted CURRENT and C2 standing are required."}</p>
+    <p>{data.reason||"Governed operator context, persisted CURRENT, and C2 passage are required."}</p>
     <p className="c2-small">Standing: DNR</p>
   </main>
 
@@ -86,14 +86,14 @@ export default function C2PacEncounter(){
       <a className="c2-brand" href="/"><span>c3</span> Community Partners</a>
       <div className="c2-topbar-actions">
         <p className="c2-shell-label">C2ME_env · governed PAC encounter</p>
-        <a className="c2-home-link" href="/my-environment">← MY ENVIRONMENT</a>
+        <a className="c2-home-link" href="/c3ops">← C3OPS</a>
       </div>
     </header>
 
     <section className="c2-mission-head">
-      <p className="c2-eyebrow">PAC ENCOUNTER</p>
-      <h1>Review what may cross the public boundary.</h1>
-      <p>C2ME_env governs the encounter. PAC custody does not transfer. Registry may register only the PAC state explicitly approved here.</p>
+      <p className="c2-eyebrow">OPERATOR PAC GOVERNANCE</p>
+      <h1>Review governed PACs before public registration.</h1>
+      <p>This is an operator/system encounter inside C2ME_env. It is not part of any participant initiative encounter. PAC custody does not transfer; Registry may register only the PAC state explicitly approved here.</p>
     </section>
 
     <section className="c2-panel">
@@ -144,7 +144,7 @@ export default function C2PacEncounter(){
     </section>
 
     <footer className="c2-footer">
-      <span>C2ME_env · governed relational encounter</span>
+      <span>C2ME_env · operator/system governed encounter</span>
       <span>Custody stays separate · Registry records approved state · mismatch resolves DNR</span>
     </footer>
   </main>

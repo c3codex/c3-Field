@@ -176,6 +176,20 @@ export default function OarOperationsConsole() {
         </dl>
       </section>
 
+      <section className="c3-ops-section" aria-labelledby="pac-governance">
+        <div className="c3-section-heading">
+          <p className="c3-ops-kicker">Operator System Function</p>
+          <h2 id="pac-governance">PAC Governance</h2>
+        </div>
+        <p>
+          Review separately custodied WebPACs inside the protected C2ME_env encounter.
+          This operator route is distinct from participant initiative encounters.
+        </p>
+        <p>
+          <a href="/c2?mode=pacs">OPEN PAC GOVERNANCE →</a>
+        </p>
+      </section>
+
       {!registryState && (
         <section className="c3-ops-section" aria-labelledby="persistence-held">
           <div className="c3-persistence-held">
