@@ -193,11 +193,14 @@ async function prepareOrPublishBlueskyPost(request, env) {
 
   const canonicalUrl=cleanSecret(body.canonical_url);
   const baseText=cleanSecret(body.text);
-  const finalText=baseText.includes(canonicalUrl)?baseText:`${baseText}\n\n${canonicalUrl}`;
+  const finalText=baseText.includes(canonicalUrl)?baseText:`${baseText}
+
+${canonicalUrl}`;
   const requestIdentity=`${body.route_key}:${body.distribution_asset_id}:${body.idempotency_key}`;
   if (Array.from(finalText).length > 300) return json({ok:false,standing:"held_bluesky_text_exceeds_300_characters",text_length:Array.from(finalText).length,external_publication_effects:0},422);
 
-  const imageUrl=cleanSecret(body.image_url);\n  if (body.dry_run !== false) return json({ok:true,standing:"bluesky_adapter_ready_dry_run",adapter:"atproto_create_record_v3_media",request_identity:requestIdentity,account_handle:cleanSecret(identifier),channel_key:body.channel_key,text_length:Array.from(finalText).length,image_url:imageUrl||null,media_embed_ready:Boolean(imageUrl),external_publication_effects:0});
+  const imageUrl=cleanSecret(body.image_url);
+  if (body.dry_run !== false) return json({ok:true,standing:"bluesky_adapter_ready_dry_run",adapter:"atproto_create_record_v3_media",request_identity:requestIdentity,account_handle:cleanSecret(identifier),channel_key:body.channel_key,text_length:Array.from(finalText).length,image_url:imageUrl||null,media_embed_ready:Boolean(imageUrl),external_publication_effects:0});
 
   const sessionResponse=await fetch(`${PDS_URL}/xrpc/com.atproto.server.createSession`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({identifier:cleanSecret(identifier),password:cleanSecret(password)})});
   const session=await sessionResponse.json().catch(()=>({}));
@@ -208,7 +211,18 @@ async function prepareOrPublishBlueskyPost(request, env) {
   const byteStart=encoder.encode(finalText.slice(0,urlIndex)).length;
   const byteEnd=byteStart+encoder.encode(canonicalUrl).length;
   const record={$type:"app.bsky.feed.post",text:finalText,createdAt:new Date().toISOString(),facets:[{index:{byteStart,byteEnd},features:[{$type:"app.bsky.richtext.facet#link",uri:canonicalUrl}]}]};
-  if (imageUrl) {\n    const mediaResponse=await fetch(imageUrl);\n    if (!mediaResponse.ok) return json({ok:false,standing:"held_bluesky_media_fetch_failed",external_response_code:mediaResponse.status,external_publication_effects:0},502);\n    const mediaType=cleanSecret(mediaResponse.headers.get("content-type"))||"image/jpeg";\n    if (!mediaType.startsWith("image/")) return json({ok:false,standing:"held_bluesky_media_type_invalid",media_type:mediaType,external_publication_effects:0},422);\n    const mediaBytes=await mediaResponse.arrayBuffer();\n    const uploadResponse=await fetch(`${PDS_URL}/xrpc/com.atproto.repo.uploadBlob`,{method:"POST",headers:{authorization:`Bearer ${session.accessJwt}`,"content-type":mediaType},body:mediaBytes});\n    const uploaded=await uploadResponse.json().catch(()=>({}));\n    if (!uploadResponse.ok||!uploaded?.blob) return json({ok:false,standing:"held_bluesky_media_upload_failed",external_response_code:uploadResponse.status,external_publication_effects:0},502);\n    record.embed={$type:"app.bsky.embed.images",images:[{image:uploaded.blob,alt:cleanSecret(body.image_alt)||"4.7% — A c3 Field Initiative"}]};\n  }\n  const createResponse=await fetch(`${PDS_URL}/xrpc/com.atproto.repo.createRecord`,{method:"POST",headers:{authorization:`Bearer ${session.accessJwt}`,"content-type":"application/json"},body:JSON.stringify({repo:session.did,collection:"app.bsky.feed.post",record})});
+  if (imageUrl) {
+    const mediaResponse=await fetch(imageUrl);
+    if (!mediaResponse.ok) return json({ok:false,standing:"held_bluesky_media_fetch_failed",external_response_code:mediaResponse.status,external_publication_effects:0},502);
+    const mediaType=cleanSecret(mediaResponse.headers.get("content-type"))||"image/jpeg";
+    if (!mediaType.startsWith("image/")) return json({ok:false,standing:"held_bluesky_media_type_invalid",media_type:mediaType,external_publication_effects:0},422);
+    const mediaBytes=await mediaResponse.arrayBuffer();
+    const uploadResponse=await fetch(`${PDS_URL}/xrpc/com.atproto.repo.uploadBlob`,{method:"POST",headers:{authorization:`Bearer ${session.accessJwt}`,"content-type":mediaType},body:mediaBytes});
+    const uploaded=await uploadResponse.json().catch(()=>({}));
+    if (!uploadResponse.ok||!uploaded?.blob) return json({ok:false,standing:"held_bluesky_media_upload_failed",external_response_code:uploadResponse.status,external_publication_effects:0},502);
+    record.embed={$type:"app.bsky.embed.images",images:[{image:uploaded.blob,alt:cleanSecret(body.image_alt)||"4.7% — A c3 Field Initiative"}]};
+  }
+  const createResponse=await fetch(`${PDS_URL}/xrpc/com.atproto.repo.createRecord`,{method:"POST",headers:{authorization:`Bearer ${session.accessJwt}`,"content-type":"application/json"},body:JSON.stringify({repo:session.did,collection:"app.bsky.feed.post",record})});
   const data=await createResponse.json().catch(()=>({}));
   const rkey=typeof data?.uri==="string"?data.uri.split("/").pop():null;
   const publicUrl=rkey?`https://bsky.app/profile/${encodeURIComponent(cleanSecret(identifier))}/post/${encodeURIComponent(rkey)}`:null;
@@ -327,7 +341,11 @@ function buildDevArticlePayload(body) {
     : cleanSecret(body.tags || "ai, security, governance, devops");
   const disclosure = cleanSecret(body.editorial_disclosure);
   const bodyMarkdown = disclosure && !body.body_markdown.includes(disclosure)
-    ? `${body.body_markdown.trim()}\n\n---\n\n${disclosure}`
+    ? `${body.body_markdown.trim()}
+
+---
+
+${disclosure}`
     : body.body_markdown;
   return {
     article: {
