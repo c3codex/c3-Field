@@ -300,7 +300,7 @@ export default function MyPacsPanel({
     }finally{setBusy("")}
   }
 
-  function reviewControls(pac:PersonalPac){
+  function reviewControls(pac:PersonalPac,showPreviewToggle=true){
     const previewOpen=previewPac===pac.pac_key
     const approvalReady=pac.review.current
     return <>
@@ -310,9 +310,9 @@ export default function MyPacsPanel({
         <span>Distribution · {pac.distribution.standing.replace(/_/g," ").toLowerCase()}</span>
       </div>
       <div className="myenv-chazz-compose-actions">
-        <button type="button" onClick={()=>setPreviewPac(previewOpen?"":pac.pac_key)}>
+        {showPreviewToggle&&<button type="button" onClick={()=>setPreviewPac(previewOpen?"":pac.pac_key)}>
           {previewOpen?"CLOSE PREVIEW":"PREVIEW / REVIEW"}
-        </button>
+        </button>}
         {previewOpen&&<button type="button" disabled={busy===pac.pac_key} onClick={()=>void reviewSnapshot(pac,"REVIEWED")}>
           {busy===pac.pac_key?"RESOLVING…":"I REVIEWED THIS VERSION"}
         </button>}
@@ -409,7 +409,7 @@ export default function MyPacsPanel({
             </button>
           </div>
           <p><strong>Custody:</strong> personal · {pac.custody_provider||"c3 Field"}</p>
-          {reviewControls(pac)}
+          {reviewControls(pac,false)}
           <div className="myenv-pac-status">
             <span>Encounter · {pac.encounter_projection.standing.toLowerCase()}</span>
             {pac.encounter_projection.authorized_by_owner&&<span>Surface · {pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field only"}</span>}
