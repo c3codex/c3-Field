@@ -52,7 +52,9 @@ Database authority boundary:
 - Registry registration rejects approvals without matching operator-system provenance.
 
 State correction:
-- Run Aground returned to private.
+- Run Aground PAC remained in owner custody throughout.
+- Run Aground primary encounter is projected to Canopy and runaground.c3field.online without custody transfer.
+- Run Aground public release state returned to private.
 - operator approval returned to PENDING.
 - NI approval returned to PENDING.
 - Registry submission returned to NOT_SUBMITTED.
