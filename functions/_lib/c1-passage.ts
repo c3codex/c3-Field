@@ -331,6 +331,51 @@ export async function sendDueVerificationReminders(env:PassageEnv,deps:Dependenc
   return results
 }
 
+export async function sendPendingConnectionWelcomes(env:PassageEnv,deps:Dependencies=defaults){
+  configuration(env)
+  if(!env.C3_RESEND_API_KEY||!env.C1_VERIFICATION_FROM) throw new Error("email_configuration")
+  const headers={"content-type":"application/json",apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!}
+  const response=await deps.fetch(PROJECT_URL+"/rest/v1/c3_env_connection_confirmation_outbox?dispatch_state=eq.pending&metadata->>message_contract=eq.c3_field_welcome_v1&order=created_at.asc&limit=10",{
+    method:"GET",redirect:"manual",signal:AbortSignal.timeout(12000),headers
+  })
+  if(!response.ok) throw new Error("welcome_list")
+  const rows=await response.json() as Array<RecordValue>
+  const results=[]
+  for(const row of rows){
+    const dispatchKey=String(row.dispatch_key||"")
+    if(!dispatchKey)continue
+    const initiative=row.metadata?.source_initiative_key==="47pct"?"4.7%":String(row.metadata?.source_initiative_key||"c3 Field")
+    const returnUrl=typeof row.metadata?.return_url==="string"?row.metadata.return_url:MY_ENVIRONMENT_ORIGIN
+    const name=typeof row.recipient_display_name==="string"&&row.recipient_display_name.trim()?row.recipient_display_name.trim():"there"
+    const text=`Hi ${name},
+
+Welcome to c3 Field.
+
+You entered c3 Field through ${initiative}, and your environment has been established.
+
+c3 Field is evolving quickly. As new information, relationships, and opportunities relevant to your environment become available, your Current State can change without requiring you to start over.
+
+When new information relevant to your environment or the connection that brought you here surfaces, we'll let you know.
+
+Return to your Current State:
+${returnUrl}`
+    const html=`<!doctype html><html><body style="margin:0;background:#111416;color:#f3efe7;font-family:Arial,sans-serif"><div style="max-width:640px;margin:auto;padding:36px 28px"><p style="letter-spacing:.16em;font-size:12px">c3 FIELD</p><h1 style="font-family:Georgia,serif;font-weight:400">Welcome to c3 Field.</h1><p>Hi ${esc(name)},</p><p>You entered c3 Field through <strong>${esc(initiative)}</strong>, and your environment has been established.</p><p>c3 Field is evolving quickly. As new information, relationships, and opportunities relevant to your environment become available, your Current State can change without requiring you to start over.</p><p>When new information relevant to your environment or the connection that brought you here surfaces, we'll let you know.</p><p><a href="${esc(returnUrl)}" style="display:inline-block;padding:14px 20px;background:#f1eee5;color:#111;text-decoration:none;font-weight:700">RETURN TO YOUR CURRENT STATE →</a></p></div></body></html>`
+    const sent=await sendResend(env,deps,{to:String(row.recipient_email||""),subject:"Welcome to c3 Field",text,html,idempotencyKey:"c3-field-welcome-"+dispatchKey})
+    const now=new Date(deps.now()).toISOString()
+    const metadata={...(row.metadata||{}),provider:"resend",last_dispatch_attempt_at:now}
+    const patch=sent
+      ?{dispatch_state:"sent",attempt_count:Number(row.attempt_count||0)+1,last_attempt_at:now,sent_at:now,metadata}
+      :{dispatch_state:"failed",attempt_count:Number(row.attempt_count||0)+1,last_attempt_at:now,metadata}
+    const updated=await deps.fetch(PROJECT_URL+"/rest/v1/c3_env_connection_confirmation_outbox?dispatch_key=eq."+encodeURIComponent(dispatchKey),{
+      method:"PATCH",redirect:"manual",signal:AbortSignal.timeout(12000),
+      headers:{...headers,prefer:"return=minimal"},body:JSON.stringify(patch)
+    })
+    if(!updated.ok)throw new Error("welcome_state_update")
+    results.push({dispatch_key:dispatchKey,sent})
+  }
+  return results
+}
+
 export async function requestEnvironmentAccessLink(emailInput: unknown, env: PassageEnv, deps: Dependencies = defaults) {
   try {
     const origin = configuration(env)
