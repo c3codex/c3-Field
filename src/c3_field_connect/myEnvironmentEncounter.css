@@ -188,3 +188,14 @@
 @media(prefers-reduced-motion:reduce){
   .myenv-index,.myenv-index-item{transition:none}
 }
+
+
+.myenv-index-system{
+  margin-top:6px;padding-top:12px;border-top:1px solid rgba(244,239,227,.1)
+}
+.myenv-index-system-link{
+  text-decoration:none
+}
+.myenv-index-system-link>span{
+  letter-spacing:.04em
+}
