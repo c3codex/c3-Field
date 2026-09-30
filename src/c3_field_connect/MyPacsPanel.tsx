@@ -1,5 +1,6 @@
 import {useEffect,useState,type FormEvent} from "react"
 import ProfilePacPanel,{type ProfileContract,type ProfileShape} from "./ProfilePacPanel"
+import {PacSnapshotSurface,type PacSnapshot} from "./RegisteredPacSurface"
 
 type ReviewState={
   standing:string
@@ -86,6 +87,7 @@ function ReviewPreview({pac}:{pac:PersonalPac}){
   const location=text(personalization.location_region)
   const openTo=textArray(personalization.open_to)
   const isProfile=pac.pac_type==="ProfilePAC"
+  const isWebPac=pac.pac_type==="c3WebPac"
 
   return <section className="myenv-pac-review-preview">
     <div className="myenv-thread-heading">
@@ -118,11 +120,18 @@ function ReviewPreview({pac}:{pac:PersonalPac}){
         </div>
       </section>}
     </div>}
-    {!isProfile&&coverUrl&&<img className="myenv-pac-review-cover" src={coverUrl} alt={title+" review cover"}/>}
-    {!isProfile&&thesis&&<p><strong>{thesis}</strong></p>}
-    {!isProfile&&profile.visibility_scope&&<p><strong>Visibility:</strong> {text(profile.visibility_scope)}</p>}
-    {!isProfile&&overview.map((paragraph,index)=><p key={"overview-"+index}>{paragraph}</p>)}
-    {!isProfile&&readerPromise.length>0&&<div className="myenv-pac-review-copy">
+    {isWebPac&&<div className="myenv-native-pac-review">
+      <PacSnapshotSurface
+        snapshot={payload as unknown as PacSnapshot}
+        snapshotHash={pac.review.snapshot_hash}
+        mode="review"
+      />
+    </div>}
+    {!isProfile&&!isWebPac&&coverUrl&&<img className="myenv-pac-review-cover" src={coverUrl} alt={title+" review cover"}/>}
+    {!isProfile&&!isWebPac&&thesis&&<p><strong>{thesis}</strong></p>}
+    {!isProfile&&!isWebPac&&profile.visibility_scope&&<p><strong>Visibility:</strong> {text(profile.visibility_scope)}</p>}
+    {!isProfile&&!isWebPac&&overview.map((paragraph,index)=><p key={"overview-"+index}>{paragraph}</p>)}
+    {!isProfile&&!isWebPac&&readerPromise.length>0&&<div className="myenv-pac-review-copy">
       <h4>Reader promise</h4>
       {readerPromise.map((paragraph,index)=><p key={"promise-"+index}>{paragraph}</p>)}
     </div>}
