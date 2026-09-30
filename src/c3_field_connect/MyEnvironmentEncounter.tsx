@@ -1,6 +1,6 @@
 import {FormEvent,useEffect,useState} from "react"
 import EternalFlame from "./EternalFlame"
-import ProfilePacPanel,{type ProfileContract} from "./ProfilePacPanel"
+import {type ProfileContract} from "./ProfilePacPanel"
 import MyPacsPanel from "./MyPacsPanel"
 import CurrentConstellation,{type CurrentToken} from "./CurrentConstellation"
 
