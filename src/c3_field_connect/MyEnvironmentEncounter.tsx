@@ -10,6 +10,11 @@ type EnvPayload={
   environment?:{env_key:string;environment_name:string;environment_class:string;standing:string;is_active:boolean;is_canonical:boolean}
   envpac?:{envpac_key:string;version:string;standing:string;owner_subject_type:string;custodian_subject_type:string;custodian_subject_key:string;custody_provider:string;portable:boolean;environment_bindings:unknown;rooted_systems:unknown;packages:unknown;profile_pac?:ProfileTruth|null}
   presentation?:{opening_visual_asset_key:string;opening_visual_url:string;source_webpac_key:string;owner_changeable:boolean;selection_standing:string;selected_at?:string;updated_at?:string}|null
+  operator_context?:{
+    resolution:"operator_context_resolved"|"operator_context_none"|"operator_context_held"
+    operator_count?:number
+    operators?:Array<{operator_identifier?:string;operator_role?:string;boundary?:string}>
+  }|null
 }
 type Primitive={
   primitive_key:string
@@ -833,6 +838,10 @@ export default function MyEnvironmentEncounter(){
     relations:primitives.filter(primitive=>primitiveGroup(primitive)==="relations"),
     other:primitives.filter(primitive=>primitiveGroup(primitive)==="other")
   }
+  const hasOperatorContext=
+    data.operator_context?.resolution==="operator_context_resolved" &&
+    (data.operator_context.operator_count||0)>0 &&
+    (data.operator_context.operators||[]).some(operator=>operator.operator_role==="operator"&&operator.boundary==="notchazz_pass")
   const environmentItemCount=primitives.length+initiatives.length
 
   return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v3+CURRENT_v1">
@@ -899,6 +908,13 @@ export default function MyEnvironmentEncounter(){
             <small>{initiative.target_environment_key||"initiative relation"}</small>
           </button>
         })}
+      </section>}
+      {hasOperatorContext&&<section className="myenv-index-group myenv-index-system">
+        <p>System</p>
+        <a className="myenv-index-item myenv-index-system-link" href="/c3ops">
+          <span>C3OPS ↗</span>
+          <small>operator system surface</small>
+        </a>
       </section>}
     </nav>
 
