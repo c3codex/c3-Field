@@ -11,7 +11,15 @@ type PersonalPac={
   custody_provider?:string|null
   title:string
   subtitle?:string|null
-  approval:{standing:string;resolved_at?:string|null;c2_projection_eligible:boolean}
+  approval:{standing:string;resolved_at?:string|null}
+  encounter_projection:{
+    standing:string
+    encounter_key:string
+    authorized_by_owner:boolean
+    presentation_scope:string
+    surface_projections:string[]
+    resolved_at?:string|null
+  }
   custody_model?:Record<string,unknown>
 }
 type Payload={
@@ -70,10 +78,10 @@ export default function MyPacsPanel({
       const response=await fetch("/api/my-environment-pacs",{
         method:"POST",
         headers:{"content-type":"application/json","accept":"application/json"},
-        body:JSON.stringify({pac_key:pacKey,disposition:next})
+        body:JSON.stringify({action:"custody_disposition",pac_key:pacKey,disposition:next})
       })
       const body=await response.json().catch(()=>null) as {
-        standing?:string;reason?:string;resolved_at?:string;c2_projection_eligible?:boolean
+        standing?:string;reason?:string;resolved_at?:string;encounter_projection_standing?:string
       }|null
       if(!response.ok||!body||!["ACT","HLD"].includes(String(body.standing||"")))
         throw new Error(body?.reason||body?.standing||"PAC disposition did not resolve.")
@@ -81,15 +89,68 @@ export default function MyPacsPanel({
         ...pac,
         approval:{
           standing:next,
-          resolved_at:body.resolved_at||new Date().toISOString(),
-          c2_projection_eligible:body.c2_projection_eligible===true
+          resolved_at:body.resolved_at||new Date().toISOString()
+        },
+        encounter_projection:{
+          ...pac.encounter_projection,
+          standing:body.encounter_projection_standing|| (next==="APPROVED"?"PENDING":"HLD"),
+          authorized_by_owner:false,
+          resolved_at:null
         }
       }:pac))
       setNotice(next==="APPROVED"
-        ?"PAC approved in your custody. It is now eligible for C2ME_env projection."
-        :"PAC held in your custody. It is not eligible for C2ME_env projection.")
+        ?"PAC approved in your custody. Encounter use remains a separate owner decision."
+        :"PAC held in your custody.")
     }catch(error){
       setNotice(error instanceof Error?error.message:"PAC disposition did not resolve.")
+    }finally{setBusy("")}
+  }
+
+
+  async function encounterProjection(
+    pacKey:string,
+    action:"AUTHORIZE"|"REVOKE",
+    surfaceScope:"c3field_only"|"c3field_plus_canopy"="c3field_only"
+  ){
+    if(busy)return
+    setBusy(pacKey);setNotice("")
+    try{
+      const response=await fetch("/api/my-environment-pacs",{
+        method:"POST",
+        headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({
+          action:"encounter_projection",
+          pac_key:pacKey,
+          projection_action:action,
+          encounter_key:"c3envpac_c2me_v0_1",
+          surface_scope:surfaceScope
+        })
+      })
+      const body=await response.json().catch(()=>null) as {
+        standing?:string;reason?:string;resolved_at?:string;
+        encounter_projection_standing?:string;authorized_by_owner?:boolean;
+        presentation_scope?:string;surface_projections?:string[]
+      }|null
+      if(!response.ok||!body||!["ACT","HLD"].includes(String(body.standing||"")))
+        throw new Error(body?.reason||body?.standing||"Encounter decision did not resolve.")
+      setPacs(current=>current.map(pac=>pac.pac_key===pacKey?{
+        ...pac,
+        encounter_projection:{
+          ...pac.encounter_projection,
+          standing:body.encounter_projection_standing|| (action==="AUTHORIZE"?"AUTHORIZED":"REVOKED"),
+          authorized_by_owner:body.authorized_by_owner===true,
+          presentation_scope:body.presentation_scope||surfaceScope,
+          surface_projections:Array.isArray(body.surface_projections)?body.surface_projections:[],
+          resolved_at:body.resolved_at||new Date().toISOString()
+        }
+      }:pac))
+      setNotice(action==="AUTHORIZE"
+        ?(surfaceScope==="c3field_plus_canopy"
+          ?"Owner authorized this approved PAC for the encounter on c3 Field and Canopy."
+          :"Owner authorized this approved PAC for the encounter on c3 Field only.")
+        :"Encounter projection authorization revoked. PAC remains in your custody.")
+    }catch(error){
+      setNotice(error instanceof Error?error.message:"Encounter decision did not resolve.")
     }finally{setBusy("")}
   }
 
@@ -100,7 +161,7 @@ export default function MyPacsPanel({
     <div className="myenv-thread-heading">
       <p className="myenv-kicker">PERSONAL CUSTODY</p>
       <h2>My PACs</h2>
-      <p>PACs in your personal custody are reviewed here. Approval makes a PAC eligible for C2ME_env projection; it does not transfer custody. Governed branch and initiative PACs are excluded.</p>
+      <p>PACs in your personal custody are reviewed here. Approval accepts the PAC in your custody. Use in an encounter is a separate owner decision. Governed branch and initiative PACs are excluded.</p>
     </div>
 
     {!loaded&&<p className="myenv-runtime-warning">{notice||"Resolving personal PAC custody…"}</p>}
@@ -114,7 +175,8 @@ export default function MyPacsPanel({
       </div>
       <div className="myenv-pac-status">
         <span>{profilePac.approval.standing}</span>
-        <span>C2 projection · {profilePac.approval.c2_projection_eligible?"eligible":"held"}</span>
+        <span>Encounter · {profilePac.encounter_projection.standing.toLowerCase()}</span>
+        {profilePac.encounter_projection.authorized_by_owner&&<span>Surface · {profilePac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field"}</span>}
       </div>
       {presentation&&<form className="myenv-thread-compose" onSubmit={onSavePresentation}>
         <label>Environment presentation</label>
@@ -141,6 +203,17 @@ export default function MyPacsPanel({
           {busy===profilePac.pac_key?"RESOLVING…":"APPROVE PROFILEPAC"}
         </button>
         <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void disposition(profilePac.pac_key,"HLD")}>HOLD</button>
+        {profilePac.approval.standing==="APPROVED"&&!profilePac.encounter_projection.authorized_by_owner&&<>
+          <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void encounterProjection(profilePac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
+          <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void encounterProjection(profilePac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
+        </>}
+        {profilePac.approval.standing==="APPROVED"&&profilePac.encounter_projection.authorized_by_owner&&<button
+          type="button"
+          disabled={busy===profilePac.pac_key}
+          onClick={()=>void encounterProjection(profilePac.pac_key,"REVOKE",profilePac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
+        >
+          REMOVE FROM ENCOUNTER
+        </button>}
       </div>
     </section>}
 
@@ -153,12 +226,24 @@ export default function MyPacsPanel({
         <h3>{pac.title}</h3>
         {pac.subtitle&&<p>{pac.subtitle}</p>}
         <p><strong>Custody:</strong> personal · {pac.custody_provider||"c3 Field"}</p>
-        <p><strong>C2 projection:</strong> {pac.approval.c2_projection_eligible?"eligible":"held until approval"}</p>
+        <p><strong>Encounter:</strong> {pac.encounter_projection.standing.toLowerCase()}</p>
+        {pac.encounter_projection.authorized_by_owner&&<p><strong>Surface:</strong> {pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field only"}</p>}
         <div className="myenv-chazz-compose-actions">
           <button type="button" disabled={busy===pac.pac_key} onClick={()=>void disposition(pac.pac_key,"APPROVED")}>
             {busy===pac.pac_key?"RESOLVING…":"APPROVE"}
           </button>
           <button type="button" disabled={busy===pac.pac_key} onClick={()=>void disposition(pac.pac_key,"HLD")}>HOLD</button>
+          {pac.approval.standing==="APPROVED"&&!pac.encounter_projection.authorized_by_owner&&<>
+            <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
+            <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
+          </>}
+          {pac.approval.standing==="APPROVED"&&pac.encounter_projection.authorized_by_owner&&<button
+            type="button"
+            disabled={busy===pac.pac_key}
+            onClick={()=>void encounterProjection(pac.pac_key,"REVOKE",pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
+          >
+            REMOVE FROM ENCOUNTER
+          </button>}
         </div>
       </article>)}
     </div>}
