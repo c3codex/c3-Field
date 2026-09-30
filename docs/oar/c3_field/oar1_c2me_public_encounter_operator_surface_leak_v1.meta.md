@@ -26,6 +26,9 @@ Observed source behavior before correction:
 - Run Aground received approval and Registry registration during this period.
 
 Historical Run Aground effect retained in Registry:
+- PAC custody remained with the owner
+- primary encounter remained owner-custodied
+- Canopy and runaground.c3field.online remain non-custodial projections of that encounter
 - prior release state: public_release_authorized
 - prior Registry standing: REGISTERED
 - disposition after correction: SUPERSEDED_REAPPROVAL_REQUIRED
