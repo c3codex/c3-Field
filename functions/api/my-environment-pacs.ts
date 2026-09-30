@@ -95,6 +95,8 @@ async function personalPacs(env:PassageEnv,session:EnvironmentSession){
           standing:typeof projection.standing==="string"?projection.standing:"PENDING",
           encounter_key:typeof projection.encounter_key==="string"?projection.encounter_key:"c3envpac_c2me_v0_1",
           authorized_by_owner:projection.authorized_by_owner===true,
+          presentation_scope:typeof projection.presentation_scope==="string"?projection.presentation_scope:"c3field_only",
+          surface_projections:Array.isArray(projection.surface_projections)?projection.surface_projections:[],
           resolved_at:typeof projection.resolved_at==="string"?projection.resolved_at:null
         },
         custody_model:metadata.custody_model
@@ -153,13 +155,17 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     if(action==="encounter_projection"){
       const projectionAction=typeof body.projection_action==="string"?body.projection_action:""
       const encounterKey=typeof body.encounter_key==="string"&&body.encounter_key?body.encounter_key:"c3envpac_c2me_v0_1"
+      const surfaceScope=typeof body.surface_scope==="string"?body.surface_scope:"c3field_only"
       if(!["AUTHORIZE","REVOKE"].includes(projectionAction))
         return json({standing:"DNR",reason:"invalid_projection_action"},400)
+      if(!["c3field_only","c3field_plus_canopy"].includes(surfaceScope))
+        return json({standing:"DNR",reason:"invalid_surface_scope"},400)
       const result=await rpc(env,"c3_pac_set_personal_encounter_projection_v1",{
         p_pac_key:pacKey,
         p_subject_key:session.subjectKey,
         p_action:projectionAction,
-        p_encounter_key:encounterKey
+        p_encounter_key:encounterKey,
+        p_surface_scope:surfaceScope
       })
       return json(result,result.standing==="ACT"||result.standing==="HLD"?200:409)
     }
