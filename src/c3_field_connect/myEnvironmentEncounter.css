@@ -239,3 +239,28 @@
   max-height:320px;overflow:auto;white-space:pre-wrap;word-break:break-word;
   padding:12px;border-radius:8px;background:rgba(0,0,0,.25);font-size:11px;line-height:1.45
 }
+
+
+.myenv-profile-review-card{
+  margin:14px 0 18px;padding:18px;border:1px solid rgba(244,239,227,.14);
+  border-radius:14px;background:rgba(255,255,255,.025)
+}
+.myenv-profile-review-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px
+}
+.myenv-profile-review-head h3{margin:.1rem 0 .35rem}
+.myenv-profile-review-visibility{
+  padding:5px 8px;border:1px solid rgba(244,239,227,.16);border-radius:999px;
+  font:700 9px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase
+}
+.myenv-profile-review-card section+section{margin-top:16px}
+.myenv-profile-review-card h4{
+  margin:0 0 6px;font:700 10px/1.2 Inter,system-ui,sans-serif;
+  letter-spacing:.09em;text-transform:uppercase
+}
+.myenv-profile-review-card p{white-space:pre-line}
+.myenv-profile-review-tags{display:flex;flex-wrap:wrap;gap:7px}
+.myenv-profile-review-tags span{
+  padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.05);
+  font:600 10px/1.1 Inter,system-ui,sans-serif
+}
