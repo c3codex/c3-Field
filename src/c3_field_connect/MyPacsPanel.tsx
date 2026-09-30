@@ -12,7 +12,14 @@ type PersonalPac={
   title:string
   subtitle?:string|null
   approval:{standing:string;resolved_at?:string|null}
-  encounter_projection:{standing:string;encounter_key:string;authorized_by_owner:boolean;resolved_at?:string|null}
+  encounter_projection:{
+    standing:string
+    encounter_key:string
+    authorized_by_owner:boolean
+    presentation_scope:string
+    surface_projections:string[]
+    resolved_at?:string|null
+  }
   custody_model?:Record<string,unknown>
 }
 type Payload={
@@ -100,7 +107,11 @@ export default function MyPacsPanel({
   }
 
 
-  async function encounterProjection(pacKey:string,action:"AUTHORIZE"|"REVOKE"){
+  async function encounterProjection(
+    pacKey:string,
+    action:"AUTHORIZE"|"REVOKE",
+    surfaceScope:"c3field_only"|"c3field_plus_canopy"="c3field_only"
+  ){
     if(busy)return
     setBusy(pacKey);setNotice("")
     try{
@@ -111,12 +122,14 @@ export default function MyPacsPanel({
           action:"encounter_projection",
           pac_key:pacKey,
           projection_action:action,
-          encounter_key:"c3envpac_c2me_v0_1"
+          encounter_key:"c3envpac_c2me_v0_1",
+          surface_scope:surfaceScope
         })
       })
       const body=await response.json().catch(()=>null) as {
         standing?:string;reason?:string;resolved_at?:string;
-        encounter_projection_standing?:string;authorized_by_owner?:boolean
+        encounter_projection_standing?:string;authorized_by_owner?:boolean;
+        presentation_scope?:string;surface_projections?:string[]
       }|null
       if(!response.ok||!body||!["ACT","HLD"].includes(String(body.standing||"")))
         throw new Error(body?.reason||body?.standing||"Encounter decision did not resolve.")
@@ -126,11 +139,15 @@ export default function MyPacsPanel({
           ...pac.encounter_projection,
           standing:body.encounter_projection_standing|| (action==="AUTHORIZE"?"AUTHORIZED":"REVOKED"),
           authorized_by_owner:body.authorized_by_owner===true,
+          presentation_scope:body.presentation_scope||surfaceScope,
+          surface_projections:Array.isArray(body.surface_projections)?body.surface_projections:[],
           resolved_at:body.resolved_at||new Date().toISOString()
         }
       }:pac))
       setNotice(action==="AUTHORIZE"
-        ?"Owner authorized this approved PAC for the C2ME_env encounter."
+        ?(surfaceScope==="c3field_plus_canopy"
+          ?"Owner authorized this approved PAC for the encounter on c3 Field and Canopy."
+          :"Owner authorized this approved PAC for the encounter on c3 Field only.")
         :"Encounter projection authorization revoked. PAC remains in your custody.")
     }catch(error){
       setNotice(error instanceof Error?error.message:"Encounter decision did not resolve.")
@@ -159,6 +176,7 @@ export default function MyPacsPanel({
       <div className="myenv-pac-status">
         <span>{profilePac.approval.standing}</span>
         <span>Encounter · {profilePac.encounter_projection.standing.toLowerCase()}</span>
+        {profilePac.encounter_projection.authorized_by_owner&&<span>Surface · {profilePac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field"}</span>}
       </div>
       {presentation&&<form className="myenv-thread-compose" onSubmit={onSavePresentation}>
         <label>Environment presentation</label>
@@ -185,12 +203,16 @@ export default function MyPacsPanel({
           {busy===profilePac.pac_key?"RESOLVING…":"APPROVE PROFILEPAC"}
         </button>
         <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void disposition(profilePac.pac_key,"HLD")}>HOLD</button>
-        {profilePac.approval.standing==="APPROVED"&&<button
+        {profilePac.approval.standing==="APPROVED"&&!profilePac.encounter_projection.authorized_by_owner&&<>
+          <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void encounterProjection(profilePac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
+          <button type="button" disabled={busy===profilePac.pac_key} onClick={()=>void encounterProjection(profilePac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
+        </>}
+        {profilePac.approval.standing==="APPROVED"&&profilePac.encounter_projection.authorized_by_owner&&<button
           type="button"
           disabled={busy===profilePac.pac_key}
-          onClick={()=>void encounterProjection(profilePac.pac_key,profilePac.encounter_projection.authorized_by_owner?"REVOKE":"AUTHORIZE")}
+          onClick={()=>void encounterProjection(profilePac.pac_key,"REVOKE",profilePac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
         >
-          {profilePac.encounter_projection.authorized_by_owner?"REMOVE FROM ENCOUNTER":"USE IN ENCOUNTER"}
+          REMOVE FROM ENCOUNTER
         </button>}
       </div>
     </section>}
@@ -205,17 +227,22 @@ export default function MyPacsPanel({
         {pac.subtitle&&<p>{pac.subtitle}</p>}
         <p><strong>Custody:</strong> personal · {pac.custody_provider||"c3 Field"}</p>
         <p><strong>Encounter:</strong> {pac.encounter_projection.standing.toLowerCase()}</p>
+        {pac.encounter_projection.authorized_by_owner&&<p><strong>Surface:</strong> {pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3 Field + Canopy":"c3 Field only"}</p>}
         <div className="myenv-chazz-compose-actions">
           <button type="button" disabled={busy===pac.pac_key} onClick={()=>void disposition(pac.pac_key,"APPROVED")}>
             {busy===pac.pac_key?"RESOLVING…":"APPROVE"}
           </button>
           <button type="button" disabled={busy===pac.pac_key} onClick={()=>void disposition(pac.pac_key,"HLD")}>HOLD</button>
-          {pac.approval.standing==="APPROVED"&&<button
+          {pac.approval.standing==="APPROVED"&&!pac.encounter_projection.authorized_by_owner&&<>
+            <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_only")}>USE ON C3 FIELD</button>
+            <button type="button" disabled={busy===pac.pac_key} onClick={()=>void encounterProjection(pac.pac_key,"AUTHORIZE","c3field_plus_canopy")}>C3 FIELD + CANOPY</button>
+          </>}
+          {pac.approval.standing==="APPROVED"&&pac.encounter_projection.authorized_by_owner&&<button
             type="button"
             disabled={busy===pac.pac_key}
-            onClick={()=>void encounterProjection(pac.pac_key,pac.encounter_projection.authorized_by_owner?"REVOKE":"AUTHORIZE")}
+            onClick={()=>void encounterProjection(pac.pac_key,"REVOKE",pac.encounter_projection.presentation_scope==="c3field_plus_canopy"?"c3field_plus_canopy":"c3field_only")}
           >
-            {pac.encounter_projection.authorized_by_owner?"REMOVE FROM ENCOUNTER":"USE IN ENCOUNTER"}
+            REMOVE FROM ENCOUNTER
           </button>}
         </div>
       </article>)}
