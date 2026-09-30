@@ -1,5 +1,6 @@
 import {json, type PassageEnv} from "../_lib/c1-passage"
 import {resolveEnvironmentSession} from "../_lib/env-session"
+import {resolveC1MeOperatorContext} from "../_lib/c1me-operator-context"
 
 type Row=Record<string,unknown>
 
@@ -50,6 +51,12 @@ async function sessionFor(request:Request,env:PassageEnv){
   const raw=cookie(request,"c3_env_session")
   if(!raw) throw new Error("environment_claim_required")
   const session=await resolveEnvironmentSession(raw,env)
+  const operatorContext=await resolveC1MeOperatorContext(session.subjectKey,env)
+  const operatorResolved=
+    operatorContext.resolution==="operator_context_resolved" &&
+    (operatorContext.operator_count||0)>0 &&
+    (operatorContext.operators||[]).some(operator=>operator.operator_role==="operator"&&operator.boundary==="notchazz_pass")
+  if(!operatorResolved) throw new Error("operator_context_required")
 
   const [tokens,c2Events,c2Grants]=await Promise.all([
     read(env,"c3_current_token",{
@@ -91,7 +98,7 @@ async function sessionFor(request:Request,env:PassageEnv){
   if(!retainedC2) throw new Error("persisted_current_required")
   if(!registeredC2Event&&!activeC2Grant) throw new Error("c2_passage_standing_required")
 
-  return {session,tokens,c2Events,c2Grants}
+  return {session,tokens,c2Events,c2Grants,operatorContext}
 }
 
 async function pacRows(env:PassageEnv,subjectKey:string,pacKey?:string|null){
@@ -181,7 +188,7 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
   }catch(error){
     const reason=error instanceof Error?error.message:"c2_pac_encounter_unavailable"
     const status=reason==="environment_claim_required"||reason==="session_expired"?401:
-      reason==="persisted_current_required"||reason==="c2_passage_standing_required"?403:503
+      reason==="operator_context_required"||reason==="persisted_current_required"||reason==="c2_passage_standing_required"?403:503
     return json({authenticated:false,standing:"DNR",reason},status)
   }
 }
@@ -217,7 +224,7 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
   }catch(error){
     const reason=error instanceof Error?error.message:"c2_pac_encounter_unavailable"
     const status=reason==="environment_claim_required"||reason==="session_expired"?401:
-      reason==="persisted_current_required"||reason==="c2_passage_standing_required"?403:503
+      reason==="operator_context_required"||reason==="persisted_current_required"||reason==="c2_passage_standing_required"?403:503
     return json({standing:"DNR",reason},status)
   }
 }
