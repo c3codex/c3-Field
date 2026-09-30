@@ -71,6 +71,8 @@ function ReviewPreview({pac}:{pac:PersonalPac}){
   const presentation=record(payload.public_presentation)
   const proposal=record(payload.proposal_projection)
   const profile=record(payload.profile)
+  const profileMeta=record(profile.metadata)
+  const personalization=record(profileMeta.personalization)
   const members=Array.isArray(payload.members)?payload.members.filter((item):item is Record<string,unknown>=>!!item&&typeof item==="object"):[]
   const cover=members.find(member=>member.member_role==="cover_master")
   const coverUrl=text(cover?.runtime_uri)
@@ -79,24 +81,53 @@ function ReviewPreview({pac}:{pac:PersonalPac}){
   const thesis=text(presentation.thesis)
   const overview=textArray(proposal.overview)
   const readerPromise=textArray(proposal.reader_promise)
+  const about=text(personalization.about)
+  const interests=text(personalization.interests)
+  const location=text(personalization.location_region)
+  const openTo=textArray(personalization.open_to)
+  const isProfile=pac.pac_type==="ProfilePAC"
 
   return <section className="myenv-pac-review-preview">
     <div className="myenv-thread-heading">
       <p className="myenv-kicker">PRIVATE REVIEW CANDIDATE</p>
       <h3>{title}</h3>
       {subtitle&&<p>{subtitle}</p>}
-      <p>This preview resolves from snapshot <code>{pac.review.snapshot_hash.slice(0,16)}…</code>. Approval binds to this exact snapshot.</p>
+      <p>This is the human-facing state tied to snapshot <code>{pac.review.snapshot_hash.slice(0,16)}…</code>. Approval binds to this exact snapshot.</p>
     </div>
-    {coverUrl&&<img className="myenv-pac-review-cover" src={coverUrl} alt={title+" review cover"}/>}
-    {thesis&&<p><strong>{thesis}</strong></p>}
-    {profile.visibility_scope&&<p><strong>Visibility:</strong> {text(profile.visibility_scope)}</p>}
-    {overview.map((paragraph,index)=><p key={"overview-"+index}>{paragraph}</p>)}
-    {readerPromise.length>0&&<div className="myenv-pac-review-copy">
+    {isProfile&&<div className="myenv-profile-review-card">
+      <div className="myenv-profile-review-head">
+        <div>
+          <p className="myenv-kicker">PROFILE</p>
+          <h3>{title}</h3>
+          {location&&<p>{location}</p>}
+        </div>
+        {profile.visibility_scope&&<span className="myenv-profile-review-visibility">{text(profile.visibility_scope)}</span>}
+      </div>
+      {about&&<section>
+        <h4>About</h4>
+        <p>{about}</p>
+      </section>}
+      {interests&&<section>
+        <h4>Interests</h4>
+        <p>{interests}</p>
+      </section>}
+      {openTo.length>0&&<section>
+        <h4>Open to</h4>
+        <div className="myenv-profile-review-tags">
+          {openTo.map(item=><span key={item}>{item}</span>)}
+        </div>
+      </section>}
+    </div>}
+    {!isProfile&&coverUrl&&<img className="myenv-pac-review-cover" src={coverUrl} alt={title+" review cover"}/>}
+    {!isProfile&&thesis&&<p><strong>{thesis}</strong></p>}
+    {!isProfile&&profile.visibility_scope&&<p><strong>Visibility:</strong> {text(profile.visibility_scope)}</p>}
+    {!isProfile&&overview.map((paragraph,index)=><p key={"overview-"+index}>{paragraph}</p>)}
+    {!isProfile&&readerPromise.length>0&&<div className="myenv-pac-review-copy">
       <h4>Reader promise</h4>
       {readerPromise.map((paragraph,index)=><p key={"promise-"+index}>{paragraph}</p>)}
     </div>}
     <details className="myenv-pac-review-data">
-      <summary>Exact review snapshot data</summary>
+      <summary>Exact snapshot data</summary>
       <pre>{JSON.stringify(payload,null,2)}</pre>
     </details>
   </section>
