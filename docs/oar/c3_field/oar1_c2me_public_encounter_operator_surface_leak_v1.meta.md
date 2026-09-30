@@ -26,6 +26,9 @@ Observed source behavior before correction:
 - Run Aground received approval and Registry registration during this period.
 
 Historical Run Aground effect retained in Registry:
+- PAC custody remained with the owner
+- primary encounter remained owner-custodied
+- Canopy and runaground.c3field.online remain non-custodial projections of that encounter
 - prior release state: public_release_authorized
 - prior Registry standing: REGISTERED
 - disposition after correction: SUPERSEDED_REAPPROVAL_REQUIRED
@@ -49,7 +52,9 @@ Database authority boundary:
 - Registry registration rejects approvals without matching operator-system provenance.
 
 State correction:
-- Run Aground returned to private.
+- Run Aground PAC remained in owner custody throughout.
+- Run Aground primary encounter is projected to Canopy and runaground.c3field.online without custody transfer.
+- Run Aground public release state returned to private.
 - operator approval returned to PENDING.
 - NI approval returned to PENDING.
 - Registry submission returned to NOT_SUBMITTED.

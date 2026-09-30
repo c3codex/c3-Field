@@ -20,6 +20,8 @@ This is the system-level fracture.
 
 The specific PAC approval and registration of Run Aground was a concrete consequence of the fracture, not the whole finding.
 
+Run Aground PAC custody itself was correct throughout. The PAC remains in the owner's personal custody and supplies the Run Aground primary encounter. Canopy and runaground.c3field.online are projections of that owner-custodied encounter; neither surface takes custody.
+
 ## Boundary that failed
 
 Expected separation:
@@ -37,13 +39,17 @@ Observed failure:
 
 - boundary: participant/public encounter vs operator/system operations
 - role: participant context vs operator context
-- authority: PAC custody was treated as sufficient where operator-system standing was also required
+- authority: owner PAC custody was correct, but consequential approval/registration controls also required operator-system standing
+- custody: Run Aground remained owner-custodied; custody did not transfer to C2ME_env, Canopy, Registry, or c3 Field
 - environment: C2ME_env correctly hosted both encounter classes, but the renderer failed to preserve the distinction between them
 - persistence: an approval and Registry registration trace was created before the boundary was corrected
 
 ## Concrete consequence
 
 Run Aground WebPAC:
+- remained correctly in the owner's personal custody
+- continued to supply the Run Aground primary encounter
+- projects to Canopy and runaground.c3field.online without custody transfer
 - was approved from the improperly surfaced participant-facing C2 placement
 - was registered before the operator-system provenance requirement existed
 - was later returned to private/held/unregistered
