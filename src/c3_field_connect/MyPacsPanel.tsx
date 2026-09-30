@@ -1,4 +1,4 @@
-import {useEffect,useState} from "react"
+import {useEffect,useState,type FormEvent} from "react"
 import ProfilePacPanel,{type ProfileContract,type ProfileShape} from "./ProfilePacPanel"
 
 type PersonalPac={
@@ -35,7 +35,7 @@ type Props={
   }|null
   presentationAsset:string
   onPresentationAssetChange:(value:string)=>void
-  onSavePresentation:(event:React.FormEvent)=>void
+  onSavePresentation:(event:FormEvent)=>void
 }
 
 export default function MyPacsPanel({
