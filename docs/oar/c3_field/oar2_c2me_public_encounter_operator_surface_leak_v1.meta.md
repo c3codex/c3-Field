@@ -39,7 +39,8 @@ Observed failure:
 
 - boundary: participant/public encounter vs operator/system operations
 - role: participant context vs operator context
-- authority: PAC custody was treated as sufficient where operator-system standing was also required
+- authority: owner PAC custody was correct, but consequential approval/registration controls also required operator-system standing
+- custody: Run Aground remained owner-custodied; custody did not transfer to C2ME_env, Canopy, Registry, or c3 Field
 - environment: C2ME_env correctly hosted both encounter classes, but the renderer failed to preserve the distinction between them
 - persistence: an approval and Registry registration trace was created before the boundary was corrected
 
