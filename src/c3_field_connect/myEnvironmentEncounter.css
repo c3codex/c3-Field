@@ -271,3 +271,21 @@
   border:1px solid rgba(244,239,227,.16);border-radius:14px;
   background:rgba(255,255,255,.025)
 }
+
+
+.myenv-personal-pac-cards{display:grid;gap:18px;margin-top:18px}
+.myenv-personal-pac-card{
+  padding:18px;border:1px solid rgba(244,239,227,.14);border-radius:14px;
+  background:rgba(255,255,255,.025)
+}
+.myenv-personal-pac-card-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:12px
+}
+.myenv-personal-pac-card-head h3{margin:.1rem 0 .35rem}
+.myenv-pac-preview-primary{
+  flex:0 0 auto;white-space:nowrap
+}
+@media(max-width:760px){
+  .myenv-personal-pac-card-head{flex-direction:column}
+  .myenv-pac-preview-primary{width:100%}
+}
