@@ -872,7 +872,7 @@ export default function MyEnvironmentEncounter(){
         </div>
         {initiativeConnectionNotice&&<p className="myenv-initiative-notice" role="status">{initiativeConnectionNotice}</p>}
         <p className="myenv-runtime-warning">{cancomE2eeStanding==="ready"
-          ?"Personal connection messages are end-to-end encrypted on this device. Registry retains passage evidence, not message text."
+          ?"New personal connection messages leave this device only as end-to-end encrypted ciphertext. Legacy messages predate E2EE; Registry retains passage evidence, not message text."
           :"Secure CanCom messaging is held until this browser can establish its local device encryption identity."}</p>
         {nativeConnections.length>0&&<form className="myenv-thread-compose" onSubmit={sendNativeMessage}>
           <select aria-label="Connected environment" value={selectedConnection} onChange={e=>setSelectedConnection(e.target.value)}>
