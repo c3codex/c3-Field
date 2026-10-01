@@ -10,9 +10,23 @@ type LapzuliAsset = LapzuliCampaign["assets"][number]
 
 const text = (x: unknown) => x == null ? "unresolved" : typeof x === "string" ? x : String(x)
 
+function EvidenceValue({value}:{value:unknown}) {
+  if (Array.isArray(value)) {
+    if (!value.length) return <>none</>
+    if (value.every(item=>item && typeof item==="object" && !Array.isArray(item))) {
+      return <div className="ops-records">{value.map((item,i)=><dl key={i}>{Object.entries(item as Record<string,unknown>).map(([k,v])=><div key={k}><dt>{k.replace(/_/g," ")}</dt><dd><EvidenceValue value={v}/></dd></div>)}</dl>)}</div>
+    }
+    return <>{value.map(item=>text(item)).join(", ")}</>
+  }
+  if (value && typeof value==="object") {
+    return <div className="ops-records"><dl>{Object.entries(value as Record<string,unknown>).map(([k,v])=><div key={k}><dt>{k.replace(/_/g," ")}</dt><dd><EvidenceValue value={v}/></dd></div>)}</dl></div>
+  }
+  return <>{text(value)}</>
+}
+
 function Rows({records}: {records: Record<string,unknown>[]}) {
   return records.length
-    ? <div className="ops-records">{records.map((r,i)=><dl key={i}>{Object.entries(r).map(([k,v])=><div key={k}><dt>{k.replace(/_/g," ")}</dt><dd>{text(v)}</dd></div>)}</dl>)}</div>
+    ? <div className="ops-records">{records.map((r,i)=><dl key={i}>{Object.entries(r).map(([k,v])=><div key={k}><dt>{k.replace(/_/g," ")}</dt><dd><EvidenceValue value={v}/></dd></div>)}</dl>)}</div>
     : <p className="ops-unresolved">DNR — no registered relation returned.</p>
 }
 
