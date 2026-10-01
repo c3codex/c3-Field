@@ -10,13 +10,13 @@ const AUTHORIZED_CHANNELS = {
   facebook_measures_registry: {
     platform: "facebook",
     service: "facebook",
-    profile_id: "6a54734280cc80cdcaa9743b",
+    profile_id: "6a8a6ddeccaf649a67fbd7d3",
     credential: "BUFFER_SOCIAL_KEY",
   },
   linkedin_measures_registry: {
     platform: "linkedin",
     service: "linkedin",
-    profile_id: "6a23c027c687a22dd467a132",
+    profile_id: "6a8a6f62ccaf649a67fbda98",
     credential: "BUFFER_SOCIAL_KEY",
   },
   x_measures_c3: {
