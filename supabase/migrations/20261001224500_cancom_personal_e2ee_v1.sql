@@ -108,7 +108,7 @@ begin
     select 1 from public.c3_envpac p where p.envpac_key=p_envpac_key and p.env_key=p_env_key
       and p.owner_subject_key=p_relationship_key and p.standing='effective' and p.is_effective=true
   ) then return jsonb_build_object('standing','HLD','reason','device_environment_relation_unresolved'); end if;
-  v_fingerprint:=encode(digest(convert_to(p_encryption_public_key||':'||p_signing_public_key,'UTF8'),'sha256'),'hex');
+  v_fingerprint:=encode(extensions.digest(convert_to(p_encryption_public_key||':'||p_signing_public_key,'UTF8'),'sha256'),'hex');
   select * into v_existing from public.c3_cancom_device_key where device_key=p_device_key;
   if found then
     if v_existing.relationship_key<>p_relationship_key or v_existing.env_key<>p_env_key
@@ -175,7 +175,7 @@ begin
      or jsonb_array_length(p_key_wraps)<2 or p_ciphertext_sha256 !~ '^[0-9a-f]{64}$'
   then return jsonb_build_object('standing','HLD','reason','encrypted_payload_invalid'); end if;
   begin
-    v_computed_hash:=encode(digest(decode(p_ciphertext,'base64'),'sha256'),'hex');
+    v_computed_hash:=encode(extensions.digest(decode(p_ciphertext,'base64'),'sha256'),'hex');
   exception when others then
     return jsonb_build_object('standing','HLD','reason','encrypted_payload_encoding_invalid');
   end;
