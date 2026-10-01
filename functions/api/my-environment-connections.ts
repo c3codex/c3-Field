@@ -38,6 +38,17 @@ async function write(env:PassageEnv,table:string,method:"POST"|"PATCH",body:unkn
   const rows=await response.json()
   return Array.isArray(rows)?rows as Row[]:[]
 }
+async function rpc(env:PassageEnv,name:string,body:Record<string,unknown>){
+  const response=await fetch(base(env)+"/rest/v1/rpc/"+name,{
+    method:"POST",
+    headers:headers(env,{"content-type":"application/json"}),
+    body:JSON.stringify(body),
+    signal:AbortSignal.timeout(12000)
+  })
+  if(!response.ok) throw new Error("rpc_failed")
+  const result=await response.json()
+  return result as Row
+}
 async function sessionFor(request:Request,env:PassageEnv){
   const raw=cookie(request,"c3_env_session")
   if(!raw) throw new Error("environment_claim_required")
@@ -70,13 +81,14 @@ async function nativeConnections(env:PassageEnv,subjectKey:string){
     const source=String(row.source_relationship_key||"")
     const target=String(row.target_relationship_key||"")
     const otherKey=source===subjectKey?target:source
-    const [owners,messages]=await Promise.all([
+    const [owners,messageResolution]=await Promise.all([
       read(env,"crs_relationship",{select:"relationship_key,display_name",relationship_key:"eq."+otherKey,is_active:"eq.true",limit:"1"}),
-      read(env,"c3_env_connection_message",{
-        select:"message_key,connection_key,sender_relationship_key,message_type,body,standing,created_at",
-        connection_key:"eq."+String(row.connection_key),standing:"eq.active",order:"created_at.asc",limit:"100"
+      rpc(env,"resolve_c1me_connection_messages_internal",{
+        p_connection_key:String(row.connection_key),
+        p_requester_relationship_key:subjectKey
       })
     ])
+    const messages=Array.isArray(messageResolution.messages)?messageResolution.messages:[]
     return {
       ...row,
       other:{relationship_key:otherKey,display_name:typeof owners[0]?.display_name==="string"?owners[0].display_name:null},
@@ -137,23 +149,18 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
       const messageBody=typeof body.body==="string"?body.body.trim():""
       if(!connectionKey||messageBody.length<1||messageBody.length>5000||!["note","introduction","opportunity","follow_up"].includes(messageType))
         return json({ok:false,standing:"connection_message_invalid"},400)
-      const rows=await read(env,"c3_env_native_connection",{
-        select:"connection_key,source_relationship_key,target_relationship_key,standing",
-        connection_key:"eq."+connectionKey,standing:"eq.active",revoked_at:"is.null",limit:"1"
+      const result=await rpc(env,"record_c1me_connection_message_internal",{
+        p_connection_key:connectionKey,
+        p_sender_relationship_key:session.subjectKey,
+        p_message_type:messageType,
+        p_body:messageBody
       })
-      const connection=rows[0]
-      if(!connection||(connection.source_relationship_key!==session.subjectKey&&connection.target_relationship_key!==session.subjectKey))
-        return json({ok:false,standing:"connection_message_not_authorized"},403)
-      const messages=await write(env,"c3_env_connection_message","POST",{
-        connection_key:connectionKey,sender_relationship_key:session.subjectKey,message_type:messageType,
-        body:messageBody,standing:"active",
-        metadata:{source:"my_environment_relational_ledger",registry_standing_created:false,authority_created:false}
-      })
-      await write(env,"c3_env_native_connection_event","POST",{
-        connection_key:connectionKey,event_type:"message_sent",actor_relationship_key:session.subjectKey,
-        share_reference:null,event_data:{message_key:messages[0]?.message_key||null,message_type:messageType}
-      },{},"return=minimal")
-      return json({ok:true,standing:"connection_message_recorded",message:messages[0]})
+      const standing=typeof result.standing==="string"?result.standing:"connection_message_held"
+      if(standing!=="connection_message_recorded"){
+        const status=standing==="connection_message_not_authorized"?403:standing==="connection_unavailable"?409:400
+        return json({ok:false,standing,reason:typeof result.reason==="string"?result.reason:null},status)
+      }
+      return json({ok:true,standing,message:result.message||null})
     }
 
     const thread=await ensureThread(env,session)
