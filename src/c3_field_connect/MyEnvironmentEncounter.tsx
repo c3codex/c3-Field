@@ -3,6 +3,7 @@ import EternalFlame from "./EternalFlame"
 import {type ProfileContract} from "./ProfilePacPanel"
 import MyPacsPanel from "./MyPacsPanel"
 import CurrentConstellation,{type CurrentToken} from "./CurrentConstellation"
+import OperationsPanel from "./OperationsPanel"
 import {
   decryptCanComMessage,
   encryptCanComMessage,
@@ -635,6 +636,9 @@ export default function MyEnvironmentEncounter(){
   }
 
   function renderPrimitive(primitive:Primitive){
+    if(primitive.renderer_key==="c1me.operations"){
+      return <OperationsPanel key={primitive.primitive_key}/>
+    }
     if(primitive.renderer_key==="c1me.current"){
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
         <div className="myenv-thread-heading">
