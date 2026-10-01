@@ -25,6 +25,9 @@ alter table public.c3_cancom_device_key enable row level security;
 revoke all on public.c3_cancom_device_key from public,anon,authenticated;
 grant select,insert,update on public.c3_cancom_device_key to service_role;
 
+grant usage on schema private to service_role;
+revoke all on schema private from anon, authenticated;
+
 alter table private.cancom_personal_message_payload alter column body drop not null;
 alter table private.cancom_personal_message_payload
   add column if not exists payload_mode text,
@@ -350,5 +353,7 @@ set metadata=metadata||jsonb_build_object(
   'e2ee_runtime_standing','implemented_pending_browser_proof'
 ),updated_at=now()
 where process_key in ('c1me_relational_runtime_v1','cancom_oar_delivery_retrieval_v1');
+
+notify pgrst, 'reload schema';
 
 commit;
