@@ -1,8 +1,16 @@
-import {FormEvent,useEffect,useState} from "react"
+import {FormEvent,useEffect,useRef,useState} from "react"
 import EternalFlame from "./EternalFlame"
 import {type ProfileContract} from "./ProfilePacPanel"
 import MyPacsPanel from "./MyPacsPanel"
 import CurrentConstellation,{type CurrentToken} from "./CurrentConstellation"
+import {
+  decryptCanComMessage,
+  encryptCanComMessage,
+  ensureCanComDeviceIdentity,
+  type CanComDeviceBundle,
+  type CanComDeviceIdentity,
+  type CanComResolvableMessage
+} from "../lib/cancom-e2ee"
 
 type EnvPayload={
   authenticated:boolean
@@ -32,7 +40,7 @@ type InitiativeComponent={component_key:string;renderer_key:string;sort_order:nu
 type Initiative={initiative_key:string;initiative_envpac_key:string;target_environment_key?:string|null;visibility_source:string;context_class?:string;context_classes?:string[];initiative_operator_binding_key?:string|null;operator_class?:string|null;operator_role?:string|null;invite_context_allowed?:boolean;components:InitiativeComponent[]}
 type InitiativePayload={authenticated:boolean;standing:string;initiatives?:Initiative[]}
 type LedgerEntry={entry_key:string;entry_type:string;title?:string|null;body:string;related_route?:string|null;standing:string;created_at:string}
-type ConnectionMessage={message_key:string;sender_relationship_key:string;message_type:string;body:string;created_at:string}
+type ConnectionMessage=CanComResolvableMessage
 type NativeConnection={
   connection_key:string
   source_relationship_key:string
@@ -150,6 +158,8 @@ export default function MyEnvironmentEncounter(){
   const [connectionMessage,setConnectionMessage]=useState("")
   const [connectionNotice,setConnectionNotice]=useState("")
   const [connectionBusy,setConnectionBusy]=useState(false)
+  const cancomDeviceRef=useRef<CanComDeviceIdentity|null>(null)
+  const [cancomE2eeStanding,setCancomE2eeStanding]=useState<"loading"|"ready"|"held">("loading")
 
   const [canopySurface,setCanopySurface]=useState("")
   const [canopyLabel,setCanopyLabel]=useState("")
@@ -189,9 +199,51 @@ export default function MyEnvironmentEncounter(){
   const [calendarNotice,setCalendarNotice]=useState("")
   const [calendarBusy,setCalendarBusy]=useState(false)
 
+  async function ensureRegisteredCanComDevice(){
+    try{
+      const identity=cancomDeviceRef.current||await ensureCanComDeviceIdentity()
+      const response=await fetch("/api/my-environment-connections",{
+        method:"POST",
+        headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({
+          action:"register_e2ee_device",
+          device_key:identity.deviceKey,
+          encryption_public_key:identity.encryptionPublicKey,
+          signing_public_key:identity.signingPublicKey
+        })
+      })
+      const body=await response.json().catch(()=>null) as {ok?:boolean;standing?:string;reason?:string}|null
+      if(!response.ok||!body?.ok)throw new Error(body?.reason||body?.standing||"secure_device_registration_held")
+      cancomDeviceRef.current=identity
+      setCancomE2eeStanding("ready")
+      return identity
+    }catch(error){
+      setCancomE2eeStanding("held")
+      throw error
+    }
+  }
+
+  async function decryptConnectionMessages(connections:NativeConnection[],identity:CanComDeviceIdentity|null){
+    return Promise.all(connections.map(async connection=>{
+      const messages=await Promise.all((connection.messages||[]).map(async message=>{
+        if(message.payload_mode!=="e2ee_ciphertext")return {...message,body:message.body||""}
+        if(!identity)return {...message,body:"[Encrypted message unavailable on this device]"}
+        try{
+          const body=await decryptCanComMessage(message,identity)
+          return {...message,body}
+        }catch{
+          return {...message,body:"[Encrypted message unavailable on this device]"}
+        }
+      }))
+      return {...connection,messages}
+    }))
+  }
+
   useEffect(()=>{
     let active=true
     async function hydrateSecondary(){
+      let cancomIdentity:CanComDeviceIdentity|null=null
+      try{cancomIdentity=await ensureRegisteredCanComDevice()}catch{cancomIdentity=null}
       const results=await Promise.allSettled([
         fetch("/api/my-environment-primitives",{headers:{accept:"application/json"}}),
         fetch("/api/my-environment-initiatives",{headers:{accept:"application/json"}}),
@@ -218,11 +270,12 @@ export default function MyEnvironmentEncounter(){
       }
       if(connectionsResult.status==="fulfilled"&&connectionsResult.value.ok){
         const body=await connectionsResult.value.json() as ConnectionsPayload
+        const resolvedConnections=await decryptConnectionMessages(body.native_connections||[],cancomIdentity)
         if(active){
           setLedgerEntries(body.entries||[])
-          setNativeConnections(body.native_connections||[])
+          setNativeConnections(resolvedConnections)
           setInitiativeConnections(body.initiative_connections||[])
-          setSelectedConnection(current=>current||(body.native_connections?.[0]?.connection_key||""))
+          setSelectedConnection(current=>current||(resolvedConnections[0]?.connection_key||""))
         }
       }
       if(canopyResult.status==="fulfilled"&&canopyResult.value.ok){
@@ -371,20 +424,58 @@ export default function MyEnvironmentEncounter(){
 
   async function sendNativeMessage(event:FormEvent){
     event.preventDefault()
-    if(!selectedConnection||!connectionMessage.trim())return
+    const plaintext=connectionMessage.trim()
+    if(!selectedConnection||!plaintext)return
     setConnectionBusy(true);setConnectionNotice("")
     try{
+      const identity=cancomDeviceRef.current||await ensureRegisteredCanComDevice()
+      const deviceResponse=await fetch("/api/my-environment-connections",{
+        method:"POST",headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({action:"resolve_e2ee_devices",connection_key:selectedConnection})
+      })
+      const deviceBody=await deviceResponse.json().catch(()=>null) as {ok?:boolean;standing?:string;reason?:string;devices?:CanComDeviceBundle[]}|null
+      if(!deviceResponse.ok||!deviceBody?.ok)
+        throw new Error(deviceBody?.reason||deviceBody?.standing||"secure_device_resolution_held")
+      const devices=deviceBody.devices||[]
+      if(!devices.some(device=>device.participant_role==="peer"))
+        throw new Error("recipient_secure_device_unavailable")
+
+      const packet=await encryptCanComMessage({
+        connectionKey:selectedConnection,
+        messageType:connectionMessageType,
+        plaintext,
+        identity,
+        devices
+      })
       const response=await fetch("/api/my-environment-connections",{
-        method:"POST",headers:{"content-type":"application/json"},
-        body:JSON.stringify({action:"send_message",connection_key:selectedConnection,message_type:connectionMessageType,body:connectionMessage.trim()})
+        method:"POST",headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({
+          action:"send_e2ee_message",
+          connection_key:selectedConnection,
+          message_type:connectionMessageType,
+          ...packet
+        })
       })
       const body=await response.json() as {ok?:boolean;message?:ConnectionMessage;standing?:string;reason?:string}
-      if(!response.ok||!body.ok||!body.message)throw new Error(body.reason||body.standing||"The message could not be sent.")
+      if(!response.ok||!body.ok||!body.message){
+        const reason=body.reason||body.standing||"The encrypted message could not be sent."
+        if(reason==="recipient_secure_device_unavailable")
+          throw new Error("Secure messaging is waiting for the connected environment to open My Env on an E2EE-capable device.")
+        if(reason==="encrypted_key_wrap_incomplete")
+          throw new Error("A connected device changed while this message was being encrypted. Try again.")
+        throw new Error(reason)
+      }
+      const localMessage:ConnectionMessage={...body.message,body:plaintext,payload_mode:"e2ee_ciphertext"}
       setNativeConnections(current=>current.map(connection=>connection.connection_key===selectedConnection
-        ?{...connection,messages:[...connection.messages,body.message!]}:connection))
-      setConnectionMessage("");setConnectionNotice("Message added to the shared connection ledger.")
-    }catch(error){setConnectionNotice(error instanceof Error?error.message:"The message could not be sent.")}
-    finally{setConnectionBusy(false)}
+        ?{...connection,messages:[...connection.messages,localMessage]}:connection))
+      setConnectionMessage("")
+      setConnectionNotice("Encrypted end to end and sent through this connection.")
+    }catch(error){
+      const reason=error instanceof Error?error.message:"The encrypted message could not be sent."
+      setConnectionNotice(reason==="recipient_secure_device_unavailable"
+        ?"Secure messaging is waiting for the connected environment to open My Env on an E2EE-capable device."
+        :reason)
+    }finally{setConnectionBusy(false)}
   }
 
   async function addCanopyReference(event:FormEvent){
@@ -780,6 +871,9 @@ export default function MyEnvironmentEncounter(){
           {nativeConnections.map(connection=><article key={connection.connection_key}><div><span>person connection</span><time>{new Date(connection.formed_at).toLocaleString()}</time></div><h3>{connection.other.display_name||"Connected environment"}</h3>{connection.messages.slice(-5).map(item=><p key={item.message_key}><strong>{item.sender_relationship_key===connection.other.relationship_key?(connection.other.display_name||"Connection")+": ":"You: "}</strong>{item.body}</p>)}</article>)}
         </div>
         {initiativeConnectionNotice&&<p className="myenv-initiative-notice" role="status">{initiativeConnectionNotice}</p>}
+        <p className="myenv-runtime-warning">{cancomE2eeStanding==="ready"
+          ?"Personal connection messages are end-to-end encrypted on this device. Registry retains passage evidence, not message text."
+          :"Secure CanCom messaging is held until this browser can establish its local device encryption identity."}</p>
         {nativeConnections.length>0&&<form className="myenv-thread-compose" onSubmit={sendNativeMessage}>
           <select aria-label="Connected environment" value={selectedConnection} onChange={e=>setSelectedConnection(e.target.value)}>
             {nativeConnections.map(connection=><option key={connection.connection_key} value={connection.connection_key}>{connection.other.display_name||"Connected environment"}</option>)}
