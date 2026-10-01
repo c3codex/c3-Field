@@ -143,24 +143,88 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     const session=await sessionFor(request,env)
     const body=await request.json() as Record<string,unknown>
 
-    if(body.action==="send_message"){
+    if(body.action==="register_e2ee_device"){
+      const deviceKey=typeof body.device_key==="string"?body.device_key.trim():""
+      const encryptionPublicKey=typeof body.encryption_public_key==="string"?body.encryption_public_key.trim():""
+      const signingPublicKey=typeof body.signing_public_key==="string"?body.signing_public_key.trim():""
+      if(!deviceKey||!encryptionPublicKey||!signingPublicKey)
+        return json({ok:false,standing:"device_registration_invalid"},400)
+      const result=await rpc(env,"register_cancom_device_key_internal",{
+        p_device_key:deviceKey,
+        p_relationship_key:session.subjectKey,
+        p_env_key:session.envKey,
+        p_envpac_key:session.envpacKey,
+        p_encryption_public_key:encryptionPublicKey,
+        p_signing_public_key:signingPublicKey
+      })
+      const standing=typeof result.standing==="string"?result.standing:"HLD"
+      if(standing!=="device_ready")
+        return json({ok:false,standing,reason:typeof result.reason==="string"?result.reason:null},409)
+      return json({ok:true,...result})
+    }
+
+    if(body.action==="resolve_e2ee_devices"){
+      const connectionKey=typeof body.connection_key==="string"?body.connection_key.trim():""
+      if(!connectionKey)return json({ok:false,standing:"connection_key_required"},400)
+      const result=await rpc(env,"resolve_cancom_connection_devices_internal",{
+        p_connection_key:connectionKey,
+        p_requester_relationship_key:session.subjectKey
+      })
+      const standing=typeof result.standing==="string"?result.standing:"HLD"
+      if(standing!=="resolved"){
+        const status=standing==="connection_message_not_authorized"?403:409
+        return json({ok:false,standing,reason:typeof result.reason==="string"?result.reason:null,devices:[]},status)
+      }
+      return json({ok:true,standing,devices:Array.isArray(result.devices)?result.devices:[]})
+    }
+
+    if(body.action==="send_e2ee_message"){
       const connectionKey=typeof body.connection_key==="string"?body.connection_key.trim():""
       const messageType=typeof body.message_type==="string"?body.message_type:"note"
-      const messageBody=typeof body.body==="string"?body.body.trim():""
-      if(!connectionKey||messageBody.length<1||messageBody.length>5000||!["note","introduction","opportunity","follow_up"].includes(messageType))
-        return json({ok:false,standing:"connection_message_invalid"},400)
-      const result=await rpc(env,"record_c1me_connection_message_internal",{
+      const messageKey=typeof body.message_key==="string"?body.message_key.trim():""
+      const senderDeviceKey=typeof body.sender_device_key==="string"?body.sender_device_key.trim():""
+      const ciphertext=typeof body.ciphertext==="string"?body.ciphertext.trim():""
+      const contentIv=typeof body.content_iv==="string"?body.content_iv.trim():""
+      const signature=typeof body.signature==="string"?body.signature.trim():""
+      const additionalData=typeof body.additional_data==="string"?body.additional_data:""
+      const ciphertextSha256=typeof body.ciphertext_sha256==="string"?body.ciphertext_sha256.trim():""
+      const keyWraps=Array.isArray(body.key_wraps)?body.key_wraps:[]
+      if(
+        !connectionKey||!messageKey||!senderDeviceKey||!ciphertext||!contentIv||!signature||!additionalData||
+        !/^[0-9a-f]{64}$/.test(ciphertextSha256)||
+        !["note","introduction","opportunity","follow_up"].includes(messageType)||
+        keyWraps.length<2
+      )return json({ok:false,standing:"encrypted_payload_invalid"},400)
+
+      const result=await rpc(env,"record_c1me_connection_ciphertext_internal",{
+        p_message_key:messageKey,
         p_connection_key:connectionKey,
         p_sender_relationship_key:session.subjectKey,
+        p_sender_device_key:senderDeviceKey,
         p_message_type:messageType,
-        p_body:messageBody
+        p_ciphertext:ciphertext,
+        p_content_iv:contentIv,
+        p_key_wraps:keyWraps,
+        p_signature:signature,
+        p_additional_data:additionalData,
+        p_ciphertext_sha256:ciphertextSha256
       })
-      const standing=typeof result.standing==="string"?result.standing:"connection_message_held"
-      if(standing!=="connection_message_recorded"){
-        const status=standing==="connection_message_not_authorized"?403:standing==="connection_unavailable"?409:400
-        return json({ok:false,standing,reason:typeof result.reason==="string"?result.reason:null},status)
+      const standing=typeof result.standing==="string"?result.standing:"HLD"
+      if(standing!=="connection_message_recorded_e2ee"){
+        const reason=typeof result.reason==="string"?result.reason:null
+        const status=reason==="connection_message_not_authorized"?403:
+          reason==="recipient_secure_device_unavailable"||reason==="encrypted_key_wrap_incomplete"||reason==="sender_device_unresolved"?409:400
+        return json({ok:false,standing,reason},status)
       }
       return json({ok:true,standing,message:result.message||null})
+    }
+
+    if(body.action==="send_message"){
+      return json({
+        ok:false,
+        standing:"HLD",
+        reason:"cancom_e2ee_ciphertext_required"
+      },409)
     }
 
     const thread=await ensureThread(env,session)
