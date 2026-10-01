@@ -19,6 +19,12 @@ const AUTHORIZED_CHANNELS = {
     profile_id: "6a8a6f62ccaf649a67fbda98",
     credential: "BUFFER_SOCIAL_KEY",
   },
+  instagram_measures_registry: {
+    platform: "instagram",
+    service: "instagram",
+    profile_id: "6a23bfc4c687a22dd467a045",
+    credential: "BUFFER_SOCIAL_KEY",
+  },
   x_measures_c3: {
     platform: "x",
     service: "twitter",
