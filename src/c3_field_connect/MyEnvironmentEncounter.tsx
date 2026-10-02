@@ -99,6 +99,13 @@ type AcquisitionResolution={resolution_key:string;property_key:string;resolved_s
 type AcquisitionDirectory={relationship_key:string;primary_email:string;display_name?:string|null;organization?:string|null;relationship_standing:string}
 type AcquisitionsPayload={authenticated:boolean;standing:string;authority?:string;properties?:AcquisitionProperty[];resolutions?:AcquisitionResolution[];directory?:AcquisitionDirectory[]}
 
+type DirectoryContact={contact_key:string;email:string;display_name?:string|null;organization?:string|null;phone?:string|null;preferred_channel?:string;source_class?:string;standing?:string;updated_at?:string}
+type DirectoryPayload={authenticated:boolean;standing:string;contacts?:DirectoryContact[];contact?:DirectoryContact;message?:string}
+type CanComSignature={display_name:string;title?:string|null;brand:string;legal_entity:string;model_path:string;email:string;website:string}
+type CanComThread={thread_key:string;contact_key?:string|null;thread_subject?:string|null;work_context_type?:string|null;work_context_key?:string|null;last_direction?:string|null;unread_count:number;last_activity_at:string;contact?:DirectoryContact|null}
+type CanComThreadMessage={message_ref_key:string;thread_key:string;direction:"outbound"|"inbound";provider_email_id:string;internet_message_id?:string|null;in_reply_to?:string|null;subject?:string|null;sender_ref?:string|null;recipient_ref?:string|null;delivery_standing:string;occurred_at:string;content_standing?:string;text?:string|null}
+type CanComWorkspacePayload={authenticated:boolean;standing:string;signature?:CanComSignature;threads?:CanComThread[];contacts?:DirectoryContact[];selected_thread?:string|null;messages?:CanComThreadMessage[];message?:string}
+
 async function readChazzJson(response:Response):Promise<ChazzPayload>{
   const contentType=(response.headers.get("content-type")||"").toLowerCase()
   if(!contentType.includes("application/json")){
@@ -122,7 +129,7 @@ function initiativeLabel(initiative:Initiative){
 function primitiveGroup(primitive:Primitive):PrimitiveGroupKey{
   if(["chazz","current","my_pacs","canopy","calendar"].includes(primitive.primitive_key))return "core"
   if(["native_connections","invite_connection"].includes(primitive.primitive_key))return "relations"
-  if(primitive.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline"||primitive.renderer_key==="c1me.acquisitions"||primitive.renderer_key==="c1me.operations")return "work"
+  if(primitive.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline"||primitive.renderer_key==="c1me.acquisitions"||primitive.renderer_key==="c1me.operations"||primitive.renderer_key==="c1me.cancom_workspace"||primitive.renderer_key==="c1me.directory")return "work"
   return "other"
 }
 function primitiveMeta(primitive:Primitive){
@@ -131,6 +138,8 @@ function primitiveMeta(primitive:Primitive){
   if(primitive.primitive_key==="calendar")return "c3-native schedule"
   if(primitive.primitive_key==="acquisitions")return "PropPac · acquisition lifecycle"
   if(primitive.primitive_key==="operations")return "operator OAR optics"
+  if(primitive.primitive_key==="cancom_workspace")return "compose · review · send · replies"
+  if(primitive.primitive_key==="directory")return "owner-private working contacts"
   if(primitive.primitive_key==="native_connections")return "CanCom · people & initiative relations"
   if(primitive.primitive_key==="invite_connection")return "CanCom · invite passage"
   if(primitive.renderer_key==="c1me.discovery")return "evidence encounter"
@@ -210,6 +219,163 @@ export default function MyEnvironmentEncounter(){
   const [acquisitionDirectory,setAcquisitionDirectory]=useState<AcquisitionDirectory[]>([])
   const [acquisitionsLoaded,setAcquisitionsLoaded]=useState(false)
   const [acquisitionNotice,setAcquisitionNotice]=useState("")
+  const [directoryContacts,setDirectoryContacts]=useState<DirectoryContact[]>([])
+  const [directoryName,setDirectoryName]=useState("")
+  const [directoryOrganization,setDirectoryOrganization]=useState("")
+  const [directoryEmail,setDirectoryEmail]=useState("")
+  const [directoryPhone,setDirectoryPhone]=useState("")
+  const [directoryNotice,setDirectoryNotice]=useState("")
+  const [directoryBusy,setDirectoryBusy]=useState(false)
+
+  const [cancomThreads,setCancomThreads]=useState<CanComThread[]>([])
+  const [cancomMessages,setCancomMessages]=useState<CanComThreadMessage[]>([])
+  const [cancomSignature,setCancomSignature]=useState<CanComSignature|null>(null)
+  const [cancomSelectedThread,setCancomSelectedThread]=useState("")
+  const [cancomTo,setCancomTo]=useState("")
+  const [cancomDisplayName,setCancomDisplayName]=useState("")
+  const [cancomOrganization,setCancomOrganization]=useState("")
+  const [cancomSubject,setCancomSubject]=useState("")
+  const [cancomBody,setCancomBody]=useState("")
+  const [cancomWorkContextType,setCancomWorkContextType]=useState("")
+  const [cancomWorkContextKey,setCancomWorkContextKey]=useState("")
+  const [cancomComposeThread,setCancomComposeThread]=useState("")
+  const [cancomNotice,setCancomNotice]=useState("")
+  const [cancomBusy,setCancomBusy]=useState(false)
+
+
+  function signaturePreview(){
+    const sig=cancomSignature
+    return [
+      cancomBody.trim(),
+      "",
+      sig?.display_name||"Stephanie Joanne Gaffney",
+      sig?.legal_entity||"c3 Community Partners DAO, LLC",
+      sig?.model_path||"Connect · Contribute · Create",
+      (sig?.email||"connect@c3field.online")+" | "+(sig?.website||"c3field.online")
+    ].join("\n")
+  }
+
+  async function refreshDirectory(){
+    try{
+      const response=await fetch("/api/my-environment-directory",{headers:{accept:"application/json"}})
+      const body=await response.json() as DirectoryPayload
+      if(!response.ok||body.standing!=="resolved")throw new Error(body.message||"Directory did not resolve.")
+      setDirectoryContacts(body.contacts||[])
+    }catch(error){setDirectoryNotice(error instanceof Error?error.message:"Directory did not resolve.")}
+  }
+
+  async function refreshCanCom(threadKey=""){
+    try{
+      const url=threadKey?"/api/my-environment-cancom-workspace?thread_key="+encodeURIComponent(threadKey):"/api/my-environment-cancom-workspace"
+      const response=await fetch(url,{headers:{accept:"application/json"}})
+      const body=await response.json() as CanComWorkspacePayload
+      if(!response.ok||body.standing!=="resolved")throw new Error(body.message||"CanCom did not resolve.")
+      setCancomThreads(body.threads||[])
+      setCancomSignature(body.signature||null)
+      if(body.contacts)setDirectoryContacts(body.contacts)
+      if(threadKey){
+        setCancomSelectedThread(threadKey)
+        setCancomMessages(body.messages||[])
+      }
+    }catch(error){setCancomNotice(error instanceof Error?error.message:"CanCom did not resolve.")}
+  }
+
+  function openContactInCanCom(contact:DirectoryContact,threadKey=""){
+    setCancomTo(contact.email)
+    setCancomDisplayName(contact.display_name||"")
+    setCancomOrganization(contact.organization||"")
+    setCancomSubject("")
+    setCancomBody("")
+    setCancomWorkContextType("")
+    setCancomWorkContextKey("")
+    setCancomComposeThread(threadKey)
+    setCancomNotice("Contact loaded. Compose and review the full CanCom before sending.")
+    setActivePanel("primitive:cancom_workspace")
+  }
+
+  function openPipelineRecordInCanCom(record:Record<string,unknown>){
+    setCancomTo(text(record.email))
+    setCancomDisplayName(text(record.display_name))
+    setCancomOrganization(text(record.organization))
+    setCancomSubject(text(record.email_subject))
+    setCancomBody(text(record.email_body))
+    setCancomWorkContextType("pipeline")
+    setCancomWorkContextKey(text(record.context_key,text(record.funding_opportunity,"pipeline")))
+    setCancomComposeThread("")
+    setCancomNotice("Work context loaded. Review the complete message and signature before sending.")
+    setActivePanel("primitive:cancom_workspace")
+  }
+
+  async function saveDirectoryContact(event:FormEvent){
+    event.preventDefault()
+    if(!directoryEmail.trim()||directoryBusy)return
+    setDirectoryBusy(true);setDirectoryNotice("")
+    try{
+      const response=await fetch("/api/my-environment-directory",{
+        method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({action:"upsert",email:directoryEmail.trim(),display_name:directoryName.trim(),organization:directoryOrganization.trim(),phone:directoryPhone.trim()})
+      })
+      const body=await response.json() as DirectoryPayload
+      if(!response.ok||body.standing!=="resolved"||!body.contact)throw new Error(body.message||"The contact could not be saved.")
+      setDirectoryName("");setDirectoryOrganization("");setDirectoryEmail("");setDirectoryPhone("")
+      setDirectoryNotice("Saved to your My Env Directory.")
+      await refreshDirectory()
+    }catch(error){setDirectoryNotice(error instanceof Error?error.message:"The contact could not be saved.")}
+    finally{setDirectoryBusy(false)}
+  }
+
+  async function loadCanComThread(thread:CanComThread){
+    setCancomNotice("")
+    await refreshCanCom(thread.thread_key)
+    try{
+      await fetch("/api/my-environment-cancom-workspace",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"mark_read",thread_key:thread.thread_key})})
+      setCancomThreads(current=>current.map(item=>item.thread_key===thread.thread_key?{...item,unread_count:0}:item))
+    }catch{}
+  }
+
+  function replyToCanComThread(thread:CanComThread){
+    const contact=thread.contact
+    if(!contact?.email){setCancomNotice("This thread does not resolve a Directory email.");return}
+    setCancomTo(contact.email)
+    setCancomDisplayName(contact.display_name||"")
+    setCancomOrganization(contact.organization||"")
+    setCancomSubject(thread.thread_subject?.toLowerCase().startsWith("re:")?thread.thread_subject:"Re: "+(thread.thread_subject||""))
+    setCancomBody("")
+    setCancomWorkContextType(thread.work_context_type||"")
+    setCancomWorkContextKey(thread.work_context_key||"")
+    setCancomComposeThread(thread.thread_key)
+    setCancomNotice("Reply context loaded. Review before sending.")
+  }
+
+  async function sendCanCom(event:FormEvent){
+    event.preventDefault()
+    if(!cancomTo.trim()||!cancomSubject.trim()||!cancomBody.trim()||cancomBusy)return
+    setCancomBusy(true);setCancomNotice("Sending through CanCom…")
+    try{
+      const response=await fetch("/api/my-environment-cancom-email",{
+        method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({
+          action:"send",to:cancomTo.trim(),subject:cancomSubject.trim(),text:cancomBody.trim(),
+          display_name:cancomDisplayName.trim(),organization:cancomOrganization.trim(),
+          work_context_type:cancomWorkContextType||null,work_context_key:cancomWorkContextKey||null,
+          thread_key:cancomComposeThread||null,request_key:crypto.randomUUID()
+        })
+      })
+      const result=await response.json() as {ok?:boolean;standing?:string;message?:string;thread_key?:string}
+      if(!response.ok||!result.ok)throw new Error(result.message||result.standing||"CanCom held the message.")
+      setCancomNotice("Sent. Provider receipt returned to CURRENT and the contact is in Directory.")
+      setCancomBody("")
+      setCancomComposeThread(result.thread_key||cancomComposeThread)
+      await Promise.all([refreshDirectory(),refreshCanCom(result.thread_key||"")])
+    }catch(error){setCancomNotice(error instanceof Error?error.message:"CanCom could not send the message.")}
+    finally{setCancomBusy(false)}
+  }
+
+  useEffect(()=>{
+    if(state!=="ready")return
+    void refreshDirectory()
+    void refreshCanCom()
+  },[state])
 
   async function ensureRegisteredCanComDevice(){
     try{
@@ -592,24 +758,6 @@ export default function MyEnvironmentEncounter(){
     }
   }
 
-  async function sendPipelineRecordEmail(record:Record<string,unknown>){
-    const recipient=text(record.email)
-    const subject=text(record.email_subject)
-    const message=text(record.email_body)
-    if(!recipient||!subject||!message){setRuntimeNotice("This work item is missing its prepared email.");return}
-    if(!window.confirm("Send the prepared email to "+recipient+"?"))return
-    setRuntimeNotice("Sending through CanCom…")
-    try{
-      const response=await fetch("/api/my-environment-cancom-email",{
-        method:"POST",headers:{"content-type":"application/json"},
-        body:JSON.stringify({action:"send",to:recipient,subject,text:message,request_key:crypto.randomUUID()})
-      })
-      const result=await response.json() as {ok?:boolean;standing?:string;message?:string}
-      if(!response.ok||!result.ok)throw new Error(result.message||result.standing||"Email was held.")
-      setRuntimeNotice("Email sent. The provider receipt returned to CURRENT.")
-    }catch(error){setRuntimeNotice(error instanceof Error?error.message:"Email could not be sent.")}
-  }
-
   function sendPipelineRecordToCalendar(record:Record<string,unknown>){
     const organization=text(record.organization,text(record.display_name,"Relationship"))
     const contact=text(record.display_name)
@@ -916,6 +1064,94 @@ export default function MyEnvironmentEncounter(){
         <p className="myenv-runtime-warning">These records support discovery only. ProWorx decides whether any candidate is worth contacting or belongs in its environment.</p>
       </section>
     }
+    if(primitive.renderer_key==="c1me.cancom_workspace"){
+      const selected=cancomThreads.find(item=>item.thread_key===cancomSelectedThread)
+      return <section key={primitive.primitive_key} className="myenv-connections-thread">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">CANCOM · REVIEWED EXTERNAL PASSAGE</p>
+          <h2>{primitive.display_label}</h2>
+          <p>Compose, review, send, and continue external email from My Env. Directory and thread references are retained here; email payload custody remains with the provider.</p>
+        </div>
+        <form onSubmit={sendCanCom} className="myenv-thread-entries">
+          <article>
+            <div><span>COMPOSE</span><time>{cancomWorkContextKey||"My Env"}</time></div>
+            <label>To<input type="email" value={cancomTo} onChange={event=>setCancomTo(event.target.value)} required /></label>
+            <label>Name<input value={cancomDisplayName} onChange={event=>setCancomDisplayName(event.target.value)} /></label>
+            <label>Organization<input value={cancomOrganization} onChange={event=>setCancomOrganization(event.target.value)} /></label>
+            <label>Subject<input value={cancomSubject} onChange={event=>setCancomSubject(event.target.value)} maxLength={240} required /></label>
+            <label>Message<textarea value={cancomBody} onChange={event=>setCancomBody(event.target.value)} rows={10} maxLength={12000} required /></label>
+            <div className="myenv-initiative-card">
+              <div><span>REVIEW BEFORE SEND</span><h3>c3 Community Partners</h3></div>
+              <p><strong>From:</strong> c3 Community Partners &lt;connect@c3field.online&gt;</p>
+              <p><strong>To:</strong> {cancomTo||"—"}</p>
+              <p><strong>Subject:</strong> {cancomSubject||"—"}</p>
+              <pre style={{whiteSpace:"pre-wrap",fontFamily:"inherit"}}>{signaturePreview()}</pre>
+            </div>
+            <div className="myenv-action-row">
+              <button type="submit" disabled={cancomBusy}>{cancomBusy?"SENDING…":"SEND CANCOM"}</button>
+              <button type="button" onClick={()=>{setCancomTo("");setCancomDisplayName("");setCancomOrganization("");setCancomSubject("");setCancomBody("");setCancomWorkContextType("");setCancomWorkContextKey("");setCancomComposeThread("");setCancomNotice("Draft cleared.")}}>CLEAR</button>
+            </div>
+          </article>
+        </form>
+        {cancomNotice&&<p className="myenv-runtime-warning">{cancomNotice}</p>}
+        <div className="myenv-thread-entries">
+          {cancomThreads.length===0&&<p className="myenv-relations-empty">No external CanCom threads yet.</p>}
+          {cancomThreads.map(thread=><article key={thread.thread_key}>
+            <div><span>{thread.last_direction||"email"}{thread.unread_count>0?" · "+thread.unread_count+" NEW":""}</span><time>{new Date(thread.last_activity_at).toLocaleString()}</time></div>
+            <h3>{thread.contact?.display_name||thread.contact?.organization||thread.contact?.email||thread.thread_subject||"CanCom thread"}</h3>
+            <p><strong>Subject:</strong> {thread.thread_subject||"—"}</p>
+            {thread.work_context_key&&<p><strong>Context:</strong> {thread.work_context_key}</p>}
+            <div className="myenv-action-row">
+              <button type="button" onClick={()=>void loadCanComThread(thread)}>OPEN THREAD</button>
+              <button type="button" onClick={()=>replyToCanComThread(thread)}>REPLY</button>
+            </div>
+          </article>)}
+        </div>
+        {selected&&<div className="myenv-thread-entries">
+          <article>
+            <div><span>THREAD</span><time>{selected.contact?.email||""}</time></div>
+            <h3>{selected.thread_subject||"CanCom"}</h3>
+            {cancomMessages.length===0&&<p>No message references resolved.</p>}
+            {cancomMessages.map(message=><div key={message.message_ref_key} style={{marginTop:"1rem"}}>
+              <p><strong>{message.direction==="inbound"?"REPLY":"SENT"}</strong> · {new Date(message.occurred_at).toLocaleString()}</p>
+              <p><strong>{message.subject||selected.thread_subject}</strong></p>
+              <pre style={{whiteSpace:"pre-wrap",fontFamily:"inherit"}}>{message.text||"[Provider content unavailable]"}</pre>
+            </div>)}
+          </article>
+        </div>}
+      </section>
+    }
+    if(primitive.renderer_key==="c1me.directory"){
+      return <section key={primitive.primitive_key} className="myenv-connections-thread">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">DIRECTORY · OWNER PRIVATE</p>
+          <h2>{primitive.display_label}</h2>
+          <p>Working contacts for My Env. A Directory entry does not create a c3 relationship, participation, standing, or authority.</p>
+        </div>
+        <form onSubmit={saveDirectoryContact} className="myenv-thread-entries">
+          <article>
+            <div><span>ADD / UPDATE CONTACT</span></div>
+            <label>Name<input value={directoryName} onChange={event=>setDirectoryName(event.target.value)} /></label>
+            <label>Organization<input value={directoryOrganization} onChange={event=>setDirectoryOrganization(event.target.value)} /></label>
+            <label>Email<input type="email" value={directoryEmail} onChange={event=>setDirectoryEmail(event.target.value)} required /></label>
+            <label>Phone<input value={directoryPhone} onChange={event=>setDirectoryPhone(event.target.value)} /></label>
+            <button type="submit" disabled={directoryBusy}>{directoryBusy?"SAVING…":"SAVE CONTACT"}</button>
+          </article>
+        </form>
+        {directoryNotice&&<p className="myenv-runtime-warning">{directoryNotice}</p>}
+        <div className="myenv-thread-entries">
+          {directoryContacts.length===0&&<p className="myenv-relations-empty">No Directory contacts yet.</p>}
+          {directoryContacts.map(contact=><article key={contact.contact_key}>
+            <div><span>{contact.source_class||"contact"}</span><time>{contact.updated_at?new Date(contact.updated_at).toLocaleString():""}</time></div>
+            <h3>{contact.display_name||contact.organization||contact.email}</h3>
+            {contact.organization&&contact.display_name&&<p>{contact.organization}</p>}
+            <p>{contact.email}</p>
+            {contact.phone&&<p>{contact.phone}</p>}
+            <button type="button" onClick={()=>openContactInCanCom(contact)}>CANCOM</button>
+          </article>)}
+        </div>
+      </section>
+    }
     if(primitive.renderer_key==="c1me.pipeline"){
       const config=primitive.config||{}
       const stages=Array.isArray(config.pipeline_stages)?config.pipeline_stages.filter((item):item is string=>typeof item==="string"):[]
@@ -938,7 +1174,7 @@ export default function MyEnvironmentEncounter(){
             <p><strong>Observed problem:</strong> {text(record.observed_problem,"Not yet established")}</p>
             <div className="myenv-action-row">
               <button type="button" onClick={()=>sendPipelineRecordToCalendar(record)}>SEND TO CALENDAR</button>
-              {text(record.email)&&text(record.email_subject)&&text(record.email_body)&&<button type="button" onClick={()=>sendPipelineRecordEmail(record)}>SEND EMAIL</button>}
+              {text(record.email)&&<button type="button" onClick={()=>openPipelineRecordInCanCom(record)}>OPEN IN CANCOM</button>}
             </div>
           </article>)}
         </div>
