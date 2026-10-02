@@ -4,6 +4,7 @@ import {type ProfileContract} from "./ProfilePacPanel"
 import MyPacsPanel from "./MyPacsPanel"
 import CurrentConstellation,{type CurrentToken} from "./CurrentConstellation"
 import OperationsPanel from "./OperationsPanel"
+import {readCanComEmailResponse} from "../lib/cancom-email-response"
 import {
   decryptCanComMessage,
   encryptCanComMessage,
@@ -352,6 +353,7 @@ export default function MyEnvironmentEncounter(){
     event.preventDefault()
     if(!cancomTo.trim()||!cancomSubject.trim()||!cancomBody.trim()||cancomBusy)return
     setCancomBusy(true);setCancomNotice("Sending through CanCom…");setCancomDecision(null)
+    const requestKey=crypto.randomUUID()
     try{
       const response=await fetch("/api/my-environment-cancom-email",{
         method:"POST",headers:{"content-type":"application/json"},
@@ -359,10 +361,10 @@ export default function MyEnvironmentEncounter(){
           action:"send",to:cancomTo.trim(),subject:cancomSubject.trim(),text:cancomBody.trim(),
           display_name:cancomDisplayName.trim(),organization:cancomOrganization.trim(),
           work_context_type:cancomWorkContextType||null,work_context_key:cancomWorkContextKey||null,
-          thread_key:cancomComposeThread||null,request_key:crypto.randomUUID()
+          thread_key:cancomComposeThread||null,request_key:requestKey
         })
       })
-      const result=await response.json() as Record<string,unknown>&{ok?:boolean;standing?:string;message?:string;thread_key?:string}
+      const result=await readCanComEmailResponse(response,requestKey) as Record<string,unknown>&{ok?:boolean;standing?:string;message?:string;thread_key?:string}
       setCancomDecision(result)
       if(!response.ok||!result.ok)throw new Error(result.message||result.standing||"CanCom held the message.")
       setCancomNotice("Sent. Provider receipt returned to CURRENT and the contact is in Directory.")

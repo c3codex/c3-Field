@@ -123,7 +123,7 @@ async function upsertDirectory(env:EmailEnv,session:EnvironmentSession,input:{em
     }})
   })
   const result=await response.json() as Row
-  if(result.standing!=="resolved"||!result.contact)throw new EmailError("The email was accepted, but its Directory contact could not be resolved.",502,"directory_return_held")
+  if(result.standing!=="resolved"||!result.contact)throw new EmailError("The email was accepted, but its Directory contact could not be resolved.",409,"directory_return_held")
   return result.contact as Row
 }
 async function sentProviderEmail(env:EmailEnv,providerId:string){

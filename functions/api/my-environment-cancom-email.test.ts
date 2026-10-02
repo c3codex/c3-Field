@@ -5,7 +5,7 @@ import {onRequestPost} from "./my-environment-cancom-email"
 const spec={nug_key:"myenv_cancom_email_op044_v1",env_key:"env-fixture",envpac_key:"pac-fixture",current_state_key:"current_env_person_eea672f5a7676dad4316755b_v1",origin_env_key:"origin-fixture",executor_ref:"registered-executor",execution_instance:"registered-execution",capability_ref:"registered-capability",authority_oar_key:"registered-oar",context_binding_key:"registered-context",effect_class:"external_email",native_function_ref:"public.resolve_cancom_context_v1(jsonb)"}
 const key="12345678-1234-4234-8234-123456789012",occurrence="myenv-email-"+key
 
-async function run(mode:"held"|"permission"|"success"|"receipt-held"|"ambiguous"){
+async function run(mode:"held"|"permission"|"success"|"receipt-held"|"ambiguous"|"directory-held"){
   const original=globalThis.fetch, calls:{url:string;body:any}[]=[]
   globalThis.fetch=async(input,init)=>{
     const url=String(input),body=init?.body?JSON.parse(String(init.body)):null
@@ -25,7 +25,7 @@ async function run(mode:"held"|"permission"|"success"|"receipt-held"|"ambiguous"
       return reply({id:"fixture-provider-id"})
     }
     if(url==="https://api.resend.com/emails/fixture-provider-id")return reply({message_id:"fixture-message-id"})
-    if(url.endsWith("rpc/resolve_c3_env_directory_v1"))return reply({standing:"resolved",contact:{contact_key:"fixture-contact"}})
+    if(url.endsWith("rpc/resolve_c3_env_directory_v1"))return reply(mode==="directory-held"?{standing:"held",reason:"envpac_unresolved"}:{standing:"resolved",contact:{contact_key:"fixture-contact"}})
     if(url.endsWith("rpc/return_c3ops_nug_effect_v1"))return reply(mode==="receipt-held"?{standing:"HLD",reason:"effect_receipt_evidence_unresolved"}:{standing:"receipt_returned",occurrence_key:occurrence,receipt_evidence_ref_key:"nug_effect_receipt:"+occurrence,provider_called:false,new_external_effects:0,custody_transferred:false,current_state_key:spec.current_state_key,evidence_return_relation:"registry://c3_current_evidence_ref/"+spec.current_state_key})
     if(/c3_cancom_thread_ref|c3_cancom_message_ref|c3ops_oar_custody_resolution_event|c3_current_evidence_ref/.test(url))return new Response(null,{status:201})
     throw new Error("unexpected fixture route: "+url)
@@ -68,5 +68,13 @@ test("receipt hold retains provider acceptance and effect count",async()=>{
 test("ambiguous provider response is unverified and is never retried",async()=>{
   const {body,calls}=await run("ambiguous")
   assert.equal(body.external_effects,"unverified");assert.equal(body.disposition,"dispatch_unverified")
+  assert.equal(calls.filter(c=>c.url==="https://api.resend.com/emails").length,1)
+})
+test("Directory business hold returns JSON with accepted effect evidence",async()=>{
+  const {body,response,calls}=await run("directory-held")
+  assert.equal(response.status,409)
+  assert.equal(body.standing,"directory_return_held")
+  assert.equal(body.external_effects,1)
+  assert.equal(body.provider_preflight.provider_email_id,"fixture-provider-id")
   assert.equal(calls.filter(c=>c.url==="https://api.resend.com/emails").length,1)
 })
