@@ -5,11 +5,17 @@ import {createFreeNugServerRuntime,type NugRequest} from "../_lib/free-nugs"
 type Row=Record<string,any>
 type EmailEnv=PassageEnv&{C3_CANCOM_REPLY_TO?:string}
 const NUG_KEY="myenv_cancom_email_op044_v1"
+type Decision={standing:string;disposition:string;reason_code:string;request_identity:Row;provider_preflight:Row;external_effects:number|"unverified";missing_predicates?:unknown;registry_error?:unknown}
+
+function decision(standing:string,reason:string,identity:Row={},provider:Row={standing:"not_checked",dispatch_attempted:false},effects:number|"unverified"=0):Decision{
+  return {standing,disposition:effects===1?"provider_accepted_receipt_held":effects==="unverified"?"dispatch_unverified":"held_before_provider_dispatch",reason_code:reason,request_identity:identity,provider_preflight:provider,external_effects:effects}
+}
 
 class EmailError extends Error{
   status:number
   standing:string
-  constructor(message:string,status=409,standing="cancom_email_held"){super(message);this.status=status;this.standing=standing}
+  evidence?:Decision
+  constructor(message:string,status=409,standing="cancom_email_held",evidence?:Decision){super(message);this.status=status;this.standing=standing;this.evidence=evidence}
 }
 function cookie(request:Request,name:string){
   const source=request.headers.get("cookie")||""
@@ -169,15 +175,15 @@ async function recordReceipt(env:EmailEnv,spec:Row,occurrenceKey:string,provider
   const evidenceKey="nug_effect_receipt:"+occurrenceKey
   const metadata={
     occurrence_key:occurrenceKey,nug_key:NUG_KEY,effect_class:spec.effect_class,
-    native_function_ref:spec.native_function_ref,authority_oar_key:spec.authority_oar_key,
+    native_function_ref:spec.native_function_ref,authority_oar_key:spec.authority_oar_key,executor_ref:spec.executor_ref,
     provider:"resend",provider_message_id:providerId,thread_key:threadKey,internet_message_id:internetMessageId
   }
   await rest(env,"c3ops_oar_custody_resolution_event",{
     method:"POST",headers:{"content-type":"application/json","prefer":"return=minimal"},
     body:JSON.stringify({
-      resolution_event_key:eventKey,process_key:"c3ops_nug_effect_receipt_v1",
-      object_identifier:providerId,object_type:"provider_receipt",related_system:"c3ops",
-      intended_function:"cancom_external_email_receipt",standing:"observed",integrity_hash:hash,
+      resolution_event_key:eventKey,process_key:"oar_evidence_asset_custody_resolution_v1",
+      object_identifier:providerId,object_type:"evidence",related_system:"c3ops",
+      intended_function:"nug_effect_receipt",standing:"observed",integrity_hash:hash,
       custody_type:"registry_receipt_manifest",custody_reference:"resend:"+providerId,
       retrieval_access_rule:"resolve_by:occurrence:"+occurrenceKey,
       related_execution_instance:spec.execution_instance,related_oar2:spec.authority_oar_key,
@@ -198,9 +204,10 @@ async function recordReceipt(env:EmailEnv,spec:Row,occurrenceKey:string,provider
   })
   return evidenceKey
 }
-function errorResponse(error:unknown){
-  if(error instanceof EmailError)return json({standing:error.standing,message:error.message},error.status)
-  return json({standing:"cancom_email_unavailable",message:"Email is temporarily unavailable."},503)
+function errorResponse(error:unknown,evidence?:Decision){
+  if(error instanceof EmailError&&evidence?.reason_code==="request_not_resolved")evidence={...evidence,reason_code:error.standing}
+  if(error instanceof EmailError)return json({...error.evidence||evidence||decision(error.standing,error.standing),standing:error.standing,message:error.message},error.status)
+  return json({...evidence||decision("cancom_email_unavailable","cancom_email_unavailable"),standing:"cancom_email_unavailable",message:"Email is temporarily unavailable."},503)
 }
 export const onRequestGet:PagesFunction<EmailEnv>=async({request,env})=>{
   try{
@@ -213,11 +220,17 @@ export const onRequestGet:PagesFunction<EmailEnv>=async({request,env})=>{
       standing:resolution.standing==="resolved_for_nug"?"cancom_email_ready":"cancom_email_held",
       signature:await signature(env),
       from:env.C1_VERIFICATION_FROM||"c3 Community Partners <connect@c3field.online>",
-      reply_to:env.C3_CANCOM_REPLY_TO||"connect@c3field.online"
+      reply_to:env.C3_CANCOM_REPLY_TO||"connect@c3field.online",
+      disposition:resolution.standing==="resolved_for_nug"?"ready_for_effect_preflight":"held_before_provider_dispatch",
+      reason_code:resolution.standing==="resolved_for_nug"?"nug_resolved":String(resolution.reason||"nug_preflight_held"),
+      request_identity:nugRequest(spec),
+      provider_preflight:{standing:env.C3_RESEND_API_KEY&&env.C1_VERIFICATION_FROM?"configured":"configuration_missing",dispatch_attempted:false},
+      external_effects:0,missing_predicates:resolution.missing_predicates
     })
   }catch(error){return errorResponse(error)}
 }
 export const onRequestPost:PagesFunction<EmailEnv>=async({request,env})=>{
+  let evidence=decision("cancom_email_held","request_not_resolved")
   try{
     const session=await requireSession(request,env)
     if(!env.C3_RESEND_API_KEY||!env.C1_VERIFICATION_FROM)throw new EmailError("Email provider configuration is unavailable.",503,"provider_configuration")
@@ -227,6 +240,8 @@ export const onRequestPost:PagesFunction<EmailEnv>=async({request,env})=>{
     const subject=clean(body.subject,240,"Subject")
     const message=clean(body.text,12000,"Message")
     const key=requestKey(body.request_key)
+    evidence.request_identity={request_key:key,occurrence_key:"myenv-email-"+key}
+    evidence.provider_preflight={standing:"configured",dispatch_attempted:false,sender:env.C1_VERIFICATION_FROM}
     const resolvedThreadKey=threadKey(body.thread_key)
     const displayName=optional(body.display_name,180)
     const organization=optional(body.organization,240)
@@ -247,10 +262,16 @@ export const onRequestPost:PagesFunction<EmailEnv>=async({request,env})=>{
     const runtime=createFreeNugServerRuntime(base(env),env.SUPABASE_SERVICE_ROLE_KEY!)
     const nug=nugRequest(spec)
     const occurrenceKey="myenv-email-"+key
+    evidence.request_identity={...evidence.request_identity,...nug}
     const prepared=await runtime.prepareEffect(nug,occurrenceKey)
-    if(prepared.standing!=="awaiting_effect_receipt")throw new EmailError("CanCom held this email before provider dispatch.",409,String(prepared.standing||"effect_preflight_held"))
+    if(prepared.standing!=="awaiting_effect_receipt"){
+      const reason=typeof prepared.reason==="string"?prepared.reason:"nug_preflight_held"
+      evidence={...evidence,standing:String(prepared.standing||"HLD"),reason_code:reason,missing_predicates:prepared.missing_predicates,registry_error:prepared.registry_error}
+      throw new EmailError("CanCom held this email before provider dispatch: "+reason+".",409,evidence.standing,evidence)
+    }
 
     const replyTo=env.C3_CANCOM_REPLY_TO||"connect@c3field.online"
+    evidence={...evidence,reason_code:"provider_dispatch_unverified",disposition:"dispatch_unverified",provider_preflight:{...evidence.provider_preflight,standing:"dispatch_attempted",dispatch_attempted:true},external_effects:"unverified"}
     const provider=await fetch("https://api.resend.com/emails",{
       method:"POST",redirect:"manual",signal:AbortSignal.timeout(15000),
       headers:{"content-type":"application/json",authorization:"Bearer "+env.C3_RESEND_API_KEY,"idempotency-key":occurrenceKey},
@@ -261,6 +282,7 @@ export const onRequestPost:PagesFunction<EmailEnv>=async({request,env})=>{
     })
     const providerBody=await provider.json().catch(()=>({})) as Row
     if(!provider.ok||typeof providerBody.id!=="string"||!providerBody.id)throw new EmailError("The email provider did not confirm delivery acceptance.",502,"provider_dispatch_unconfirmed")
+    evidence={...evidence,reason_code:"receipt_return_pending",disposition:"provider_accepted_receipt_held",provider_preflight:{...evidence.provider_preflight,standing:"provider_accepted",provider_email_id:providerBody.id},external_effects:1}
 
     const providerRecord=await sentProviderEmail(env,providerBody.id)
     const internetMessageId=typeof providerRecord?.message_id==="string"?providerRecord.message_id:null
@@ -274,12 +296,16 @@ export const onRequestPost:PagesFunction<EmailEnv>=async({request,env})=>{
     })
     const receiptRef=await recordReceipt(env,spec,occurrenceKey,providerBody.id,to,subject,resolvedThreadKey,internetMessageId)
     const returned=await runtime.returnEffect(occurrenceKey,spec.executor_ref,receiptRef)
-    if(returned.standing!=="receipt_returned")throw new EmailError("The email was accepted by the provider, but the Registry receipt is held.",502,"receipt_return_held")
+    if(returned.standing!=="receipt_returned"){
+      evidence={...evidence,reason_code:String(returned.reason||"effect_receipt_return_unverified")}
+      throw new EmailError("The email was accepted by the provider, but the Registry receipt is held.",502,"receipt_return_held",evidence)
+    }
     return json({
+      ...evidence,disposition:"effect_returned",reason_code:"provider_accepted_receipt_returned",
       ok:true,standing:"email_effect_returned",provider:"resend",receipt_ref:receiptRef,
       thread_key:resolvedThreadKey,provider_email_id:providerBody.id,internet_message_id:internetMessageId,
       directory_contact:contact
     })
-  }catch(error){return errorResponse(error)}
+  }catch(error){return errorResponse(error,evidence)}
 }
 export const onRequest:PagesFunction=async()=>json({error:"method not allowed"},405)

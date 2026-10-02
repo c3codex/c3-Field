@@ -68,6 +68,17 @@
 .myenv-thread-entries{display:grid;gap:9px;max-height:320px;overflow:auto;padding-right:4px}
 .myenv-thread-entries article{border:1px solid rgba(244,239,227,.12);border-radius:10px;background:rgba(4,9,13,.32);padding:12px 13px}
 .myenv-thread-entries article>div{display:flex;justify-content:space-between;gap:12px;color:rgba(244,239,227,.46);font-size:8px;letter-spacing:.1em;text-transform:uppercase}
+.myenv-cancom-email,.myenv-cancom-email .myenv-thread-entries,.myenv-cancom-email article{min-width:0;max-width:100%}
+.myenv-cancom-email .myenv-thread-entries{grid-template-columns:minmax(0,1fr)}
+.myenv-cancom-email article>.myenv-cancom-review{display:grid;grid-template-columns:minmax(0,1fr);text-transform:none;letter-spacing:normal;font-size:12px}
+.myenv-cancom-email label{display:grid;gap:6px;margin-top:10px;min-width:0}
+.myenv-cancom-email input,.myenv-cancom-email textarea{box-sizing:border-box;width:100%;min-width:0;max-width:100%}
+.myenv-cancom-email pre,.myenv-cancom-email p,.myenv-cancom-email h3,.myenv-cancom-email time{overflow-wrap:anywhere;min-width:0}
+.myenv-cancom-email .myenv-action-row{flex-wrap:wrap}
+.myenv-cancom-decision{margin:14px 0;font-size:11px;overflow-wrap:anywhere}
+.myenv-cancom-decision dl>div{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;margin-top:10px}
+.myenv-cancom-decision dt{font-weight:600}
+.myenv-cancom-decision dd{margin:0;white-space:pre-wrap;min-width:0}
 .myenv-thread-entries h3{margin:6px 0 3px;font:400 16px/1.2 Georgia,serif}
 .myenv-thread-entries p{margin:5px 0;color:rgba(244,239,227,.76);font-size:11px;line-height:1.48;white-space:pre-wrap}
 .myenv-thread-entries a{display:inline-block;margin-top:6px;color:#f4efe3;font-size:8px;letter-spacing:.1em;text-decoration:none}

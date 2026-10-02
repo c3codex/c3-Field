@@ -240,6 +240,7 @@ export default function MyEnvironmentEncounter(){
   const [cancomWorkContextKey,setCancomWorkContextKey]=useState("")
   const [cancomComposeThread,setCancomComposeThread]=useState("")
   const [cancomNotice,setCancomNotice]=useState("")
+  const [cancomDecision,setCancomDecision]=useState<Record<string,unknown>|null>(null)
   const [cancomBusy,setCancomBusy]=useState(false)
 
 
@@ -350,7 +351,7 @@ export default function MyEnvironmentEncounter(){
   async function sendCanCom(event:FormEvent){
     event.preventDefault()
     if(!cancomTo.trim()||!cancomSubject.trim()||!cancomBody.trim()||cancomBusy)return
-    setCancomBusy(true);setCancomNotice("Sending through CanCom…")
+    setCancomBusy(true);setCancomNotice("Sending through CanCom…");setCancomDecision(null)
     try{
       const response=await fetch("/api/my-environment-cancom-email",{
         method:"POST",headers:{"content-type":"application/json"},
@@ -361,7 +362,8 @@ export default function MyEnvironmentEncounter(){
           thread_key:cancomComposeThread||null,request_key:crypto.randomUUID()
         })
       })
-      const result=await response.json() as {ok?:boolean;standing?:string;message?:string;thread_key?:string}
+      const result=await response.json() as Record<string,unknown>&{ok?:boolean;standing?:string;message?:string;thread_key?:string}
+      setCancomDecision(result)
       if(!response.ok||!result.ok)throw new Error(result.message||result.standing||"CanCom held the message.")
       setCancomNotice("Sent. Provider receipt returned to CURRENT and the contact is in Directory.")
       setCancomBody("")
@@ -1066,7 +1068,7 @@ export default function MyEnvironmentEncounter(){
     }
     if(primitive.renderer_key==="c1me.cancom_workspace"){
       const selected=cancomThreads.find(item=>item.thread_key===cancomSelectedThread)
-      return <section key={primitive.primitive_key} className="myenv-connections-thread">
+      return <section key={primitive.primitive_key} className="myenv-connections-thread myenv-cancom-email">
         <div className="myenv-thread-heading">
           <p className="myenv-kicker">CANCOM · REVIEWED EXTERNAL PASSAGE</p>
           <h2>{primitive.display_label}</h2>
@@ -1080,7 +1082,7 @@ export default function MyEnvironmentEncounter(){
             <label>Organization<input value={cancomOrganization} onChange={event=>setCancomOrganization(event.target.value)} /></label>
             <label>Subject<input value={cancomSubject} onChange={event=>setCancomSubject(event.target.value)} maxLength={240} required /></label>
             <label>Message<textarea value={cancomBody} onChange={event=>setCancomBody(event.target.value)} rows={10} maxLength={12000} required /></label>
-            <div className="myenv-initiative-card">
+            <div className="myenv-initiative-card myenv-cancom-review">
               <div><span>REVIEW BEFORE SEND</span><h3>c3 Community Partners</h3></div>
               <p><strong>From:</strong> c3 Community Partners &lt;connect@c3field.online&gt;</p>
               <p><strong>To:</strong> {cancomTo||"—"}</p>
@@ -1094,6 +1096,14 @@ export default function MyEnvironmentEncounter(){
           </article>
         </form>
         {cancomNotice&&<p className="myenv-runtime-warning">{cancomNotice}</p>}
+        {cancomDecision&&<details className="myenv-cancom-decision" open>
+          <summary>CanCom decision evidence</summary>
+          <dl>{["standing","disposition","reason_code","request_identity","provider_preflight","external_effects"].map(field=><div key={field}>
+            <dt>{field}</dt><dd>{typeof cancomDecision[field]==="object"?JSON.stringify(cancomDecision[field],null,2):String(cancomDecision[field]??"unresolved")}</dd>
+          </div>)}</dl>
+          {Array.isArray(cancomDecision.missing_predicates)&&<p>Missing predicates: {cancomDecision.missing_predicates.join(", ")||"none"}</p>}
+          {cancomDecision.registry_error&&<pre>{JSON.stringify(cancomDecision.registry_error,null,2)}</pre>}
+        </details>}
         <div className="myenv-thread-entries">
           {cancomThreads.length===0&&<p className="myenv-relations-empty">No external CanCom threads yet.</p>}
           {cancomThreads.map(thread=><article key={thread.thread_key}>

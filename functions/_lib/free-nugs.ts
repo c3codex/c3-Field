@@ -14,6 +14,9 @@ export type NugRequest = {
 }
 export type NugResult = Record<string, unknown>
 export type NugRegistryRpc = (name: string, args: Record<string, unknown>) => Promise<NugResult>
+class NugRegistryError extends Error {
+  constructor(readonly code:string,readonly relation:string|null){super("nug_registry_permission_denied")}
+}
 
 // Existing server Registry credentials only. This is never a browser client or
 // external effect adapter, and it cannot call an arbitrary RPC/provider URL.
@@ -31,7 +34,14 @@ export function createFreeNugServerRuntime(url: string, serviceRoleKey: string) 
       headers:{apikey:serviceRoleKey, authorization:`Bearer ${serviceRoleKey}`, "content-type":"application/json"},
       body:JSON.stringify(args),
     })
-    if (!response.ok) throw new Error("nug_registry_unavailable")
+    if (!response.ok) {
+      const error=await response.json().catch(()=>null) as {code?:unknown;message?:unknown}|null
+      if(error?.code==="42501"){
+        const match=typeof error.message==="string"? /^permission denied for table (c3_current_state|c3_current_evidence_ref)$/.exec(error.message):null
+        throw new NugRegistryError("42501",match?.[1]||null)
+      }
+      throw new Error("nug_registry_unavailable")
+    }
     const result: unknown = await response.json()
     if (!result || typeof result !== "object" || Array.isArray(result)) throw new Error("nug_registry_invalid_response")
     return result as NugResult
@@ -81,7 +91,11 @@ export function createFreeNugRuntime(registry: NugRegistryRpc) {
         return result?.standing === "awaiting_effect_receipt" && result.occurrence_key === occurrenceKey
           && result.provider_called === false && result.external_effects === 0
           ? result : held("effect_preparation_unverified")
-      } catch { return held("effect_preparation_unverified") }
+      } catch(error) {
+        return error instanceof NugRegistryError
+          ? {...held("nug_registry_permission_denied"),registry_error:{code:error.code,relation:error.relation}}
+          : held("effect_preparation_unverified")
+      }
     },
     async returnEffect(occurrenceKey: string, executor: string, receiptEvidenceRefKey: string): Promise<NugResult> {
       if ([occurrenceKey, executor, receiptEvidenceRefKey].some(value => typeof value !== "string" || !value.trim())) {
