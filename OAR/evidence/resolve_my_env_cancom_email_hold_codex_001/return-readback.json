@@ -1,0 +1,14 @@
+{
+  "execution_instance": "resolve_my_env_cancom_email_hold_codex_001",
+  "return_standing": "held_for_registrar_review",
+  "registry_return_route": "registry://cancom/oar1_return/resolve_my_env_cancom_email_hold_codex_001",
+  "oar1_custody_ref": "github_file:c3codex/c3-Field@645c9ff1c37beb3218acb0ae0d87f1f486bd7560:OAR/OAR1/codex/oar1_resolve_my_env_cancom_email_hold_codex_20261002_001.md",
+  "oar1_bytes": 9932,
+  "oar1_sha256": "b409e91a9c7726140fb9ff2656926d4ca7d165404b1b64d734bb1d5ae998e672",
+  "drive_id": "1UktwfPZG0wEzyvDSZu5sTEjD40C36O2-",
+  "drive_parent": "1NmEY07h7Oh1ulJdk0W_cin---KqtsIfG",
+  "drive_content_readback_matches_canonical_git_blob": true,
+  "lifecycle_mutations": {"system_oar_queue": "oar1_submitted; db/src mutated; deploy deployed", "c3_oar_process_instance": "held; held_pending_validation; chazz_review_required", "c3_oar_transition_event": "1 exact oar1_return row", "system_oar_execution_evidence": "1 exact oar1_return row", "c3ops_oar_custody_resolution_event": "held_for_registrar_review; exact canonical hash/ref verified"},
+  "post_return_inbox_check": "same OAR2 remains newest; no newer OAR2 or send.card found",
+  "external_emails_sent": 0
+}
