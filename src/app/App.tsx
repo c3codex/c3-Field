@@ -4,7 +4,8 @@ const C2EnvironmentDoor = lazy(() => import("../c3_field_contribution/C2Environm
 const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
 const C3PublicDocumentPage = lazy(() => import("../c3_field_connect/C3PublicDocumentPage"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
-const C3InitiativeSurfaceDoor = lazy(() => import("../c3_field_connect/C3InitiativeSurfaceDoor"))\nconst C3FieldRoot = lazy(() => import("../c3_field_connect/C3FieldRoot"))
+const C3InitiativeSurfaceDoor = lazy(() => import("../c3_field_connect/C3InitiativeSurfaceDoor"))
+const C3FieldRoot = lazy(() => import("../c3_field_connect/C3FieldRoot"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import { isC3FieldInitiativeHostCandidate, isC3FieldPersonalEnvironmentHost } from "../c3_field_connect/initiativeSurfaceHost"
