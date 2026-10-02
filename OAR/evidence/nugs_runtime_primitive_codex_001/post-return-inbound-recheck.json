@@ -1,0 +1,6 @@
+{
+  "source": "Registry executor_wake_ready + approved_for_execution queue, codex, newer than exact NUGS wake",
+  "newer_pending_passages": [],
+  "notification_creates_execution_authority": false,
+  "drive_projection_not_part_of_registered_route": true
+}

@@ -1,0 +1,143 @@
+{
+  "registration": {
+    "standing": "returned_for_registrar_review",
+    "passage_key": "nugs_runtime_primitive_codex_001",
+    "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+    "lifecycle_rails": [
+      "system_oar_queue",
+      "c3_oar_process_instance",
+      "c3_oar_transition_event",
+      "system_oar_execution_evidence",
+      "c3ops_oar_custody_resolution_event"
+    ],
+    "origin_oar2_key": "oar2_nugs_runtime_20261001_001",
+    "return_event_key": "nugs_runtime_primitive_codex_001:oar1:oar1_nugs_runtime_20261002_001",
+    "execution_instance": "nugs_runtime_primitive_codex_001"
+  },
+  "readback": {
+    "queue": {
+      "oar1_path": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+      "queue_key": "queue_nugs_runtime_primitive_codex_001",
+      "queue_status": "oar1_submitted",
+      "deploy_standing": "not_authorized",
+      "db_mutation_standing": "mutated",
+      "src_mutation_standing": "mutated"
+    },
+    "optics": {
+      "oar_key": "oar2_nugs_runtime_20261001_001",
+      "created_at": "2026-10-02T12:49:25.206384+00:00",
+      "updated_at": "2026-10-02T13:24:08.227193+00:00",
+      "executor_ref": "codex",
+      "queue_standing": "oar1_submitted",
+      "deploy_standing": "not_authorized",
+      "return_standing": "returned_for_registrar_review",
+      "requested_action": "establish_nugs_c3ops_runtime_primitive",
+      "execution_summary": "Implemented and verified the bounded NUGS Registry/FREE runtime foundation on codex/nugs-runtime-001; candidates remain HLD; zero external effects.",
+      "execution_instance": "nugs_runtime_primitive_codex_001",
+      "preflight_standing": "passed",
+      "validation_standing": "chazz_review_required",
+      "model_resolution_standing": "returned"
+    },
+    "custody": {
+      "metadata": {
+        "oar_key": "oar1_nugs_runtime_20261002_001",
+        "evidence": {
+          "source_branch": "codex/nugs-runtime-001",
+          "evidence_index": "github_file:c3codex/c3-Field@aff56e573ee424dacaf463b493fe80a9213c73b0:OAR/evidence/nugs_runtime_primitive_codex_001/sha256.implementation.json",
+          "deploy_standing": "not_authorized",
+          "origin_oar2_key": "oar2_nugs_runtime_20261001_001",
+          "canonical_sha256": "5aa35c268f99f6937431123900492bb29af571264979be77b2d1dd11c018f72b",
+          "execution_summary": "Implemented and verified the bounded NUGS Registry/FREE runtime foundation on codex/nugs-runtime-001; candidates remain HLD; zero external effects.",
+          "oar1_payload_bytes": 13067,
+          "validation_summary": "33 rollback-only Registry proofs, 7 FREE tests, focused TypeScript and local c3Field build passed. Native and effect receipt return verified in fixtures; Chazz review required.",
+          "mutation_accounting": {
+            "new_workers": 0,
+            "new_providers": 0,
+            "deploy_commands": 0,
+            "new_capabilities": 0,
+            "production_merges": 0,
+            "new_registry_tables": 3,
+            "live_nug_occurrences": 0,
+            "new_context_relations": 0,
+            "new_operator_standing": 0,
+            "external_messages_sent": 0,
+            "new_registry_functions": 6,
+            "pac_semantic_mutations": 0,
+            "live_nug_effect_passages": 0,
+            "external_provider_effects": 0,
+            "active_nug_bindings_created": 0,
+            "new_registry_candidate_rows": 3
+          },
+          "oar1_custody_commit": "7e3d239a9947bb827a918834b061c9cb3a9a3d1b",
+          "db_mutation_standing": "mutated",
+          "canonical_payload_ref": "github_file:c3codex/c3-Field@135a9f0d17a896d94ccebb86c646a9b431381faa:OAR/OAR2/codex/oar2_nugs_runtime_20261001_001.md",
+          "implementation_commit": "aff56e573ee424dacaf463b493fe80a9213c73b0",
+          "src_mutation_standing": "mutated",
+          "external_messages_sent": 0,
+          "hosted_runtime_standing": "not_deployed_not_proven",
+          "external_provider_effects": 0,
+          "model_resolution_evidence": {
+            "context_fit": "high_context_sufficient_for_registered_foundation",
+            "fallback_used": false,
+            "fallback_level": "none_observed",
+            "fallback_reason": "No runtime fallback observed",
+            "tools_available": [
+              "repository",
+              "supabase",
+              "runtime_verification"
+            ],
+            "execution_result": "foundation_implemented_and_verified_without_external_effects",
+            "capability_floor_passed": true,
+            "preferred_model_or_tier": "strongest_qualified_codex_model",
+            "selected_model_or_explicit_unverified_state": "GPT-6-based Codex; exact runtime model SKU unverified"
+          },
+          "candidate_admission_standing": "HLD_missing_native_binding_environment_capability_authority_context_effect_evidence",
+          "implementation_manifest_sha256": "4723bc986de4f7eb42d35b8deb5a7fb7adf19e72fe003a652c106fe1b7ea1863"
+        },
+        "oar_type": "oar1",
+        "passage_key": "nugs_runtime_primitive_codex_001",
+        "executor_ref": "codex",
+        "integrity_value": "285f1c003f616bbe4f3515ecc8d88894dad88199dc1b295001edfbc706ba9b15",
+        "origin_oar2_key": "oar2_nugs_runtime_20261001_001",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "lifecycle_standing": "returned_for_registrar_review",
+        "authority_scope_ref": "capability:nugs_oar001_codex_bounded_execution",
+        "payload_custody_ref": "github_file:c3codex/c3-Field@7e3d239a9947bb827a918834b061c9cb3a9a3d1b:OAR/OAR1/codex/oar1_nugs_runtime_20261002_001.md",
+        "serialization_basis": "utf8_raw_bytes_sha256",
+        "expected_return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+        "origin_wake_event_key": "nugs_runtime_primitive_codex_001:wake:001",
+        "origin_manifest_event_key": "nugs_runtime_primitive_codex_001:oar2:registry_manifest_delivery"
+      },
+      "standing": "returned_for_registrar_review",
+      "created_at": "2026-10-02T13:24:08.227193+00:00",
+      "hold_reason": null,
+      "object_type": "oar1",
+      "process_key": "oar_custody_resolution_v1",
+      "custody_type": "registry_return_manifest",
+      "related_oar1": "oar1_nugs_runtime_20261002_001",
+      "related_oar2": "oar2_nugs_runtime_20261001_001",
+      "integrity_hash": "285f1c003f616bbe4f3515ecc8d88894dad88199dc1b295001edfbc706ba9b15",
+      "related_system": "c3ops",
+      "custody_reference": "github_file:c3codex/c3-Field@7e3d239a9947bb827a918834b061c9cb3a9a3d1b:OAR/OAR1/codex/oar1_nugs_runtime_20261002_001.md",
+      "intended_function": "cancom_oar_return",
+      "object_identifier": "oar1_nugs_runtime_20261002_001",
+      "resolution_status": "resolved",
+      "resolution_event_key": "nugs_runtime_primitive_codex_001:oar1:oar1_nugs_runtime_20261002_001",
+      "transition_timestamp": "2026-10-02T13:24:08.227193+00:00",
+      "retrieval_access_rule": "resolve_by:execution:nugs_runtime_primitive_codex_001",
+      "related_execution_instance": "nugs_runtime_primitive_codex_001"
+    },
+    "process": {
+      "evidence_path": "registry://c3ops_oar_custody_resolution_event/nugs_runtime_primitive_codex_001:oar1:oar1_nugs_runtime_20261002_001",
+      "deploy_standing": "held",
+      "actual_oar1_path": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+      "execution_standing": "completed",
+      "validation_standing": "chazz_review_required"
+    },
+    "live_active_nugs": 0,
+    "live_occurrences": 0,
+    "live_effect_passages": 0,
+    "return_evidence_count": 1,
+    "return_transition_count": 1
+  }
+}

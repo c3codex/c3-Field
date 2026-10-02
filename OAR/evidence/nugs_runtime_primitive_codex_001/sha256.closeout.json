@@ -1,0 +1,66 @@
+{
+  "serialization_basis": "raw_file_bytes_sha256",
+  "execution_instance": "nugs_runtime_primitive_codex_001",
+  "files": [
+    {
+      "path": "OAR/OAR1/codex/oar1_nugs_runtime_20261002_001.md",
+      "bytes": 13067,
+      "sha256": "285f1c003f616bbe4f3515ecc8d88894dad88199dc1b295001edfbc706ba9b15"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/authority-preflight.json",
+      "bytes": 6912,
+      "sha256": "99077d24df4bc2ccf5d00f9866bf6f3c8ed838abf5247ea28c9866f9f9c40d10"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/cancom-regression-readback.json",
+      "bytes": 1145,
+      "sha256": "582a108d8442bc21e9543edf17ec74ac55ac87a76eb83723130754cc496515ed"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/oar1.sha256.json",
+      "bytes": 344,
+      "sha256": "20ddd84777e2614016583826408181ce1830e7375e94a95e5738549bbcefd6ba"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/post-return-inbound-recheck.json",
+      "bytes": 255,
+      "sha256": "ea2d821eeaf11eb4d4fec05ef513ab800fe804d14f706ce79978946ef971e5b3"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/registry-fixture-proof.json",
+      "bytes": 32785,
+      "sha256": "5c86cd268fcf00b6ceb5fa05d8c63f7d0a1f19d464ccd30302ddcfe0436e2922"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/registry-posture.json",
+      "bytes": 4126,
+      "sha256": "bc72bf88bb5f349d1ae5e48c40fe07384bdce5e5f21e23930a061c150cdb7725"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/return-readback.json",
+      "bytes": 7652,
+      "sha256": "e6c8b247be211822f6e30943da220957497c36f079b012b208c725dab3b8f9e1"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/security-advisor-scope.json",
+      "bytes": 935,
+      "sha256": "ec833d550ef81dffe9c9276a6a75528951d53ec6a325f417ae0e2daa636292ab"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/sha256.implementation.json",
+      "bytes": 2837,
+      "sha256": "4723bc986de4f7eb42d35b8deb5a7fb7adf19e72fe003a652c106fe1b7ea1863"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/source-push-readback.json",
+      "bytes": 541,
+      "sha256": "cffd4e6752159bd5631872e751fe07bde943fc14aadf22e5972756ccf76511a0"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/verification.json",
+      "bytes": 2678,
+      "sha256": "f1ad42fe0ddd02c4ba02d21dc15c9cf628f314522e719240bf9b3191e01927c7"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "implementation_commit": "aff56e573ee424dacaf463b493fe80a9213c73b0",
+  "oar1_custody_commit": "7e3d239a9947bb827a918834b061c9cb3a9a3d1b",
+  "remote_branch": "codex/nugs-runtime-001",
+  "remote_oar1_ref_verified": true,
+  "git_blob_manifest_mismatches": [],
+  "github_implementation_status_count": 0,
+  "github_actions_branch_run_count": 0,
+  "commit_prefix": "[skip ci]",
+  "deployment_commands": 0,
+  "cloudflare_account_level_readback": "not_obtained_no_hosted_proof_asserted",
+  "unrelated_file_excluded": "src/c3ops/C3OpsDoor.css"
+}
