@@ -1,3 +1,5 @@
+import {readResolvedOarOptics,OAR_OPTICS_INTERFACE} from "./c3ops-oar-optics"
+
 export type Row = Record<string, unknown>
 export type ReadRows = (table: string, select: string, filters?: Record<string, string>) => Promise<Row[]>
 const record = (x: unknown): Row => x && typeof x === "object" && !Array.isArray(x) ? x as Row : {}
@@ -275,6 +277,7 @@ export async function readC3OpsCurrentState(read: ReadRows) {
     chazzCapability,
     current,
     opticsObservation,
+    oarOptics,
   ] = await Promise.all([
     readProcess("prism_publication_operations_v1"),
     readProcess("lapzuli_distribution"),
@@ -299,6 +302,7 @@ export async function readC3OpsCurrentState(read: ReadRows) {
       "observation_key,optics_key,source_registry_process_key,initiative_key,surface_key,standing,observed_at",
       {observation_key:"eq.optics432:operational_proof:c3_system_baseline_v1"},
     ),
+    readResolvedOarOptics(read),
   ])
   const component = (key: string, label: string, subtitle: string, source: string, records: Row[]) => ({
     key,label,subtitle,source,records,
@@ -321,6 +325,7 @@ export async function readC3OpsCurrentState(read: ReadRows) {
         "system_process_registry:governed_object_passage_process_v4",
       ].join(" + "),[...mgs,...passage]),
       component("current","CURRENT","c3Ops governed present state","c3_current_state:env_c3ops/is_current=true",current),
+      component("oar_lifecycle","OAR Operations","Resolved execution and return state",OAR_OPTICS_INTERFACE,oarOptics),
       component("chazz","Chazz","Capability + c3Ops role-call; capability is not authority",[
         "system_process_registry:c3ops_role_call_computational_skills_v1",
         "system_process_registry:ai_execution_capability_profile_chazz_chatgpt_connected_v1",
