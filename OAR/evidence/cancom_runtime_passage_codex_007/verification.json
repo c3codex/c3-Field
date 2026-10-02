@@ -1,0 +1,187 @@
+{
+  "execution_instance": "cancom_runtime_passage_codex_007",
+  "origin_oar2": "oar2_cancom_runtime_20261001_007",
+  "canonical_sha256": "632c7276af49e36e6b714ab90309e2afa22dc21a061f992b7df6fc8eea02c4b6",
+  "notchazz": {
+    "evaluation_key": "c1df618b-7d48-41e7-8e0a-b870fe187e3f",
+    "result": "PASS",
+    "exact_sha_verified": true
+  },
+  "implementation_commit": "c462bc8f258153f5704443fde9ba03632da3c486",
+  "shadow_transaction_proofs": [
+    {
+      "proof_key": "atomic_delivery_and_model_policy",
+      "result": {
+        "rails": 5,
+        "policy": {
+          "deploy": false,
+          "db_mutation": true,
+          "passage_key": "cancom_runtime_passage_codex_007",
+          "executor_ref": "codex",
+          "src_mutation": true,
+          "capability_ref": "cancom_oar007_codex_bounded_execution",
+          "canonical_sha256": "632c7276af49e36e6b714ab90309e2afa22dc21a061f992b7df6fc8eea02c4b6",
+          "required_capability": "bounded_cancom_delivery_and_optics_correction",
+          "serialization_basis": "utf8_raw_bytes_sha256",
+          "requires_oar1_return": true,
+          "canonical_payload_ref": "github_file:c3codex/c3-Field@e3e461080938ec14e45951ab45956cb4292f6ca1:OAR/OAR2/codex/oar2_cancom_runtime_20261001_007.md",
+          "executor_binding_mode": "specific_executor",
+          "canonical_payload_bytes": 4658,
+          "external_correspondence": false,
+          "minimum_capability_floor": "high_reasoning_code_system_execution_with_repository_and_database_access",
+          "payload_custody_provider": "github",
+          "execution_profile_process": "oar_execution_profile_model_resolution_v1",
+          "model_resolution_evidence_required": true
+        },
+        "standing": "PASS",
+        "rollback_only": true
+      }
+    },
+    {
+      "proof_key": "invalid_model_zero_lifecycle_delta",
+      "result": {
+        "reason": "HLD_MODEL_RESOLUTION_EVIDENCE_REQUIRED",
+        "standing": "HLD",
+        "zero_lifecycle_delta": true
+      }
+    },
+    {
+      "proof_key": "missing_model_zero_lifecycle_delta",
+      "result": {
+        "reason": "HLD_MODEL_RESOLUTION_EVIDENCE_REQUIRED",
+        "standing": "HLD",
+        "zero_lifecycle_delta": true
+      }
+    },
+    {
+      "proof_key": "notchazz_exact_sha_gate",
+      "result": {
+        "error": "HLD_NOTCHAZZ_OAR_FORMATION_BOUNDARY: PASS evaluation required before executor delivery",
+        "standing": "PASS",
+        "zero_lifecycle_delta": true
+      }
+    },
+    {
+      "proof_key": "process_failure_zero_delivery_delta",
+      "result": {
+        "error": "duplicate key value violates unique constraint \"c3_oar_process_instance_pkey\"",
+        "standing": "PASS",
+        "zero_lifecycle_delta": true
+      }
+    },
+    {
+      "proof_key": "valid_return_resolves_optics",
+      "result": {
+        "oar_key": "oar2_cancom_runtime_20261001_007",
+        "created_at": "2026-10-02T05:14:26.488861+00:00",
+        "updated_at": "2026-10-02T05:14:26.488861+00:00",
+        "executor_ref": "codex",
+        "rollback_only": true,
+        "queue_standing": "oar1_submitted",
+        "deploy_standing": "not_authorized",
+        "return_standing": "returned_for_registrar_review",
+        "requested_action": "restore_cancom_delivery_and_resolve_c3ops_oar_optics",
+        "execution_summary": "rollback-only contract verification",
+        "execution_instance": "cancom_runtime_passage_codex_007",
+        "preflight_standing": "passed",
+        "validation_standing": "chazz_review_required",
+        "model_resolution_standing": "returned"
+      }
+    }
+  ],
+  "live_missing_model_proof": [
+    {
+      "result": {
+        "reason": "HLD_MODEL_RESOLUTION_EVIDENCE_REQUIRED",
+        "standing": "HLD",
+        "after_standing": "approved_for_execution",
+        "before_standing": "approved_for_execution",
+        "zero_lifecycle_delta": true
+      }
+    }
+  ],
+  "oar005_regressions": {
+    "drive": {
+      "standing": "admitted",
+      "provider_key": "drive"
+    },
+    "github": {
+      "standing": "admitted",
+      "provider_key": "github"
+    },
+    "unknown": {
+      "reason": "HLD_CUSTODY_PROVIDER_UNREGISTERED",
+      "standing": "HLD"
+    },
+    "mismatch": {
+      "reason": "HLD_CUSTODY_REFERENCE_CLASS_MISMATCH",
+      "standing": "HLD"
+    },
+    "operator": "operator_context",
+    "pickup_003": "resolved_for_executor",
+    "pickup_004": "resolved_for_executor",
+    "pickup_005": "resolved_for_executor",
+    "mdm_operator": {
+      "reason": "HLD_OPERATOR_CONTEXT_UNRESOLVED",
+      "standing": "HLD"
+    },
+    "folder_lookup": {
+      "count": 0,
+      "reason": "manifest_missing_or_ambiguous",
+      "standing": "HLD"
+    },
+    "optics_privacy": {
+      "anon_select": false,
+      "service_select": true,
+      "security_invoker": true,
+      "authenticated_select": false
+    },
+    "wrong_executor": {
+      "reason": "queue_or_manifest_boundary",
+      "standing": "HLD"
+    },
+    "legacy_plaintext": {
+      "reason": "cancom_e2ee_ciphertext_required",
+      "standing": "HLD"
+    },
+    "participant_probes": [
+      {
+        "participant": "participant_relation_only",
+        "operator_rejected": "HLD_OPERATOR_CONTEXT_UNRESOLVED"
+      }
+    ]
+  },
+  "return_validator_body_unchanged": true,
+  "source_tests": {
+    "projection_tests_passed": 4,
+    "operator_middleware_regressions_passed": 3
+  },
+  "typescript": {
+    "version": "5.9.3",
+    "frontend_diagnostics": 71,
+    "functions_diagnostics": 4,
+    "baseline_diagnostics_identical": true,
+    "changed_operations_panel_diagnostics": 0,
+    "standalone_optics_and_adapter_check": "passed",
+    "configuration_override": "ignoreDeprecations=5.0; existing tsconfig value 6.0 is invalid for locked compiler"
+  },
+  "database_migrations": [
+    "20261002045940_cancom_oar007_delivery_lifecycle",
+    "20261002045943_c3ops_oar007_resolved_optics"
+  ],
+  "effects": {
+    "production_merges": 0,
+    "deployments": 0,
+    "public_releases": 0,
+    "external_messages": 0,
+    "new_providers": 0,
+    "new_operator_or_relation_standings": 0,
+    "credential_expansions": 0,
+    "participant_visibility_widening": 0
+  },
+  "limits": [
+    "Source and database verification only; browser/production activation not performed.",
+    "Delivery replay used temporary shadow tables with deployed function bodies and the live NotChazz gate, rolled back.",
+    "Whole-project TypeScript diagnostics remain; comparison proved unchanged from the current origin/c3field base."
+  ]
+}

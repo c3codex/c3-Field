@@ -1,0 +1,112 @@
+{
+  "serialization_basis": "git_blob_raw_utf8_bytes_sha256",
+  "implementation_commit": "c462bc8f258153f5704443fde9ba03632da3c486",
+  "base_revision": "e3e461080938ec14e45951ab45956cb4292f6ca1",
+  "files": [
+    {
+      "path": "functions/_lib/c3ops-oar-optics.ts",
+      "bytes": 751,
+      "sha256": "5dc7bba190909e9ff1057f20835b58027d5c42dba6e5a3594fc7d9b74b261ce0"
+    },
+    {
+      "path": "functions/_lib/me-environment.ts",
+      "bytes": 20566,
+      "sha256": "a5ab0e986256753024d8d580e536319f27b74d8cf675b9ad3c40288d364e833e"
+    },
+    {
+      "path": "functions/api/my-environment-operations.test.ts",
+      "bytes": 5367,
+      "sha256": "e9992e9a10b7b7b65f653b1a6e0eac525457ef5847176d0c52956fbc50932f12"
+    },
+    {
+      "path": "functions/api/my-environment-operations.ts",
+      "bytes": 2840,
+      "sha256": "5b278e69e4562ea0d12b4ca6035d7574fde017b82a9ea3a126a6811484e99e43"
+    },
+    {
+      "path": "scripts/lib/cancom-oar-passage.ts",
+      "bytes": 6956,
+      "sha256": "41c2c054ad71a85b491aac1e72986bd97c4955be3990a76b26710f07b802bc6c"
+    },
+    {
+      "path": "scripts/verify-cancom-oar007-regressions.sql",
+      "bytes": 3500,
+      "sha256": "4f8ebee02b8ee5a6995f35dcd945bc68d335107b6ee36b5eb783388953965bff"
+    },
+    {
+      "path": "scripts/verify-cancom-oar007-types.cjs",
+      "bytes": 3201,
+      "sha256": "e6df7093c21d5ebe06e6eb5aa3dde057e8c1c390b7c404f32ccfe4d5fbeb7aac"
+    },
+    {
+      "path": "scripts/verify-cancom-oar007.sql",
+      "bytes": 13731,
+      "sha256": "8a8df4b6927777bf0e8ebe0e22a7437bad66cb2bdec22015d31af68d18896ddd"
+    },
+    {
+      "path": "src/c3_field_connect/OperationsPanel.tsx",
+      "bytes": 3039,
+      "sha256": "e8a30183602a3b1b9dd02965cad385b92b5a5a06761e8f2d7a935e0764f99802"
+    },
+    {
+      "path": "supabase/migrations/20261001214437_cancom_registry_pickup_return.sql",
+      "bytes": 11130,
+      "sha256": "2a57b1f9a951e782a83ee8f429008a4ae852d6e24bd70378ff751c4e242e7ec1"
+    },
+    {
+      "path": "supabase/migrations/20261001214620_cancom_registry_delivery_registration.sql",
+      "bytes": 9520,
+      "sha256": "13a3234f39af1712c073188c48e0a5c474f992d0e151f620dcac1f10db5df38e"
+    },
+    {
+      "path": "supabase/migrations/20261001232621_cancom_oar004_provider_neutral_pickup.sql",
+      "bytes": 7745,
+      "sha256": "70265239f43568b43c253068f59a68b36c1b2a1c42ceb60cc74953487071a466"
+    },
+    {
+      "path": "supabase/migrations/20261001232635_cancom_oar004_provider_neutral_delivery.sql",
+      "bytes": 9588,
+      "sha256": "692c10c522ede67f82fe175b2d409a82b435ac45a497d0899466b454e6a4f151"
+    },
+    {
+      "path": "supabase/migrations/20261001232644_cancom_oar004_lifecycle.sql",
+      "bytes": 7751,
+      "sha256": "15e962d0a7595a2df538497bb3324a87e8d6ad248b72605c6b36db67a28c24c5"
+    },
+    {
+      "path": "supabase/migrations/20261001232925_cancom_oar004_context_resolver.sql",
+      "bytes": 9931,
+      "sha256": "6da7241fa7af15da9a5c9f2e94e1df76998fb13d2c42ee167ed09417ac50f6b0"
+    },
+    {
+      "path": "supabase/migrations/20261001233017_cancom_oar003_return_reconciliation.sql",
+      "bytes": 3644,
+      "sha256": "1589396e48e4cd12306dfdd1d997ee7c094108cc71b471560692ecad36b777b2"
+    },
+    {
+      "path": "supabase/migrations/20261001233345_cancom_oar004_delivery_lifecycle.sql",
+      "bytes": 10893,
+      "sha256": "2edb0cf0611c904c249625183d86ad251d5d9bb753ef4859779ab55a9049651c"
+    },
+    {
+      "path": "supabase/migrations/20261002010642_cancom_oar004_return_validation.sql",
+      "bytes": 7784,
+      "sha256": "36fd16e202e31f7dc6f687bf44f055f1e447b07363f1655dec9ae4254dea1460"
+    },
+    {
+      "path": "supabase/migrations/20261002032831_cancom_oar005_semantic_enforcement.sql",
+      "bytes": 38281,
+      "sha256": "d7dde8a9aa062d4f8f8356f0e73f964019132988332ca55cbde1e25ba0b6078c"
+    },
+    {
+      "path": "supabase/migrations/20261002045940_cancom_oar007_delivery_lifecycle.sql",
+      "bytes": 11216,
+      "sha256": "544a633c864cd825cb8c9474fe97d8f91751b0c7341fd7da9541b3daf58078e4"
+    },
+    {
+      "path": "supabase/migrations/20261002045943_c3ops_oar007_resolved_optics.sql",
+      "bytes": 3496,
+      "sha256": "492c6f4d66d08cfd00e6c6edddf8326dbde6c7d5d4906ef2373a9d1579b414c7"
+    }
+  ]
+}
