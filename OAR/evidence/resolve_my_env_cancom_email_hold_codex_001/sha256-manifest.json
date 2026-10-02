@@ -1,0 +1,51 @@
+{
+  "commit": "fe20b3e6699d94b64d12da1afa02593ae6717964",
+  "serialization_basis": "git_blob_raw_bytes_sha256",
+  "files": [
+    {
+      "path": "functions/_lib/free-nugs.ts",
+      "bytes": 6572,
+      "sha256": "483563232ea405098d9156eae95cfc88d30fe186e44e9eb8a711d53ccdaea8a2"
+    },
+    {
+      "path": "functions/api/my-environment-cancom-email.test.ts",
+      "bytes": 5950,
+      "sha256": "384e891da46c4f046e82d0511ead7e278ae2cc34837022432d99897db7578864"
+    },
+    {
+      "path": "functions/api/my-environment-cancom-email.ts",
+      "bytes": 19724,
+      "sha256": "e811f04b52c90c55ad9cd718cc35899d8f4c568a9bbb05d2b048474bea827c0d"
+    },
+    {
+      "path": "scripts/verify-myenv-email-hold-001.sql",
+      "bytes": 4320,
+      "sha256": "e11d78dc9d426d5e1ddd225698b4c26cf55ad6051d29f6a9a4a03e33cd50402c"
+    },
+    {
+      "path": "scripts/verify-myenv-email-layout.cjs",
+      "bytes": 2303,
+      "sha256": "082ee6e71f33382455d03e4fbd95090eb6d963e8cba3e8f7fe8cdcb9ba2ff16e"
+    },
+    {
+      "path": "scripts/verify-myenv-email-types.cjs",
+      "bytes": 1598,
+      "sha256": "098879afb258cf9e808e8e8f811ca13a113cde83ddbae817a3e7268cccd2893c"
+    },
+    {
+      "path": "src/c3_field_connect/MyEnvironmentEncounter.tsx",
+      "bytes": 89371,
+      "sha256": "46a58011895cf882ac85740fe2ab7ba88f9d9f2870efa2634b1716775682eb1a"
+    },
+    {
+      "path": "src/c3_field_connect/myEnvironmentEncounter.css",
+      "bytes": 20586,
+      "sha256": "c075ecb94cf4d28bbc636472c9cca61d95e1fce8f409e4fe3c7994b799b0fa92"
+    },
+    {
+      "path": "supabase/migrations/20261002204722_myenv_cancom_email_server_privileges.sql",
+      "bytes": 602,
+      "sha256": "96c65c26b7101f352ccdb86841f007f7b98378ab56e5efb80a04badc78e428e3"
+    }
+  ]
+}

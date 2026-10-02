@@ -1,0 +1,15 @@
+{
+  "execution_instance": "resolve_my_env_cancom_email_hold_codex_001",
+  "canonical_oar2_sha256": "2d4a7cc3140a4916edbc4858f54fc871ed21e7fbb44ce3b812fa6dbec64bff46",
+  "canonical_oar2_bytes": 3012,
+  "implementation_commit": "fe20b3e6699d94b64d12da1afa02593ae6717964",
+  "registry_project": "zfihrspxvennjzazxcbj",
+  "db_migration": {"local_version": "20261002204722", "applied_version": "20261002205327", "name": "myenv_cancom_email_server_privileges", "applied": true},
+  "before": {"service_role_prepare": "42501: permission denied for table c3_current_state", "owner_prepare": "awaiting_effect_receipt", "outbound_message_refs": 0},
+  "after": {"service_role_prepare": "awaiting_effect_receipt", "provider_called": false, "external_effects": 0, "service_current_read": true, "service_current_lock_column": true, "service_current_full_update": false, "service_evidence_insert": true, "anon_current_read": false, "authenticated_current_read": false, "anon_evidence_insert": false, "authenticated_evidence_insert": false},
+  "rollback_fixture": {"prepare": "PASS", "prepare_replay_hold": "PASS", "old_receipt_object_check_rejection": "PASS", "old_receipt_contract_hold": "PASS", "correct_receipt_return": "PASS", "receipt_replay_hold": "PASS", "executor_substitution_hold": "PASS", "persisted_test_passages": 0, "persisted_test_current_evidence": 0, "persisted_test_custody_rows": 0},
+  "tests": {"runtime_and_adapter_tests": 12, "passed": 12, "real_provider_calls": 0, "typescript_server_baseline_errors": 4, "typescript_frontend_baseline_errors": 7, "new_type_diagnostics": 0, "committed_source_build": "PASS: npm run build:c3field; local public-fallback configuration"},
+  "layout": {"basis": "local static compose/review CSS fixture, not an authenticated production encounter", "original_form_client_width": 450, "original_form_scroll_width": 4232, "corrected_form_client_width": 450, "corrected_form_scroll_width": 450, "viewport_768": {"panel": [664,664], "form": [587,587], "review": [556,556]}, "viewport_390": {"panel": [374,374], "form": [315,315], "review": [284,284]}, "width_pair_basis": "clientWidth, scrollWidth"},
+  "live_email_test": {"standing": "HLD", "missing_fields": ["existing_authorized_operator_controlled_test_recipient", "active_owner_session"], "operator_test_directory_contexts_found": 0, "browser_owner_session_handoff": "no active owner session", "external_effects": 0},
+  "security_advisors": {"current_tables": "RLS enabled without browser policies; internal service-only use intended", "credential_or_provider_scope_change": false, "security_definer_added": false}
+}
