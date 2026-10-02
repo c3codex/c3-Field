@@ -393,6 +393,18 @@ export default function App() {
         applyPageMetadata(C3_COMMUNITY_POTENTIAL_METADATA)
         return () => { cancelled = true }
       }
+      if (c3Route.kind === "connect" && c3Route.pathname === "/") {
+        void fetch("/api/c3-root-presentation",{headers:{accept:"application/json"},cache:"no-store"})
+          .then(response=>response.ok?response.json():null)
+          .then(body=>{
+            if(cancelled||body?.standing!=="bounded_public_runtime")return
+            const og=body.manifest?.og_share_presentation as Record<string,string>|undefined
+            if(og?.title&&og?.description&&og?.canonical_url&&og?.image_runtime_uri){
+              applyPageMetadata({title:og.title,description:og.description,url:og.canonical_url,canonicalUrl:og.canonical_url,image:"https://c3field.online"+og.image_runtime_uri,type:"website"})
+            }
+          }).catch(()=>{})
+        return () => { cancelled = true }
+      }
       applyPageMetadata(C3_FIELD_METADATA)
       void fetch("/api/c3-public-presentation",{headers:{accept:"application/json"}})
         .then(response=>response.ok?response.json():null)
@@ -490,6 +502,7 @@ export default function App() {
     if (c3Route.kind === "publication") return <PublicWhitePaperLanding paper={communityPotential} />
     if (c3Route.kind === "public_document") return <Suspense fallback={<p>Loading document…</p>}><C3PublicDocumentPage kind={c3Route.pathname === "/privacy" ? "privacy" : c3Route.pathname === "/terms" ? "terms" : "contact"} /></Suspense>
     if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
+    if (c3Route.kind === "connect" && c3Route.pathname === "/connect") return <C3CommunityConnect />
     return <Suspense fallback={<p>Opening c3 Field…</p>}><C3FieldRoot /></Suspense>
   }
 
