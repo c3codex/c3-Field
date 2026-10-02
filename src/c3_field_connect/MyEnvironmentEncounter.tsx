@@ -122,15 +122,17 @@ function initiativeLabel(initiative:Initiative){
 function primitiveGroup(primitive:Primitive):PrimitiveGroupKey{
   if(["chazz","current","my_pacs","canopy","calendar"].includes(primitive.primitive_key))return "core"
   if(["native_connections","invite_connection"].includes(primitive.primitive_key))return "relations"
-  if(primitive.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline")return "work"
+  if(primitive.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline"||primitive.renderer_key==="c1me.acquisitions"||primitive.renderer_key==="c1me.operations")return "work"
   return "other"
 }
 function primitiveMeta(primitive:Primitive){
   if(primitive.primitive_key==="current")return "retained relation"
   if(primitive.primitive_key==="my_pacs")return "personal custody & approval"
   if(primitive.primitive_key==="calendar")return "c3-native schedule"
-  if(primitive.primitive_key==="native_connections")return "people & initiative relations"
-  if(primitive.primitive_key==="invite_connection")return "relational passage"
+  if(primitive.primitive_key==="acquisitions")return "PropPac · acquisition lifecycle"
+  if(primitive.primitive_key==="operations")return "operator OAR optics"
+  if(primitive.primitive_key==="native_connections")return "CanCom · people & initiative relations"
+  if(primitive.primitive_key==="invite_connection")return "CanCom · invite passage"
   if(primitive.renderer_key==="c1me.discovery")return "evidence encounter"
   if(primitive.renderer_key==="c1me.pipeline")return "private operator view"
   if(primitive.primitive_key==="chazz")return "CURRENT-aware work"
@@ -925,7 +927,7 @@ export default function MyEnvironmentEncounter(){
     if(primitive.renderer_key==="c1me.native_connections"){
       const has47pct=initiativeConnections.some(connection=>connection.initiative_key==="47pct")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
-        <div className="myenv-thread-heading"><p className="myenv-kicker">C3-NATIVE</p><h2>{primitive.display_label}</h2><p>People and initiative relations appear here only after their governed passage resolves.</p></div>
+        <div className="myenv-thread-heading"><p className="myenv-kicker">CANCOM · C3-NATIVE</p><h2>CanCom · {primitive.display_label}</h2><p>People and initiative relations appear here only after their governed passage resolves. Personal messages use end-to-end encrypted CanCom passage.</p></div>
         <div className="myenv-thread-entries">
           {initiativeConnections.map(connection=>{
             const initiative=initiatives.find(item=>item.initiative_key===connection.initiative_key)
@@ -963,7 +965,7 @@ export default function MyEnvironmentEncounter(){
     }
     if(primitive.renderer_key==="c1me.invite_connection"){
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
-        <div className="myenv-thread-heading"><p className="myenv-kicker">RELATIONAL PASSAGE</p><h2>{primitive.display_label}</h2><p>Prepare a personalized invitation from this environment. The connection forms only when the recipient authenticates into their environment.</p></div>
+        <div className="myenv-thread-heading"><p className="myenv-kicker">CANCOM · RELATIONAL PASSAGE</p><h2>{primitive.display_label}</h2><p>Prepare a personalized invitation from this environment. The connection forms only when the recipient authenticates into their environment.</p></div>
         <form className="myenv-thread-compose" onSubmit={prepareInvite}>
           <textarea aria-label="Invitation message" rows={3} maxLength={1200} value={inviteMessage} onChange={e=>setInviteMessage(e.target.value)} placeholder="Add a personal invitation message."/>
           <select aria-label="Initiative context" value={inviteInitiative} onChange={e=>setInviteInitiative(e.target.value)}>
