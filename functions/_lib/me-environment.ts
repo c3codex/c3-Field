@@ -267,6 +267,8 @@ export async function readC3OpsCurrentState(read: ReadRows) {
     prism,
     lapzuli,
     opticsProcess,
+    notchazzOpticsProcess,
+    notchazzBoundaryReports,
     mgs,
     passage,
     chazzRoleCall,
@@ -277,6 +279,12 @@ export async function readC3OpsCurrentState(read: ReadRows) {
     readProcess("prism_publication_operations_v1"),
     readProcess("lapzuli_distribution"),
     readProcess("c3_optics_operational_proof_output_v1"),
+    readProcess("c3ops_notchazz_boundary_optics_projection_v1"),
+    read(
+      "c3ops_notchazz_oar_formation_evaluation",
+      "evaluation_key,oar_key,execution_instance,oar_integrity_sha256,boundary_process_key,governed_process_key,result,result_reason,required_predicates,unresolved_predicates,evaluator,authority_created,standing,created_at",
+      {standing:"eq.active",order:"created_at.desc",limit:"20"},
+    ),
     readProcess("minimum_governed_standard_v1"),
     readProcess("governed_object_passage_process_v4"),
     readProcess("c3ops_role_call_computational_skills_v1"),
@@ -302,10 +310,12 @@ export async function readC3OpsCurrentState(read: ReadRows) {
     components:[
       component("prism","Prism","Publication operations","system_process_registry:prism_publication_operations_v1",prism),
       component("lapzuli","Lapzuli","Distribution rail","system_process_registry:lapzuli_distribution",lapzuli),
-      component("optics","Optics","Operational proof",[
+      component("optics","Optics","Operational proof + NotChazz border health",[
         "system_process_registry:c3_optics_operational_proof_output_v1",
         "c3_optics_observation:optics432:operational_proof:c3_system_baseline_v1",
-      ].join(" + "),[...opticsProcess,...opticsObservation]),
+        "system_process_registry:c3ops_notchazz_boundary_optics_projection_v1",
+        "c3ops_notchazz_oar_formation_evaluation:active",
+      ].join(" + "),[...opticsProcess,...opticsObservation,...notchazzOpticsProcess,...notchazzBoundaryReports]),
       component("c3_model","c3 Model","MGS + governed passage",[
         "system_process_registry:minimum_governed_standard_v1",
         "system_process_registry:governed_object_passage_process_v4",
