@@ -83,7 +83,18 @@ c3ops_notchazz_oar_formation_evaluation
 
 PASS/HOLD/SEND telemetry is border health, not OAR lifecycle optics.
 
-## Objective D — preserve OAR005 accepted behavior
+## Objective D — restore delivery propagation for required model-return evidence
+The live OAR005 replacement of `register_cancom_oar_delivery_v1` currently omits both:
+- `execution_profile_process`
+- `model_resolution_evidence_required`
+
+from newly created queue `automation_permissions`.
+
+Repair that propagation from the already-registered executor capability/model-resolution policy. For authority-sensitive OARs that require model evidence, the queue must carry `model_resolution_evidence_required=true` before executor pickup.
+
+This is implementation repair only; do not redefine the model policy.
+
+## Objective E — preserve OAR005 accepted behavior
 Do not regress:
 - participant cannot promote to initiative operator
 - active first-class initiative-operator binding required
@@ -95,7 +106,7 @@ Do not regress:
 - personal E2EE/no plaintext fallback
 - no deploy/public release/external correspondence
 
-## Source custody
+## Objective F — Source custody
 Start from current origin/c3field.
 Use codex/cancom-005 only for accepted implementation that remains required.
 Push final correction to remote non-production branch:
@@ -113,7 +124,7 @@ OAR1 must include:
 5. proof NotChazz telemetry remains separate
 6. operator-bound My Env Operations test
 7. projection allowlist/no-private-material test
-8. OAR005 A/B/C/D regressions
+8. OAR005 A/B/C/D regressions, including queue propagation of the required model-evidence flag
 9. available type/runtime tests
 10. remote branch codex/cancom-006 and resolvable commit
 11. required model-resolution evidence
