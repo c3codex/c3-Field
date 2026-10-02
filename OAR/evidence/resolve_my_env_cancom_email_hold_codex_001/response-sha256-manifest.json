@@ -1,0 +1,47 @@
+{
+  "serialization_basis": "utf8_raw_git_blob_bytes_sha256",
+  "artifacts": [
+    {
+      "commit": "e19716efbda5735bfdcccad2663fc8eb37634f08",
+      "path": "functions/api/my-environment-cancom-email.test.ts",
+      "bytes": 6474,
+      "sha256": "c2269fefa38e621361b52da763f0acee284be65e61cdbdec11a9bac38a076c49"
+    },
+    {
+      "commit": "e19716efbda5735bfdcccad2663fc8eb37634f08",
+      "path": "functions/api/my-environment-cancom-email.ts",
+      "bytes": 19724,
+      "sha256": "c89144484f0d2165ffda0436c334e1353186aba631a51decd2018a3f6a810e9e"
+    },
+    {
+      "commit": "e19716efbda5735bfdcccad2663fc8eb37634f08",
+      "path": "src/c3_field_connect/MyEnvironmentEncounter.tsx",
+      "bytes": 89501,
+      "sha256": "a570565c984086e4328703d264f989a3ff92f9cf30f13103d563642e59381866"
+    },
+    {
+      "commit": "e19716efbda5735bfdcccad2663fc8eb37634f08",
+      "path": "src/lib/cancom-email-response.test.ts",
+      "bytes": 917,
+      "sha256": "99ca85621ee32ab329f2a87d58f20e267bd523ea1ab3c16ee3bb7f8e9b7daf2c"
+    },
+    {
+      "commit": "e19716efbda5735bfdcccad2663fc8eb37634f08",
+      "path": "src/lib/cancom-email-response.ts",
+      "bytes": 872,
+      "sha256": "5b545380403e04deefc06b30803c924e3632d62eaffc38a5e3eefccdc1b61e5c"
+    },
+    {
+      "commit": "e19716efbda5735bfdcccad2663fc8eb37634f08",
+      "path": "supabase/migrations/20261002224950_myenv_directory_effective_envpac.sql",
+      "bytes": 691,
+      "sha256": "d22753a7d72962b845b7fec514b1c9dd15eb02b519c3a3ac7c2ebbd2af2d3368"
+    },
+    {
+      "commit": "682c6e8734e08c2f88b89d3bed37514bba007815",
+      "path": "OAR/OAR1/codex/oar1_resolve_my_env_cancom_email_hold_codex_20261002_001.response-supplement.md",
+      "bytes": 4513,
+      "sha256": "75c5523c88f652f501bcd30b37594578aae7ede45507f9714c0e3d496dde5641"
+    }
+  ]
+}
