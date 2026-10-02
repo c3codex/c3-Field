@@ -1,0 +1,148 @@
+{
+  "candidates": [
+    {
+      "spec": {},
+      "nug_key": "candidate_cancom",
+      "standing": "candidate",
+      "created_at": "2026-10-02T13:04:15.922799+00:00",
+      "service_name": "CanCom",
+      "source_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "native_function_binding",
+        "environment_current",
+        "capability",
+        "authority",
+        "context",
+        "effect_preflight"
+      ]
+    },
+    {
+      "spec": {},
+      "nug_key": "candidate_calendar",
+      "standing": "candidate",
+      "created_at": "2026-10-02T13:04:15.922799+00:00",
+      "service_name": "Calendar",
+      "source_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "native_function_binding",
+        "environment_current",
+        "capability",
+        "authority",
+        "context",
+        "effect_preflight"
+      ]
+    },
+    {
+      "spec": {},
+      "nug_key": "candidate_directory",
+      "standing": "candidate",
+      "created_at": "2026-10-02T13:04:15.922799+00:00",
+      "service_name": "Directory",
+      "source_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "native_function_binding",
+        "environment_current",
+        "capability",
+        "authority",
+        "context",
+        "effect_preflight"
+      ]
+    }
+  ],
+  "migrations": [
+    {
+      "name": "nugs_runtime_foundation",
+      "version": "20261002130415"
+    },
+    {
+      "name": "nugs_effect_evidence_return",
+      "version": "20261002130933"
+    },
+    {
+      "name": "nugs_runtime_boundary_hardening",
+      "version": "20261002131058"
+    },
+    {
+      "name": "nugs_receipt_custody_boundary",
+      "version": "20261002131301"
+    }
+  ],
+  "new_tables": [
+    {
+      "rls": true,
+      "table": "c3ops_nug_binding",
+      "force_rls": true,
+      "anon_select": false,
+      "service_select": true,
+      "authenticated_select": false
+    },
+    {
+      "rls": true,
+      "table": "c3ops_nug_occurrence",
+      "force_rls": true,
+      "anon_select": false,
+      "service_select": true,
+      "authenticated_select": false
+    },
+    {
+      "rls": true,
+      "table": "c3ops_nug_effect_passage",
+      "force_rls": true,
+      "anon_select": false,
+      "service_select": true,
+      "authenticated_select": false
+    }
+  ],
+  "occurrences": 0,
+  "new_functions": [
+    {
+      "sha256": "f18641f38d9409585f605f6bd33567d63f5bdd71150e461a92509707b380ba1f",
+      "function": "call_c3ops_nug_native_v1(jsonb,text)",
+      "anon_execute": false,
+      "service_execute": true,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "sha256": "14a5941745f40a0c7d29fb733cf4cf72b09ff09c83be6a1617faca25efa30db2",
+      "function": "preflight_c3ops_nug_spec_v1(text,jsonb)",
+      "anon_execute": false,
+      "service_execute": true,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "sha256": "123bbafa115673e6025db016b37cae9a97bf23d593f02cea63326b3a0943ca92",
+      "function": "prepare_c3ops_nug_effect_v1(jsonb,text)",
+      "anon_execute": false,
+      "service_execute": true,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "sha256": "272fac9c27cbe4297b1cb9bb7595134d3c50ed760ef9eeb4651f9329ae122fbc",
+      "function": "register_c3ops_nug_binding_v1(text,text,jsonb)",
+      "anon_execute": false,
+      "service_execute": true,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "sha256": "9f35ab4fff6719af88ea58481d37ebe19d36e8d4b7b85342b806a255ada24045",
+      "function": "resolve_c3ops_nug_v1(jsonb)",
+      "anon_execute": false,
+      "service_execute": true,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "sha256": "b6873599a9d7cdb76007ae923c05067a820f20625763057a6fdd995dc5b2e472",
+      "function": "return_c3ops_nug_effect_v1(text,text,text)",
+      "anon_execute": false,
+      "service_execute": true,
+      "security_definer": false,
+      "authenticated_execute": false
+    }
+  ],
+  "effect_passages": 0
+}

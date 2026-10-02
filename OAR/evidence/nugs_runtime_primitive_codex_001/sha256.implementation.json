@@ -1,0 +1,76 @@
+{
+  "serialization_basis": "raw_file_bytes_sha256",
+  "execution_instance": "nugs_runtime_primitive_codex_001",
+  "files": [
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/authority-preflight.json",
+      "bytes": 6912,
+      "sha256": "99077d24df4bc2ccf5d00f9866bf6f3c8ed838abf5247ea28c9866f9f9c40d10"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/cancom-regression-readback.json",
+      "bytes": 1145,
+      "sha256": "582a108d8442bc21e9543edf17ec74ac55ac87a76eb83723130754cc496515ed"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/registry-fixture-proof.json",
+      "bytes": 32785,
+      "sha256": "5c86cd268fcf00b6ceb5fa05d8c63f7d0a1f19d464ccd30302ddcfe0436e2922"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/registry-posture.json",
+      "bytes": 4126,
+      "sha256": "bc72bf88bb5f349d1ae5e48c40fe07384bdce5e5f21e23930a061c150cdb7725"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/security-advisor-scope.json",
+      "bytes": 935,
+      "sha256": "ec833d550ef81dffe9c9276a6a75528951d53ec6a325f417ae0e2daa636292ab"
+    },
+    {
+      "path": "OAR/evidence/nugs_runtime_primitive_codex_001/verification.json",
+      "bytes": 2678,
+      "sha256": "f1ad42fe0ddd02c4ba02d21dc15c9cf628f314522e719240bf9b3191e01927c7"
+    },
+    {
+      "path": "docs/c3ops/nugs-runtime-foundation.md",
+      "bytes": 5239,
+      "sha256": "fffddd92cab14bdfddcefdcbb30685020966d1eec30500c4a592eb858621c569"
+    },
+    {
+      "path": "functions/_lib/free-nugs.test.ts",
+      "bytes": 4697,
+      "sha256": "60334ca4d51ac96d36408f667934ff85ed73fb6eed4eaf13e0374aff1e58162a"
+    },
+    {
+      "path": "functions/_lib/free-nugs.ts",
+      "bytes": 5878,
+      "sha256": "5bf4ee0ed2cdb22fbad4740d1d8108945983f04d4385ad5f3e388a167a8af5f7"
+    },
+    {
+      "path": "scripts/verify-nugs-runtime.sql",
+      "bytes": 18794,
+      "sha256": "d009feafe08eaf8daac0038ced8c8041fca4ae0326d61d17fb7a8d05bb3dc304"
+    },
+    {
+      "path": "supabase/migrations/20261002125733_nugs_runtime_foundation.sql",
+      "bytes": 17626,
+      "sha256": "c25c5fd735e28a20df7db8e9b1a15c18bf5e7afd08d56b758c5d3ac692fc7781"
+    },
+    {
+      "path": "supabase/migrations/20261002130805_nugs_effect_evidence_return.sql",
+      "bytes": 7904,
+      "sha256": "f6630aa2eec03311f724538df1a119e2f921821ecdc2010056bae366859cb34b"
+    },
+    {
+      "path": "supabase/migrations/20261002131028_nugs_runtime_boundary_hardening.sql",
+      "bytes": 1715,
+      "sha256": "420232e51adad4a0204b3506cff135255aae80e86609d5ba0b9c50788fcd7852"
+    },
+    {
+      "path": "supabase/migrations/20261002131236_nugs_receipt_custody_boundary.sql",
+      "bytes": 850,
+      "sha256": "131640426e31cf6a01eee643215ff47b822789dd98266537adae5d037d95c369"
+    }
+  ]
+}

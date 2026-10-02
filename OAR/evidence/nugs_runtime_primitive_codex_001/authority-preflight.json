@@ -1,0 +1,156 @@
+{
+  "pickup": {
+    "sha256": "5aa35c268f99f6937431123900492bb29af571264979be77b2d1dd11c018f72b",
+    "oar_key": "oar2_nugs_runtime_20261001_001",
+    "standing": "resolved_for_executor",
+    "queue_key": "queue_nugs_runtime_primitive_codex_001",
+    "passage_key": "nugs_runtime_primitive_codex_001",
+    "executor_ref": "codex",
+    "queue_status": "approved_for_execution",
+    "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+    "payload_bytes": 4631,
+    "capability_ref": "nugs_oar001_codex_bounded_execution",
+    "wake_event_key": "nugs_runtime_primitive_codex_001:wake:001",
+    "execution_instance": "nugs_runtime_primitive_codex_001",
+    "manifest_event_key": "nugs_runtime_primitive_codex_001:oar2:registry_manifest_delivery",
+    "authority_scope_ref": "capability:nugs_oar001_codex_bounded_execution",
+    "payload_custody_ref": "github_file:c3codex/c3-Field@135a9f0d17a896d94ccebb86c646a9b431381faa:OAR/OAR2/codex/oar2_nugs_runtime_20261001_001.md",
+    "serialization_basis": "utf8_raw_bytes_sha256",
+    "deployment_authorized": false,
+    "payload_custody_provider": "github",
+    "external_correspondence_authorized": false
+  },
+  "capability": {
+    "scope": {
+      "oar_key": "oar2_nugs_runtime_20261001_001",
+      "process_key": "cancom_oar_delivery_retrieval_v1",
+      "executor_ref": "codex",
+      "operator_ref": "op044",
+      "allowed_actions": [
+        "resolve_registry_manifest",
+        "resolve_cancom_passage",
+        "retrieve_canonical_payload",
+        "implement_nug_registry_binding",
+        "implement_nug_resolver_preflight",
+        "integrate_free_nug_resolution",
+        "admit_proven_initial_candidate_nugs",
+        "implement_occurrence_evidence_return",
+        "verify_pac_cancom_regressions",
+        "push_nonproduction_remote_branch",
+        "return_oar1_evidence"
+      ],
+      "execution_profile": {
+        "task_class": "authority_sensitive_runtime_foundation",
+        "required_tools": [
+          "repository",
+          "supabase",
+          "runtime_verification"
+        ],
+        "authority_sensitivity": "high",
+        "minimum_capability_floor": "high_reasoning_code_system_execution_with_repository_and_database_access",
+        "required_reasoning_level": "high",
+        "required_context_capacity": "high"
+      },
+      "execution_instance": "nugs_runtime_primitive_codex_001",
+      "resolved_semantics": {
+        "free": "process:aop_006_free_binding",
+        "nugs": "process:c3ops_nugs_native_universal_general_services_v1",
+        "cancom": "process:cancom_oar_delivery_retrieval_v1",
+        "governed_passage": "process:governed_object_passage_process_v4",
+        "minimum_standard": "process:minimum_governed_standard_v1"
+      },
+      "remote_source_branch": "codex/nugs-runtime-001",
+      "deployment_authorized": false,
+      "db_mutation_authorized": true,
+      "model_resolution_policy": {
+        "return_contract": "oar1_model_resolution_return_contract_v1",
+        "below_floor_disposition": "HLD_MODEL_CAPABILITY_UNAVAILABLE",
+        "preferred_model_or_tier": "strongest_qualified_codex_model",
+        "oar1_model_resolution_evidence_required": true,
+        "fallback_allowed_only_if_minimum_capability_floor_is_met": true
+      },
+      "public_release_authorized": false,
+      "source_mutation_authorized": true,
+      "production_merge_authorized": false,
+      "remote_source_push_authorized": true,
+      "pac_semantic_mutation_authorized": false,
+      "external_correspondence_authorized": false,
+      "external_provider_effects_authorized": false,
+      "credential_scope_expansion_authorized": false,
+      "new_relation_or_operator_standing_authorized": false
+    },
+    "standing": "active",
+    "capability": "bounded_nugs_runtime_foundation",
+    "created_at": "2026-10-02T12:48:47.124927+00:00",
+    "envpac_key": "c3envpac_field_v0_1",
+    "system_key": "c3ops",
+    "updated_at": "2026-10-02T12:48:47.124927+00:00",
+    "evidence_ref": "registry://cancom/oar2/oar2_nugs_runtime_20261001_001",
+    "capability_key": "nugs_oar001_codex_bounded_execution"
+  },
+  "evaluation": {
+    "result": "PASS",
+    "oar_key": "oar2_nugs_runtime_20261001_001",
+    "standing": "active",
+    "evaluator": "notchazz",
+    "created_at": "2026-10-02T12:49:03.522847+00:00",
+    "result_reason": "NUGS runtime foundation OAR is implementation-only. Candidate NUG admission must fail closed unless native function, capability, authority, context, and effect predicates are proven; real external effects remain unauthorized.",
+    "evaluation_key": "9cc75483-175b-472c-b4f2-e341327d95c8",
+    "authority_created": false,
+    "execution_instance": "nugs_runtime_primitive_codex_001",
+    "required_predicates": [
+      {
+        "resolution": "resolved",
+        "predicate_key": "nugs_semantics",
+        "predicate_class": "semantic_authority",
+        "registry_evidence_ref": "process:c3ops_nugs_native_universal_general_services_v1"
+      },
+      {
+        "resolution": "resolved",
+        "predicate_key": "free_runtime_resolution",
+        "predicate_class": "runtime_resolver",
+        "registry_evidence_ref": "process:aop_006_free_binding"
+      },
+      {
+        "resolution": "resolved",
+        "predicate_key": "governed_function_passage",
+        "predicate_class": "passage_authority",
+        "registry_evidence_ref": "process:governed_object_passage_process_v4"
+      },
+      {
+        "resolution": "resolved",
+        "predicate_key": "minimum_governed_standard",
+        "predicate_class": "preflight_standard",
+        "registry_evidence_ref": "process:minimum_governed_standard_v1"
+      },
+      {
+        "resolution": "resolved",
+        "predicate_key": "cancom_candidate_semantics",
+        "predicate_class": "native_function_candidate",
+        "registry_evidence_ref": "process:cancom_oar_delivery_retrieval_v1"
+      },
+      {
+        "resolution": "resolved",
+        "predicate_key": "effect_scope",
+        "predicate_class": "effect_scope",
+        "registry_evidence_ref": "capability:nugs_oar001_codex_bounded_execution"
+      },
+      {
+        "resolution": "resolved",
+        "predicate_key": "model_return",
+        "predicate_class": "return_contract",
+        "registry_evidence_ref": "process:oar1_model_resolution_return_contract_v1"
+      },
+      {
+        "resolution": "resolved",
+        "predicate_key": "source_custody",
+        "predicate_class": "source_custody",
+        "registry_evidence_ref": "github_file:c3codex/c3-Field@135a9f0d17a896d94ccebb86c646a9b431381faa:OAR/OAR2/codex/oar2_nugs_runtime_20261001_001.md"
+      }
+    ],
+    "boundary_process_key": "notchazz_oar_predispatch_semantic_boundary_v1",
+    "governed_process_key": "governed_object_passage_process_v4",
+    "oar_integrity_sha256": "5aa35c268f99f6937431123900492bb29af571264979be77b2d1dd11c018f72b",
+    "unresolved_predicates": []
+  }
+}

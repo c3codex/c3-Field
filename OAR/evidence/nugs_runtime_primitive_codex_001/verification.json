@@ -1,0 +1,68 @@
+{
+  "execution_instance": "nugs_runtime_primitive_codex_001",
+  "source_revision": "135a9f0d17a896d94ccebb86c646a9b431381faa",
+  "canonical_payload_bytes": 4631,
+  "canonical_sha256": "5aa35c268f99f6937431123900492bb29af571264979be77b2d1dd11c018f72b",
+  "registry_fixture_proofs": 33,
+  "registry_fixture_only": true,
+  "free_runtime_tests": {
+    "command": "node --import tsx --test functions/_lib/free-nugs.test.ts",
+    "passed": 7,
+    "failed": 0
+  },
+  "focused_typescript": {
+    "command": "npx tsc --noEmit --skipLibCheck --target ES2022 --module ESNext --moduleResolution Bundler --types node functions/_lib/free-nugs.ts functions/_lib/free-nugs.test.ts",
+    "exit_code": 0
+  },
+  "build": {
+    "command": "npm run build:c3field",
+    "exit_code": 0,
+    "production_env_credentials_not_loaded": true,
+    "scope": "local build, no runtime host or deployment proof",
+    "warnings": [
+      "Existing free-media URL resolved at runtime",
+      "Existing static/dynamic import overlap",
+      "Existing large bundle warning"
+    ]
+  },
+  "mutation_accounting": {
+    "new_registry_tables": 3,
+    "new_registry_functions": 6,
+    "new_registry_candidate_rows": 3,
+    "active_nug_bindings_created": 0,
+    "live_nug_occurrences": 0,
+    "live_nug_effect_passages": 0,
+    "new_capabilities": 0,
+    "new_context_relations": 0,
+    "new_operator_standing": 0,
+    "new_providers": 0,
+    "new_workers": 0,
+    "external_messages_sent": 0,
+    "external_provider_effects": 0,
+    "pac_semantic_mutations": 0,
+    "production_merges": 0,
+    "deploy_commands": 0
+  },
+  "unrelated_worktree_change_excluded": "src/c3ops/C3OpsDoor.css appeared modified independently; not edited, staged or committed by this execution",
+  "source_push_boundary": {
+    "branch": "codex/nugs-runtime-001",
+    "commit_prefix": "[skip ci]",
+    "documentation": "https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/#skipping-a-build-via-a-commit-message"
+  },
+  "standing": "implemented_verified_pending_registrar_review",
+  "model_resolution_evidence": {
+    "preferred_model_or_tier": "strongest_qualified_codex_model",
+    "selected_model_or_explicit_unverified_state": "GPT-6-based Codex; exact runtime model SKU unverified",
+    "fallback_used": false,
+    "fallback_level": "none_observed",
+    "fallback_reason": "No runtime fallback observed",
+    "capability_floor_passed": true,
+    "tools_available": [
+      "repository",
+      "supabase",
+      "runtime_verification"
+    ],
+    "context_fit": "high_context_sufficient_for_registered_foundation",
+    "execution_result": "foundation_implemented_and_verified_without_external_effects"
+  }
+}

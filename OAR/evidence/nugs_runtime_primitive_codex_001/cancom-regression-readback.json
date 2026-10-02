@@ -1,0 +1,51 @@
+{
+  "drive": {
+    "standing": "admitted",
+    "provider_key": "drive"
+  },
+  "github": {
+    "standing": "admitted",
+    "provider_key": "github"
+  },
+  "unknown": {
+    "reason": "HLD_CUSTODY_PROVIDER_UNREGISTERED",
+    "standing": "HLD"
+  },
+  "mismatch": {
+    "reason": "HLD_CUSTODY_REFERENCE_CLASS_MISMATCH",
+    "standing": "HLD"
+  },
+  "operator": "operator_context",
+  "pickup_003": "HLD",
+  "pickup_004": "HLD",
+  "pickup_005": "HLD",
+  "mdm_operator": {
+    "reason": "HLD_OPERATOR_CONTEXT_UNRESOLVED",
+    "standing": "HLD"
+  },
+  "folder_lookup": {
+    "count": 0,
+    "reason": "manifest_missing_or_ambiguous",
+    "standing": "HLD"
+  },
+  "optics_privacy": {
+    "anon_select": false,
+    "service_select": true,
+    "security_invoker": true,
+    "authenticated_select": false
+  },
+  "wrong_executor": {
+    "reason": "queue_or_manifest_boundary",
+    "standing": "HLD"
+  },
+  "legacy_plaintext": {
+    "reason": "cancom_e2ee_ciphertext_required",
+    "standing": "HLD"
+  },
+  "participant_probes": [
+    {
+      "participant": "participant_relation_only",
+      "operator_rejected": "HLD_OPERATOR_CONTEXT_UNRESOLVED"
+    }
+  ]
+}

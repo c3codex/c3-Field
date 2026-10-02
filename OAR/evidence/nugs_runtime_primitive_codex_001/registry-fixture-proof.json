@@ -1,0 +1,782 @@
+{
+  "proofs": {
+    "context_held": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "context"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "stale_current": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "environment_current"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "replay_refused": {
+      "reason": "occurrence_already_returned",
+      "standing": "HLD"
+    },
+    "free_unresolved": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "free_resolver"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "capability_revoked": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "capability"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "provider_is_not_nug": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "provider",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "capability",
+        "authority",
+        "adapter_class"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "resolution_positive": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "resolved_for_nug",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "adapter_unregistered": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "registered_adapter",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": "nonexistent_fixture_worker",
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "capability",
+        "authority",
+        "registered_adapter"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "native_function_drift": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "native_function",
+        "capability",
+        "authority"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "registration_positive": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "registered",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "claimed_receipt_refused": {
+      "reason": "effect_receipt_evidence_unresolved",
+      "standing": "HLD"
+    },
+    "native_function_missing": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.nonexistent_nug_fixture(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "native_function",
+        "capability",
+        "authority",
+        "adapter_boundary"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "request_missing_env_key": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "env_key"
+      ]
+    },
+    "effect_preflight_missing": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "external_email",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "capability",
+        "authority",
+        "adapter_boundary",
+        "effect_preflight"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "external_effect_not_called": {
+      "reason": "bounded_effect_caller_required",
+      "standing": "HLD",
+      "external_effects": 0
+    },
+    "nonreceipt_custody_refused": {
+      "reason": "effect_receipt_evidence_unresolved",
+      "standing": "HLD"
+    },
+    "request_missing_envpac_key": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "envpac_key"
+      ]
+    },
+    "capability_is_not_authority": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "none",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "direct_native",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": null,
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "authority"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "request_missing_executor_ref": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "executor_ref"
+      ]
+    },
+    "effect_receipt_current_return": {
+      "standing": "receipt_returned",
+      "fixture_only": true,
+      "occurrence_key": "fixture_effect_occurrence",
+      "provider_called": false,
+      "current_state_key": "current_env_c3ops_v1",
+      "custody_transferred": false,
+      "new_external_effects": 0,
+      "ownership_transferred": false,
+      "real_provider_receipt": false,
+      "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1",
+      "receipt_evidence_ref_key": "fixture_receipt_ref",
+      "current_reresolution_required": true
+    },
+    "effect_receipt_replay_refused": {
+      "reason": "effect_receipt_already_returned",
+      "standing": "HLD"
+    },
+    "explicit_external_prohibition": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "external_email",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "registered_adapter",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": "cancom_oar_delivery_retrieval_v1",
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "HLD",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [
+        "effect_preflight"
+      ],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "effect_preparation_no_dispatch": {
+      "standing": "awaiting_effect_receipt",
+      "resolution": {
+        "binding": {
+          "env_key": "env_c3ops",
+          "nug_key": "fixture_cancom",
+          "envpac_key": "c3envpac_field_v0_1",
+          "effect_class": "external_email",
+          "executor_ref": "codex",
+          "native_input": {
+            "relation_ref": "nugs_runtime_primitive_codex_001",
+            "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+            "audience_role": "direct_executor",
+            "relation_class": "ai_executor_passage",
+            "asserted_sender": "codex",
+            "transport_adapter": "registry_cancom_internal",
+            "origin_environment": "c3_field",
+            "payload_custody_class": "immutable_oar_payload",
+            "receiving_environment": "executor:codex"
+          },
+          "adapter_class": "registered_adapter",
+          "origin_env_key": "env_c3_field",
+          "current_state_key": "current_env_c3ops_v1",
+          "execution_instance": "nugs_runtime_primitive_codex_001",
+          "native_process_key": "cancom_oar_delivery_retrieval_v1",
+          "adapter_process_key": "cancom_oar_delivery_retrieval_v1",
+          "context_binding_key": "fixture_nug_context",
+          "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+          "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+          "native_result_standing": "resolved_for_passage",
+          "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+        },
+        "nug_key": "fixture_cancom",
+        "standing": "resolved_for_nug",
+        "capability_ref": "nugs_oar001_codex_bounded_execution",
+        "authority_created": false,
+        "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+        "missing_predicates": [],
+        "custody_transferred": false,
+        "ownership_transferred": false
+      },
+      "fixture_only": true,
+      "next_boundary": "separately_authorized_adapter_must_repreflight_before_effect",
+      "occurrence_key": "fixture_effect_occurrence",
+      "provider_called": false,
+      "external_effects": 0
+    },
+    "request_missing_capability_ref": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "capability_ref"
+      ]
+    },
+    "request_missing_origin_env_key": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "origin_env_key"
+      ]
+    },
+    "wrong_executor_receipt_refused": {
+      "reason": "effect_passage_unresolved",
+      "standing": "HLD"
+    },
+    "wrong_occurrence_receipt_refused": {
+      "reason": "effect_receipt_evidence_unresolved",
+      "standing": "HLD"
+    },
+    "request_missing_authority_oar_key": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "authority_oar_key"
+      ]
+    },
+    "request_missing_current_state_key": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "current_state_key"
+      ]
+    },
+    "request_missing_execution_instance": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "execution_instance"
+      ]
+    },
+    "request_missing_context_binding_key": {
+      "standing": "HLD",
+      "fixture_only": true,
+      "missing_predicates": [
+        "context_binding_key"
+      ]
+    },
+    "registered_adapter_is_infrastructure": {
+      "binding": {
+        "env_key": "env_c3ops",
+        "nug_key": "fixture_cancom",
+        "envpac_key": "c3envpac_field_v0_1",
+        "effect_class": "external_email",
+        "executor_ref": "codex",
+        "native_input": {
+          "relation_ref": "nugs_runtime_primitive_codex_001",
+          "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+          "audience_role": "direct_executor",
+          "relation_class": "ai_executor_passage",
+          "asserted_sender": "codex",
+          "transport_adapter": "registry_cancom_internal",
+          "origin_environment": "c3_field",
+          "payload_custody_class": "immutable_oar_payload",
+          "receiving_environment": "executor:codex"
+        },
+        "adapter_class": "registered_adapter",
+        "origin_env_key": "env_c3_field",
+        "current_state_key": "current_env_c3ops_v1",
+        "execution_instance": "nugs_runtime_primitive_codex_001",
+        "native_process_key": "cancom_oar_delivery_retrieval_v1",
+        "adapter_process_key": "cancom_oar_delivery_retrieval_v1",
+        "context_binding_key": "fixture_nug_context",
+        "native_function_ref": "public.resolve_cancom_context_v1(jsonb)",
+        "native_function_sha256": "dd4c54472c8398248075625f21840af878e522c1a936abaffa6c738a3e853e6f",
+        "native_result_standing": "resolved_for_passage",
+        "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1"
+      },
+      "nug_key": "fixture_cancom",
+      "standing": "resolved_for_nug",
+      "fixture_only": true,
+      "capability_ref": "nugs_oar001_codex_bounded_execution",
+      "adapter_executed": false,
+      "authority_created": false,
+      "authority_oar_key": "oar2_nugs_runtime_20261001_001",
+      "missing_predicates": [],
+      "custody_transferred": false,
+      "ownership_transferred": false
+    },
+    "workerless_native_occurrence_current_return": {
+      "result": {
+        "standing": "resolved_for_passage",
+        "optics_state": "executor_bounded",
+        "relation_ref": "nugs_runtime_primitive_codex_001",
+        "return_route": "registry://cancom/oar1_return/nugs_runtime_primitive_codex_001",
+        "audience_role": "direct_executor",
+        "relation_class": "ai_executor_passage",
+        "resolved_actor": "codex",
+        "asserted_sender": "codex",
+        "authority_created": false,
+        "transport_adapter": "registry_cancom_internal",
+        "origin_environment": "c3_field",
+        "relationship_created": false,
+        "payload_custody_class": "immutable_oar_payload",
+        "receiving_environment": "executor:codex"
+      },
+      "standing": "occurrence_returned",
+      "fixture_only": true,
+      "occurrence_key": "fixture_occurrence_001",
+      "external_effects": 0,
+      "current_state_key": "current_env_c3ops_v1",
+      "custody_transferred": false,
+      "evidence_return_relation": "registry://c3_current_evidence_ref/current_env_c3ops_v1",
+      "current_reresolution_required": true
+    }
+  },
+  "proof_count": 33,
+  "fixture_only": true,
+  "external_effects": 0,
+  "persistent_authority_mutations": 0
+}
