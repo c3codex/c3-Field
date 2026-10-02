@@ -94,6 +94,10 @@ type ProfileIntakePayload={authenticated:boolean;standing:string;contract?:Profi
 type ChazzMessage={role:"user"|"assistant";text:string}
 type ChazzPayload={standing:string;runtime?:string;reason?:string;message?:string;messages?:ChazzMessage[]}
 type CurrentPayload={authenticated:boolean;standing:string;semantics?:string;current_state_ref?:string|null;token_count?:number;tokens?:CurrentToken[]}
+type AcquisitionProperty={property_key:string;display_name:string;city:string;county:string;lane:string;priority:number;asking_price?:number|null;acreage?:number|null;property_setup?:string|null;listing_status?:string|null;days_on_market?:number|null;oz_status:string;leverage_signal?:string|null;structure_signal:string;acquisition_standing:string;mdm_overlap_note?:string|null;metadata?:Record<string,unknown>}
+type AcquisitionResolution={resolution_key:string;property_key:string;resolved_standing:string;resolution_reason:string;next_action?:string|null;effective_at:string}
+type AcquisitionDirectory={relationship_key:string;primary_email:string;display_name?:string|null;organization?:string|null;relationship_standing:string}
+type AcquisitionsPayload={authenticated:boolean;standing:string;authority?:string;properties?:AcquisitionProperty[];resolutions?:AcquisitionResolution[];directory?:AcquisitionDirectory[]}
 
 async function readChazzJson(response:Response):Promise<ChazzPayload>{
   const contentType=(response.headers.get("content-type")||"").toLowerCase()
@@ -199,6 +203,11 @@ export default function MyEnvironmentEncounter(){
   const [calendarContextKey,setCalendarContextKey]=useState("")
   const [calendarNotice,setCalendarNotice]=useState("")
   const [calendarBusy,setCalendarBusy]=useState(false)
+  const [acquisitionProperties,setAcquisitionProperties]=useState<AcquisitionProperty[]>([])
+  const [acquisitionResolutions,setAcquisitionResolutions]=useState<AcquisitionResolution[]>([])
+  const [acquisitionDirectory,setAcquisitionDirectory]=useState<AcquisitionDirectory[]>([])
+  const [acquisitionsLoaded,setAcquisitionsLoaded]=useState(false)
+  const [acquisitionNotice,setAcquisitionNotice]=useState("")
 
   async function ensureRegisteredCanComDevice(){
     try{
@@ -252,10 +261,11 @@ export default function MyEnvironmentEncounter(){
         fetch("/api/my-environment-canopy",{headers:{accept:"application/json"}}),
         fetch("/api/my-environment-profile",{headers:{accept:"application/json"}}),
         fetch("/api/my-environment-current",{headers:{accept:"application/json"}}),
-        fetch("/api/my-environment-calendar",{headers:{accept:"application/json"}})
+        fetch("/api/my-environment-calendar",{headers:{accept:"application/json"}}),
+        fetch("/api/my-environment-acquisitions",{headers:{accept:"application/json"}})
       ])
       if(!active)return
-      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult,currentResult,calendarResult]=results
+      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult,currentResult,calendarResult,acquisitionsResult]=results
       if(primitiveResult.status==="fulfilled"&&primitiveResult.value.ok){
         const body=await primitiveResult.value.json() as PrimitivePayload
         if(active&&body.primitives){
@@ -299,6 +309,12 @@ export default function MyEnvironmentEncounter(){
         if(active){setCalendarEvents(body.events||[]);setCalendarLoaded(true)}
       }else if(active){
         setCalendarLoaded(false)
+      }
+      if(acquisitionsResult.status==="fulfilled"&&acquisitionsResult.value.ok){
+        const body=await acquisitionsResult.value.json() as AcquisitionsPayload
+        if(active){setAcquisitionProperties(body.properties||[]);setAcquisitionResolutions(body.resolutions||[]);setAcquisitionDirectory(body.directory||[]);setAcquisitionsLoaded(true)}
+      }else if(active){
+        setAcquisitionsLoaded(false)
       }
       if(profileResult.status==="fulfilled"&&profileResult.value.ok){
         const body=await profileResult.value.json() as ProfileIntakePayload
@@ -635,7 +651,61 @@ export default function MyEnvironmentEncounter(){
     }catch(error){setCalendarNotice(error instanceof Error?error.message:"The calendar action could not be completed.")}
   }
 
+  async function resolveAcquisition(property:AcquisitionProperty,resolvedStanding:string){
+    const reason=window.prompt("Resolution / evidence for this standing change:")
+    if(reason===null)return
+    const nextAction=window.prompt("Next action:")||""
+    setAcquisitionNotice("")
+    try{
+      const response=await fetch("/api/my-environment-acquisitions",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({
+        action:"resolve",property_key:property.property_key,resolved_standing:resolvedStanding,
+        resolution_reason:reason,next_action:nextAction,next_action_owner:"op044"
+      })})
+      const body=await response.json() as {ok?:boolean;standing?:string;reason?:string;resolution?:AcquisitionResolution;property?:AcquisitionProperty}
+      if(!response.ok||!body.ok)throw new Error(body.reason||body.standing||"Resolution could not be recorded.")
+      if(body.property)setAcquisitionProperties(current=>current.map(item=>item.property_key===property.property_key?{...item,...body.property}:item))
+      if(body.resolution)setAcquisitionResolutions(current=>[body.resolution!,...current])
+      setAcquisitionNotice("Resolution persisted to PropPac.")
+    }catch(error){setAcquisitionNotice(error instanceof Error?error.message:"Resolution could not be recorded.")}
+  }
+
   function renderPrimitive(primitive:Primitive){
+    if(primitive.renderer_key==="c1me.acquisitions"){
+      const gerron=acquisitionDirectory.find(item=>item.primary_email.toLowerCase()==="gerron@paragonparcels.com")
+      return <section key={primitive.primitive_key} className="myenv-connections-thread">
+        <div className="myenv-thread-heading">
+          <p className="myenv-kicker">PROPPAC · OPERATOR LIFECYCLE</p>
+          <h2>{primitive.display_label}</h2>
+          <p>Work Property → Contact → Encounter → Evidence → Resolution → Standing → Next Action here. Commons and MDM remain explicit relations; neither receives property custody from this surface.</p>
+        </div>
+        {!acquisitionsLoaded&&<p className="myenv-runtime-warning">Acquisition authority could not be resolved from this session.</p>}
+        {gerron&&<article>
+          <div><span>DIRECTORY · ACQUISITION DISCOVERY</span></div>
+          <h3>{gerron.display_name} · {gerron.organization}</h3>
+          <p>{gerron.primary_email} · {gerron.relationship_standing.replace(/_/g," ")}</p>
+          <small>Directory relation only. Not a property contact and no standing is inferred from the email coordinate.</small>
+        </article>}
+        <div className="myenv-thread-entries">
+          {acquisitionsLoaded&&acquisitionProperties.length===0&&<p className="myenv-relations-empty">PropPac is active; no acquisition records are currently resolved.</p>}
+          {acquisitionProperties.map(property=>{
+            const latest=acquisitionResolutions.find(item=>item.property_key===property.property_key)
+            return <article key={property.property_key}>
+              <div><span>{property.lane} · P{property.priority}</span><span>{property.acquisition_standing.replace(/_/g," ")}</span></div>
+              <h3>{property.display_name}</h3>
+              <p>{property.city}, {property.county} County{property.asking_price?(" · $"+Number(property.asking_price).toLocaleString()):""}{property.acreage?(" · "+property.acreage+" ac"):""}</p>
+              {property.property_setup&&<p>{property.property_setup}</p>}
+              <p><strong>OZ:</strong> {property.oz_status.replace(/_/g," ")} · <strong>Structure:</strong> {property.structure_signal.replace(/_/g," ")}</p>
+              {property.leverage_signal&&<p><strong>Leverage:</strong> {property.leverage_signal}</p>}
+              {latest&&<p><strong>Next:</strong> {latest.next_action||latest.resolution_reason}</p>}
+              <div className="myenv-chazz-compose-actions">
+                {["contact","discovery","diligence","structure","offer","held","dnr"].map(standing=><button key={standing} type="button" onClick={()=>void resolveAcquisition(property,standing)}>{standing.toUpperCase()}</button>)}
+              </div>
+            </article>
+          })}
+        </div>
+        {acquisitionNotice&&<p className="myenv-initiative-notice" role="status">{acquisitionNotice}</p>}
+      </section>
+    }
     if(primitive.renderer_key==="c1me.operations"){
       return <OperationsPanel key={primitive.primitive_key}/>
     }
