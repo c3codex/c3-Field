@@ -1,0 +1,31 @@
+{
+  "commit": "6cc9752fc4b456e604881525af66cbb911146d99",
+  "basis": "git_blob_raw_bytes_sha256",
+  "files": [
+    {
+      "path": "functions/_lib/free-nugs.test.ts",
+      "bytes": 5326,
+      "sha256": "7a8d99402c60ea4713f6d691fa816e686597a166c311fc2e319b626044f3fa3f"
+    },
+    {
+      "path": "functions/_lib/free-nugs.ts",
+      "bytes": 7000,
+      "sha256": "cc82b211695145a156f6d087d308e0f174d6dc9e0d3e3afea2abc4d929a2b053"
+    },
+    {
+      "path": "scripts/verify-free-nugs-workerd/config.capnp",
+      "bytes": 532,
+      "sha256": "fe6f7cdc7445e292fb4986c81e3734818dfa72550398bc4b22cf6229ffe97224"
+    },
+    {
+      "path": "scripts/verify-free-nugs-workerd/registry.js",
+      "bytes": 607,
+      "sha256": "70061ebf2da3b91b6254487cff45d6ab043dc0f510c0e9df30ee770e1f814657"
+    },
+    {
+      "path": "scripts/verify-free-nugs-workerd/worker.ts",
+      "bytes": 928,
+      "sha256": "ea0605b3d2f0c053bd729750f05e8346503c88c6770e4d606348fae8c4528039"
+    }
+  ]
+}

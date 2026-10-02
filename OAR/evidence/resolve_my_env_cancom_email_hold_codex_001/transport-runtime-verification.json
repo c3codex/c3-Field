@@ -1,0 +1,21 @@
+{
+  "execution_instance": "resolve_my_env_cancom_email_hold_codex_001",
+  "operator_request_key": "bbf7b808-fa33-4f3e-8b80-cfaebb617534",
+  "operator_occurrence_key": "myenv-email-bbf7b808-fa33-4f3e-8b80-cfaebb617534",
+  "registry_exact_occurrence": null,
+  "registry_exact_effect_passage": null,
+  "service_role_rollback_preparation": "awaiting_effect_receipt",
+  "live_log_window": ["2026-10-02T20:40:00Z", "2026-10-02T21:20:00Z"],
+  "live_binding_read": {"timestamp": "2026-10-02T21:16:17.188Z", "http_status": 200},
+  "live_nug_rpc_requests_in_inspected_window": 0,
+  "workerd_version": "2026-10-02",
+  "probe_compatibility_date": "2024-01-01",
+  "before": {"redirect_error_request_constructed": false, "error": "Invalid redirect value, must be one of follow or manual", "redirect_manual_request_constructed": true},
+  "after": {"pass": true, "prepared": {"standing": "awaiting_effect_receipt", "occurrence_key": "workerd-fixture", "provider_called": false, "external_effects": 0}, "redirected": {"standing": "HLD", "reason": "nug_registry_redirect_refused"}},
+  "fixture_outbound_boundary": "synthetic local workerd service; no external network/Registry/provider credential",
+  "node_tests": {"passed": 13, "failed": 0},
+  "new_type_diagnostics": 0,
+  "implementation_commit": "6cc9752fc4b456e604881525af66cbb911146d99",
+  "real_external_effects_initiated": 0,
+  "authenticated_production_send": "unverified"
+}
