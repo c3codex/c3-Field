@@ -1,29 +1,19 @@
 import {useEffect,useState} from "react"
 
 type Operation={
-  queue_key:string
   oar_key:string
   oar_type:string
   queue_status:string
   scope_key:string
   requested_action:string
-  execution_boundary:string
   preflight_status:string
   operator_confirmed_at?:string|null
   execution_started_at?:string|null
   execution_completed_at?:string|null
-  blocked_reason?:string|null
-  refusal_reason?:string|null
-  oar1_path?:string|null
-  source_oar2_path?:string|null
-  expected_oar1_path?:string|null
+  return_standing?:string|null
   execution_summary?:string|null
-  db_mutation_standing?:string|null
-  src_mutation_standing?:string|null
-  deploy_standing?:string|null
   executor_ref?:string|null
-  model_resolution_evidence_required?:boolean
-  payload_custody_provider?:string|null
+  model_resolution_standing?:string|null
   created_at?:string|null
   updated_at?:string|null
 }
@@ -55,7 +45,7 @@ export default function OperationsPanel(){
     {state==="held"&&<p className="myenv-runtime-warning">{notice}</p>}
     {state==="ready"&&operations.length===0&&<p className="myenv-relations-empty">No operator OARs are currently registered.</p>}
     <div className="myenv-thread-entries">
-      {operations.map(operation=><article key={operation.queue_key}>
+      {operations.map(operation=><article key={operation.scope_key}>
         <div>
           <span>{operation.oar_type.toUpperCase()} · {operation.queue_status.replace(/_/g," ")}</span>
           {operation.created_at&&<time>{new Date(operation.created_at).toLocaleString()}</time>}
@@ -63,12 +53,9 @@ export default function OperationsPanel(){
         <h3>{operation.oar_key}</h3>
         <p>{operation.requested_action}</p>
         <p><strong>Executor:</strong> {operation.executor_ref||"unresolved"} · <strong>Preflight:</strong> {operation.preflight_status}</p>
-        <p><strong>DB:</strong> {operation.db_mutation_standing||"—"} · <strong>Source:</strong> {operation.src_mutation_standing||"—"} · <strong>Deploy:</strong> {operation.deploy_standing||"—"}</p>
-        {operation.model_resolution_evidence_required&&<p>Model resolution evidence required on OAR1.</p>}
+        <p><strong>Return:</strong> {operation.return_standing?.replace(/_/g," ")||"awaiting OAR1"} · <strong>Model evidence:</strong> {operation.model_resolution_standing?.replace(/_/g," ")||"unresolved"}</p>
         {operation.execution_summary&&<p>{operation.execution_summary}</p>}
-        {operation.blocked_reason&&<p className="myenv-runtime-warning">{operation.blocked_reason}</p>}
-        {operation.refusal_reason&&<p className="myenv-runtime-warning">{operation.refusal_reason}</p>}
-        <small>{operation.scope_key} · custody {operation.payload_custody_provider||"registered provider"}</small>
+        <small>{operation.scope_key}</small>
       </article>)}
     </div>
   </section>
