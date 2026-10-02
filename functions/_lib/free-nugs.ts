@@ -17,6 +17,9 @@ export type NugRegistryRpc = (name: string, args: Record<string, unknown>) => Pr
 class NugRegistryError extends Error {
   constructor(readonly code:string,readonly relation:string|null){super("nug_registry_permission_denied")}
 }
+class NugRegistryRedirectError extends Error {
+  constructor(){super("nug_registry_redirect_refused")}
+}
 
 // Existing server Registry credentials only. This is never a browser client or
 // external effect adapter, and it cannot call an arbitrary RPC/provider URL.
@@ -30,10 +33,13 @@ export function createFreeNugServerRuntime(url: string, serviceRoleKey: string) 
   return createFreeNugRuntime(async (name, args) => {
     if (!operations.has(name)) throw new Error("unsupported_nug_registry_operation")
     const response = await fetch(new URL(`/rest/v1/rpc/${name}`, base), {
-      method:"POST", redirect:"error", signal:AbortSignal.timeout(15_000),
+      // Workers rejects redirect:"error" before dispatch. Manual mode never
+      // follows a redirect; reject 3xx explicitly before reading any payload.
+      method:"POST", redirect:"manual", signal:AbortSignal.timeout(15_000),
       headers:{apikey:serviceRoleKey, authorization:`Bearer ${serviceRoleKey}`, "content-type":"application/json"},
       body:JSON.stringify(args),
     })
+    if(response.status>=300&&response.status<400)throw new NugRegistryRedirectError()
     if (!response.ok) {
       const error=await response.json().catch(()=>null) as {code?:unknown;message?:unknown}|null
       if(error?.code==="42501"){
@@ -92,6 +98,7 @@ export function createFreeNugRuntime(registry: NugRegistryRpc) {
           && result.provider_called === false && result.external_effects === 0
           ? result : held("effect_preparation_unverified")
       } catch(error) {
+        if(error instanceof NugRegistryRedirectError)return held(error.message)
         return error instanceof NugRegistryError
           ? {...held("nug_registry_permission_denied"),registry_error:{code:error.code,relation:error.relation}}
           : held("effect_preparation_unverified")

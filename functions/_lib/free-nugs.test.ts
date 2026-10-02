@@ -63,7 +63,7 @@ test("server transport uses the bounded Registry RPC with redirect refusal", asy
   try {
     globalThis.fetch = async (input, init) => {
       assert.equal(String(input),"https://fixture.supabase.co/rest/v1/rpc/resolve_c3ops_nug_v1")
-      assert.equal(init?.redirect,"error")
+      assert.equal(init?.redirect,"manual")
       assert.equal(init?.method,"POST")
       assert.deepEqual(JSON.parse(String(init?.body)),{p_request:request})
       return new Response(JSON.stringify({standing:"HLD",missing_predicates:["authority"]}),{status:200})
@@ -72,4 +72,18 @@ test("server transport uses the bounded Registry RPC with redirect refusal", asy
     assert.equal((await runtime.resolve(request)).standing,"HLD")
     assert.throws(() => createFreeNugServerRuntime("http://fixture.supabase.co","fixture_not_a_real_key"))
   } finally {globalThis.fetch=original}
+})
+
+test("manual transport refuses Registry redirects without following or retrying",async()=>{
+  const original=globalThis.fetch
+  let calls=0
+  try{
+    globalThis.fetch=async(_input,init)=>{
+      calls++;assert.equal(init?.redirect,"manual")
+      return new Response(null,{status:302,headers:{location:"https://other.invalid/"}})
+    }
+    const runtime=createFreeNugServerRuntime("https://fixture.supabase.co","fixture-only")
+    assert.deepEqual(await runtime.prepareEffect(request,"redirect-probe"),{standing:"HLD",reason:"nug_registry_redirect_refused"})
+    assert.equal(calls,1)
+  }finally{globalThis.fetch=original}
 })
