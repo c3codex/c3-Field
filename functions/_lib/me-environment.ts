@@ -273,6 +273,7 @@ export async function readC3OpsCurrentState(read: ReadRows) {
     chazzCapability,
     current,
     opticsObservation,
+    registrarResolutionObservation,
   ] = await Promise.all([
     readProcess("prism_publication_operations_v1"),
     readProcess("lapzuli_distribution"),
@@ -291,6 +292,11 @@ export async function readC3OpsCurrentState(read: ReadRows) {
       "observation_key,optics_key,source_registry_process_key,initiative_key,surface_key,standing,observed_at",
       {observation_key:"eq.optics432:operational_proof:c3_system_baseline_v1"},
     ),
+    read(
+      "c3_optics_observation",
+      "observation_key,optics_key,source_registry_process_key,initiative_key,surface_key,standing,observed_at",
+      {observation_key:"eq.optics432:oar004:registrar_notchazz_resolution_v1"},
+    ),
   ])
   const component = (key: string, label: string, subtitle: string, source: string, records: Row[]) => ({
     key,label,subtitle,source,records,
@@ -302,10 +308,11 @@ export async function readC3OpsCurrentState(read: ReadRows) {
     components:[
       component("prism","Prism","Publication operations","system_process_registry:prism_publication_operations_v1",prism),
       component("lapzuli","Lapzuli","Distribution rail","system_process_registry:lapzuli_distribution",lapzuli),
-      component("optics","Optics","Operational proof",[
+      component("optics","Optics","Operational proof + Registrar resolution",[
         "system_process_registry:c3_optics_operational_proof_output_v1",
         "c3_optics_observation:optics432:operational_proof:c3_system_baseline_v1",
-      ].join(" + "),[...opticsProcess,...opticsObservation]),
+        "c3_optics_observation:optics432:oar004:registrar_notchazz_resolution_v1",
+      ].join(" + "),[...opticsProcess,...opticsObservation,...registrarResolutionObservation]),
       component("c3_model","c3 Model","MGS + governed passage",[
         "system_process_registry:minimum_governed_standard_v1",
         "system_process_registry:governed_object_passage_process_v4",
