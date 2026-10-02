@@ -592,6 +592,24 @@ export default function MyEnvironmentEncounter(){
     }
   }
 
+  async function sendPipelineRecordEmail(record:Record<string,unknown>){
+    const recipient=text(record.email)
+    const subject=text(record.email_subject)
+    const message=text(record.email_body)
+    if(!recipient||!subject||!message){setRuntimeNotice("This work item is missing its prepared email.");return}
+    if(!window.confirm("Send the prepared email to "+recipient+"?"))return
+    setRuntimeNotice("Sending through CanCom…")
+    try{
+      const response=await fetch("/api/my-environment-cancom-email",{
+        method:"POST",headers:{"content-type":"application/json"},
+        body:JSON.stringify({action:"send",to:recipient,subject,text:message,request_key:crypto.randomUUID()})
+      })
+      const result=await response.json() as {ok?:boolean;standing?:string;message?:string}
+      if(!response.ok||!result.ok)throw new Error(result.message||result.standing||"Email was held.")
+      setRuntimeNotice("Email sent. The provider receipt returned to CURRENT.")
+    }catch(error){setRuntimeNotice(error instanceof Error?error.message:"Email could not be sent.")}
+  }
+
   function sendPipelineRecordToCalendar(record:Record<string,unknown>){
     const organization=text(record.organization,text(record.display_name,"Relationship"))
     const contact=text(record.display_name)
@@ -918,7 +936,10 @@ export default function MyEnvironmentEncounter(){
             {text(record.signal)&&<p><strong>Signal:</strong> {text(record.signal)}</p>}
             <p><strong>Next:</strong> {text(record.next_encounter,"reply or discovery conversation")}</p>
             <p><strong>Observed problem:</strong> {text(record.observed_problem,"Not yet established")}</p>
-            <button type="button" onClick={()=>sendPipelineRecordToCalendar(record)}>SEND TO CALENDAR</button>
+            <div className="myenv-action-row">
+              <button type="button" onClick={()=>sendPipelineRecordToCalendar(record)}>SEND TO CALENDAR</button>
+              {text(record.email)&&text(record.email_subject)&&text(record.email_body)&&<button type="button" onClick={()=>sendPipelineRecordEmail(record)}>SEND EMAIL</button>}
+            </div>
           </article>)}
         </div>
         <p className="myenv-runtime-warning">Progress only from evidenced replies and discovery. Outreach alone does not establish a problem or relationship standing.</p>
