@@ -21,7 +21,7 @@ type Payload={
   current?:Row[]
   ledger?:{standing:string;writable:boolean}
 }
-type Tab="ground"|"money"|"evidence"|"ledger"|"state"|"current"
+type Tab="ground"|"money"|"mapped"|"evidence"|"ledger"|"state"|"current"
 
 function dedupeAssertions(rows:MoneyAssertion[]){
   const seen=new Set<string>()
@@ -68,7 +68,7 @@ export default function C247PctEncounter(){
       ||null,
     [groundPoints,selected]
   )
-  const moneyAssertions=useMemo(()=>dedupeAssertions(data?.money?.assertions||[]),[data])
+  const moneyAssertions=useMemo(()=>dedupeAssertions(data?.money?.assertions||[]),[data])\n  const mappedMeasured=useMemo(()=>data?.components?.find(row=>row.component_key==="mapped_measured_cost_claim"&&row.standing==="active")||null,[data])
 
   if(!data) return <main className="pct47-c2 pct47-c2--held"><p className="pct47-c2-kicker">c2ME.env · 4.7%</p><h1>Resolving the encounter…</h1></main>
   if(!data.authenticated) return <main className="pct47-c2 pct47-c2--held">
@@ -93,8 +93,8 @@ export default function C247PctEncounter(){
     </section>
 
     <nav className="pct47-c2-tabs" aria-label="4.7% encounter">
-      {(["ground","money","evidence","ledger","state","current"] as Tab[]).map(value=>
-        <button key={value} type="button" className={tab===value?"active":""} onClick={()=>setTab(value)}>{value==="state"?"CURRENT STATE":value.toUpperCase()}</button>
+      {(["ground","money","mapped","evidence","ledger","state","current"] as Tab[]).map(value=>
+        <button key={value} type="button" className={tab===value?"active":""} onClick={()=>setTab(value)}>{value==="state"?"CURRENT STATE":value==="mapped"?"MAPPED & MEASURED":value.toUpperCase()}</button>
       )}
     </nav>
 
@@ -164,6 +164,21 @@ export default function C247PctEncounter(){
         <span>RECOGNIZED HARM</span><span>ALLOWED CLAIM VALUE</span><span>ACTUAL DISTRIBUTION</span>
         <span>TRUST / BANKRUPTCY FLOW</span><span>INSTITUTIONAL ASSETS</span><span>SETTLEMENT CONTRIBUTION</span>
       </div>
+    </section>}
+
+    {tab==="mapped"&&<section className="pct47-c2-panel pct47-c2-publication">
+      <p className="pct47-c2-eyebrow">MAPPED &amp; MEASURED</p>
+      {!mappedMeasured?<><h2>Publication held.</h2><p>No active Registry publication component resolves for this encounter.</p></>:<>
+        {typeof mappedMeasured.config.banner_uri==="string"&&<img src={mappedMeasured.config.banner_uri} alt="Mapped & Measured — The Cost of a Claim" style={{width:"100%",height:"auto",display:"block",borderRadius:"0.4rem"}} />}
+        <h2>{String(mappedMeasured.config.title||"Mapped & Measured — The Cost of a Claim")}</h2>
+        <p>This record connects the FY2024 money-out view to the sourced evidence held by {String(mappedMeasured.config.evidence_pac_key||"evidence_pac_47pct_v1")}.</p>
+        {typeof mappedMeasured.config.inline_visual_uri==="string"&&<figure style={{margin:"1.5rem 0 0"}}>
+          <img src={mappedMeasured.config.inline_visual_uri} alt="BSA Settlement Trust FY2024 Money Out" style={{width:"100%",height:"auto",display:"block"}} />
+          <figcaption>Reported FY2024 claim disbursements and operating-expense categories. Categories shown are not additive; Claims Administration is included within Total Operating Expense.</figcaption>
+        </figure>}
+        <div className="pct47-c2-hold"><strong>Evidence rule</strong><p>Every displayed quantifier must resolve to sourced and citeable evidence. Financially accounted does not equal operationally explained.</p></div>
+        <p className="pct47-c2-rule">The full approved article remains Registry-held until its exact canonical article body is bound to this renderer. This surface does not invent or reconstruct missing publication copy.</p>
+      </>}
     </section>}
 
     {tab==="evidence"&&<section className="pct47-c2-panel">
