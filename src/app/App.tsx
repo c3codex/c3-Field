@@ -5,6 +5,7 @@ const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironm
 const C3PublicDocumentPage = lazy(() => import("../c3_field_connect/C3PublicDocumentPage"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 const C3InitiativeSurfaceDoor = lazy(() => import("../c3_field_connect/C3InitiativeSurfaceDoor"))
+const FieldReporterEncounter = lazy(() => import("../c3_field_connect/FieldReporterEncounter"))
 const C3FieldRoot = lazy(() => import("../c3_field_connect/C3FieldRoot"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
@@ -342,6 +343,8 @@ export default function App() {
     }
 
     if (isC3InitiativeHost) {
+      if (hostname === "47pct.c3field.online" && window.location.pathname.startsWith("/field-reporter/"))
+        return () => { cancelled = true }
       void fetch("/api/c3-initiative-surface",{headers:{accept:"application/json"},cache:"no-store"})
         .then(response=>response.ok?response.json():null)
         .then(async body=>{
@@ -493,6 +496,8 @@ export default function App() {
   }
 
   if (isC3InitiativeHost) {
+    if (hostname === "47pct.c3field.online" && window.location.pathname.startsWith("/field-reporter/"))
+      return <Suspense fallback={<p>Resolving publication…</p>}><FieldReporterEncounter /></Suspense>
     return <Suspense fallback={<p>Resolving initiative surface…</p>}><C3InitiativeSurfaceDoor /></Suspense>
   }
 
