@@ -96,7 +96,14 @@ async function nativeConnections(env:PassageEnv,subjectKey:string){
     }
   }))
 }
-async function publicationNotifications(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){\n  return read(env,"c3_env_publication_notification",{\n    select:"notification_key,publication_event_key,initiative_key,source_envpac_key,source_component_binding,title,summary,target_context_key,standing,published_at,read_at,metadata",\n    recipient_env_key:"eq."+session.envKey,recipient_envpac_key:"eq."+session.envpacKey,\n    standing:"in.(unread,read)",order:"published_at.desc",limit:"100"\n  })\n}\nasync function initiativeConnections(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){
+async function publicationNotifications(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){
+  return read(env,"c3_env_publication_notification",{
+    select:"notification_key,publication_event_key,initiative_key,source_envpac_key,source_component_binding,title,summary,target_context_key,standing,published_at,read_at,metadata",
+    recipient_env_key:"eq."+session.envKey,recipient_envpac_key:"eq."+session.envpacKey,
+    standing:"in.(unread,read)",order:"published_at.desc",limit:"100"
+  })
+}
+async function initiativeConnections(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){
   return read(env,"c3_env_initiative_visibility",{
     select:"visibility_key,initiative_key,initiative_envpac_key,target_environment_key,visibility_source,source_ref,standing,visible_at,metadata",
     relationship_key:"eq."+session.subjectKey,
