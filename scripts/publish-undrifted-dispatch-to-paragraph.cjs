@@ -106,6 +106,29 @@ async function run() {
   const fileContents = fs.readFileSync(path.join(__dirname, "..", dispatch.assetPath), "utf8")
   const markdown = extractMarkdownBody(fileContents)
 
+  // Reconcile before any irreversible POST. A canonical slug that already exists is
+  // the publication identity; return it instead of creating a duplicate.
+  const existing = await paragraphFetch("/posts")
+  const posts = Array.isArray(existing) ? existing : existing?.posts || existing?.data || []
+  const match = posts.find((post) => post?.slug === dispatch.slug)
+  if (match) {
+    console.log(JSON.stringify({
+      published: match.status === "published",
+      reconciled_existing: true,
+      external_effects: 0,
+      dispatch_key: dispatchKey,
+      paragraph_publication_slug: me.slug,
+      paragraph_post_id: match.id,
+      paragraph_status: match.status,
+      paragraph_slug: match.slug,
+      disposition: match.status === "published" ? "ACT_EXISTING_PUBLICATION" : "HLD_EXISTING_NONPUBLISHED_POST",
+      next_step: match.status === "published"
+        ? "Bind the existing Paragraph post identity as publication evidence and close any stale duplicate dispatch DNR."
+        : "Do not POST. Reconcile the existing non-published Paragraph post before any publication action.",
+    }, null, 2))
+    return
+  }
+
   const result = await paragraphFetch("/posts", {
     method: "POST",
     body: JSON.stringify({
