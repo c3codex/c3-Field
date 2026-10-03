@@ -44,6 +44,24 @@ test("route evidence preserves history without turning publication into Current"
  assert.equal(r.current_status,"unresolved_without_explicit_current_relation")
  assert.equal(r.mutation_authority,false)
 })
+test("FREE resolves Registrar PubPAC work onto Lapzuli without a Measures distribution asset",async()=>{
+ const read:ReadRows=async table=>{
+  if(table==="c3_registrar_publication_registration") return [{registration_key:"reg1",publication_object_key:"pub1",desk_key:"desk1",native_context_key:"47pct",editorial_voice_key:"mapped_and_measured",pubpac_key:"pac1",publication_standing:"approved",distribution_standing:"available_to_lapzuli",metadata:{article_member_key:"article1"}}]
+  if(table==="c3_registrar_publication_desk") return [{desk_key:"desk1",desk_label:"4.7% Desk",publication_authority_key:"c3_registrar",metadata:{publication_surface:"c3 Registrar - Field Reporter"}}]
+  if(table==="c3ops_publication_object") return [{publication_object_key:"pub1",publication_key:"47pct",title:"The Cost of a Claim",description:"Field report",editorial_standing:"operator_reviewed"}]
+  if(table==="lapzuli_route") return [{route_key:"route1",publication_object_key:"article1",desk_key:"desk1",outlet_key:"c3_facebook_page",distribution_mode:"visual_caption_pair",route_status:"authorized",operator_confirmed:true,canonical_url:"https://47pct.c3field.online/",metadata:{channel_key:"channel1",executor_key:"executor1",derivative_key:"hero1"}}]
+  if(table==="measures_distribution_channel") return [{channel_key:"channel1",status:"active"}]
+  if(table==="measures_distribution_executor") return [{executor_key:"executor1",status:"available",supports_publish:true}]
+  return []
+ }
+ const r=await readLapzuli(read)
+ const card=r.campaigns.find((x:any)=>x.campaign_key==="reg1") as any
+ assert.ok(card);assert.equal(card.campaign_name,"The Cost of a Claim")
+ assert.equal(card.publication_authority,"c3_registrar");assert.equal(card.publication_surface,"c3 Registrar - Field Reporter")
+ assert.equal(card.campaign_pac_key,"pac1");assert.equal(card.free_resolution,"pubpac_resolved_to_lapzuli_surface")
+ assert.equal(card.counts.assets,1);assert.equal(card.counts.ready,1)
+})
+
 test("current state projection resolves only its six registered authority groups",async()=>{
  const calls:{table:string,filters?:Record<string,string>}[]=[]
  const read:ReadRows=async(table,_select,filters)=>{
