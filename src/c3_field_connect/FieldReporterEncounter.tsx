@@ -1,5 +1,5 @@
 import {useEffect,useState} from "react"
-import "./C3CommunityConnect.css"
+import "./c3CommunityConnect.css"
 import "./FieldReporterEncounter.css"
 
 type Decision={standing:string;reason:string;publicationLabel?:string;deskLabel?:string;editorialVoice?:string;title?:string}
