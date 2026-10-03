@@ -63,7 +63,8 @@ type InitiativeConnection={
   visible_at:string
   metadata?:Record<string,unknown>
 }
-type ConnectionsPayload={authenticated:boolean;standing:string;entries?:LedgerEntry[];native_connections?:NativeConnection[];initiative_connections?:InitiativeConnection[]}
+type PublicationNotification={notification_key:string;publication_event_key:string;initiative_key:string;title:string;summary?:string|null;target_context_key:string;standing:"unread"|"read";published_at:string;read_at?:string|null;metadata?:Record<string,unknown>}
+type ConnectionsPayload={authenticated:boolean;standing:string;entries?:LedgerEntry[];native_connections?:NativeConnection[];initiative_connections?:InitiativeConnection[];publication_notifications?:PublicationNotification[];unread_publication_notification_count?:number}
 type CanopyReference={reference_key:string;surface_label:string;display_label?:string|null;external_url:string;handle?:string|null;sort_order:number}
 type CanopyPayload={standing:string;references?:CanopyReference[]}
 type CalendarEvent={
@@ -158,7 +159,7 @@ export default function MyEnvironmentEncounter(){
   const [initiatives,setInitiatives]=useState<Initiative[]>([])
   const [ledgerEntries,setLedgerEntries]=useState<LedgerEntry[]>([])
   const [nativeConnections,setNativeConnections]=useState<NativeConnection[]>([])
-  const [initiativeConnections,setInitiativeConnections]=useState<InitiativeConnection[]>([])
+  const [initiativeConnections,setInitiativeConnections]=useState<InitiativeConnection[]>([])\n  const [publicationNotifications,setPublicationNotifications]=useState<PublicationNotification[]>([])
   const [initiativeConnectionBusy,setInitiativeConnectionBusy]=useState(false)
   const [initiativeConnectionNotice,setInitiativeConnectionNotice]=useState("")
   const [canopy,setCanopy]=useState<CanopyReference[]>([])
@@ -457,7 +458,7 @@ export default function MyEnvironmentEncounter(){
         if(active){
           setLedgerEntries(body.entries||[])
           setNativeConnections(resolvedConnections)
-          setInitiativeConnections(body.initiative_connections||[])
+          setInitiativeConnections(body.initiative_connections||[])\n          setPublicationNotifications(body.publication_notifications||[])
           setSelectedConnection(current=>current||(resolvedConnections[0]?.connection_key||""))
         }
       }
@@ -858,6 +859,21 @@ export default function MyEnvironmentEncounter(){
           <small>Directory relation only. Not a property contact and no standing is inferred from the email coordinate.</small>
         </article>}
         <div className="myenv-thread-entries">
+          {publicationNotifications.map(notification=><article key={notification.notification_key} className={notification.standing==="unread"?"myenv-publication-notice is-unread":"myenv-publication-notice"}>
+            <div><span>{notification.standing==="unread"?"new update":"update"}</span><time>{new Date(notification.published_at).toLocaleString()}</time></div>
+            <h3>{notification.title}</h3>
+            {notification.summary&&<p>{notification.summary}</p>}
+            <button type="button" onClick={async()=>{
+              if(notification.standing==="unread"){
+                await fetch("/api/my-environment-connections",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"mark_publication_notification_read",notification_key:notification.notification_key})})
+                setPublicationNotifications(rows=>rows.map(row=>row.notification_key===notification.notification_key?{...row,standing:"read",read_at:new Date().toISOString()}:row))
+              }
+              const initiative=initiatives.find(item=>item.initiative_key===notification.initiative_key)
+              const c2=initiative?.components.find(component=>component.renderer_key==="initiative.c2_entry")
+              const href=typeof c2?.config?.href==="string"?c2.config.href:"/c2/47pct"
+              window.location.assign(href)
+            }}>OPEN 4.7%</button>
+          </article>)}
           {acquisitionsLoaded&&acquisitionProperties.length===0&&<p className="myenv-relations-empty">PropPac is active; no acquisition records are currently resolved.</p>}
           {acquisitionProperties.map(property=>{
             const latest=acquisitionResolutions.find(item=>item.property_key===property.property_key)
