@@ -55,3 +55,4 @@ if (failures.length) {
 }
 
 console.log("[source-integrity] PASS — no literal \\n artifacts outside strings")
+// Deployment retrigger: 2026-10-03 — refresh Cloudflare Pages from current c3field HEAD.
