@@ -80,6 +80,9 @@ export async function readLapzuli(read: ReadRows) {
     evidence,
     channels,
     executors,
+    registrarRegistrations,
+    registrarDesks,
+    registrarPublications,
   ] = await Promise.all([
     read("measures_publication_campaign","campaign_key,publication_key,issue_id,campaign_name,campaign_objective,status,release_state,review_status,metadata,created_at,updated_at"),
     read("measures_publication_distribution_asset","distribution_asset_key,campaign_asset_id,publication_asset_id,campaign_id,platform,distribution_type,status,review_status,payload,metadata,created_at,updated_at"),
@@ -90,6 +93,9 @@ export async function readLapzuli(read: ReadRows) {
     read("lapzuli_encounter_evidence","encounter_id,route_key,observed_outcome,observed_reason,external_id,external_url,observed_at"),
     read("measures_distribution_channel","channel_key,platform,account_name,channel_identifier,channel_url,status,metadata"),
     read("measures_distribution_executor","executor_key,executor_name,executor_type,platform,execution_mode,status,supports_publish,supports_scheduling,metadata"),
+    read("c3_registrar_publication_registration","registration_key,publication_object_key,desk_key,native_context_class,native_context_key,editorial_voice_key,pubpac_key,publication_standing,distribution_standing,metadata,created_at,updated_at"),
+    read("c3_registrar_publication_desk","desk_key,desk_label,native_context_class,native_context_key,publication_authority_key,standing,default_editorial_voice_key,metadata"),
+    read("c3ops_publication_object","publication_object_key,publisher_key,publication_key,series_key,issue_key,title,description,publication_standing,editorial_standing,updated_at"),
   ])
 
   const derivativeByKey = new Map(derivatives.map(row => [str(row.derivative_key) ?? "", row]))
@@ -239,16 +245,92 @@ export async function readLapzuli(read: ReadRows) {
       }
     })
 
+  const registrarDeskByKey = new Map(registrarDesks.map(row => [str(row.desk_key) ?? "", row]))
+  const registrarPublicationByKey = new Map(registrarPublications.map(row => [str(row.publication_object_key) ?? "", row]))
+  const registrarCampaignCards = registrarRegistrations
+    .filter(registration => registration.distribution_standing === "available_to_lapzuli")
+    .map(registration => {
+      const metadata = record(registration.metadata)
+      const publicationObjectKey = str(registration.publication_object_key) ?? "unresolved_publication"
+      const articleMemberKey = str(metadata.article_member_key)
+      const deskKey = str(registration.desk_key)
+      const desk = deskKey ? registrarDeskByKey.get(deskKey) ?? null : null
+      const publication = registrarPublicationByKey.get(publicationObjectKey) ?? null
+      const publicationRoutes = routes.filter(route => {
+        const key = str(route.publication_object_key)
+        return key === publicationObjectKey || (articleMemberKey && key === articleMemberKey)
+      })
+      const assets = publicationRoutes.map(route => {
+        const routeMetadata = record(route.metadata)
+        const channelKey = str(routeMetadata.channel_key)
+        const executorKey = str(routeMetadata.executor_key)
+        const channel = channelKey ? channelByKey.get(channelKey) ?? null : null
+        const executor = executorKey ? executorByKey.get(executorKey) ?? null : null
+        const blockers:string[] = []
+        if (route.route_status !== "authorized" || route.operator_confirmed !== true) blockers.push("authorized_route_unresolved")
+        if (!channel || channel.status !== "active") blockers.push("active_channel_unresolved")
+        if (!executor || executor.status !== "available" || executor.supports_publish !== true) blockers.push("callable_executor_unresolved")
+        return {
+          distribution_asset_key: str(routeMetadata.distribution_asset_key) ?? str(route.route_key),
+          campaign_id: str(registration.registration_key),
+          campaign_asset_id: null,
+          publication_asset_id: articleMemberKey ?? publicationObjectKey,
+          platform: route.outlet_key,
+          distribution_type: route.distribution_mode,
+          distribution_status: "registrar_pubpac_resolved",
+          review_status: str(routeMetadata.review_state) ?? "registrar_resolved",
+          derivative_key: str(routeMetadata.derivative_key),
+          derivative: null,
+          channel_key: channelKey,
+          channel: channel ? fields(channel,["channel_key","platform","account_name","channel_identifier","channel_url","status"]) : null,
+          executor_key: executorKey,
+          executor: executor ? fields(executor,["executor_key","executor_name","executor_type","execution_mode","status","supports_publish","supports_scheduling"]) : null,
+          route: fields(route,["route_key","publication_object_key","desk_key","outlet_key","distribution_mode","route_status","authority_reference","operator_confirmed","canonical_url"]),
+          registered_standing_key: str(registration.registration_key),
+          callable_contract: {source:"FREE",authority:"c3_registrar",pubpac_key:registration.pubpac_key},
+          lapzuli_callable: blockers.length === 0,
+          payload: {},
+          latest_execution: null,
+          execution_count: 0,
+          distribution_state: blockers.length === 0 ? "ready_for_operator_execution" : "held",
+          blockers,
+        }
+      })
+      const readyCount = assets.filter(asset => asset.distribution_state === "ready_for_operator_execution").length
+      const heldCount = assets.filter(asset => asset.distribution_state === "held").length
+      return {
+        campaign_key: str(registration.registration_key),
+        publication_key: publication?.publication_key ?? registration.native_context_key,
+        issue_id: publication?.issue_key ?? publicationObjectKey,
+        campaign_name: publication?.title ?? publicationObjectKey,
+        campaign_objective: publication?.description ?? "Registrar PubPAC resolved through FREE for Lapzuli.",
+        status: registration.publication_standing,
+        release_state: registration.distribution_standing,
+        review_status: publication?.editorial_standing ?? "registrar_resolved",
+        campaign_pac_key: registration.pubpac_key,
+        canonical_url: str(metadata.canonical_url) ?? str(publicationRoutes[0]?.canonical_url),
+        standing: readyCount > 0 ? "ready_for_operator_execution" : "held",
+        publication_authority: desk?.publication_authority_key ?? "c3_registrar",
+        publication_surface: str(record(desk?.metadata).publication_surface) ?? "c3 Registrar - Field Reporter",
+        desk_key: deskKey,
+        desk_label: desk?.desk_label,
+        editorial_voice_key: registration.editorial_voice_key,
+        free_resolution: "pubpac_resolved_to_lapzuli_surface",
+        counts:{assets:assets.length,distributed:0,accepted:0,ready:readyCount,held:heldCount},
+        assets,
+      }
+    })
+
   return {
     contract:"lapzuli_distribution_desk_v1",
     source:"CampaignPAC / publication campaign -> derivative -> distribution asset -> registered standing -> route/channel/executor -> execution evidence",
     observed_at:new Date().toISOString(),
-    campaigns:campaignCards,
+    campaigns:[...registrarCampaignCards,...campaignCards],
     routes,
     evidence,
     channels,
     executors,
-    unresolved:campaignCards
+    unresolved:[...registrarCampaignCards,...campaignCards]
       .filter(campaign => campaign.standing === "awaiting_lapzuli_resolution" || campaign.standing === "held")
       .map(campaign => `${campaign.campaign_key}: ${campaign.standing}`),
     current_status:"registry_backed_distribution_readback",
