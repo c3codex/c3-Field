@@ -459,7 +459,8 @@ export default function MyEnvironmentEncounter(){
         if(active){
           setLedgerEntries(body.entries||[])
           setNativeConnections(resolvedConnections)
-          setInitiativeConnections(body.initiative_connections||[])\n          setPublicationNotifications(body.publication_notifications||[])
+          setInitiativeConnections(body.initiative_connections||[])
+          setPublicationNotifications(body.publication_notifications||[])
           setSelectedConnection(current=>current||(resolvedConnections[0]?.connection_key||""))
         }
       }
