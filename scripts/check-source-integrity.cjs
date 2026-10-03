@@ -27,7 +27,14 @@ function inspect(file) {
       if (ch === "\\") {
         const next = line[i + 1]
         if (!inSingle && !inDouble && !inTemplate && next === "n") {
-          failures.push(`${file}:${index + 1} literal \\n outside a string`)
+          const prefix = line.slice(Math.max(0, i - 3), i)
+          const suffix = line.slice(i + 2, i + 5)
+          const looksLikeRegexEscape =
+            prefix.endsWith("/") ||
+            prefix.endsWith("[") ||
+            prefix.endsWith("[\\r") ||
+            suffix.startsWith("{")
+          if (!looksLikeRegexEscape) failures.push(`${file}:${index + 1} literal \\n outside a string`)
         }
         escaped = true
         continue
