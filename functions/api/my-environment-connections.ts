@@ -96,7 +96,7 @@ async function nativeConnections(env:PassageEnv,subjectKey:string){
     }
   }))
 }
-async function initiativeConnections(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){
+async function publicationNotifications(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){\n  return read(env,"c3_env_publication_notification",{\n    select:"notification_key,publication_event_key,initiative_key,source_envpac_key,source_component_binding,title,summary,target_context_key,standing,published_at,read_at,metadata",\n    recipient_env_key:"eq."+session.envKey,recipient_envpac_key:"eq."+session.envpacKey,\n    standing:"in.(unread,read)",order:"published_at.desc",limit:"100"\n  })\n}\nasync function initiativeConnections(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){
   return read(env,"c3_env_initiative_visibility",{
     select:"visibility_key,initiative_key,initiative_envpac_key,target_environment_key,visibility_source,source_ref,standing,visible_at,metadata",
     relationship_key:"eq."+session.subjectKey,
@@ -112,7 +112,7 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
   try{
     const session=await sessionFor(request,env)
     const thread=await ensureThread(env,session)
-    const [entries,connections,initiativeConnectionsRows]=await Promise.all([
+    const [entries,connections,initiativeConnectionsRows,publicationNotificationRows]=await Promise.all([
       read(env,"c1_environment_connection_thread_entry",{
         select:"entry_key,entry_type,title,body,related_type,related_key,related_route,standing,metadata,created_at,updated_at",
         thread_key:"eq."+String(thread.thread_key),owner_relationship_key:"eq."+session.subjectKey,
@@ -142,6 +142,21 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     if(origin&&origin!==new URL(request.url).origin) return json({ok:false,standing:"connection_origin_held"},403)
     const session=await sessionFor(request,env)
     const body=await request.json() as Record<string,unknown>
+
+    if(body.action==="mark_publication_notification_read"){
+      const notificationKey=typeof body.notification_key==="string"?body.notification_key.trim():""
+      if(!notificationKey)return json({ok:false,standing:"notification_key_required"},400)
+      const rows=await write(env,"c3_env_publication_notification","PATCH",{
+        standing:"read",read_at:new Date().toISOString(),updated_at:new Date().toISOString()
+      },{
+        notification_key:"eq."+notificationKey,
+        recipient_env_key:"eq."+session.envKey,
+        recipient_envpac_key:"eq."+session.envpacKey,
+        standing:"eq.unread"
+      })
+      if(!rows.length)return json({ok:false,standing:"notification_not_found_or_already_read"},404)
+      return json({ok:true,standing:"publication_notification_read",notification:rows[0]})
+    }
 
     if(body.action==="register_e2ee_device"){
       const deviceKey=typeof body.device_key==="string"?body.device_key.trim():""
