@@ -68,7 +68,8 @@ export default function C247PctEncounter(){
       ||null,
     [groundPoints,selected]
   )
-  const moneyAssertions=useMemo(()=>dedupeAssertions(data?.money?.assertions||[]),[data])\n  const mappedMeasured=useMemo(()=>data?.components?.find(row=>row.component_key==="mapped_measured_cost_claim"&&row.standing==="active")||null,[data])
+  const moneyAssertions=useMemo(()=>dedupeAssertions(data?.money?.assertions||[]),[data])
+  const mappedMeasured=useMemo(()=>data?.components?.find(row=>row.component_key==="mapped_measured_cost_claim"&&row.standing==="active")||null,[data])
 
   if(!data) return <main className="pct47-c2 pct47-c2--held"><p className="pct47-c2-kicker">c2ME.env · 4.7%</p><h1>Resolving the encounter…</h1></main>
   if(!data.authenticated) return <main className="pct47-c2 pct47-c2--held">
