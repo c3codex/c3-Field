@@ -81,7 +81,7 @@ function canonicalAllowed(adapter: string, value: string) {
   try {
     const url = new URL(value)
     if (url.protocol !== "https:") return false
-    if (adapter === "/buffer/posts") return url.hostname === "measuresregistry.com"
+    if (adapter === "/buffer/posts" || adapter === "/paragraph/posts") return url.hostname === "measuresregistry.com"
     if (adapter === "/bluesky/posts") return ["measuresregistry.com","c3field.online","mdm.c3field.online","47pct.c3field.online"].includes(url.hostname)
     return ["c3field.online","mdm.c3field.online","47pct.c3field.online"].includes(url.hostname)
   } catch {
