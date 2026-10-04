@@ -326,7 +326,8 @@ export async function readLapzuli(read: ReadRows) {
     source:"CampaignPAC / publication campaign -> derivative -> distribution asset -> registered standing -> route/channel/executor -> execution evidence",
     observed_at:new Date().toISOString(),
     campaigns:[...registrarCampaignCards,...campaignCards],
-    routes,
+    routes:routes.map(route=>({...route,free_runtime_preflight_path:
+      "/api/c3ops/manifest?view=lapzuli_free&route_key="+encodeURIComponent(String(route.route_key))})),
     evidence,
     channels,
     executors,

@@ -1,5 +1,5 @@
 import { resolveMEEnvironments, readLapzuli, readC3OpsCurrentState, type ReadRows } from "../../_lib/me-environment"
-import { handleLapzuliAction } from "./lapzuli"
+import { handleLapzuliAction, preflightLapzuliRoute } from "./lapzuli"
 export type Env = {
   SUPABASE_URL?: string
   VITE_SUPABASE_URL?: string
@@ -39,6 +39,12 @@ export async function handleRead(request: Request, env: Env) {
   const envKey = params.get("env_key") ?? undefined
   if(envKey && !/^[a-zA-Z0-9_-]{1,160}$/.test(envKey)) return new Response(JSON.stringify({error:"invalid_env_key"}),{status:400,headers})
   try {
+    if(view==="lapzuli_free"){
+      const routeKey=params.get("route_key")
+      if(!routeKey || !/^[a-zA-Z0-9_-]{1,200}$/.test(routeKey))return new Response(JSON.stringify({standing:"HLD",reason:"exact_route_key_required",external_publication_effects:0}),{status:400,headers})
+      const result=await preflightLapzuliRoute(env,routeKey)
+      return new Response(JSON.stringify(result),{status:result.standing==="EXECUTEABLE"?200:409,headers})
+    }
     const read = createRegistryReader(env)
     const result = view==="lapzuli" ? await readLapzuli(read) : view==="current_state" ? await readC3OpsCurrentState(read) : await resolveMEEnvironments(read,envKey)
     return new Response(JSON.stringify(result),{headers})

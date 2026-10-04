@@ -1,3 +1,5 @@
+import { resolveLapzuliFreeRoute, type Read } from "../../_lib/lapzuli-free-runtime"
+
 type Env = {
   SUPABASE_URL?: string
   VITE_SUPABASE_URL?: string
@@ -48,7 +50,7 @@ async function supabaseFetch<T>(env: Env, path: string, init: RequestInit = {}):
   headers.set("content-type","application/json")
   const response = await fetch(`${base.replace(/\/$/,"")}/rest/v1/${path}`,{
     ...init,
-    headers,
+    headers,redirect:"manual",signal:AbortSignal.timeout(15000),
   })
   const body = await response.text()
   if (!response.ok) throw new Error(body || `Supabase request failed: ${response.status}`)
@@ -314,11 +316,27 @@ async function workerRequest(env: Env, path: string, method: "GET"|"POST" = "POS
   if (!token) return {response:null,body:{ok:false,standing:"held_lapzuli_control_token_missing",external_publication_effects:0}}
   const base=(env.LAPZULI_DISTRIBUTION_WORKER_URL ?? DEFAULT_WORKER_URL).replace(/\/$/,"")
   const response=await fetch(base+path,{
-    method,
+    method,redirect:"manual",signal:AbortSignal.timeout(20000),
     headers:{authorization:`Bearer ${token}`,...(method==="POST"?{"content-type":"application/json"}:{})},
     ...(method==="POST"?{body:JSON.stringify(payload ?? {})}:{}),
   })
+  if(response.status>=300&&response.status<400) return {response:null,body:{ok:false,standing:"held_worker_redirect",external_publication_effects:0}}
   return {response,body:record(await response.json().catch(()=>({})))}
+}
+
+export async function preflightLapzuliRoute(env:Env,routeKey:string) {
+  const read:Read=async(table,select,filters={})=>{
+    const query=new URLSearchParams({select,...filters,limit:"501"})
+    const rows=await supabaseFetch<Row[]>(env,table+"?"+query)
+    if(!Array.isArray(rows)||rows.length>500)throw new Error("route_evidence_incomplete")
+    return rows
+  }
+  return resolveLapzuliFreeRoute(read,routeKey,async(path,method="GET",payload)=>{
+    try{
+      const called=await workerRequest(env,path,method,payload)
+      return {ok:called.response?.ok===true&&called.body.ok===true,body:called.body}
+    }catch{return {ok:false,body:{standing:"held_current_provider_probe_unavailable",external_publication_effects:0}}}
+  })
 }
 
 async function verifyBlueskyIdentities(env: Env) {
@@ -343,11 +361,16 @@ async function workerCall(env: Env, path: string, payload: Row) {
 }
 
 async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boolean) {
+  const bindingAssets=await supabaseFetch<Row[]>(env,`measures_publication_distribution_asset?distribution_asset_key=eq.${encodeURIComponent(distributionAssetKey)}&select=metadata&limit=1`)
+  const bindingRouteKey=str(record(bindingAssets[0]?.metadata).route_key)
+  if(!bindingRouteKey)return {status:409,body:{standing:"HLD",reason:"registered_asset_route_binding_missing",external_publication_effects:0}}
+  const binding=await preflightLapzuliRoute(env,bindingRouteKey)
+  if(binding.standing!=="EXECUTEABLE")return {status:409,body:{...binding,standing:"HLD",action:dryRun?"preflight_asset":"dispatch_asset"}}
   const callableRows=await supabaseFetch<Row[]>(env,
     `lapzuli_derivative_execution_view_v1?distribution_asset_key=eq.${encodeURIComponent(distributionAssetKey)}&select=*&limit=1`)
   const callable=callableRows[0]
   if (!callable || callable.lapzuli_callable !== true) {
-    return {status:409,body:{standing:"HLD",reason:"lapzuli_callable_contract_not_satisfied",distribution_asset_key:distributionAssetKey,external_publication_effects:0}}
+    return {status:409,body:{standing:"HLD",reason:"registered_derivative_binding_unresolved",distribution_asset_key:distributionAssetKey,external_publication_effects:0}}
   }
 
   const assetRows=await supabaseFetch<Row[]>(env,
@@ -411,10 +434,8 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     registered_standing:adapter === "/buffer/c3/posts" ? "registered" : callable.registered_standing,
     authority_reference:route.authority_reference,
     route_key:route.route_key,
-    channel_identifier:callable.channel_identifier,
     operator_confirmed:true,
     lapzuli_callable:true,
-    operator_confirmed:true,
     idempotency_key:`${distributionAssetKey}:${callable.registered_standing_key}`,
     text:outboundText,
     canonical_url:canonicalUrl,
@@ -556,7 +577,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
 
 export const onRequestGet: PagesFunction<Env> = async ({request}) => {
   if (new URL(request.url).hostname !== C3OPS_HOST) return json({error:"not_found"},404)
-  return json({contract:"lapzuli_distribution_actions_v1",actions:["verify_bluesky_identities","resolve_campaign","preflight_asset","dispatch_asset"],external_publication_effects:0})
+  return json({contract:"lapzuli_distribution_actions_v1",actions:["verify_bluesky_identities","resolve_campaign","preflight_route","preflight_asset","dispatch_asset"],external_publication_effects:0})
 }
 
 export async function handleLapzuliAction(request: Request, env: Env) {
@@ -564,6 +585,12 @@ export async function handleLapzuliAction(request: Request, env: Env) {
   try {
     const body=record(await request.json().catch(()=>({})))
     const action=str(body.action)
+    if(action === "preflight_route"){
+      const routeKey=str(body.route_key)
+      if(!routeKey || !/^[a-zA-Z0-9_-]{1,200}$/.test(routeKey))return json({standing:"HLD",reason:"exact_route_key_required",external_publication_effects:0},400)
+      const binding=await preflightLapzuliRoute(env,routeKey)
+      return json(binding,binding.standing==="EXECUTEABLE"?200:409)
+    }
     if (action === "verify_bluesky_identities") {
       const result=await verifyBlueskyIdentities(env)
       return json(result.body,result.status)
