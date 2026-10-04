@@ -101,8 +101,25 @@ type AcquisitionResolution={resolution_key:string;property_key:string;resolved_s
 type AcquisitionDirectory={relationship_key:string;primary_email:string;display_name?:string|null;organization?:string|null;relationship_standing:string}
 type AcquisitionsPayload={authenticated:boolean;standing:string;authority?:string;properties?:AcquisitionProperty[];resolutions?:AcquisitionResolution[];directory?:AcquisitionDirectory[]}
 
-type DirectoryContact={contact_key:string;email:string;display_name?:string|null;organization?:string|null;phone?:string|null;preferred_channel?:string;source_class?:string;standing?:string;updated_at?:string}
+type DirectoryContact={contact_key:string;email:string;display_name?:string|null;organization?:string|null;phone?:string|null;preferred_channel?:string;source_class?:string;standing?:string;updated_at?:string;metadata?:Record<string,unknown>}
 type DirectoryPayload={authenticated:boolean;standing:string;contacts?:DirectoryContact[];contact?:DirectoryContact;message?:string}
+type OwnerLifecycleBlocker={pac_key:string;pac_type?:string|null;owner_subject_type?:string|null;owner_subject_key?:string|null;ownership_resolution?:string|null}
+type OwnerLifecyclePayload={
+  authenticated?:boolean
+  standing:string
+  owned_pac_count?:number
+  non_owned_reference_count?:number
+  transfer_blockers?:OwnerLifecycleBlocker[]
+  active_initiative_count?:number
+  active_connection_count?:number
+  manifest_sha256?:string|null
+  disposition_options?:string[]
+  message?:string
+  receipt_key?:string
+  manifest?:Record<string,unknown>
+  termination_receipt_key?:string
+  terminal_manifest?:Record<string,unknown>
+}
 type CanComSignature={display_name:string;title?:string|null;brand:string;legal_entity:string;model_path:string;email:string;website:string}
 type CanComThread={thread_key:string;contact_key?:string|null;thread_subject?:string|null;work_context_type?:string|null;work_context_key?:string|null;last_direction?:string|null;unread_count:number;last_activity_at:string;contact?:DirectoryContact|null}
 type CanComThreadMessage={message_ref_key:string;thread_key:string;direction:"outbound"|"inbound";provider_email_id:string;internet_message_id?:string|null;in_reply_to?:string|null;subject?:string|null;sender_ref?:string|null;recipient_ref?:string|null;delivery_standing:string;occurred_at:string;content_standing?:string;text?:string|null}
@@ -230,6 +247,15 @@ export default function MyEnvironmentEncounter(){
   const [directoryNotice,setDirectoryNotice]=useState("")
   const [directoryBusy,setDirectoryBusy]=useState(false)
 
+  const [ownerLifecycle,setOwnerLifecycle]=useState<OwnerLifecyclePayload|null>(null)
+  const [ownerLifecycleNotice,setOwnerLifecycleNotice]=useState("")
+  const [ownerLifecycleBusy,setOwnerLifecycleBusy]=useState(false)
+  const [ownerExportReceipt,setOwnerExportReceipt]=useState("")
+  const [ownerTerminationDisposition,setOwnerTerminationDisposition]=useState<"retain_c3_field_custody"|"portable_export">("retain_c3_field_custody")
+  const [ownerTerminationText,setOwnerTerminationText]=useState("")
+  const [ownerTerminationHistoryAck,setOwnerTerminationHistoryAck]=useState(false)
+  const [ownerTerminationReentryAck,setOwnerTerminationReentryAck]=useState(false)
+
   const [cancomThreads,setCancomThreads]=useState<CanComThread[]>([])
   const [cancomMessages,setCancomMessages]=useState<CanComThreadMessage[]>([])
   const [cancomSignature,setCancomSignature]=useState<CanComSignature|null>(null)
@@ -268,6 +294,86 @@ export default function MyEnvironmentEncounter(){
     }catch(error){setDirectoryNotice(error instanceof Error?error.message:"Directory did not resolve.")}
   }
 
+  async function refreshOwnerLifecycle(){
+    setOwnerLifecycleNotice("")
+    try{
+      const response=await fetch("/api/my-environment-owner-lifecycle",{headers:{accept:"application/json"}})
+      const body=await response.json() as OwnerLifecyclePayload
+      if(!response.ok||body.standing!=="resolved")throw new Error(body.message||"Ownership state did not resolve.")
+      setOwnerLifecycle(body)
+    }catch(error){
+      setOwnerLifecycle(null)
+      setOwnerLifecycleNotice(error instanceof Error?error.message:"Ownership state did not resolve.")
+    }
+  }
+
+  function downloadOwnerManifest(manifest:Record<string,unknown>,filename:string){
+    const blob=new Blob([JSON.stringify(manifest,null,2)],{type:"application/json"})
+    const url=URL.createObjectURL(blob)
+    const anchor=document.createElement("a")
+    anchor.href=url
+    anchor.download=filename
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+    URL.revokeObjectURL(url)
+  }
+
+  async function exportOwnedPacs(){
+    if(ownerLifecycleBusy)return
+    setOwnerLifecycleBusy(true);setOwnerLifecycleNotice("Preparing your portable PAC package…")
+    try{
+      const response=await fetch("/api/my-environment-owner-lifecycle",{
+        method:"POST",headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({action:"export"})
+      })
+      const body=await response.json() as OwnerLifecyclePayload
+      if(!response.ok||body.standing!=="export_ready"||!body.manifest||!body.receipt_key)
+        throw new Error(body.message||"Your PAC package could not be prepared.")
+      setOwnerExportReceipt(body.receipt_key)
+      downloadOwnerManifest(body.manifest,"my-env-owned-pacs.json")
+      setOwnerLifecycleNotice("Portable package prepared. Ownership and lineage remain intact.")
+      await refreshOwnerLifecycle()
+    }catch(error){setOwnerLifecycleNotice(error instanceof Error?error.message:"Your PAC package could not be prepared.")}
+    finally{setOwnerLifecycleBusy(false)}
+  }
+
+  async function terminateMyEnv(){
+    if(ownerLifecycleBusy)return
+    if(ownerTerminationText!=="TERMINATE MY ENVIRONMENT"){
+      setOwnerLifecycleNotice("Type TERMINATE MY ENVIRONMENT exactly to continue.")
+      return
+    }
+    if(!ownerTerminationHistoryAck||!ownerTerminationReentryAck){
+      setOwnerLifecycleNotice("Confirm both termination effects before continuing.")
+      return
+    }
+    if(ownerTerminationDisposition==="portable_export"&&!ownerExportReceipt){
+      setOwnerLifecycleNotice("Export your owned PAC package before terminating with the export option.")
+      return
+    }
+    setOwnerLifecycleBusy(true);setOwnerLifecycleNotice("Terminating this My Env…")
+    try{
+      const response=await fetch("/api/my-environment-owner-lifecycle",{
+        method:"POST",headers:{"content-type":"application/json","accept":"application/json"},
+        body:JSON.stringify({
+          action:"terminate",
+          disposition:ownerTerminationDisposition,
+          portability_receipt_key:ownerTerminationDisposition==="portable_export"?ownerExportReceipt:null,
+          confirmation:ownerTerminationText,
+          understands_history_preserved:true,
+          understands_reentry_required:true
+        })
+      })
+      const body=await response.json() as OwnerLifecyclePayload
+      if(!response.ok||body.standing!=="terminated")throw new Error(body.message||"Termination was held.")
+      if(body.terminal_manifest)downloadOwnerManifest(body.terminal_manifest,"my-env-terminal-manifest.json")
+      setOwnerLifecycleNotice("My Env terminated. Active participation and passage are closed.")
+      window.setTimeout(()=>window.location.assign("https://c3field.online/"),250)
+    }catch(error){setOwnerLifecycleNotice(error instanceof Error?error.message:"Termination was held.")}
+    finally{setOwnerLifecycleBusy(false)}
+  }
+
   async function refreshCanCom(threadKey=""){
     try{
       const url=threadKey?"/api/my-environment-cancom-workspace?thread_key="+encodeURIComponent(threadKey):"/api/my-environment-cancom-workspace"
@@ -285,13 +391,14 @@ export default function MyEnvironmentEncounter(){
   }
 
   function openContactInCanCom(contact:DirectoryContact,threadKey=""){
+    const initiativeKey=text(contact.metadata?.initiative_key)
     setCancomTo(contact.email)
     setCancomDisplayName(contact.display_name||"")
     setCancomOrganization(contact.organization||"")
     setCancomSubject("")
     setCancomBody("")
-    setCancomWorkContextType("")
-    setCancomWorkContextKey("")
+    setCancomWorkContextType(contact.source_class==="initiative_participant_projection"&&initiativeKey?"initiative":"")
+    setCancomWorkContextKey(contact.source_class==="initiative_participant_projection"?initiativeKey:"")
     setCancomComposeThread(threadKey)
     setCancomNotice("Contact loaded. Compose and review the full CanCom before sending.")
     setActivePanel("primitive:cancom_workspace")
@@ -1288,6 +1395,7 @@ export default function MyEnvironmentEncounter(){
   const activeInitiative=activePanel?.startsWith("initiative:")
     ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
     :null
+  const activeOwnerLifecycle=activePanel==="owner:lifecycle"
   const groupedPrimitives={
     core:primitives.filter(primitive=>primitiveGroup(primitive)==="core"),
     work:primitives.filter(primitive=>primitiveGroup(primitive)==="work"),
@@ -1365,6 +1473,18 @@ export default function MyEnvironmentEncounter(){
           </button>
         })}
       </section>}
+      <section className="myenv-index-group myenv-index-system">
+        <p>Environment</p>
+        <button
+          type="button"
+          className="myenv-index-item"
+          aria-current={activeOwnerLifecycle?"page":undefined}
+          onClick={()=>{setActivePanel("owner:lifecycle");setEnvironmentIndexOpen(false);void refreshOwnerLifecycle()}}
+        >
+          <span>Ownership & Exit</span>
+          <small>PAC portability · terminate My Env</small>
+        </button>
+      </section>
       {hasOperatorContext&&<section className="myenv-index-group myenv-index-system">
         <p>System</p>
         <a className="myenv-index-item myenv-index-system-link" href="/c3ops">
@@ -1374,14 +1494,64 @@ export default function MyEnvironmentEncounter(){
       </section>}
     </nav>
 
-    {(activePrimitive||activeInitiative)&&<div
+    {(activePrimitive||activeInitiative||activeOwnerLifecycle)&&<div
       className="myenv-overlay"
       role="presentation"
       onMouseDown={event=>{if(event.currentTarget===event.target)setActivePanel(null)}}
     >
-      <section className="myenv-panel" role="dialog" aria-modal="true" aria-label={activePrimitive?.display_label||"Initiative"}>
+      <section className="myenv-panel" role="dialog" aria-modal="true" aria-label={activeOwnerLifecycle?"Ownership & Exit":(activePrimitive?.display_label||"Initiative")}>
         <button className="myenv-panel-close" type="button" aria-label="Close" onClick={()=>setActivePanel(null)}>×</button>
         {activePrimitive&&renderPrimitive(activePrimitive)}
+        {activeOwnerLifecycle&&<section className="myenv-connections-thread">
+          <div className="myenv-thread-heading">
+            <p className="myenv-kicker">OWNERSHIP · PORTABILITY · EXIT</p>
+            <h2>Ownership & Exit</h2>
+            <p>Your My Env is yours to end. Ending it closes active participation and passage. It does not erase historical evidence or change who owns a PAC.</p>
+          </div>
+          {!ownerLifecycle&&<p className="myenv-runtime-warning">{ownerLifecycleNotice||"Resolving ownership state…"}</p>}
+          {ownerLifecycle&&<div className="myenv-thread-entries">
+            <article>
+              <div><span>OWNED PACS</span><span>{ownerLifecycle.owned_pac_count||0}</span></div>
+              <h3>Take your owned PACs with you</h3>
+              <p>The portable package includes the Registry manifests, lineage, integrity references, and custody references for PACs explicitly owned by you.</p>
+              <p><strong>{ownerLifecycle.non_owned_reference_count||0}</strong> PACs in this environment are custody/reference-only and are not exported as your property.</p>
+              <button type="button" disabled={ownerLifecycleBusy} onClick={()=>void exportOwnedPacs()}>{ownerLifecycleBusy?"PREPARING…":"DOWNLOAD MY OWNED PAC PACKAGE"}</button>
+              {ownerExportReceipt&&<p><strong>Export receipt:</strong> {ownerExportReceipt}</p>}
+            </article>
+            {(ownerLifecycle.transfer_blockers||[]).length>0&&<article>
+              <div><span>REFERENCE / CUSTODY ONLY</span></div>
+              <h3>Not included as your owned property</h3>
+              <p>These PACs remain visible for lineage, but this environment does not establish that you own them.</p>
+              <ul>
+                {(ownerLifecycle.transfer_blockers||[]).map(item=><li key={item.pac_key}><strong>{item.pac_key}</strong>{item.pac_type?" · "+item.pac_type:""} · {(item.ownership_resolution||"reference only").replace(/_/g," ")}</li>)}
+              </ul>
+            </article>}
+            <article>
+              <div><span>TERMINATE MY ENV</span></div>
+              <h3>End this environment</h3>
+              <p>This revokes active My Env sessions, initiative visibility, active connections, and new CanCom passage rooted through this environment. Historical records and PAC lineage remain.</p>
+              <label>Owned PAC disposition
+                <select value={ownerTerminationDisposition} onChange={event=>setOwnerTerminationDisposition(event.target.value as "retain_c3_field_custody"|"portable_export")}>
+                  <option value="retain_c3_field_custody">Leave c3 Field as custodian</option>
+                  <option value="portable_export">Export my owned PAC package first</option>
+                </select>
+              </label>
+              {ownerTerminationDisposition==="portable_export"&&!ownerExportReceipt&&<p className="myenv-runtime-warning">Download your owned PAC package first. The export receipt is required before termination.</p>}
+              <label><input type="checkbox" checked={ownerTerminationHistoryAck} onChange={event=>setOwnerTerminationHistoryAck(event.target.checked)} /> I understand termination does not erase historical evidence.</label>
+              <label><input type="checkbox" checked={ownerTerminationReentryAck} onChange={event=>setOwnerTerminationReentryAck(event.target.checked)} /> I understand returning later requires an explicit new re-entry passage.</label>
+              <label>Type TERMINATE MY ENVIRONMENT
+                <input value={ownerTerminationText} onChange={event=>setOwnerTerminationText(event.target.value)} autoComplete="off" />
+              </label>
+              <button
+                type="button"
+                disabled={ownerLifecycleBusy||ownerTerminationText!=="TERMINATE MY ENVIRONMENT"||!ownerTerminationHistoryAck||!ownerTerminationReentryAck||(ownerTerminationDisposition==="portable_export"&&!ownerExportReceipt)}
+                onClick={()=>void terminateMyEnv()}
+              >{ownerLifecycleBusy?"WORKING…":"TERMINATE MY ENVIRONMENT"}</button>
+              <p><small>No hard delete. Ownership survives termination; custody and active standing are handled separately.</small></p>
+            </article>
+          </div>}
+          {ownerLifecycleNotice&&<p className="myenv-runtime-warning" role="status">{ownerLifecycleNotice}</p>}
+        </section>}
         {activeInitiative&&<section className="myenv-connections-thread">
           <div className="myenv-thread-heading">
             <p className="myenv-kicker">{(activeInitiative.context_class==="operator"?"operator":activeInitiative.visibility_source).toUpperCase()}</p>
