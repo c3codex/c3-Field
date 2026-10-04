@@ -9,7 +9,7 @@ function fixture(overrides:Record<string,Row[]>={}) {
     lapzuli_outlet:[{account_standing:"verified"}],
     undrifted_distribution_report_v1:[{publication_status:"published",source_distribution_hold:false}],
     measures_distribution_executor:[{status:"available",supports_publish:true}],
-    measures_distribution_channel:[{status:"active",channel_identifier:"undrifted.bsky.social"}],
+    measures_distribution_channel:[{status:"active",executor_key:"bluesky_api",channel_identifier:"undrifted.bsky.social"}],
     lapzuli_derivative_execution_view_v1:[{registered_standing:"registered",registered_standing_key:"standing"}],
     lapzuli_encounter_evidence:[],measures_distribution_execution:[],...overrides,
   }
@@ -18,7 +18,7 @@ function fixture(overrides:Record<string,Row[]>={}) {
 const probe=async(path:string)=>({ok:true,body:path.startsWith("/verify")?{handle:"undrifted.bsky.social"}:{external_publication_effects:0,standing:"ready"}})
 test("exact upstream authority satisfies proof-era qualification disposition without another confirmation",async()=>{
   const result=await resolveLapzuliFreeRoute(fixture(),"route",probe)
-  assert.equal(result.standing,"EXECUTEABLE")
+  assert.equal(result.standing,"EXECUTABLE")
   assert.equal(result.second_operator_confirmation_required,false)
 })
 test("source hold remains authoritative despite active route and available provider",async()=>{
@@ -41,4 +41,8 @@ test("prior or uncertain effect prevents duplicate execution",async()=>{
 test("a dry-run response without explicit zero effects cannot establish readiness",async()=>{
   const result=await resolveLapzuliFreeRoute(fixture(),"route",async path=>({ok:true,body:path.startsWith("/verify")?{handle:"undrifted.bsky.social"}:{standing:"ready"}}))
   assert.equal(result.reason,"provider_payload_preflight")
+})
+test("active atomic claim blocks another dispatch",async()=>{
+ const result=await resolveLapzuliFreeRoute(fixture({measures_distribution_execution:[{execution_status:"publication_attempted"}]}),"route",probe)
+ assert.equal(result.standing,"HLD");assert.equal(result.reason,"execution_effect_guard")
 })

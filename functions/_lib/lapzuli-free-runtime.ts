@@ -9,13 +9,13 @@ export function routeAssetKey(route:Row) {
   return str(obj(route.metadata).distribution_asset_key) ??
     (ref?.startsWith("measures_publication_distribution_asset:")?ref.split(":")[1]:ref)
 }
-export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?:Probe) {
+export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?:Probe):Promise<Row> {
   const result:Row={binding_version:"lapzuli_free_runtime_v1",route_key:routeKey,
     observed_at:new Date().toISOString(),external_publication_effects:0,
     publication_authority_created:false,second_operator_confirmation_required:false}
   const predicates:Row[]=[]
   const check=(predicate:string,pass:boolean,evidence:unknown)=>predicates.push({predicate,pass,evidence})
-  const finish=()=>({...result,predicates,standing:result.standing ?? (predicates.every(p=>p.pass===true)?"EXECUTEABLE":"HLD"),
+  const finish=()=>({...result,predicates,standing:result.standing ?? (result.historical_effect===true?"HISTORICAL_OR_SUPERSEDED":predicates.every(p=>p.pass===true)?"EXECUTABLE":"HLD"),
     reason:result.reason ?? predicates.find(p=>p.pass!==true)?.predicate ?? null})
   const exact=async(table:string,key:string,value:string)=> (await read(table,"*",{[key]:"eq."+value}))[0]
   const route=await exact("lapzuli_route","route_key",routeKey)
@@ -54,10 +54,12 @@ export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?
       historical_execution_external_publication_authorized:am.external_publication_authorized ?? null,
       authority_basis:"current source release plus exact approved package and confirmed route; no metadata flags changed"})
   if(encounters.some(e=>e.external_id||e.external_url)) {
+    result.historical_effect=true
     check("duplicate_guard",false,"registered prior external encounter")
   }
   const executions=assetKey?await read("measures_distribution_execution","execution_id,execution_status,platform_post_id,platform_url,evidence",{distribution_asset_id:"eq."+assetKey}):[]
-  check("execution_effect_guard",!executions.some(e=>["published","queued","publication_uncertain","pending"].includes(String(e.execution_status)) || e.platform_post_id || e.platform_url || obj(e.evidence).external_publication_effects===1),
+  if(executions.some(e=>["published","queued"].includes(String(e.execution_status))||e.platform_post_id||e.platform_url||obj(e.evidence).external_publication_effects===1))result.historical_effect=true
+  check("execution_effect_guard",!executions.some(e=>["published","queued","publication_uncertain","pending","publication_attempted"].includes(String(e.execution_status)) || e.platform_post_id || e.platform_url || obj(e.evidence).external_publication_effects===1),
     executions.map(e=>({execution_id:e.execution_id,execution_status:e.execution_status})))
   const channelKey=str(meta.channel_key) ?? str(am.channel_key) ?? str(callable?.channel_key)
   const executorKey=str(meta.executor_key) ?? str(am.executor_key) ?? str(callable?.executor_key)
@@ -72,7 +74,9 @@ export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?
   try{const u=new URL(canonical ?? "");canonicalPass=u.protocol==="https:"&&["measuresregistry.com","c3field.online","47pct.c3field.online","mdm.c3field.online"].includes(u.hostname)}catch{}
   check("canonical_url_scope",canonicalPass,canonical)
   const channel=channelKey?await exact("measures_distribution_channel","channel_key",channelKey):undefined
-  if(["buffer","bluesky_api"].includes(executorKey??""))check("registered_channel_active",channel?.status==="active"&&!!str(channel.channel_identifier),{channel_key:channelKey,status:channel?.status ?? null})
+  result.channel_identifier=channel?.channel_identifier??null
+  result.registered_operator=str(meta.operator)??str(meta.operator_confirmed_by)
+  if(["buffer","bluesky_api","paragraph_api"].includes(executorKey??""))check("registered_channel_active",channel?.status==="active"&&channel.executor_key===executorKey&&!!str(channel.channel_identifier),{channel_key:channelKey,status:channel?.status ?? null})
   const text=str(payload.text) ?? str(payload.caption)
   const media=obj(payload.media)
   const image=str(payload.image_url) ?? str(media.runtime_uri)
@@ -95,15 +99,25 @@ export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?
     const inventory=await probe(channelKey?.startsWith("c3_")?"/buffer/c3/channels":"/buffer/channels")
     const credentials=obj(inventory.body.credentials)
     const channels=Array.isArray(inventory.body.channels)?inventory.body.channels as Row[]:Object.values(credentials).flatMap(v=>Array.isArray(obj(v).channels)?obj(v).channels as Row[]:[])
-    check("current_provider_channel",inventory.ok&&channels.some(c=>c.id===channel?.channel_identifier),{channel_identifier:channel?.channel_identifier ?? null,inventory_verified:inventory.ok})
+    check("current_provider_channel",inventory.ok&&channels.some(c=>c.id===channel?.channel_identifier&&str(c.externalLink)?.replace(/\/$/,"")===str(channel?.channel_url)?.replace(/\/$/,"")&&c.isDisconnected!==true&&c.isLocked!==true),{channel_identifier:channel?.channel_identifier ?? null,inventory_verified:inventory.ok})
   }else if(executorKey==="medium_import_manual"){
     const session=await probe("/browser/medium/session-proof")
     check("current_medium_session",session.ok&&session.body.ok===true,{standing:session.body.standing ?? null})
+  }else if(executorKey==="paragraph_api"){
+    check("registered_dispatch_operator",!!result.registered_operator,result.registered_operator)
+    const verified=await probe("/paragraph/preflight")
+    const em=obj(executor?.metadata)
+    check("current_provider_identity",verified.ok&&verified.body.publication_id===em.verified_publication_id&&verified.body.publication_slug===em.verified_publication_slug&&verified.body.publication_id===channel?.channel_identifier,{publication_id:verified.body.publication_id,publication_slug:verified.body.publication_slug,standing:verified.body.standing})
+    check("runtime_adapter_binding",verified.ok&&verified.body.adapter==="paragraph_direct_api_v1",verified.body.adapter??null)
+    const prepared=await probe("/paragraph/posts","POST",{...payload,dry_run:true,execute:false,operator_confirmed:true,lapzuli_callable:true,route_key:routeKey,publication_object_key:route.publication_object_key,distribution_asset_id:assetKey,authority_reference:route.authority_reference,channel_key:channelKey,channel_identifier:channel?.channel_identifier,idempotency_key:str(payload.idempotency_key)??routeKey+":"+assetKey,canonical_url:canonical,sendNewsletter:false})
+    check("provider_payload_preflight",prepared.ok&&prepared.body.external_publication_effects===0,{standing:prepared.body.standing,external_publication_effects:prepared.body.external_publication_effects})
+    if(prepared.body.standing==="HISTORICAL_OR_SUPERSEDED")result.standing="HISTORICAL_OR_SUPERSEDED"
+  }else if(executorKey==="dev_api"){
+    const verified=await probe("/dev/preflight")
+    const expected=str(obj(channel?.metadata).account_username)??str(obj(executor?.metadata).verified_account_username)
+    check("current_provider_identity",verified.ok&&!!expected&&verified.body.account_username===expected,{expected_username:expected,observed_username:verified.body.account_username??null,standing:verified.body.standing})
   }else{
-    const bindings=await probe("/verify-bindings")
-    check("current_provider_binding",bindings.ok&&obj(bindings.body.required_bindings)[executorKey==="dev_api"?"DEV_API_KEY":"PARAGRAPH_PUBLISH_KEY"]===true,
-      {executor_key:executorKey,binding_present:obj(bindings.body.required_bindings)[executorKey==="dev_api"?"DEV_API_KEY":"PARAGRAPH_PUBLISH_KEY"]===true})
-    check("runtime_adapter_binding",executorKey==="dev_api",executorKey==="paragraph_api"?"historical direct Paragraph adapter is not bound to Dizzy runtime":"registered DEV adapter")
+    check("runtime_adapter_binding",false,"registered provider adapter missing")
   }
   if(["buffer","bluesky_api"].includes(executorKey??"")){
     const path=executorKey==="bluesky_api"?"/bluesky/posts":channelKey?.startsWith("c3_")?"/buffer/c3/posts":"/buffer/posts"

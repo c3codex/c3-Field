@@ -1,4 +1,6 @@
 import { proxyBrowserExecutor } from "./browser-proxy.js";
+import { handleParagraph } from "./paragraph-adapter.js";
+import { preflightDev } from "./dev-preflight.js";
 
 const PDS_URL = "https://bsky.social";
 
@@ -62,6 +64,7 @@ export default {
         required_bindings: {
           LAPZULI_DISTRIBUTION_CONTROL_TOKEN: Boolean(env.LAPZULI_DISTRIBUTION_CONTROL_TOKEN),
           DEV_API_KEY: Boolean(readDevApiKey(env)),
+          PARAGRAPH_PUBLISH_KEY: Boolean(env.PARAGRAPH_PUBLISH_KEY),
           MEASURES_APP_PASSWORD: Boolean(env.MEASURES_APP_PASSWORD),
           MEASURES_BLUESKY_HANDLE: Boolean(env.MEASURES_BLUESKY_HANDLE),
           UNDRIFTED_APP_PASSWORD: Boolean(env.UNDRIFTED_APP_PASSWORD),
@@ -76,6 +79,11 @@ export default {
       });
     }
 
+    if(url.pathname==="/paragraph/preflight"||url.pathname==="/paragraph/posts"||url.pathname==="/dev/preflight"){
+      if(!isAuthorized(request,env))return json({ok:false,error:"unauthorized",external_publication_effects:0},401);
+      if(url.pathname==="/dev/preflight")return request.method==="GET"?preflightDev(env):json({ok:false,error:"method_not_allowed",external_publication_effects:0},405);
+      return handleParagraph(request,env);
+    }
     if (url.pathname === "/dev/articles") {
       if (!isAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401);
       if (request.method !== "POST") return json({ ok: false, error: "method_not_allowed" }, 405);

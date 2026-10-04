@@ -43,7 +43,7 @@ export async function handleRead(request: Request, env: Env) {
       const routeKey=params.get("route_key")
       if(!routeKey || !/^[a-zA-Z0-9_-]{1,200}$/.test(routeKey))return new Response(JSON.stringify({standing:"HLD",reason:"exact_route_key_required",external_publication_effects:0}),{status:400,headers})
       const result=await preflightLapzuliRoute(env,routeKey)
-      return new Response(JSON.stringify(result),{status:result.standing==="EXECUTEABLE"?200:409,headers})
+      return new Response(JSON.stringify(result),{status:result.standing==="EXECUTABLE"?200:409,headers})
     }
     const read = createRegistryReader(env)
     const result = view==="lapzuli" ? await readLapzuli(read) : view==="current_state" ? await readC3OpsCurrentState(read) : await resolveMEEnvironments(read,envKey)

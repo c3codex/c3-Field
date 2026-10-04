@@ -4,7 +4,8 @@ const AUTHORIZED_CHANNELS = {
   facebook_undrifted: {
     platform: "facebook",
     service: "facebook",
-    profile_id: "6a54761280cc80cdcaa97c9a",
+    profile_id: "6a8a6ddeccaf649a67fbd7d2",
+    external_link: "https://facebook.com/1241211659068854",
     credential: "BUFFER_SOCIAL_KEY",
   },
   facebook_measures_registry: {
@@ -171,6 +172,9 @@ async function prepareOrPublishBufferPost(request, env) {
   }
 
   const mode = clean(body.buffer_mode) || "shareNow";
+  if(channel.external_link&&clean(selected.externalLink).replace(/\/$/,"")!==channel.external_link){
+    return json({ok:false,standing:"held_buffer_exact_page_identity_mismatch",external_publication_effects:0},409);
+  }
 
   if (body.dry_run !== false) {
     return json({

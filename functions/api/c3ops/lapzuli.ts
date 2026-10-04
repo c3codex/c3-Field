@@ -60,6 +60,7 @@ async function supabaseFetch<T>(env: Env, path: string, init: RequestInit = {}):
 function adapterFor(channelKey: string | null, executorKey: string | null) {
   if (!channelKey) return null
   if (executorKey === "bluesky_api" && BLUESKY_CHANNELS.has(channelKey)) return "/bluesky/posts"
+  if (executorKey === "paragraph_api" && channelKey === "paragraph_undrifted") return "/paragraph/posts"
   if (executorKey !== "buffer") return null
   if (LEGACY_BUFFER_CHANNELS.has(channelKey)) return "/buffer/posts"
   if (C3_BUFFER_CHANNELS.has(channelKey)) return "/buffer/c3/posts"
@@ -365,10 +366,10 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
   const bindingRouteKey=str(record(bindingAssets[0]?.metadata).route_key)
   if(!bindingRouteKey)return {status:409,body:{standing:"HLD",reason:"registered_asset_route_binding_missing",external_publication_effects:0}}
   const binding=await preflightLapzuliRoute(env,bindingRouteKey)
-  if(binding.standing!=="EXECUTEABLE")return {status:409,body:{...binding,standing:"HLD",action:dryRun?"preflight_asset":"dispatch_asset"}}
+  if(binding.standing!=="EXECUTABLE")return {status:409,body:{...binding,action:dryRun?"preflight_asset":"dispatch_asset"}}
   const callableRows=await supabaseFetch<Row[]>(env,
     `lapzuli_derivative_execution_view_v1?distribution_asset_key=eq.${encodeURIComponent(distributionAssetKey)}&select=*&limit=1`)
-  const callable=callableRows[0]
+  const callable:Row|undefined=callableRows[0] ?? (binding.executor_key === "paragraph_api" ? {lapzuli_callable:true,channel_key:binding.channel_key,executor_key:binding.executor_key,channel_identifier:binding.channel_identifier,registered_operator:binding.registered_operator,registered_standing_key:bindingRouteKey,registered_standing:"registered"} : undefined)
   if (!callable || callable.lapzuli_callable !== true) {
     return {status:409,body:{standing:"HLD",reason:"registered_derivative_binding_unresolved",distribution_asset_key:distributionAssetKey,external_publication_effects:0}}
   }
@@ -413,10 +414,10 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
   const canonicalUrl=str(callable.canonical_url) ?? str(payload.canonical_url) ?? str(route.canonical_url)
   const textValue=str(payload.text) ?? str(payload.caption)
   const imageUrl=str(payload.image_url) ?? str(record(payload.media).runtime_uri) ?? publicMediaUrl(env,payload)
-  if (!canonicalUrl || !textValue) {
+  if (!canonicalUrl || (executorKey === "paragraph_api" ? !str(payload.title)||!str(payload.body_markdown)||!str(payload.slug) : !textValue)) {
     return {status:409,body:{standing:"HLD",reason:"resolved_payload_incomplete",external_publication_effects:0}}
   }
-  const outboundText=textValue.includes(canonicalUrl) ? textValue : `${textValue}\n\n${canonicalUrl}`
+  const outboundText=textValue?.includes(canonicalUrl) ? textValue : `${textValue}\n\n${canonicalUrl}`
   if (str(asset?.platform) === "x" && Array.from(outboundText).length > 280) {
     return {status:409,body:{standing:"HLD",reason:"x_payload_exceeds_280_characters",text_length:Array.from(outboundText).length,external_publication_effects:0}}
   }
@@ -441,6 +442,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     canonical_url:canonicalUrl,
     image_url:imageUrl,
     buffer_mode:"shareNow",
+    ...(executorKey === "paragraph_api" ? {title:payload.title,body_markdown:payload.body_markdown,slug:payload.slug,sendNewsletter:false} : {}),
   }
 
   let executionId:string|null=null
@@ -475,7 +477,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
 
   let called:{response:Response|null;body:Row}
   try {
-    called=await workerCall(env,adapter,requestBody)
+    called=await workerCall(env,adapter,{...requestBody,atomic_execution_id:executionId})
   } catch(error) {
     if (executionId) {
       await supabaseFetch(env,`measures_distribution_execution?execution_id=eq.${encodeURIComponent(executionId)}`,{
@@ -513,7 +515,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
 
   const body=called.body
   const ok=called.response?.ok === true && body.ok === true
-  const effects=typeof body.external_publication_effects === "number" ? body.external_publication_effects : 0
+  const effects=typeof body.external_publication_effects === "number" ? body.external_publication_effects : null
 
   if (!dryRun && executionId) {
     const platformUrl=str(body.platform_url)
@@ -521,7 +523,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     const providerPostId=str(body.buffer_post_id) ?? str(body.buffer_update_id)
     const executionStatus=effects === 1
       ? (platformUrl ? "published" : "queued")
-      : "failed"
+      : effects === 0 ? "failed" : "publication_uncertain"
     await supabaseFetch(env,`measures_distribution_execution?execution_id=eq.${encodeURIComponent(executionId)}`,{
       method:"PATCH",
       headers:{Prefer:"return=minimal"},
@@ -539,7 +541,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
           provider_post_id:providerPostId,
           external_response_code:body.external_response_code,
           external_publication_effects:effects,
-          effect_state:effects === 1 ? "provider_effect_confirmed" : "no_external_effect_confirmed",
+          effect_state:effects === 1 ? "provider_effect_confirmed" : effects === 0 ? "no_external_effect_confirmed" : "unknown",
         },
         error:ok ? null : str(body.error) ?? str(body.standing) ?? "lapzuli_worker_execution_failed",
         metadata:{
@@ -589,7 +591,7 @@ export async function handleLapzuliAction(request: Request, env: Env) {
       const routeKey=str(body.route_key)
       if(!routeKey || !/^[a-zA-Z0-9_-]{1,200}$/.test(routeKey))return json({standing:"HLD",reason:"exact_route_key_required",external_publication_effects:0},400)
       const binding=await preflightLapzuliRoute(env,routeKey)
-      return json(binding,binding.standing==="EXECUTEABLE"?200:409)
+      return json(binding,binding.standing==="EXECUTABLE"?200:409)
     }
     if (action === "verify_bluesky_identities") {
       const result=await verifyBlueskyIdentities(env)
