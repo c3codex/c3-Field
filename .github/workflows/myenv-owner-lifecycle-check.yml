@@ -1,0 +1,24 @@
+name: My Env owner lifecycle check
+
+on:
+  push:
+    branches:
+      - chazz/myenv-owner-lifecycle-v1
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: TypeScript
+        run: npx tsc --noEmit
+      - name: Owner lifecycle endpoint tests
+        run: npx tsx --test functions/api/my-environment-owner-lifecycle.test.ts
+      - name: Vite build
+        run: npm run build
