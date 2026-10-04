@@ -96,15 +96,14 @@ export const onRequestGet:PagesFunction<WorkspaceEnv>=async({request,env})=>{
       limit:"100"
     })
     const threads=await (await rest(env,"c3_cancom_thread_ref?"+tq)).json() as Row[]
-    const cq=new URLSearchParams({
-      select:"contact_key,normalized_email,display_name,organization,phone,preferred_channel,source_class,standing,metadata,updated_at",
-      env_key:"eq."+s.envKey,
-      envpac_key:"eq."+s.envpacKey,
-      standing:"eq.active",
-      order:"display_name.asc.nullslast,normalized_email.asc",
-      limit:"250"
+    const directoryResponse=await rest(env,"rpc/resolve_c3_env_directory_v2",{
+      method:"POST",
+      headers:{"content-type":"application/json"},
+      body:JSON.stringify({p_request:{action:"list",env_key:s.envKey,envpac_key:s.envpacKey}})
     })
-    const contacts=await (await rest(env,"c3_env_directory_contact?"+cq)).json() as Row[]
+    const directory=await directoryResponse.json() as Row
+    if(directory.standing!=="resolved")throw new WorkspaceError("Directory is held in this environment.",409,String(directory.reason||"directory_held"))
+    const contacts=Array.isArray(directory.contacts)?directory.contacts as Row[]:[]
     const contactMap=new Map(contacts.map(contact=>[String(contact.contact_key),contact]))
     const enrichedThreads=threads.map(thread=>({...thread,contact:thread.contact_key?contactMap.get(String(thread.contact_key))||null:null}))
     let messages:Row[]=[]
