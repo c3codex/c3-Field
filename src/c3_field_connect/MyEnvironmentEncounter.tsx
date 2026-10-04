@@ -392,15 +392,20 @@ export default function MyEnvironmentEncounter(){
 
   function openContactInCanCom(contact:DirectoryContact,threadKey=""){
     const initiativeKey=text(contact.metadata?.initiative_key)
+    const relationshipKey=text(contact.metadata?.relationship_key)
+    const participantProjection=contact.source_class==="active_my_env_participant_projection"&&!!relationshipKey
+    const initiativeProjection=contact.source_class==="initiative_participant_projection"&&!!initiativeKey
     setCancomTo(contact.email)
     setCancomDisplayName(contact.display_name||"")
     setCancomOrganization(contact.organization||"")
     setCancomSubject("")
     setCancomBody("")
-    setCancomWorkContextType(contact.source_class==="initiative_participant_projection"&&initiativeKey?"initiative":"")
-    setCancomWorkContextKey(contact.source_class==="initiative_participant_projection"?initiativeKey:"")
+    setCancomWorkContextType(participantProjection?"participant":initiativeProjection?"initiative":"")
+    setCancomWorkContextKey(participantProjection?relationshipKey:initiativeProjection?initiativeKey:"")
     setCancomComposeThread(threadKey)
-    setCancomNotice("Contact loaded. Compose and review the full CanCom before sending.")
+    setCancomNotice(participantProjection
+      ?"Active My Env participant loaded. Compose and review the full CanCom before sending."
+      :"Contact loaded. Compose and review the full CanCom before sending.")
     setActivePanel("primitive:cancom_workspace")
   }
 
@@ -1259,12 +1264,46 @@ export default function MyEnvironmentEncounter(){
       </section>
     }
     if(primitive.renderer_key==="c1me.directory"){
+      const participantContacts=directoryContacts.filter(contact=>contact.source_class==="active_my_env_participant_projection")
+      const otherContacts=directoryContacts.filter(contact=>contact.source_class!=="active_my_env_participant_projection")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
         <div className="myenv-thread-heading">
-          <p className="myenv-kicker">DIRECTORY · OWNER PRIVATE</p>
+          <p className="myenv-kicker">{participantContacts.length>0?"DIRECTORY · OPERATOR + OWNER PRIVATE":"DIRECTORY · OWNER PRIVATE"}</p>
           <h2>{primitive.display_label}</h2>
-          <p>Working contacts for My Env. A Directory entry does not create a c3 relationship, participation, standing, or authority.</p>
+          <p>{participantContacts.length>0
+            ?"Your operator view resolves every active personal My Env participant. Initiative membership is context, not a requirement for appearing here."
+            :"Working contacts for My Env. A Directory entry does not create a c3 relationship, participation, standing, or authority."}</p>
         </div>
+
+        {participantContacts.length>0&&<>
+          <div className="myenv-thread-heading">
+            <p className="myenv-kicker">ACTIVE PARTICIPANTS · OPERATOR</p>
+            <h3>{participantContacts.length} active participant{participantContacts.length===1?"":"s"}</h3>
+            <p>Resolved from active personal My Env standing. This projection does not create or change participant standing.</p>
+          </div>
+          <div className="myenv-thread-entries">
+            {participantContacts.map(contact=>{
+              const rawInitiatives=Array.isArray(contact.metadata?.active_initiatives)?contact.metadata?.active_initiatives:[]
+              const initiativeLabels=(rawInitiatives as unknown[]).map(item=>{
+                if(!item||typeof item!=="object"||Array.isArray(item))return ""
+                const key=text((item as Record<string,unknown>).initiative_key)
+                if(key==="47pct")return "4.7%"
+                if(key==="million_dollar_mission")return "Million Dollar Mission"
+                return key
+              }).filter(Boolean)
+              return <article key={contact.contact_key}>
+                <div><span>ACTIVE MY ENV PARTICIPANT</span><time>{contact.updated_at?new Date(contact.updated_at).toLocaleString():""}</time></div>
+                <h3>{contact.display_name||contact.organization||contact.email}</h3>
+                {contact.organization&&contact.display_name&&<p>{contact.organization}</p>}
+                <p>{contact.email}</p>
+                {contact.phone&&<p>{contact.phone}</p>}
+                <p><strong>Initiatives:</strong> {initiativeLabels.length>0?initiativeLabels.join(" · "):"No active initiative relation"}</p>
+                <button type="button" onClick={()=>openContactInCanCom(contact)}>CANCOM</button>
+              </article>
+            })}
+          </div>
+        </>}
+
         <form onSubmit={saveDirectoryContact} className="myenv-thread-entries">
           <article>
             <div><span>ADD / UPDATE CONTACT</span></div>
@@ -1275,18 +1314,27 @@ export default function MyEnvironmentEncounter(){
             <button type="submit" disabled={directoryBusy}>{directoryBusy?"SAVING…":"SAVE CONTACT"}</button>
           </article>
         </form>
+
         {directoryNotice&&<p className="myenv-runtime-warning">{directoryNotice}</p>}
-        <div className="myenv-thread-entries">
-          {directoryContacts.length===0&&<p className="myenv-relations-empty">No Directory contacts yet.</p>}
-          {directoryContacts.map(contact=><article key={contact.contact_key}>
-            <div><span>{contact.source_class||"contact"}</span><time>{contact.updated_at?new Date(contact.updated_at).toLocaleString():""}</time></div>
-            <h3>{contact.display_name||contact.organization||contact.email}</h3>
-            {contact.organization&&contact.display_name&&<p>{contact.organization}</p>}
-            <p>{contact.email}</p>
-            {contact.phone&&<p>{contact.phone}</p>}
-            <button type="button" onClick={()=>openContactInCanCom(contact)}>CANCOM</button>
-          </article>)}
-        </div>
+
+        {otherContacts.length>0&&<>
+          <div className="myenv-thread-heading">
+            <p className="myenv-kicker">OTHER DIRECTORY CONTACTS</p>
+            <p>Working contacts are separate from active My Env participant standing.</p>
+          </div>
+          <div className="myenv-thread-entries">
+            {otherContacts.map(contact=><article key={contact.contact_key}>
+              <div><span>{contact.source_class||"contact"}</span><time>{contact.updated_at?new Date(contact.updated_at).toLocaleString():""}</time></div>
+              <h3>{contact.display_name||contact.organization||contact.email}</h3>
+              {contact.organization&&contact.display_name&&<p>{contact.organization}</p>}
+              <p>{contact.email}</p>
+              {contact.phone&&<p>{contact.phone}</p>}
+              <button type="button" onClick={()=>openContactInCanCom(contact)}>CANCOM</button>
+            </article>)}
+          </div>
+        </>}
+
+        {directoryContacts.length===0&&<p className="myenv-relations-empty">No Directory contacts yet.</p>}
       </section>
     }
     if(primitive.renderer_key==="c1me.pipeline"){
