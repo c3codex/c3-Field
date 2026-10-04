@@ -22,7 +22,7 @@ function base(env:DirectoryEnv){
   return env.SUPABASE_URL.replace(/\/$/,"")
 }
 async function rpc(env:DirectoryEnv,payload:Row){
-  const response=await fetch(base(env)+"/rest/v1/rpc/resolve_c3_env_directory_v1",{
+  const response=await fetch(base(env)+"/rest/v1/rpc/resolve_c3_env_directory_v2",{
     method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
     headers:{
       apikey:env.SUPABASE_SERVICE_ROLE_KEY!,
