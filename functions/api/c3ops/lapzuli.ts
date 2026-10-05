@@ -172,6 +172,12 @@ async function resolveCampaign(env: Env, campaignKey: string) {
     return {status:409,body:{standing:"HLD",reason:"no_callable_distribution_assets",campaign_key:campaignKey,held,external_publication_effects:0}}
   }
 
+  // Five reads, one standing write, two updates per asset, and one route batch.
+  // Hold before mutation if the observed 50-subrequest action envelope cannot fit.
+  if (7 + 2 * eligible.length > 50) {
+    return {status:409,body:{standing:"HLD",reason:"resolve_campaign_runtime_capacity_hold",campaign_key:campaignKey,eligible_count:eligible.length,external_publication_effects:0}}
+  }
+
   const standingKey = `${campaignKey}_lapzuli_registered`
   const resolvedAt = new Date().toISOString()
   await supabaseFetch(env,"registered_process_log?on_conflict=process_key",{
@@ -210,6 +216,7 @@ async function resolveCampaign(env: Env, campaignKey: string) {
   })
 
   const resolved: Array<Record<string,unknown>> = []
+  const routes: Row[] = []
   for (const item of eligible) {
     const assetKey = str(item.asset.distribution_asset_key)!
     const derivativeMetadata = record(item.derivative.metadata)
@@ -259,10 +266,7 @@ async function resolveCampaign(env: Env, campaignKey: string) {
       }),
     })
 
-    await supabaseFetch(env,"lapzuli_route?on_conflict=route_key",{
-      method:"POST",
-      headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
-      body:JSON.stringify({
+    routes.push({
         route_key:routeKey,
         publication_object_key:str(item.asset.publication_asset_id) ?? str(item.asset.campaign_asset_id) ?? assetKey,
         desk_key:"campaign_distribution",
@@ -294,10 +298,16 @@ async function resolveCampaign(env: Env, campaignKey: string) {
           operator_confirmed_at:resolvedAt,
           external_publication_effects:0,
         },
-      }),
     })
     resolved.push({distribution_asset_key:assetKey,channel_key:item.channelKey,route_key:routeKey,adapter:item.adapter})
   }
+
+  // The same governed route records use the existing upsert endpoint in one request.
+  await supabaseFetch(env,"lapzuli_route?on_conflict=route_key",{
+    method:"POST",
+    headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+    body:JSON.stringify(routes),
+  })
 
   return {status:200,body:{
     standing:"ACT",

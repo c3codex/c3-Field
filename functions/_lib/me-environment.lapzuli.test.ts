@@ -90,7 +90,7 @@ test("actual resolveCampaign alone forms standing in a fully isolated Registry f
   if(table==="registered_process_log")f.rows[table].push(body)
   else if(table==="measures_publication_distribution_asset")Object.assign(f.asset,body)
   else if(table==="measures_publication_derivative_asset")Object.assign(f.rows[table][0],body)
-  else if(table==="lapzuli_route"){const old=f.rows[table].find(x=>x.route_key===body.route_key);if(old)Object.assign(old,body);else f.rows[table].push(body)}
+  else if(table==="lapzuli_route"){for(const route of Array.isArray(body)?body:[body]){const old=f.rows[table].find(x=>x.route_key===route.route_key);if(old)Object.assign(old,route);else f.rows[table].push(route)}}
   else throw Error("Unexpected mutation "+table)
   return new Response(null,{status:204})
  }) as typeof fetch
