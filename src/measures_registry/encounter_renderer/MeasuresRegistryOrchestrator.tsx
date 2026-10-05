@@ -152,6 +152,16 @@ function normalizeWebsite(value: string | undefined): string {
 
 export default function MeasuresRegistryOrchestrator() {
   const resolverData = useRegistryResolver()
+  const mrPacResolution = resolverData.loading
+    ? "pending"
+    : resolverData.registryRows.some((row) =>
+        row.registry_key === "measures_registry_root" &&
+        row.is_active !== false &&
+        row.release_state === "released" &&
+        row.access_state === "visible",
+      )
+      ? "resolved"
+      : "dnr"
   const [activeSurface, setActiveSurface] = useState<OrchestratorSurface>(initialSurface)
   const evaluationDeliveryResolvedRef = useRef(false)
   const ambientAudioRef = useRef<HTMLAudioElement>(null)
