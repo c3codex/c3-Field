@@ -1,4 +1,5 @@
 // FREE resolves exact Registry relations; it creates no publication authority.
+import {campaignPacKeys,resolveCampaignPacSpeaker} from "./campaignpac-speaker"
 export type Row = Record<string, unknown>
 export type Read = (table: string, select: string, filters?: Record<string,string>) => Promise<Row[]>
 export type Probe = (path:string, method?:"GET"|"POST", payload?:Row) => Promise<{ok:boolean;body:Row}>
@@ -75,6 +76,8 @@ export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?
   check("canonical_url_scope",canonicalPass,canonical)
   const channel=channelKey?await exact("measures_distribution_channel","channel_key",channelKey):undefined
   result.channel_identifier=channel?.channel_identifier??null
+  result.destination_account_key=channelKey
+  result.destination_account_identifier=channel?.channel_identifier??null
   result.registered_operator=str(meta.operator)??str(meta.operator_confirmed_by)
   if(["buffer","bluesky_api","paragraph_api"].includes(executorKey??""))check("registered_channel_active",channel?.status==="active"&&channel.executor_key===executorKey&&!!str(channel.channel_identifier),{channel_key:channelKey,status:channel?.status ?? null})
   const text=str(payload.text) ?? str(payload.caption)
@@ -88,7 +91,12 @@ export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?
     (!q.requires_original_contribution || (profile?.researched_and_cited===true && profile?.operator_initiated_research===true)) &&
     (!constraints.not_pure_promotion || obj(payload.constraints).not_pure_promotion===true),{requires_ai_disclosure:q?.requires_ai_disclosure,requires_original_contribution:q?.requires_original_contribution,
       researched_and_cited:profile?.researched_and_cited ?? null,operator_initiated_research:profile?.operator_initiated_research ?? null,ai_disclosure_available:profile?.ai_disclosure_available ?? null})
-  if(!probe){check("current_provider_preflight",false,"server-side runtime probe required");return finish()}
+  const pacs=(await Promise.all(campaignPacKeys(route,asset,callable).map(key=>read("c3_pac","pac_key,pac_type,is_effective,standing,source_authority,metadata",{pac_key:"eq."+key})))).flat()
+  const speaker=resolveCampaignPacSpeaker(route,asset,callable,pacs,channelKey)
+  const {predicates:speakerPredicates,...speakerFields}=speaker
+  Object.assign(result,speakerFields)
+  // Existing source/qualification/duplicate/provider predicates retain priority.
+  if(!probe){check("current_provider_preflight",false,"server-side runtime probe required");predicates.push(...speakerPredicates);return finish()}
   // Probe only fixed, non-effecting paths. Never submit publication/import commands.
   if(executorKey==="bluesky_api"){
     const paths:Record<string,string>={bluesky_undrifted:"/verify/bluesky/undrifted",bluesky_measures_registry:"/verify/bluesky/measures",bluesky_c3_field:"/verify/bluesky/c3-field",bluesky_c3_partners:"/verify/bluesky/c3-partners"}
@@ -109,7 +117,7 @@ export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?
     const em=obj(executor?.metadata)
     check("current_provider_identity",verified.ok&&verified.body.publication_id===em.verified_publication_id&&verified.body.publication_slug===em.verified_publication_slug&&verified.body.publication_id===channel?.channel_identifier,{publication_id:verified.body.publication_id,publication_slug:verified.body.publication_slug,standing:verified.body.standing})
     check("runtime_adapter_binding",verified.ok&&verified.body.adapter==="paragraph_direct_api_v1",verified.body.adapter??null)
-    const prepared=await probe("/paragraph/posts","POST",{...payload,dry_run:true,execute:false,operator_confirmed:true,lapzuli_callable:true,route_key:routeKey,publication_object_key:route.publication_object_key,distribution_asset_id:assetKey,authority_reference:route.authority_reference,channel_key:channelKey,channel_identifier:channel?.channel_identifier,idempotency_key:str(payload.idempotency_key)??routeKey+":"+assetKey,canonical_url:canonical,sendNewsletter:false})
+    const prepared=await probe("/paragraph/posts","POST",{...payload,campaign_pac_key:speaker.campaign_pac_key,public_speaking_identity:speaker.public_speaking_identity,dry_run:true,execute:false,operator_confirmed:true,lapzuli_callable:true,route_key:routeKey,publication_object_key:route.publication_object_key,distribution_asset_id:assetKey,authority_reference:route.authority_reference,channel_key:channelKey,channel_identifier:channel?.channel_identifier,idempotency_key:str(payload.idempotency_key)??routeKey+":"+assetKey,canonical_url:canonical,sendNewsletter:false})
     check("provider_payload_preflight",prepared.ok&&prepared.body.external_publication_effects===0,{standing:prepared.body.standing,external_publication_effects:prepared.body.external_publication_effects})
     if(prepared.body.standing==="HISTORICAL_OR_SUPERSEDED")result.standing="HISTORICAL_OR_SUPERSEDED"
   }else if(executorKey==="dev_api"){
@@ -124,11 +132,13 @@ export async function resolveLapzuliFreeRoute(read:Read, routeKey:string, probe?
     const prepared=await probe(path,"POST",{dry_run:true,execute:false,operator_confirmed:true,lapzuli_callable:true,
       route_key:routeKey,authority_reference:route.authority_reference,publication_object_key:route.publication_object_key,
       distribution_asset_id:assetKey,channel_key:channelKey,channel_identifier:channel?.channel_identifier,
+      campaign_pac_key:speaker.campaign_pac_key,public_speaking_identity:speaker.public_speaking_identity,
       executor_key:executorKey,derivative_key:callable?.derivative_key,registered_standing_key:callable?.registered_standing_key,
       registered_standing:callable?.registered_standing,idempotency_key:str(payload.idempotency_key)??routeKey+":"+assetKey,
       text:text,canonical_url:canonical,image_url:image,buffer_mode:"shareNow"})
     check("provider_payload_preflight",prepared.ok&&prepared.body.external_publication_effects===0,
       {standing:prepared.body.standing ?? null,missing:prepared.body.missing ?? null,external_publication_effects:prepared.body.external_publication_effects ?? null})
   }
+  predicates.push(...speakerPredicates)
   return finish()
 }

@@ -367,6 +367,9 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
   if(!bindingRouteKey)return {status:409,body:{standing:"HLD",reason:"registered_asset_route_binding_missing",external_publication_effects:0}}
   const binding=await preflightLapzuliRoute(env,bindingRouteKey)
   if(binding.standing!=="EXECUTABLE")return {status:409,body:{...binding,action:dryRun?"preflight_asset":"dispatch_asset"}}
+  const speakerBinding={campaign_pac_key:binding.campaign_pac_key,public_speaking_identity:binding.public_speaking_identity,
+    source_pubpac_key:binding.source_pubpac_key,destination_account_key:binding.destination_account_key,
+    destination_account_identifier:binding.destination_account_identifier}
   const callableRows=await supabaseFetch<Row[]>(env,
     `lapzuli_derivative_execution_view_v1?distribution_asset_key=eq.${encodeURIComponent(distributionAssetKey)}&select=*&limit=1`)
   const callable:Row|undefined=callableRows[0] ?? (binding.executor_key === "paragraph_api" ? {lapzuli_callable:true,channel_key:binding.channel_key,executor_key:binding.executor_key,channel_identifier:binding.channel_identifier,registered_operator:binding.registered_operator,registered_standing_key:bindingRouteKey,registered_standing:"registered"} : undefined)
@@ -402,6 +405,8 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
 
   const channelKey=str(callable.channel_key)
   const executorKey=str(callable.executor_key)
+  if(channelKey!==binding.channel_key || executorKey!==binding.executor_key || callable.channel_identifier!==binding.channel_identifier)
+    return {status:409,body:{...speakerBinding,standing:"HLD",reason:"preflight_dispatch_binding_mismatch",external_publication_effects:0}}
   const operatorKey=str(callable.registered_operator)
   const adapter=adapterFor(channelKey,executorKey)
   if (!adapter) {
@@ -423,6 +428,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
   }
 
   const requestBody: Row={
+    ...speakerBinding,
     dry_run:dryRun,
     execute:!dryRun,
     publication_object_key:route.publication_object_key,
@@ -487,6 +493,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
           execution_status:"publication_uncertain",
           error:"lapzuli_worker_transport_outcome_uncertain",
           evidence:{
+            ...speakerBinding,
             route_key:route.route_key,
             adapter_path:adapter,
             effect_state:"unknown",
@@ -534,6 +541,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
         platform_post_id:platformPostId,
         platform_url:platformUrl,
         evidence:{
+          ...speakerBinding,
           route_key:route.route_key,
           adapter_path:adapter,
           adapter_standing:body.standing,
@@ -563,6 +571,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     (!ok ? `worker_http_${called.response?.status ?? 502}` : null)
 
   return {status:ok ? (dryRun?200:201) : (called.response?.status ?? 502),body:{
+    ...speakerBinding,
     standing:ok ? (dryRun ? "ACT_PREFLIGHT" : "ACT") : "HLD",
     reason:workerReason,
     action:dryRun ? "preflight_asset" : "dispatch_asset",

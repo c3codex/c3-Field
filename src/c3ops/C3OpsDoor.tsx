@@ -111,6 +111,8 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
       <strong>{actionError?"HLD":text(actionResult?.standing)}</strong>
       <span>{actionError||text(actionResult?.action)}</span>
       <span>External effects: {actionResult?.external_publication_effects == null ? "UNKNOWN" : text(actionResult.external_publication_effects)}</span>
+      {actionResult && "public_speaking_identity" in actionResult && <span>Public speaker: {actionResult.public_speaking_identity ? text(actionResult.public_speaking_identity) : "Unresolved"}</span>}
+      {actionResult && "destination_account_key" in actionResult && <span>Destination account: {text(actionResult.destination_account_key)}</span>}
       {actionResult && Array.isArray(actionResult.identities) && <details open><summary>Bluesky identity proof</summary><Rows records={actionResult.identities as Record<string,unknown>[]}/></details>}
       {actionResult && typeof actionResult.worker_result==="object" && actionResult.worker_result!==null && <details>
         <summary>Provider preflight evidence</summary>
@@ -147,6 +149,10 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
               </div>
               <p>{text(asset.distribution_asset_key)}</p>
               <dl>
+                <div><dt>Public speaker</dt><dd>{asset.public_speaking_identity ? text(asset.public_speaking_identity) : "Unresolved"}</dd></div>
+                <div><dt>Destination account</dt><dd>{text(asset.destination_account_key)}</dd></div>
+                <div><dt>CampaignPac</dt><dd>{text(asset.campaign_pac_key)}</dd></div>
+                <div><dt>Source PubPac</dt><dd>{text(asset.source_pubpac_key)}</dd></div>
                 <div><dt>Derivative</dt><dd>{text(asset.derivative_key)}</dd></div>
                 <div><dt>Executor</dt><dd>{text(asset.executor_key)}</dd></div>
                 <div><dt>Route</dt><dd>{text(asset.route?.route_key)}</dd></div>

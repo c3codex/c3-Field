@@ -1,4 +1,6 @@
 import {readResolvedOarOptics,OAR_OPTICS_INTERFACE} from "./c3ops-oar-optics"
+import {resolveCampaignPacSpeaker} from "./campaignpac-speaker"
+import {routeAssetKey} from "./lapzuli-free-runtime"
 
 export type Row = Record<string, unknown>
 export type ReadRows = (table: string, select: string, filters?: Record<string, string>) => Promise<Row[]>
@@ -83,6 +85,7 @@ export async function readLapzuli(read: ReadRows) {
     registrarRegistrations,
     registrarDesks,
     registrarPublications,
+    campaignPacs,
   ] = await Promise.all([
     read("measures_publication_campaign","campaign_key,publication_key,issue_id,campaign_name,campaign_objective,status,release_state,review_status,metadata,created_at,updated_at"),
     read("measures_publication_distribution_asset","distribution_asset_key,campaign_asset_id,publication_asset_id,campaign_id,platform,distribution_type,status,review_status,payload,metadata,created_at,updated_at"),
@@ -96,6 +99,7 @@ export async function readLapzuli(read: ReadRows) {
     read("c3_registrar_publication_registration","registration_key,publication_object_key,desk_key,native_context_class,native_context_key,editorial_voice_key,pubpac_key,publication_standing,distribution_standing,metadata,created_at,updated_at"),
     read("c3_registrar_publication_desk","desk_key,desk_label,native_context_class,native_context_key,publication_authority_key,standing,default_editorial_voice_key,metadata"),
     read("c3ops_publication_object","publication_object_key,publisher_key,publication_key,series_key,issue_key,title,description,publication_standing,editorial_standing,updated_at"),
+    read("c3_pac","pac_key,pac_type,is_effective,standing,source_authority,metadata",{pac_type:"eq.CampaignPac"}),
   ])
 
   const derivativeByKey = new Map(derivatives.map(row => [str(row.derivative_key) ?? "", row]))
@@ -111,16 +115,10 @@ export async function readLapzuli(read: ReadRows) {
     executionsByAsset.set(key, rows)
   }
 
-  const routeByAsset = new Map<string, Row>()
+  const routesByAsset = new Map<string, Row[]>()
   for (const route of routes) {
-    const metadata = record(route.metadata)
-    const direct = str(metadata.distribution_asset_key)
-    const ref = str(route.payload_reference)
-    const referenced = ref?.startsWith("measures_publication_distribution_asset:")
-      ? ref.slice("measures_publication_distribution_asset:".length).split(":")[0]
-      : ref
-    const key = direct ?? referenced
-    if (key && !routeByAsset.has(key)) routeByAsset.set(key, route)
+    const key = routeAssetKey(route)
+    if (key) routesByAsset.set(key,[...(routesByAsset.get(key) ?? []),route])
   }
 
   const normalizedAssets = distributionAssets.map(asset => {
@@ -133,7 +131,9 @@ export async function readLapzuli(read: ReadRows) {
       str(payload.caption_derivative_key)
     const derivative = derivativeKey ? derivativeByKey.get(derivativeKey) ?? null : null
     const callable = callableByAsset.get(assetKey) ?? null
-    const route = routeByAsset.get(assetKey) ?? null
+    const assetRoutes = routesByAsset.get(assetKey) ?? []
+    const explicitRoute = str(metadata.route_key)
+    const route = explicitRoute ? assetRoutes.find(row => row.route_key === explicitRoute) ?? null : assetRoutes.length === 1 ? assetRoutes[0] : null
     const channelKey = str(metadata.channel_key) ?? str(callable?.channel_key)
     const executorKey =
       str(metadata.executor_key) ??
@@ -141,6 +141,7 @@ export async function readLapzuli(read: ReadRows) {
       str(callable?.executor_key)
     const channel = channelKey ? channelByKey.get(channelKey) ?? null : null
     const executor = executorKey ? executorByKey.get(executorKey) ?? null : null
+    const {predicates: speakerPredicates, ...speaker} = resolveCampaignPacSpeaker(route ?? {},asset,callable ?? undefined,campaignPacs,channelKey)
     const assetExecutions = [...(executionsByAsset.get(assetKey) ?? [])].sort((a,b) => {
       const aa = Date.parse(str(a.executed_at) ?? str(a.created_at) ?? "") || 0
       const bb = Date.parse(str(b.executed_at) ?? str(b.created_at) ?? "") || 0
@@ -173,6 +174,7 @@ export async function readLapzuli(read: ReadRows) {
       if (!channel || channel.status !== "active") blockers.push("active_channel_unresolved")
       if (!executor || executor.status !== "available" || executor.supports_publish !== true) blockers.push("callable_executor_unresolved")
       if (!isCallable && blockers.length === 0) blockers.push("lapzuli_callable_contract_unresolved")
+      blockers.push(...speakerPredicates.filter(predicate => !predicate.pass).map(predicate => predicate.predicate))
     }
     return {
       distribution_asset_key: assetKey,
@@ -186,6 +188,9 @@ export async function readLapzuli(read: ReadRows) {
       derivative_key: derivativeKey,
       derivative: derivative ? fields(derivative,["derivative_key","derivative_type","title","format","source_reference","generation_status","approval_status","release_state","review_status"]) : null,
       channel_key: channelKey,
+      ...speaker,
+      destination_account_key: channelKey,
+      destination_account_identifier: channel?.channel_identifier ?? null,
       channel: channel ? fields(channel,["channel_key","platform","account_name","channel_identifier","channel_url","status"]) : null,
       executor_key: executorKey,
       executor: executor ? fields(executor,["executor_key","executor_name","executor_type","execution_mode","status","supports_publish","supports_scheduling"]) : null,
@@ -196,7 +201,7 @@ export async function readLapzuli(read: ReadRows) {
       payload,
       latest_execution: latestExecution,
       execution_count: assetExecutions.length,
-      distribution_state: distributed ? "distributed" : accepted ? "accepted_pending_platform_proof" : isCallable ? "ready_for_operator_execution" : "held",
+      distribution_state: distributed ? "distributed" : accepted ? "accepted_pending_platform_proof" : isCallable && blockers.length === 0 ? "ready_for_operator_execution" : "held",
       blockers,
     }
   })
@@ -266,10 +271,14 @@ export async function readLapzuli(read: ReadRows) {
         const executorKey = str(routeMetadata.executor_key)
         const channel = channelKey ? channelByKey.get(channelKey) ?? null : null
         const executor = executorKey ? executorByKey.get(executorKey) ?? null : null
+        const asset = distributionAssets.find(row => row.distribution_asset_key === routeMetadata.distribution_asset_key)
+        const callable = asset ? callableByAsset.get(String(asset.distribution_asset_key)) : undefined
+        const {predicates: speakerPredicates, ...speaker} = resolveCampaignPacSpeaker(route,asset,callable,campaignPacs,channelKey)
         const blockers:string[] = []
         if (route.route_status !== "authorized" || route.operator_confirmed !== true) blockers.push("authorized_route_unresolved")
         if (!channel || channel.status !== "active") blockers.push("active_channel_unresolved")
         if (!executor || executor.status !== "available" || executor.supports_publish !== true) blockers.push("callable_executor_unresolved")
+        blockers.push(...speakerPredicates.filter(predicate => !predicate.pass).map(predicate => predicate.predicate))
         return {
           distribution_asset_key: str(routeMetadata.distribution_asset_key) ?? str(route.route_key),
           campaign_id: str(registration.registration_key),
@@ -282,6 +291,9 @@ export async function readLapzuli(read: ReadRows) {
           derivative_key: str(routeMetadata.derivative_key),
           derivative: null,
           channel_key: channelKey,
+          ...speaker,
+          destination_account_key: channelKey,
+          destination_account_identifier: channel?.channel_identifier ?? null,
           channel: channel ? fields(channel,["channel_key","platform","account_name","channel_identifier","channel_url","status"]) : null,
           executor_key: executorKey,
           executor: executor ? fields(executor,["executor_key","executor_name","executor_type","execution_mode","status","supports_publish","supports_scheduling"]) : null,
@@ -307,7 +319,8 @@ export async function readLapzuli(read: ReadRows) {
         status: registration.publication_standing,
         release_state: registration.distribution_standing,
         review_status: publication?.editorial_standing ?? "registrar_resolved",
-        campaign_pac_key: registration.pubpac_key,
+        campaign_pac_key: str(metadata.campaign_pac_key),
+        pubpac_key: registration.pubpac_key,
         canonical_url: str(metadata.canonical_url) ?? str(publicationRoutes[0]?.canonical_url),
         standing: readyCount > 0 ? "ready_for_operator_execution" : "held",
         publication_authority: desk?.publication_authority_key ?? "c3_registrar",
@@ -326,8 +339,16 @@ export async function readLapzuli(read: ReadRows) {
     source:"CampaignPAC / publication campaign -> derivative -> distribution asset -> registered standing -> route/channel/executor -> execution evidence",
     observed_at:new Date().toISOString(),
     campaigns:[...registrarCampaignCards,...campaignCards],
-    routes:routes.map(route=>({...route,free_runtime_preflight_path:
-      "/api/c3ops/manifest?view=lapzuli_free&route_key="+encodeURIComponent(String(route.route_key))})),
+    routes:routes.map(route=>{
+      const metadata=record(route.metadata)
+      const asset=distributionAssets.find(row=>row.distribution_asset_key === routeAssetKey(route))
+      const channelKey=str(metadata.channel_key) ?? str(record(asset?.metadata).channel_key)
+      const {predicates,...speaker}=resolveCampaignPacSpeaker(route,asset,asset?callableByAsset.get(String(asset.distribution_asset_key)):undefined,campaignPacs,channelKey)
+      return {...route,...speaker,route_key:route.route_key,desk_key:route.desk_key,outlet_key:route.outlet_key,
+        publication_object_key:route.publication_object_key,route_status:route.route_status,
+        destination_account_key:channelKey,destination_account_identifier:channelKey?channelByKey.get(channelKey)?.channel_identifier ?? null:null,
+        free_runtime_preflight_path:"/api/c3ops/manifest?view=lapzuli_free&route_key="+encodeURIComponent(String(route.route_key))}
+    }),
     evidence,
     channels,
     executors,
