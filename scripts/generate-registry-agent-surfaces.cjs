@@ -3,6 +3,15 @@ const path = require("path")
 
 const outDir = process.argv[2] || "dist-registry"
 const baseUrl = "https://measuresregistry.com"
+const authorityPath = path.join(outDir, "_registry-route-authority.json")
+const canonicalAuthority = fs.existsSync(authorityPath) ? JSON.parse(fs.readFileSync(authorityPath, "utf8")) : null
+
+function governedCanonical(canonical, filePath) {
+  const route = "/" + filePath.replace(/\/index\.html$/, "")
+  const authority = canonicalAuthority?.source === "measures_registry" ? canonicalAuthority.routes?.[route] : null
+  if (authority?.route_authority !== "registry" || !authority.unit_key || authority.canonical_url !== canonical) return false
+  try { return new URL(canonical).protocol === "https:" } catch { return false }
+}
 
 const publicNav = [
   ["Measures Registry", "/"],
@@ -94,7 +103,9 @@ function injectStaticRepresentation(html, filePath) {
     filePath,
   )
 
-  if (!canonical.startsWith(baseUrl)) {
+  let onRegistryOrigin = false
+  try { onRegistryOrigin = new URL(canonical).origin === baseUrl } catch { /* Invalid canonical fails closed. */ }
+  if (!onRegistryOrigin && !governedCanonical(canonical, filePath)) {
     throw new Error(`${filePath} has unexpected canonical URL: ${canonical}`)
   }
 

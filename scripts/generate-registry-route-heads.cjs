@@ -481,9 +481,11 @@ async function main() {
   writePrivacyRouteHead(outDir, template)
   writeTermsRouteHead(outDir, template)
 
+  const canonicalAuthority = { source: "measures_registry", routes: {} }
   for (const unit of routeUnits) {
     const row = data.find((item) => item.registry_key === unit.unitKey)
     const seo = routeSeo(row, unit.routePath)
+    canonicalAuthority.routes[unit.routePath] = { unit_key: row.registry_key, route_authority: "registry", canonical_url: seo.canonical_url }
     const routeDir = path.join(outDir, unit.routePath.replace(/^\//, ""))
     fs.mkdirSync(routeDir, { recursive: true })
     let html = applyRouteHead(template, seo)
@@ -494,6 +496,7 @@ async function main() {
     }
     fs.writeFileSync(path.join(routeDir, "index.html"), html)
   }
+  fs.writeFileSync(path.join(outDir, "_registry-route-authority.json"), JSON.stringify(canonicalAuthority, null, 2) + "\n")
 
   const articleRoutes = mergeRoutes(launchCycleArticleRoutes, publishedUndriftedRoutes)
   patchUndriftedRedirects(outDir, articleRoutes)
