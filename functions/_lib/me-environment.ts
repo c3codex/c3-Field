@@ -103,6 +103,7 @@ export async function readLapzuli(read: ReadRows) {
   ])
 
   const derivativeByKey = new Map(derivatives.map(row => [str(row.derivative_key) ?? "", row]))
+  const campaignByKey = new Map(campaigns.map(row => [str(row.campaign_key) ?? "", row]))
   const callableByAsset = new Map(callableRows.map(row => [str(row.distribution_asset_key) ?? "", row]))
   const channelByKey = new Map(channels.map(row => [str(row.channel_key) ?? "", row]))
   const executorByKey = new Map(executors.map(row => [str(row.executor_key) ?? "", row]))
@@ -162,19 +163,37 @@ export async function readLapzuli(read: ReadRows) {
       )
     )
     const isCallable = callable?.lapzuli_callable === true
+    const preResolutionState = asset.status === "ready_for_lapzuli_resolution" || asset.status === "awaiting_lapzuli_resolution"
+      ? asset.status : null
     const blockers: string[] = []
     if (!distributed && !accepted) {
       if (!derivative) blockers.push("derivative_unresolved")
       if (derivative && derivative.approval_status !== "operator_approved") blockers.push("derivative_not_operator_approved")
       if (derivative && derivative.release_state !== "released") blockers.push("derivative_not_released")
-      if (asset.status !== "ready_for_operator_execution") blockers.push("distribution_asset_not_ready")
+      if (!preResolutionState && asset.status !== "ready_for_operator_execution") blockers.push("distribution_asset_not_ready")
       if (asset.review_status !== "operator_approved") blockers.push("distribution_asset_not_operator_approved")
-      if (!str(metadata.registered_standing_key)) blockers.push("registered_standing_unresolved")
+      // Registration and the callable view are outcomes of resolution, not entry predicates.
+      // All common authority predicates still apply to the explicit pre-resolution source state.
+      if (!preResolutionState && !str(metadata.registered_standing_key)) blockers.push("registered_standing_unresolved")
       if (!route || route.route_status !== "authorized" || route.operator_confirmed !== true) blockers.push("authorized_route_unresolved")
       if (!channel || channel.status !== "active") blockers.push("active_channel_unresolved")
       if (!executor || executor.status !== "available" || executor.supports_publish !== true) blockers.push("callable_executor_unresolved")
-      if (!isCallable && blockers.length === 0) blockers.push("lapzuli_callable_contract_unresolved")
+      if (!preResolutionState && !isCallable && blockers.length === 0) blockers.push("lapzuli_callable_contract_unresolved")
       blockers.push(...speakerPredicates.filter(predicate => !predicate.pass).map(predicate => predicate.predicate))
+      if (preResolutionState) {
+        const campaign = campaignByKey.get(str(asset.campaign_id) ?? "")
+        const campaignMetadata = record(campaign?.metadata)
+        const releaseState = str(campaign?.release_state)
+        if (!campaign) blockers.push("campaign_unresolved")
+        if (campaign?.review_status !== "operator_approved") blockers.push("campaign_not_operator_approved")
+        if (campaignMetadata.external_distribution_authorized !== true) blockers.push("campaign_external_distribution_not_authorized")
+        if (!releaseState || !(releaseState.startsWith("authorized_") || releaseState === "release_ready")) blockers.push("campaign_release_state_not_distribution_authorized")
+        if (!str(campaignMetadata.activation_operator) || !(str(campaignMetadata.campaign_pac_key) ?? str(campaignMetadata.pac_key))) blockers.push("campaign_operator_or_pac_unresolved")
+        if (metadata.operator_confirmed !== true) blockers.push("asset_operator_confirmation_missing")
+        if (metadata.external_distribution_authorized !== true) blockers.push("asset_external_distribution_not_authorized")
+        const activeKeys = Array.isArray(campaignMetadata.lapzuli_active_asset_keys) ? campaignMetadata.lapzuli_active_asset_keys : null
+        if (activeKeys?.length && !activeKeys.includes(assetKey)) blockers.push("outside_active_distribution_scope")
+      }
     }
     return {
       distribution_asset_key: assetKey,
@@ -201,7 +220,7 @@ export async function readLapzuli(read: ReadRows) {
       payload,
       latest_execution: latestExecution,
       execution_count: assetExecutions.length,
-      distribution_state: distributed ? "distributed" : accepted ? "accepted_pending_platform_proof" : isCallable && blockers.length === 0 ? "ready_for_operator_execution" : "held",
+      distribution_state: distributed ? "distributed" : accepted ? "accepted_pending_platform_proof" : preResolutionState && blockers.length === 0 ? preResolutionState : isCallable && blockers.length === 0 ? "ready_for_operator_execution" : "held",
       blockers,
     }
   })
