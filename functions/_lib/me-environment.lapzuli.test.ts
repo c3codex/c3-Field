@@ -6,6 +6,7 @@ import {dirname,resolve} from "node:path"
 import {fileURLToPath} from "node:url"
 import {readLapzuli,type Row,type ReadRows} from "./me-environment"
 import {handleLapzuliAction} from "../api/c3ops/lapzuli"
+import projectionAuthority from "./fixtures/lapzuli-projection-authority.json"
 
 const require=createRequire(import.meta.url),root=resolve(dirname(fileURLToPath(import.meta.url)),"../..")
 // Compile the actual existing desk for server rendering; the extra export is test-only.
@@ -20,7 +21,10 @@ function fixture() {
   measures_publication_campaign:[{campaign_key:"campaign",publication_key:"undrifted",issue_id:"issue003",campaign_name:"Issue 003",status:"active",review_status:"operator_approved",release_state:"authorized_pending_lapzuli_execution",metadata:{activation_operator:"op044",campaign_pac_key:"pac",external_distribution_authorized:true}}],
   measures_publication_distribution_asset:[{distribution_asset_key:"asset",campaign_id:"campaign",publication_asset_id:"publication",platform:"bluesky",distribution_type:"social_source_link",status:"ready_for_lapzuli_resolution",review_status:"operator_approved",metadata:{campaign_pac_key:"pac",derivative_key:"derivative",channel_key:"bluesky_undrifted",executor_key:"bluesky_api",route_key:"route",operator_confirmed:true,external_distribution_authorized:true},payload:{text:"Exact approved text",canonical_url:"https://measuresregistry.com/article"}}],
   measures_publication_derivative_asset:[{derivative_key:"derivative",approval_status:"operator_approved",review_status:"approved",release_state:"released",metadata:{}}],
-  lapzuli_route:[{route_key:"route",publication_object_key:"publication",payload_reference:"asset",route_status:"authorized",operator_confirmed:true,outlet_key:"bluesky",metadata:{campaign_pac_key:"pac"}}],
+  lapzuli_route:[{route_key:"route",publication_object_key:"publication",payload_reference:"asset",route_status:"authorized",operator_confirmed:true,outlet_key:"bluesky",desk_key:"drift_report",distribution_mode:"social_source_link_distribution",metadata:{campaign_pac_key:"pac"}}],
+  c3_registrar_publication_authority:[projectionAuthority],
+  lapzuli_outlet:[{outlet_key:"bluesky",account_standing:"verified"}],
+  lapzuli_outlet_qualification:[{outlet_key:"bluesky",desk_key:"drift_report",distribution_mode:"social_source_link_distribution",standing:"qualified_with_constraints"}],
   measures_distribution_channel:[{channel_key:"bluesky_undrifted",status:"active",channel_identifier:"undrifted.bsky.social"}],
   measures_distribution_executor:[{executor_key:"bluesky_api",status:"available",supports_publish:true}],
   c3_pac:[{pac_key:"pac",pac_type:"CampaignPac",is_effective:true,standing:"registered",metadata:{public_speaking_identity:"unDrifted",source_pubpac:"pubpac"}}],
@@ -61,7 +65,8 @@ test("pre-resolution preserves every existing common authority hold",async()=>{
  for(const[reason,mutate]of cases){const f=fixture();mutate(f);const packet=await project(f);assert.equal(only(packet).distribution_state,"held",reason);assert.ok(only(packet).blockers.includes(reason),reason);assert.doesNotMatch(markup(packet),/Resolve CampaignPAC → Lapzuli|>Preflight<|>Dispatch now</)}
 })
 test("pre-resolution cannot bypass current campaign authorization",async()=>{
- for(const mutate of [(f:ReturnType<typeof fixture>)=>f.campaign.review_status="draft",(f:ReturnType<typeof fixture>)=>f.campaign.release_state="draft",(f:ReturnType<typeof fixture>)=>f.campaign.metadata={activation_operator:"op044",campaign_pac_key:"pac",external_distribution_authorized:false},(f:ReturnType<typeof fixture>)=>f.rows.measures_publication_campaign=[]]){const f=fixture();mutate(f);const packet=await project(f);assert.ok(packet.campaigns.every(c=>c.assets.every(a=>a.distribution_state==="held")));assert.doesNotMatch(markup(packet),/Resolve CampaignPAC → Lapzuli/)}
+ for(const mutate of [(f:ReturnType<typeof fixture>)=>f.campaign.review_status="draft",(f:ReturnType<typeof fixture>)=>f.campaign.metadata={activation_operator:"op044",campaign_pac_key:"pac",external_distribution_authorized:false},(f:ReturnType<typeof fixture>)=>f.rows.measures_publication_campaign=[]]){const f=fixture();mutate(f);const packet=await project(f);assert.ok(packet.campaigns.every(c=>c.assets.every(a=>a.distribution_state==="held")));assert.doesNotMatch(markup(packet),/Resolve CampaignPAC → Lapzuli/)}
+ const f=fixture();f.campaign.release_state="held_obsolete_campaign_copy";assert.equal(only(await project(f)).distribution_state,"ready_for_lapzuli_resolution","CURRENT owners outrank historical copied campaign release state")
 })
 test("pre-resolution retains asset confirmation and active campaign scope",async()=>{
  for(const[reason,mutate]of [

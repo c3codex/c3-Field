@@ -1,5 +1,6 @@
 import {readResolvedOarOptics,OAR_OPTICS_INTERFACE} from "./c3ops-oar-optics"
 import {resolveCampaignPacSpeaker} from "./campaignpac-speaker"
+import {consumeLapzuliProjectionResolution,resolveCurrentOutletQualification,deriveCurrentCampaignStanding} from "./lapzuli-projection-resolution"
 import {routeAssetKey} from "./lapzuli-free-runtime"
 
 export type Row = Record<string, unknown>
@@ -86,6 +87,9 @@ export async function readLapzuli(read: ReadRows) {
     registrarDesks,
     registrarPublications,
     campaignPacs,
+    projectionAuthorities,
+    outlets,
+    qualifications,
   ] = await Promise.all([
     read("measures_publication_campaign","campaign_key,publication_key,issue_id,campaign_name,campaign_objective,status,release_state,review_status,metadata,created_at,updated_at"),
     read("measures_publication_distribution_asset","distribution_asset_key,campaign_asset_id,publication_asset_id,campaign_id,platform,distribution_type,status,review_status,payload,metadata,created_at,updated_at"),
@@ -100,7 +104,12 @@ export async function readLapzuli(read: ReadRows) {
     read("c3_registrar_publication_desk","desk_key,desk_label,native_context_class,native_context_key,publication_authority_key,standing,default_editorial_voice_key,metadata"),
     read("c3ops_publication_object","publication_object_key,publisher_key,publication_key,series_key,issue_key,title,description,publication_standing,editorial_standing,updated_at"),
     read("c3_pac","pac_key,pac_type,is_effective,standing,source_authority,metadata",{pac_type:"eq.CampaignPac"}),
+    read("c3_registrar_publication_authority","authority_key,standing,metadata",{authority_key:"eq.c3_registrar"}),
+    read("lapzuli_outlet","outlet_key,outlet_name,account_standing,submission_mode,qualification_state,metadata"),
+    read("lapzuli_outlet_qualification","outlet_key,desk_key,distribution_mode,standing,operator_disposition_required,requires_ai_disclosure,requires_canonical,requires_original_contribution,provenance_constraints"),
   ])
+
+  const projectionAuthority=consumeLapzuliProjectionResolution(projectionAuthorities)
 
   const derivativeByKey = new Map(derivatives.map(row => [str(row.derivative_key) ?? "", row]))
   const campaignByKey = new Map(campaigns.map(row => [str(row.campaign_key) ?? "", row]))
@@ -149,29 +158,35 @@ export async function readLapzuli(read: ReadRows) {
       return bb-aa
     })
     const latestExecution = assetExecutions[0] ?? null
+    const routeEvidence=evidence.filter(row=>assetRoutes.some(candidate=>candidate.route_key===row.route_key))
+    const normalizedCurrent=campaignByKey.get(str(asset.campaign_id) ?? "")?.publication_key === "undrifted"
+    const currentOwners=resolveCurrentOutletQualification(route,outlets,qualifications)
     const distributed = Boolean(
-      latestExecution &&
-      (latestExecution.execution_status === "published" || latestExecution.platform_url)
+      normalizedCurrent
+        ? assetExecutions.some(row=>row.execution_status === "published") || routeEvidence.some(row=>row.observed_outcome === "published" && str(row.external_url))
+        : latestExecution && (latestExecution.execution_status === "published" || latestExecution.platform_url)
     )
     const accepted = Boolean(
       !distributed &&
-      latestExecution &&
+      (normalizedCurrent ? latestExecution?.execution_status === "queued" : latestExecution &&
       (
         latestExecution.execution_status === "queued" ||
         latestExecution.platform_post_id ||
         record(latestExecution.evidence).external_publication_effects === 1
-      )
+      ))
     )
     const isCallable = callable?.lapzuli_callable === true
     const preResolutionState = asset.status === "ready_for_lapzuli_resolution" || asset.status === "awaiting_lapzuli_resolution"
       ? asset.status : null
     const blockers: string[] = []
     if (!distributed && !accepted) {
+      if(normalizedCurrent)blockers.push(...projectionAuthority.hold_reasons,...currentOwners.holds)
       if (!derivative) blockers.push("derivative_unresolved")
       if (derivative && derivative.approval_status !== "operator_approved") blockers.push("derivative_not_operator_approved")
       if (derivative && derivative.release_state !== "released") blockers.push("derivative_not_released")
       if (!preResolutionState && asset.status !== "ready_for_operator_execution") blockers.push("distribution_asset_not_ready")
       if (asset.review_status !== "operator_approved") blockers.push("distribution_asset_not_operator_approved")
+      if(normalizedCurrent && asset.review_status === "chazz_review_required")blockers.push("chazz_review_required")
       // Registration and the callable view are outcomes of resolution, not entry predicates.
       // All common authority predicates still apply to the explicit pre-resolution source state.
       if (!preResolutionState && !str(metadata.registered_standing_key)) blockers.push("registered_standing_unresolved")
@@ -187,7 +202,7 @@ export async function readLapzuli(read: ReadRows) {
         if (!campaign) blockers.push("campaign_unresolved")
         if (campaign?.review_status !== "operator_approved") blockers.push("campaign_not_operator_approved")
         if (campaignMetadata.external_distribution_authorized !== true) blockers.push("campaign_external_distribution_not_authorized")
-        if (!releaseState || !(releaseState.startsWith("authorized_") || releaseState === "release_ready")) blockers.push("campaign_release_state_not_distribution_authorized")
+        if (!normalizedCurrent && (!releaseState || !(releaseState.startsWith("authorized_") || releaseState === "release_ready"))) blockers.push("campaign_release_state_not_distribution_authorized")
         if (!str(campaignMetadata.activation_operator) || !(str(campaignMetadata.campaign_pac_key) ?? str(campaignMetadata.pac_key))) blockers.push("campaign_operator_or_pac_unresolved")
         if (metadata.operator_confirmed !== true) blockers.push("asset_operator_confirmation_missing")
         if (metadata.external_distribution_authorized !== true) blockers.push("asset_external_distribution_not_authorized")
@@ -214,6 +229,10 @@ export async function readLapzuli(read: ReadRows) {
       executor_key: executorKey,
       executor: executor ? fields(executor,["executor_key","executor_name","executor_type","execution_mode","status","supports_publish","supports_scheduling"]) : null,
       route: route ? fields(route,["route_key","publication_object_key","desk_key","outlet_key","distribution_mode","route_status","authority_reference","operator_confirmed","canonical_url"]) : null,
+      outlet:normalizedCurrent ? currentOwners.outlet : null,
+      qualification:normalizedCurrent ? currentOwners.qualification : null,
+      current_owner_holds:normalizedCurrent ? currentOwners.holds : [],
+      publication_evidence:routeEvidence,
       registered_standing_key: str(metadata.registered_standing_key),
       callable_contract: callable,
       lapzuli_callable: isCallable,
@@ -236,24 +255,20 @@ export async function readLapzuli(read: ReadRows) {
       const heldCount = assets.filter(asset => asset.distribution_state === "held").length
       const metadata = record(campaign.metadata)
       const releaseState = str(campaign.release_state)
-      const reviewStatus = str(campaign.review_status)
-      const campaignStanding = distributedCount > 0
-        ? "active_trace"
-        : acceptedCount > 0
-          ? "provider_accepted_pending_platform_proof"
-        : readyCount > 0
-          ? "ready_for_operator_execution"
-          : reviewStatus === "operator_approved" && Boolean(releaseState?.startsWith("authorized_"))
-            ? "awaiting_lapzuli_resolution"
-            : "held"
+      const normalizedCurrent=campaign.publication_key === "undrifted"
+      const campaignStanding = normalizedCurrent ? deriveCurrentCampaignStanding(assets)
+        : distributedCount > 0 ? "active_trace" : acceptedCount > 0 ? "provider_accepted_pending_platform_proof"
+        : readyCount > 0 ? "ready_for_operator_execution"
+        : campaign.review_status === "operator_approved" && Boolean(releaseState?.startsWith("authorized_")) ? "awaiting_lapzuli_resolution" : "held"
       return {
         campaign_key: campaignKey,
         publication_key: campaign.publication_key,
         issue_id: campaign.issue_id,
         campaign_name: campaign.campaign_name,
         campaign_objective: campaign.campaign_objective,
-        status: campaign.status,
-        release_state: campaign.release_state,
+        status: normalizedCurrent ? campaignStanding : campaign.status,
+        release_state: normalizedCurrent ? campaignStanding : campaign.release_state,
+        historical:normalizedCurrent ? {classification:"historical_evidence_provenance",status:campaign.status,release_state:campaign.release_state,metadata:campaign.metadata} : null,
         review_status: campaign.review_status,
         campaign_pac_key: str(metadata.campaign_pac_key) ?? str(metadata.pac_key),
         canonical_url: str(metadata.canonical_url),
@@ -317,6 +332,10 @@ export async function readLapzuli(read: ReadRows) {
           executor_key: executorKey,
           executor: executor ? fields(executor,["executor_key","executor_name","executor_type","execution_mode","status","supports_publish","supports_scheduling"]) : null,
           route: fields(route,["route_key","publication_object_key","desk_key","outlet_key","distribution_mode","route_status","authority_reference","operator_confirmed","canonical_url"]),
+          outlet:null,
+          qualification:null,
+          current_owner_holds:[] as string[],
+          publication_evidence:[] as Row[],
           registered_standing_key: str(registration.registration_key),
           callable_contract: {source:"FREE",authority:"c3_registrar",pubpac_key:registration.pubpac_key},
           lapzuli_callable: blockers.length === 0,
@@ -337,6 +356,7 @@ export async function readLapzuli(read: ReadRows) {
         campaign_objective: publication?.description ?? "Registrar PubPAC resolved through FREE for Lapzuli.",
         status: registration.publication_standing,
         release_state: registration.distribution_standing,
+        historical:null,
         review_status: publication?.editorial_standing ?? "registrar_resolved",
         campaign_pac_key: str(metadata.campaign_pac_key),
         pubpac_key: registration.pubpac_key,
@@ -357,6 +377,7 @@ export async function readLapzuli(read: ReadRows) {
     contract:"lapzuli_distribution_desk_v1",
     source:"CampaignPAC / publication campaign -> derivative -> distribution asset -> registered standing -> route/channel/executor -> execution evidence",
     observed_at:new Date().toISOString(),
+    projection_authority:projectionAuthority,
     campaigns:[...registrarCampaignCards,...campaignCards],
     routes:routes.map(route=>{
       const metadata=record(route.metadata)
@@ -371,6 +392,8 @@ export async function readLapzuli(read: ReadRows) {
     evidence,
     channels,
     executors,
+    outlets,
+    qualifications,
     unresolved:[...registrarCampaignCards,...campaignCards]
       .filter(campaign => campaign.standing === "awaiting_lapzuli_resolution" || campaign.standing === "held")
       .map(campaign => `${campaign.campaign_key}: ${campaign.standing}`),

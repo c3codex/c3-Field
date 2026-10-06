@@ -1,0 +1,27 @@
+{
+  "authority_key": "c3_registrar",
+  "standing": "active",
+  "metadata": {
+    "lapzuli_projection_resolution_v1": {
+      "scope": "undrifted_lapzuli_campaign_projection_authority",
+      "operator": "op044",
+      "standing": "registered_effective",
+      "optics_rule": "consume_registrar_report_and_registered_resolution; observer_only; no_independent_current_interpretation",
+      "confirmed_date": "2026-10-05",
+      "external_effects": 0,
+      "issue001_resolution": "historical_release_ready_must_not_imply_current_executable_work_when_current_trace_is_4_published_8_held_0_ready_0_accepted",
+      "resolve_invocations": 0,
+      "campaign_rollup_rule": "derived_from_current_assets_routes_outlets_qualification_and_evidence",
+      "dispatch_invocations": 0,
+      "outlet_account_owner": "lapzuli_outlet",
+      "preflight_invocations": 0,
+      "route_authority_owner": "lapzuli_route",
+      "campaign_identity_owner": "measures_publication_campaign",
+      "publication_proof_owner": "distribution_execution_plus_encounter_evidence",
+      "historical_campaign_fields": "evidence_provenance_when_superseded_not_current_operational_truth",
+      "outlet_qualification_owner": "lapzuli_outlet_qualification",
+      "issue003_paragraph_resolution": "current_paragraph_outlet_qualification_route_asset_and_publication_evidence_govern_projection; preserve_dr005_publication_evidence_and_prevent_duplicate_dispatch",
+      "distribution_object_operational_owner": "current_distribution_asset_plus_execution_evidence"
+    }
+  }
+}

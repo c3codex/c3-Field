@@ -55,6 +55,48 @@ function Station({component}:{component:CurrentStateComponent}) {
   </article>
 }
 
+function ProjectionAuthority({lapzuli}:{lapzuli:LapzuliReadback}) {
+  const authority=lapzuli.projection_authority
+  return <details className="lapzuli-campaign" aria-label="Registrar projection resolution">
+    <summary>Registrar resolution · {authority.standing}</summary>
+    <p className="ops-caption">{authority.source}</p>
+    {authority.hold_reasons.length>0&&<p className="ops-unresolved">HLD — {authority.hold_reasons.join(", ")}</p>}
+    <Rows records={[authority.resolution]}/>
+    <details><summary>Registrar report · historical evidence</summary>
+      <a href={authority.registrar_report.url}>{authority.registrar_report.title}</a>
+      <p className="ops-caption">{authority.registrar_report.text_sha256} · {authority.registrar_report.integrity_basis}</p>
+      <p style={{whiteSpace:"pre-wrap"}}>{authority.registrar_report.content}</p>
+    </details>
+  </details>
+}
+
+function CampaignSummary({campaign}:{campaign:LapzuliCampaign}) {
+  return <>
+    <header>
+      <div><p className="ops-kicker">{text(campaign.publication_key)} · {campaign.historical?"CURRENT object trace":text(campaign.release_state)}</p>
+        <h3>{text(campaign.campaign_name)}</h3><p>{text(campaign.campaign_objective)}</p></div>
+      <strong className="lapzuli-standing">{text(campaign.standing)}</strong>
+    </header>
+    <div className="lapzuli-counts"><span>{campaign.counts.assets} assets</span><span>{campaign.counts.ready} ready</span><span>{campaign.counts.accepted} accepted</span><span>{campaign.counts.distributed} published</span><span>{campaign.counts.held} held</span></div>
+    {campaign.historical&&<details aria-label="Historical campaign evidence"><summary>Historical campaign evidence / provenance</summary><Rows records={[campaign.historical]}/></details>}
+  </>
+}
+
+function LapzuliProjectionOptics({lapzuli}:{lapzuli:LapzuliReadback}) {
+  return <section aria-label="Lapzuli CURRENT projection optics">
+    <h2>Lapzuli CURRENT object trace</h2>
+    <p>Consumes the Registrar report, registered resolution, and the same CURRENT projection as Lapzuli. Observation grants no action authority.</p>
+    <ProjectionAuthority lapzuli={lapzuli}/>
+    <div className="lapzuli-campaigns">{lapzuli.campaigns.filter(campaign=>campaign.publication_key==="undrifted").map(campaign=><article className="lapzuli-campaign" data-campaign-key={text(campaign.campaign_key)} data-standing={campaign.standing} key={text(campaign.campaign_key)}>
+      <CampaignSummary campaign={campaign}/>
+      <details><summary>Inspect CURRENT assets</summary>{campaign.assets.map(asset=><article className="lapzuli-asset" data-state={asset.distribution_state} key={text(asset.distribution_asset_key)}>
+        <h4>{text(asset.distribution_asset_key)}</h4><p>{asset.distribution_state}</p>
+        <Rows records={[{route:asset.route,outlet:asset.outlet,qualification:asset.qualification,blockers:asset.blockers,current_owner_holds:asset.current_owner_holds,execution_evidence:asset.latest_execution,publication_evidence:asset.publication_evidence}]}/>
+      </article>)}</details>
+    </article>)}</div>
+  </section>
+}
+
 function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>Promise<void>}) {
   const [busy,setBusy]=useState("")
   const [actionResult,setActionResult]=useState<Record<string,unknown>|null>(null)
@@ -120,19 +162,10 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
       </details>}
     </div>}
 
+    <ProjectionAuthority lapzuli={lapzuli}/>
     <div className="lapzuli-campaigns">
-      {lapzuli.campaigns.map((campaign:LapzuliCampaign)=><article className="lapzuli-campaign" key={text(campaign.campaign_key)} data-standing={campaign.standing}>
-        <header>
-          <div>
-            <p className="ops-kicker">{text(campaign.publication_key)} · {text(campaign.release_state)}</p>
-            <h3>{text(campaign.campaign_name)}</h3>
-            <p>{text(campaign.campaign_objective)}</p>
-          </div>
-          <strong className="lapzuli-standing">{text(campaign.standing)}</strong>
-        </header>
-        <div className="lapzuli-counts">
-          <span>{campaign.counts.assets} assets</span><span>{campaign.counts.ready} ready</span><span>{campaign.counts.accepted} accepted</span><span>{campaign.counts.distributed} published</span><span>{campaign.counts.held} held</span>
-        </div>
+      {lapzuli.campaigns.map((campaign:LapzuliCampaign)=><article className="lapzuli-campaign" key={text(campaign.campaign_key)} data-campaign-key={text(campaign.campaign_key)} data-standing={campaign.standing}>
+        <CampaignSummary campaign={campaign}/>
         {campaign.assets.some((asset:LapzuliAsset)=>asset.distribution_state==="awaiting_lapzuli_resolution" || asset.distribution_state==="ready_for_lapzuli_resolution")&&<button
           className="lapzuli-action"
           disabled={Boolean(busy)}
@@ -156,6 +189,9 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
                 <div><dt>Derivative</dt><dd>{text(asset.derivative_key)}</dd></div>
                 <div><dt>Executor</dt><dd>{text(asset.executor_key)}</dd></div>
                 <div><dt>Route</dt><dd>{text(asset.route?.route_key)}</dd></div>
+                {campaign.publication_key==="undrifted"&&<><div><dt>CURRENT outlet/account</dt><dd>{text(asset.outlet?.outlet_key)} / {text(asset.outlet?.account_standing)}</dd></div>
+                <div><dt>CURRENT qualification</dt><dd>{text(asset.qualification?.standing)}</dd></div>
+                <div><dt>CURRENT adapter</dt><dd>{text(asset.outlet?.metadata && (asset.outlet.metadata as Record<string,unknown>).adapter)}</dd></div></>}
               </dl>
               {asset.blockers.length>0&&<ul className="lapzuli-blockers">{asset.blockers.map(blocker=><li key={blocker}>{blocker.replace(/_/g," ")}</li>)}</ul>}
               {asset.distribution_state==="ready_for_operator_execution"&&<div className="lapzuli-asset-actions">
@@ -343,7 +379,7 @@ export default function C3OpsDoor() {
         </article>)}</section>}
 
         {lapzuli && route==="/relational-operations/lapzuli" && <LapzuliDesk lapzuli={lapzuli} onRefresh={refreshLapzuli}/>}
-        {lapzuli && route==="/c3optics" && <section aria-label="Lapzuli returned encounters"><h2>Lapzuli returned encounters</h2><p>Provider outcomes are evidence; resulting Current requires its own registered relation.</p><div className="ops-env-grid">{lapzuli.routes.map(r=><article className="ops-env" key={text(r.route_key)}><p className="ops-kicker">{text(r.desk_key)} · {text(r.outlet_key)}</p><h3>{text(r.publication_object_key)}</h3><p>Route: {text(r.route_key)} · {text(r.route_status)}</p><Rows records={lapzuli.evidence.filter(e=>e.route_key===r.route_key)}/></article>)}</div></section>}
+        {lapzuli && route==="/c3optics" && <><LapzuliProjectionOptics lapzuli={lapzuli}/><section aria-label="Lapzuli returned encounters"><h2>Lapzuli returned encounters</h2><p>Provider outcomes are evidence; resulting Current requires its own registered relation.</p><div className="ops-env-grid">{lapzuli.routes.map(r=><article className="ops-env" key={text(r.route_key)}><p className="ops-kicker">{text(r.desk_key)} · {text(r.outlet_key)}</p><h3>{text(r.publication_object_key)}</h3><p>Route: {text(r.route_key)} · {text(r.route_status)}</p><Rows records={lapzuli.evidence.filter(e=>e.route_key===r.route_key)}/></article>)}</div></section></>}
       </>}
     </>}
   </main>
