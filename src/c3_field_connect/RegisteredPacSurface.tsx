@@ -9,14 +9,9 @@ export type PacSnapshot={
   proposal_projection?:Record<string,unknown>
   members?:Array<Record<string,unknown>>
 }
-type FreeTruth={
-  standing:"ACT"|"DNR"
-  reason?:string
-  pac_key?:string
-  registered_content_sha256?:string
-  current_content_sha256?:string
-  registered_at?:string
-  snapshot?:PacSnapshot
+type PublicSurface={
+  status:"available"|"unavailable"
+  presentation?:PacSnapshot
 }
 
 function strings(value:unknown){
@@ -59,7 +54,7 @@ export function PacSnapshotSurface({
   }}>
     <header style={{borderBottom:"1px solid currentColor",paddingBottom:32,marginBottom:40}}>
       <p style={{textTransform:"uppercase",letterSpacing:".16em",fontSize:12}}>
-        {mode==="review"?"Private c3 Field-native review":"Registered public PAC · c3 Field"}
+        {mode==="review"?"Private review":"c3 Field"}
       </p>
       <h1 style={{fontSize:"clamp(3rem,8vw,6.5rem)",lineHeight:.9,margin:"18px 0"}}>
         {String(presentation.title||projection.title||snapshot.pac_key)}
@@ -94,31 +89,29 @@ export function PacSnapshotSurface({
     <footer style={{borderTop:"1px solid currentColor",marginTop:56,paddingTop:24,fontSize:13}}>
       {mode==="review"
         ?<><p>Private review snapshot · {snapshotHash||"hash unavailable"}</p><p>This is rendered with the same c3 Field PAC surface used by the canonical host. Review does not publish or make the encounter discoverable.</p></>
-        :<><p>Registry standing: ACT · Snapshot {snapshotHash}</p><p>FREE renders this registered snapshot only while the current PAC hash matches Registry. Mismatch resolves DNR.</p></>}
+        :<><p>Current public presentation.</p></>}
     </footer>
   </main>
 }
 
 export default function RegisteredPacSurface(){
-  const [truth,setTruth]=useState<FreeTruth|null>(null)
+  const [truth,setTruth]=useState<PublicSurface|null>(null)
 
   useEffect(()=>{
     let active=true
-    void fetch("/api/free-registered-pac",{headers:{accept:"application/json"},cache:"no-store"})
-      .then(async response=>await response.json() as FreeTruth)
+    void fetch("/api/public-surface",{headers:{accept:"application/json"},cache:"no-store"})
+      .then(async response=>await response.json() as PublicSurface)
       .then(body=>{if(active)setTruth(body)})
-      .catch(()=>{if(active)setTruth({standing:"DNR",reason:"FREE unavailable"})})
+      .catch(()=>{if(active)setTruth({status:"unavailable"})})
     return()=>{active=false}
   },[])
 
-  if(!truth) return <main style={{maxWidth:900,margin:"0 auto",padding:"64px 24px",fontFamily:"Georgia, serif"}}><p>Resolving registered PAC…</p></main>
+  if(!truth) return <main style={{maxWidth:900,margin:"0 auto",padding:"64px 24px",fontFamily:"Georgia, serif"}}><p>Loading…</p></main>
 
-  if(truth.standing!=="ACT"||!truth.snapshot) return <main style={{maxWidth:900,margin:"0 auto",padding:"64px 24px",fontFamily:"Georgia, serif"}}>
-    <p style={{textTransform:"uppercase",letterSpacing:".14em",fontSize:12}}>c3 Field · FREE</p>
-    <h1>Public encounter unavailable.</h1>
-    <p>The registered PAC did not resolve.</p>
-    <p><strong>DNR</strong>{truth.reason?" · "+truth.reason:""}</p>
+  if(truth.status!=="available"||!truth.presentation) return <main style={{maxWidth:900,margin:"0 auto",padding:"64px 24px",fontFamily:"Georgia, serif"}}>
+    <p style={{textTransform:"uppercase",letterSpacing:".14em",fontSize:12}}>c3 Field</p>
+    <h1>This encounter is not currently available.</h1>
   </main>
 
-  return <PacSnapshotSurface snapshot={truth.snapshot} snapshotHash={truth.registered_content_sha256} mode="runtime"/>
+  return <PacSnapshotSurface snapshot={truth.presentation} mode="runtime"/>
 }
