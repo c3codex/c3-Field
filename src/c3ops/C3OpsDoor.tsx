@@ -91,7 +91,8 @@ function LapzuliProjectionOptics({lapzuli}:{lapzuli:LapzuliReadback}) {
       <CampaignSummary campaign={campaign}/>
       <details><summary>Inspect CURRENT assets</summary>{campaign.assets.map(asset=><article className="lapzuli-asset" data-state={asset.distribution_state} key={text(asset.distribution_asset_key)}>
         <h4>{text(asset.distribution_asset_key)}</h4><p>{asset.distribution_state}</p>
-        <Rows records={[{route:asset.route,outlet:asset.outlet,qualification:asset.qualification,blockers:asset.blockers,current_owner_holds:asset.current_owner_holds,execution_evidence:asset.latest_execution,publication_evidence:asset.publication_evidence}]}/>
+        <Rows records={[{route:asset.route,outlet:asset.outlet,qualification:asset.qualification,blockers:asset.blockers,current_owner_holds:asset.current_owner_holds}]}/>
+        {(asset.latest_execution||asset.publication_evidence.length>0)&&<details><summary>Recorded execution / publication evidence</summary><Rows records={[{execution_evidence:asset.latest_execution,publication_evidence:asset.publication_evidence}]}/></details>}
       </article>)}</details>
     </article>)}</div>
   </section>
