@@ -228,7 +228,6 @@ function resolvedPublicMedia(assetKey:string,asset:RegistryRow,pacKey:string,bin
   }
   const response=json(payload,200)
   response.headers.set("cache-control","private, max-age=300")
-  response.headers.set("x-c3-free-contract","authority-resolution-v2")
   return addPacProof(response,pacKey,binding)
 }
 
