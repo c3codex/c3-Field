@@ -17,8 +17,8 @@ export default function C3InitiativeSurfaceDoor(){
     }
 
     const registeredPacRequest=pathname==="/"
-      ? fetch("/api/free-registered-pac",{headers:{accept:"application/json"},cache:"no-store"})
-      : Promise.resolve(new Response(JSON.stringify({standing:"DNR"}),{
+      ? fetch("/api/public-surface",{headers:{accept:"application/json"},cache:"no-store"})
+      : Promise.resolve(new Response(JSON.stringify({status:"unavailable"}),{
           status:409,
           headers:{"content-type":"application/json"}
         }))
@@ -27,7 +27,7 @@ export default function C3InitiativeSurfaceDoor(){
       .then(async response=>await response.json().catch(()=>null))
       .then(body=>{
         if(!active)return
-        if(body?.standing==="ACT"){
+        if(body?.status==="available"){
           setRegisteredPac(true)
           return
         }
@@ -52,6 +52,6 @@ export default function C3InitiativeSurfaceDoor(){
 
   if(registeredPac) return <RegisteredPacSurface/>
   if((pathname!=="/"&&!isInitiativeSurfacePathAllowed(pathname))||held) return <HeldUnknownC3FieldRoute pathname={pathname} />
-  if(!surface) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Resolving registered surface…</p></main>
+  if(!surface) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading…</p></main>
   return <C3CommunityConnect initiativeSurface={surface} />
 }
