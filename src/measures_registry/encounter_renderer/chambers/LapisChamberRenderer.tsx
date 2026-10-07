@@ -1083,6 +1083,8 @@ function MeasuresRegistryHome({
   // Hero & Brand media consumed through registered encounter media roles
   const heroBackgroundUrl = mediaUrl(encounter.mediaByRole.get("hero_background"))
   const registryLogoUrl = mediaUrl(encounter.mediaByRole.get("measures_registry_logo"))
+  const presentationSealRow = encounter.mediaByRole.get("mr_public_presentation_seal_artwork_webp_v1")
+  const presentationSealUrl = mediaUrl(presentationSealRow)
 
   // Hero media
   const videoRow = encounter.mediaByRole.get("about_measures_registry_video")
