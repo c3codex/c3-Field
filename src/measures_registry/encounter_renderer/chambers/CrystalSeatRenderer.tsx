@@ -324,6 +324,10 @@ function CrystalIntroSeat({
             muted
             playsInline
             preload="auto"
+            onLoadedMetadata={(event) => {
+              const captionTrack = event.currentTarget.textTracks[0]
+              if (captionTrack) captionTrack.mode = "showing"
+            }}
             onEnded={handleAdvance}
             onError={() => setVideoFailed(true)}
             aria-label={headline}
