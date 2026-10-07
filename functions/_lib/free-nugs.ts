@@ -11,6 +11,7 @@ export type NugRequest = {
   capability_ref: string
   authority_oar_key: string
   context_binding_key: string
+  participant_input?: Record<string, unknown>
 }
 export type NugResult = Record<string, unknown>
 export type NugRegistryRpc = (name: string, args: Record<string, unknown>) => Promise<NugResult>
@@ -56,11 +57,14 @@ export function createFreeNugServerRuntime(url: string, serviceRoleKey: string) 
 
 export function createFreeNugRuntime(registry: NugRegistryRpc) {
   const held = (reason: string): NugResult => ({standing: "HLD", reason})
-  const valid = (request: NugRequest) => request && Object.values(request).every(
-    value => typeof value === "string" && value.trim().length > 0,
-  ) && ["nug_key", "origin_env_key", "env_key", "envpac_key", "current_state_key",
+  const fields = ["nug_key", "origin_env_key", "env_key", "envpac_key", "current_state_key",
     "executor_ref", "execution_instance", "capability_ref", "authority_oar_key", "context_binding_key",
-  ].every(key => Object.hasOwn(request, key))
+  ] as const
+  const valid = (request: NugRequest) => request && fields.every(key =>
+    typeof request[key] === "string" && request[key].trim().length > 0,
+  ) && Object.keys(request).every(key => fields.includes(key as typeof fields[number]) || key === "participant_input")
+    && (request.participant_input === undefined || (request.participant_input !== null
+      && typeof request.participant_input === "object" && !Array.isArray(request.participant_input)))
   return {
     async resolve(request: NugRequest): Promise<NugResult> {
       if (!valid(request)) return held("request_boundary_missing")
