@@ -1052,8 +1052,6 @@ function MeasuresRegistryHome({
   renderHeader,
   renderSystemFooter,
 }: LapisChamberProps) {
-  const [aboutVideoActivated, setAboutVideoActivated] = useState(false)
-  
   const approved = asRecord(encounter.encounterDef?.metadata?.approved_content_contract)
   if (!approved) {
     return (
@@ -1088,9 +1086,7 @@ function MeasuresRegistryHome({
 
   // Hero media
   const videoRow = encounter.mediaByRole.get("about_measures_registry_video")
-  const posterRow = encounter.mediaByRole.get("about_hero_poster")
   const videoUrl = mediaUrl(videoRow)
-  const posterUrl = mediaUrl(posterRow)
 
   // Section list from metadata
   const sectionsArray = asRecordArray(approved.sections)
@@ -1149,34 +1145,15 @@ function MeasuresRegistryHome({
         {videoUrl ? (
           <section className="registry-home-video-section" aria-label="Orientation Video" style={{ borderBottom: "1px solid rgba(114, 144, 188, 0.15)", paddingBottom: "3.5rem" }}>
             <div className="registry-home-video-wrapper" style={{ maxWidth: "36rem", margin: "0 auto", width: "100%" }}>
-              {aboutVideoActivated ? (
-                <video
-                  src={videoUrl}
-                  poster={posterUrl ?? undefined}
-                  controls
-                  autoPlay
-                  muted
-                  playsInline
-                  preload="auto"
-                  aria-label="Measures Registry Orientation"
-                />
-              ) : posterUrl ? (
-                <div className="registry-home-video-poster" onClick={() => setAboutVideoActivated(true)}>
-                  <img src={posterUrl} alt="Video Poster" loading="eager" />
-                  <button type="button" className="registry-home-video-play-btn" aria-label="Play video">
-                    <span aria-hidden="true">▶</span>
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  className="registry-home-video-activate-btn"
-                  onClick={() => setAboutVideoActivated(true)}
-                  aria-label="Play video"
-                >
-                  <span>▶ Play Video</span>
-                </button>
-              )}
+              <video
+                src={videoUrl}
+                controls
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                aria-label="Measures Registry Orientation"
+              />
             </div>
           </section>
         ) : null}
