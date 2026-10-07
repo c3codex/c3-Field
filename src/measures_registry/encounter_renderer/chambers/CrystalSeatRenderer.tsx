@@ -275,7 +275,11 @@ function CrystalIntroSeat({
   const headline = asString(introCopy?.headline) ?? "AI Isn't Broken... Systems Are"
   const nextSurface = resolveNextSurface(encounter)
 
-  const videoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
+  const introVideoRow = encounter.mediaByRole.get("intro_hook_video")
+  const introVideoMeta = asRecord(introVideoRow?.metadata)
+  const videoUrl = mediaUrl(introVideoRow)
+  const captionTrackUrl = asString(introVideoMeta?.caption_track_public_url)
+  const captionLanguage = asString(introVideoMeta?.caption_language) ?? "en"
 
   function handleAdvance() {
     onNavigate("measures_registry_home")
@@ -315,6 +319,7 @@ function CrystalIntroSeat({
             ref={videoRef}
             className="registry-crystal-intro-video"
             src={videoUrl}
+            crossOrigin="anonymous"
             autoPlay
             muted
             playsInline
@@ -322,7 +327,17 @@ function CrystalIntroSeat({
             onEnded={handleAdvance}
             onError={() => setVideoFailed(true)}
             aria-label={headline}
-          />
+          >
+            {captionTrackUrl ? (
+              <track
+                kind="captions"
+                src={captionTrackUrl}
+                srcLang={captionLanguage}
+                label="English"
+                default
+              />
+            ) : null}
+          </video>
         ) : null}
         <div className="registry-crystal-intro-headline">
           <h1>{headline}</h1>
