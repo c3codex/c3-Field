@@ -268,7 +268,6 @@ function CrystalIntroSeat({
 }: CrystalSeatProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [introAudioEnabled, setIntroAudioEnabled] = useState(false)
-  const [videoActivated, setVideoActivated] = useState(false)
   const [videoFailed, setVideoFailed] = useState(false)
 
   const meta = asRecord(encounter.encounterDef?.metadata)
@@ -277,34 +276,6 @@ function CrystalIntroSeat({
   const nextSurface = resolveNextSurface(encounter)
 
   const videoUrl = mediaUrl(encounter.mediaByRole.get("intro_hook_video"))
-  const posterUrl = mediaUrl(encounter.mediaByRole.get("hero_poster"))
-
-  // OAR2 "Replace Initial Hero Video Load With Poster-First Media Delivery" —
-  // poster paints immediately; the 14MB video is not requested until the page
-  // has settled (load event + idle), so it never competes with initial LCP.
-  useEffect(() => {
-    if (!videoUrl) return
-    let idleId: number | undefined
-    function scheduleActivate() {
-      if (typeof window.requestIdleCallback === "function") {
-        idleId = window.requestIdleCallback(() => setVideoActivated(true), { timeout: 1500 })
-      } else {
-        idleId = window.setTimeout(() => setVideoActivated(true), 200)
-      }
-    }
-    if (document.readyState === "complete") {
-      scheduleActivate()
-    } else {
-      window.addEventListener("load", scheduleActivate, { once: true })
-    }
-    return () => {
-      window.removeEventListener("load", scheduleActivate)
-      if (idleId !== undefined) {
-        if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId)
-        else window.clearTimeout(idleId)
-      }
-    }
-  }, [videoUrl])
 
   function handleAdvance() {
     onNavigate("measures_registry_home")
@@ -339,34 +310,24 @@ function CrystalIntroSeat({
       style={registryTokenStyle}
     >
       <section className="registry-crystal-intro" aria-label="Introduction" onClick={handleAdvance}>
-        {videoActivated && videoUrl ? (
+        {videoUrl ? (
           <video
             ref={videoRef}
             className="registry-crystal-intro-video"
             src={videoUrl}
-            poster={posterUrl ?? undefined}
             autoPlay
             muted
             playsInline
             preload="auto"
             onEnded={handleAdvance}
-            onError={() => { setVideoFailed(true); setVideoActivated(false) }}
+            onError={() => setVideoFailed(true)}
             aria-label={headline}
-          />
-        ) : posterUrl ? (
-          <img
-            className="registry-crystal-intro-video"
-            src={posterUrl}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            fetchPriority="high"
           />
         ) : null}
         <div className="registry-crystal-intro-headline">
           <h1>{headline}</h1>
         </div>
-        {videoActivated && videoUrl ? (
+        {videoUrl && !videoFailed ? (
           <button
             type="button"
             className="registry-crystal-intro-audio"
@@ -378,7 +339,15 @@ function CrystalIntroSeat({
           <button
             type="button"
             className="registry-crystal-intro-audio"
-            onClick={(e) => { e.stopPropagation(); setVideoFailed(false); setVideoActivated(true) }}
+            onClick={(e) => {
+              e.stopPropagation()
+              setVideoFailed(false)
+              const video = videoRef.current
+              if (video) {
+                video.load()
+                void video.play().catch(() => setVideoFailed(true))
+              }
+            }}
           >
             Retry introduction
           </button>
