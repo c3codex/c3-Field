@@ -52,9 +52,12 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
       envpac_key:result.envpac_ref,
       current_ref:result.current_ref,
       primitive_contract:result.primitive_contract,
+      primitive_count:result.primitive_count,
+      contextual_component_count:result.contextual_component_count,
       free_resolution_source:result.free_resolution_source,
       initiative_projection_rule:result.initiative_projection_rule,
-      primitives:result.primitives
+      primitives:result.primitives,
+      contextual_components:result.contextual_components
     })
   }catch(error){
     const reason=error instanceof Error?error.message:"envpac_primitive_resolution_unavailable"
