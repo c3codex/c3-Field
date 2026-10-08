@@ -36,7 +36,7 @@ type Primitive={
   sort_order:number
   config?:Record<string,unknown>
 }
-type PrimitivePayload={authenticated:boolean;standing:string;primitives?:Primitive[]}
+type PrimitivePayload={authenticated:boolean;standing:string;primitive_contract?:string;primitive_count?:number;contextual_component_count?:number;primitives?:Primitive[];contextual_components?:Primitive[]}
 type PrimitiveGroupKey="core"|"work"|"relations"|"other"
 type InitiativeComponent={component_key:string;renderer_key:string;sort_order:number;config?:Record<string,unknown>}
 type Initiative={initiative_key:string;initiative_envpac_key:string;target_environment_key?:string|null;visibility_source:string;context_class?:string;context_classes?:string[];initiative_operator_binding_key?:string|null;operator_class?:string|null;operator_role?:string|null;invite_context_allowed?:boolean;components:InitiativeComponent[]}
@@ -173,6 +173,8 @@ export default function MyEnvironmentEncounter(){
   const [data,setData]=useState<EnvPayload|null>(null)
   const [message,setMessage]=useState("Opening your environment…")
   const [primitives,setPrimitives]=useState<Primitive[]>([])
+  const [contextualComponents,setContextualComponents]=useState<Primitive[]>([])
+  const [primitiveContract,setPrimitiveContract]=useState("c1me_env_primitives_v5")
   const [initiatives,setInitiatives]=useState<Initiative[]>([])
   const [ledgerEntries,setLedgerEntries]=useState<LedgerEntry[]>([])
   const [nativeConnections,setNativeConnections]=useState<NativeConnection[]>([])
@@ -556,6 +558,8 @@ export default function MyEnvironmentEncounter(){
         const body=await primitiveResult.value.json() as PrimitivePayload
         if(active&&body.primitives){
           setPrimitives([...body.primitives].sort((a,b)=>a.sort_order-b.sort_order))
+          setContextualComponents([...(body.contextual_components||[])].sort((a,b)=>a.sort_order-b.sort_order))
+          setPrimitiveContract(body.primitive_contract||"c1me_env_primitives_v5")
           setRuntimeNotice("")
         }
       }else if(active){
@@ -1437,26 +1441,27 @@ export default function MyEnvironmentEncounter(){
   const has47pct=initiatives.some(initiative=>initiative.initiative_key==="47pct")
   const genericBackdrop=!data.presentation||["c3_field_c1me_live_backdrop_v1","c3_field_environment_opening_visual_v1"].includes(data.presentation.opening_visual_asset_key)
   const backdrop=genericBackdrop?"":(data.presentation?.opening_visual_url||"")
+  const availableComponents=[...primitives,...contextualComponents]
   const activePrimitive=activePanel?.startsWith("primitive:")
-    ?primitives.find(primitive=>"primitive:"+primitive.primitive_key===activePanel)
+    ?availableComponents.find(primitive=>"primitive:"+primitive.primitive_key===activePanel)
     :null
   const activeInitiative=activePanel?.startsWith("initiative:")
     ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
     :null
   const activeOwnerLifecycle=activePanel==="owner:lifecycle"
   const groupedPrimitives={
-    core:primitives.filter(primitive=>primitiveGroup(primitive)==="core"),
-    work:primitives.filter(primitive=>primitiveGroup(primitive)==="work"),
-    relations:primitives.filter(primitive=>primitiveGroup(primitive)==="relations"),
-    other:primitives.filter(primitive=>primitiveGroup(primitive)==="other")
+    core:availableComponents.filter(primitive=>primitiveGroup(primitive)==="core"),
+    work:availableComponents.filter(primitive=>primitiveGroup(primitive)==="work"),
+    relations:availableComponents.filter(primitive=>primitiveGroup(primitive)==="relations"),
+    other:availableComponents.filter(primitive=>primitiveGroup(primitive)==="other")
   }
   const hasOperatorContext=
     data.operator_context?.resolution==="operator_context_resolved" &&
     (data.operator_context.operator_count||0)>0 &&
     (data.operator_context.operators||[]).some(operator=>operator.operator_role==="operator"&&operator.boundary==="notchazz_pass")
-  const environmentItemCount=primitives.length+initiatives.length
+  const environmentItemCount=availableComponents.length+initiatives.length
 
-  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract="c1me_env_primitives_v3+CURRENT_v1">
+  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract={primitiveContract}>
     {backdrop&&<img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>}
     <CurrentConstellation tokens={currentTokens}/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
