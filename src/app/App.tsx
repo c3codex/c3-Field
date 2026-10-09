@@ -1,4 +1,6 @@
 import { lazy, Suspense, useEffect } from "react"
+import {isRegisteredPublicationProjectionHost} from "../c3_field_connect/registeredPublicationProjection"
+const RegisteredPublicationProjectionDoor=lazy(()=>import("../c3_field_connect/RegisteredPublicationProjectionDoor"))
 import { isC3OpsHost } from "../c3ops/c3OpsRoutes"
 const C2EnvironmentDoor = lazy(() => import("../c3_field_contribution/C2EnvironmentDoor"))
 const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
@@ -326,10 +328,12 @@ export default function App() {
   const isC3Host = isC3FieldHost(hostname)
   const isC3PersonalHost = isC3FieldPersonalEnvironmentHost(hostname)
   const isC3InitiativeHost = isC3FieldInitiativeHostCandidate(hostname)
+  const isRegisteredPublicationHost=isRegisteredPublicationProjectionHost(hostname)
   const c3Route = resolveC3FieldRoute(window.location.pathname)
 
   useEffect(() => {
     let cancelled = false
+    if(isRegisteredPublicationHost)return()=>{cancelled=true}
 
     if (isOpsHost) {
       applyPageMetadata({ ...C3_OPS_METADATA, title: "c3Ops", url: "https://c3ops.c3field.online", canonicalUrl: "https://c3ops.c3field.online" })
@@ -477,6 +481,7 @@ export default function App() {
   }, [c3Route.kind, isC3Host, isC3PersonalHost, isC3InitiativeHost, isInannaHost, isOpsHost, mode])
 
   if (isOpsHost) return <Suspense fallback={<p role="status">Opening c3Ops…</p>}><C3OpsDoor /></Suspense>
+  if(isRegisteredPublicationHost)return <Suspense fallback={<p role="status">Resolving registered publication projection…</p>}><RegisteredPublicationProjectionDoor /></Suspense>
 
   if (isRegistryHost) {
     return <MeasuresRegistryRuntime />

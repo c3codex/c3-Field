@@ -80,6 +80,9 @@ export function composeEncounter(
   }
 
   return {
+    homeHero: rootRow?.is_active && rootRow.release_state === "released" && rootRow.access_state === "visible"
+      ? asRecord(rootMeta?.home_hero)
+      : null,
     surface,
     registryKey: assignment.registry_key,
     registryRow,

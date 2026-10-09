@@ -2,12 +2,13 @@ import { FormEvent, useMemo, useState } from "react"
 import { supabase, supabaseConfigError } from "@/integrations/supabase/client"
 import "./getUndriftedConnect.css"
 
-type DeskKey = "drift_report" | "structural_standings" | "mapped_and_measured" | "current"
+type DeskKey = string
 
 type GetUndriftedConnectProps = {
   dispatchKey?: string | null
   sourceRoute: string
   compact?: boolean
+  desks?: Array<{ key: string; label: string }>
 }
 
 const DESKS: Array<{ key: DeskKey; label: string }> = [
@@ -21,6 +22,7 @@ export default function GetUndriftedConnect({
   dispatchKey = null,
   sourceRoute,
   compact = false,
+  desks = DESKS,
 }: GetUndriftedConnectProps) {
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
@@ -131,7 +133,7 @@ export default function GetUndriftedConnect({
           <fieldset className="undrifted-connect-desks">
             <legend>Preferred desks <small>— leave blank for publication-wide updates</small></legend>
             <div>
-              {DESKS.map((desk) => (
+              {desks.map((desk) => (
                 <label key={desk.key}>
                   <input
                     type="checkbox"

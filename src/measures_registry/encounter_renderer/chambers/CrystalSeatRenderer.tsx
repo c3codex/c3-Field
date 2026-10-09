@@ -280,6 +280,7 @@ function CrystalIntroSeat({
   const videoUrl = mediaUrl(introVideoRow)
   const captionTrackUrl = asString(introVideoMeta?.caption_track_public_url)
   const captionLanguage = asString(introVideoMeta?.caption_language) ?? "en"
+  const [captionsEnabled,setCaptionsEnabled]=useState(introVideoMeta?.caption_default_enabled===true)
 
   function handleAdvance() {
     onNavigate("measures_registry_home")
@@ -326,7 +327,7 @@ function CrystalIntroSeat({
             preload="auto"
             onLoadedMetadata={(event) => {
               const captionTrack = event.currentTarget.textTracks[0]
-              if (captionTrack) captionTrack.mode = "showing"
+              if (captionTrack) captionTrack.mode = captionsEnabled ? "showing" : "disabled"
             }}
             onEnded={handleAdvance}
             onError={() => setVideoFailed(true)}
@@ -338,7 +339,7 @@ function CrystalIntroSeat({
                 src={captionTrackUrl}
                 srcLang={captionLanguage}
                 label="English"
-                default
+                default={captionsEnabled}
               />
             ) : null}
           </video>
@@ -346,6 +347,13 @@ function CrystalIntroSeat({
         <div className="registry-crystal-intro-headline">
           <h1>{headline}</h1>
         </div>
+        {captionTrackUrl&&videoUrl&&!videoFailed ? <button type="button" className="registry-crystal-intro-captions" aria-pressed={captionsEnabled} onClick={event=>{
+          event.stopPropagation()
+          const enabled=!captionsEnabled
+          setCaptionsEnabled(enabled)
+          const track=videoRef.current?.textTracks[0]
+          if(track)track.mode=enabled?"showing":"disabled"
+        }}>Captions {captionsEnabled?"on":"off"}</button> : null}
         {videoUrl && !videoFailed ? (
           <button
             type="button"

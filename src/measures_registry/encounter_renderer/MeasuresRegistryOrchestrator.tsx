@@ -110,9 +110,9 @@ function surfaceForPathname(pathname: string): OrchestratorSurface | null {
   return null
 }
 
-function initialSurface(): OrchestratorSurface {
+function initialSurface(routeOverride?:string): OrchestratorSurface {
   const url = new URL(window.location.href)
-  const pathname = normalizePathname(url.pathname)
+  const pathname = normalizePathname(routeOverride||url.pathname)
   if (url.searchParams.get("payment") === "success") return "marble_chamber_C2_resolution"
   const mapped = surfaceForPathname(pathname)
   if (mapped) return mapped
@@ -150,7 +150,7 @@ function normalizeWebsite(value: string | undefined): string {
   return /^www\./i.test(trimmed) ? `https://${trimmed}` : trimmed
 }
 
-export default function MeasuresRegistryOrchestrator() {
+export default function MeasuresRegistryOrchestrator({routeOverride,projectionMode=false}:{routeOverride?:string;projectionMode?:boolean}={}) {
   const resolverData = useRegistryResolver()
   const mrPacResolution = resolverData.loading
     ? "pending"
@@ -162,7 +162,7 @@ export default function MeasuresRegistryOrchestrator() {
       )
       ? "resolved"
       : "dnr"
-  const [activeSurface, setActiveSurface] = useState<OrchestratorSurface>(initialSurface)
+  const [activeSurface, setActiveSurface] = useState<OrchestratorSurface>(()=>initialSurface(routeOverride))
   const evaluationDeliveryResolvedRef = useRef(false)
   const ambientAudioRef = useRef<HTMLAudioElement>(null)
   const fadeRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -179,6 +179,7 @@ export default function MeasuresRegistryOrchestrator() {
   }, [])
 
   useEffect(() => {
+    if(projectionMode)return
     if (evaluationDeliveryResolvedRef.current) return
     const token = new URL(window.location.href).searchParams.get("evaluation")
     if (!token) return
@@ -200,6 +201,7 @@ export default function MeasuresRegistryOrchestrator() {
 
   // URL sync
   useEffect(() => {
+    if(projectionMode)return
     if (activeRouteDefaultSurface === activeSurface) return
     if (navigationSourceRef.current === "history") {
       navigationSourceRef.current = "app"
@@ -214,6 +216,7 @@ export default function MeasuresRegistryOrchestrator() {
   // popstate
   useEffect(() => {
     function handlePopState(event: PopStateEvent) {
+      if(projectionMode)return
       if (event.state?.source !== HISTORY_SOURCE || !event.state.surface) return
       navigationSourceRef.current = "history"
       setActiveSurface(event.state.surface as OrchestratorSurface)

@@ -1,0 +1,128 @@
+/* Measures Registry governed home hero.
+   Copy authority: measures_registry_root.metadata.home_hero
+   Media authority: measures_media_map.media_role = hero_background */
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: min(860px, calc(100svh - var(--registry-header-height, 3rem)));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #03070d;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  color: #f4f1eb;
+}
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 7, 14, 0.92) 0%,
+      rgba(2, 7, 14, 0.78) 34%,
+      rgba(2, 7, 14, 0.30) 58%,
+      rgba(2, 7, 14, 0.04) 72%
+    ),
+    linear-gradient(180deg, rgba(1, 5, 10, 0.16), rgba(1, 5, 10, 0.28));
+}
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero .hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(46rem, 52vw);
+  padding: clamp(3rem, 7vw, 7rem);
+  padding-right: 0;
+}
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero .hero-brand {
+  margin: 0 0 clamp(1rem, 2.2vw, 1.8rem);
+  font-size: clamp(0.74rem, 0.95vw, 0.9rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(225, 235, 247, 0.72);
+}
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero h1 {
+  margin: 0;
+  max-width: 12ch;
+  font-family: var(--registry-font-heading, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(3.3rem, 6.8vw, 6.8rem);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  color: #f6f2ea;
+  text-wrap: balance;
+}
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero .hero-body,
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero .hero-support {
+  max-width: 37rem;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero .hero-body {
+  margin-top: clamp(1.35rem, 2.6vw, 2rem);
+  font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+  color: rgba(239, 243, 248, 0.92);
+}
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero .hero-support {
+  margin-top: 0.9rem;
+  font-size: clamp(0.9rem, 1.15vw, 1rem);
+  color: rgba(222, 230, 239, 0.76);
+}
+
+.measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero .hero-primary-cta {
+  margin-top: clamp(1.5rem, 2.8vw, 2.2rem);
+  min-height: 3rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(218, 230, 244, 0.44);
+  border-radius: 3px;
+  background: rgba(7, 20, 38, 0.58);
+  color: #f5f8fb;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 800px) {
+  .measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero {
+    min-height: 100svh;
+    align-items: flex-start;
+    background-position: 58% center;
+  }
+
+  .measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero-shade {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 7, 14, 0.84) 0%,
+        rgba(2, 7, 14, 0.72) 42%,
+        rgba(2, 7, 14, 0.24) 72%,
+        rgba(2, 7, 14, 0.18) 100%
+      );
+  }
+
+  .measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero .hero-content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: max(2rem, env(safe-area-inset-top, 0px)) 1.35rem 42svh;
+  }
+
+  .measures-registry-runtime[data-surface="measures_registry_home"] .measures-home-hero h1 {
+    max-width: 11ch;
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+}

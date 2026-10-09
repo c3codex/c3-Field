@@ -15,6 +15,8 @@ import {
   asStringArray,
 } from "../shared/encounterRendererUtils"
 import { encounterStyleDataAttributes } from "../styles/encounterStyleProfile"
+import { RegistryHomeHero } from "../shared/RegistryHomeHero"
+import "../styles/encounters/home.css"
 import {
   launchCycleArticleForPath,
   UNDRIFTED_LAUNCH_CYCLE_001_ARTICLES,
@@ -1079,7 +1081,9 @@ function MeasuresRegistryHome({
   const missionText = asString(approved.mission) ?? "Make computational participation governable."
 
   // Hero & Brand media consumed through registered encounter media roles
-  const heroBackgroundUrl = mediaUrl(encounter.mediaByRole.get("hero_background"))
+  const heroBackgroundRow=encounter.mediaByRole.get("hero_background")
+  const heroSourcePacKey=asString(encounter.homeHero?.source_pac_key)
+  const heroBackgroundUrl=heroSourcePacKey&&asString(asRecord(heroBackgroundRow?.metadata)?.source_pac_key)===heroSourcePacKey ? mediaUrl(heroBackgroundRow) : null
   const registryLogoUrl = mediaUrl(encounter.mediaByRole.get("measures_registry_logo"))
   const presentationSealRow = encounter.mediaByRole.get("mr_public_presentation_seal_artwork_webp_v1")
   const presentationSealUrl = mediaUrl(presentationSealRow)
@@ -1115,28 +1119,8 @@ function MeasuresRegistryHome({
     >
       {renderHeader({ title: "Measures Registry" })}
 
+      <RegistryHomeHero homeHero={encounter.homeHero} backgroundUrl={heroBackgroundUrl} logoUrl={registryLogoUrl} onAssessment={()=>onNavigate("obsidian_chamber_orientation")} />
       <div className="registry-home-shell">
-        {/* 1. HERO SECTION — PAC-resolved institutional backdrop + logo. */}
-        {heroBackgroundUrl ? (
-          <section id="hero" className="registry-home-hero-backdrop" aria-label="Measures Registry">
-            <img
-              className="registry-home-hero-backdrop-image"
-              src={heroBackgroundUrl}
-              alt=""
-              aria-hidden="true"
-              loading="eager"
-              fetchPriority="high"
-            />
-            {registryLogoUrl ? (
-              <img
-                className="registry-home-hero-logo"
-                src={registryLogoUrl}
-                alt="Measures Registry"
-                loading="eager"
-              />
-            ) : null}
-          </section>
-        ) : null}
 
         {/* space / material transition */}
         <div style={{ height: "3rem" }} />

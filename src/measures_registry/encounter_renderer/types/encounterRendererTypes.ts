@@ -159,6 +159,7 @@ export type RoleCallStanding = {
 }
 
 export type ComposedEncounter = {
+  homeHero?: Record<string, unknown> | null
   surface: EncounterSurface
   registryKey: string
   registryRow: RegistryRow
@@ -175,6 +176,7 @@ export type ComposedEncounter = {
 }
 
 export type RenderableEncounter = {
+  homeHero?: Record<string, unknown> | null
   surface: EncounterSurface
   registryKey: string
   registryRow: RegistryRow

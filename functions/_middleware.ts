@@ -1,3 +1,5 @@
+import {resolveRegisteredUndriftedProjection} from "../src/c3_field_connect/registeredPublicationProjection"
+
 type Env = {
   OPERATOR_DISPATCH_KEY?: string
 }
@@ -232,6 +234,29 @@ async function projectMdmSocialHead(request: Request, response: Response) {
   }
 }
 
+async function projectRegisteredPublicationHead(request:Request,response:Response){
+  const url=new URL(request.url)
+  if(url.hostname!=="undrifted.measuresregistry.com"||url.pathname!=="/"||!response.ok||!response.headers.get("content-type")?.includes("text/html"))return response
+  try{
+    const get=async(path:string)=>{
+      const r=await fetch(new URL(path,request.url),{headers:{accept:"application/json"},redirect:"manual",signal:AbortSignal.timeout(15000)})
+      if(!r.ok)throw new Error("registered_publication_unavailable")
+      return record(await r.json())
+    }
+    const projection=resolveRegisteredUndriftedProjection(await get("/api/public-surface"),url.hostname)
+    if(!projection)throw new Error("registered_publication_projection_held")
+    const packet=await get("/api/publication-presentation?surface=lapis_chamber_encounter")
+    const p=record(packet.presentation),authority=record(p.authority),seo=record(packet.socialMetadata)
+    if(packet.standing!=="resolved"||p.version!=="designpac_v1"||record(p.publication).id!==projection.publication_key||authority.pubpac!==projection.source_pubpac_key||packet.socialMetadataSource!=="undrifted_publication_landing")throw new Error("publication_authority_mismatch")
+    const title=stringValue(seo.og_title),description=stringValue(seo.og_description),canonicalUrl=stringValue(seo.canonical_url),ogImageUrl=stringValue(seo.og_image),ogType=stringValue(seo.og_type)
+    if(!title||!description||!canonicalUrl||!ogImageUrl||!ogType||canonicalUrl!==url.origin+"/"||seo.og_url!==canonicalUrl||new URL(ogImageUrl).protocol!=="https:")throw new Error("publication_social_authority_missing")
+    const headers=new Headers(response.headers);headers.delete("content-length");headers.set("x-c3-social-head","registered-undrifted-publication-projected")
+    return new Response(rewriteInitiativeSocialHead(await response.text(),{title,description,canonicalUrl,ogImageUrl,ogType,ogImageType:"image/png"}),{status:response.status,headers})
+  }catch{
+    return new Response("Publication presentation temporarily unavailable",{status:503,headers:{"content-type":"text/plain; charset=utf-8","cache-control":"no-store","x-c3-social-head":"registered-publication-held"}})
+  }
+}
+
 async function sha256Hex(value: string) {
   const bytes = new TextEncoder().encode(value)
   const digest = await crypto.subtle.digest("SHA-256", bytes)
@@ -301,7 +326,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 
   if (!isProtectedPath(pathname) && !c3OpsRoom) {
     const response = await next()
-    return project47PctSocialHead(request, await projectMdmSocialHead(request, response))
+    return project47PctSocialHead(request, await projectMdmSocialHead(request, await projectRegisteredPublicationHead(request,response)))
   }
   if (!env.OPERATOR_DISPATCH_KEY) {
     return new Response(JSON.stringify({ error: "operator access not configured" }), {
