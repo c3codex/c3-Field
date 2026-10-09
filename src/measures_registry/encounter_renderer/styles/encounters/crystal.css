@@ -293,3 +293,9 @@
   background: rgba(31, 50, 96, 0.07);
   border-color: rgba(31, 50, 96, 0.62);
 }
+
+/* Only the intro error continuation; no authority or composition change. */
+.registry-crystal-intro-recovery {position:absolute;bottom:1rem;left:1rem;right:1rem;z-index:3;display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;background:#10151eee;color:#fff;padding:1rem}
+.registry-crystal-intro-recovery p {flex-basis:100%;margin:0;text-align:center}
+.registry-crystal-intro-recovery button {min-height:44px;padding:.65rem 1rem;background:#172030;color:#fff;border:1px solid #ffffff80;cursor:pointer}
+.registry-crystal-intro-recovery button:focus-visible {outline:3px solid #91b9f3;outline-offset:3px}

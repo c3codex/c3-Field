@@ -1,5 +1,6 @@
 import type { CSSProperties, FormEvent, MouseEvent, ReactNode } from "react"
 import { useEffect, useRef, useState } from "react"
+import { startAuthoredIntro, showApprovedCaptions, type AuthoredIntroState } from "@/shared/media/authoredIntroPlayback"
 import { resolveRuntimeMediaUrl } from "@/shared/media/runtimeMediaUrl"
 import type { EncounterMediaRow, EncounterSurface, RenderableEncounter, TransitionNode } from "../types/encounterRendererTypes"
 import {
@@ -257,53 +258,48 @@ function CrystalOrientationSeat({
 }
 
 // --- crystal_seat_intro -----------------------------------------------------
-// Full-viewport video. Auto-play, NOT muted. Auto-advance on end.
-// Headline "AI Isn't Broken... Systems Are" left-seated. No mute controls.
+// Exact registered intro; authored sound attempt and genuine ended progression.
 
 function CrystalIntroSeat({
-  encounter,
-  registryTokenStyle,
-  onNavigate,
-  renderSystemFooter,
+  encounter, registryTokenStyle, onNavigate, renderSystemFooter,
 }: CrystalSeatProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [introAudioEnabled, setIntroAudioEnabled] = useState(false)
-  const [videoFailed, setVideoFailed] = useState(false)
-
+  const controller = useRef<ReturnType<typeof startAuthoredIntro> | null>(null)
+  const [playback, setPlayback] = useState<AuthoredIntroState>("loading")
+  const advanced = useRef(false)
+  const navigation = useRef(onNavigate)
+  navigation.current = onNavigate
   const meta = asRecord(encounter.encounterDef?.metadata)
   const introCopy = asRecord(meta?.intro_copy)
   const headline = asString(introCopy?.headline) ?? "AI Isn't Broken... Systems Are"
-  const nextSurface = resolveNextSurface(encounter)
-
+  // Current WebPAC-projected policy supersedes the retained legacy threshold flow.
+  const introPolicy = asRecord(encounter.homeHero?.intro_policy)
+  const advanceTarget = asString(introPolicy?.auto_advance_target)
+  const next = useRef(advanceTarget)
+  next.current = advanceTarget
   const introVideoRow = encounter.mediaByRole.get("intro_hook_video")
   const introVideoMeta = asRecord(introVideoRow?.metadata)
   const videoUrl = mediaUrl(introVideoRow)
   const captionTrackUrl = asString(introVideoMeta?.caption_track_public_url)
   const captionLanguage = asString(introVideoMeta?.caption_language) ?? "en"
-  // OAR028 restores initial visibility; an explicit Registry prohibition still controls.
   const [captionsEnabled,setCaptionsEnabled]=useState(introVideoMeta?.caption_default_enabled!==false)
-
+  const showCaptions = captionsEnabled && introVideoMeta?.caption_default_enabled!==false
   function handleAdvance() {
-    onNavigate("measures_registry_home")
+    if (advanced.current || !next.current) return
+    advanced.current = true
+    navigation.current(next.current as EncounterSurface)
   }
-
-  function handleIntroAudio(e: MouseEvent) {
-    e.stopPropagation()
-    const video = videoRef.current
-    if (!video) return
-    if (!introAudioEnabled) {
-      video.muted = false
-      video.volume = 1
-      void video.play().catch(() => {
-        video.muted = true
-        setIntroAudioEnabled(false)
-      })
-      setIntroAudioEnabled(true)
-    } else {
-      video.muted = true
-      setIntroAudioEnabled(false)
-    }
-  }
+  useEffect(() => {
+    if (!videoUrl || !videoRef.current) return
+    const current = startAuthoredIntro(videoRef.current, {
+      state: setPlayback, complete: handleAdvance, failure: () => {},
+    }, window)
+    controller.current = current
+    return () => {current.dispose();if(controller.current===current)controller.current=null}
+  }, [videoUrl])
+  useEffect(() => {
+    if (videoRef.current) showApprovedCaptions(videoRef.current.textTracks, showCaptions)
+  }, [videoUrl, captionTrackUrl, showCaptions])
 
   return (
     <main
@@ -315,23 +311,16 @@ function CrystalIntroSeat({
       {...encounterStyleDataAttributes(encounter.surfaceAssignmentMetadata)}
       style={registryTokenStyle}
     >
-      <section className="registry-crystal-intro" aria-label="Introduction" onClick={handleAdvance}>
+      <section className="registry-crystal-intro" aria-label="Introduction" data-intro-playback={playback}>
         {videoUrl ? (
           <video
             ref={videoRef}
             className="registry-crystal-intro-video"
             src={videoUrl}
             crossOrigin="anonymous"
-            autoPlay
-            muted
             playsInline
             preload="auto"
-            onLoadedMetadata={(event) => {
-              const captionTrack = event.currentTarget.textTracks[0]
-              if (captionTrack) captionTrack.mode = captionsEnabled ? "showing" : "disabled"
-            }}
-            onEnded={handleAdvance}
-            onError={() => setVideoFailed(true)}
+            onLoadedMetadata={event => showApprovedCaptions(event.currentTarget.textTracks, showCaptions)}
             aria-label={headline}
           >
             {captionTrackUrl ? (
@@ -340,7 +329,8 @@ function CrystalIntroSeat({
                 src={captionTrackUrl}
                 srcLang={captionLanguage}
                 label="English"
-                default={captionsEnabled}
+                default={showCaptions}
+                onLoad={() => {if(videoRef.current)showApprovedCaptions(videoRef.current.textTracks, showCaptions)}}
               />
             ) : null}
           </video>
@@ -348,38 +338,13 @@ function CrystalIntroSeat({
         <div className="registry-crystal-intro-headline">
           <h1>{headline}</h1>
         </div>
-        {captionTrackUrl&&videoUrl&&!videoFailed ? <button type="button" className="registry-crystal-intro-captions" aria-pressed={captionsEnabled} onClick={event=>{
-          event.stopPropagation()
-          const enabled=!captionsEnabled
-          setCaptionsEnabled(enabled)
-          const track=videoRef.current?.textTracks[0]
-          if(track)track.mode=enabled?"showing":"disabled"
-        }}>Captions {captionsEnabled?"on":"off"}</button> : null}
-        {videoUrl && !videoFailed ? (
-          <button
-            type="button"
-            className="registry-crystal-intro-audio"
-            onClick={handleIntroAudio}
-          >
-            {introAudioEnabled ? "Mute" : "Enter with sound"}
-          </button>
-        ) : videoFailed && videoUrl ? (
-          <button
-            type="button"
-            className="registry-crystal-intro-audio"
-            onClick={(e) => {
-              e.stopPropagation()
-              setVideoFailed(false)
-              const video = videoRef.current
-              if (video) {
-                video.load()
-                void video.play().catch(() => setVideoFailed(true))
-              }
-            }}
-          >
-            Retry introduction
-          </button>
-        ) : null}
+        {captionTrackUrl&&videoUrl&&playback!=="failed" ? <button type="button" className="registry-crystal-intro-captions" aria-pressed={showCaptions} onClick={()=>setCaptionsEnabled(!captionsEnabled)}>Captions {showCaptions?"on":"off"}</button> : null}
+        {playback==="blocked" ? <button type="button" className="registry-crystal-intro-audio" onClick={()=>controller.current?.playWithSound()}>Play with sound</button> : null}
+        {playback==="failed"||!videoUrl ? <div className="registry-crystal-intro-recovery" role="status">
+          <p>The introduction is unavailable.</p>
+          {videoUrl?<button type="button" onClick={()=>controller.current?.retry()}>Retry introduction</button>:null}
+          <button type="button" onClick={handleAdvance}>Continue to Measures Registry</button>
+        </div>:null}
         <div className="c3-visually-hidden">
           <nav aria-label="Measures Registry navigation">
             <a href="/" onClick={(e) => e.stopPropagation()}>Home</a>
