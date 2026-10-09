@@ -11,6 +11,14 @@ test("routes c3 Field root to C1 Connect without operations spine", () => {
   assert.equal(route.createsStanding, false)
 })
 
+test("routes the Registry-seated Living Circuit as a non-standing public encounter", () => {
+  const route = resolveC3FieldRoute("/living-circuit/")
+  assert.equal(route.kind, "encounter")
+  assert.equal(route.component, "LivingCircuitEncounter")
+  assert.equal(route.exposesOperationsSpine, false)
+  assert.equal(route.createsStanding, false)
+})
+
 test("routes c3ops to the existing operations spine", () => {
   const route = resolveC3FieldRoute("/c3ops/")
   assert.equal(route.kind, "operations")
