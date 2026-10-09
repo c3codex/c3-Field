@@ -6,5 +6,5 @@ export function initialPublicEntryStage(pathname: string, initiativeKey: string 
   // Preserve other initiatives' existing share/intro semantics.
   if (hasShareReference && initiativeKey === "47pct") return "landing"
   if (hasShareReference) return "intro"
-  return path === "/connect" ? "connect" : initiativeKey ? "landing" : "intro"
+  return pathname === "/connect" ? "connect" : initiativeKey ? "landing" : "intro"
 }
