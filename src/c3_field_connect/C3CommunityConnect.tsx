@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
 import MdmEntryIntro from "./MdmEntryIntro"
+import {initialPublicEntryStage} from "./publicEntryStage"
 import MillionDollarMissionLanding from "./MillionDollarMissionLanding"
 import {loadC3PublicPresentation,type C3PublicPresentation} from "./c3PublicPresentation"
 import type {InitiativeSurfaceRuntime} from "./initiativeSurfaceHost"
@@ -33,13 +34,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   const [mediaFailed, setMediaFailed] = useState(false)
   const shareReference = shareReferenceFromLocation()
   const [publicStage, setPublicStage] = useState<"intro"|"landing"|"connect">(() =>
-    shareReference && initiativeSurface?.initiativeKey==="47pct"
-      ? "landing"
-      : shareReference
-        ? "intro"
-        : initiativeSurface
-          ? (window.location.pathname === "/connect" ? "connect" : "landing")
-          : (window.location.pathname === "/connect" ? "connect" : "intro")
+    initialPublicEntryStage(window.location.pathname, initiativeSurface?.initiativeKey, !!shareReference)
   )
   const [introMuted, setIntroMuted] = useState(true)
   const introVideoRef = useRef<HTMLVideoElement | null>(null)
