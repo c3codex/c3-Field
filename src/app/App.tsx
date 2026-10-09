@@ -341,15 +341,19 @@ export default function App() {
     }
 
     if (isRegisteredPublicationHost) {
-      applyPageMetadata({
-        title: "unDrifted | c3 Field",
-        description: "Registered c3 Field projection of the unDrifted publication.",
-        url: "https://undrifted.measuresregistry.com/",
-        canonicalUrl: "https://undrifted.measuresregistry.com/",
-        ogUrl: "https://undrifted.measuresregistry.com/",
-        image: "https://measuresregistry.com/og.jpeg",
-        type: "website",
-      })
+      const routeUnit=REGISTRY_ROUTE_UNITS["/undrifted"]
+      if(supabaseConfigError) return () => { cancelled = true }
+      void supabase
+        .from("measures_registry")
+        .select("metadata")
+        .eq("registry_key",routeUnit)
+        .eq("is_active",true)
+        .maybeSingle()
+        .then(({data,error})=>{
+          if(cancelled||error)return
+          const metadata=metadataFromGovernedRow(data)
+          if(metadata)applyPageMetadata(metadata)
+        })
       return () => { cancelled = true }
     }
 
