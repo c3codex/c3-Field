@@ -110,9 +110,9 @@ function surfaceForPathname(pathname: string): OrchestratorSurface | null {
   return null
 }
 
-function initialSurface(): OrchestratorSurface {
+function initialSurface(routeOverride?: string): OrchestratorSurface {
   const url = new URL(window.location.href)
-  const pathname = normalizePathname(url.pathname)
+  const pathname = normalizePathname(routeOverride ?? url.pathname)
   if (url.searchParams.get("payment") === "success") return "marble_chamber_C2_resolution"
   const mapped = surfaceForPathname(pathname)
   if (mapped) return mapped
@@ -150,7 +150,13 @@ function normalizeWebsite(value: string | undefined): string {
   return /^www\./i.test(trimmed) ? `https://${trimmed}` : trimmed
 }
 
-export default function MeasuresRegistryOrchestrator() {
+export default function MeasuresRegistryOrchestrator({
+  routeOverride,
+  projectionMode = false,
+}: {
+  routeOverride?: string
+  projectionMode?: boolean
+} = {}) {
   const resolverData = useRegistryResolver()
   const mrPacResolution = resolverData.loading
     ? "pending"
@@ -162,23 +168,25 @@ export default function MeasuresRegistryOrchestrator() {
       )
       ? "resolved"
       : "dnr"
-  const [activeSurface, setActiveSurface] = useState<OrchestratorSurface>(initialSurface)
+  const [activeSurface, setActiveSurface] = useState<OrchestratorSurface>(() => initialSurface(routeOverride))
   const evaluationDeliveryResolvedRef = useRef(false)
   const ambientAudioRef = useRef<HTMLAudioElement>(null)
   const fadeRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const [toneBlocked, setToneBlocked] = useState(false)
 
   const navigationSourceRef = useRef<"app" | "history">("app")
-  const activeRouteDefaultSurface = surfaceForPathname(normalizePathname(window.location.pathname))
+  const activeRouteDefaultSurface = surfaceForPathname(normalizePathname(routeOverride ?? window.location.pathname))
 
   // Redirect legacy /structural-drift alias
   useEffect(() => {
+    if (routeOverride) return
     if (window.location.pathname === "/structural-drift") {
       window.location.replace("/undrifted")
     }
-  }, [])
+  }, [routeOverride])
 
   useEffect(() => {
+    if (projectionMode) return
     if (evaluationDeliveryResolvedRef.current) return
     const token = new URL(window.location.href).searchParams.get("evaluation")
     if (!token) return
@@ -196,10 +204,11 @@ export default function MeasuresRegistryOrchestrator() {
         // The public route remains a held lookup if the delivery token cannot resolve.
       }
     })()
-  }, [])
+  }, [projectionMode])
 
   // URL sync
   useEffect(() => {
+    if (projectionMode) return
     if (activeRouteDefaultSurface === activeSurface) return
     if (navigationSourceRef.current === "history") {
       navigationSourceRef.current = "app"
@@ -209,10 +218,11 @@ export default function MeasuresRegistryOrchestrator() {
     if (state?.source === HISTORY_SOURCE && state.surface === activeSurface) return
     const method = state?.source === HISTORY_SOURCE ? "pushState" : "replaceState"
     writeHistory(method, activeSurface)
-  }, [activeRouteDefaultSurface, activeSurface])
+  }, [activeRouteDefaultSurface, activeSurface, projectionMode])
 
   // popstate
   useEffect(() => {
+    if (projectionMode) return
     function handlePopState(event: PopStateEvent) {
       if (event.state?.source !== HISTORY_SOURCE || !event.state.surface) return
       navigationSourceRef.current = "history"
@@ -220,7 +230,7 @@ export default function MeasuresRegistryOrchestrator() {
     }
     window.addEventListener("popstate", handlePopState)
     return () => window.removeEventListener("popstate", handlePopState)
-  }, [])
+  }, [projectionMode])
 
   const registryTokenStyle = useMemo<CSSProperties>(() => {
     const style: Record<string, string> = {}
@@ -335,11 +345,29 @@ export default function MeasuresRegistryOrchestrator() {
   }, [activeSurface, resolverData.loading, resolverData.surfaceAssignmentRows, resolverData.encounterDefRows])
 
   function navigate(surface: OrchestratorSurface) {
+    if (projectionMode && surface !== "lapis_chamber_encounter") {
+      const route = PUBLIC_ROUTE_BY_SURFACE[surface] ?? "/"
+      window.location.href = `https://measuresregistry.com${route}`
+      return
+    }
     navigationSourceRef.current = "app"
     setActiveSurface(surface)
   }
 
   function renderHeader({ title }: { title: string }) {
+    if (projectionMode) {
+      return (
+        <header className="registry-public-header" aria-label="unDrifted c3 Field projection">
+          <div className="registry-public-brand">
+            <span>unDrifted</span>
+          </div>
+          <nav className="registry-public-nav" aria-label="Projection navigation">
+            <a href="https://c3field.online/">c3 Field</a>
+            <a href="https://measuresregistry.com/undrifted/">Native publication</a>
+          </nav>
+        </header>
+      )
+    }
     return (
       <header className="registry-public-header" aria-label={title}>
         <div className="registry-public-brand">
@@ -382,11 +410,23 @@ export default function MeasuresRegistryOrchestrator() {
           <p key={line}>{line}</p>
         ))}
         <nav className="registry-footer-legal-links" aria-label="Legal">
-          <a href="/privacy" onClick={(e) => { e.preventDefault(); navigate("privacy") }}>Privacy</a>
-          <span aria-hidden="true">·</span>
-          <a href="/terms" onClick={(e) => { e.preventDefault(); navigate("terms") }}>Terms</a>
-          <span aria-hidden="true">·</span>
-          <a href="/connect" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Connect</a>
+          {projectionMode ? (
+            <>
+              <a href="https://measuresregistry.com/privacy">Privacy</a>
+              <span aria-hidden="true">·</span>
+              <a href="https://measuresregistry.com/terms">Terms</a>
+              <span aria-hidden="true">·</span>
+              <a href="https://measuresregistry.com/connect">Connect</a>
+            </>
+          ) : (
+            <>
+              <a href="/privacy" onClick={(e) => { e.preventDefault(); navigate("privacy") }}>Privacy</a>
+              <span aria-hidden="true">·</span>
+              <a href="/terms" onClick={(e) => { e.preventDefault(); navigate("terms") }}>Terms</a>
+              <span aria-hidden="true">·</span>
+              <a href="/connect" onClick={(e) => { e.preventDefault(); navigate("crystal_seat_encounter") }}>Connect</a>
+            </>
+          )}
         </nav>
         <nav className="registry-footer-social-links" aria-label="Measures Registry public profiles">
           <a href="https://twitter.com/measures_c3" target="_blank" rel="me noreferrer">X</a>
