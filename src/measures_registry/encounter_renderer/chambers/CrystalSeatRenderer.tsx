@@ -280,7 +280,8 @@ function CrystalIntroSeat({
   const videoUrl = mediaUrl(introVideoRow)
   const captionTrackUrl = asString(introVideoMeta?.caption_track_public_url)
   const captionLanguage = asString(introVideoMeta?.caption_language) ?? "en"
-  const [captionsEnabled,setCaptionsEnabled]=useState(introVideoMeta?.caption_default_enabled===true)
+  // OAR028 restores initial visibility; an explicit Registry prohibition still controls.
+  const [captionsEnabled,setCaptionsEnabled]=useState(introVideoMeta?.caption_default_enabled!==false)
 
   function handleAdvance() {
     onNavigate("measures_registry_home")

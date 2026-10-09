@@ -77,7 +77,6 @@ export function RegistryHomeHero({
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center top",
         backgroundColor: "#040913",
-        aspectRatio: "4 / 3",
       }}
     >
       <div className="measures-home-hero-shade" aria-hidden="true" />
@@ -86,16 +85,7 @@ export function RegistryHomeHero({
           src={logoUrl}
           alt="Measures Registry"
           loading="eager"
-          style={{
-            position: "absolute",
-            zIndex: 3,
-            top: "5%",
-            right: "2.5%",
-            width: "clamp(8rem, 20vw, 15rem)",
-            maxHeight: "32%",
-            objectFit: "contain",
-            filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.48))",
-          }}
+          className="measures-home-hero-logo"
         />
       ) : null}
       <div className="hero-content">
