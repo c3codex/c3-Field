@@ -3,6 +3,7 @@ import { isC3OpsHost } from "../c3ops/c3OpsRoutes"
 const C2EnvironmentDoor = lazy(() => import("../c3_field_contribution/C2EnvironmentDoor"))
 const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
 const C3PublicDocumentPage = lazy(() => import("../c3_field_connect/C3PublicDocumentPage"))
+const LivingCircuitEncounter = lazy(() => import("../c3_field_connect/LivingCircuitEncounter"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 const C3InitiativeSurfaceDoor = lazy(() => import("../c3_field_connect/C3InitiativeSurfaceDoor"))
 const FieldReporterEncounter = lazy(() => import("../c3_field_connect/FieldReporterEncounter"))
@@ -397,6 +398,32 @@ export default function App() {
         applyPageMetadata(C3_COMMUNITY_POTENTIAL_METADATA)
         return () => { cancelled = true }
       }
+      if (c3Route.kind === "encounter") {
+        void fetch("/api/c3-root-presentation",{headers:{accept:"application/json"},cache:"no-store"})
+          .then(response=>response.ok?response.json():null)
+          .then(body=>{
+            if(cancelled||body?.standing!=="bounded_public_runtime")return
+            const encounter=body.manifest?.composition?.public_encounters?.living_circuit as Record<string,any>|undefined
+            const seo=encounter?.seo as Record<string,string>|undefined
+            if(encounter?.route!=="/living-circuit"
+              || encounter?.standing_created!==false
+              || !seo?.title
+              || !seo?.description
+              || !seo?.canonical_url
+              || !seo?.og_image_runtime_uri)return
+            applyPageMetadata({
+              title:seo.title,
+              description:seo.description,
+              url:seo.canonical_url,
+              canonicalUrl:seo.canonical_url,
+              ogUrl:seo.og_url||seo.canonical_url,
+              image:"https://c3field.online"+seo.og_image_runtime_uri,
+              type:seo.og_type||"website",
+            })
+          })
+          .catch(()=>{})
+        return () => { cancelled = true }
+      }
       if (c3Route.kind === "connect" && c3Route.pathname === "/") {
         void fetch("/api/c3-root-presentation",{headers:{accept:"application/json"},cache:"no-store"})
           .then(response=>response.ok?response.json():null)
@@ -506,6 +533,7 @@ export default function App() {
     if (c3Route.kind === "c2_shell") return <Suspense fallback={<p>Loading environment…</p>}><C2EnvironmentDoor /></Suspense>
     if (c3Route.kind === "operations") return <OarOperationsConsole />
     if (c3Route.kind === "publication") return <PublicWhitePaperLanding paper={communityPotential} />
+    if (c3Route.kind === "encounter") return <Suspense fallback={<p>Opening the Living Circuit…</p>}><LivingCircuitEncounter /></Suspense>
     if (c3Route.kind === "public_document") return <Suspense fallback={<p>Loading document…</p>}><C3PublicDocumentPage kind={c3Route.pathname === "/privacy" ? "privacy" : c3Route.pathname === "/terms" ? "terms" : "contact"} /></Suspense>
     if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
     if (c3Route.kind === "connect" && c3Route.pathname === "/connect") return <C3CommunityConnect />
