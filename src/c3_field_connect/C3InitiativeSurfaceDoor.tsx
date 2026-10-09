@@ -2,6 +2,7 @@ import {useEffect,useState} from "react"
 import C3CommunityConnect,{HeldUnknownC3FieldRoute} from "./C3CommunityConnect"
 import RegisteredPacSurface from "./RegisteredPacSurface"
 import {isInitiativeSurfacePathAllowed,loadInitiativeSurfaceHost,type InitiativeSurfaceRuntime} from "./initiativeSurfaceHost"
+import {resolveRegisteredInitiativeProjection} from "./registeredInitiativeProjection"
 
 export default function C3InitiativeSurfaceDoor(){
   const pathname=window.location.pathname
@@ -28,6 +29,11 @@ export default function C3InitiativeSurfaceDoor(){
       .then(body=>{
         if(!active)return
         if(body?.status==="available"){
+          const registeredInitiative=resolveRegisteredInitiativeProjection(body,window.location.hostname)
+          if(registeredInitiative){
+            setSurface(registeredInitiative)
+            return
+          }
           setRegisteredPac(true)
           return
         }
