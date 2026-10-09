@@ -1,0 +1,66 @@
+{
+  "curriculum_key": "baby_chazz_day0_semantics_v0_1",
+  "source": "Registry concordance_term readback (2026-10-09)",
+  "standing": "DISCOVERY_ONLY_NOT_TRAINING_AUTHORIZED",
+  "data_eligibility": "candidate_keys_only_no_protected_source_payload_exported",
+  "c3_field_corpus_training_approved": false,
+  "proposed_sources": [
+    {
+      "term_key": "myenv_primitive_environment_v0_1",
+      "lesson": "environment boundary",
+      "version_key": "my_environment_primitive_grammar_v0_1"
+    },
+    {
+      "term_key": "myenv_primitive_relation_v0_1",
+      "lesson": "relation without custody collapse",
+      "version_key": "my_environment_primitive_grammar_v0_1"
+    },
+    {
+      "term_key": "myenv_primitive_current_v0_1",
+      "lesson": "persisted state is not command authority",
+      "version_key": "my_environment_primitive_grammar_v0_1"
+    },
+    {
+      "term_key": "myenv_primitive_package_v0_1",
+      "lesson": "package custody and references",
+      "version_key": "my_environment_primitive_grammar_v0_1"
+    },
+    {
+      "term_key": "source_concordance_v8_current_as_result_of_passage_founding_principle_v1",
+      "lesson": "current follows governed passage",
+      "version_key": "source_concordance_v8"
+    },
+    {
+      "term_key": "source_concordance_v8_material_environment_touchpoints_v1",
+      "lesson": "six relational touchpoints",
+      "version_key": "source_concordance_v8"
+    },
+    {
+      "term_key": "cancom_v1_cancom",
+      "lesson": "communications role and boundaries",
+      "version_key": "cancom_concordance_v1"
+    },
+    {
+      "term_key": "operational_v5_cancom_oar_delivery",
+      "lesson": "actual delivery versus file appearance",
+      "version_key": "c3_operational_concordance_v5"
+    }
+  ],
+  "verified_registry_counts": {
+    "concordance_term": 306,
+    "concordance_relation": 452,
+    "concordance_version": 21,
+    "concordance_document": 18,
+    "registered_process": 176,
+    "pac_schema": 21,
+    "pac_boundary_evaluation": 8,
+    "notchazz_oar_evaluation": 49
+  },
+  "invariants": [
+    "versioned authority",
+    "no historical/superseded teaching as present authority",
+    "no user private data",
+    "no automatic cross-environment learning",
+    "no model-created standing"
+  ]
+}
