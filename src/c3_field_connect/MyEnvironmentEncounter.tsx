@@ -145,13 +145,13 @@ function initiativeLabel(initiative:Initiative){
   const base=initiative.initiative_key==="47pct"?"4.7%":text(entry?.config?.title,initiative.initiative_key)
   return initiative.context_class==="operator"?base+" · Operator":base
 }
-function componentGroup(component:RuntimeComponent):ComponentGroupKey{
-  if(["chazz","current","my_pacs","canopy","calendar"].includes(component.primitive_key))return "core"
+function componentGroup(primitive:RuntimeComponent):ComponentGroupKey{
+  if(["chazz","current","my_pacs","canopy","calendar"].includes(primitive.primitive_key))return "core"
   if(["native_connections","invite_connection"].includes(primitive.primitive_key))return "relations"
-  if(component.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline"||primitive.renderer_key==="c1me.acquisitions"||primitive.renderer_key==="c1me.operations"||primitive.renderer_key==="c1me.cancom_workspace"||primitive.renderer_key==="c1me.directory")return "work"
+  if(primitive.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline"||primitive.renderer_key==="c1me.acquisitions"||primitive.renderer_key==="c1me.operations"||primitive.renderer_key==="c1me.cancom_workspace"||primitive.renderer_key==="c1me.directory")return "work"
   return "other"
 }
-function componentMeta(component:RuntimeComponent){
+function componentMeta(primitive:RuntimeComponent){
   if(primitive.primitive_key==="current")return "retained relation"
   if(primitive.primitive_key==="my_pacs")return "personal custody & approval"
   if(primitive.primitive_key==="calendar")return "c3-native schedule"
@@ -165,7 +165,7 @@ function componentMeta(component:RuntimeComponent){
   if(primitive.renderer_key==="c1me.pipeline")return "private operator view"
   if(primitive.primitive_key==="chazz")return "CURRENT-aware work"
   if(primitive.primitive_key==="canopy")return "external surfaces"
-  return component.primitive_class.replace(/_/g," ")
+  return primitive.primitive_class.replace(/_/g," ")
 }
 
 export default function MyEnvironmentEncounter(){
@@ -961,7 +961,7 @@ export default function MyEnvironmentEncounter(){
     }catch(error){setAcquisitionNotice(error instanceof Error?error.message:"Resolution could not be recorded.")}
   }
 
-  function renderComponent(component:RuntimeComponent){
+  function renderComponent(primitive:RuntimeComponent){
     if(primitive.renderer_key==="c1me.acquisitions"){
       const gerron=acquisitionDirectory.find(item=>item.primary_email.toLowerCase()==="gerron@paragonparcels.com")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
@@ -1452,9 +1452,9 @@ export default function MyEnvironmentEncounter(){
   const activeOwnerLifecycle=activePanel==="owner:lifecycle"
   const groupedComponents={
     core:availableComponents.filter(primitive=>componentGroup(primitive)==="core"),
-    work:availableComponents.filter(primitive=>primitiveGroup(primitive)==="work"),
-    relations:availableComponents.filter(primitive=>primitiveGroup(primitive)==="relations"),
-    other:availableComponents.filter(primitive=>primitiveGroup(primitive)==="other")
+    work:availableComponents.filter(primitive=>componentGroup(primitive)==="work"),
+    relations:availableComponents.filter(primitive=>componentGroup(primitive)==="relations"),
+    other:availableComponents.filter(primitive=>componentGroup(primitive)==="other")
   }
   const hasOperatorContext=
     data.operator_context?.resolution==="operator_context_resolved" &&
