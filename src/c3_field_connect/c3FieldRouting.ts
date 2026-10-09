@@ -1,9 +1,9 @@
-export type C3FieldRouteKind = "connect" | "environment" | "c2_shell" | "operations" | "publication" | "public_document" | "held_unknown"
+export type C3FieldRouteKind = "connect" | "environment" | "c2_shell" | "operations" | "publication" | "encounter" | "public_document" | "held_unknown"
 
 export type C3FieldRouteDecision = {
   kind: C3FieldRouteKind
   pathname: string
-  component: "C3CommunityConnect" | "MyEnvironmentEncounter" | "C2EnvironmentShell" | "OarOperationsConsole" | "PublicWhitePaperLanding" | "C3PublicDocumentPage" | "HeldUnknownC3FieldRoute"
+  component: "C3CommunityConnect" | "MyEnvironmentEncounter" | "C2EnvironmentShell" | "OarOperationsConsole" | "PublicWhitePaperLanding" | "LivingCircuitEncounter" | "C3PublicDocumentPage" | "HeldUnknownC3FieldRoute"
   exposesOperationsSpine: boolean
   createsStanding: false
 }
@@ -30,6 +30,9 @@ export function resolveC3FieldRoute(pathname: string): C3FieldRouteDecision {
   }
   if (normalized === "/community-potential") {
     return { kind: "publication", pathname: normalized, component: "PublicWhitePaperLanding", exposesOperationsSpine: false, createsStanding: false }
+  }
+  if (normalized === "/living-circuit") {
+    return { kind: "encounter", pathname: normalized, component: "LivingCircuitEncounter", exposesOperationsSpine: false, createsStanding: false }
   }
   if (normalized === "/c3ops") {
     return {
