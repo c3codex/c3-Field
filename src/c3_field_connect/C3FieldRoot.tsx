@@ -1,4 +1,6 @@
-import {useEffect,useState} from "react"
+import {useEffect,useRef,useState} from "react"
+import {startIntroPlayback} from "./introPlayback"
+import "./publicIntroStage.css"
 
 type Section={key:string;title?:string;headline?:string;body?:string;descriptor?:string;role?:string;items?:string[];points?:string[]}
 type PublicEncounter={route:string;title:string;hero?:string;root_entry_label?:string;root_entry_summary?:string;standing_created?:boolean}
@@ -8,7 +10,22 @@ export default function C3FieldRoot(){
   const [state,setState]=useState<RootPresentation|null>(null)
   const [held,setHeld]=useState(false)
   const [videoDone,setVideoDone]=useState(false)
+  const [sound,setSound]=useState(false)
+  const video=useRef<HTMLVideoElement>(null)
   useEffect(()=>{fetch("/api/c3-root-presentation",{headers:{accept:"application/json"},cache:"no-store"}).then(async r=>{const body=await r.json();if(!r.ok||body?.standing!=="bounded_public_runtime")throw new Error("held");setState(body)}).catch(()=>setHeld(true))},[])
+  useEffect(()=>{
+    if(!state||videoDone)return
+    if(window.matchMedia?.("(prefers-reduced-motion: reduce)").matches){setVideoDone(true);return}
+    if(video.current)return startIntroPlayback(video.current,()=>setVideoDone(true),window)
+  },[state,videoDone])
+  function toggleSound(){
+    const player=video.current
+    if(!player)return
+    const enabled=!sound
+    player.muted=!enabled
+    setSound(enabled)
+    if(enabled)void player.play().catch(()=>{player.muted=true;setSound(false)})
+  }
   if(held)return <main style={{minHeight:"100vh",display:"grid",placeItems:"center",background:"#111",color:"#eee",fontFamily:"system-ui",padding:"2rem"}}><p>c3 Field presentation temporarily unavailable.</p></main>
   if(!state)return <main style={{minHeight:"100vh",display:"grid",placeItems:"center",background:"#111",color:"#eee",fontFamily:"system-ui"}}><p>Opening c3 Field…</p></main>
   const c=state.manifest.composition
@@ -16,9 +33,12 @@ export default function C3FieldRoot(){
   const identity=state.publicIdentity
   return <main style={{minHeight:"100vh",background:"#101311",color:"#f2f1ea",fontFamily:"system-ui, sans-serif",position:"relative"}}>
     <div aria-hidden="true" style={{position:"fixed",inset:0,backgroundImage:`linear-gradient(rgba(10,14,11,.72),rgba(10,14,11,.9)),url("${state.runtimeMedia.backdrop.runtime_uri}")`,backgroundSize:"cover",backgroundPosition:"center",zIndex:0}} />
-    {!videoDone&&<div style={{position:"fixed",inset:0,zIndex:20,background:"#000",display:"grid",placeItems:"center"}}>
-      <video src={state.runtimeMedia.opening.runtime_uri} autoPlay playsInline controls onEnded={()=>setVideoDone(true)} style={{width:"100%",height:"100%",objectFit:"cover"}} />
-      <button onClick={()=>setVideoDone(true)} style={{position:"absolute",right:"1rem",bottom:"1rem",padding:".65rem 1rem"}}>Enter c3 Field</button>
+    {!videoDone&&<div className="c3-public-intro-stage c3-public-intro-stage--root">
+      <video ref={video} src={state.runtimeMedia.opening.runtime_uri} autoPlay muted={!sound} playsInline controls aria-label="c3 Field opening film" onEnded={()=>setVideoDone(true)} onError={()=>setVideoDone(true)} />
+      <div className="c3-public-intro-controls">
+        <button type="button" aria-label={sound?"Turn opening film sound off":"Turn opening film sound on"} aria-pressed={sound} onClick={toggleSound}>{sound?"SOUND OFF":"SOUND ON"}</button>
+        <button type="button" onClick={()=>setVideoDone(true)}>Enter c3 Field</button>
+      </div>
     </div>}
     <div style={{position:"relative",zIndex:1,maxWidth:"960px",margin:"0 auto",padding:"2rem 1.25rem 4rem"}}>
       <header style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"1rem",paddingBottom:"12vh"}}>

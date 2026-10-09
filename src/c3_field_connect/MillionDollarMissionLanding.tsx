@@ -1,5 +1,6 @@
 import {useState} from "react"
 import type {C3PublicPresentation} from "./c3PublicPresentation"
+import {navigationAtPaths} from "./registeredNavigation"
 
 
 const media=(key:string)=>`/api/free-media?asset=${key}`
@@ -17,7 +18,7 @@ export default function MillionDollarMissionLanding({presentation}:{presentation
     <header className="mdm-header">
       <a className="mdm-brand" href="/" aria-label={identity.brand+" home"}><img src={emblem} alt="" width="44" height="44"/><span>{identity.brand}</span></a>
       <nav className="mdm-nav" aria-label="Primary">
-        {presentation.navigation.filter(item=>["/community-potential","/privacy","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label.toUpperCase()}</a>)}
+        {navigationAtPaths(presentation.navigation,["/community-potential","/privacy","/contact"]).map(item=><a key={item.route} href={item.route}>{item.label.toUpperCase()}</a>)}
         <a className="mdm-nav-cta" href={presentation.connect_route}>CONNECT</a>
       </nav>
     </header>
@@ -60,7 +61,7 @@ export default function MillionDollarMissionLanding({presentation}:{presentation
 
     <footer className="mdm-footer">
       <div><strong>{identity.brand}</strong><span>{identity.environment_definition}</span><span>{identity.formal_authority_statement}</span><span><a href={`mailto:${identity.contact_email}`}>{identity.contact_email}</a> · <a href={identity.contact_phone_href}>{identity.contact_phone}</a></span><span>{identity.copyright}</span></div>
-      <nav aria-label="Footer">{presentation.navigation.filter(item=>["/community-potential","/privacy","/terms","/contact"].includes(item.route)).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}</nav>
+      <nav aria-label="Footer">{navigationAtPaths(presentation.navigation,["/community-potential","/privacy","/terms","/contact"]).map(item=><a key={item.route} href={item.route}>{item.label}</a>)}</nav>
     </footer>
   </main>
 }
