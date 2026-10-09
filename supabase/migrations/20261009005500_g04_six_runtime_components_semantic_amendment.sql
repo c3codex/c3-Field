@@ -84,12 +84,15 @@ returns trigger
 language plpgsql
 security definer
 set search_path=public,pg_temp
-as $$
+as $
 begin
   perform public.seed_c1me_env_runtime_components_internal(new.envpac_key);
   return new;
 end
-$$;
+$;
+
+revoke all on function public.c1me_envpac_primitive_seed_trigger()
+from public,anon,authenticated;
 
 -- Normalize all effective personal My Env EnvPACs through the corrected component contract.
 select public.seed_c1me_env_runtime_components_internal(ep.envpac_key)
