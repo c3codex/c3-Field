@@ -4,6 +4,7 @@ const C2EnvironmentDoor = lazy(() => import("../c3_field_contribution/C2Environm
 const MyEnvironmentEncounter = lazy(() => import("../c3_field_connect/MyEnvironmentEncounter"))
 const C3PublicDocumentPage = lazy(() => import("../c3_field_connect/C3PublicDocumentPage"))
 const LivingCircuitEncounter = lazy(() => import("../c3_field_connect/LivingCircuitEncounter"))
+const RegisteredPublicationProjectionDoor = lazy(() => import("../c3_field_connect/RegisteredPublicationProjectionDoor"))
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 const C3InitiativeSurfaceDoor = lazy(() => import("../c3_field_connect/C3InitiativeSurfaceDoor"))
 const FieldReporterEncounter = lazy(() => import("../c3_field_connect/FieldReporterEncounter"))
@@ -11,6 +12,7 @@ const C3FieldRoot = lazy(() => import("../c3_field_connect/C3FieldRoot"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import { isC3FieldInitiativeHostCandidate, isC3FieldPersonalEnvironmentHost } from "../c3_field_connect/initiativeSurfaceHost"
+import { isRegisteredPublicationProjectionHost } from "../c3_field_connect/registeredPublicationProjection"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import Temple from "../measures_of_inanna/Temple"
@@ -323,6 +325,7 @@ export default function App() {
   const hostname = window.location.hostname
   const isOpsHost = isC3OpsHost(hostname)
   const isRegistryHost = isMeasuresRegistryHost(hostname)
+  const isRegisteredPublicationHost = isRegisteredPublicationProjectionHost(hostname)
   const isInannaHost = isMeasuresOfInannaHost(hostname)
   const isC3Host = isC3FieldHost(hostname)
   const isC3PersonalHost = isC3FieldPersonalEnvironmentHost(hostname)
@@ -334,6 +337,19 @@ export default function App() {
 
     if (isOpsHost) {
       applyPageMetadata({ ...C3_OPS_METADATA, title: "c3Ops", url: "https://c3ops.c3field.online", canonicalUrl: "https://c3ops.c3field.online" })
+      return () => { cancelled = true }
+    }
+
+    if (isRegisteredPublicationHost) {
+      applyPageMetadata({
+        title: "unDrifted | c3 Field",
+        description: "Registered c3 Field projection of the unDrifted publication.",
+        url: "https://undrifted.measuresregistry.com/",
+        canonicalUrl: "https://undrifted.measuresregistry.com/",
+        ogUrl: "https://undrifted.measuresregistry.com/",
+        image: "https://measuresregistry.com/og.jpeg",
+        type: "website",
+      })
       return () => { cancelled = true }
     }
 
@@ -501,9 +517,12 @@ export default function App() {
       })
 
     return () => { cancelled = true }
-  }, [c3Route.kind, isC3Host, isC3PersonalHost, isC3InitiativeHost, isInannaHost, isOpsHost, mode])
+  }, [c3Route.kind, isC3Host, isC3PersonalHost, isC3InitiativeHost, isInannaHost, isOpsHost, isRegisteredPublicationHost, mode])
 
   if (isOpsHost) return <Suspense fallback={<p role="status">Opening c3Ops…</p>}><C3OpsDoor /></Suspense>
+
+  if (isRegisteredPublicationHost)
+    return <Suspense fallback={<p role="status">Resolving c3 Field publication projection…</p>}><RegisteredPublicationProjectionDoor /></Suspense>
 
   if (isRegistryHost) {
     return <MeasuresRegistryRuntime />
