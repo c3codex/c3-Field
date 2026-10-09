@@ -31,3 +31,18 @@ node demo.mjs
 M3 remains active and the domain/renderer repair remains a separate priority. M5 remains implementation-gated; this is a controlled experimental birthpack only. First live implementation must resolve credentials, capability grants, environmental filtering, negative tests, model version, and independent checks under a bounded OAR2/OAR1.
 
 **Born open-weight (planned). Raised relationally. Gender-undecided. Never needs watering. 💙**
+
+
+## Model-agnostic birth adapter
+
+`workers_ai_adapter.mjs` permits a **synthetic-only, opt-in, nonproduction** inference experiment against allowlisted Cloudflare-hosted open-weight models:
+
+- `@cf/openai/gpt-oss-20b`
+- `@cf/qwen/qwen3-30b-a3b-fp8`
+- `@cf/google/gemma-4-26b-a4b-it`
+
+No Cloudflare token or account ID has been connected, and **no actual AI inference was performed**. Tests inject a mock transport to prove synthetic-only gating and response-boundary handling. Cloudflare provider compatibility for *fine-tuned LoRA adapters* must be checked separately for the particular model; hosting a model for inference does **not** imply custom-LoRA compatibility.
+
+Run all 13 harness tests with `node --test test_*.mjs`.
+
+**Do not wire this harness directly to production.** In these isolated tests, `current_verified` and `retrieval_authorized` are fixture booleans. Production trust MUST originate in independent server-side Registry/session/capability resolution, never from a client-supplied boolean or an LLM. Structured-response validation limits effects but does not, by itself, guarantee truthfulness or prevent misleading natural-language claims.
