@@ -4,8 +4,8 @@ import {
   InitiativeSurfaceResolutionError,
   isInitiativeSurfaceHostname,
   normalizeInitiativeSurfaceHostname,
-  resolveInitiativeSurfaceHost,
 } from "../_lib/initiative-surface-host"
+import {PublicSurfaceError,resolveRegisteredPublicSurface,resolveRegisteredNativeInitiative,readProjectionPac} from "../_lib/registered-public-surface"
 
 type R2ObjectBody={body:ReadableStream|null;size:number;httpEtag?:string;range?:{offset:number;length:number};writeHttpMetadata?:(headers:Headers)=>void}
 type R2BucketLike={get:(key:string,options?:{range?:{offset:number;length:number}})=>Promise<R2ObjectBody|null>}
@@ -250,15 +250,35 @@ async function canonicalPublicIntroPacKey(env:FreeMediaEnv){
   return key
 }
 
-async function publicPacKeysForRequest(env:FreeMediaEnv,request:Request){
+async function publicPacKeysForRequest(env:FreeMediaEnv,request:Request,assetKey:string){
   const host=normalizeInitiativeSurfaceHostname(new URL(request.url).hostname)
   if(isInitiativeSurfaceHostname(host)){
-    const initiativePac=(await resolveInitiativeSurfaceHost(env,host)).webpacKey
+    const {p,initiative}=await resolveRegisteredPublicSurface(env,host)
+    if(!initiative){
+      if(p.projection_type!=="registered_owner_custodied_pac_projection"||p.custody_transfer!==false||p.projection_origin!=="my_env")
+        throw new FreeMediaError("public_media_projection_mismatch",423)
+      const projectionKey=str(p.pac_key),sourceKey=str(p.source_pac_key)
+      if(!projectionKey||!sourceKey)throw new FreeMediaError("public_media_source_unbound",423)
+      const projection=await readProjectionPac(env,projectionKey)
+      const metadata=record(projection.metadata)
+      if(metadata.canonical_host!==host||metadata.source_pac_key!==sourceKey||metadata.custody_transfer!==false||metadata.frontend_invention!==false)
+        throw new FreeMediaError("public_media_source_mismatch",423)
+      const matches=Array.isArray(p.members)?p.members.filter(value=>{
+        const member=record(value),m=record(member.metadata)
+        return member.runtime_uri==="/api/free-media?asset="+assetKey&&m.runtime_derivative_asset_key===assetKey&&m.approval_state==="operator_approved"&&m.runtime_binding_state==="READY"&&m.frontend_invention_allowed===false
+      }):[]
+      if(matches.length!==1)throw new FreeMediaError("public_projection_media_not_released",423)
+      // A released FREE snapshot authorizes this exact public member, never the
+      // private source package as a whole. Retain the source PAC's HOLD unchanged.
+      await readProjectionPac(env,sourceKey)
+      return [{pacKey:sourceKey,member:record(matches[0])}]
+    }
+    const initiativePac=(await resolveRegisteredNativeInitiative(env,host)).sourcePacKey
     const canonicalC1Pac=await canonicalPublicIntroPacKey(env)
-    return initiativePac===canonicalC1Pac?[initiativePac]:[initiativePac,canonicalC1Pac]
+    return (initiativePac===canonicalC1Pac?[initiativePac]:[initiativePac,canonicalC1Pac]).map(pacKey=>({pacKey,member:null}))
   }
   if(host==="c3field.online"||host==="www.c3field.online"){
-    return [await canonicalPublicIntroPacKey(env)]
+    return [{pacKey:await canonicalPublicIntroPacKey(env),member:null}]
   }
   throw new FreeMediaError("public_media_surface_unregistered",404)
 }
@@ -320,11 +340,18 @@ async function findPacRuntimeBinding(env:FreeMediaEnv,pacKey:string,assetKey:str
 }
 
 async function resolvePublicPacBinding(env:FreeMediaEnv,request:Request,assetKey:string,asset:RegistryRow){
-  const candidatePacKeys=await publicPacKeysForRequest(env,request)
-  for(const pacKey of candidatePacKeys){
-    await requireEligiblePublicPac(env,pacKey)
+  const candidatePacKeys=await publicPacKeysForRequest(env,request,assetKey)
+  for(const {pacKey,member} of candidatePacKeys){
+    if(!member)await requireEligiblePublicPac(env,pacKey)
     const binding=await findPacRuntimeBinding(env,pacKey,assetKey,asset)
-    if(binding) return {pacKey,binding}
+    if(binding){
+      if(member){
+        const approved=record(member.metadata)
+        if(approved.runtime_integrity_state!=="sha256_verified"||asset.hash_algorithm!=="sha256"||binding.runtime_uri!==member.runtime_uri||binding.provider!==approved.runtime_storage_provider||binding.bucket_name!==approved.runtime_storage_bucket||binding.object_path!==approved.runtime_storage_object||asset.content_hash!==approved.runtime_derivative_sha256||asset.byte_size!==approved.runtime_derivative_byte_size||asset.mime_type!==approved.runtime_derivative_mime_type)
+          throw new FreeMediaError("public_projection_media_custody_mismatch",409)
+      }
+      return {pacKey,binding}
+    }
   }
   throw new FreeMediaError("pac_media_binding_unavailable",423)
 }
@@ -359,7 +386,7 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
     await resolveEnvironmentSession(sessionCookie,env)
     return await resolveNativeCustody(asset,env,request)
   }catch(error){
-    if(error instanceof InitiativeSurfaceResolutionError)
+    if(error instanceof InitiativeSurfaceResolutionError||error instanceof PublicSurfaceError)
       return json({standing:"free_media_held",reason:error.reasonCode},error.status)
     if(error instanceof FreeMediaError)
       return json({standing:"free_media_held",reason:error.message},error.status)

@@ -50,9 +50,10 @@ export function resolveRegisteredInitiativeProjection(
 
   try{
     const url=new URL(canonicalUrl)
-    if(url.protocol!=="https:"||normalizeHost(url.hostname)!==normalizeHost(host))return null
+    if(url.protocol!=="https:"||normalizeHost(url.hostname)!==normalizeHost(host)||url.pathname!==canonicalPath||url.search||url.hash||url.username||url.password||url.port)return null
   }catch{return null}
 
+  if(route!=="/"||connectRoute!=="/connect")return null
   const publicPresentation=record(p.public_presentation)
   const publicFooter=record(p.public_footer)
   const openGraphContract=record(p.open_graph_contract)

@@ -1,4 +1,5 @@
-import {InitiativeSurfaceResolutionError,isInitiativeSurfaceHostname,resolveInitiativeSurfaceHost,type InitiativeSurfaceEnv} from "../_lib/initiative-surface-host"
+import {isInitiativeSurfaceHostname,type InitiativeSurfaceEnv} from "../_lib/initiative-surface-host"
+import {PublicSurfaceError,resolveRegisteredNativeInitiative} from "../_lib/registered-public-surface"
 import {projectMdmMediaRoles} from "../_lib/mdm-media-roles"
 
 type Env=InitiativeSurfaceEnv
@@ -56,13 +57,11 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
       return json({standing:"public_identity_authority_incomplete"},409)
 
     const initiativeSurface=isInitiativeSurfaceHostname(requestUrl.hostname)
-      ? await resolveInitiativeSurfaceHost(env,requestUrl.hostname)
+      ? await resolveRegisteredNativeInitiative(env,requestUrl.hostname)
       : null
 
     const authoritySource=initiativeSurface
-      ? typeof initiativeSurface.bindingMetadata.presentation_source_key==="string"
-        ? initiativeSurface.bindingMetadata.presentation_source_key
-        : ""
+      ? initiativeSurface.presentationSourceKey || (typeof em.public_presentation_authority_source==="string" ? em.public_presentation_authority_source : "")
       : typeof em.public_presentation_authority_source==="string"
         ? em.public_presentation_authority_source
         : ""
@@ -114,11 +113,12 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
         primary_cta_route:initiativeSurface.connectRoute
       }
       presentation=projected
+      presentation.open_graph_contract=initiativeSurface.openGraphContract
       if(initiativeSurface.initiativeKey==="million_dollar_mission"){
         // The host resolver establishes package release. FREE still verifies each asset's custody.
         const url=new URL(env.SUPABASE_URL!.replace(/\/$/,"")+"/rest/v1/c3_pac_runtime_binding")
         url.searchParams.set("select","media_role,runtime_uri,standing,metadata")
-        url.searchParams.set("pac_key","eq."+initiativeSurface.webpacKey)
+        url.searchParams.set("pac_key","eq."+initiativeSurface.sourcePacKey)
         const response=await fetch(url,{headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY},signal:AbortSignal.timeout(12000)})
         if(!response.ok)throw new Error("registry_read_failed")
         const rows=await response.json()
@@ -144,7 +144,7 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
       presentation
     })
   }catch(error){
-    if(error instanceof InitiativeSurfaceResolutionError)
+    if(error instanceof PublicSurfaceError)
       return json({standing:"public_presentation_held",reason:error.reasonCode},error.status)
     const reason=error instanceof Error?error.message:"unavailable"
     return json({standing:"public_presentation_held",reason},503)

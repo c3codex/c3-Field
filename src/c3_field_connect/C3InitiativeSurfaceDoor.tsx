@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react"
 import C3CommunityConnect,{HeldUnknownC3FieldRoute} from "./C3CommunityConnect"
 import RegisteredPacSurface from "./RegisteredPacSurface"
-import {isInitiativeSurfacePathAllowed,loadInitiativeSurfaceHost,type InitiativeSurfaceRuntime} from "./initiativeSurfaceHost"
+import {isInitiativeSurfacePathAllowed,type InitiativeSurfaceRuntime} from "./initiativeSurfaceHost"
 import {resolveRegisteredInitiativeProjection} from "./registeredInitiativeProjection"
 
 export default function C3InitiativeSurfaceDoor(){
@@ -17,12 +17,7 @@ export default function C3InitiativeSurfaceDoor(){
       return()=>{active=false}
     }
 
-    const registeredPacRequest=pathname==="/"
-      ? fetch("/api/public-surface",{headers:{accept:"application/json"},cache:"no-store"})
-      : Promise.resolve(new Response(JSON.stringify({status:"unavailable"}),{
-          status:409,
-          headers:{"content-type":"application/json"}
-        }))
+    const registeredPacRequest=fetch("/api/public-surface",{headers:{accept:"application/json"},cache:"no-store"})
 
     void registeredPacRequest
       .then(async response=>await response.json().catch(()=>null))
@@ -34,23 +29,15 @@ export default function C3InitiativeSurfaceDoor(){
             setSurface(registeredInitiative)
             return
           }
-          setRegisteredPac(true)
+          if(body.presentation?.projection_type==="registered_owner_custodied_pac_projection"&&pathname==="/")setRegisteredPac(true)
+          else setHeld(true)
           return
         }
-        if(!isInitiativeSurfacePathAllowed(pathname)){
-          setHeld(true)
-          return
-        }
-        loadInitiativeSurfaceHost()
-          .then(value=>{if(active)setSurface(value)})
-          .catch(()=>{if(active)setHeld(true)})
+        setHeld(true)
       })
       .catch(()=>{
         if(!active)return
-        if(!isInitiativeSurfacePathAllowed(pathname)){setHeld(true);return}
-        loadInitiativeSurfaceHost()
-          .then(value=>{if(active)setSurface(value)})
-          .catch(()=>{if(active)setHeld(true)})
+        setHeld(true)
       })
 
     return()=>{active=false}

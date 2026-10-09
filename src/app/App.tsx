@@ -13,6 +13,7 @@ import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
 import { isC3FieldInitiativeHostCandidate, isC3FieldPersonalEnvironmentHost } from "../c3_field_connect/initiativeSurfaceHost"
 import { isRegisteredPublicationProjectionHost } from "../c3_field_connect/registeredPublicationProjection"
+import {resolveRegisteredInitiativeProjection} from "../c3_field_connect/registeredInitiativeProjection"
 import OarOperationsConsole from "../c3_field_convergence/OarOperationsConsole"
 import { supabase, supabaseConfigError } from "../integrations/supabase/client"
 import Temple from "../measures_of_inanna/Temple"
@@ -366,23 +367,25 @@ export default function App() {
     if (isC3InitiativeHost) {
       if (hostname === "47pct.c3field.online" && window.location.pathname.startsWith("/field-reporter/"))
         return () => { cancelled = true }
-      void fetch("/api/c3-initiative-surface",{headers:{accept:"application/json"},cache:"no-store"})
+      void fetch("/api/public-surface",{headers:{accept:"application/json"},cache:"no-store"})
         .then(response=>response.ok?response.json():null)
         .then(async body=>{
-          if(cancelled||!body||body.standing!=="resolved") return
-          if(body.initiativeKey==="47pct"&&body.publicPresentation){
-            const presentation=body.publicPresentation as Record<string,any>
-            const title=String(presentation.og_title||"4.7% | A c3 Field Initiative")
-            const description=String(presentation.og_description||presentation.initiative_explanation||"")
-            const canonical=String(body.canonicalUrl||window.location.origin+"/")
+          const surface=resolveRegisteredInitiativeProjection(body,hostname)
+          if(cancelled||!surface)return
+          if(surface.initiativeKey==="47pct"&&surface.publicPresentation){
+            const presentation=surface.publicPresentation
+            const title=String(presentation.og_title||"")
+            const description=String(presentation.og_description||"")
+            const canonical=window.location.pathname==="/connect" ? new URL(surface.connectRoute,surface.canonicalUrl).href : surface.canonicalUrl
             const assetKey=String(presentation.og_image_asset_key||"")
-            if(title&&description&&canonical&&assetKey){
+            const og=surface.openGraphContract
+            if(title&&description&&canonical&&assetKey&&og?.image_asset_key===assetKey&&og.social_delivery_uri){
               applyPageMetadata({
                 title,
                 description,
                 url:canonical,
                 canonicalUrl:canonical,
-                image:window.location.origin+"/api/free-media?asset="+encodeURIComponent(assetKey),
+                image:og.social_delivery_uri,
                 type:"website",
               })
             }
@@ -392,14 +395,15 @@ export default function App() {
           const response=await fetch("/api/c3-public-presentation",{headers:{accept:"application/json"}})
           if(!response.ok)return
           const presentationBody=await response.json()
-          if(cancelled||!presentationBody?.presentation)return
+          if(cancelled||presentationBody?.standing!=="bounded_public_runtime"||presentationBody?.surface?.webpacKey!==surface.webpacKey||!presentationBody?.presentation)return
           const presentation=presentationBody.presentation as Record<string,any>
           const seo=presentation.seo as Record<string,string>|undefined
           if(seo?.title&&seo?.description&&seo?.canonical_url){
             applyPageMetadata({
               title:seo.title,
               description:seo.description,
-              url:seo.canonical_url,
+              url:window.location.pathname==="/connect" ? new URL(surface.connectRoute,surface.canonicalUrl).href : surface.canonicalUrl,
+              canonicalUrl:window.location.pathname==="/connect" ? new URL(surface.connectRoute,surface.canonicalUrl).href : surface.canonicalUrl,
               image:window.location.origin+"/api/free-media?asset="+String(seo.og_image_asset_key||presentation.media_roles?.og_master),
               type:seo.og_type||"website",
             })

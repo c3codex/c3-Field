@@ -1,6 +1,7 @@
 import {captureCandidate, type PassageEnv} from "../_lib/c1-passage"
 import {unable} from "../_lib/c1-abuse"
-import {isInitiativeSurfaceHostname,resolveInitiativeSurfaceHost} from "../_lib/initiative-surface-host"
+import {isInitiativeSurfaceHostname} from "../_lib/initiative-surface-host"
+import {resolveRegisteredNativeInitiative} from "../_lib/registered-public-surface"
 const headers = {"content-type": "application/json; charset=utf-8", "cache-control": "no-store"}
 const allowed = new Set(["name", "email", "message", "consent", "participationIntention", "attestation", "connectAs", "initiativeKey", "shareReference"])
 function held(standing: string, message: string, status: number, evidence?: unknown) {
@@ -78,7 +79,7 @@ export const onRequestPost: PagesFunction<PassageEnv> = async ({request, env}) =
       try{
         if(!origin||origin!==requestUrl.origin||!isInitiativeSurfaceHostname(requestUrl.hostname))
           return held("held_origin_mismatch","The submission could not be verified.",403)
-        const resolved=await resolveInitiativeSurfaceHost(env,requestUrl.hostname)
+        const resolved=await resolveRegisteredNativeInitiative(env,requestUrl.hostname)
         if(new URL(resolved.canonicalUrl).origin!==origin)
           return held("held_origin_mismatch","The submission could not be verified.",403)
         sourceInitiative={
