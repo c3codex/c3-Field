@@ -1,0 +1,182 @@
+{
+  "evidence_type": "oar2_formation_read_only_preflight",
+  "date": "2026-10-09",
+  "oar_key": "oar2_c3ops_envpac_operator_workroom_20261009_001",
+  "execution_instance": "c3ops_envpac_operator_workroom_codex_001",
+  "environment": "env_c3ops",
+  "operator": "op044",
+  "source": "Supabase Registry read-only selections and c3codex/c3-Field source retrieval",
+  "operator_scope_confirmation": true,
+  "not_chazz_called": false,
+  "registrar_registration_called": false,
+  "oar2_delivery_registered": false,
+  "codex_execution_started": false,
+  "observed": [
+    {
+      "predicate": "PF-01 environment",
+      "status": "PASS_BASELINE",
+      "source": "public.c3_environment",
+      "evidence": {
+        "env_key": "env_c3ops",
+        "system_key": "c3_field",
+        "standing": "governed_environment",
+        "active": true,
+        "registered_canonical_parent_environment": "env_c3_community_connect"
+      }
+    },
+    {
+      "predicate": "PF-01 field root owner",
+      "status": "PASS_SOURCE",
+      "source": "public.c3_envpac",
+      "evidence": {
+        "envpac_key": "c3envpac_field_v0_1",
+        "env_key": "env_c3_field",
+        "is_effective": true,
+        "owner": "system:c3_field",
+        "custodian": "system:c3_field",
+        "custody_provider": "c3_field"
+      }
+    },
+    {
+      "predicate": "PF-02 MGS postbind",
+      "status": "HLD",
+      "source": "public.c3_current_state.current_env_c3ops_v1.metadata",
+      "evidence": {
+        "current_marker_exists": true,
+        "is_current": true,
+        "old_mgs_evaluation": "held_env_c3ops_current_binding_missing",
+        "mgs_re_evaluation": "pending_post_bind",
+        "mgs_process": "c3ops_mgs_gate_v1"
+      },
+      "required": "authoritative post-bind MGS qualification return"
+    },
+    {
+      "predicate": "PF-03 EnvPAC type",
+      "status": "PASS_CONTRACT_EXISTS",
+      "source": "public.c3_pac_type_contract",
+      "evidence": {
+        "contract_key": "pac_contract_envpac_v1",
+        "effective": true,
+        "required_fields": [
+          "envpac_key",
+          "env_key",
+          "version",
+          "standing",
+          "owner_subject_type",
+          "owner_subject_key",
+          "custodian_subject_type",
+          "custodian_subject_key",
+          "custody_uri",
+          "custody_provider",
+          "architecture_version",
+          "is_effective",
+          "portable"
+        ]
+      }
+    },
+    {
+      "predicate": "PF-03 UX PAC type",
+      "status": "PASS_CONTRACT_EXISTS_SEND_UX_ELIGIBILITY",
+      "source": "public.c3_pac_type_contract",
+      "evidence": {
+        "contract_key": "pac_contract_c3webpac_v1",
+        "effective": true,
+        "required_member": {
+          "kind": "record",
+          "role": "presentation_manifest",
+          "minimum": 1
+        },
+        "resolver": "FREE",
+        "frontend": "renderer",
+        "private_release_state_allowed": true
+      },
+      "required": "Registrar decision on exact operator-only Workroom envelope and private access"
+    },
+    {
+      "predicate": "PF-04 EnvPAC collision",
+      "status": "PASS_ABSENCE_NARROW",
+      "source": "public.c3_envpac",
+      "evidence": {
+        "env_key": "env_c3ops",
+        "observed_rows": 0
+      },
+      "required": "all related registrations/source assets and partial attempts checked at actual execution"
+    },
+    {
+      "predicate": "PF-04 PAC collision",
+      "status": "PASS_ABSENCE_NARROW",
+      "source": "public.c3_pac",
+      "evidence": {
+        "owner_environment_key": "env_c3ops",
+        "observed_rows": 0
+      },
+      "required": "other envpac or relation-keyed assets checked at actual execution"
+    },
+    {
+      "predicate": "PF-05 source custody",
+      "status": "SEND",
+      "source": "operator confirmation; public.c3_envpac.c3envpac_field_v0_1",
+      "evidence": {
+        "owner_intent": "system:c3_field",
+        "custodian_intent": "system:c3_field",
+        "child_custody_uri": null
+      },
+      "required": "Registrar c3Ops-specific formation authority, custody URI/provider and actual minimal source admission"
+    },
+    {
+      "predicate": "PF-06 NotChazz",
+      "status": "HLD_NOT_RUN",
+      "source": "docs/registry/notchazz_oar_predispatch_semantic_boundary_v1.md",
+      "evidence": {
+        "registered_process": "governed_object_passage_process_v4",
+        "required_exact_oar_sha256": true
+      },
+      "required": "Registrar predicate resolution then NotChazz exact OAR PASS and qualified CanCom passage"
+    },
+    {
+      "predicate": "PF-07 operator UX",
+      "status": "PASS_CODE_EXISTS_NOT_LIVE_VALIDATED",
+      "source": "src/c3ops/C3OpsDoor.tsx; src/c3ops/c3OpsRoutes.ts; functions/api/c3ops/manifest.ts",
+      "evidence": {
+        "modes": [
+          "OPERATE",
+          "INTEROPERATE",
+          "OBSERVE"
+        ],
+        "routes": [
+          "/relational-operations",
+          "/systems-access",
+          "/c3optics"
+        ],
+        "lapzuli_module": true
+      }
+    },
+    {
+      "predicate": "PF-08 go/no-go",
+      "status": "NO_GO_EXECUTION",
+      "source": "this preflight",
+      "evidence": {
+        "normative_semantics": "SEND",
+        "mgs": "HLD",
+        "workroom_envpac": "ABSENT",
+        "notchazz": "NOT_RUN",
+        "dispatch": "NOT_RUN"
+      }
+    }
+  ],
+  "disposition": {
+    "design_candidate": "FORMED",
+    "registrar_semantic_resolution": "SEND",
+    "production_registration": "HLD",
+    "executor_delivery": "HLD",
+    "production_mutations": 0,
+    "new_envpac": 0,
+    "new_uxpac": 0,
+    "external_effects": 0,
+    "deployments": 0
+  },
+  "source_links": [
+    "https://docs.google.com/document/d/14yohFfjTs0Q9-XcW55To2SC_5yyjXrtsu66WycQovcA/edit",
+    "https://docs.google.com/document/d/1_I5t70K7vG33RAUOh5DGoy68Xq9zKSMUvbBOW7rS3S8/edit"
+  ]
+}
