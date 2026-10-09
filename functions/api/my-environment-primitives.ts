@@ -42,27 +42,33 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
        result.relationship_ref!==session.subjectKey ||
        result.env_key!==session.envKey ||
        result.envpac_ref!==session.envpacKey ||
-       result.primitive_resolution!=="envpac_resolved"){
-      return json({authenticated:true,standing:"envpac_primitive_resolution_held"},409)
+       result.component_resolution!=="envpac_resolved"){
+      return json({authenticated:true,standing:"envpac_component_resolution_held"},409)
     }
     return json({
       authenticated:true,
-      standing:"envpac_primitives_ready",
+      standing:"envpac_components_ready",
       env_key:result.env_key,
       envpac_key:result.envpac_ref,
       current_ref:result.current_ref,
-      primitive_contract:result.primitive_contract,
-      primitive_count:result.primitive_count,
+      runtime_component_contract:result.runtime_component_contract,
+      runtime_component_count:result.runtime_component_count,
+      relational_condition_contract:result.relational_condition_contract,
+      relational_condition_count:result.relational_condition_count,
       contextual_component_count:result.contextual_component_count,
       free_resolution_source:result.free_resolution_source,
       initiative_projection_rule:result.initiative_projection_rule,
+      components:result.components,
+      contextual_components:result.contextual_components,
+      primitive_contract:result.primitive_contract,
+      primitive_count:result.primitive_count,
       primitives:result.primitives,
-      contextual_components:result.contextual_components
+      primitive_compatibility_deprecated:result.primitive_compatibility_deprecated
     })
   }catch(error){
-    const reason=error instanceof Error?error.message:"envpac_primitive_resolution_unavailable"
+    const reason=error instanceof Error?error.message:"envpac_component_resolution_unavailable"
     const status=reason==="session_expired"||reason==="environment_claim_required"?401:503
-    return json({authenticated:false,standing:"envpac_primitive_resolution_held",reason},status)
+    return json({authenticated:false,standing:"envpac_component_resolution_held",reason},status)
   }
 }
 
