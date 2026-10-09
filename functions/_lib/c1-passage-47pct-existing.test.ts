@@ -72,7 +72,7 @@ test("existing 47pct invite persists inviter provenance before 322 reentry",asyn
       initiativeKey:"47pct",
       sourceHost:"47pct.c3field.online",
       surfaceKey:"47pct_c1me_surface",
-      webpacKey:"47pct_c1_connect_c3webpac_v1"
+      webpacKey:"47pct_native_field_projection_c3webpac_v1"
     },
     sourceEnvironmentShare:{share_reference:shareReference}
   },env,{
