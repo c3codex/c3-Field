@@ -27,7 +27,7 @@ type EnvPayload={
     operators?:Array<{operator_identifier?:string;operator_role?:string;boundary?:string}>
   }|null
 }
-type Primitive={
+type RuntimeComponent={
   primitive_key:string
   primitive_class:string
   display_label:string
@@ -36,8 +36,8 @@ type Primitive={
   sort_order:number
   config?:Record<string,unknown>
 }
-type PrimitivePayload={authenticated:boolean;standing:string;primitive_contract?:string;primitive_count?:number;contextual_component_count?:number;primitives?:Primitive[];contextual_components?:Primitive[]}
-type PrimitiveGroupKey="core"|"work"|"relations"|"other"
+type ComponentPayload={authenticated:boolean;standing:string;runtime_component_contract?:string;runtime_component_count?:number;relational_condition_contract?:string;relational_condition_count?:number;contextual_component_count?:number;components?:RuntimeComponent[];contextual_components?:RuntimeComponent[];primitive_contract?:string;primitive_count?:number;primitives?:RuntimeComponent[];primitive_compatibility_deprecated?:boolean}
+type ComponentGroupKey="core"|"work"|"relations"|"other"
 type InitiativeComponent={component_key:string;renderer_key:string;sort_order:number;config?:Record<string,unknown>}
 type Initiative={initiative_key:string;initiative_envpac_key:string;target_environment_key?:string|null;visibility_source:string;context_class?:string;context_classes?:string[];initiative_operator_binding_key?:string|null;operator_class?:string|null;operator_role?:string|null;invite_context_allowed?:boolean;components:InitiativeComponent[]}
 type InitiativePayload={authenticated:boolean;standing:string;initiatives?:Initiative[]}
@@ -145,13 +145,13 @@ function initiativeLabel(initiative:Initiative){
   const base=initiative.initiative_key==="47pct"?"4.7%":text(entry?.config?.title,initiative.initiative_key)
   return initiative.context_class==="operator"?base+" · Operator":base
 }
-function primitiveGroup(primitive:Primitive):PrimitiveGroupKey{
-  if(["chazz","current","my_pacs","canopy","calendar"].includes(primitive.primitive_key))return "core"
+function componentGroup(component:RuntimeComponent):ComponentGroupKey{
+  if(["chazz","current","my_pacs","canopy","calendar"].includes(component.primitive_key))return "core"
   if(["native_connections","invite_connection"].includes(primitive.primitive_key))return "relations"
-  if(primitive.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline"||primitive.renderer_key==="c1me.acquisitions"||primitive.renderer_key==="c1me.operations"||primitive.renderer_key==="c1me.cancom_workspace"||primitive.renderer_key==="c1me.directory")return "work"
+  if(component.renderer_key==="c1me.discovery"||primitive.renderer_key==="c1me.pipeline"||primitive.renderer_key==="c1me.acquisitions"||primitive.renderer_key==="c1me.operations"||primitive.renderer_key==="c1me.cancom_workspace"||primitive.renderer_key==="c1me.directory")return "work"
   return "other"
 }
-function primitiveMeta(primitive:Primitive){
+function componentMeta(component:RuntimeComponent){
   if(primitive.primitive_key==="current")return "retained relation"
   if(primitive.primitive_key==="my_pacs")return "personal custody & approval"
   if(primitive.primitive_key==="calendar")return "c3-native schedule"
@@ -165,16 +165,16 @@ function primitiveMeta(primitive:Primitive){
   if(primitive.renderer_key==="c1me.pipeline")return "private operator view"
   if(primitive.primitive_key==="chazz")return "CURRENT-aware work"
   if(primitive.primitive_key==="canopy")return "external surfaces"
-  return primitive.primitive_class.replace(/_/g," ")
+  return component.primitive_class.replace(/_/g," ")
 }
 
 export default function MyEnvironmentEncounter(){
   const [state,setState]=useState<"claiming"|"loading"|"intro"|"ready"|"held">("loading")
   const [data,setData]=useState<EnvPayload|null>(null)
   const [message,setMessage]=useState("Opening your environment…")
-  const [primitives,setPrimitives]=useState<Primitive[]>([])
-  const [contextualComponents,setContextualComponents]=useState<Primitive[]>([])
-  const [primitiveContract,setPrimitiveContract]=useState("c1me_env_primitives_v5")
+  const [runtimeComponents,setRuntimeComponents]=useState<RuntimeComponent[]>([])
+  const [contextualComponents,setContextualComponents]=useState<RuntimeComponent[]>([])
+  const [runtimeComponentContract,setRuntimeComponentContract]=useState("c1me_env_runtime_components_v6")
   const [initiatives,setInitiatives]=useState<Initiative[]>([])
   const [ledgerEntries,setLedgerEntries]=useState<LedgerEntry[]>([])
   const [nativeConnections,setNativeConnections]=useState<NativeConnection[]>([])
@@ -553,13 +553,14 @@ export default function MyEnvironmentEncounter(){
         fetch("/api/my-environment-acquisitions",{headers:{accept:"application/json"}})
       ])
       if(!active)return
-      const [primitiveResult,initiativeResult,connectionsResult,canopyResult,profileResult,currentResult,calendarResult,acquisitionsResult]=results
-      if(primitiveResult.status==="fulfilled"&&primitiveResult.value.ok){
-        const body=await primitiveResult.value.json() as PrimitivePayload
-        if(active&&body.primitives){
-          setPrimitives([...body.primitives].sort((a,b)=>a.sort_order-b.sort_order))
+      const [componentResult,initiativeResult,connectionsResult,canopyResult,profileResult,currentResult,calendarResult,acquisitionsResult]=results
+      if(componentResult.status==="fulfilled"&&componentResult.value.ok){
+        const body=await componentResult.value.json() as ComponentPayload
+        const resolvedComponents=body.components||body.primitives||[]
+        if(active&&resolvedComponents.length){
+          setRuntimeComponents([...resolvedComponents].sort((a,b)=>a.sort_order-b.sort_order))
           setContextualComponents([...(body.contextual_components||[])].sort((a,b)=>a.sort_order-b.sort_order))
-          setPrimitiveContract(body.primitive_contract||"c1me_env_primitives_v5")
+          setRuntimeComponentContract(body.runtime_component_contract||"c1me_env_runtime_components_v6")
           setRuntimeNotice("")
         }
       }else if(active){
@@ -960,7 +961,7 @@ export default function MyEnvironmentEncounter(){
     }catch(error){setAcquisitionNotice(error instanceof Error?error.message:"Resolution could not be recorded.")}
   }
 
-  function renderPrimitive(primitive:Primitive){
+  function renderComponent(component:RuntimeComponent){
     if(primitive.renderer_key==="c1me.acquisitions"){
       const gerron=acquisitionDirectory.find(item=>item.primary_email.toLowerCase()==="gerron@paragonparcels.com")
       return <section key={primitive.primitive_key} className="myenv-connections-thread">
@@ -1441,16 +1442,16 @@ export default function MyEnvironmentEncounter(){
   const has47pct=initiatives.some(initiative=>initiative.initiative_key==="47pct")
   const genericBackdrop=!data.presentation||["c3_field_c1me_live_backdrop_v1","c3_field_environment_opening_visual_v1"].includes(data.presentation.opening_visual_asset_key)
   const backdrop=genericBackdrop?"":(data.presentation?.opening_visual_url||"")
-  const availableComponents=[...primitives,...contextualComponents]
-  const activePrimitive=activePanel?.startsWith("primitive:")
+  const availableComponents=[...runtimeComponents,...contextualComponents]
+  const activeComponent=activePanel?.startsWith("primitive:")
     ?availableComponents.find(primitive=>"primitive:"+primitive.primitive_key===activePanel)
     :null
   const activeInitiative=activePanel?.startsWith("initiative:")
     ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
     :null
   const activeOwnerLifecycle=activePanel==="owner:lifecycle"
-  const groupedPrimitives={
-    core:availableComponents.filter(primitive=>primitiveGroup(primitive)==="core"),
+  const groupedComponents={
+    core:availableComponents.filter(primitive=>componentGroup(primitive)==="core"),
     work:availableComponents.filter(primitive=>primitiveGroup(primitive)==="work"),
     relations:availableComponents.filter(primitive=>primitiveGroup(primitive)==="relations"),
     other:availableComponents.filter(primitive=>primitiveGroup(primitive)==="other")
@@ -1461,7 +1462,7 @@ export default function MyEnvironmentEncounter(){
     (data.operator_context.operators||[]).some(operator=>operator.operator_role==="operator"&&operator.boundary==="notchazz_pass")
   const environmentItemCount=availableComponents.length+initiatives.length
 
-  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract={primitiveContract}>
+  return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract={runtimeComponentContract}>
     {backdrop&&<img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>}
     <CurrentConstellation tokens={currentTokens}/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
@@ -1493,11 +1494,11 @@ export default function MyEnvironmentEncounter(){
         <button type="button" aria-label="Close Environment Index" onClick={()=>setEnvironmentIndexOpen(false)}>×</button>
       </div>
       {([
-        ["core","Core",groupedPrimitives.core],
-        ["work","Work",groupedPrimitives.work],
-        ["relations","Relations",groupedPrimitives.relations],
-        ["other","Other",groupedPrimitives.other]
-      ] as Array<[PrimitiveGroupKey,string,Primitive[]]>).map(([key,label,items])=>items.length>0&&<section className="myenv-index-group" key={key}>
+        ["core","Core",groupedComponents.core],
+        ["work","Work",groupedComponents.work],
+        ["relations","Relations",groupedComponents.relations],
+        ["other","Other",groupedComponents.other]
+      ] as Array<[ComponentGroupKey,string,RuntimeComponent[]]>).map(([key,label,items])=>items.length>0&&<section className="myenv-index-group" key={key}>
         <p>{label}</p>
         {items.map(primitive=><button
           key={primitive.primitive_key}
@@ -1507,7 +1508,7 @@ export default function MyEnvironmentEncounter(){
           onClick={()=>{setActivePanel("primitive:"+primitive.primitive_key);setEnvironmentIndexOpen(false)}}
         >
           <span>{primitive.display_label}</span>
-          <small>{primitiveMeta(primitive)}</small>
+          <small>{componentMeta(primitive)}</small>
         </button>)}
       </section>)}
       {initiatives.length>0&&<section className="myenv-index-group">
@@ -1547,14 +1548,14 @@ export default function MyEnvironmentEncounter(){
       </section>}
     </nav>
 
-    {(activePrimitive||activeInitiative||activeOwnerLifecycle)&&<div
+    {(activeComponent||activeInitiative||activeOwnerLifecycle)&&<div
       className="myenv-overlay"
       role="presentation"
       onMouseDown={event=>{if(event.currentTarget===event.target)setActivePanel(null)}}
     >
-      <section className="myenv-panel" role="dialog" aria-modal="true" aria-label={activeOwnerLifecycle?"Ownership & Exit":(activePrimitive?.display_label||"Initiative")}>
+      <section className="myenv-panel" role="dialog" aria-modal="true" aria-label={activeOwnerLifecycle?"Ownership & Exit":(activeComponent?.display_label||"Initiative")}>
         <button className="myenv-panel-close" type="button" aria-label="Close" onClick={()=>setActivePanel(null)}>×</button>
-        {activePrimitive&&renderPrimitive(activePrimitive)}
+        {activeComponent&&renderComponent(activeComponent)}
         {activeOwnerLifecycle&&<section className="myenv-connections-thread">
           <div className="myenv-thread-heading">
             <p className="myenv-kicker">OWNERSHIP · PORTABILITY · EXIT</p>
