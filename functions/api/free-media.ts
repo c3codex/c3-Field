@@ -271,19 +271,19 @@ async function publicPacKeysForRequest(env:FreeMediaEnv,request:Request,assetKey
       // A released FREE snapshot authorizes this exact public member, never the
       // private source package as a whole. Retain the source PAC's HOLD unchanged.
       await readProjectionPac(env,sourceKey)
-      return [{pacKey:sourceKey,member:record(matches[0])}]
+      return [{pacKey:sourceKey,member:record(matches[0]),nativeSource:false}]
     }
     const initiativePac=(await resolveRegisteredNativeInitiative(env,host)).sourcePacKey
     const canonicalC1Pac=await canonicalPublicIntroPacKey(env)
-    return (initiativePac===canonicalC1Pac?[initiativePac]:[initiativePac,canonicalC1Pac]).map(pacKey=>({pacKey,member:null}))
+    return (initiativePac===canonicalC1Pac?[initiativePac]:[initiativePac,canonicalC1Pac]).map(pacKey=>({pacKey,member:null,nativeSource:pacKey===initiativePac}))
   }
   if(host==="c3field.online"||host==="www.c3field.online"){
-    return [{pacKey:await canonicalPublicIntroPacKey(env),member:null}]
+    return [{pacKey:await canonicalPublicIntroPacKey(env),member:null,nativeSource:false}]
   }
   throw new FreeMediaError("public_media_surface_unregistered",404)
 }
 
-async function requireEligiblePublicPac(env:FreeMediaEnv,pacKey:string){
+async function requireEligiblePublicPac(env:FreeMediaEnv,pacKey:string,nativeSource=false){
   const rows=await readRows(
     env,
     "c3_pac",
@@ -296,7 +296,7 @@ async function requireEligiblePublicPac(env:FreeMediaEnv,pacKey:string){
   if(
     pac.pac_type!=="c3WebPac"||
     pac.is_effective!==true||
-    metadata.completeness!=="pass"||
+    !(metadata.completeness==="pass"||(nativeSource&&pac.standing==="registered_complete_runtime_release_authorized"))||
     metadata.public_release_authorized!==true||
     metadata.runtime_release_authorized!==true
   ) throw new FreeMediaError("public_webpac_held",423)
@@ -341,10 +341,14 @@ async function findPacRuntimeBinding(env:FreeMediaEnv,pacKey:string,assetKey:str
 
 async function resolvePublicPacBinding(env:FreeMediaEnv,request:Request,assetKey:string,asset:RegistryRow){
   const candidatePacKeys=await publicPacKeysForRequest(env,request,assetKey)
-  for(const {pacKey,member} of candidatePacKeys){
-    if(!member)await requireEligiblePublicPac(env,pacKey)
+  for(const {pacKey,member,nativeSource} of candidatePacKeys){
     const binding=await findPacRuntimeBinding(env,pacKey,assetKey,asset)
     if(binding){
+      // Native release is resolved by the hardened typed projection and its
+      // retained source lineage. The source must still be explicitly complete,
+      // effective and public/runtime-authorized; unrelated held PACs cannot
+      // block a separately registered canonical intro binding.
+      if(!member)await requireEligiblePublicPac(env,pacKey,nativeSource)
       if(member){
         const approved=record(member.metadata)
         if(approved.runtime_integrity_state!=="sha256_verified"||asset.hash_algorithm!=="sha256"||binding.runtime_uri!==member.runtime_uri||binding.provider!==approved.runtime_storage_provider||binding.bucket_name!==approved.runtime_storage_bucket||binding.object_path!==approved.runtime_storage_object||asset.content_hash!==approved.runtime_derivative_sha256||asset.byte_size!==approved.runtime_derivative_byte_size||asset.mime_type!==approved.runtime_derivative_mime_type)

@@ -80,3 +80,35 @@ test("owner-custodied public cover uses exact approved member and retained held 
     member.metadata.runtime_derivative_sha256="different";assert.equal((await call(key)).status,409);assert.equal(providerReads,1)
   }finally{globalThis.fetch=original}
 })
+
+test("native media honors registered complete source release and independently bound canonical intro",async()=>{
+  const original=fetch,b=native("47pct.c3field.online","47pct")
+  let authorized=true,complete=true,providerReads=0
+  globalThis.fetch=async input=>{
+    const u=new URL(String(input)),asset=u.searchParams.get("asset_key")?.slice(3)||"og"
+    if(u.pathname.endsWith("resolve_public_surface_v1"))return Response.json(b)
+    if(u.pathname.endsWith("c3_environment"))return Response.json([{metadata:{public_intro_webpac_key:"canonical_intro_pac"}}])
+    if(u.pathname.endsWith("c3_pac")){
+      const key=u.searchParams.get("pac_key")?.slice(3)
+      if(key===b.presentation.webpac_key)return Response.json([{pac_key:key,pac_type:"c3WebPac",is_effective:true,metadata:{canonical_host:b.presentation.canonical_host,initiative_key:"47pct",frontend_invention:false,creates_standing:false,legacy_presentation_source_pac:"source_pac"}}])
+      return Response.json([{pac_key:key,pac_type:"c3WebPac",is_effective:true,standing:complete?"registered_complete_runtime_release_authorized":"formed",metadata:{hardened_projection_pac_key:b.presentation.webpac_key,public_release_authorized:authorized,runtime_release_authorized:authorized,...(key==="canonical_intro_pac"?{completeness:"pass"}:{})}}])
+    }
+    if(u.pathname.endsWith("c3ops_asset_record"))return Response.json([{asset_key:asset,standing:"operator_approved_webpac_reference",public_retrieval_standing:"bounded_public_runtime",authoritative_custody_provider:"supabase",authoritative_custody_identifier:"c3-field-media",authoritative_custody_location:asset+".webp",current_free_binding:"/api/free-media?asset="+asset,mime_type:"image/webp",byte_size:3}])
+    if(u.pathname.endsWith("c3_pac_runtime_binding")){
+      const key=u.searchParams.get("pac_key")?.slice(3),asset=JSON.parse(u.searchParams.get("metadata")!.slice(3)).source_asset_key
+      if((asset==="og"&&key!=="source_pac")||(asset==="intro"&&key!=="canonical_intro_pac"))return Response.json([])
+      return Response.json([{binding_key:asset+"_binding",pac_key:key,provider:"supabase",bucket_name:"c3-field-media",object_path:asset+".webp",runtime_uri:"/api/free-media?asset="+asset,standing:"active",metadata:{source_asset_key:asset}}])
+    }
+    if(u.pathname.includes("/storage/")){providerReads++;return new Response(new Uint8Array([1,2,3]),{headers:{"content-type":"image/webp"}})}
+    throw new Error("unexpected authority dependency")
+  }
+  const call=(asset:string)=>media({env,request:new Request("https://47pct.c3field.online/api/free-media?asset="+asset)} as never)
+  try{
+    assert.equal((await call("og")).status,200)
+    assert.equal((await call("intro")).status,200)
+    assert.equal(providerReads,2)
+    authorized=false;assert.equal((await call("og")).status,423)
+    authorized=true;complete=false;assert.equal((await call("og")).status,423)
+    assert.equal(providerReads,2)
+  }finally{globalThis.fetch=original}
+})
