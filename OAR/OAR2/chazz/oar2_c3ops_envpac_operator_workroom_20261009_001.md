@@ -152,3 +152,20 @@ No public c3Ops entry, no unrestricted admin portal, no mass participant list, n
 **MGS + EXECUTION: HLD.**  
 **NOTCHAZZ PASS: NOT EVALUATED.**  
 **EXTERNAL EFFECTS = 0; PRODUCTION DB MUTATION = 0; OAR2 EXECUTOR DISPATCH = 0.**
+
+
+## October 10 Registrar precedence correction — owner-resolved
+
+**CONTROLLING LATER OPERATOR DIRECTIVES.** The original OAR2 001 has never obtained executor authority; its early PF-02 sentence requesting `c3ops_mgs_gate_v1` evaluation against post-bind c3Ops state is now **superseded**. Live Registry establishes that `c3ops_mgs_gate_v1` is MAP/SEAT-consumer-only and cannot be used for this new EnvPAC's target-specific MGS. This source correction is a governance constraint on interpreting older numbered steps; preserve old text as historical provenance, do not dispatch its now-known-invalid assertion.
+
+**Target-bound Current MGS FOUND, not absent:** existing `public.c3_current_evidence_ref.current_evidence_env_c3ops_target_bound_mgs_v1` attests target MGS `447ea3f04a53b474535e8ec234fe7e5a8e177362aabfdb76ebf3f8adecdb1025` under Google Drive custody `1-maWl03MTkHDqUuI8fhfB3rJR2exzwZK`. September 13 `oar1_env_c3ops_mgs_satisfied_op044_20260913_001` satisfies its **initial Current prerequisite only**. The current state `pending_post_bind` remains an independent, unsatisfied later MGS requirement after EnvPAC formation.
+
+**Candidate parent c3Ops EnvPAC formation source now explicitly identified and integrity-proven:** `c3codex/measures-of-inanna-governance` path `governance/c3ops_parent_envpac_formation_source_custody_proof_20261010.md`, immutable commit `1a42d15de0fbc35e91acae9efe227d63ef81462b`, verified SHA-256 `0d06145af037e149eaf5b837a3af9aaff0b3ba149464f808b91cad78bef7c58b` (8061 bytes). The source exists and its provenance can be verified; the eventual c3Ops EnvPAC object and logical `c3://envpac/...` custody remain **unformed**. This precise distinction replaces the earlier open-ended semantic ask about who owns the source: op044 identifies system `c3_field` as both owner and custodian, and the distinct bounded EnvPAC formation is warranted for the existing `env_c3ops`.
+
+**No Lapzuli child:** per op044, Lapzuli is a named service, not the owner of source work and not an additional `env_c3ops_lapzuli`/EnvPAC/Current. One private c3Ops Workroom (type `c3WebPac`, conditional on independently custodied `presentation_manifest`) remains the maximum presently warranted operator UX PAC. No extra PAC for OPS mode, NUG or route.
+
+**Binding oldest-first ordering:** first resolve **this** original 001's formation semantics/source and obtain its legitimate NotChazz/Registrar admission for the narrowly warranted parent EnvPAC; no operational effect before true binding. Later corrected 031 is the explicit source of postbind MGS/operator relation preconditions; only after its OAR1 return may 032 read-only Lapzuli status be admitted; only then M3-09/030 operational Workroom can execute. Finally Spark_PAC #033 remains second workstream, no parallel Codex dispatch. A single OAR cannot turn post-formation observations into a pre-formation proof; Gate A warrant and Gate B actual MGS are distinct evidentiary moments.
+
+**Current effect ceiling:** no actual parent `c3envpac_c3ops_v0_1` exists, op044 has no env_c3ops operator binding, no post-EnvPAC MGS PASS, no independent Workroom private manifest PAC, no per-OAR Executor/Registrar delivery capability and no actual CanCom delivery. Those are **governed HLD**, not semantic freedom to invent them. Recompute this amended file's exact SHA-256, rerun NotChazz, and only progress through an admitted exact source and bounded return; original October 9 evaluation SHA and SEND cannot be reused.
+
+**Current amendment = SOURCE CHANGE ONLY, no Registrar PAC/EnvPAC registration, no Current mutation, no Codex deployment.**
