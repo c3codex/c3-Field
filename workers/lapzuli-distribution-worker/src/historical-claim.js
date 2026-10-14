@@ -1,7 +1,9 @@
 const ASSET="undrifted_hole_map_bluesky_dist_v1";
 // Called only after adapter payload/identity validation, before any provider I/O.
 export async function admitHistoricalWorkerClaim(body,env){
-  if(body.distribution_asset_id!==ASSET||body.dry_run!==false)return null;
+  const exactEffect=body.distribution_asset_id===ASSET||body.route_key==="lapzuli_route_"+ASSET||
+    (body.channel_key==="bluesky_undrifted"&&body.canonical_url==="https://measuresregistry.com/undrifted/the-hole-in-the-map");
+  if(!exactEffect||body.dry_run!==false)return null;
   const held=reason=>({ok:false,standing:"HLD",reason,external_publication_effects:0});
   if(body.execute!==true||!body.atomic_execution_id||!body.historical_occurrence_key)
     return held("historical_bound_worker_claim_required");
