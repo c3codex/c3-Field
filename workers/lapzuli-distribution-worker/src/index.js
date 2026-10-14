@@ -1,6 +1,7 @@
 import { proxyBrowserExecutor } from "./browser-proxy.js";
 import { handleParagraph } from "./paragraph-adapter.js";
 import { preflightDev } from "./dev-preflight.js";
+import { admitHistoricalWorkerClaim } from "./historical-claim.js";
 
 const PDS_URL = "https://bsky.social";
 
@@ -209,6 +210,9 @@ ${canonicalUrl}`;
 
   const imageUrl=cleanSecret(body.image_url);
   if (body.dry_run !== false) return json({ok:true,standing:"bluesky_adapter_ready_dry_run",adapter:"atproto_create_record_v3_media",request_identity:requestIdentity,account_handle:cleanSecret(identifier),channel_key:body.channel_key,text_length:Array.from(finalText).length,image_url:imageUrl||null,media_embed_ready:Boolean(imageUrl),external_publication_effects:0});
+
+  const historicalHold=await admitHistoricalWorkerClaim(body,env);
+  if(historicalHold)return json(historicalHold,409);
 
   const sessionResponse=await fetch(`${PDS_URL}/xrpc/com.atproto.server.createSession`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({identifier:cleanSecret(identifier),password:cleanSecret(password)})});
   const session=await sessionResponse.json().catch(()=>({}));
