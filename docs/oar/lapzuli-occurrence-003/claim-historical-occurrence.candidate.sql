@@ -5,7 +5,7 @@ create or replace function public.claim_lapzuli_historical_occurrence_v1(
   p_operator_session_token text,p_execution_instance text,p_preflight jsonb
 ) returns table(execution_id uuid,claimed boolean,reason text,attempt_number integer,
                 occurrence_key text,binding jsonb)
-language plpgsql security invoker set search_path = ''
+language plpgsql security invoker set search_path = '' set log_parameter_max_length_on_error='0'
 as $$
 declare
   v_instance constant text := 'registrar_lapzuli_native_occurrence_claim_binder_codex_003';
@@ -64,6 +64,9 @@ begin
   end if;
   execute 'select public.resolve_lapzuli_historical_admission_v1($1,$2,$3)'
     into v_admission using p_operator_session_token,v_instance,p_preflight;
+  if v_admission->>'standing' is distinct from 'admitted' then
+    return query select null::uuid,false,coalesce(v_admission->>'reason','native_individual_source_effect_admission_unresolved'),null::integer,null::text,null::jsonb; return;
+  end if;
   if v_admission->>'standing' is distinct from 'admitted' or
      v_admission->'individual_authenticated' is distinct from 'true'::jsonb or
      v_admission->>'operator_ref' is distinct from 'op044' or
@@ -131,6 +134,10 @@ begin
     'oar2_registrar_lapzuli_manual_backlog_handoff_chazz_20261011_002r',
     'distribution_asset_key',v_asset,'route_key',v_route,'destination_account_identifier','undrifted.bsky.social',
     'operator_ref','op044','individual_authenticated',true,'actor_evidence_ref',v_admission->>'actor_evidence_ref',
+    'actor_binding',v_admission->'actor_binding','proof_event_key',v_admission->>'proof_event_key',
+    'source_passage_capability_ref',v_admission->>'source_passage_capability_ref',
+    'native_source_sha256',v_admission->>'native_source_sha256',
+    'proof_sha256',v_admission->>'proof_sha256','source_snapshot_sha256',v_admission->>'source_snapshot_sha256',
     'prepared_worker_request',v_admission->'prepared_worker_request','verified_at',v_admission->>'verified_at',
     'valid_until',v_admission->>'valid_until',
     'capabilities',v_caps,'effect_tuple',v_tuple,'serialization_basis','postgres_jsonb_text_utf8_sha256');
