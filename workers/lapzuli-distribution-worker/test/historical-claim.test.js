@@ -12,6 +12,12 @@ test('historical provider requests HOLD without a bound claim or worker Registry
   assert.equal((await admitHistoricalWorkerClaim({...base,atomic_execution_id:null},env)).reason,'historical_bound_worker_claim_required');
   assert.equal((await admitHistoricalWorkerClaim(base,{})).reason,'historical_worker_registry_credentials_unconfigured');
 });
+test('relabeling the target asset cannot bypass the route/canonical-effect guard',async()=>{
+  for(const alias of [
+    {...base,distribution_asset_id:'another_asset',route_key:'lapzuli_route_undrifted_hole_map_bluesky_dist_v1',atomic_execution_id:null},
+    {...base,distribution_asset_id:'another_asset',channel_key:'bluesky_undrifted',canonical_url:'https://measuresregistry.com/undrifted/the-hole-in-the-map',atomic_execution_id:null},
+  ])assert.equal((await admitHistoricalWorkerClaim(alias,env)).reason,'historical_bound_worker_claim_required');
+});
 test('native HLD, unavailable or mismatched consume receipts do not admit provider dispatch',async()=>{
   const old=globalThis.fetch;
   try{
