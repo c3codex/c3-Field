@@ -372,7 +372,7 @@ async function workerCall(env: Env, path: string, payload: Row) {
   return workerRequest(env,path,"POST",payload)
 }
 
-async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boolean, historicalToken?:string|null) {
+async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boolean, historicalToken?:string|null,preflightEvidenceKey?:string|null) {
   const bindingAssets=await supabaseFetch<Row[]>(env,`measures_publication_distribution_asset?distribution_asset_key=eq.${encodeURIComponent(distributionAssetKey)}&select=metadata&limit=1`)
   const bindingRouteKey=str(record(bindingAssets[0]?.metadata).route_key)
   if(!bindingRouteKey)return {status:409,body:{standing:"HLD",reason:"registered_asset_route_binding_missing",external_publication_effects:0}}
@@ -470,7 +470,7 @@ async function dispatchAsset(env: Env, distributionAssetKey: string, dryRun: boo
     if(distributionAssetKey===HISTORICAL_ASSET){
       const bound=await claimHistoricalAsset((name,args)=>supabaseFetch(env,"rpc/"+name,{
         method:"POST",body:JSON.stringify(args),
-      }),historicalToken??null,{...binding,prepared_worker_request:requestBody})
+      }),historicalToken??null,{...binding,prepared_worker_request:requestBody,native_preflight_evidence_key:preflightEvidenceKey??null})
       executionId=bound.executionId
       attemptNumber=bound.attemptNumber
       occurrenceKey=bound.occurrenceKey
@@ -640,7 +640,7 @@ export async function handleLapzuliAction(request: Request, env: Env) {
         return json({standing:"HLD",reason:"historical_asset_outside_allowlist",external_publication_effects:0},409)
       const token=historicalOperatorToken(request)
       if(!token)return json({standing:"HLD",reason:"native_individual_operator_session_required",external_publication_effects:0},409)
-      const result=await dispatchAsset(env,HISTORICAL_ASSET,false,token)
+      const result=await dispatchAsset(env,HISTORICAL_ASSET,false,token,str(body.native_preflight_evidence_key))
       return json(result.body,result.status)
     }
     if(action === "preflight_route"){
