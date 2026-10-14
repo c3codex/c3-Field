@@ -3,19 +3,23 @@ export const HISTORICAL_ASSET = "undrifted_hole_map_bluesky_dist_v1"
 export const HISTORICAL_ROUTE = "lapzuli_route_undrifted_hole_map_bluesky_dist_v1"
 export const HISTORICAL_INSTANCE = "registrar_lapzuli_native_occurrence_claim_binder_codex_003"
 export const HISTORICAL_OAR2 = "oar2_registrar_lapzuli_native_occurrence_claim_binder_chazz_20261012_003"
+export const HISTORICAL_PASSAGE = "myenv_lapzuli_historical_v1"
 type Row = Record<string, unknown>
 export type HistoricalClaim = {executionId:string;attemptNumber:number|null;occurrenceKey:string;binding:Row}
 export class HistoricalClaimHold extends Error {
   constructor(readonly reason:string) { super(reason) }
 }
 
-// Token comes only from an HttpOnly runtime cookie, never from action metadata.
-// It is presented to the native verifier, not treated here as authenticated.
+// My Env resolves its host-only cookie and forwards the token privately over
+// HTTPS server-to-server. No copied browser cookie is accepted on c3Ops.
+// The transport contract/shared access key is NOT identity; SQL verifies the
+// secret against the existing session and governed owner/operator relations.
 export function historicalOperatorToken(request:Request):string|null {
-  const matches=(request.headers.get("cookie")??"").split(";").map(v=>v.trim())
-    .filter(v=>v.startsWith("c3_env_session="))
-  if(matches.length!==1)return null
-  const token=matches[0].slice("c3_env_session=".length)
+  if(new URL(request.url).origin!=="https://c3ops.c3field.online"||request.method!=="POST"||
+    request.headers.has("origin")||request.headers.get("x-c3-contract")!==HISTORICAL_PASSAGE||
+    request.headers.get("x-c3-source-origin")!=="https://my.c3field.online"||
+    request.headers.get("x-c3-execution-instance")!==HISTORICAL_INSTANCE)return null
+  const token=request.headers.get("x-c3-private-owner-session")??""
   return /^[0-9a-f]{64}$/.test(token)?token:null
 }
 
