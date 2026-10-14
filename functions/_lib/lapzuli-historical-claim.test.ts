@@ -1,6 +1,6 @@
 import test from "node:test"
 import assert from "node:assert/strict"
-import {claimHistoricalAsset,historicalOperatorToken,HISTORICAL_ASSET,HISTORICAL_ROUTE,HISTORICAL_INSTANCE,HISTORICAL_OAR2} from "./lapzuli-historical-claim"
+import {claimHistoricalAsset,historicalOperatorToken,HISTORICAL_ASSET,HISTORICAL_ROUTE,HISTORICAL_INSTANCE,HISTORICAL_OAR2,HISTORICAL_PASSAGE} from "./lapzuli-historical-claim"
 import {handleLapzuliAction} from "../api/c3ops/lapzuli"
 const token="a".repeat(64)
 const preflight={standing:"EXECUTABLE",distribution_asset_key:HISTORICAL_ASSET,route_key:HISTORICAL_ROUTE,
@@ -13,13 +13,17 @@ const fixture=()=>({claimed:true,execution_id:"11111111-1111-4111-8111-111111111
 test("missing individual token holds before all Registry calls",async()=>{
   await assert.rejects(()=>claimHistoricalAsset(async()=>{throw Error("must not call")},null,preflight),/native_individual_operator_session_required/)
 })
-test("only one native cookie is accepted, shared chamber key and request headers are not identity",()=>{
-  const req=(cookie:string)=>new Request("https://fixture.invalid",{headers:{cookie}})
-  assert.equal(historicalOperatorToken(req("mr_operator_chamber="+token)),null)
-  assert.equal(historicalOperatorToken(req("c3_env_session="+token)),token)
-  assert.equal(historicalOperatorToken(req("c3_env_session="+token+"; c3_env_session="+token)),null)
-  assert.equal(historicalOperatorToken(req("c3_env_session=op044")),null)
+test("c3Ops accepts only a bounded server-side passage, never a copied host cookie",()=>{
+  const headers={"x-c3-contract":HISTORICAL_PASSAGE,"x-c3-source-origin":"https://my.c3field.online",
+    "x-c3-execution-instance":HISTORICAL_INSTANCE,"x-c3-private-owner-session":token}
+  const req=(h:Record<string,string>,url="https://c3ops.c3field.online/api/c3ops/lapzuli")=>new Request(url,{method:"POST",headers:h})
+  assert.equal(historicalOperatorToken(req({cookie:"c3_env_session="+token})),null)
+  assert.equal(historicalOperatorToken(req(headers)),token)
+  assert.equal(historicalOperatorToken(req({...headers,origin:"https://my.c3field.online"})),null)
+  assert.equal(historicalOperatorToken(req({...headers,"x-c3-execution-instance":"another"})),null)
+  assert.equal(historicalOperatorToken(req(headers,"https://attacker.invalid")),null)
 })
+
 test("changed account, asset, speaker or route holds before native claim",async()=>{
   for(const key of ["distribution_asset_key","route_key","public_speaking_identity","destination_account_identifier"])
     await assert.rejects(()=>claimHistoricalAsset(async()=>{throw Error("must not call")},token,{...preflight,[key]:"wrong"}),/historical_preflight_binding_mismatch/)
@@ -104,7 +108,7 @@ for(const mode of ["held","accepted","transport_unknown","receipt_write_failed"]
     const f=runtimeFixture(mode),old=globalThis.fetch;globalThis.fetch=f.fetch as typeof globalThis.fetch
     try{
       const response=await handleLapzuliAction(new Request("https://c3ops.c3field.online/api/c3ops/lapzuli",{
-        method:"POST",headers:{cookie:"c3_env_session="+token},body:JSON.stringify({action:"dispatch_historical_asset",distribution_asset_key:HISTORICAL_ASSET}),
+        method:"POST",headers:{"x-c3-contract":HISTORICAL_PASSAGE,"x-c3-source-origin":"https://my.c3field.online","x-c3-execution-instance":HISTORICAL_INSTANCE,"x-c3-private-owner-session":token},body:JSON.stringify({action:"dispatch_historical_asset",distribution_asset_key:HISTORICAL_ASSET}),
       }),{SUPABASE_URL:"https://registry.fixture.invalid",SUPABASE_SERVICE_ROLE_KEY:"fixture",LAPZULI_DISTRIBUTION_CONTROL_TOKEN:"fixture",LAPZULI_DISTRIBUTION_WORKER_URL:"https://worker.fixture.invalid"})
       const result=await response.json();assert.equal(f.claims(),1)
       if(mode==="held"){
