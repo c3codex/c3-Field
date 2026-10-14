@@ -1,0 +1,80 @@
+{
+  "oar": "004",
+  "original_oar": "003 retained unchanged",
+  "source_oar2_sha256": "0505c15ecf23b3ae7735d7913473cf58d8291bb20304c3ecc950830c8f6940fc",
+  "native_tests": {
+    "status": "PASS",
+    "assertions": 49,
+    "production_columns": 543,
+    "production_constraints": 170,
+    "external_dependency_fks_skipped": 16,
+    "authentication_resolvers": "ACTUAL EXISTING NATIVE SQL; synthetic credential/authority/proof fixtures only",
+    "provider_calls": 0,
+    "production_mutations": 0,
+    "local_database": "lapzuli_admission_004_1791969882661"
+  },
+  "target_tests_passed": 24,
+  "regression_tests_passed": 23,
+  "typecheck": "Four preexisting diagnostics; no new diagnostics compared with baseline",
+  "production_installation": false,
+  "external_effects": 0,
+  "limitations": [
+    "16 external dependency foreign keys and three constraint triggers omitted from isolated fixture",
+    "Actual raw operator session not possessed or tested against production",
+    "Fresh production proof, installation reviews and exact-scope authority remain required"
+  ],
+  "files": {
+    "docs/oar/lapzuli-occurrence-003/README.md": {
+      "sha256": "fce66f675766f21ff7a21e3924a7d33f21d93eca90581b0de72762c222bede89",
+      "bytes": 8557
+    },
+    "docs/oar/lapzuli-occurrence-003/claim-historical-occurrence.candidate.sql": {
+      "sha256": "d5a7358475c26d7e9dffbda299560b306225d7fcec9ef3d29b032eaa53834ddb",
+      "bytes": 18801
+    },
+    "functions/_lib/lapzuli-historical-claim.test.ts": {
+      "sha256": "6822f30da1af2d023ba250b1ec2392158dbcebb5e427ee09172dd5882cc24f51",
+      "bytes": 10057
+    },
+    "functions/_lib/lapzuli-historical-claim.ts": {
+      "sha256": "4716ae0538a0f101a27a5030ef4bde045db384605cc199fe2f8234e8c800de45",
+      "bytes": 3931
+    },
+    "functions/api/c3ops/lapzuli.ts": {
+      "sha256": "d7fdc435cecdb642340292a533b1cc1984e971e5655dd006fd417301e0f86bca",
+      "bytes": 34310
+    },
+    "workers/lapzuli-distribution-worker/src/historical-claim.js": {
+      "sha256": "4d75f9cb76cfe9cfe326e4643d4bf619cba5867e5a81c745f338cbdba6638e37",
+      "bytes": 1673
+    },
+    "workers/lapzuli-distribution-worker/test/historical-claim.test.js": {
+      "sha256": "63da7a8d1e17b2d3ebfa99e76f23a8ac92df3a350c6df7efc4dabcdf666a7bc0",
+      "bytes": 2991
+    },
+    "docs/oar/lapzuli-occurrence-003/native-admission.candidate.sql": {
+      "sha256": "5a423a9947130d8a22d3f0cd39656d3255e2018a846f7f615a5796f89a170146",
+      "bytes": 34687
+    },
+    "docs/oar/lapzuli-occurrence-003/native-schema.fixture.json": {
+      "sha256": "5f73dcfe924d2c20265a436a4579da4eacf29ddfc914ea3b4a48ccae9da1cd3d",
+      "bytes": 125181
+    },
+    "docs/oar/lapzuli-occurrence-003/source-registry.fixture.json": {
+      "sha256": "8475b1be506f18b3e69ab9b62e050baa5fcbd3701a8bdde271f0b0cbf4e1365f",
+      "bytes": 60868
+    },
+    "functions/api/my-environment-lapzuli.test.ts": {
+      "sha256": "d949537a800a8a99c077478dfc3cb20f76752a67692c2bf7583d19987673cc25",
+      "bytes": 5670
+    },
+    "functions/api/my-environment-lapzuli.ts": {
+      "sha256": "e635766d347ebb4db3e8738127134514e4fc28cfffc679d1eeedbb13c6613001",
+      "bytes": 7554
+    },
+    "scripts/test-lapzuli-native-admission-004.mjs": {
+      "sha256": "b5fd4f0ec1b58f7dfd1632651f65a0e7f84dd6aeb926ccac44c6496f013d00d1",
+      "bytes": 28434
+    }
+  }
+}
