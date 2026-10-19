@@ -1,0 +1,20 @@
+[
+  {
+    "uri": "https://field-media.c3field.online/c1/c3_field_tree_intro_c1me.mp4",
+    "http": 200,
+    "content_type": [
+      "video/mp4"
+    ],
+    "content_length": [
+      "17669703"
+    ]
+  },
+  {
+    "uri": "https://c3field.online/api/free-media?asset=c3_field_c1me_live_backdrop_v1",
+    "http": 405,
+    "content_type": [
+      "application/json; charset=utf-8"
+    ],
+    "content_length": null
+  }
+]

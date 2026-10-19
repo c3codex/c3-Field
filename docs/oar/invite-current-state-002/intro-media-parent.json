@@ -1,0 +1,54 @@
+[
+  {
+    "evidence": {
+      "media": [
+        {
+          "pac_key": "c3field_root_orientation_c3webpac_v1",
+          "metadata": {
+            "integrity_value": "b27febeea50ca53dc6835227a6289daf-1",
+            "source_asset_key": "c3_field_c1me_live_backdrop_v1",
+            "integrity_algorithm": "storage-etag",
+            "presentation_treatment": "muted"
+          },
+          "provider": "supabase",
+          "standing": "active",
+          "created_at": "2026-10-02T14:09:16.559861+00:00",
+          "media_role": "muted_backdrop",
+          "updated_at": "2026-10-02T14:09:16.559861+00:00",
+          "binding_key": "c3field_root_v1_tree_backdrop",
+          "bucket_name": "c3-field-media",
+          "object_path": "c1ME_c3tree.webp",
+          "runtime_uri": "/api/free-media?asset=c3_field_c1me_live_backdrop_v1"
+        },
+        {
+          "pac_key": "c3field_root_orientation_c3webpac_v1",
+          "metadata": {
+            "byte_size": 17669703,
+            "r2_created_at": "2026-10-02 08:37:34 CDT",
+            "integrity_value": "015ffec5d7d2317bdaecfb71652ef1541356cc80b1b79cacd2aff63f1afadbcb",
+            "source_asset_key": "c3_field_root_intro_video_v1",
+            "integrity_algorithm": "sha256",
+            "operator_confirmed_home_page_only_video": true
+          },
+          "provider": "cloudflare_r2",
+          "standing": "active",
+          "created_at": "2026-10-02T14:09:16.559861+00:00",
+          "media_role": "opening_video",
+          "updated_at": "2026-10-02T18:36:49.206385+00:00",
+          "binding_key": "c3field_root_v1_intro_video",
+          "bucket_name": "c3-field-media",
+          "object_path": "c1/c3_field_tree_intro_c1me.mp4",
+          "runtime_uri": "https://field-media.c3field.online/c1/c3_field_tree_intro_c1me.mp4"
+        }
+      ],
+      "parent": {
+        "owner": "c3_field",
+        "standing": "effective",
+        "custodian": "c3_field",
+        "effective": true,
+        "envpac_key": "c3envpac_field_v0_1"
+      },
+      "reference_count": 30
+    }
+  }
+]

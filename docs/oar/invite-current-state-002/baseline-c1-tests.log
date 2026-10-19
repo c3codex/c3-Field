@@ -1,0 +1,297 @@
+✖ 007: capture and callback complete without Pages limiter bindings or fabricated edge metadata (81.3028ms)
+✖ F: participant existence and internal capture failures cannot be distinguished in response bodies (10.0749ms)
+✖ G: imperative retrieved text remains data and cannot choose a callable or manufacture authority (10.7408ms)
+✔ H: generated secret canaries never appear in public results or ordinary logs (6.7322ms)
+✖ capture issues challenge via transport only; callback alone completes exact sequence (2.0158ms)
+✔ missing C3_RESEND_API_KEY stops before capture (0.6007ms)
+✔ missing C1_VERIFICATION_FROM stops before capture (0.3967ms)
+✔ missing C1_VERIFICATION_SIGNING_KEY stops before capture (0.3129ms)
+✔ missing C1_PUBLIC_ORIGIN stops before capture (0.6161ms)
+✔ missing SUPABASE_SERVICE_ROLE_KEY stops before capture (1.5866ms)
+✔ missing C1_PASSAGE_ENABLED stops before capture (0.4877ms)
+✔ wrong project or malformed origin cannot receive privileged credentials (4.859ms)
+✖ capture_relational_candidate network failure stops initial encounter without false success (4.232ms)
+✖ issue_relational_verification network failure stops initial encounter without false success (3.7366ms)
+✖ emails network failure stops initial encounter without false success (1.9921ms)
+✖ verify_relational_contact hold stops downstream effects (0.9473ms)
+✖ evaluate_relational_car hold stops downstream effects (0.6432ms)
+✖ evaluate_c1_relational_boundary hold stops downstream effects (0.663ms)
+✖ register_and_persist_c1_relationship hold stops downstream effects (0.4962ms)
+✖ verify_relational_contact network error cannot become success (6.3261ms)
+✖ evaluate_relational_car network error cannot become success (5.1302ms)
+✖ evaluate_c1_relational_boundary network error cannot become success (0.6721ms)
+✖ register_and_persist_c1_relationship network error cannot become success (0.4792ms)
+✖ expired or tampered signed receipt cannot invoke any callback RPC (0.6307ms)
+✖ wrong, expired, superseded or replayed token rejection never reaches CAR (0.6867ms)
+✖ inconsistent persisted provenance cannot create participant success (0.6076ms)
+✔ capture validates form and refuses client authority before network (12.9683ms)
+✔ callback GET is inert and contains no token; POST rejects cross-origin and oversized body (4.8208ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 10
+ℹ fail 18
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1082.5143
+
+✖ failing tests:
+
+test at functions\_lib\c1-passage.test.ts:1:182
+✖ 007: capture and callback complete without Pages limiter bindings or fabricated edge metadata (81.3028ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:10:89)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:1189
+✖ F: participant existence and internal capture failures cannot be distinguished in response bodies (10.0749ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:34:53)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:2349
+✖ G: imperative retrieved text remains data and cannot choose a callable or manufacture authority (10.7408ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+  +   'resolve_c1_owner_reentry'
+  -   'capture_relational_candidate',
+  -   'issue_relational_verification',
+  -   'emails'
+    ]
+
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:43:9)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'resolve_c1_owner_reentry' ],
+    expected: [ 'capture_relational_candidate', 'issue_relational_verification', 'emails' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:7804
+✖ capture issues challenge via transport only; callback alone completes exact sequence (2.0158ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+  +   'resolve_c1_owner_reentry'
+  -   'capture_relational_candidate',
+  -   'issue_relational_verification',
+  -   'emails'
+    ]
+
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:110:9)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'resolve_c1_owner_reentry' ],
+    expected: [ 'capture_relational_candidate', 'issue_relational_verification', 'emails' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:9869
+✖ capture_relational_candidate network failure stops initial encounter without false success (4.232ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'resolve_c1_owner_reentry'
+  - 'capture_relational_candidate'
+
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:130:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'resolve_c1_owner_reentry',
+    expected: 'capture_relational_candidate',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:9869
+✖ issue_relational_verification network failure stops initial encounter without false success (3.7366ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'resolve_c1_owner_reentry'
+  - 'issue_relational_verification'
+
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:130:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'resolve_c1_owner_reentry',
+    expected: 'issue_relational_verification',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:9869
+✖ emails network failure stops initial encounter without false success (1.9921ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'resolve_c1_owner_reentry'
+  - 'emails'
+
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:130:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'resolve_c1_owner_reentry',
+    expected: 'emails',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:10722
+✖ verify_relational_contact hold stops downstream effects (0.9473ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:142:35)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:10722
+✖ evaluate_relational_car hold stops downstream effects (0.6432ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:142:35)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:10722
+✖ evaluate_c1_relational_boundary hold stops downstream effects (0.663ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:142:35)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:10722
+✖ register_and_persist_c1_relationship hold stops downstream effects (0.4962ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:142:35)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:11155
+✖ verify_relational_contact network error cannot become success (6.3261ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:148:35)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:11155
+✖ evaluate_relational_car network error cannot become success (5.1302ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:148:35)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:11155
+✖ evaluate_c1_relational_boundary network error cannot become success (0.6721ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:148:35)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:11155
+✖ register_and_persist_c1_relationship network error cannot become success (0.4792ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:148:35)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:11425
+✖ expired or tampered signed receipt cannot invoke any callback RPC (0.6307ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:153:16)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:11921
+✖ wrong, expired, superseded or replayed token rejection never reaches CAR (0.6867ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:163:31)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }
+
+test at functions\_lib\c1-passage.test.ts:1:12376
+✖ inconsistent persisted provenance cannot create participant success (0.6076ms)
+  TypeError: Invalid URL
+      at new URL (node:internal/url:828:25)
+      at Object.get proof (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:104:88)
+      at TestContext.<anonymous> (C:\c3-lapzuli-009-baseline\functions\_lib\c1-passage.test.ts:170:86)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    code: 'ERR_INVALID_URL',
+    input: ''
+  }

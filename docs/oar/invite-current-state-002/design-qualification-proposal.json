@@ -1,0 +1,73 @@
+{
+  "document_class": "DESIGNPAC_SOURCE_QUALIFICATION_PROPOSAL",
+  "standing": "PRIVATE_SOURCE_REVIEW_NOT_REGISTERED",
+  "candidate": "c3field_root_current_state_entry_designpac_v1",
+  "schema_ref": "registry://c3_pac_schema/pac_schema_designpac_v1_1",
+  "source_contract": "github_file:c3codex/measures-of-inanna-governance@3c14ca21170809dff29528d29a1a5b6594dd3173:governance/maturity/c3_field_m3_20261008/design/c3field_root_current_state_entry_design_contract_20261016.md",
+  "parent_envpac": {
+    "version": "v0.1",
+    "standing": "effective",
+    "envpac_key": "c3envpac_field_v0_1",
+    "is_effective": true,
+    "owner_subject_key": "c3_field",
+    "owner_subject_type": "system",
+    "architecture_version": "c3pac_v0.1",
+    "custodian_subject_key": "c3_field",
+    "custodian_subject_type": "system"
+  },
+  "parent_webpac": "c3field_root_orientation_c3webpac_v1",
+  "registration_authorized": false,
+  "runtime_release_authorized": false,
+  "public_release_authorized": false,
+  "authority_created": false,
+  "source_components": 9,
+  "source_component_manifest": "design-source-manifest.json",
+  "qualified_source_dependencies": [
+    "active_design_schema",
+    "effective_parent_envpac",
+    "registered_parent_webpac",
+    "actual_registered_opening_URI_and_integrity",
+    "source_contract_and_nine_custodied_descendants",
+    "unchanged_registered_legal_footer",
+    "Current_State_app_and_recipient_owned_My_Env_separation",
+    "protected_media_guards_preserved"
+  ],
+  "unresolved": [
+    {
+      "field": "native_designpac_header_and_c3_model_binding",
+      "owner": "Registrar",
+      "next_action": "Form and independently admit complete private DesignPAC under active schema; source proposal is not registration"
+    },
+    {
+      "field": "visual_composition_and_operator_acceptance",
+      "owner": "Operator / design owner",
+      "next_action": "Review first impression and mobile/desktop/keyboard/reduced-motion hierarchy with actual approved assets; no invented icon/palette"
+    },
+    {
+      "field": "safe_effective_snapshot_selector",
+      "owner": "Registrar / native FREE source qualifier",
+      "next_action": "Qualify a server-side effective DesignPAC/version/integrity/owner/parent-WebPAC selector and safe snapshot contract before renderer consumption; no caller-chosen PAC override or stale hardcoded authority"
+    },
+    {
+      "field": "protected_backdrop",
+      "owner": "media custodian / FREE",
+      "next_action": "Retain current owner-protected401; no anonymous grant or alternate fallback asset"
+    },
+    {
+      "field": "public_install_and_real_browser_acceptance",
+      "owner": "Operator / Registrar",
+      "next_action": "Separate exact installer OAR after private DesignPAC and WebPAC design presentation read; no source push while shared previews would auto-build"
+    }
+  ],
+  "selector_requirements": [
+    "authenticated_owner_or_explicit_public_release_scope",
+    "current_effective_pac_version_and_registration_integrity",
+    "parent_envpac_owner_and_webpac_design_binding",
+    "read_only_allowlisted_snapshot",
+    "no_mutation_or_registration_from_free_read",
+    "no_arbitrary_client_pac_identity_override",
+    "held_on_missing_revoked_or_ambiguous_binding",
+    "no_private_media_or_owner_state_in_public_payload"
+  ],
+  "native_selector_discovery": "No public function names matched bounded designpac/design-snapshot patterns; no source implementation match in inspected functions/src. Not a global absence proof."
+}

@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
 import MdmEntryIntro from "./MdmEntryIntro"
-import {initialPublicEntryStage} from "./publicEntryStage"
+import {initialPublicEntryStage,afterPublicIntro,invitationFromSearch} from "./publicEntryStage"
 import MillionDollarMissionLanding from "./MillionDollarMissionLanding"
 import {loadC3PublicPresentation,type C3PublicPresentation} from "./c3PublicPresentation"
 import type {InitiativeSurfaceRuntime} from "./initiativeSurfaceHost"
@@ -13,8 +13,7 @@ export default function C3CommunityConnect({initiativeSurface=null}:{initiativeS
 }
 
 function shareReferenceFromLocation(){
-  const value = new URLSearchParams(window.location.search).get("via")
-  return value && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value) ? value : null
+  return invitationFromSearch(window.location.search).via
 }
 
 function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:InitiativeSurfaceRuntime|null}) {
@@ -34,7 +33,8 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   const [mediaFailed, setMediaFailed] = useState(false)
   const shareReference = shareReferenceFromLocation()
   const [publicStage, setPublicStage] = useState<"intro"|"landing"|"connect">(() =>
-    initialPublicEntryStage(window.location.pathname, initiativeSurface?.initiativeKey, !!shareReference)
+    initialPublicEntryStage(window.location.pathname, initiativeSurface?.initiativeKey, !!shareReference,
+      new URLSearchParams(window.location.search).get("intro")==="complete")
   )
   const [introMuted, setIntroMuted] = useState(true)
   const introVideoRef = useRef<HTMLVideoElement | null>(null)
@@ -47,10 +47,15 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
     return () => query.removeEventListener("change", update)
   }, [])
   const submitting = useRef(false)
+  useEffect(()=>{
+    if(!initiativeSurface&&shareReference&&window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)
+      setPublicStage("connect")
+  },[initiativeSurface,shareReference])
 
   async function submitCandidate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (submitting.current || !environment?.available || environment.encounterEnabled === false) return
+    if (submitting.current || !environment?.available || environment.encounterEnabled === false ||
+      invitationFromSearch(window.location.search).kind==="invalid") return
     const form = new FormData(event.currentTarget)
     if (!event.currentTarget.checkValidity()) return
     submitting.current = true
@@ -98,6 +103,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
     }
   }
 
+  if(invitationFromSearch(window.location.search).kind==="invalid") return <main className="c3-connect-shell c3-connect-held"><p role="alert">This invitation link could not be verified. Check the original link before continuing.</p><a href="/">Explore c3 Field separately</a></main>
   if (!environment && !loadFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading…</p></main>
   if (!environment?.available) return <HeldUnknownC3FieldRoute pathname="/" />
   const pct47StandaloneReady=initiativeSurface?.initiativeKey==="47pct"&&!!initiativeSurface.publicPresentation
@@ -141,7 +147,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
         {mediaFailed ? (
           <div className="c3-intro-fallback" role="status">
             <p>The introduction is temporarily unavailable.</p>
-            <button className="c3-connect-button" type="button" onClick={() => setPublicStage("landing")}>CONTINUE <span aria-hidden="true">↗</span></button>
+            <button className="c3-connect-button" type="button" onClick={() => setPublicStage(afterPublicIntro(initiativeSurface?.initiativeKey,!!shareReference))}>CONTINUE <span aria-hidden="true">↗</span></button>
           </div>
         ) : (
           <video
@@ -153,7 +159,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
             preload="auto"
             poster={assets.intro.poster}
             aria-label={copy.mediaTitle}
-            onEnded={() => setPublicStage("landing")}
+            onEnded={() => setPublicStage(afterPublicIntro(initiativeSurface?.initiativeKey,!!shareReference))}
             onError={() => setMediaFailed(true)}
           >
             Your browser does not support this video.

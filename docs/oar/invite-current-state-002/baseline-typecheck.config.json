@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "baseUrl": "C:/c3-invite-002",
+    "typeRoots": [
+      "C:/c3-invite-002/node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "react": [
+        "node_modules/@types/react/index.d.ts"
+      ],
+      "react/jsx-runtime": [
+        "node_modules/@types/react/jsx-runtime.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "C:/c3-invite-002/node_modules/@cloudflare/workers-types/index.d.ts",
+    "C:/c3-invite-002/node_modules/vite/client.d.ts",
+    "C:/c3-lapzuli-009-baseline/functions/api/my-environment-invite.ts",
+    "C:/c3-lapzuli-009-baseline/src/c3_field_connect/C3FieldRoot.tsx",
+    "C:/c3-lapzuli-009-baseline/src/c3_field_connect/C3CommunityConnect.tsx",
+    "C:/c3-lapzuli-009-baseline/src/c3_field_connect/publicEntryStage.ts"
+  ]
+}

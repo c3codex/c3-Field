@@ -1,0 +1,24 @@
+[
+  {
+    "project": "c3-field",
+    "http": 200,
+    "production_branch": "c3field",
+    "production_auto_deploy": false,
+    "preview_setting": "all",
+    "includes": [
+      "*"
+    ],
+    "excludes": []
+  },
+  {
+    "project": "measuresregistry",
+    "http": 200,
+    "production_branch": "measures",
+    "production_auto_deploy": true,
+    "preview_setting": "all",
+    "includes": [
+      "*"
+    ],
+    "excludes": []
+  }
+]

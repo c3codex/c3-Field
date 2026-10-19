@@ -1,0 +1,15 @@
+{
+  "observed_at": "2026-10-19T13:30:22.58845+00:00",
+  "reference": {
+    "share_state": "active",
+    "source_env_key": "env_person_eea672f5a7676dad4316755b",
+    "share_reference": "90c495d0-3588-4d2b-a5bc-bd919b10513b",
+    "owner_subject_key": "crs_93e901234ae044a396654ee80644b005",
+    "source_envpac_key": "c3envpac_person_eea672f5a7676dad4316755b_v0_1",
+    "source_initiative_key": "founders_ground",
+    "source_context_class": "operator",
+    "source_operator_binding_key": "initop_founders_ground_op044_v1"
+  },
+  "owner_reference_count": 30,
+  "design_candidate": 0
+}

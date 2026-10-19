@@ -1,0 +1,112 @@
+[
+  {
+    "evidence": {
+      "parent": {
+        "version": "v0.1",
+        "standing": "effective",
+        "envpac_key": "c3envpac_field_v0_1",
+        "is_effective": true,
+        "owner_subject_key": "c3_field",
+        "owner_subject_type": "system",
+        "architecture_version": "c3pac_v0.1",
+        "custodian_subject_key": "c3_field",
+        "custodian_subject_type": "system"
+      },
+      "boundary": {
+        "result": "PASS",
+        "oar_key": "oar2_registrar_invite_current_state_handoff_root_design_codex_20261016_002",
+        "standing": "active",
+        "evaluator": "notchazz",
+        "created_at": "2026-10-16T20:45:55.179766+00:00",
+        "result_reason": "Operator correction supersedes the earlier generic c3 Field landing success criterion: approved invite intro must continue to existing verified C1 Current State and recipient-owned My Env; no user-token direct claim or auto enrollment. #002 source/test only, same #001 source line without competing patch. c3 Field root remains public for noninvite traffic, DesignPAC is private review source only pending native safe FREE selector qualification, public visual acceptance and later exact effect OAR2. No deploy/external messages.",
+        "evaluation_key": "b4d286d9-2c3d-41a9-bffc-ee01af971aab",
+        "authority_created": false,
+        "execution_instance": "registrar_invite_current_state_handoff_root_design_codex_002",
+        "required_predicates": [
+          {
+            "resolution": "resolved",
+            "predicate_key": "immutable_source",
+            "predicate_class": "source",
+            "registry_evidence_ref": "github_file:c3codex/measures-of-inanna-governance@2052519d6883abdb27703028159bc13276dd2f7d:governance/maturity/c3_field_m3_20261008/OAR/OAR2/chazz/oar2_correct_invite_current_state_handoff_and_c3field_root_design_codex_20261016_002.md"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "operator_op044_actual_current_state_handoff_correction",
+            "predicate_class": "operator",
+            "registry_evidence_ref": "registry://c3_operator_standing/op044_operator_standing"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "active_c3ops_envpac",
+            "predicate_class": "environment",
+            "registry_evidence_ref": "registry://c3_envpac/c3envpac_c3ops_v0_1"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "valid_owner_invite_prior_scope",
+            "predicate_class": "previous_oar",
+            "registry_evidence_ref": "registry://cancom/oar2/oar2_registrar_myenv_invite_initiative_surface_fallback_codex_20261016_001"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "founders_ground_invitation_permission_no_public_release",
+            "predicate_class": "initiative",
+            "registry_evidence_ref": "registry://c3_initiative_operator_binding/initop_founders_ground_op044_v1"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "existing_root_webpac",
+            "predicate_class": "pac",
+            "registry_evidence_ref": "registry://c3_pac/c3field_root_orientation_c3webpac_v1"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "existing_personal_app_envpac",
+            "predicate_class": "envpac",
+            "registry_evidence_ref": "registry://c3_envpac/c3envpac_c1me_v0_1"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "established_c1_native_verification_and_personal_claim",
+            "predicate_class": "process",
+            "registry_evidence_ref": "registry://system_process_registry/c1me_relational_runtime_v1"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "registered_designpac_schema_pending_visual_approval",
+            "predicate_class": "schema",
+            "registry_evidence_ref": "registry://c3_pac_schema/pac_schema_designpac_v1_1"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "cancom_transport",
+            "predicate_class": "process",
+            "registry_evidence_ref": "registry://system_process_registry/cancom_oar_delivery_retrieval_v1"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "bounded_registrar_delivery",
+            "predicate_class": "capability",
+            "registry_evidence_ref": "registry://c3_envpac_capability_grant/invite_002_registrar_cancom_delivery"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "bounded_codex_source_implementation",
+            "predicate_class": "capability",
+            "registry_evidence_ref": "registry://c3_envpac_capability_grant/invite_002_codex_source_handoff"
+          },
+          {
+            "resolution": "resolved",
+            "predicate_key": "no_live_deploy_no_pac_registration_no_provider_effect",
+            "predicate_class": "effect_boundary",
+            "registry_evidence_ref": "github_file:c3codex/measures-of-inanna-governance@2052519d6883abdb27703028159bc13276dd2f7d:governance/maturity/c3_field_m3_20261008/OAR/OAR2/chazz/oar2_correct_invite_current_state_handoff_and_c3field_root_design_codex_20261016_002.md"
+          }
+        ],
+        "boundary_process_key": "notchazz_oar_predispatch_semantic_boundary_v1",
+        "governed_process_key": "governed_object_passage_process_v4",
+        "oar_integrity_sha256": "279dae7315f622200ca80a0391c8ba1d936f82f02d66662298ad0516bcda61e6",
+        "unresolved_predicates": []
+      }
+    }
+  }
+]

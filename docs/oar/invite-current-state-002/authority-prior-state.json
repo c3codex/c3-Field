@@ -1,0 +1,120 @@
+[
+  {
+    "evidence": {
+      "grant": {
+        "scope": {
+          "oar_key": "oar2_registrar_invite_current_state_handoff_root_design_codex_20261016_002",
+          "expires_at": "2026-10-23T20:45:13.765239Z",
+          "process_key": "cancom_oar_delivery_retrieval_v1",
+          "source_only": true,
+          "executor_ref": "codex",
+          "operator_ref": "op044",
+          "branch_policy": "NO_REMOTE_PUSH_WITHOUT_VERIFIED_PAGES_PREVIEW_SAFETY",
+          "allowed_actions": [
+            "resolve_registry_manifest",
+            "resolve_cancom_passage",
+            "retrieve_canonical_payload",
+            "read_native_invite_001_queue_and_source_return_status",
+            "inspect_c3field_root_approved_intro_and_c1_connect_route",
+            "implement_source_only_invite_provenance_to_verified_current_state_handoff",
+            "preserve_approved_intro_and_eliminate_duplicate_intro",
+            "test_public_root_separation_reentry_new_claim_negative_token_and_operator_bindings",
+            "qualify_private_c3field_current_state_designpac_source_and_free_selector_without_registration",
+            "return_oar1_evidence"
+          ],
+          "execution_profile": {
+            "minimum_capability_floor": "same_source_line_invite_to_current_state_own_verified_env_source_patch_negative_tests_designpac_registration_preflight"
+          },
+          "allowed_repository": "c3codex/c3-Field",
+          "execution_instance": "registrar_invite_current_state_handoff_root_design_codex_002",
+          "operator_confirmed": true,
+          "source_oar2_sha256": "279dae7315f622200ca80a0391c8ba1d936f82f02d66662298ad0516bcda61e6",
+          "source_payload_ref": "github_file:c3codex/measures-of-inanna-governance@2052519d6883abdb27703028159bc13276dd2f7d:governance/maturity/c3_field_m3_20261008/OAR/OAR2/chazz/oar2_correct_invite_current_state_handoff_and_c3field_root_design_codex_20261016_002.md",
+          "external_effect_max": 0,
+          "pr_merge_authorized": false,
+          "allowed_source_paths": [
+            "functions/api/my-environment-invite.ts",
+            "src/c3_field_connect/C3FieldRoot.tsx",
+            "src/app/App.tsx",
+            "src/c3_field_connect/C3CommunityConnect.tsx",
+            "src/c3_field_connect/publicEntryStage.ts",
+            "src/c3_field_connect/c3FieldRouting.ts",
+            "**/*invite*.test.ts",
+            "**/*routing*.test.ts"
+          ],
+          "requires_oar1_return": true,
+          "deployment_authorized": false,
+          "operator_confirmed_at": "2026-10-16T20:45:13.765239Z",
+          "model_resolution_policy": {
+            "oar1_model_resolution_evidence_required": true
+          },
+          "source_mutation_authorized": true,
+          "pac_registration_authorized": false,
+          "production_deployment_authorized": false,
+          "coordinate_with_existing_instance": "registrar_myenv_invite_initiative_surface_fallback_codex_001",
+          "production_db_mutation_authorized": false,
+          "external_correspondence_authorized": false,
+          "external_provider_effects_authorized": false,
+          "no_competing_parallel_implementation": true,
+          "external_publication_effects_authorized": false
+        },
+        "standing": "active",
+        "capability": "invite_002_codex_source_correction_and_designpac_review",
+        "created_at": "2026-10-16T20:45:35.83098+00:00",
+        "envpac_key": "c3envpac_c3ops_v0_1",
+        "system_key": "c3ops",
+        "updated_at": "2026-10-16T20:45:35.83098+00:00",
+        "evidence_ref": "github_file:c3codex/measures-of-inanna-governance@2052519d6883abdb27703028159bc13276dd2f7d:governance/maturity/c3_field_m3_20261008/OAR/OAR2/chazz/oar2_correct_invite_current_state_handoff_and_c3field_root_design_codex_20261016_002.md",
+        "capability_key": "invite_002_codex_source_handoff"
+      },
+      "prior": {
+        "oar_key": "oar2_registrar_myenv_invite_initiative_surface_fallback_codex_20261016_001",
+        "oar_type": "oar2",
+        "oar1_path": null,
+        "queue_key": "queue_registrar_myenv_invite_initiative_surface_fallback_codex_001",
+        "scope_key": "registrar_myenv_invite_initiative_surface_fallback_codex_001",
+        "created_at": "2026-10-16T20:28:42.9967+00:00",
+        "system_key": "c3ops",
+        "updated_at": "2026-10-16T20:28:42.9967+00:00",
+        "process_key": "cancom_oar_delivery_retrieval_v1",
+        "operator_key": "op044",
+        "queue_status": "approved_for_execution",
+        "blocked_reason": null,
+        "refusal_reason": null,
+        "deploy_standing": "not_authorized",
+        "preflight_status": "passed",
+        "requested_action": "Fix My Env Invite Connection initiative_surface_not_resolved when selected registered Founders Ground has no public initiative page; retain authorized personal invitation provenance and existing generic c3 Field via entrance, isolated negative tests and return OAR1.",
+        "source_oar2_path": "registry://cancom/oar2/oar2_registrar_myenv_invite_initiative_surface_fallback_codex_20261016_001",
+        "execution_summary": null,
+        "execution_boundary": "source_test_only_no_prod_install_no_initiative_release_no_provider_messages",
+        "expected_oar1_path": "registry://cancom/oar1_return/registrar_myenv_invite_initiative_surface_fallback_codex_001",
+        "chazz_review_prompt": null,
+        "cody_handoff_prompt": null,
+        "db_mutation_standing": "not_authorized",
+        "execution_started_at": null,
+        "operator_confirmed_at": "2026-10-16T20:26:03+00:00",
+        "src_mutation_standing": "not_authorized",
+        "automation_permissions": {
+          "deploy": false,
+          "db_mutation": false,
+          "passage_key": "registrar_myenv_invite_initiative_surface_fallback_codex_001",
+          "executor_ref": "codex",
+          "src_mutation": true,
+          "capability_ref": "invite_001_codex_source_correction",
+          "canonical_sha256": "d21a9f3d7c98eb106510a58af1ca53d95ce657b29773f58a8b5c6ea5be314ed2",
+          "required_capability": "invite_001_codex_source_and_isolated_test_correction",
+          "serialization_basis": "utf8_raw_bytes_sha256",
+          "requires_oar1_return": true,
+          "canonical_payload_ref": "github_file:c3codex/measures-of-inanna-governance@ed68c3f9c847250878ffa0d600d939eacad0b1d8:governance/maturity/c3_field_m3_20261008/OAR/OAR2/chazz/oar2_myenv_invite_connection_unreleased_initiative_fallback_codex_20261016_001.md",
+          "executor_binding_mode": "specific_executor",
+          "canonical_payload_bytes": 9560,
+          "external_correspondence": false,
+          "payload_custody_provider": "github"
+        },
+        "execution_completed_at": null,
+        "chazz_review_prompt_authority": "thread_prompt_only",
+        "chazz_review_prompt_generated_at": null
+      }
+    }
+  }
+]

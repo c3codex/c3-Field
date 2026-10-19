@@ -1,5 +1,6 @@
 import {useEffect,useRef,useState} from "react"
 import {startIntroPlayback} from "./introPlayback"
+import {invitationFromSearch,invitationConnectUrl} from "./publicEntryStage"
 import "./publicIntroStage.css"
 
 type Section={key:string;title?:string;headline?:string;body?:string;descriptor?:string;role?:string;items?:string[];points?:string[]}
@@ -12,11 +13,19 @@ export default function C3FieldRoot(){
   const [videoDone,setVideoDone]=useState(false)
   const [sound,setSound]=useState(false)
   const video=useRef<HTMLVideoElement>(null)
+  const invitation=useRef(invitationFromSearch(window.location.search)).current
+  const continued=useRef(false)
+  function finishIntro(){
+    if(continued.current)return
+    continued.current=true
+    setVideoDone(true)
+    if(invitation.kind==="valid")window.location.assign(invitationConnectUrl(invitation.via!))
+  }
   useEffect(()=>{fetch("/api/c3-root-presentation",{headers:{accept:"application/json"},cache:"no-store"}).then(async r=>{const body=await r.json();if(!r.ok||body?.standing!=="bounded_public_runtime")throw new Error("held");setState(body)}).catch(()=>setHeld(true))},[])
   useEffect(()=>{
     if(!state||videoDone)return
-    if(window.matchMedia?.("(prefers-reduced-motion: reduce)").matches){setVideoDone(true);return}
-    if(video.current)return startIntroPlayback(video.current,()=>setVideoDone(true),window)
+    if(window.matchMedia?.("(prefers-reduced-motion: reduce)").matches){finishIntro();return}
+    if(video.current)return startIntroPlayback(video.current,finishIntro,window)
   },[state,videoDone])
   function toggleSound(){
     const player=video.current
@@ -34,16 +43,23 @@ export default function C3FieldRoot(){
   return <main style={{minHeight:"100vh",background:"#101311",color:"#f2f1ea",fontFamily:"system-ui, sans-serif",position:"relative"}}>
     <div aria-hidden="true" style={{position:"fixed",inset:0,backgroundImage:`linear-gradient(rgba(10,14,11,.72),rgba(10,14,11,.9)),url("${state.runtimeMedia.backdrop.runtime_uri}")`,backgroundSize:"cover",backgroundPosition:"center",zIndex:0}} />
     {!videoDone&&<div className="c3-public-intro-stage c3-public-intro-stage--root">
-      <video ref={video} src={state.runtimeMedia.opening.runtime_uri} autoPlay muted={!sound} playsInline controls aria-label="c3 Field opening film" onEnded={()=>setVideoDone(true)} onError={()=>setVideoDone(true)} />
+      <video ref={video} src={state.runtimeMedia.opening.runtime_uri} autoPlay muted={!sound} playsInline controls aria-label="c3 Field opening film" onEnded={finishIntro} onError={finishIntro} />
       <div className="c3-public-intro-controls">
         <button type="button" aria-label={sound?"Turn opening film sound off":"Turn opening film sound on"} aria-pressed={sound} onClick={toggleSound}>{sound?"SOUND OFF":"SOUND ON"}</button>
-        <button type="button" onClick={()=>setVideoDone(true)}>Enter c3 Field</button>
+        <button type="button" onClick={finishIntro}>{invitation.kind==="valid"?"Continue to Current State":"Enter c3 Field"}</button>
       </div>
     </div>}
     <div style={{position:"relative",zIndex:1,maxWidth:"960px",margin:"0 auto",padding:"2rem 1.25rem 4rem"}}>
       <header style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"1rem",paddingBottom:"12vh"}}>
         <strong>c3 Field</strong><span style={{fontSize:".8rem",opacity:.7}}>{c.header?.owner}</span>
       </header>
+      {invitation.kind==="invalid"?<section role="alert"><h1>This invitation link could not be verified.</h1><p>Check the original link before continuing. Opening a link does not create your environment.</p><a href="/">Explore c3 Field separately</a></section>:<section aria-label="Current State entrance">
+        <h2>{invitation.kind==="valid"?"Verify to open your environment":"Enter c3 Current State"}</h2>
+        <p>Current State is the app for your own My Env. Verification is required before your environment can open.</p>
+        <a href={invitation.kind==="valid"?invitationConnectUrl(invitation.via!):"/connect"}>Enter c3 Current State</a>
+        <p><a href="#field-orientation">Explore c3 Field</a></p>
+      </section>}
+      <div id="field-orientation">
       {sections.map(section=><section key={section.key} style={{padding:"clamp(2.5rem,8vh,6rem) 0",borderTop:"1px solid rgba(255,255,255,.16)"}}>
         {section.headline&&<h1 style={{fontSize:"clamp(2.4rem,7vw,5.6rem)",lineHeight:.98,maxWidth:"14ch",margin:"0 0 1.5rem"}}>{section.headline}</h1>}
         {section.title&&<h2 style={{fontSize:"clamp(1.8rem,4vw,3.2rem)",margin:"0 0 1rem"}}>{section.title}</h2>}
@@ -53,6 +69,7 @@ export default function C3FieldRoot(){
         {section.items&&<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:"1rem",marginTop:"1.5rem"}}>{section.items.map(item=><div key={item} style={{padding:"1.4rem",border:"1px solid rgba(255,255,255,.2)",borderRadius:"1rem",fontSize:"1.25rem"}}>{item}</div>)}</div>}
         {section.points&&<div style={{display:"grid",gap:".7rem",marginTop:"1.5rem"}}>{section.points.map(point=><div key={point} style={{fontSize:"1.2rem",padding:"1rem 0",borderBottom:"1px solid rgba(255,255,255,.12)"}}>{point}</div>)}</div>}
       </section>)}
+      </div>
       {c.public_encounters?.living_circuit?.standing_created===false&&<section style={{padding:"clamp(2.5rem,8vh,6rem) 0",borderTop:"1px solid rgba(255,255,255,.16)"}}>
         <p style={{fontSize:".72rem",letterSpacing:".14em",textTransform:"uppercase",opacity:.68}}>Public orientation encounter</p>
         <h2 style={{fontSize:"clamp(2.2rem,5vw,4.6rem)",lineHeight:1,margin:".6rem 0 1rem",fontFamily:"Georgia,serif",fontWeight:400}}>{c.public_encounters.living_circuit.title}</h2>

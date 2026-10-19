@@ -48,17 +48,30 @@ async function initiativeEntryUrl(env:PassageEnv,initiativeKey:string){
     metadata:"cs."+JSON.stringify({initiative_key:initiativeKey,surface_type:"initiative_connect_surface"}),
     limit:"2"
   })
-  if(rows.length!==1) throw new Error("initiative_surface_not_resolved")
+  if(rows.length===0) return null
+  if(rows.length!==1) throw new Error("initiative_surface_ambiguous")
   const metadata=record(rows[0].metadata)
   if(rows[0].status!=="active"||rows[0].process_status!=="active"||
-     metadata.canonical!==true||metadata.binding_state!=="active"||
-     metadata.release_state!=="released"||metadata.access_state!=="public")
+     metadata.initiative_key!==initiativeKey||metadata.surface_type!=="initiative_connect_surface"||
+     metadata.canonical!==true||!["active","held","pending"].includes(String(metadata.binding_state)))
+    throw new Error("initiative_surface_not_resolved")
+  if(["held","private","draft","unreleased"].includes(String(metadata.release_state))) return null
+  if(metadata.binding_state!=="active"||metadata.release_state!=="released"||metadata.access_state!=="public")
     throw new Error("initiative_surface_not_resolved")
   const host=typeof metadata.canonical_host==="string"?metadata.canonical_host:""
   if(!host) throw new Error("initiative_surface_not_resolved")
   const resolved=await resolveInitiativeSurfaceHost(env,host)
   if(resolved.initiativeKey!==initiativeKey) throw new Error("initiative_surface_mismatch")
-  return new URL(resolved.route,resolved.canonicalUrl)
+  const url=new URL(resolved.route,resolved.canonicalUrl)
+  if(url.origin!==new URL(resolved.canonicalUrl).origin||url.protocol!=="https:"||url.username||url.password||url.search||url.hash)
+    throw new Error("initiative_surface_url_mismatch")
+  return url
+}
+function personalEntryUrl(env:PassageEnv){
+  const url=new URL(env.C1_PUBLIC_ORIGIN||"https://c3field.online")
+  if(url.origin!=="https://c3field.online"||url.username||url.password||url.pathname!=="/"||url.search||url.hash)
+    throw new Error("personal_entry_origin_invalid")
+  return url
 }
 async function sessionFor(request:Request,env:PassageEnv){
   const raw=cookie(request,"c3_env_session")
@@ -80,10 +93,15 @@ async function initiativeContext(env:PassageEnv,session:Awaited<ReturnType<typeo
      result.env_key!==session.envKey||result.envpac_ref!==session.envpacKey||
      result.initiative_resolution!=="envpac_resolved") throw new Error("initiative_context_not_resolved")
   const initiatives=Array.isArray(result.initiatives)?result.initiatives as Row[]:[]
-  const row=initiatives.find(item=>item.initiative_key===value)
-  if(!row) throw new Error("initiative_context_not_resolved")
+  const matches=initiatives.filter(item=>item.initiative_key===value)
+  if(matches.length!==1) throw new Error("initiative_context_not_resolved")
+  const row=matches[0]
   const contextClass=typeof row.context_class==="string"?row.context_class:"participant"
+  if(!["operator","participant"].includes(contextClass)||typeof row.initiative_envpac_key!=="string"||!row.initiative_envpac_key)
+    throw new Error("initiative_context_not_resolved")
   if(contextClass==="operator"&&row.invite_context_allowed!==true) throw new Error("initiative_operator_invite_not_authorized")
+  if(contextClass==="operator"&&(typeof row.initiative_operator_binding_key!=="string"||!row.initiative_operator_binding_key))
+    throw new Error("initiative_operator_binding_required")
   return {
     source_initiative_key:String(row.initiative_key),
     initiative_envpac_key:String(row.initiative_envpac_key),
@@ -101,10 +119,17 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     if(origin&&origin!==new URL(request.url).origin) return json({ok:false,standing:"invite_origin_held"},403)
     const session=await sessionFor(request,env)
     const body=await request.json().catch(()=>null) as Record<string,unknown>|null
-    if(!body) return json({ok:false,standing:"invite_intake_invalid"},400)
+    if(!body||typeof body!=="object"||Array.isArray(body)||
+      Object.keys(body).some(key=>!["message","source_initiative_key"].includes(key))||
+      (body.message!==undefined&&typeof body.message!=="string"))
+      return json({ok:false,standing:"invite_intake_invalid"},400)
     const message=typeof body.message==="string"?body.message.trim():""
     if(message.length>1200) return json({ok:false,standing:"invite_message_too_long"},400)
     const initiative=await initiativeContext(env,session,body.source_initiative_key)
+    // Resolve authority and route before creating any active reference.
+    const initiativeUrl=initiative?await initiativeEntryUrl(env,initiative.source_initiative_key):null
+    const publicUrl=initiativeUrl||personalEntryUrl(env)
+    const destinationClass=initiativeUrl?"initiative_connection":"current_state_connection"
     const rows=await write(env,"c3_env_share_reference",{
       source_env_key:session.envKey,
       source_envpac_key:session.envpacKey,
@@ -123,14 +148,13 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     })
     if(!rows[0]?.share_reference) throw new Error("invite_reference_unavailable")
     const shareReference=String(rows[0].share_reference)
-    const publicUrl=initiative
-      ?await initiativeEntryUrl(env,initiative.source_initiative_key)
-      :new URL("/",env.C1_PUBLIC_ORIGIN||"https://c3field.online")
     publicUrl.searchParams.set("via",shareReference)
     const copyText=[message||null,"Connect here:\n"+publicUrl.toString()].filter(Boolean).join("\n\n")
     return json({
       ok:true,
       standing:"connection_invite_ready",
+      destination_class:destinationClass,
+      initiative_surface_state:initiative?(initiativeUrl?"released":"unreleased"):"not_selected",
       public_url:publicUrl.toString(),
       copy_text:copyText,
       message:message||null,

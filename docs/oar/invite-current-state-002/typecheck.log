@@ -1,0 +1,11 @@
+functions/_lib/c1-passage.ts(169,32): error TS2339: Property 'signedURL' does not exist on type 'object'.
+functions/_lib/c1-passage.ts(169,64): error TS2339: Property 'signedURL' does not exist on type 'object'.
+functions/_lib/c1-passage.ts(170,19): error TS2339: Property 'signedUrl' does not exist on type 'object'.
+functions/_lib/c1-passage.ts(170,51): error TS2339: Property 'signedUrl' does not exist on type 'object'.
+src/c3_field_connect/C3CommunityConnect.tsx(116,32): error TS2339: Property 'public_identity' does not exist on type 'C3PublicPresentation'.
+src/c3_field_connect/C3CommunityConnect.tsx(134,81): error TS2339: Property 'formal_authority_statement' does not exist on type '{ kicker?: string | undefined; title?: string | undefined; header_line?: string | undefined; initiative_explanation?: string | undefined; model_descriptor?: string | undefined; model_path?: string | undefined; ... 9 more ...; public_surface_protected_primitive_labels_allowed?: boolean | undefined; }'.
+src/c3_field_connect/C3CommunityConnect.tsx(228,38): error TS2339: Property 'open_question' does not exist on type '{ kicker?: string | undefined; title?: string | undefined; header_line?: string | undefined; initiative_explanation?: string | undefined; model_descriptor?: string | undefined; model_path?: string | undefined; ... 9 more ...; public_surface_protected_primitive_labels_allowed?: boolean | undefined; }'.
+src/c3_field_connect/C3CommunityConnect.tsx(229,97): error TS2339: Property 'open_question_helper' does not exist on type '{ kicker?: string | undefined; title?: string | undefined; header_line?: string | undefined; initiative_explanation?: string | undefined; model_descriptor?: string | undefined; model_path?: string | undefined; ... 9 more ...; public_surface_protected_primitive_labels_allowed?: boolean | undefined; }'.
+src/c3_field_connect/C3FieldRoot.tsx(24,165): error TS2339: Property 'standing' does not exist on type '{}'.
+src/c3_field_connect/C3FieldRoot.tsx(24,234): error TS2345: Argument of type '{}' is not assignable to parameter of type 'SetStateAction<RootPresentation | null>'.
+src/c3_field_connect/MillionDollarMissionLanding.tsx(16,31): error TS2339: Property 'public_identity' does not exist on type 'C3PublicPresentation'.

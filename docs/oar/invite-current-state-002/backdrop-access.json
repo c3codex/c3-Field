@@ -1,0 +1,6 @@
+{
+  "method": "GET",
+  "uri": "https://c3field.online/api/free-media?asset=c3_field_c1me_live_backdrop_v1",
+  "http": 401,
+  "body_not_captured": true
+}

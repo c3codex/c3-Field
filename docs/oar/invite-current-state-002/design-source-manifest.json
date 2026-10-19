@@ -1,0 +1,47 @@
+[
+  {
+    "path": "design/current_state_app_entry_orientation.md",
+    "bytes": 540,
+    "sha256": "4b510ee4f9361a5a3898370308883c047d90315c5791d60cf7349412a82223ea"
+  },
+  {
+    "path": "design/first_impression_and_intro_transition.md",
+    "bytes": 495,
+    "sha256": "3b65a02468b85f496202f63dd668b37c30673f2c8ca9245cf33250fbd37f04d7"
+  },
+  {
+    "path": "design/footer_and_legal.md",
+    "bytes": 485,
+    "sha256": "1fa3798a8c023f118a108d30d6056f202f05de41fd566ad962e65575824074eb"
+  },
+  {
+    "path": "design/invitation_provenance_and_verification.md",
+    "bytes": 516,
+    "sha256": "60fff2f68a24075e59eafe356ea725f5bc19856a0f045f2e646125a7ad81d57b"
+  },
+  {
+    "path": "design/parent_identity_and_copy.md",
+    "bytes": 514,
+    "sha256": "12ab102966097487c5e28a568e9a3b84fc6258afa536fb1c408740b759004ac4"
+  },
+  {
+    "path": "design/readiness_and_work_in_progress.md",
+    "bytes": 505,
+    "sha256": "c76faf48aa3bc7f2418ca5b11f5930a4b488bc07c82a3691c7fe9a8f3f5dfac1"
+  },
+  {
+    "path": "design/registered_media_and_og.md",
+    "bytes": 564,
+    "sha256": "e63afc35686c63b4a1cd4ab79a816e5aae67a307d794c60bc8a21d42787e5060"
+  },
+  {
+    "path": "design/responsive_accessibility_and_return.md",
+    "bytes": 545,
+    "sha256": "b20496023f6c89e10360eb15845c12431d995e47a0691bed1ae37ef618bfe9b9"
+  },
+  {
+    "path": "design/two_entrance_hierarchy.md",
+    "bytes": 524,
+    "sha256": "5bb777a68654b3600c7884fc696837c3840ecd13847664ba1543a770998aef26"
+  }
+]
