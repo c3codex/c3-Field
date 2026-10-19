@@ -1,0 +1,17 @@
+create schema extensions;
+create extension pgcrypto with schema extensions;
+create role anon; create role authenticated; create role service_role;
+create table c3_environment(env_key text primary key,environment_class text);
+create table c3_envpac(envpac_key text primary key,env_key text,owner_subject_type text,owner_subject_key text,portable boolean,custodian_subject_type text,custodian_subject_key text,custody_provider text,custody_uri text,metadata jsonb default '{}',updated_at timestamptz);
+create table c3_envpac_access_grant(envpac_key text,subject_type text,subject_key text,relation_role text,standing text,revoked_at timestamptz,expires_at timestamptz,scope jsonb,granted_at timestamptz default now());
+create table c3_pac(pac_key text primary key,envpac_key text,pac_type text,version text,standing text,source_authority text,custody_provider text,custody_uri text,metadata jsonb default '{}',owner_subject_type text,owner_subject_key text,owner_environment_key text,registration_protocol text default 'legacy_pre_hardening',registered_at timestamptz,registration_sha256 text,boundary_evaluation_key text,registrar_role_call_key text,custodian_subject_type text,custodian_subject_key text,updated_at timestamptz);
+create table c3_pac_boundary_evaluation(evaluation_key text,presented_pac_key text,presented_registration_sha256 text,owner_subject_type text,owner_subject_key text,owner_environment_key text,notchazz_result text);
+create table c3_pac_registration_receipt(pac_key text,registration_sha256 text,boundary_evaluation_key text,registrar_role_call_key text,standing text);
+create table c3_pac_relation(relation_key text,source_pac_key text);
+create table c3_envpac_canopy_reference(envpac_key text,sort_order int,created_at timestamptz);
+create table c3_env_initiative_visibility(relationship_key text,standing text,revoked_at timestamptz);
+create table c3_env_native_connection(source_relationship_key text,target_relationship_key text,standing text,revoked_at timestamptz);
+create table c3_my_env_owner_lifecycle_receipt(receipt_key uuid default gen_random_uuid(),relationship_key text,env_key text,envpac_key text,action text,standing text,disposition text,portable_manifest jsonb,manifest_sha256 text,metadata jsonb,completed_at timestamptz,target_custodian_type text,target_custodian_key text,target_custody_provider text,target_custody_uri text);
+insert into c3_environment values('env','c3me_individual_environment');
+insert into c3_envpac(envpac_key,env_key,owner_subject_type,owner_subject_key,portable) values('ep','env','individual','owner',true);
+insert into c3_envpac_access_grant(envpac_key,subject_type,subject_key,relation_role,standing,scope) values('ep','individual','owner','owner','active','{"rights":["export"]}');
