@@ -1,0 +1,78 @@
+{
+  ".gitignore": {
+    "bytes": 25,
+    "sha256": "feb5cf8731bb195c37a169d163c01cfb319fe6cecc64d99996287b6a11145f24"
+  },
+  "baseline.sql": {
+    "bytes": 12601,
+    "sha256": "102f97e2aa6057cb00dc1fdd983173f4fa46730a0d8c3fa263660b4bd433e86b"
+  },
+  "build-candidate.py": {
+    "bytes": 4218,
+    "sha256": "b5f95d456309e4302589804d025b9f8d3f54abfb4066fe10ef67baa98f7019ca"
+  },
+  "caller-tests.txt": {
+    "bytes": 432,
+    "sha256": "70ac9156228edeac96e7f4a46e84bb236b21b7b97a74a506354135ceceb043ad"
+  },
+  "candidate.patch": {
+    "bytes": 7962,
+    "sha256": "3ae56c790a8790531692133c40dbe7395f21b468e107c8f1417e1b599b2f50d5"
+  },
+  "candidate.sql": {
+    "bytes": 14469,
+    "sha256": "cf3bb74fa4716f088066012b51d137e261f946086e99af338b16ebcfc29b2465"
+  },
+  "fixtures.sql": {
+    "bytes": 2760,
+    "sha256": "a91a541ecb067d94e61e318bf7705970e47a26643005118fb17e25b7caca20df"
+  },
+  "grants.json": {
+    "bytes": 4106,
+    "sha256": "f411de376e81959b95904667e2da5ab48cdf7419bc1c3ce3156cca08138f2c20"
+  },
+  "installed.json": {
+    "bytes": 14260,
+    "sha256": "da830ddb450806ebb0a071a293959bb57b9c7f754e0c5470323dff5013d10c8c"
+  },
+  "installed.sql": {
+    "bytes": 12620,
+    "sha256": "bec9743cfdf50a0440757d281462553b61252ff3f86776b1f57256ef0130b35f"
+  },
+  "notchazz.json": {
+    "bytes": 3979,
+    "sha256": "3773462b01cb2fdde768e7fdad6aa62344371815e5c56cbe75205cc57002e14e"
+  },
+  "OAR1.md": {
+    "bytes": 12137,
+    "sha256": "c0757b40c55466627f272c9efd4479f1d2b2fc574f19a1e180a3dbf1f6d59b61"
+  },
+  "OAR2.md": {
+    "bytes": 6757,
+    "sha256": "4c5e2a2419aabe8d304b6ac42fe172be945300f23ecfa509ac62d2472bbff08e"
+  },
+  "ownership.json": {
+    "bytes": 1809,
+    "sha256": "2942a21c3e3cbe75133d85648ec77f91be4aa17d45f478692c3f9e358f4b3d4c"
+  },
+  "pickup.json": {
+    "bytes": 2210,
+    "sha256": "403d2e076611408f67690fdbbb6ef9af782807f21e52f78d15bac279ac951efd"
+  },
+  "security.json": {
+    "bytes": 2056,
+    "sha256": "27ca5261ebda63c4c2433436fd492b4c72cae80d1948246e81af91c3852a9d61"
+  },
+  "test-output.txt": {
+    "bytes": 1241,
+    "sha256": "7ed1321999ab722f03f6270d4b16bb89af87cc2bef97718a125bdd4259f02413"
+  },
+  "test.cjs": {
+    "bytes": 8229,
+    "sha256": "2a31378c6e97c8fb4f5b84d4c332383b04c83ad518afb4bdcef13a685fe6a2ab"
+  },
+  "verify-evidence.py": {
+    "bytes": 935,
+    "sha256": "e72ce26b773e71996e694745d00e3bdb9d0c2e1f75fe916e3a256f9449b13f63"
+  }
+}
