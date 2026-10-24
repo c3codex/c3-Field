@@ -1,0 +1,25 @@
+PASS genuine service role fresh delivery and pickup; core remains denied
+PASS inspection accepted only as inspection; read-only Optics and fresh session reconstruction
+PASS known implementation uses independently measured local before/after effects and tests
+PASS bounded discovery is classified without expanding effect authority
+PASS wrong actor, executor, instance, source hash and route fail closed
+PASS expired, missing-expiry, revoked grant and source mismatch reject pickup
+PASS missing NotChazz prevents delivery atomically
+PASS identical/different duplicate returns preserve exactly one immutable receipt
+PASS concurrent fresh returns serialize to one effect
+PASS transaction interruption rolls back all return rails and retry succeeds
+PASS partial pre-existing return state holds without overwriting evidence
+PASS missing evidence persists only held disposition; no false acceptance
+PASS partial effect and failed tests cannot be certified by counters
+PASS stale evidence and changed desired effects rejected before receipt persistence
+PASS contested semantics escalates only affected objective
+PASS ordinary roles and forged actor strings cannot finalize
+PASS final disposition retries are idempotent; contradictions preserved
+PASS atomic finalizer rollback after forced failure leaves no half-closeout
+PASS delivery replay exactness and registrar expiration
+PASS wrong observed runtime identity and failed receipt predicates hold
+PASS unqualified registered human-required policy cannot be silently overridden
+PASS concurrent independent finalizations have one validation transition
+PASS independently authorized objectives retain passed evidence beside held dependency
+PASS rollback candidate restores exact prior bodies without deleting receipts
+{"tests":24,"result":"PASS","postgres":"PostgreSQL 17.6 on x86_64-windows, compiled by msvc-19.44.35213, 64-bit"}

@@ -3,6 +3,24 @@ export type RegisteredProcessKey =
   | "oar_custody_resolution_v1"
   | "oar_evidence_asset_custody_resolution_v1";
 
+/** Projection vocabulary only; the native Registry adapter adjudicates these. */
+export type DiscoverResolveClassification =
+  | "REUSE_RESOLVED" | "RESOLVE_KNOWN" | "DISCOVER_AND_RESOLVE"
+  | "ESCALATE_BOUNDARY" | "HOLD_UNVERIFIED";
+
+export type NativeDispositionRpc = (name: string, args: Record<string, unknown>) => Promise<Record<string, unknown>>;
+
+/** Invoke the existing-rail candidate adapter; never synthesize a local closeout. */
+export async function resolveNativeOarDisposition(
+  rpc: NativeDispositionRpc, executionInstance: string, validatorCapability: string,
+): Promise<Record<string, unknown>> {
+  assertNonEmpty("executionInstance", executionInstance);
+  assertNonEmpty("validatorCapability", validatorCapability);
+  return rpc("resolve_cancom_oar_disposition_v1", {
+    p_execution_instance: executionInstance, p_validator_capability: validatorCapability,
+  });
+}
+
 export type CustodyObjectType = "oar1" | "oar2" | "evidence" | "asset" | "protected_source";
 
 export type CustodyStanding =

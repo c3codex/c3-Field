@@ -3,10 +3,13 @@ export type OarType = "oar1" | "oar2";
 export type QueueStatus =
   | "draft"
   | "queued"
+  | "queued_for_cody"
   | "preflight_required"
   | "awaiting_operator_confirm"
   | "approved_for_execution"
   | "executing"
+  | "oar1_submitted"
+  | "held"
   | "blocked"
   | "refused"
   | "completed"
@@ -78,10 +81,13 @@ export type ProcessRegistryRuntimeAdapter = {
 const allowedTransitions: Record<QueueStatus, QueueStatus[]> = {
   draft: ["queued", "blocked", "refused"],
   queued: ["preflight_required", "awaiting_operator_confirm", "blocked", "refused"],
+  queued_for_cody: ["executing", "blocked", "held", "refused"],
   preflight_required: ["awaiting_operator_confirm", "blocked", "refused"],
   awaiting_operator_confirm: ["approved_for_execution", "blocked", "refused"],
   approved_for_execution: ["executing", "blocked", "refused"],
   executing: ["completed", "blocked", "refused"],
+  oar1_submitted: [], // Finalization is an atomic native RPC, never a local patch.
+  held: [], // Qualified reconciliation preserves contradictory evidence.
   completed: ["closed"],
   blocked: ["preflight_required", "awaiting_operator_confirm", "refused"],
   refused: [],

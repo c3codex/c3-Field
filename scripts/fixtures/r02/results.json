@@ -1,0 +1,122 @@
+{
+  "fixture_environment": {
+    "host": "127.0.0.1",
+    "port": 55473,
+    "user": "postgres",
+    "database": "postgres"
+  },
+  "limitations": [
+    "Synthetic rows only",
+    "Actual non-superuser SET ROLE; JWT claims simulated trusted gateway",
+    "FK parents/provider catalog stubbed",
+    "No remote runtime installed"
+  ],
+  "results": [
+    {
+      "name": "genuine service role fresh delivery and pickup; core remains denied",
+      "result": "PASS"
+    },
+    {
+      "name": "inspection accepted only as inspection; read-only Optics and fresh session reconstruction",
+      "result": "PASS"
+    },
+    {
+      "measured_effect": {
+        "instance": "fixture_r02_3",
+        "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "after": "c7a2041ca8d19fd392c14e90b5ddfc80b8805ef7b5fd35268fa0de1b2b3331f8",
+        "runtime": "localhost PG17",
+        "actor": "fixture postgres",
+        "candidate": "20261024215507_r02_computational_oar_disposition_candidate.sql"
+      }
+    },
+    {
+      "name": "known implementation uses independently measured local before/after effects and tests",
+      "result": "PASS"
+    },
+    {
+      "name": "bounded discovery is classified without expanding effect authority",
+      "result": "PASS"
+    },
+    {
+      "name": "wrong actor, executor, instance, source hash and route fail closed",
+      "result": "PASS"
+    },
+    {
+      "name": "expired, missing-expiry, revoked grant and source mismatch reject pickup",
+      "result": "PASS"
+    },
+    {
+      "name": "missing NotChazz prevents delivery atomically",
+      "result": "PASS"
+    },
+    {
+      "name": "identical/different duplicate returns preserve exactly one immutable receipt",
+      "result": "PASS"
+    },
+    {
+      "name": "concurrent fresh returns serialize to one effect",
+      "result": "PASS"
+    },
+    {
+      "name": "transaction interruption rolls back all return rails and retry succeeds",
+      "result": "PASS"
+    },
+    {
+      "name": "partial pre-existing return state holds without overwriting evidence",
+      "result": "PASS"
+    },
+    {
+      "name": "missing evidence persists only held disposition; no false acceptance",
+      "result": "PASS"
+    },
+    {
+      "name": "partial effect and failed tests cannot be certified by counters",
+      "result": "PASS"
+    },
+    {
+      "name": "stale evidence and changed desired effects rejected before receipt persistence",
+      "result": "PASS"
+    },
+    {
+      "name": "contested semantics escalates only affected objective",
+      "result": "PASS"
+    },
+    {
+      "name": "ordinary roles and forged actor strings cannot finalize",
+      "result": "PASS"
+    },
+    {
+      "name": "final disposition retries are idempotent; contradictions preserved",
+      "result": "PASS"
+    },
+    {
+      "name": "atomic finalizer rollback after forced failure leaves no half-closeout",
+      "result": "PASS"
+    },
+    {
+      "name": "delivery replay exactness and registrar expiration",
+      "result": "PASS"
+    },
+    {
+      "name": "wrong observed runtime identity and failed receipt predicates hold",
+      "result": "PASS"
+    },
+    {
+      "name": "unqualified registered human-required policy cannot be silently overridden",
+      "result": "PASS"
+    },
+    {
+      "name": "concurrent independent finalizations have one validation transition",
+      "result": "PASS"
+    },
+    {
+      "name": "independently authorized objectives retain passed evidence beside held dependency",
+      "result": "PASS"
+    },
+    {
+      "name": "rollback candidate restores exact prior bodies without deleting receipts",
+      "result": "PASS"
+    }
+  ]
+}

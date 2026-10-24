@@ -1,0 +1,17 @@
+{
+  "runtime_imports_cleanly": true,
+  "direct_execution_rejected": "Transition queued -> executing is not allowed.",
+  "missing_operator_confirmation_rejected": "Operator confirmation was not supplied.",
+  "close_without_evidence_rejected": "Closeout requires OAR1 path, completion timestamp, and execution evidence.",
+  "evidence_required_for_closeout": true,
+  "final_validation_result": {
+    "queue_key": "queue_runtime_validation_v1",
+    "queue_status": "closed",
+    "preflight_status": "passed",
+    "operator_confirmed": true,
+    "execution_started": true,
+    "execution_completed": true,
+    "oar1_path_present": true,
+    "evidence_count": 1
+  }
+}

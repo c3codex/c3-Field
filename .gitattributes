@@ -1,0 +1,3 @@
+# Exact candidate/fixture bytes bind source and rollback digests across checkouts.
+scripts/fixtures/r02/*.sql -text
+supabase/migrations/20261024215507_r02_computational_oar_disposition_candidate.sql -text

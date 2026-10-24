@@ -5,6 +5,8 @@ export const OAR_OPTICS_FIELDS=[
   "oar_key","execution_instance","executor_ref","queue_standing","preflight_standing",
   "requested_action","execution_summary","return_standing","model_resolution_standing",
   "validation_standing","deploy_standing","created_at","updated_at",
+  "authorized_outcome","source_sha256","computational_disposition",
+  "acceptance_predicates","held_predicates","effect_proof","next_dependency",
 ] as const
 
 // Transport/projection only. Lifecycle meaning is resolved by the Registry view.
