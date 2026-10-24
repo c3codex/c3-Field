@@ -845,6 +845,9 @@ begin
     or g.scope->>'actor_ref' is distinct from actor
     or g.scope->>'execution_instance' is distinct from p_execution_instance
     or g.scope->>'oar_key' is distinct from q.oar_key
+    or g.scope->>'source_ref' is distinct from q.automation_permissions->>'canonical_payload_ref'
+    or g.scope->>'source_sha256' is distinct from q.automation_permissions->>'canonical_sha256'
+    or g.scope->>'source_bytes' is distinct from q.automation_permissions->>'canonical_payload_bytes'
     or g.scope->>'process_key' is distinct from 'oar_lifecycle_resolution_v1'
     or not coalesce(g.scope->'allowed_actions' ? 'finalize_oar_disposition',false)
     or actor=q.automation_permissions->>'executor_ref' then
@@ -959,6 +962,11 @@ begin
           or g.standing is distinct from 'active' or not coalesce(public.cancom_finite_grant_v1(g.scope),false)
           or g.scope->>'actor_ref' is distinct from actor
           or g.scope->>'execution_instance' is distinct from p_execution_instance
+          or g.scope->>'oar_key' is distinct from q.oar_key
+          or g.scope->>'process_key' is distinct from 'oar_lifecycle_resolution_v1'
+          or g.scope->>'source_ref' is distinct from q.automation_permissions->>'canonical_payload_ref'
+          or g.scope->>'source_sha256' is distinct from q.automation_permissions->>'canonical_sha256'
+          or g.scope->>'source_bytes' is distinct from q.automation_permissions->>'canonical_payload_bytes'
           or not coalesce(g.scope->'allowed_actions' ? 'record_oar_acceptance_receipt',false)
           or g.scope->'computational_acceptance' is distinct from contract
           or (receipt->>'valid_until')::timestamptz<=clock_timestamp() then
@@ -1034,6 +1042,8 @@ begin
     or g.scope->>'execution_instance' is distinct from p_execution_instance or g.scope->>'oar_key' is distinct from q.oar_key
     or g.scope->>'process_key' is distinct from 'oar_lifecycle_resolution_v1'
     or g.scope->>'source_sha256' is distinct from q.automation_permissions->>'canonical_sha256'
+    or g.scope->>'source_ref' is distinct from q.automation_permissions->>'canonical_payload_ref'
+    or g.scope->>'source_bytes' is distinct from q.automation_permissions->>'canonical_payload_bytes'
     or g.scope->'computational_acceptance' is distinct from contract
     or not coalesce(g.scope->'allowed_actions' ?& array['record_oar_acceptance_receipt','finalize_oar_disposition'],false) then
     return jsonb_build_object('standing','HLD','reason','independent_verifier_authority_missing');

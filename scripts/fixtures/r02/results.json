@@ -5,6 +5,8 @@
     "user": "postgres",
     "database": "postgres"
   },
+  "source_revision": "691b772547acd418f4268ff5950ee9c683bcd7169bbec54b53cf64b76abc73c4",
+  "runtime_revision": "31c6d1d816c4165519c86a62836014656f821ca3a5ec2ea99a26f74cd17706ca",
   "limitations": [
     "Synthetic rows only",
     "Actual non-superuser SET ROLE; JWT claims simulated trusted gateway",
@@ -26,7 +28,7 @@
         "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "after": "c7a2041ca8d19fd392c14e90b5ddfc80b8805ef7b5fd35268fa0de1b2b3331f8",
         "runtime": "localhost PG17",
-        "actor": "fixture postgres",
+        "actor": "service_role/codex via simulated trusted JWT",
         "candidate": "20261024215507_r02_computational_oar_disposition_candidate.sql"
       }
     },
