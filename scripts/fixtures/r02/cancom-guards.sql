@@ -225,7 +225,7 @@ begin
       );
     end if;
 
-    
+
 declare
   v_instance text := p_manifest->>'execution_instance';
   v_oar text := p_manifest->>'oar_key';
@@ -580,7 +580,7 @@ begin
   end if;
 
   if not v_has_return_state then
-    
+
 declare
   v_pickup jsonb;
   v_q public.system_oar_queue%rowtype;
