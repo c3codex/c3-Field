@@ -1,5 +1,7 @@
 # Hosted stage entry — HELD, no target admitted
 
+OCE supplement: source-only six Obsidian source_alignment mappings and I19 GET0/explicit POST1/retry0 now have bounded local receipts. Two additional related_to scope rows remain unqualified. The participant UI initiation call is outside the current source allowlist and is not wired. See OCE-SCOPE.md and connections-first-use-acceptance.json; no prior strict-failure or hosted gate is silently promoted.
+
 Single candidate class: a **fresh data-free c3 Field Supabase preview branch**, project ref **UNASSIGNED / HLD**. This is a recommendation only. Do not use live Measures Codex zfihrspxvennjzazxcbj or any existing unrelated project. No branch creation, billing, install, hosted probe or deployment is authorized here.
 
 Entry requires a separate exact OAR2 and independent PASS binding Operator/owner, actual project ref and environment, acknowledged quoted cost, finite stage-only actor/executor/verifier grants and immutable source hashes. The migration plan must explicitly stage original Concordance RPC prerequisite and resolve0002 relation_scope/snapshot standing conflicts through qualified source authority; raw chronological parity is not established. Maintain the287/374 inventory and missing source/byte holds. A partial synthetic baseline cannot stand for complete hosted migration readiness.

@@ -2,6 +2,10 @@ import {json,type PassageEnv} from "../_lib/c1-passage"
 import {resolveEnvironmentSession} from "../_lib/env-session"
 
 type Row=Record<string,unknown>
+class ConnectionsHold extends Error{
+  constructor(message:string,public status=409){super(message)}
+}
+const record=(value:unknown):Row=>value&&typeof value==="object"&&!Array.isArray(value)?value as Row:{}
 
 function cookie(request:Request,name:string){
   const source=request.headers.get("cookie")||""
@@ -36,7 +40,8 @@ async function write(env:PassageEnv,table:string,method:"POST"|"PATCH",body:unkn
   if(!response.ok) throw new Error("write_failed")
   if(prefer.includes("return=minimal")) return []
   const rows=await response.json()
-  return Array.isArray(rows)?rows as Row[]:[]
+  if(!Array.isArray(rows))throw new Error("write_shape")
+  return rows as Row[]
 }
 async function rpc(env:PassageEnv,name:string,body:Record<string,unknown>){
   const response=await fetch(base(env)+"/rest/v1/rpc/"+name,{
@@ -55,19 +60,82 @@ async function sessionFor(request:Request,env:PassageEnv){
   return resolveEnvironmentSession(raw,env)
 }
 function threadKey(envKey:string){return "connections:"+envKey}
-async function ensureThread(env:PassageEnv,session:Awaited<ReturnType<typeof sessionFor>>){
+type Session=Awaited<ReturnType<typeof sessionFor>>
+async function ownerAuthority(env:PassageEnv,session:Session){
+  if(session.subjectType!=="individual")throw new ConnectionsHold("personal_owner_required",403)
+  const [current,envpacs]=await Promise.all([
+    rpc(env,"resolve_c1me_current_internal",{p_relationship_key:session.subjectKey}),
+    read(env,"c3_envpac",{select:"envpac_key,env_key",owner_subject_type:"eq.individual",owner_subject_key:"eq."+session.subjectKey,standing:"eq.effective",is_effective:"eq.true"})
+  ])
+  if(current.resolution!=="existing_c1"||current.relationship_ref!==session.subjectKey||current.env_key!==session.envKey||current.envpac_ref!==session.envpacKey||typeof current.current_ref!=="string"||!current.current_ref)
+    throw new ConnectionsHold("connections_owner_current_held")
+  if(envpacs.length!==1||envpacs[0].env_key!==session.envKey||envpacs[0].envpac_key!==session.envpacKey)
+    throw new ConnectionsHold("connections_owner_envpac_held")
+  return current
+}
+async function entranceAuthority(env:PassageEnv,session:Session){
+  // Existing target-bound MGS/consent rails only. This reader never forms
+  // an evaluation, binding, identity, grant or CURRENT.
+  const [evaluations,environments,consents,processes,capabilities]=await Promise.all([
+    read(env,"measures_persistence_state",{select:"persistence_key,governed_state,evidence",process_key:"eq.minimum_governed_standard_v1",environment_key:"eq."+session.envKey,object_type:"eq.minimum_governed_standard_evaluation",standing:"eq.minimum_governed_standard_satisfied"}),
+    read(env,"c3_environment",{select:"environment_class,standing",env_key:"eq."+session.envKey,is_active:"eq.true"}),
+    read(env,"crs_consent",{select:"consent_scope",relationship_key:"eq."+session.subjectKey,consent_scope:"eq.c1_connect_relationship",consent_state:"eq.granted",withdrawn_at:"is.null"}),
+    read(env,"system_process_registry",{select:"process_key",process_key:"eq.minimum_governed_standard_v1",process_status:"eq.active",authority_level:"eq.registered"}),
+    read(env,"c3_envpac_capability_grant",{select:"capability_key",envpac_key:"eq."+session.envpacKey,standing:"eq.active"})
+  ])
+  if(evaluations.length!==1||environments.length!==1||!consents.length||processes.length!==1)throw new ConnectionsHold("connections_entrance_evidence_held")
+  const evaluation=record(evaluations[0].governed_state),evidence=record(evaluations[0].evidence)
+  if(!Number.isInteger(evaluation.active_capability_count)||evaluation.active_capability_count!==capabilities.length)throw new ConnectionsHold("connections_mgs_capability_drift")
+  if(evaluation.result!=="minimum_governed_standard_satisfied"||evaluation.target_env_key!==session.envKey||evaluation.target_envpac_key!==session.envpacKey||evaluation.subject_key!==session.subjectKey||evaluation.applicable_role!=="owner"||evaluation.mgs_target_class!=="c1ME.env"||evaluation.target_registry_environment_class!==environments[0].environment_class||evaluation.environment_standing!==environments[0].standing||evaluation.owner_grant_resolved!==true||evaluation.consent_resolved!==true||evaluation.formal_mgs_satisfaction_created!==true||typeof evidence.current_binding!=="string"||typeof evaluation.mgs_key!=="string"||typeof evaluation.mgs_version!=="string")
+    throw new ConnectionsHold("connections_entrance_scope_held")
+  const [bindings,standards]=await Promise.all([
+    read(env,"measures_persistence_state",{select:"governed_state",persistence_key:"eq."+evidence.current_binding,process_key:"eq.minimum_governed_standard_v1",object_type:"eq.minimum_governed_standard_binding",standing:"eq.current",environment_key:"eq."+session.envKey}),
+    read(env,"measures_registry",{select:"metadata",registry_key:"eq."+evaluation.mgs_key,is_active:"eq.true",release_state:"eq.released",access_state:"eq.callable"})
+  ])
+  const binding=record(bindings[0]?.governed_state),standard=record(standards[0]?.metadata)
+  if(bindings.length!==1||standards.length!==1||binding.mgs_key!==evaluation.mgs_key||binding.mgs_version!==evaluation.mgs_version||binding.target_env_key!==session.envKey||binding.target_envpac_key!==session.envpacKey||binding.scope_match!==true||!Array.isArray(binding.unresolved_holds)||binding.unresolved_holds.length!==0||standard.record_class!=="target_bound_mgs"||standard.target_class!=="c1ME.env"||standard.standing!=="operative"||standard.registration_standing!=="registered"||standard.version!==evaluation.mgs_version)
+    throw new ConnectionsHold("connections_mgs_binding_held")
+  return String(evaluations[0].persistence_key)
+}
+async function ownedThread(env:PassageEnv,session:Session){
   const key=threadKey(session.envKey)
-  const rows=await read(env,"c1_environment_connection_thread",{
-    select:"thread_key,env_key,envpac_key,owner_relationship_key,title,standing,visibility,metadata,created_at,updated_at",
-    thread_key:"eq."+key,owner_relationship_key:"eq."+session.subjectKey,limit:"1"
-  })
-  if(rows.length) return rows[0]
-  const created=await write(env,"c1_environment_connection_thread","POST",{
-    thread_key:key,env_key:session.envKey,envpac_key:session.envpacKey,owner_relationship_key:session.subjectKey,
+  const select="thread_key,env_key,envpac_key,owner_relationship_key,title,standing,visibility,metadata,created_at,updated_at"
+  const [keys,owners]=await Promise.all([
+    read(env,"c1_environment_connection_thread",{select,thread_key:"eq."+key}),
+    read(env,"c1_environment_connection_thread",{select,env_key:"eq."+session.envKey,owner_relationship_key:"eq."+session.subjectKey})
+  ])
+  if(keys.length>1||owners.length>1)throw new ConnectionsHold("connections_thread_ambiguous")
+  const row=keys[0]||owners[0]
+  if(!row)return null
+  const metadata=record(row.metadata)
+  if((keys.length&&owners.length&&keys[0].thread_key!==owners[0].thread_key)||row.thread_key!==key||row.env_key!==session.envKey||row.envpac_key!==session.envpacKey||row.owner_relationship_key!==session.subjectKey||row.visibility!=="owner_private"||row.standing!=="active"||metadata.thread_is_authority!==false||metadata.thread_is_relationship_registry!==false)
+    throw new ConnectionsHold("connections_thread_binding_held")
+  return row
+}
+async function initializeThread(request:Request,env:PassageEnv,session:Session){
+  if(request.headers.get("origin")!==new URL(request.url).origin||request.headers.get("content-type")?.split(";")[0].trim().toLowerCase()!=="application/json"||["cross-site","same-site","none"].includes(request.headers.get("sec-fetch-site")||""))
+    throw new ConnectionsHold("connections_initialization_origin_held",403)
+  const current=await ownerAuthority(env,session),entrance=await entranceAuthority(env,session)
+  const existing=await ownedThread(env,session)
+  if(existing)return {thread:existing,inserted_row_count:0}
+  const fresh=await sessionFor(request,env)
+  if(fresh.subjectKey!==session.subjectKey||fresh.envKey!==session.envKey||fresh.envpacKey!==session.envpacKey)throw new ConnectionsHold("connections_session_changed")
+  await ownerAuthority(env,fresh);await entranceAuthority(env,fresh)
+  let created:Row[]=[]
+  try{created=await write(env,"c1_environment_connection_thread","POST",{
+    thread_key:threadKey(session.envKey),env_key:session.envKey,envpac_key:session.envpacKey,owner_relationship_key:session.subjectKey,
     title:"Connections",standing:"active",visibility:"owner_private",
-    metadata:{source:"my_environment",thread_is_authority:false,thread_is_relationship_registry:false}
-  })
-  return created[0]
+    metadata:{source:"explicit_owner_connections_initialization",thread_is_authority:false,thread_is_relationship_registry:false,current_ref:current.current_ref,mgs_evaluation_ref:entrance,initiated_by:session.subjectKey}
+  },{on_conflict:"thread_key"},"resolution=ignore-duplicates,return=representation")}catch(error){
+    await ownedThread(env,session)
+    // A lost response may follow a committed insert. Readback alone cannot
+    // attribute a zero-effect retry to this attempt.
+    throw new ConnectionsHold("connections_initialization_effect_unverified")
+  }
+  if(created.length>1)throw new ConnectionsHold("connections_thread_effect_ambiguous")
+  const thread=await ownedThread(env,session)
+  if(!thread)throw new ConnectionsHold("connections_thread_readback_held")
+  return {thread,inserted_row_count:created.length}
 }
 async function nativeConnections(env:PassageEnv,subjectKey:string){
   const rows=await read(env,"c3_env_native_connection",{
@@ -118,7 +186,9 @@ async function initiativeConnections(env:PassageEnv,session:Awaited<ReturnType<t
 export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
   try{
     const session=await sessionFor(request,env)
-    const thread=await ensureThread(env,session)
+    await ownerAuthority(env,session)
+    const thread=await ownedThread(env,session)
+    if(!thread)return json({authenticated:true,standing:"thread_not_initialized",thread:null,entries:[],native_connections:[],initiative_connections:[]})
     const [entries,connections,initiativeConnectionsRows,publicationNotificationRows]=await Promise.all([
       read(env,"c1_environment_connection_thread_entry",{
         select:"entry_key,entry_type,title,body,related_type,related_key,related_route,standing,metadata,created_at,updated_at",
@@ -138,7 +208,7 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
     })
   }catch(error){
     const reason=error instanceof Error?error.message:"connections_unavailable"
-    const status=reason==="environment_claim_required"||reason==="session_expired"?401:503
+    const status=error instanceof ConnectionsHold?error.status:reason==="environment_claim_required"||reason==="session_expired"?401:503
     return json({authenticated:false,standing:"connections_held",reason},status)
   }
 }
@@ -149,6 +219,12 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     if(origin&&origin!==new URL(request.url).origin) return json({ok:false,standing:"connection_origin_held"},403)
     const session=await sessionFor(request,env)
     const body=await request.json() as Record<string,unknown>
+
+    if(body.action==="ensure_owner_private_connections_thread"){
+      if(Object.keys(body).some(key=>key!=="action"))throw new ConnectionsHold("connections_initialization_claims_held",400)
+      const result=await initializeThread(request,env,session)
+      return json({ok:true,standing:"owner_private_connections_thread_ready",...result,authority_created:false,connection_created:false,message_sent:false},result.inserted_row_count?201:200)
+    }
 
     if(body.action==="mark_publication_notification_read"){
       const notificationKey=typeof body.notification_key==="string"?body.notification_key.trim():""
@@ -249,7 +325,9 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
       },409)
     }
 
-    const thread=await ensureThread(env,session)
+    await ownerAuthority(env,session)
+    const thread=await ownedThread(env,session)
+    if(!thread)throw new ConnectionsHold("thread_not_initialized")
     const entryType=String(body.entry_type||"note")
     const allowed=new Set(["note","introduction","opportunity","follow_up"])
     if(!allowed.has(entryType)) return json({ok:false,standing:"ledger_entry_type_not_supported"},400)
@@ -266,7 +344,7 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     return json({ok:true,standing:"ledger_entry_recorded",entry:rows[0]})
   }catch(error){
     const reason=error instanceof Error?error.message:"connections_unavailable"
-    const status=reason==="environment_claim_required"||reason==="session_expired"?401:503
+    const status=error instanceof ConnectionsHold?error.status:reason==="environment_claim_required"||reason==="session_expired"?401:503
     return json({ok:false,standing:"connections_held",reason},status)
   }
 }

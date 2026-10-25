@@ -1,0 +1,197 @@
+{
+  "authority_oar2_sha256": "11ed397b7d25fe013699b9af0364146605e2e39d78b6981fa02463c76cd6103b",
+  "original_commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+  "original_path": "supabase/migrations/202606080002_obsidian_contract_seating.sql",
+  "original_sha256": "1eba9e21262f504037c0dc048bc31ca820a0b6fecfb85036af3424cef4ebf45b",
+  "adapted_sha256": "ab079826121dc4b6191e530fae4216bec9e7fa40083228e2b7612eda5817262e",
+  "changes": [
+    {
+      "relation_key": "obsidian_src_capture_table_binding",
+      "old_scope": "obsidian",
+      "new_scope": "system",
+      "relation_type": "source_alignment",
+      "old_metadata": "'{\n    \"contract_domain\": \"src_capture\",\n    \"table\": \"obsidian_src_continuity\",\n    \"standing_boundary\": \"contact_eval_continuity_opened_only\"\n  }'::jsonb",
+      "new_metadata": {
+        "contract_domain": "src_capture",
+        "table": "obsidian_src_continuity",
+        "standing_boundary": "contact_eval_continuity_opened_only",
+        "chamber": "obsidian"
+      },
+      "unchanged_fields": {
+        "relation_key": "'obsidian_src_capture_table_binding'",
+        "version_key": "'obsidian_contact_src_capture_contract_v1'",
+        "source_ref": "'obsidian_contact_src_capture_contract_v1'",
+        "target_ref": "'obsidian_src_continuity'",
+        "relation_type": "'source_alignment'",
+        "relation_label": "'Runtime table: obsidian_src_continuity \u2014 SRC/SRC1 continuity intake record'",
+        "relation_standing": "'active'",
+        "visibility_standing": "'internal'",
+        "source_oar2_path": "'docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_email_and_marble_carryover_contracts_v1.meta.md'"
+      }
+    },
+    {
+      "relation_key": "obsidian_oar1_intake_table_binding",
+      "old_scope": "obsidian",
+      "new_scope": "system",
+      "relation_type": "source_alignment",
+      "old_metadata": "'{\n    \"contract_domain\": \"oar1_intake\",\n    \"table\": \"obsidian_oar1_record\",\n    \"oar1_body_fields\": [\"objective\", \"action\", \"result\"]\n  }'::jsonb",
+      "new_metadata": {
+        "contract_domain": "oar1_intake",
+        "table": "obsidian_oar1_record",
+        "oar1_body_fields": [
+          "objective",
+          "action",
+          "result"
+        ],
+        "chamber": "obsidian"
+      },
+      "unchanged_fields": {
+        "relation_key": "'obsidian_oar1_intake_table_binding'",
+        "version_key": "'obsidian_oar1_assessment_intake_contract_v1'",
+        "source_ref": "'obsidian_oar1_assessment_intake_contract_v1'",
+        "target_ref": "'obsidian_oar1_record'",
+        "relation_type": "'source_alignment'",
+        "relation_label": "'Runtime table: obsidian_oar1_record \u2014 OAR1 intake per contact'",
+        "relation_standing": "'active'",
+        "visibility_standing": "'internal'",
+        "source_oar2_path": "'docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_email_and_marble_carryover_contracts_v1.meta.md'"
+      }
+    },
+    {
+      "relation_key": "obsidian_eval_result_def_table_binding",
+      "old_scope": "obsidian",
+      "new_scope": "system",
+      "relation_type": "source_alignment",
+      "old_metadata": "'{\n    \"contract_domain\": \"eval_result_content\",\n    \"table\": \"obsidian_eval_result_def\",\n    \"seeded_keys\": [\"eval_result_01\", \"eval_result_02\", \"eval_result_03\", \"eval_result_04\"],\n    \"matching_logic\": \"severity_precedence: conditions_4plus \u2192 eval_result_04, 3plus \u2192 eval_result_03, 2plus \u2192 eval_result_02, else \u2192 eval_result_01\"\n  }'::jsonb",
+      "new_metadata": {
+        "contract_domain": "eval_result_content",
+        "table": "obsidian_eval_result_def",
+        "seeded_keys": [
+          "eval_result_01",
+          "eval_result_02",
+          "eval_result_03",
+          "eval_result_04"
+        ],
+        "matching_logic": "severity_precedence: conditions_4plus \u2192 eval_result_04, 3plus \u2192 eval_result_03, 2plus \u2192 eval_result_02, else \u2192 eval_result_01",
+        "chamber": "obsidian"
+      },
+      "unchanged_fields": {
+        "relation_key": "'obsidian_eval_result_def_table_binding'",
+        "version_key": "'obsidian_eval_result_content_contract_v1'",
+        "source_ref": "'obsidian_eval_result_content_contract_v1'",
+        "target_ref": "'obsidian_eval_result_def'",
+        "relation_type": "'source_alignment'",
+        "relation_label": "'Runtime table: obsidian_eval_result_def \u2014 4 seeded result bands'",
+        "relation_standing": "'active'",
+        "visibility_standing": "'internal'",
+        "source_oar2_path": "'docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_email_and_marble_carryover_contracts_v1.meta.md'"
+      }
+    },
+    {
+      "relation_key": "obsidian_initial_email_def_binding",
+      "old_scope": "obsidian",
+      "new_scope": "system",
+      "relation_type": "source_alignment",
+      "old_metadata": "'{\n    \"contract_domain\": \"initial_eval_email\",\n    \"table\": \"obsidian_email_contract_def\",\n    \"seeded_key\": \"obsidian_initial_eval_email\",\n    \"email_type\": \"initial_eval\",\n    \"sequence_position\": 0\n  }'::jsonb",
+      "new_metadata": {
+        "contract_domain": "initial_eval_email",
+        "table": "obsidian_email_contract_def",
+        "seeded_key": "obsidian_initial_eval_email",
+        "email_type": "initial_eval",
+        "sequence_position": 0,
+        "chamber": "obsidian"
+      },
+      "unchanged_fields": {
+        "relation_key": "'obsidian_initial_email_def_binding'",
+        "version_key": "'obsidian_initial_eval_email_contract_v1'",
+        "source_ref": "'obsidian_initial_eval_email_contract_v1'",
+        "target_ref": "'obsidian_email_contract_def'",
+        "relation_type": "'source_alignment'",
+        "relation_label": "'Runtime table: obsidian_email_contract_def \u2014 initial eval email definition'",
+        "relation_standing": "'active'",
+        "visibility_standing": "'internal'",
+        "source_oar2_path": "'docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_email_and_marble_carryover_contracts_v1.meta.md'"
+      }
+    },
+    {
+      "relation_key": "obsidian_followup_email_def_binding",
+      "old_scope": "obsidian",
+      "new_scope": "system",
+      "relation_type": "source_alignment",
+      "old_metadata": "'{\n    \"contract_domain\": \"governed_followup_email\",\n    \"table\": \"obsidian_email_contract_def\",\n    \"seeded_keys\": [\"obsidian_eval_followup_01_structural_risk\", \"obsidian_eval_followup_02_alignment_path\", \"obsidian_eval_followup_03_review_prepared_path\"],\n    \"email_type\": \"followup\"\n  }'::jsonb",
+      "new_metadata": {
+        "contract_domain": "governed_followup_email",
+        "table": "obsidian_email_contract_def",
+        "seeded_keys": [
+          "obsidian_eval_followup_01_structural_risk",
+          "obsidian_eval_followup_02_alignment_path",
+          "obsidian_eval_followup_03_review_prepared_path"
+        ],
+        "email_type": "followup",
+        "chamber": "obsidian"
+      },
+      "unchanged_fields": {
+        "relation_key": "'obsidian_followup_email_def_binding'",
+        "version_key": "'obsidian_governed_followup_email_contract_v1'",
+        "source_ref": "'obsidian_governed_followup_email_contract_v1'",
+        "target_ref": "'obsidian_email_contract_def'",
+        "relation_type": "'source_alignment'",
+        "relation_label": "'Runtime table: obsidian_email_contract_def \u2014 3 governed followup definitions'",
+        "relation_standing": "'active'",
+        "visibility_standing": "'internal'",
+        "source_oar2_path": "'docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_email_and_marble_carryover_contracts_v1.meta.md'"
+      }
+    },
+    {
+      "relation_key": "obsidian_marble_carryover_table_binding",
+      "old_scope": "obsidian",
+      "new_scope": "system",
+      "relation_type": "source_alignment",
+      "old_metadata": "'{\n    \"contract_domain\": \"marble_governance_carryover\",\n    \"table\": \"obsidian_marble_carryover\",\n    \"default_commerce_reveal_state\": \"held_until_marble_governance_passage\",\n    \"reveal_gate\": \"marble_governance_passage_entered = true\"\n  }'::jsonb",
+      "new_metadata": {
+        "contract_domain": "marble_governance_carryover",
+        "table": "obsidian_marble_carryover",
+        "default_commerce_reveal_state": "held_until_marble_governance_passage",
+        "reveal_gate": "marble_governance_passage_entered = true",
+        "chamber": "obsidian"
+      },
+      "unchanged_fields": {
+        "relation_key": "'obsidian_marble_carryover_table_binding'",
+        "version_key": "'obsidian_marble_governance_carryover_contract_v1'",
+        "source_ref": "'obsidian_marble_governance_carryover_contract_v1'",
+        "target_ref": "'obsidian_marble_carryover'",
+        "relation_type": "'source_alignment'",
+        "relation_label": "'Runtime table: obsidian_marble_carryover \u2014 per-contact carryover payload held until passage'",
+        "relation_standing": "'active'",
+        "visibility_standing": "'internal'",
+        "source_oar2_path": "'docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_email_and_marble_carryover_contracts_v1.meta.md'"
+      }
+    }
+  ],
+  "snapshot": {
+    "standing": "VERIFIED_SYNTHETIC_REPLAY_ONLY",
+    "original_statement_sha256": "d15d300bd051942d25967343b13e608bb2e02983b2c8359dc1cc32f895faaeee",
+    "source_path": "docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_email_and_marble_carryover_contracts_v1.meta.md",
+    "source_commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+    "source_sha256": "97c66d591a1beb04176ce687cedb1e9875ac8cbfd74fd5810f154e52ae983b1b",
+    "source_bytes": 15808,
+    "source_custody_ref": "github_file:c3codex/c3-Field@729012c179d73682cac7e95c94c4d2607939dbe8:docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_email_and_marble_carryover_contracts_v1.meta.md",
+    "verification_time": "now() after actual source measurement; not historical verification date"
+  },
+  "unmapped": [
+    {
+      "relation_key": "obsidian_followup_sequence_instance_binding",
+      "relation_type": "'related_to'",
+      "scope": "obsidian",
+      "standing": "HLD_OUTSIDE_SIX_SOURCE_ALIGNMENT_MAPPING"
+    },
+    {
+      "relation_key": "obsidian_to_marble_chamber_boundary",
+      "relation_type": "'related_to'",
+      "scope": "obsidian",
+      "standing": "HLD_OUTSIDE_SIX_SOURCE_ALIGNMENT_MAPPING"
+    }
+  ],
+  "qualified_slice": "Diagnostic six mapped relations plus their original document/version prerequisites and measured source snapshot; remaining rows are not represented as passed",
+  "original_source_unchanged": true
+}

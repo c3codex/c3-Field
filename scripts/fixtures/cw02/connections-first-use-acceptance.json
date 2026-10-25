@@ -1,0 +1,11 @@
+{
+  "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+  "source": "OAR2 11ed397b7d25fe013699b9af0364146605e2e39d78b6981fa02463c76cd6103b",
+  "supplement_to": {"native_spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6", "case": "I19", "original_spec_unchanged": true},
+  "read": {"method": "GET", "path": "/api/my-environment-connections", "missing": "thread_not_initialized", "allowed_writes": 0},
+  "initiate": {"method": "POST", "path": "/api/my-environment-connections", "body": {"action": "ensure_owner_private_connections_thread"}, "required_origin": "same-origin", "content_type": "application/json", "first_insert_max": 1, "retry_insert_max": 0},
+  "owner_requirements": ["valid runtime owner session", "exact unique effective personal EnvPAC", "unambiguous CURRENT and owner grant", "registered active target MGS", "unique satisfied target evaluation", "current exact binding with no unresolved holds", "current C1 consent", "fresh effect-time recheck"],
+  "denials": ["forged owner/env payload", "cross/missing origin", "revoked grant", "expired session", "ambiguous owner", "ineffective EnvPAC", "missing/ambiguous MGS", "withdrawn consent", "inactive MGS process", "MGS unresolved holds", "mismatched thread", "unverified insert response"],
+  "held": ["frontend interaction wiring outside source allowlist", "real signed gateway/PostgREST", "atomic authority changes across REST calls", "provider egress", "complete native MGS/trigger clone"],
+  "forbidden": ["connection formation", "message/invite/send", "CURRENT creation", "public projection", "authority grant", "provider effect", "ownership transfer"]
+}

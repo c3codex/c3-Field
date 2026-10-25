@@ -1,5 +1,7 @@
 # Concordance prerequisite and exact W02 local harness
 
+Current supplement: [OCE-SCOPE.md](OCE-SCOPE.md) qualifies the six Obsidian mappings and repaired I19 source effect pair under the later exact OAR2. The predecessor scope/results below remain historical context; current hosted/UI/atomic-authority acceptance stays held.
+
 Execution instance `c3field_concordance_lineage_w02_local_acceptance_20261024_001`, source base `1dfcbdd3fb6f6ec76c1f06dd60592da8f570e260`, branch `oar2/concordance-w02-prestage-source-20261024`. Exact OAR2 SHA-256 `bb5af6b3cf806f6a1d3541342e609d31576296e2f36f1326e565f9a71b57bd0c`. Source/loopback synthetic only, no hosted application, participant data or actual Registry authority formed.
 
 Use a newly initialized isolated PostgreSQL17.6 cluster at127.0.0.1:55474, postgres database/user. These runners **drop public/extensions schemas and synthetic roles**. No remote URL/credential input exists. Set C3_PG_MODULE to a pg installation, use existing source-locked Node/tsx dependencies. Providers are unreachable: the in-process bridge admits only fixture.invalid; all other network requests fail and increment a counter.

@@ -1,0 +1,86 @@
+{
+  "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+  "scope": "Exact six-row test-only semantic adapter plus measured source snapshot; full adapter/HISTORY remains bounded by additional unmapped rows",
+  "environment": {
+    "host": "127.0.0.1",
+    "port": 55474,
+    "user": "postgres",
+    "database": "postgres"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "six_qualified_rows": "PASS",
+      "snapshot_source_proof": "PASS_SYNTHETIC_ONLY",
+      "snapshot": [
+        {
+          "source_sha256": "97c66d591a1beb04176ce687cedb1e9875ac8cbfd74fd5810f154e52ae983b1b",
+          "byte_size": 15808,
+          "verification_standing": "verified",
+          "verified_at": "2026-10-25T04:42:49.737Z"
+        }
+      ],
+      "qualified_result_sha256": "03066b81b05f4084a0e9448228fee1e8dd5f40b0f22ef0a3084f56a4d6f3ff8c",
+      "catalog_sha256": "35c6315fbd1df77f2f974d311781f4d3fa9ba1769e0f642870ff91a23440c7ff",
+      "rollback_sha256": "35c6315fbd1df77f2f974d311781f4d3fa9ba1769e0f642870ff91a23440c7ff",
+      "full_adapter": {
+        "standing": "HLD",
+        "sqlstate": "23514",
+        "message": "new row for relation \"concordance_relation\" violates check constraint \"concordance_relation_relation_scope_check\"",
+        "detail": "Failing row contains (obsidian_followup_sequence_instance_binding, obsidian_governed_followup_email_contract_v1, obsidian_governed_followup_email_contract_v1, obsidian_email_sequence_instance, obsidian, related_to, Runtime table: obsidian_email_sequence_instance — per-contact ..., active, internal, docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_emai..., {\"table\": \"obsidian_email_sequence_instance\", \"contract_domain\":..., 2026-10-24 23:42:49.782862-05)."
+      },
+      "remaining_rows": [
+        {
+          "relation_key": "obsidian_followup_sequence_instance_binding",
+          "relation_type": "'related_to'",
+          "scope": "obsidian",
+          "standing": "HLD_OUTSIDE_SIX_SOURCE_ALIGNMENT_MAPPING"
+        },
+        {
+          "relation_key": "obsidian_to_marble_chamber_boundary",
+          "relation_type": "'related_to'",
+          "scope": "obsidian",
+          "standing": "HLD_OUTSIDE_SIX_SOURCE_ALIGNMENT_MAPPING"
+        }
+      ]
+    },
+    {
+      "attempt": 2,
+      "six_qualified_rows": "PASS",
+      "snapshot_source_proof": "PASS_SYNTHETIC_ONLY",
+      "snapshot": [
+        {
+          "source_sha256": "97c66d591a1beb04176ce687cedb1e9875ac8cbfd74fd5810f154e52ae983b1b",
+          "byte_size": 15808,
+          "verification_standing": "verified",
+          "verified_at": "2026-10-25T04:42:49.995Z"
+        }
+      ],
+      "qualified_result_sha256": "03066b81b05f4084a0e9448228fee1e8dd5f40b0f22ef0a3084f56a4d6f3ff8c",
+      "catalog_sha256": "35c6315fbd1df77f2f974d311781f4d3fa9ba1769e0f642870ff91a23440c7ff",
+      "rollback_sha256": "35c6315fbd1df77f2f974d311781f4d3fa9ba1769e0f642870ff91a23440c7ff",
+      "full_adapter": {
+        "standing": "HLD",
+        "sqlstate": "23514",
+        "message": "new row for relation \"concordance_relation\" violates check constraint \"concordance_relation_relation_scope_check\"",
+        "detail": "Failing row contains (obsidian_followup_sequence_instance_binding, obsidian_governed_followup_email_contract_v1, obsidian_governed_followup_email_contract_v1, obsidian_email_sequence_instance, obsidian, related_to, Runtime table: obsidian_email_sequence_instance — per-contact ..., active, internal, docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_emai..., {\"table\": \"obsidian_email_sequence_instance\", \"contract_domain\":..., 2026-10-24 23:42:50.036583-05)."
+      },
+      "remaining_rows": [
+        {
+          "relation_key": "obsidian_followup_sequence_instance_binding",
+          "relation_type": "'related_to'",
+          "scope": "obsidian",
+          "standing": "HLD_OUTSIDE_SIX_SOURCE_ALIGNMENT_MAPPING"
+        },
+        {
+          "relation_key": "obsidian_to_marble_chamber_boundary",
+          "relation_type": "'related_to'",
+          "scope": "obsidian",
+          "standing": "HLD_OUTSIDE_SIX_SOURCE_ALIGNMENT_MAPPING"
+        }
+      ]
+    }
+  ],
+  "result": "PASS_BOUNDED_SIX_ROWS",
+  "full_history": "HLD_ADDITIONAL_RELATED_TO_SCOPE_NOT_QUALIFIED"
+}

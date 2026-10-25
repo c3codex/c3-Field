@@ -5,9 +5,9 @@
     "user": "postgres",
     "database": "postgres"
   },
-  "source_base": "1dfcbdd3fb6f6ec76c1f06dd60592da8f570e260",
+  "source_base": "3482593a37d918170afc5c3099d44039710a2adc",
   "run_bindings": {
-    "runner_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+    "runner_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
     "bootstrap_sha256": "51d5b3ed02e3b37ce561a176ada9946802e54dc6eecec2fe9af6761f5dab88a4",
     "combined_baseline_sha256": "6013354b18b3ff6d201300254a202c96fa52e045270de7e7ea93e2d8faef49d3",
     "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
@@ -16,7 +16,7 @@
       "functions/api/c1me-current.ts": "fc819f6f3ab4b7f4af63a8a7106eb5417dcbcbace5059a40cf5367941e529048",
       "functions/api/my-environment-pacs.ts": "74ec77b220b159a7d794256461e29672ad9ac53e60cb4b7d3d248c33069f5582",
       "functions/api/my-environment-canopy.ts": "ceb0bd28e4317211217ed4410006f9792ba64688bcc59d71e8dca79dbd40f37d",
-      "functions/api/my-environment-connections.ts": "36971ccfe120578473ec209b8e4aa4e0671a66d5d5d28bf031ecfc22c4e5ef92",
+      "functions/api/my-environment-connections.ts": "a610429c71855701bc0f1d96508e0e42a2915e2240483bef0614225696a606e3",
       "functions/_lib/env-session.ts": "0c10508e0f5e15c51532c0324e25467c481bf91ca4068761fda7d6afd7848c86",
       "functions/_lib/c1-passage.ts": "737d368ed9dbb10c1f389f42fb08926dadbd637ca796a6e1f776be1b5fcf853f"
     }
@@ -57,8 +57,8 @@
   "receipts": [
     {
       "case_id": "I01",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I01",
@@ -84,10 +84,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:09.947Z",
+      "observed_at": "2026-10-25T04:42:47.644Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -126,8 +126,8 @@
     },
     {
       "case_id": "I02",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I02",
@@ -153,10 +153,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:09.979Z",
+      "observed_at": "2026-10-25T04:42:47.722Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -195,8 +195,8 @@
     },
     {
       "case_id": "I03",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I03",
@@ -222,10 +222,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.008Z",
+      "observed_at": "2026-10-25T04:42:47.805Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -264,8 +264,8 @@
     },
     {
       "case_id": "I04",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I04",
@@ -291,10 +291,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.040Z",
+      "observed_at": "2026-10-25T04:42:47.884Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -334,8 +334,8 @@
     },
     {
       "case_id": "I05",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I05",
@@ -361,10 +361,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.086Z",
+      "observed_at": "2026-10-25T04:42:47.987Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -478,8 +478,8 @@
     },
     {
       "case_id": "I06",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I06",
@@ -505,10 +505,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.113Z",
+      "observed_at": "2026-10-25T04:42:48.055Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -548,8 +548,8 @@
     },
     {
       "case_id": "I07",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I07",
@@ -575,22 +575,22 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "3e9d01eb22437d2996e737ef04cae1d984766a8094d20fbd7f0fee093fbf6486",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "e69e3a5868b7181e46bcda39bf1aa42fa445aeb56a00c796aa5a6134b425e710",
       "table_mutation_accounting": [
         {
           "table": "c3_envpac_access_grant",
           "before": {
             "rows": 3,
-            "sha256": "948755cdcff3f435c12c46692e07470b94aa79412c775ec7ef3c8d004fd8cb80"
+            "sha256": "aa65e51ef500f095e8e6d5c51011415a68862b8007d5e7e8e4e5c0b27da19cf4"
           },
           "after": {
             "rows": 3,
-            "sha256": "6da1fd220557f6bcf5fb855594aac960fd9ce79c5737ecfa057acb3f20d9fa64"
+            "sha256": "6f3f8a91fb8c51704eb65f013e37463c65fd5ffd4c34df028b41c1759c060fde"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.146Z",
+      "observed_at": "2026-10-25T04:42:48.096Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -615,8 +615,8 @@
     },
     {
       "case_id": "I08",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I08",
@@ -642,22 +642,22 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "66c66d152a5a2b911ae19e1e209e00f32e90774c4220697b37da3eec16e73590",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "9ac2e9cb4ce98e22a176371232123388a4a213f8712de4e64301067a05d40c4a",
       "table_mutation_accounting": [
         {
           "table": "c3_env_runtime_session",
           "before": {
             "rows": 3,
-            "sha256": "ab008124a87f43ed471f326a3755b1d28b6c44367f58bc3f555c13ad5ff46086"
+            "sha256": "425d4e275c9b9cbcd1de32c6f02a1bb0ee0d80ee83fa486cdb27a4bc65b095c2"
           },
           "after": {
             "rows": 3,
-            "sha256": "8dbd7ab38e46643d848674178f7ab621eb99f8b76b1781f8175de186a3120a81"
+            "sha256": "63a19dfd1ba925db399389fced8e0e71d476b0b2fc01391b41596ec7b3d01d6f"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.172Z",
+      "observed_at": "2026-10-25T04:42:48.136Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -676,8 +676,8 @@
     },
     {
       "case_id": "I09",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I09",
@@ -703,22 +703,22 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "49a583a8c9fb6638519be4872003a962e77f466052bcab3042e174592b849082",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "733be20dccaaa2e0de620fb5334a79eb71823b75444d81bfc94be867779d58e4",
       "table_mutation_accounting": [
         {
           "table": "c3_envpac_access_grant",
           "before": {
             "rows": 3,
-            "sha256": "948755cdcff3f435c12c46692e07470b94aa79412c775ec7ef3c8d004fd8cb80"
+            "sha256": "aa65e51ef500f095e8e6d5c51011415a68862b8007d5e7e8e4e5c0b27da19cf4"
           },
           "after": {
             "rows": 4,
-            "sha256": "40ded2202dccde7aa8a34e4813ecbeae13a9eaf4461011d670b6a9c90a9ae1b5"
+            "sha256": "a2b99d0f3e001ee2de13c388ce37560bf6374622fadfdbf6155f6a9ae765dc23"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.195Z",
+      "observed_at": "2026-10-25T04:42:48.173Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -756,8 +756,8 @@
     },
     {
       "case_id": "I10",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I10",
@@ -783,33 +783,33 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "a84f41a84aeb377dcee8aba2cac4c8bbfd336f8bfc4ca3dba682cc8417406507",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "2bbb7768e83c1df611c7eadf0739ae4debefe8b06f1105025576be0fbcad4854",
       "table_mutation_accounting": [
         {
           "table": "c3_env_runtime_session",
           "before": {
             "rows": 3,
-            "sha256": "ab008124a87f43ed471f326a3755b1d28b6c44367f58bc3f555c13ad5ff46086"
+            "sha256": "425d4e275c9b9cbcd1de32c6f02a1bb0ee0d80ee83fa486cdb27a4bc65b095c2"
           },
           "after": {
             "rows": 3,
-            "sha256": "eb4df3f07ca1e0cf65566cc21677b25764a305b70e2451158e4d1e7782315837"
+            "sha256": "829159c70c33ef86752d89dd8fdf9e11352699ddd50a51de6f2f71c83f52819a"
           }
         },
         {
           "table": "c3_envpac_access_grant",
           "before": {
             "rows": 3,
-            "sha256": "948755cdcff3f435c12c46692e07470b94aa79412c775ec7ef3c8d004fd8cb80"
+            "sha256": "aa65e51ef500f095e8e6d5c51011415a68862b8007d5e7e8e4e5c0b27da19cf4"
           },
           "after": {
             "rows": 4,
-            "sha256": "f91ca2dd3a93cd374f79c1a0c5bbcc80c054321b6922dee39920085a69df194a"
+            "sha256": "3be396e7dfad9b7e0d1c538f19dde5d01cd229b3d097e3703e7b75553d3057a0"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.222Z",
+      "observed_at": "2026-10-25T04:42:48.218Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -828,8 +828,8 @@
     },
     {
       "case_id": "I11",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I11",
@@ -855,33 +855,33 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "c70643a197ecf2084826944dc0c24cf44afe0dbaaa538e9fcf0711a8aea6ff41",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "b88f37f22eca8baf54b36fcab98753925b24e18e7a4232d7b6f17c73e8d250bf",
       "table_mutation_accounting": [
         {
           "table": "c3_env_runtime_session",
           "before": {
             "rows": 3,
-            "sha256": "ab008124a87f43ed471f326a3755b1d28b6c44367f58bc3f555c13ad5ff46086"
+            "sha256": "425d4e275c9b9cbcd1de32c6f02a1bb0ee0d80ee83fa486cdb27a4bc65b095c2"
           },
           "after": {
             "rows": 3,
-            "sha256": "0cfaaa66be8cd0ededc9cb0ea98e88a17dede245e075008704d10fc7ded81db3"
+            "sha256": "939e3228e46297a1717d3776e0b2a0039a93d1d37cfd97c7b01235e7e5c1072e"
           }
         },
         {
           "table": "c3_envpac_access_grant",
           "before": {
             "rows": 3,
-            "sha256": "948755cdcff3f435c12c46692e07470b94aa79412c775ec7ef3c8d004fd8cb80"
+            "sha256": "aa65e51ef500f095e8e6d5c51011415a68862b8007d5e7e8e4e5c0b27da19cf4"
           },
           "after": {
             "rows": 4,
-            "sha256": "d8cd54a69997578cf5ee96f35969bd7f5dc0e40ce76dab502176647a12a643e6"
+            "sha256": "b5335aa51f6fa62f6c87c1632c393fa91491ba2be4a6457033a02238f27746b1"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.246Z",
+      "observed_at": "2026-10-25T04:42:48.264Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -900,8 +900,8 @@
     },
     {
       "case_id": "I12",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I12",
@@ -927,33 +927,33 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "317723bc3beb195cf9b46c240e51420a3748266a7ecb95cd821ccae29cf144e2",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "e9aefc5a7ee47f537ce41bcd444328dda45866d9ad320a9380b7576316a82d59",
       "table_mutation_accounting": [
         {
           "table": "c3_pac",
           "before": {
             "rows": 6,
-            "sha256": "1558e374a89a5af25696a76c43cd62e3f5e98e44d138569a17fb2550ffe4e861"
+            "sha256": "4793ac6fa0c28f78565fc363469ba03f61fe1f56645edbdbd6f4d6797717b722"
           },
           "after": {
             "rows": 6,
-            "sha256": "4f7513a7367402fa9337a98813a584263e60fd5f80b83d380dba7c8f721d158f"
+            "sha256": "db2ee48ece605e9ab5e37b38c459a07502c7bc65ca7e9bb27b5b7fc131c59212"
           }
         },
         {
           "table": "c3_profile_pac",
           "before": {
             "rows": 3,
-            "sha256": "2e15b14925e81e1c46fc8b0ffea13857e82cdb07007c16c832a4d3d6263e78bf"
+            "sha256": "c3cc1e6341bcdc6eec5312faa2fcd05483120ffe0c293b29597575db105d5b51"
           },
           "after": {
             "rows": 3,
-            "sha256": "667302cc57e05c84b9db9b1bee56af2ffd4158e84f8121a846552705f2d970c9"
+            "sha256": "39d6dc666b337fa19e277ed5525cf7dc13517bed016e3e97de85c9dbff8a8232"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.276Z",
+      "observed_at": "2026-10-25T04:42:48.310Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -997,8 +997,8 @@
     },
     {
       "case_id": "I13",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I13",
@@ -1016,7 +1016,7 @@
       "environment_alias": "localhost_pg17_6_synthetic",
       "grant_revision": "fixture_v1",
       "request_digest": "65916b551a18d5ad8e1cf255294f2889499a3d485d3b41e5a9ce7726a95ddb2f",
-      "response_digest": "4ec83bc79f802b283f24a7b2b92ba9a3905faa58cc8599e948d93568e57f7e33",
+      "response_digest": "882be2c2540348d3880b88dc53d62d7115c85391eeb3c51c11c758e7257b22d6",
       "response_status": 200,
       "reason_code": null,
       "forbidden_field_matches": [],
@@ -1024,22 +1024,22 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "9e9c2fddd54c4f91d27725d46cff4b9ee63b846f9afe678baa9dae2d3d2ec560",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "928fd97709c059d2c4edf8b99cf15cc513202c321ffa1f63df0217577249c965",
       "table_mutation_accounting": [
         {
           "table": "c3_pac",
           "before": {
             "rows": 6,
-            "sha256": "1558e374a89a5af25696a76c43cd62e3f5e98e44d138569a17fb2550ffe4e861"
+            "sha256": "4793ac6fa0c28f78565fc363469ba03f61fe1f56645edbdbd6f4d6797717b722"
           },
           "after": {
             "rows": 6,
-            "sha256": "4951bb81de8b1563ad21b64f2648bca6af9971c3dd2290c6ba326b8530ea00f3"
+            "sha256": "9ab8122758974f67f2072d31e732d8f2f3d7520f46e0ddb7d049ef3015ec5e9e"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.317Z",
+      "observed_at": "2026-10-25T04:42:48.366Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -1049,7 +1049,7 @@
         "body": {
           "pac_key": "fixture_profile_a",
           "standing": "ACT",
-          "resolved_at": "2026-10-24T22:37:10.284046-05:00",
+          "resolved_at": "2026-10-24T23:42:48.322917-05:00",
           "encounter_key": "c3envpac_c2me_v0_1",
           "presentation_scope": "c3field_only",
           "authorized_by_owner": true,
@@ -1135,8 +1135,8 @@
     },
     {
       "case_id": "I14",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I14",
@@ -1154,7 +1154,7 @@
       "environment_alias": "localhost_pg17_6_synthetic",
       "grant_revision": "fixture_v1",
       "request_digest": "08e7bab9749ebe6980842d714999dd39b7e901011ed51021ab6861e35b3ed723",
-      "response_digest": "19a94d0f21d2caaa3a19b8f9c7742b8a9189f6202dfee00a9a0ff68985f9024d",
+      "response_digest": "112037300698a47e301f7a6fc37fc0fe65fc57ca2c425e2a02988429ac50e622",
       "response_status": null,
       "reason_code": "revocation_recorded_cache_adapter_not_qualified",
       "forbidden_field_matches": [],
@@ -1162,22 +1162,22 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "29abc5055297bcaf844db5675c700bb916f2a197c07281751729b86fe6a29ef0",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "e9b97e97f0b8a73afb354507313a50d15db6a2cdb7d2947daa6f119d2650c797",
       "table_mutation_accounting": [
         {
           "table": "c3_pac",
           "before": {
             "rows": 6,
-            "sha256": "1558e374a89a5af25696a76c43cd62e3f5e98e44d138569a17fb2550ffe4e861"
+            "sha256": "4793ac6fa0c28f78565fc363469ba03f61fe1f56645edbdbd6f4d6797717b722"
           },
           "after": {
             "rows": 6,
-            "sha256": "3650d8ad9967cef26511c5f4eb0bbe18837f21c878e55672c1277f128f86b9ea"
+            "sha256": "45685ee451fec2f821c543aaa027b3720b13430cceec80ff9e055c12f5468d04"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.355Z",
+      "observed_at": "2026-10-25T04:42:48.406Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -1187,7 +1187,7 @@
         "body": {
           "pac_key": "fixture_profile_a",
           "standing": "HLD",
-          "resolved_at": "2026-10-24T22:37:10.326815-05:00",
+          "resolved_at": "2026-10-24T23:42:48.376082-05:00",
           "encounter_key": "c3envpac_c2me_v0_1",
           "presentation_scope": "none",
           "authorized_by_owner": false,
@@ -1200,8 +1200,8 @@
     },
     {
       "case_id": "I15",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I15",
@@ -1227,10 +1227,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.402Z",
+      "observed_at": "2026-10-25T04:42:48.435Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -1250,8 +1250,8 @@
     },
     {
       "case_id": "I16",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I16",
@@ -1277,10 +1277,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.428Z",
+      "observed_at": "2026-10-25T04:42:48.462Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -1298,8 +1298,8 @@
     },
     {
       "case_id": "I17",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I17",
@@ -1325,10 +1325,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.452Z",
+      "observed_at": "2026-10-25T04:42:48.486Z",
       "local_assertions": "PASS",
       "strict_contract_result": "LOCAL_SUBSET_ONLY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -1340,8 +1340,8 @@
     },
     {
       "case_id": "I18",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I18",
@@ -1367,10 +1367,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.475Z",
+      "observed_at": "2026-10-25T04:42:48.516Z",
       "local_assertions": "PASS",
       "strict_contract_result": "HLD_CLAIM_EXCHANGE_AND_REPLAY",
       "standing": "HLD_HOSTED_OBSERVATION",
@@ -1383,8 +1383,8 @@
     },
     {
       "case_id": "I19",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I19",
@@ -1401,17 +1401,17 @@
       "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
       "environment_alias": "localhost_pg17_6_synthetic",
       "grant_revision": "fixture_v1",
-      "request_digest": "caab8a404a887ef61d6e183a268074dce4f19c9fac6f1851168a40bd88ce47ee",
-      "response_digest": "a3b8075f6a407b24c0fdeca97aaa1a06fa349ed5199fb6972ad182642e7c4529",
+      "request_digest": "dc78fa79625087fd883a5b1c76e473b4f169e9b36e3ec90550a40d576c9774a6",
+      "response_digest": "470e6ce293a00859979da823b8002f945d1558fdd6ec30b64d85485cd74ec85f",
       "response_status": 200,
       "reason_code": null,
       "forbidden_field_matches": [],
-      "db_write_count": 1,
+      "db_write_count": 3,
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "f60db9231943f78409a197630065d4e497b5445790302197fdc265d6f78cf75c",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "098decdde8341744a888ec4872e255e2057a3f543b4da280a4244ea546ea828f",
       "table_mutation_accounting": [
         {
           "table": "c1_environment_connection_thread",
@@ -1420,24 +1420,111 @@
             "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
           },
           "after": {
-            "rows": 1,
-            "sha256": "9e34ab5c8680c4d072c06ebc441a556bc3019970eccfe19b42ddca90c64aaaab"
+            "rows": 2,
+            "sha256": "ddf9b0b19920ba595e1ce3f2fc49ee21a7be16c4f7385654eccf0c3f0233a743"
           }
         }
       ],
-      "observed_at": "2026-10-25T03:37:10.512Z",
+      "observed_at": "2026-10-25T04:42:48.721Z",
       "local_assertions": "PASS",
-      "strict_contract_result": "FAIL_STRICT_ZERO_WRITE",
+      "strict_contract_result": "PASS_GET_READONLY_EXPLICIT_INIT_LOCAL",
       "standing": "HLD_HOSTED_OBSERVATION",
-      "hosted_reason": "Observed strict zero-write variant fails: first GET creates one owner thread. This source does not authorize production behavior remediation; hosted observation remains required.",
+      "hosted_reason": "Server source/local I19 effect pair passed; exact UI interaction path is outside this OAR allowlist; real signed gateway, action-time atomic authority and hosted transport remain held.",
       "observed": {
         "status": 200,
         "body": {
-          "standing": "connections_ready",
-          "strict_zero_write": "FAIL",
-          "thread_writes": 1,
-          "last_seen_writes": 0,
-          "retry_created_threads": 0
+          "strict_get_zero_write": "PASS",
+          "explicit_initiation": "PASS_BOUNDED_LOCAL",
+          "subcases": [
+            {
+              "id": "I19a",
+              "get_write_count": 0,
+              "standing": "thread_not_initialized"
+            },
+            {
+              "id": "I19b",
+              "first_insert": 1,
+              "retry_insert": 0
+            },
+            {
+              "id": "I19c",
+              "get_after_write_count": 0,
+              "last_seen_writes": 0
+            },
+            {
+              "id": "revoked_grant",
+              "status": 503,
+              "reason": "owner_grant",
+              "inserted_rows": 0
+            },
+            {
+              "id": "expired_session",
+              "status": 401,
+              "reason": "session_expired",
+              "inserted_rows": 0
+            },
+            {
+              "id": "ambiguous_owner",
+              "status": 409,
+              "reason": "connections_owner_current_held",
+              "inserted_rows": 0
+            },
+            {
+              "id": "ineffective_envpac",
+              "status": 409,
+              "reason": "connections_owner_current_held",
+              "inserted_rows": 0
+            },
+            {
+              "id": "missing_mgs",
+              "status": 409,
+              "reason": "connections_entrance_evidence_held",
+              "inserted_rows": 0
+            },
+            {
+              "id": "withdrawn_consent",
+              "status": 409,
+              "reason": "connections_entrance_evidence_held",
+              "inserted_rows": 0
+            },
+            {
+              "id": "inactive_mgs_process",
+              "status": 409,
+              "reason": "connections_entrance_evidence_held",
+              "inserted_rows": 0
+            },
+            {
+              "id": "mgs_holds",
+              "status": 409,
+              "reason": "connections_mgs_binding_held",
+              "inserted_rows": 0
+            },
+            {
+              "id": "forged_owner_and_csrf",
+              "inserted_rows": 0,
+              "cross_status": 400,
+              "missing_origin_status": 403,
+              "cross_origin_status": 403
+            },
+            {
+              "id": "mismatch_no_overwrite",
+              "status": 409
+            },
+            {
+              "id": "independent_owner_b",
+              "inserted_rows": 1
+            },
+            {
+              "id": "concurrent_handler_attempts",
+              "inserts": [
+                0,
+                1
+              ],
+              "rows_after": 1,
+              "transport": "single SQL transaction with serialized fetch bridge; independent SQL concurrency separately tested"
+            }
+          ],
+          "provider_calls": 0
         }
       },
       "transport_calls": [
@@ -1454,15 +1541,183 @@
           "body": null
         },
         {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
           "path": "c1_environment_connection_thread",
           "method": "GET",
-          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&limit=1",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
           "body": null
         },
         {
           "path": "c1_environment_connection_thread",
           "method": "POST",
-          "query": "",
+          "query": "?on_conflict=thread_key",
           "body": {
             "thread_key": "connections:env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
             "env_key": "env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
@@ -1472,11 +1727,144 @@
             "standing": "active",
             "visibility": "owner_private",
             "metadata": {
-              "source": "my_environment",
+              "source": "explicit_owner_connections_initialization",
               "thread_is_authority": false,
-              "thread_is_relationship_registry": false
+              "thread_is_relationship_registry": false,
+              "current_ref": "fixture_current_a",
+              "mgs_evaluation_ref": "fixture_mgs_evaluation_a",
+              "initiated_by": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
             }
           }
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
         },
         {
           "path": "c1_environment_connection_thread_entry",
@@ -1509,35 +1897,955 @@
           "body": null
         },
         {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.a0fab1377f49a759b57f63318262ebe89fabfc990e8e93ceac2984561482b9d4&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_bbbbbbbbbbbbbbbbbbbbbbbb_v0_1&subject_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
           "path": "c1_environment_connection_thread",
           "method": "GET",
-          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&limit=1",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
           "body": null
         },
         {
-          "path": "c1_environment_connection_thread_entry",
+          "path": "c1_environment_connection_thread",
           "method": "GET",
-          "query": "?select=entry_key%2Centry_type%2Ctitle%2Cbody%2Crelated_type%2Crelated_key%2Crelated_route%2Cstanding%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&order=created_at.desc&limit=200",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "body": null
         },
         {
-          "path": "c3_env_native_connection",
+          "path": "c3_env_runtime_session",
           "method": "GET",
-          "query": "?select=connection_key%2Csource_relationship_key%2Csource_env_key%2Csource_envpac_key%2Ctarget_relationship_key%2Ctarget_env_key%2Ctarget_envpac_key%2Cstanding%2Cformed_at%2Cmetadata&standing=eq.active&revoked_at=is.null&or=%28source_relationship_key.eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%2Ctarget_relationship_key.eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%29&order=formed_at.desc",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.a0fab1377f49a759b57f63318262ebe89fabfc990e8e93ceac2984561482b9d4&standing=eq.active&revoked_at=is.null&limit=1",
           "body": null
         },
         {
-          "path": "c3_env_initiative_visibility",
+          "path": "c3_envpac_access_grant",
           "method": "GET",
-          "query": "?select=visibility_key%2Cinitiative_key%2Cinitiative_envpac_key%2Ctarget_environment_key%2Cvisibility_source%2Csource_ref%2Cstanding%2Cvisible_at%2Cmetadata&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active&revoked_at=is.null&order=visible_at.desc",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_bbbbbbbbbbbbbbbbbbbbbbbb_v0_1&subject_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_bbbbbbbbbbbbbbbbbbbbbbbb&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_bbbbbbbbbbbbbbbbbbbbbbbb&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_bbbbbbbbbbbbbbbbbbbbbbbb_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_b&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_bbbbbbbbbbbbbbbbbbbbbbbb&owner_relationship_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.a0fab1377f49a759b57f63318262ebe89fabfc990e8e93ceac2984561482b9d4&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_bbbbbbbbbbbbbbbbbbbbbbbb_v0_1&subject_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_bbbbbbbbbbbbbbbbbbbbbbbb&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_bbbbbbbbbbbbbbbbbbbbbbbb&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_bbbbbbbbbbbbbbbbbbbbbbbb_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_b&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "POST",
+          "query": "?on_conflict=thread_key",
+          "body": {
+            "thread_key": "connections:env_person_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "env_key": "env_person_bbbbbbbbbbbbbbbbbbbbbbbb",
+            "envpac_key": "c3envpac_person_bbbbbbbbbbbbbbbbbbbbbbbb_v0_1",
+            "owner_relationship_key": "crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "title": "Connections",
+            "standing": "active",
+            "visibility": "owner_private",
+            "metadata": {
+              "source": "explicit_owner_connections_initialization",
+              "thread_is_authority": false,
+              "thread_is_relationship_registry": false,
+              "current_ref": "fixture_current_b",
+              "mgs_evaluation_ref": "fixture_mgs_evaluation_b",
+              "initiated_by": "crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          }
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_bbbbbbbbbbbbbbbbbbbbbbbb",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_bbbbbbbbbbbbbbbbbbbbbbbb&owner_relationship_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac",
+          "method": "GET",
+          "query": "?select=envpac_key%2Cenv_key&owner_subject_type=eq.individual&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&standing=eq.effective&is_effective=eq.true",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=persistence_key%2Cgoverned_state%2Cevidence&process_key=eq.minimum_governed_standard_v1&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&object_type=eq.minimum_governed_standard_evaluation&standing=eq.minimum_governed_standard_satisfied",
+          "body": null
+        },
+        {
+          "path": "c3_environment",
+          "method": "GET",
+          "query": "?select=environment_class%2Cstanding&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&is_active=eq.true",
+          "body": null
+        },
+        {
+          "path": "crs_consent",
+          "method": "GET",
+          "query": "?select=consent_scope&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&consent_scope=eq.c1_connect_relationship&consent_state=eq.granted&withdrawn_at=is.null",
+          "body": null
+        },
+        {
+          "path": "system_process_registry",
+          "method": "GET",
+          "query": "?select=process_key&process_key=eq.minimum_governed_standard_v1&process_status=eq.active&authority_level=eq.registered",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_capability_grant",
+          "method": "GET",
+          "query": "?select=capability_key&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "measures_persistence_state",
+          "method": "GET",
+          "query": "?select=governed_state&persistence_key=eq.fixture_mgs_binding_a&process_key=eq.minimum_governed_standard_v1&object_type=eq.minimum_governed_standard_binding&standing=eq.current&environment_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "measures_registry",
+          "method": "GET",
+          "query": "?select=metadata&registry_key=eq.c1me_minimum_governed_standard_v0_1&is_active=eq.true&release_state=eq.released&access_state=eq.callable",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "POST",
+          "query": "?on_conflict=thread_key",
+          "body": {
+            "thread_key": "connections:env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "env_key": "env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "envpac_key": "c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1",
+            "owner_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "title": "Connections",
+            "standing": "active",
+            "visibility": "owner_private",
+            "metadata": {
+              "source": "explicit_owner_connections_initialization",
+              "thread_is_authority": false,
+              "thread_is_relationship_registry": false,
+              "current_ref": "fixture_current_a",
+              "mgs_evaluation_ref": "fixture_mgs_evaluation_a",
+              "initiated_by": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          }
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "POST",
+          "query": "?on_conflict=thread_key",
+          "body": {
+            "thread_key": "connections:env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "env_key": "env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "envpac_key": "c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1",
+            "owner_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "title": "Connections",
+            "standing": "active",
+            "visibility": "owner_private",
+            "metadata": {
+              "source": "explicit_owner_connections_initialization",
+              "thread_is_authority": false,
+              "thread_is_relationship_registry": false,
+              "current_ref": "fixture_current_a",
+              "mgs_evaluation_ref": "fixture_mgs_evaluation_a",
+              "initiated_by": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          }
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "body": null
         }
       ]
     },
     {
       "case_id": "I20",
-      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
-      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+      "source_sha256": "fae151aa8288b9e5b1ff8b2634a4ea67f671fb99be7febe39b6c03e588e5d54a",
       "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
       "contract": {
         "id": "I20",
@@ -1563,10 +2871,10 @@
       "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
       "fixture_and_rpc_mutations_in_digest": true,
       "provider_call_count": 0,
-      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
-      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "before_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
+      "after_digest": "bcc6b07a7bbb214c5f2f49b77606a3573a16d66e97d35d3654bd51ff62c6444b",
       "table_mutation_accounting": [],
-      "observed_at": "2026-10-25T03:37:10.539Z",
+      "observed_at": "2026-10-25T04:42:48.745Z",
       "local_assertions": "NOT_EXECUTED_NO_QUALIFIED_ADAPTER",
       "strict_contract_result": "HLD_EFFECT_ADAPTER",
       "standing": "HLD_HOSTED_OBSERVATION",

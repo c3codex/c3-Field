@@ -1,0 +1,196 @@
+[
+  {
+    "relname": "crs_consent",
+    "columns": [
+      {
+        "type": "text",
+        "column": "consent_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "relationship_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "consent_scope",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "consent_state",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "consent_source",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "evidence_ref",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "granted_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "withdrawn_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "crs_consent_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (consent_key)"
+      },
+      {
+        "name": "crs_consent_relationship_key_fkey",
+        "type": "f",
+        "parent": "crs_relationship",
+        "definition": "FOREIGN KEY (relationship_key) REFERENCES crs_relationship(relationship_key)"
+      }
+    ]
+  },
+  {
+    "relname": "measures_persistence_state",
+    "columns": [
+      {
+        "type": "text",
+        "column": "persistence_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "process_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "oar2_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "environment_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "object_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "object_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "governed_state",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "source_sha256",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "evidence",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "custody",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "lineage",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "next_permitted_transition",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "persisted_by",
+        "default": "'registrar'::text",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "persisted_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "measures_persistence_state_environment_key_object_key_key",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (environment_key, object_key)"
+      },
+      {
+        "name": "measures_persistence_state_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (persistence_key)"
+      }
+    ]
+  }
+]

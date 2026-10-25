@@ -1,0 +1,10 @@
+{
+  "execution_instance": "c3field_obsidian_semantics_connections_first_use_effect_20261024_001",
+  "standing": "PASS_SQL_UNIQUENESS_CONVERGENCE",
+  "actual_sql_transactions": 2,
+  "lock_wait_observed": true,
+  "first_insert_rows": 1,
+  "second_insert_rows": 0,
+  "final_rows": 1,
+  "scope": "Actual separate SQL sessions; not a hosted PostgREST/gateway authorization test"
+}

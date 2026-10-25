@@ -1,0 +1,9 @@
+{
+  "basis": "Captured current metadata only; no production row data copied. Synthetic service-role fixtures, no claim of complete trigger or MGS runtime clone",
+  "omitted_constraints": [],
+  "qualified_source_checks": [
+    "supabase/migrations/20260917062800_register_c1me_mgs_and_create_current_binding_v0_1.sql",
+    "supabase/migrations/20260917064200_persist_c1me_mgs_evaluation_v0_1.sql"
+  ],
+  "production_evidence_read": false
+}
