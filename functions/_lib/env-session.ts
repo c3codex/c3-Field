@@ -50,7 +50,7 @@ async function activeScopedGrant(env:PassageEnv,envpacKey:string,subjectKey:stri
   const rows=await (await rest(env,"c3_envpac_access_grant?"+q)).json() as Array<Record<string,unknown>>
   const grant=rows[0]
   if(!grant) throw new Error("scoped_grant_required")
-  if(typeof grant.expires_at==="string" && Date.parse(grant.expires_at)<=now) throw new Error("scoped_grant_expired")
+  if(typeof grant.expires_at==="string" && (!Number.isFinite(Date.parse(grant.expires_at)) || Date.parse(grant.expires_at)<=now)) throw new Error("scoped_grant_expired")
   const scope=grant.scope&&typeof grant.scope==="object"&&!Array.isArray(grant.scope)?grant.scope as Record<string,unknown>:{}
   if(scope.initiative_key!==initiativeKey) throw new Error("scoped_grant_initiative_mismatch")
   return grant
@@ -68,7 +68,7 @@ async function activeOwnerGrant(env:PassageEnv,envpacKey:string,subjectKey:strin
   const rows=await (await rest(env,"c3_envpac_access_grant?"+q)).json() as Array<Record<string,unknown>>
   const grant=rows[0]
   if(!grant) throw new Error("owner_grant")
-  if(typeof grant.expires_at==="string" && Date.parse(grant.expires_at)<=now) throw new Error("owner_grant_expired")
+  if(typeof grant.expires_at==="string" && (!Number.isFinite(Date.parse(grant.expires_at)) || Date.parse(grant.expires_at)<=now)) throw new Error("owner_grant_expired")
   return grant
 }
 function runtimeToken(){
@@ -104,7 +104,7 @@ export async function createEnvironmentSession(claim:OwnerClaim,env:PassageEnv,s
   })
   return {token,envKey:claim.envKey,envpacKey:claim.envpacKey,subjectType:String(grant.subject_type||"individual"),subjectKey:claim.relationshipKey,expiresAt}
 }
-export async function resolveEnvironmentSession(token:string,env:PassageEnv):Promise<EnvironmentSession>{
+export async function resolveEnvironmentSession(token:string,env:PassageEnv,options:{touchLastSeen?:boolean}={}):Promise<EnvironmentSession>{
   if(!/^[a-f0-9]{64}$/.test(token)) throw new Error("session_shape")
   const tokenHash=await sha256(token)
   const q=new URLSearchParams({
@@ -116,9 +116,11 @@ export async function resolveEnvironmentSession(token:string,env:PassageEnv):Pro
   })
   const rows=await (await rest(env,"c3_env_runtime_session?"+q)).json() as Array<Record<string,unknown>>
   const row=rows[0]
-  if(!row || typeof row.expires_at!=="string" || Date.parse(row.expires_at)<=Date.now()) throw new Error("session_expired")
+  if(!row || typeof row.expires_at!=="string" || !Number.isFinite(Date.parse(row.expires_at)) || Date.parse(row.expires_at)<=Date.now()) throw new Error("session_expired")
   await activeOwnerGrant(env,String(row.envpac_key),String(row.subject_key))
-  if(typeof row.session_key==="string"){
+  // Session resolution is read-only unless a separately authorized caller opts
+  // into telemetry. Merely displaying an owner projection must not write state.
+  if(options.touchLastSeen===true && typeof row.session_key==="string"){
     const p=new URLSearchParams({session_key:"eq."+row.session_key})
     await rest(env,"c3_env_runtime_session?"+p,{method:"PATCH",headers:{"content-type":"application/json","prefer":"return=minimal"},body:JSON.stringify({last_seen_at:new Date().toISOString()})})
   }
@@ -175,7 +177,8 @@ export async function createScopedEnvironmentSession(input:{
 export async function resolveScopedEnvironmentSession(
   token:string,
   env:PassageEnv,
-  expected:{envKey:string;envpacKey:string;relationRole:string;initiativeKey:string}
+  expected:{envKey:string;envpacKey:string;relationRole:string;initiativeKey:string},
+  options:{touchLastSeen?:boolean}={}
 ):Promise<EnvironmentSession & {relationRole:string;initiativeKey:string;grantKey:string}>{
   if(!/^[a-f0-9]{64}$/.test(token)) throw new Error("session_shape")
   const tokenHash=await sha256(token)
@@ -188,7 +191,7 @@ export async function resolveScopedEnvironmentSession(
   })
   const rows=await (await rest(env,"c3_env_runtime_session?"+q)).json() as Array<Record<string,unknown>>
   const row=rows[0]
-  if(!row || typeof row.expires_at!=="string" || Date.parse(row.expires_at)<=Date.now()) throw new Error("session_expired")
+  if(!row || typeof row.expires_at!=="string" || !Number.isFinite(Date.parse(row.expires_at)) || Date.parse(row.expires_at)<=Date.now()) throw new Error("session_expired")
   if(row.env_key!==expected.envKey||row.envpac_key!==expected.envpacKey) throw new Error("scoped_session_target_mismatch")
   const metadata=row.metadata&&typeof row.metadata==="object"&&!Array.isArray(row.metadata)?row.metadata as Record<string,unknown>:{}
   if(metadata.session_class!=="initiative_c2_consumer"||
@@ -196,7 +199,7 @@ export async function resolveScopedEnvironmentSession(
      metadata.initiative_key!==expected.initiativeKey) throw new Error("scoped_session_contract_mismatch")
   const grant=await activeScopedGrant(env,expected.envpacKey,String(row.subject_key),expected.relationRole,expected.initiativeKey)
   if(row.evidence_ref!==grant.grant_key) throw new Error("scoped_session_grant_mismatch")
-  if(typeof row.session_key==="string"){
+  if(options.touchLastSeen===true && typeof row.session_key==="string"){
     const p=new URLSearchParams({session_key:"eq."+row.session_key})
     await rest(env,"c3_env_runtime_session?"+p,{
       method:"PATCH",headers:{"content-type":"application/json","prefer":"return=minimal"},

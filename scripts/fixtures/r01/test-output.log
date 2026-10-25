@@ -1,0 +1,26 @@
+PASS synthetic preimage demonstrates broad ordinary-role reads before correction
+PASS c3ops_asset_lineage_record: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE
+PASS c3ops_asset_placement_determination: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE
+PASS c3ops_partner: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE
+PASS c3ops_publication_component: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE
+PASS c3ops_publication_lineage_record: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE
+PASS c3ops_publication_object: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE
+PASS c3_envpac_effective_graph: raw ordinary reads denied; service read preserved
+PASS c3_envpac_registry_reference: raw ordinary reads denied; service read preserved
+PASS measures_seat_hold_notification_review_v1: raw ordinary reads denied; service read preserved
+PASS service read/write positives preserve all six named internal authority consumers
+PASS owner A/B isolation: ordinary raw view access denied; exact server filter preserves owner projection
+PASS RLS remains restrictive even if a future ordinary role accidentally receives table privileges
+PASS add_measures_transition_rule: ordinary roles denied; unregistered service actor denied; qualified exact-effect service accepted
+PASS define_measures_encounter: ordinary roles denied; unregistered service actor denied; qualified exact-effect service accepted
+PASS system_oar_queue_confirm_and_start_cody: ordinary roles denied; unregistered service actor denied; qualified exact-effect service accepted
+PASS system_oar_queue_submit_oar1_for_chazz_prompt: ordinary roles denied; unregistered service actor denied; qualified exact-effect service accepted
+PASS forged actor, wrong source/instance/action/effect and altered parameters fail before rule write
+PASS expired, malformed expiry, revoked and inactive grants fail closed
+PASS native CanCom queue is never routed through legacy lifecycle helpers
+PASS encounter upsert repeatability and four functions invoker/search-path pinning
+PASS migration replay is idempotent and exact state is unchanged
+PASS transactional interruption rolls back a corrected catalog without partial effect
+PASS drifted column grant refuses entire migration and preserves state
+PASS rollback restores exact function bodies, ACL sets, policies and view/RLS state
+{"result":"PASS","cases":25,"postgres":"PostgreSQL 17.6 on x86_64-windows, compiled by msvc-19.44.35213, 64-bit","candidate_sha256":"170550ab2c144ea8be429f2ee0fd9c8119f7e0dc590cab390b2c30058e946db4"}

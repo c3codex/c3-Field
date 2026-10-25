@@ -1,0 +1,3 @@
+# Preserve exact SQL preimage/rollback bytes across fresh checkouts.
+scripts/fixtures/r01/*.sql -text whitespace=cr-at-eol
+supabase/migrations/20261025001210_r01_access_authority_candidate.sql -text whitespace=cr-at-eol
