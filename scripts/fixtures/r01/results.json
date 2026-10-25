@@ -1,0 +1,117 @@
+{
+  "environment": {
+    "host": "127.0.0.1",
+    "port": 55474,
+    "user": "postgres",
+    "database": "postgres"
+  },
+  "candidate_sha256": "170550ab2c144ea8be429f2ee0fd9c8119f7e0dc590cab390b2c30058e946db4",
+  "limitations": [
+    "Synthetic rows only; simulated trusted JWT app_metadata",
+    "Real non-superuser PostgreSQL roles; no live gateway proof",
+    "External FK parents and ancillary triggers omitted",
+    "Public rendering and complete publisher/custody workflows separately qualified"
+  ],
+  "results": [
+    {
+      "name": "synthetic preimage demonstrates broad ordinary-role reads before correction",
+      "result": "PASS"
+    },
+    {
+      "name": "c3ops_asset_lineage_record: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE",
+      "result": "PASS"
+    },
+    {
+      "name": "c3ops_asset_placement_determination: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE",
+      "result": "PASS"
+    },
+    {
+      "name": "c3ops_partner: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE",
+      "result": "PASS"
+    },
+    {
+      "name": "c3ops_publication_component: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE",
+      "result": "PASS"
+    },
+    {
+      "name": "c3ops_publication_lineage_record: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE",
+      "result": "PASS"
+    },
+    {
+      "name": "c3ops_publication_object: anon/authenticated deny SELECT, INSERT, UPDATE, DELETE and TRUNCATE",
+      "result": "PASS"
+    },
+    {
+      "name": "c3_envpac_effective_graph: raw ordinary reads denied; service read preserved",
+      "result": "PASS"
+    },
+    {
+      "name": "c3_envpac_registry_reference: raw ordinary reads denied; service read preserved",
+      "result": "PASS"
+    },
+    {
+      "name": "measures_seat_hold_notification_review_v1: raw ordinary reads denied; service read preserved",
+      "result": "PASS"
+    },
+    {
+      "name": "service read/write positives preserve all six named internal authority consumers",
+      "result": "PASS"
+    },
+    {
+      "name": "owner A/B isolation: ordinary raw view access denied; exact server filter preserves owner projection",
+      "result": "PASS"
+    },
+    {
+      "name": "RLS remains restrictive even if a future ordinary role accidentally receives table privileges",
+      "result": "PASS"
+    },
+    {
+      "name": "add_measures_transition_rule: ordinary roles denied; unregistered service actor denied; qualified exact-effect service accepted",
+      "result": "PASS"
+    },
+    {
+      "name": "define_measures_encounter: ordinary roles denied; unregistered service actor denied; qualified exact-effect service accepted",
+      "result": "PASS"
+    },
+    {
+      "name": "system_oar_queue_confirm_and_start_cody: ordinary roles denied; unregistered service actor denied; qualified exact-effect service accepted",
+      "result": "PASS"
+    },
+    {
+      "name": "system_oar_queue_submit_oar1_for_chazz_prompt: ordinary roles denied; unregistered service actor denied; qualified exact-effect service accepted",
+      "result": "PASS"
+    },
+    {
+      "name": "forged actor, wrong source/instance/action/effect and altered parameters fail before rule write",
+      "result": "PASS"
+    },
+    {
+      "name": "expired, malformed expiry, revoked and inactive grants fail closed",
+      "result": "PASS"
+    },
+    {
+      "name": "native CanCom queue is never routed through legacy lifecycle helpers",
+      "result": "PASS"
+    },
+    {
+      "name": "encounter upsert repeatability and four functions invoker/search-path pinning",
+      "result": "PASS"
+    },
+    {
+      "name": "migration replay is idempotent and exact state is unchanged",
+      "result": "PASS"
+    },
+    {
+      "name": "transactional interruption rolls back a corrected catalog without partial effect",
+      "result": "PASS"
+    },
+    {
+      "name": "drifted column grant refuses entire migration and preserves state",
+      "result": "PASS"
+    },
+    {
+      "name": "rollback restores exact function bodies, ACL sets, policies and view/RLS state",
+      "result": "PASS"
+    }
+  ]
+}

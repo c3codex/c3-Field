@@ -284,7 +284,7 @@ function bearerToken(authorization: string) {
     : null
 }
 
-async function isAuthorizedOperator(request: Request, key: string) {
+export async function isAuthorizedOperator(request: Request, key: string) {
   const authorization = request.headers.get("authorization") ?? ""
   const candidates = [
     request.headers.get("x-operator-dispatch-key"),

@@ -1,0 +1,399 @@
+{
+  "relations": [
+    {
+      "oid": 35267,
+      "schema": "public",
+      "relname": "c3_envpac_effective_graph",
+      "relkind": "v",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": false,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": " SELECT envpac_key,\n    env_key AS registry_env_key,\n    version,\n    standing AS envpac_standing,\n    owner_subject_type,\n    owner_subject_key,\n    custodian_subject_type,\n    custodian_subject_key,\n    custody_uri,\n    custody_provider,\n    content_sha256,\n    portable,\n    COALESCE(( SELECT jsonb_agg(jsonb_build_object('env_key', b.env_key, 'binding_role', b.binding_role, 'standing', b.standing, 'is_primary', b.is_primary, 'metadata', b.metadata) ORDER BY b.is_primary DESC, b.env_key) AS jsonb_agg\n           FROM c3_envpac_environment_binding b\n          WHERE b.envpac_key = ep.envpac_key), '[]'::jsonb) AS environment_bindings,\n    COALESCE(( SELECT jsonb_agg(jsonb_build_object('system_key', rs.system_key, 'relation_role', rs.relation_role, 'standing', rs.standing, 'authority_scope', rs.authority_scope, 'runtime_ref', rs.runtime_ref, 'source_ref', rs.source_ref) ORDER BY rs.relation_role, rs.system_key) AS jsonb_agg\n           FROM c3_envpac_rooted_system rs\n          WHERE rs.envpac_key = ep.envpac_key), '[]'::jsonb) AS rooted_systems,\n    COALESCE(( SELECT jsonb_agg(jsonb_build_object('pac_key', p.pac_key, 'pac_type', p.pac_type, 'version', p.version, 'standing', p.standing, 'custody_uri', p.custody_uri, 'content_sha256', p.content_sha256) ORDER BY p.pac_type, p.pac_key) AS jsonb_agg\n           FROM c3_pac p\n          WHERE p.envpac_key = ep.envpac_key AND p.is_effective = true), '[]'::jsonb) AS packages\n   FROM c3_envpac ep\n  WHERE is_effective = true;"
+    },
+    {
+      "oid": 35198,
+      "schema": "public",
+      "relname": "c3_envpac_registry_reference",
+      "relkind": "v",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": false,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": " SELECT e.env_key,\n    e.system_key,\n    e.environment_name,\n    p.envpac_key,\n    p.version AS envpac_version,\n    p.standing AS envpac_standing,\n    p.owner_subject_type,\n    p.owner_subject_key,\n    p.custodian_subject_type,\n    p.custodian_subject_key,\n    p.custody_uri,\n    p.custody_provider,\n    p.content_sha256,\n    p.portable,\n    p.effective_at\n   FROM c3_environment e\n     JOIN c3_envpac p ON p.env_key = e.env_key\n  WHERE p.is_effective = true;"
+    },
+    {
+      "oid": 33362,
+      "schema": "public",
+      "relname": "c3ops_asset_lineage_record",
+      "relkind": "r",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": null
+    },
+    {
+      "oid": 33348,
+      "schema": "public",
+      "relname": "c3ops_asset_placement_determination",
+      "relkind": "r",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": null
+    },
+    {
+      "oid": 33415,
+      "schema": "public",
+      "relname": "c3ops_partner",
+      "relkind": "r",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": null
+    },
+    {
+      "oid": 33390,
+      "schema": "public",
+      "relname": "c3ops_publication_component",
+      "relkind": "r",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": null
+    },
+    {
+      "oid": 33401,
+      "schema": "public",
+      "relname": "c3ops_publication_lineage_record",
+      "relkind": "r",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": null
+    },
+    {
+      "oid": 33375,
+      "schema": "public",
+      "relname": "c3ops_publication_object",
+      "relkind": "r",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": null
+    },
+    {
+      "oid": 29919,
+      "schema": "public",
+      "relname": "measures_seat_hold_notification_review_v1",
+      "relkind": "v",
+      "owner": "postgres",
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": false,
+      "force_rls": false,
+      "reloptions": null,
+      "anon_schema_usage": true,
+      "auth_schema_usage": true,
+      "anon_select": true,
+      "anon_insert": true,
+      "anon_update": true,
+      "anon_delete": true,
+      "auth_select": true,
+      "auth_insert": true,
+      "auth_update": true,
+      "auth_delete": true,
+      "service_any_crud": true,
+      "view_definition": " SELECT id AS capture_id,\n    email,\n    offering_key,\n    source_encounter_key,\n    notification_state,\n    seat_lifecycle_state,\n    created_at,\n    notified_at\n   FROM measures_seat_hold_capture\n  WHERE registry_key = 'measures_registry'::text\n  ORDER BY created_at DESC;"
+    }
+  ],
+  "policies": [
+    {
+      "cmd": "ALL",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_asset_lineage_record",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow anon and authenticated write on c3ops_asset_lineage_recor",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_asset_lineage_record",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow public read access on c3ops_asset_lineage_record",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_asset_placement_determination",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow anon and authenticated write on c3ops_asset_placement_det",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_asset_placement_determination",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow public read access on c3ops_asset_placement_determination",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_partner",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow anon and authenticated write on c3ops_partner",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_partner",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow public read access on c3ops_partner",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_publication_component",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow anon and authenticated write on c3ops_publication_compone",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_publication_component",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow public read access on c3ops_publication_component",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_publication_lineage_record",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow anon and authenticated write on c3ops_publication_lineage",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_publication_lineage_record",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow public read access on c3ops_publication_lineage_record",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "ALL",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_publication_object",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow anon and authenticated write on c3ops_publication_object",
+      "schemaname": "public",
+      "with_check": "true"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "c3ops_publication_object",
+      "permissive": "PERMISSIVE",
+      "policyname": "Allow public read access on c3ops_publication_object",
+      "schemaname": "public",
+      "with_check": null
+    }
+  ],
+  "functions": [
+    {
+      "signature": "add_measures_transition_rule(text,text,text,boolean,boolean,boolean,boolean,integer,jsonb)",
+      "proname": "add_measures_transition_rule",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": null,
+      "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+      "definition": "CREATE OR REPLACE FUNCTION public.add_measures_transition_rule(p_from_registry_key text, p_to_registry_key text, p_transition_kind text, p_requires_release boolean DEFAULT true, p_requires_dependency_satisfied boolean DEFAULT false, p_requires_passage_ready boolean DEFAULT false, p_requires_connect_prompt boolean DEFAULT false, p_sort_order integer DEFAULT 0, p_metadata jsonb DEFAULT '{}'::jsonb)\n RETURNS TABLE(transition_rule_id uuid, from_registry_id uuid, to_registry_id uuid, transition_kind text, rule_state text)\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\r\ndeclare\r\n  v_from_registry_id uuid;\r\n  v_to_registry_id uuid;\r\n  v_rule_id uuid;\r\nbegin\r\n  select mr.id\r\n  into v_from_registry_id\r\n  from public.measures_registry mr\r\n  where mr.registry_key = p_from_registry_key\r\n    and mr.is_active = true;\r\n\r\n  select mr.id\r\n  into v_to_registry_id\r\n  from public.measures_registry mr\r\n  where mr.registry_key = p_to_registry_key\r\n    and mr.is_active = true;\r\n\r\n  if v_from_registry_id is null then\r\n    raise exception 'from registry_key not found or inactive: %', p_from_registry_key;\r\n  end if;\r\n\r\n  if v_to_registry_id is null then\r\n    raise exception 'to registry_key not found or inactive: %', p_to_registry_key;\r\n  end if;\r\n\r\n  insert into public.measures_transition_rule (\r\n    from_registry_id,\r\n    to_registry_id,\r\n    transition_kind,\r\n    rule_state,\r\n    requires_release,\r\n    requires_dependency_satisfied,\r\n    requires_passage_ready,\r\n    requires_connect_prompt,\r\n    sort_order,\r\n    metadata\r\n  )\r\n  values (\r\n    v_from_registry_id,\r\n    v_to_registry_id,\r\n    p_transition_kind,\r\n    'active',\r\n    coalesce(p_requires_release, true),\r\n    coalesce(p_requires_dependency_satisfied, false),\r\n    coalesce(p_requires_passage_ready, false),\r\n    coalesce(p_requires_connect_prompt, false),\r\n    coalesce(p_sort_order, 0),\r\n    coalesce(p_metadata, '{}'::jsonb)\r\n  )\r\n  returning id into v_rule_id;\r\n\r\n  return query\r\n  select\r\n    mtr.id,\r\n    mtr.from_registry_id,\r\n    mtr.to_registry_id,\r\n    mtr.transition_kind,\r\n    mtr.rule_state\r\n  from public.measures_transition_rule mtr\r\n  where mtr.id = v_rule_id;\r\nend;\r\n$function$\n"
+    },
+    {
+      "signature": "define_measures_encounter(text,text,text,text,text,text,integer,boolean,boolean,jsonb)",
+      "proname": "define_measures_encounter",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": null,
+      "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+      "definition": "CREATE OR REPLACE FUNCTION public.define_measures_encounter(p_registry_key text, p_encounter_key text, p_display_title text, p_encounter_type text, p_material_family text DEFAULT NULL::text, p_surface_type text DEFAULT NULL::text, p_sequence_order integer DEFAULT NULL::integer, p_pause_allowed boolean DEFAULT false, p_is_entry_surface boolean DEFAULT false, p_metadata jsonb DEFAULT '{}'::jsonb)\n RETURNS TABLE(encounter_id uuid, registry_id uuid, registry_key text, encounter_key text)\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\r\ndeclare\r\n  v_registry_id uuid;\r\n  v_encounter_id uuid;\r\nbegin\r\n  select mr.id\r\n  into v_registry_id\r\n  from public.measures_registry mr\r\n  where mr.registry_key = p_registry_key\r\n    and mr.is_active = true;\r\n\r\n  if v_registry_id is null then\r\n    raise exception 'registry_key not found or inactive: %', p_registry_key;\r\n  end if;\r\n\r\n  insert into public.measures_encounter_def (\r\n    registry_id,\r\n    encounter_key,\r\n    display_title,\r\n    encounter_type,\r\n    material_family,\r\n    surface_type,\r\n    sequence_order,\r\n    pause_allowed,\r\n    is_entry_surface,\r\n    is_active,\r\n    metadata\r\n  )\r\n  values (\r\n    v_registry_id,\r\n    p_encounter_key,\r\n    p_display_title,\r\n    p_encounter_type,\r\n    p_material_family,\r\n    p_surface_type,\r\n    p_sequence_order,\r\n    coalesce(p_pause_allowed, false),\r\n    coalesce(p_is_entry_surface, false),\r\n    true,\r\n    coalesce(p_metadata, '{}'::jsonb)\r\n  )\r\n  on conflict (registry_id) do update\r\n    set encounter_key = excluded.encounter_key,\r\n        display_title = excluded.display_title,\r\n        encounter_type = excluded.encounter_type,\r\n        material_family = excluded.material_family,\r\n        surface_type = excluded.surface_type,\r\n        sequence_order = excluded.sequence_order,\r\n        pause_allowed = excluded.pause_allowed,\r\n        is_entry_surface = excluded.is_entry_surface,\r\n        metadata = excluded.metadata,\r\n        updated_at = now()\r\n  returning id into v_encounter_id;\r\n\r\n  return query\r\n  select\r\n    med.id,\r\n    med.registry_id,\r\n    mr.registry_key,\r\n    med.encounter_key\r\n  from public.measures_encounter_def med\r\n  join public.measures_registry mr\r\n    on mr.id = med.registry_id\r\n  where med.id = v_encounter_id;\r\nend;\r\n$function$\n"
+    },
+    {
+      "signature": "system_oar_queue_confirm_and_start_cody(text,text)",
+      "proname": "system_oar_queue_confirm_and_start_cody",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public"
+      ],
+      "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+      "definition": "CREATE OR REPLACE FUNCTION public.system_oar_queue_confirm_and_start_cody(p_queue_key text, p_operator_key text)\n RETURNS system_oar_queue\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\r\ndeclare\r\n  v_queue public.system_oar_queue%rowtype;\r\nbegin\r\n  select *\r\n  into v_queue\r\n  from public.system_oar_queue\r\n  where queue_key = p_queue_key\r\n  for update;\r\n\r\n  if not found then\r\n    raise exception 'system_oar_queue row not found: %', p_queue_key;\r\n  end if;\r\n\r\n  if v_queue.oar_type <> 'oar2' then\r\n    raise exception 'only OAR2 queue rows can start Cody execution';\r\n  end if;\r\n\r\n  if v_queue.queue_status not in ('awaiting_operator_confirm', 'approved_for_execution', 'queued_for_cody') then\r\n    raise exception 'queue row is not eligible for operator-confirmed Cody execution: %', v_queue.queue_status;\r\n  end if;\r\n\r\n  if v_queue.preflight_status <> 'passed' then\r\n    raise exception 'preflight must be passed before Cody execution';\r\n  end if;\r\n\r\n  if v_queue.source_oar2_path is null or v_queue.expected_oar1_path is null then\r\n    raise exception 'source_oar2_path and expected_oar1_path are required before Cody execution';\r\n  end if;\r\n\r\n  update public.system_oar_queue\r\n  set\r\n    operator_key = p_operator_key,\r\n    operator_confirmed_at = coalesce(operator_confirmed_at, now()),\r\n    queue_status = 'queued_for_cody',\r\n    cody_handoff_prompt = concat(\r\n      'Execute only from confirmed OAR2: ',\r\n      source_oar2_path,\r\n      '. Expected OAR1: ',\r\n      expected_oar1_path,\r\n      '.'\r\n    )\r\n  where queue_key = p_queue_key\r\n  returning *\r\n  into v_queue;\r\n\r\n  update public.system_oar_queue\r\n  set\r\n    queue_status = 'executing',\r\n    execution_started_at = coalesce(execution_started_at, now())\r\n  where queue_key = p_queue_key\r\n  returning *\r\n  into v_queue;\r\n\r\n  return v_queue;\r\nend;\r\n$function$\n"
+    },
+    {
+      "signature": "system_oar_queue_submit_oar1_for_chazz_prompt(text,text,text,text,text,text,text)",
+      "proname": "system_oar_queue_submit_oar1_for_chazz_prompt",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=public"
+      ],
+      "acl": "{=X/postgres,postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+      "definition": "CREATE OR REPLACE FUNCTION public.system_oar_queue_submit_oar1_for_chazz_prompt(p_queue_key text, p_oar1_path text, p_evidence_path text, p_execution_summary text, p_db_mutation_standing text DEFAULT 'not_applicable'::text, p_src_mutation_standing text DEFAULT 'not_applicable'::text, p_deploy_standing text DEFAULT 'not_applicable'::text)\n RETURNS system_oar_queue\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\r\ndeclare\r\n  v_queue public.system_oar_queue%rowtype;\r\n  v_evidence_key text;\r\nbegin\r\n  select *\r\n  into v_queue\r\n  from public.system_oar_queue\r\n  where queue_key = p_queue_key\r\n  for update;\r\n\r\n  if not found then\r\n    raise exception 'system_oar_queue row not found: %', p_queue_key;\r\n  end if;\r\n\r\n  if v_queue.queue_status <> 'executing' then\r\n    raise exception 'OAR1 can only be submitted from executing standing';\r\n  end if;\r\n\r\n  if p_oar1_path is null or length(trim(p_oar1_path)) = 0 then\r\n    raise exception 'OAR1 path is required before Chazz prompt generation';\r\n  end if;\r\n\r\n  if p_evidence_path is null or length(trim(p_evidence_path)) = 0 then\r\n    raise exception 'evidence path is required before Chazz prompt generation';\r\n  end if;\r\n\r\n  v_evidence_key := concat(p_queue_key, ':oar1-submitted');\r\n\r\n  insert into public.system_oar_execution_evidence (\r\n    evidence_key,\r\n    queue_key,\r\n    evidence_type,\r\n    evidence_summary,\r\n    artifact_path\r\n  )\r\n  values (\r\n    v_evidence_key,\r\n    p_queue_key,\r\n    'runtime_validation',\r\n    coalesce(nullif(p_execution_summary, ''), 'OAR1 submitted for Chazz review prompt'),\r\n    p_evidence_path\r\n  )\r\n  on conflict (evidence_key) do update\r\n  set\r\n    evidence_summary = excluded.evidence_summary,\r\n    artifact_path = excluded.artifact_path;\r\n\r\n  update public.system_oar_queue\r\n  set\r\n    queue_status = 'oar1_submitted',\r\n    execution_completed_at = coalesce(execution_completed_at, now()),\r\n    oar1_path = p_oar1_path,\r\n    execution_summary = p_execution_summary,\r\n    db_mutation_standing = p_db_mutation_standing,\r\n    src_mutation_standing = p_src_mutation_standing,\r\n    deploy_standing = p_deploy_standing,\r\n    chazz_review_prompt_authority = 'thread_prompt_only',\r\n    chazz_review_prompt_generated_at = now(),\r\n    chazz_review_prompt = concat(\r\n      'Review this OAR1 against its source OAR2.',\r\n      E'\\n\\nSource OAR2: ',\r\n      source_oar2_path,\r\n      E'\\nOAR1: ',\r\n      p_oar1_path,\r\n      E'\\nEvidence: ',\r\n      p_evidence_path,\r\n      E'\\nExecution standing: oar1_submitted',\r\n      E'\\nDB mutation standing: ',\r\n      p_db_mutation_standing,\r\n      E'\\nsrc mutation standing: ',\r\n      p_src_mutation_standing,\r\n      E'\\nDeploy standing: ',\r\n      p_deploy_standing,\r\n      E'\\nWhat Cody changed: ',\r\n      coalesce(p_execution_summary, 'not recorded'),\r\n      E'\\nRequested Chazz decision: `validated`, `correction_required`, or `held`.',\r\n      E'\\n\\nThis prompt is a review surface only. Final standing must be seated back into governed DB/Measures state.'\r\n    )\r\n  where queue_key = p_queue_key\r\n  returning *\r\n  into v_queue;\r\n\r\n  return v_queue;\r\nend;\r\n$function$\n"
+    }
+  ]
+}

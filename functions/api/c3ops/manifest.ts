@@ -1,6 +1,8 @@
 import { resolveMEEnvironments, readLapzuli, readC3OpsCurrentState, type ReadRows } from "../../_lib/me-environment"
 import { handleLapzuliAction, preflightLapzuliRoute } from "./lapzuli"
+import {isAuthorizedOperator} from "../../_middleware"
 export type Env = {
+  OPERATOR_DISPATCH_KEY?: string
   SUPABASE_URL?: string
   VITE_SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
@@ -34,11 +36,16 @@ export async function handleRead(request: Request, env: Env) {
   if(new URL(request.url).hostname!=="c3ops.c3field.online") return new Response(JSON.stringify({error:"not_found"}),{status:404,headers})
   const params = new URL(request.url).searchParams
   const view=params.get("view")
-  if(request.method==="POST" && view==="lapzuli_action") return handleLapzuliAction(request,env)
-  if(request.method!=="GET") return new Response(JSON.stringify({error:"read_only"}),{status:405,headers:{...headers,allow:"GET, POST"}})
+  const actionRequest=request.method==="POST" && view==="lapzuli_action"
+  if(request.method!=="GET" && !actionRequest) return new Response(JSON.stringify({error:"read_only"}),{status:405,headers:{...headers,allow:"GET, POST"}})
   const envKey = params.get("env_key") ?? undefined
   if(envKey && !/^[a-zA-Z0-9_-]{1,160}$/.test(envKey)) return new Response(JSON.stringify({error:"invalid_env_key"}),{status:400,headers})
   try {
+    // Reuse the existing Operator boundary even if this handler is called without
+    // Pages middleware. A host name or server credential is not caller authority.
+    if(!env.OPERATOR_DISPATCH_KEY) return new Response(JSON.stringify({standing:"HLD",error:"operator access not configured"}),{status:503,headers})
+    if(!await isAuthorizedOperator(request,env.OPERATOR_DISPATCH_KEY)) return new Response(JSON.stringify({standing:"HLD",error:"operator access denied"}),{status:403,headers})
+    if(actionRequest) return handleLapzuliAction(request,env)
     if(view==="lapzuli_free"){
       const routeKey=params.get("route_key")
       if(!routeKey || !/^[a-zA-Z0-9_-]{1,200}$/.test(routeKey))return new Response(JSON.stringify({standing:"HLD",reason:"exact_route_key_required",external_publication_effects:0}),{status:400,headers})
