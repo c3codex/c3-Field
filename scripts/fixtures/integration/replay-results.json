@@ -1,0 +1,47 @@
+{
+  "environment": {
+    "host": "127.0.0.1",
+    "port": 55474,
+    "user": "postgres",
+    "database": "postgres"
+  },
+  "postgres": "PostgreSQL 17.6 on x86_64-windows, compiled by msvc-19.44.35213, 64-bit",
+  "profile": "c3field_integrity_disposable_pg17_v1",
+  "synthetic_only": true,
+  "migrations": [
+    {
+      "name": "20261024215507_r02_computational_oar_disposition_candidate.sql",
+      "sha256": "691b772547acd418f4268ff5950ee9c683bcd7169bbec54b53cf64b76abc73c4"
+    },
+    {
+      "name": "20261025001210_r01_access_authority_candidate.sql",
+      "sha256": "170550ab2c144ea8be429f2ee0fd9c8119f7e0dc590cab390b2c30058e946db4"
+    }
+  ],
+  "replays": [
+    {
+      "replay": 1,
+      "catalog_sha256": "08363d6543294bb9d520adeb6a1dfc650fad8c6c81c9d58f89739e3ad548fb22",
+      "baseline_sha256": "f17f5dab4da97aed45536f6cc9964877444a60daa65ed6aec5c25da1472626d6",
+      "rollback_sha256": "f17f5dab4da97aed45536f6cc9964877444a60daa65ed6aec5c25da1472626d6",
+      "migration_replay": "PASS",
+      "rollback": "PASS"
+    },
+    {
+      "replay": 2,
+      "catalog_sha256": "08363d6543294bb9d520adeb6a1dfc650fad8c6c81c9d58f89739e3ad548fb22",
+      "baseline_sha256": "f17f5dab4da97aed45536f6cc9964877444a60daa65ed6aec5c25da1472626d6",
+      "rollback_sha256": "f17f5dab4da97aed45536f6cc9964877444a60daa65ed6aec5c25da1472626d6",
+      "migration_replay": "PASS",
+      "rollback": "PASS"
+    }
+  ],
+  "result": "PASS",
+  "historical_source_replay": {
+    "standing": "HLD",
+    "first_failed_file": "202606080002_obsidian_contract_seating.sql",
+    "code": "42P01",
+    "message": "relation \"public.concordance_document\" does not exist",
+    "detail": null
+  }
+}

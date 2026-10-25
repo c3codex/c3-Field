@@ -1,0 +1,166 @@
+{
+  "basis": "R02 bootstrap then nonduplicate R01 definitions; synthetic fixtures only",
+  "skipped": [
+    {
+      "object": "(['create', 'role'], ('anon',))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": true,
+      "sha256": "c9dbb8d66f2863c934ce95d9a4c52150ba54dbcba86cd11082fce87c20007b48"
+    },
+    {
+      "object": "(['create', 'role'], ('authenticated',))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": true,
+      "sha256": "507ed9f2c66e864715507d2f7b6318dad626645e29a740b46d0cd634885ab5d2"
+    },
+    {
+      "object": "(['create', 'role'], ('service_role',))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": true,
+      "sha256": "abd0cca975a028650497150d4e76607a4ebad292202fa26265023ffc5efe2c66"
+    },
+    {
+      "object": "(['create', 'table'], ('c3_envpac_capability_grant',))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": true,
+      "sha256": "4acf92f6a6e9668a9dc00f011bdb217c56540eee01462bfcfb3d8f2e9fcfeab0"
+    },
+    {
+      "object": "(['create', 'table'], ('system_oar_execution_evidence',))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": true,
+      "sha256": "ac367ca08762ec0db2eba002701051ca5901a523fab25fc6b6f32454309ffc04"
+    },
+    {
+      "object": "(['create', 'table'], ('system_oar_queue',))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": true,
+      "sha256": "ca76bbd8c83ce436ff5d3dde3e4b5b16eb3352669696e707270ac5076f67aa20"
+    },
+    {
+      "object": "(['create', 'table'], ('system_process_registry',))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "9b922e1221bf64f1a8db7e9170d7ca56d792e548eaad32dfa34d57a00ebe669c"
+    },
+    {
+      "object": "(['alter', 'table'], ('c3_envpac_capability_grant', 'c3_envpac_capability_grant_envpac_key_system_key_capability_key'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "81c98854ebbe992534406ee4b25e0840457b55bfad9b9e65b9a2ca97f98202e6"
+    },
+    {
+      "object": "(['alter', 'table'], ('c3_envpac_capability_grant', 'c3_envpac_capability_grant_pkey'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "3cf1ad622ef6e67aca1165dfcba76ec75005a5c6c6c92d3715155cf58452ede6"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_execution_evidence', 'system_oar_execution_evidence_pkey'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "d994aad4a250ff2049a6f0d6d38fd0ee206b4d81355d58ba33a6c196b52b6612"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_execution_evidence', 'system_oar_execution_evidence_type_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "34a4b63281aea4bc50f3388fd40f62308abf4bc90063df4de2a376e410911337"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_chazz_prompt_thread_only_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "83fd64c7ee86b407b6db30863a99d49735beae92177e0ce16f32b6562ef0cb15"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_closed_requires_oar1_path_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "02d85f424cf750c7dda500664d51a941c88e55698ae0df42e010cdfd3ddcfbf6"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_completed_requires_execution_completed_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "42e41bdce3d0c0ef8a0c4e310e841ec7ce024ecd3fd95ee820f300bd3868e123"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_deploy_standing_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "dd0c7b542d3b2d4af9542611b952f91a8bcceb7c46463063b29154efd768053f"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_executing_requires_operator_confirm_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "e29bba81ab1b146934fdbe27c5465a7f6d7d4d435d8c82b1b3024f0c94e4e5c9"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_executing_requires_passed_preflight_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "9dce4277e07160d00855a64aed81229947473e74ccad93433e87b975d949cba3"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_mutation_standing_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "b59998a2e3268a8c964b288ca8215020ec5f0aa96dfa6e8a8cb5a4dffd18e942"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_oar1_submitted_requires_oar1_path_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "8ecf36c84c319d74e50523af784f19ea7a2112e5cc83e82d38501a14379d19b5"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_oar_type_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "402b1a530a2b2f0f04e0d4c8dc5bb127893f720521eebeb1194fe6cf9332a0cb"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_pkey'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "02cfa042db93b97c1edc8df4b6ff3730a207ddb5d9e5f3a26b45ba82b7ce09da"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_preflight_status_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "fd57f328d14b9dc05484fa1b32e98c9b147ad432b528034ab7ee9adb62699916"
+    },
+    {
+      "object": "(['alter', 'table'], ('system_oar_queue', 'system_oar_queue_queue_status_check'))",
+      "prior": "r02",
+      "omitted": "r01",
+      "identical": false,
+      "sha256": "57c548eb2aa3f10ff1adf99ed8157fa635a3cc163d18f451115280d3a83bf4a9"
+    }
+  ]
+}

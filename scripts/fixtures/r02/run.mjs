@@ -5,7 +5,8 @@ import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 const require=createRequire(import.meta.url);
 const {Client}=require(process.env.R02_PG_MODULE || 'pg');
-const config={host:'127.0.0.1',port:55473,user:'postgres',database:'postgres'};
+const config={host:'127.0.0.1',port:55474,user:'postgres',database:process.env.C3_FIXTURE_DB || 'postgres'};
+if(!/^(postgres|fixture_g1_[ab])$/.test(config.database))throw Error('unqualified disposable database');
 const admin=new Client(config); await admin.connect();
 const root=new URL('../../../',import.meta.url);
 const file=name=>readFileSync(new URL(name,import.meta.url),'utf8');
@@ -49,8 +50,10 @@ const record=async(f,r,c=verifier)=>rpc(c,'record_cancom_acceptance_receipt_v1',
 let registrar,executor,verifier;
 try {
  await admin.query('drop schema public cascade; create schema public; drop schema if exists extensions cascade; drop role if exists service_role; drop role if exists anon; drop role if exists authenticated;');
- await admin.query(file('bootstrap.sql'));
+ await admin.query(process.env.C3_INTEGRATED ? readFileSync(new URL('../integration/bootstrap.sql',import.meta.url),'utf8') : file('bootstrap.sql'));
  await admin.query(readFileSync(new URL('supabase/migrations/'+migration,root),'utf8'));
+ if(process.env.C3_INTEGRATED){const other=readdirSync(new URL('supabase/migrations/',root)).find(x=>x.includes('_r01_')&&x.endsWith('_candidate.sql'));await admin.query(readFileSync(new URL('supabase/migrations/'+other,root),'utf8'));}
+ if(process.env.C3_INTEGRATED)await admin.query("insert into c3_environment(env_key,system_key,environment_name,environment_class,standing,source_authority_ref,is_canonical) values('fixture_env','c3ops','Fixture','fixture','fixture','fixture://authority',false);insert into c3_envpac(envpac_key,env_key,version,standing,owner_subject_type,owner_subject_key,custodian_subject_type,custodian_subject_key,custody_uri,custody_provider) values('fixture_env','fixture_env','1','active','individual','fixture_c3_native_operator','individual','fixture_c3_native_operator','fixture://local','fixture')");
  runtimeRevision=(await admin.query("select encode(sha256(convert_to(pg_get_functiondef('public.resolve_cancom_oar_disposition_v1(text,text)'::regprocedure),'UTF8')),'hex') as h")).rows[0].h;
  // Synthetic operative normalization; the migration never silently changes live policy.
  for(const key of ['cancom_oar_delivery_retrieval_v1','oar_lifecycle_resolution_v1'])await admin.query("insert into public.system_process_registry(process_key,process_family,title,status,source_path,authority_state,process_title,process_scope,process_status,authority_level,metadata) values($1,'fixture','fixture','active','fixture://source','registered','fixture','fixture','active','registered',$2)",[key,{postreturn_mode:'computational_original_oar2',computational_policy_source_ref:'fixture://operator_qualified_policy'}]);

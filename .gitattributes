@@ -1,5 +1,6 @@
 # Preserve exact R01/R02 SQL candidate and rollback bytes.
 scripts/fixtures/r01/*.sql -text whitespace=cr-at-eol
 scripts/fixtures/r02/*.sql -text whitespace=cr-at-eol
+scripts/fixtures/integration/*.sql -text whitespace=cr-at-eol
 supabase/migrations/20261025001210_r01_access_authority_candidate.sql -text whitespace=cr-at-eol
 supabase/migrations/20261024215507_r02_computational_oar_disposition_candidate.sql -text

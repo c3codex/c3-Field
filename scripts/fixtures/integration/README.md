@@ -1,0 +1,15 @@
+# R01/R02 combined disposable fixture
+
+Execution instance: `c3field_g1_g4_reusable_test_local_integration_20261024_001`.
+Authority source SHA-256: `69357cf8b330c0f8733916c2d74d0f4eb45400e934621871cec8b1c01d69da06`.
+Profile: `c3field_integrity_disposable_pg17_v1`. PG17.6 loopback port55474 only; synthetic rows, simulated trusted JWT app_metadata. No hosted credentials, project, provider or participant data.
+
+Run `python scripts/fixtures/integration-assemble.py` to compose the two captured bootstraps. R02 supplies the full process registry rather than the R01 minimal stub. Duplicate exact named constraints are retained once. `composition.json` records omitted source fragments and digests; quoted identifiers produce textual differences. The original captured Optics rollback definition and read-only ACL are installed as baseline, plus native wrapper service-only ACLs independently read back from the live catalog. This fixes fixture incompleteness, not production migration history. Original R01/R02 candidate migrations and rollback SQL remain byte-identical.
+
+With a **new disposable** loopback PG17.6 cluster, set `C3_PG_MODULE`, `R01_PG_MODULE`, `R02_PG_MODULE` to an installed pg package; set `C3_INTEGRATED=1`. Run `node scripts/fixtures/integration/replay.mjs`, `node scripts/fixtures/r01/run.mjs`, then `node scripts/fixtures/r02/run.mjs`. These commands DROP public/extensions schemas and synthetic roles. Never run against a reused or remote database. Defaults are hard-coded localhost; optional database alias is restricted to postgres/fixture_g1_a/fixture_g1_b. Shared cluster roles mean use one isolated database at a time.
+
+Replay runner executes two clean schema resets, exact combined bootstrap, both candidates, idempotent replay, reverse rollback, and independently queries columns, relations/ACLs, constraints, functions/ACLs, views and policies. ACL sets are normalized rather than comparing physical array order. Raw catalog files and SHA-256 results are retained. The broader role suites run on the composed baseline and exercise existing 25 R01 and24 R02 assertions. No claim of independent human witness, real signed JWT, PostgREST or deployed browser behavior follows.
+
+This is a **bounded synthetic baseline**, not a complete production schema baseline. External FK parents, provider integration and ancillary policies/triggers remain incomplete as documented by predecessors. Historical source replay with PG extensions initialized fails at `202606080002_obsidian_contract_seating.sql`: missing `public.concordance_document`. Source/live migration lineage remains held. Do not repair by manufacturing a historical migration, resetting the production ledger or replaying source-only migrations blindly.
+
+Current source base has a Windows case collision between C3OpsDoor.css and c3OpsDoor.css; inherited working-copy difference is excluded. Application tests use existing locked dependencies from the separately verified R02 recovery npm-ci; this passage checks lockfile identity and build, and does not claim a fresh dependency installation.

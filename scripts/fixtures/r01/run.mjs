@@ -3,11 +3,12 @@ import {readFileSync,readdirSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 const require=createRequire(import.meta.url),{Client}=require(process.env.R01_PG_MODULE||'pg');
-const config={host:'127.0.0.1',port:55474,user:'postgres',database:'postgres'};
+const config={host:'127.0.0.1',port:55474,user:'postgres',database:process.env.C3_FIXTURE_DB || 'postgres'};
 const root=new URL('../../../',import.meta.url),local=n=>readFileSync(new URL(n,import.meta.url),'utf8');
 const migration=readdirSync(new URL('supabase/migrations/',root)).find(n=>n.endsWith('_r01_access_authority_candidate.sql'));
 const candidate=readFileSync(new URL('supabase/migrations/'+migration,root),'utf8');
 const pre=JSON.parse(local('preimages.json')),tables=pre.relations.filter(x=>x.relkind==='r').map(x=>x.relname),views=pre.relations.filter(x=>x.relkind==='v').map(x=>x.relname);
+if(!/^(postgres|fixture_g1_[ab])$/.test(config.database))throw Error('unqualified disposable database');
 const admin=new Client(config);await admin.connect();const results=[];let clients=[];
 const hash=s=>createHash('sha256').update(s).digest('hex');
 async function test(name,fn){await fn();results.push({name,result:'PASS'});console.log('PASS '+name);}
@@ -20,14 +21,15 @@ async function seed(){
  for(const [table,row]of Object.entries(rows))await admin.query('insert into '+table+'('+Object.keys(row).join(',')+') values('+Object.keys(row).map((_,i)=>'$'+(i+1)).join(',')+')',Object.values(row));
  for(const owner of ['a','b']){await admin.query("insert into c3_environment(env_key,system_key,environment_name,environment_class,standing,source_authority_ref) values($1,'c3ops',$2,'fixture','fixture','fixture://authority')",['env_'+owner,'Owner '+owner]);await admin.query("insert into c3_envpac(envpac_key,env_key,version,standing,owner_subject_type,owner_subject_key,custodian_subject_type,custodian_subject_key,custody_uri,custody_provider,is_effective) values($1,$2,'1','active','individual',$3,'individual',$3,$4,'fixture',true)",['owner_'+owner,'env_'+owner,'subject_'+owner,'fixture://private/'+owner]);}
  await admin.query("insert into measures_seat_hold_capture(encounter_key,email,registry_key) values('foundation_seat_hold','synthetic@example.invalid','measures_registry')");
- await admin.query("insert into system_process_registry values('fixture_registered_process','active')");
+ await admin.query("insert into system_process_registry(process_key,process_family,title,status,source_path,authority_state,process_title,process_scope,process_status,authority_level) values('fixture_registered_process','fixture','fixture','active','fixture://source','registered','fixture','fixture','active','registered')");
  await admin.query("insert into measures_registry(registry_key,display_title,registry_family,is_active) values('fixture_from','From','spine',true),('fixture_to','To','spine',true),('fixture_encounter_registry','Encounter','spine',true)");
  await admin.query("insert into system_oar_queue(queue_key,process_key,oar_key,oar_type,queue_status,operator_key,system_key,scope_key,requested_action,execution_boundary,preflight_status,source_oar2_path,expected_oar1_path) values('fixture_queue','fixture_registered_process','fixture_oar','oar2','approved_for_execution','op044','c3ops','fixture_instance','fixture','fixture','passed','fixture://oar2','fixture://oar1')");
 }
 let before,after;
 try{
- await admin.query('drop schema public cascade;create schema public;drop role if exists anon;drop role if exists authenticated;drop role if exists service_role;drop role if exists fixture_accidental;');
- await admin.query(local('bootstrap.sql'));await seed();before=await snapshot();writeFileSync(new URL('before-matrix.json',import.meta.url),JSON.stringify(before,null,2)+'\n');
+ await admin.query('drop schema public cascade;create schema public;drop schema if exists extensions cascade;drop role if exists anon;drop role if exists authenticated;drop role if exists service_role;drop role if exists fixture_accidental;');
+ await admin.query(process.env.C3_INTEGRATED ? readFileSync(new URL('../integration/bootstrap.sql',import.meta.url),'utf8') : local('bootstrap.sql'));if(process.env.C3_INTEGRATED){const other=readdirSync(new URL('supabase/migrations/',root)).find(x=>x.includes('_r02_')&&x.endsWith('_candidate.sql'));await admin.query(readFileSync(new URL('supabase/migrations/'+other,root),'utf8'));}
+ await seed();before=await snapshot();writeFileSync(new URL('before-matrix.json',import.meta.url),JSON.stringify(before,null,2)+'\n');
  const anon=await session('anon'),auth=await session('authenticated'),service=await session();
  await test('synthetic preimage demonstrates broad ordinary-role reads before correction',async()=>{assert.equal((await anon.query('select count(*)::int n from c3ops_partner')).rows[0].n,1);assert.equal((await auth.query('select count(*)::int n from c3_envpac_effective_graph')).rows[0].n,2);});
  await admin.query(candidate);after=await snapshot();writeFileSync(new URL('after-matrix.json',import.meta.url),JSON.stringify(after,null,2)+'\n');
