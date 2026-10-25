@@ -1,0 +1,290 @@
+{
+  "execution_authority": "NONE_THIS_JSON_IS_A_FUTURE_TEST_SPECIFICATION",
+  "fixture_only": true,
+  "live_participant_data": false,
+  "requires": "new exact staging OAR2, operator/Registrar/NotChazz qualification and disposable test-role identities",
+  "fixtures": {
+    "A": {
+      "subject": "synthetic_subject_A",
+      "environment": "synthetic_env_A",
+      "envpac": "synthetic_envpac_A",
+      "current": "synthetic_current_A_v1",
+      "pac": "synthetic_pac_A"
+    },
+    "B": {
+      "subject": "synthetic_subject_B",
+      "environment": "synthetic_env_B",
+      "envpac": "synthetic_envpac_B",
+      "current": "synthetic_current_B_v1",
+      "pac": "synthetic_pac_B"
+    }
+  },
+  "runner_contract": {
+    "clock": "injected",
+    "transport": "staging or mocked per separately admitted scope",
+    "credentials": "test-role only; never service_role as participant proof",
+    "preimage": "table-scoped digest of synthetic fixtures before case",
+    "postimage": "same digest after case; exact expected changes only",
+    "receipt_fields": [
+      "case_id",
+      "execution_instance",
+      "source_sha256",
+      "role",
+      "environment_alias",
+      "grant_revision",
+      "request_digest",
+      "response_digest",
+      "response_status",
+      "reason_code",
+      "forbidden_field_matches",
+      "db_write_count",
+      "provider_call_count",
+      "before_digest",
+      "after_digest",
+      "observed_at",
+      "standing"
+    ]
+  },
+  "cases": [
+    {
+      "id": "I01",
+      "name": "A own Current",
+      "request": {
+        "method": "GET",
+        "path": "/api/c1me-current"
+      },
+      "setup": "A active owner session, one effective EnvPAC/Current",
+      "expected": "existing_c1, correct current_ref; no B fields",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I02",
+      "name": "B own Current",
+      "request": {
+        "method": "GET",
+        "path": "/api/c1me-current"
+      },
+      "setup": "B independent fixture",
+      "expected": "existing_c1 with B only",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I03",
+      "name": "A tampers env/owner in body/query",
+      "request": {
+        "method": "GET",
+        "path": "/api/c1me-current?env_key=synthetic_B"
+      },
+      "setup": "A cookie, B request claim",
+      "expected": "server-derived A or request denied; never B",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I04",
+      "name": "cross-owner PAC review",
+      "request": {
+        "method": "POST",
+        "path": "/api/my-environment-pacs"
+      },
+      "setup": "A session, B pac_key, review_snapshot",
+      "expected": "DNR/HLD; B review/approval unchanged",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I05",
+      "name": "cross-owner Canopy reference",
+      "request": {
+        "method": "POST",
+        "path": "/api/my-environment-canopy"
+      },
+      "setup": "A session, B reference_key edit/remove/open",
+      "expected": "404/denial; no B URL/body returned",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I06",
+      "name": "foreign connection message/device",
+      "request": {
+        "method": "POST",
+        "path": "/api/my-environment-connections"
+      },
+      "setup": "A session, connection with neither endpoint A",
+      "expected": "HLD/DNR; no ciphertext, device detail or new message",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I07",
+      "name": "revoked owner grant",
+      "request": {
+        "method": "GET",
+        "path": "/api/my-environment-pacs"
+      },
+      "setup": "A formerly valid session, grant revoked in disposable fixture",
+      "expected": "401/403/held; no private payload",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I08",
+      "name": "expired or revoked session",
+      "request": {
+        "method": "GET",
+        "path": "/api/my-environment"
+      },
+      "setup": "A session expiry before clock / revoked_at set",
+      "expected": "401/held; no private payload",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I09",
+      "name": "ambiguous grant/EnvPAC/Current",
+      "request": {
+        "method": "GET",
+        "path": "/api/c1me-current"
+      },
+      "setup": "two qualifying fixture rows",
+      "expected": "409 reconciliation_hold; no arbitrary first row authority",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I10",
+      "name": "scoped C2 session wrong target",
+      "request": {
+        "method": "GET",
+        "path": "qualified_scoped_test_adapter"
+      },
+      "setup": "A scoped session for X presented to Y",
+      "expected": "scoped_session_target_mismatch; no X/Y leak",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I11",
+      "name": "scoped grant mismatch",
+      "request": {
+        "method": "GET",
+        "path": "qualified_scoped_test_adapter"
+      },
+      "setup": "same env but evidence_ref, role or initiative mismatch",
+      "expected": "scoped_session_grant_mismatch/contract_mismatch",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I12",
+      "name": "stale source after approval",
+      "request": {
+        "method": "POST",
+        "path": "/api/my-environment-pacs"
+      },
+      "setup": "owner approval hash differs from source snapshot",
+      "expected": "HLD stale approval; projection denied",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I13",
+      "name": "owner authorizes exact projection",
+      "request": {
+        "method": "POST",
+        "path": "/api/my-environment-pacs"
+      },
+      "setup": "A owns exact current reviewed PAC and has qualified target",
+      "expected": "only qualified synthetic projection; receipt attributed A",
+      "allowed_staging_business_effects": 1,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I14",
+      "name": "projection revoke and cached replay",
+      "request": {
+        "method": "GET",
+        "path": "qualified_projection_adapter"
+      },
+      "setup": "grant revoked after initial permitted projection",
+      "expected": "no private replay, renewed authorization required",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I15",
+      "name": "ordinary role direct private data",
+      "request": {
+        "method": "GET",
+        "path": "staging Data API only"
+      },
+      "setup": "anon/auth role, synthetic private PAC/session/grant fixtures",
+      "expected": "no rows or permission denied; service_role results excluded",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I16",
+      "name": "owner-rights view exposure regression",
+      "request": {
+        "method": "GET",
+        "path": "staging c3_envpac_effective_graph and seat review views"
+      },
+      "setup": "anon/auth, synthetic A/B only",
+      "expected": "no unauthorized owner/custody/contact columns",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I17",
+      "name": "legacy privileged RPC bypass regression",
+      "request": {
+        "method": "POST",
+        "path": "staging legacy queue/transition RPC"
+      },
+      "setup": "ordinary role, synthetic queue only",
+      "expected": "permission denied or explicit authorized identity match required",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I18",
+      "name": "forged HMAC owner claim/replay",
+      "request": {
+        "method": "POST",
+        "path": "qualified claim exchange fixture"
+      },
+      "setup": "tampered signature/expired ticket/wrong env or reuse",
+      "expected": "refusal, no session/relationship creation",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I19",
+      "name": "GET bookkeeping",
+      "request": {
+        "method": "GET",
+        "path": "/api/my-environment-connections"
+      },
+      "setup": "A active session, no existing synthetic thread",
+      "expected": "record last_seen/thread writes; fail strict zero-write variant unless separately allowed",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    },
+    {
+      "id": "I20",
+      "name": "model/provider/send denied",
+      "request": {
+        "method": "POST",
+        "path": "qualified no-effect test adapter"
+      },
+      "setup": "any fixture request for inference/send/publish/spend",
+      "expected": "DNR_EFFECT_NOT_AUTHORIZED, network/provider spy zero",
+      "allowed_staging_business_effects": 0,
+      "status": "SPECIFIED_NOT_RUN"
+    }
+  ]
+}

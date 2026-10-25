@@ -1,0 +1,2268 @@
+[
+  {
+    "relname": "c1_environment_connection_thread",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "thread_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "env_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "owner_relationship_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "title",
+        "default": "'Connections'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "visibility",
+        "default": "'owner_private'::text",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c1_environment_connection_thr_env_key_owner_relationship_ke_key",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (env_key, owner_relationship_key)"
+      },
+      {
+        "name": "c1_environment_connection_thread_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (thread_key)"
+      },
+      {
+        "name": "c1_environment_connection_thread_standing_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((standing = ANY (ARRAY['active'::text, 'held'::text, 'closed'::text])))"
+      },
+      {
+        "name": "c1_environment_connection_thread_visibility_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((visibility = ANY (ARRAY['owner_private'::text, 'shared_bounded'::text])))"
+      }
+    ]
+  },
+  {
+    "relname": "c1_environment_connection_thread_entry",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "uuid",
+        "column": "entry_key",
+        "default": "gen_random_uuid()",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "thread_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "owner_relationship_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "entry_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "title",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "body",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "related_type",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "related_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "related_route",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c1_environment_connection_thread_entry_entry_type_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((entry_type = ANY (ARRAY['connection'::text, 'note'::text, 'introduction'::text, 'opportunity'::text, 'follow_up'::text, 'system_update'::text])))"
+      },
+      {
+        "name": "c1_environment_connection_thread_entry_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (entry_key)"
+      },
+      {
+        "name": "c1_environment_connection_thread_entry_standing_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((standing = ANY (ARRAY['active'::text, 'held'::text, 'resolved'::text, 'superseded'::text])))"
+      },
+      {
+        "name": "c1_environment_connection_thread_entry_thread_key_fkey",
+        "type": "f",
+        "parent": "c1_environment_connection_thread",
+        "definition": "FOREIGN KEY (thread_key) REFERENCES c1_environment_connection_thread(thread_key) ON DELETE CASCADE"
+      }
+    ]
+  },
+  {
+    "relname": "c3_cancom_device_key",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "device_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "relationship_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "env_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "encryption_public_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "signing_public_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "encryption_algorithm",
+        "default": "'X25519'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "signing_algorithm",
+        "default": "'Ed25519'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "key_fingerprint",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "last_seen_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "revoked_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_cancom_device_key_algorithms_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((encryption_algorithm = 'X25519'::text) AND (signing_algorithm = 'Ed25519'::text)))"
+      },
+      {
+        "name": "c3_cancom_device_key_fingerprint_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((key_fingerprint ~ '^[0-9a-f]{64}$'::text))"
+      },
+      {
+        "name": "c3_cancom_device_key_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (device_key)"
+      },
+      {
+        "name": "c3_cancom_device_key_standing_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((standing = ANY (ARRAY['active'::text, 'revoked'::text])))"
+      }
+    ]
+  },
+  {
+    "relname": "c3_current_evidence_ref",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,service_role=ar/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "current_evidence_ref_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "current_state_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "evidence_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "evidence_class",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "asset_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "content_hash",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "hash_algorithm",
+        "default": "'sha256'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "authoritative_custody_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "authoritative_custody_provider",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "authoritative_custody_identifier",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "authoritative_custody_location",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "evidence_standing",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "tokenization_standing_at_attest",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "external_anchor_ref_at_attest",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "source_execution_instance_id",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "attested_by",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "attested_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_current_evidence_anchor_object",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((external_anchor_ref_at_attest IS NULL) OR (jsonb_typeof(external_anchor_ref_at_attest) = 'object'::text)))"
+      },
+      {
+        "name": "c3_current_evidence_attested_by_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(attested_by)) > 0))"
+      },
+      {
+        "name": "c3_current_evidence_class_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(evidence_class)) > 0))"
+      },
+      {
+        "name": "c3_current_evidence_custody_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(authoritative_custody_type)) > 0))"
+      },
+      {
+        "name": "c3_current_evidence_hash_algorithm_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(hash_algorithm)) > 0))"
+      },
+      {
+        "name": "c3_current_evidence_hash_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(content_hash)) > 0))"
+      },
+      {
+        "name": "c3_current_evidence_identity_unique",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (current_state_key, evidence_key, content_hash)"
+      },
+      {
+        "name": "c3_current_evidence_key_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(evidence_key)) > 0))"
+      },
+      {
+        "name": "c3_current_evidence_metadata_object",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((jsonb_typeof(metadata) = 'object'::text))"
+      },
+      {
+        "name": "c3_current_evidence_ref_current_state_key_fkey",
+        "type": "f",
+        "parent": "c3_current_state",
+        "definition": "FOREIGN KEY (current_state_key) REFERENCES c3_current_state(current_state_key) ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_current_evidence_ref_key_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(current_evidence_ref_key)) > 0))"
+      },
+      {
+        "name": "c3_current_evidence_ref_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (current_evidence_ref_key)"
+      },
+      {
+        "name": "c3_current_evidence_standing_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(evidence_standing)) > 0))"
+      }
+    ]
+  },
+  {
+    "relname": "c3_current_state",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,service_role=r/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "current_state_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "env_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "integer",
+        "column": "state_version",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "effective_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "superseded_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "formation_authority_ref",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "advance_disposition_ref",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "predecessor_current_state_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "boolean",
+        "column": "is_current",
+        "default": "true",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "source_grammar_key",
+        "default": "'codexstone_source_spark_weave_field_form'::text",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "created_by",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "mutation_protocol",
+        "default": "'legacy_pre_hardening'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "registrar_role_key",
+        "default": null,
+        "notnull": false
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_current_state_created_by_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(created_by)) > 0))"
+      },
+      {
+        "name": "c3_current_state_env_key_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(env_key)) > 0))"
+      },
+      {
+        "name": "c3_current_state_env_version_unique",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (env_key, state_version)"
+      },
+      {
+        "name": "c3_current_state_formation_authority_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(formation_authority_ref)) > 0))"
+      },
+      {
+        "name": "c3_current_state_initial_or_successor",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((((state_version = 1) AND (predecessor_current_state_key IS NULL) AND (advance_disposition_ref IS NULL)) OR ((state_version > 1) AND (predecessor_current_state_key IS NOT NULL) AND (advance_disposition_ref IS NOT NULL) AND (length(btrim(advance_disposition_ref)) > 0))))"
+      },
+      {
+        "name": "c3_current_state_key_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(current_state_key)) > 0))"
+      },
+      {
+        "name": "c3_current_state_metadata_object",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((jsonb_typeof(metadata) = 'object'::text))"
+      },
+      {
+        "name": "c3_current_state_mutation_protocol_chk",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((mutation_protocol = ANY (ARRAY['legacy_pre_hardening'::text, 'registrar_v1'::text])))"
+      },
+      {
+        "name": "c3_current_state_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (current_state_key)"
+      },
+      {
+        "name": "c3_current_state_predecessor_current_state_key_fkey",
+        "type": "f",
+        "parent": "c3_current_state",
+        "definition": "FOREIGN KEY (predecessor_current_state_key) REFERENCES c3_current_state(current_state_key) ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_current_state_predecessor_not_self",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((predecessor_current_state_key IS NULL) OR (predecessor_current_state_key <> current_state_key)))"
+      },
+      {
+        "name": "c3_current_state_registrar_protocol_chk",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((mutation_protocol <> 'registrar_v1'::text) OR (registrar_role_key = 'c3_registrar_ci_v1'::text)))"
+      },
+      {
+        "name": "c3_current_state_registrar_role_fk",
+        "type": "f",
+        "parent": "c3_ci_role",
+        "definition": "FOREIGN KEY (registrar_role_key) REFERENCES c3_ci_role(role_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_current_state_standing_nonblank",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(standing)) > 0))"
+      },
+      {
+        "name": "c3_current_state_supersession_consistency",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((((is_current IS TRUE) AND (superseded_at IS NULL)) OR ((is_current IS FALSE) AND (superseded_at IS NOT NULL))))"
+      },
+      {
+        "name": "c3_current_state_version_positive",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((state_version >= 1))"
+      },
+      {
+        "name": "trg_c3_current_require_successor",
+        "type": "t",
+        "parent": "-",
+        "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+      }
+    ]
+  },
+  {
+    "relname": "c3_env_initiative_visibility",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "visibility_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "relationship_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "env_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "initiative_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "initiative_envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "target_environment_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "visibility_source",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "source_ref",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "visible_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "revoked_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_env_initiative_visibility_env_key_fkey",
+        "type": "f",
+        "parent": "c3_environment",
+        "definition": "FOREIGN KEY (env_key) REFERENCES c3_environment(env_key) ON UPDATE CASCADE"
+      },
+      {
+        "name": "c3_env_initiative_visibility_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE"
+      },
+      {
+        "name": "c3_env_initiative_visibility_initiative_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (initiative_envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE"
+      },
+      {
+        "name": "c3_env_initiative_visibility_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (visibility_key)"
+      },
+      {
+        "name": "c3_env_initiative_visibility_relationship_key_initiative_ke_key",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (relationship_key, initiative_key)"
+      },
+      {
+        "name": "c3_env_initiative_visibility_source_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((visibility_source = ANY (ARRAY['encounter'::text, 'invite'::text])))"
+      },
+      {
+        "name": "c3_env_initiative_visibility_standing_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((standing = ANY (ARRAY['active'::text, 'revoked'::text])))"
+      }
+    ]
+  },
+  {
+    "relname": "c3_env_native_connection",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "connection_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "pair_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "source_relationship_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "source_env_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "source_envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "target_relationship_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "target_env_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "target_envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "uuid",
+        "column": "formed_from_share_reference",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "formed_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "revoked_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_env_native_connection_distinct_relations_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((source_relationship_key <> target_relationship_key))"
+      },
+      {
+        "name": "c3_env_native_connection_formed_from_share_reference_fkey",
+        "type": "f",
+        "parent": "c3_env_share_reference",
+        "definition": "FOREIGN KEY (formed_from_share_reference) REFERENCES c3_env_share_reference(share_reference) ON UPDATE CASCADE"
+      },
+      {
+        "name": "c3_env_native_connection_pair_key_key",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (pair_key)"
+      },
+      {
+        "name": "c3_env_native_connection_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (connection_key)"
+      },
+      {
+        "name": "c3_env_native_connection_source_env_key_fkey",
+        "type": "f",
+        "parent": "c3_environment",
+        "definition": "FOREIGN KEY (source_env_key) REFERENCES c3_environment(env_key) ON UPDATE CASCADE"
+      },
+      {
+        "name": "c3_env_native_connection_source_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (source_envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE"
+      },
+      {
+        "name": "c3_env_native_connection_standing_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((standing = ANY (ARRAY['active'::text, 'revoked'::text])))"
+      },
+      {
+        "name": "c3_env_native_connection_target_env_key_fkey",
+        "type": "f",
+        "parent": "c3_environment",
+        "definition": "FOREIGN KEY (target_env_key) REFERENCES c3_environment(env_key) ON UPDATE CASCADE"
+      },
+      {
+        "name": "c3_env_native_connection_target_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (target_envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE"
+      }
+    ]
+  },
+  {
+    "relname": "c3_env_runtime_session",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "uuid",
+        "column": "session_key",
+        "default": "gen_random_uuid()",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "token_sha256",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "env_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "subject_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "subject_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "last_seen_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "expires_at",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "revoked_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "evidence_ref",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_env_runtime_session_env_key_fkey",
+        "type": "f",
+        "parent": "c3_environment",
+        "definition": "FOREIGN KEY (env_key) REFERENCES c3_environment(env_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_env_runtime_session_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_env_runtime_session_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (session_key)"
+      },
+      {
+        "name": "c3_env_runtime_session_token_sha256_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((token_sha256 ~ '^[a-f0-9]{64}$'::text))"
+      },
+      {
+        "name": "c3_env_runtime_session_token_sha256_key",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (token_sha256)"
+      }
+    ]
+  },
+  {
+    "relname": "c3_envpac_access_grant",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "grant_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "subject_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "subject_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "relation_role",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "scope",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "granted_by_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "granted_by_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "granted_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "expires_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "revoked_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "evidence_ref",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_envpac_access_grant_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE ON DELETE CASCADE"
+      },
+      {
+        "name": "c3_envpac_access_grant_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (grant_key)"
+      },
+      {
+        "name": "c3_envpac_access_grant_relation_role_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((relation_role = ANY (ARRAY['owner'::text, 'custodian'::text, 'delegate'::text, 'consumer'::text])))"
+      },
+      {
+        "name": "c3_envpac_access_grant_subject_type_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((subject_type = ANY (ARRAY['individual'::text, 'entity'::text, 'system'::text, 'environment'::text, 'service'::text])))"
+      }
+    ]
+  },
+  {
+    "relname": "c3_envpac_canopy_event",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "uuid",
+        "column": "event_key",
+        "default": "gen_random_uuid()",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "uuid",
+        "column": "reference_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "owner_subject_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "event_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "event_data",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_envpac_canopy_event_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key)"
+      },
+      {
+        "name": "c3_envpac_canopy_event_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (event_key)"
+      },
+      {
+        "name": "c3_envpac_canopy_event_reference_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac_canopy_reference",
+        "definition": "FOREIGN KEY (reference_key) REFERENCES c3_envpac_canopy_reference(reference_key)"
+      },
+      {
+        "name": "c3_envpac_canopy_event_type_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((event_type = ANY (ARRAY['reference_added'::text, 'reference_edited'::text, 'reference_removed'::text, 'open_requested'::text, 'c3_link_copied'::text, 'connection_invite_prepared'::text])))"
+      }
+    ]
+  },
+  {
+    "relname": "c3_envpac_canopy_reference",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "uuid",
+        "column": "reference_key",
+        "default": "gen_random_uuid()",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "owner_subject_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "surface_label",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "display_label",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "external_url",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "handle",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "integer",
+        "column": "sort_order",
+        "default": "0",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "reference_state",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "removed_at",
+        "default": null,
+        "notnull": false
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_envpac_canopy_reference_display_label_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((display_label IS NULL) OR (char_length(display_label) <= 120)))"
+      },
+      {
+        "name": "c3_envpac_canopy_reference_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key)"
+      },
+      {
+        "name": "c3_envpac_canopy_reference_handle_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((handle IS NULL) OR (char_length(handle) <= 160)))"
+      },
+      {
+        "name": "c3_envpac_canopy_reference_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (reference_key)"
+      },
+      {
+        "name": "c3_envpac_canopy_reference_sort_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((sort_order >= 0) AND (sort_order <= 9999)))"
+      },
+      {
+        "name": "c3_envpac_canopy_reference_state_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((reference_state = ANY (ARRAY['active'::text, 'removed'::text])))"
+      },
+      {
+        "name": "c3_envpac_canopy_reference_surface_label_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((char_length(TRIM(BOTH FROM surface_label)) >= 1) AND (char_length(TRIM(BOTH FROM surface_label)) <= 80)))"
+      },
+      {
+        "name": "c3_envpac_canopy_reference_url_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((((char_length(external_url) >= 1) AND (char_length(external_url) <= 2048)) AND (external_url ~* '^(https?://|mailto:)'::text)))"
+      }
+    ]
+  },
+  {
+    "relname": "c3_envpac_runtime_primitive",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "binding_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "primitive_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "primitive_class",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "display_label",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "renderer_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "runtime_endpoint",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "integer",
+        "column": "sort_order",
+        "default": "0",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "config",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_envpac_runtime_primitive_class_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(primitive_class)) > 0))"
+      },
+      {
+        "name": "c3_envpac_runtime_primitive_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE ON DELETE CASCADE"
+      },
+      {
+        "name": "c3_envpac_runtime_primitive_envpac_key_primitive_key_key",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (envpac_key, primitive_key)"
+      },
+      {
+        "name": "c3_envpac_runtime_primitive_key_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(primitive_key)) > 0))"
+      },
+      {
+        "name": "c3_envpac_runtime_primitive_label_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(display_label)) > 0))"
+      },
+      {
+        "name": "c3_envpac_runtime_primitive_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (binding_key)"
+      },
+      {
+        "name": "c3_envpac_runtime_primitive_renderer_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(renderer_key)) > 0))"
+      },
+      {
+        "name": "c3_envpac_runtime_primitive_sort_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((sort_order >= 0) AND (sort_order <= 9999)))"
+      },
+      {
+        "name": "c3_envpac_runtime_primitive_standing_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((standing = ANY (ARRAY['active'::text, 'held'::text, 'retired'::text])))"
+      }
+    ]
+  },
+  {
+    "relname": "c3_pac",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "pac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "envpac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "pac_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "version",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "custody_uri",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "content_sha256",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "source_authority",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "boolean",
+        "column": "is_effective",
+        "default": "true",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "contract_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "architecture_version",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "custodian_subject_type",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "custodian_subject_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "custody_provider",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "authority_effect",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "release_state",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "execution_authority_state",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "formation_state",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "effective_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "supersedes_pac_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "superseded_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "boolean",
+        "column": "return_evidence_required",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "owner_subject_type",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "owner_subject_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "owner_environment_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "registration_protocol",
+        "default": "'legacy_pre_hardening'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "registration_sha256",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "boundary_evaluation_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "registered_at",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "registrar_role_call_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "schema_key",
+        "default": null,
+        "notnull": false
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_pac_boundary_evaluation_fk",
+        "type": "f",
+        "parent": "c3_pac_boundary_evaluation",
+        "definition": "FOREIGN KEY (boundary_evaluation_key) REFERENCES c3_pac_boundary_evaluation(evaluation_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_pac_contract_key_fkey",
+        "type": "f",
+        "parent": "c3_pac_type_contract",
+        "definition": "FOREIGN KEY (contract_key) REFERENCES c3_pac_type_contract(contract_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_pac_custodian_subject_type_v1_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((custodian_subject_type IS NULL) OR (custodian_subject_type = ANY (ARRAY['individual'::text, 'entity'::text, 'system'::text, 'environment'::text, 'service'::text]))))"
+      },
+      {
+        "name": "c3_pac_envpac_key_fkey",
+        "type": "f",
+        "parent": "c3_envpac",
+        "definition": "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_pac_envpac_key_pac_key_version_key",
+        "type": "u",
+        "parent": "-",
+        "definition": "UNIQUE (envpac_key, pac_key, version)"
+      },
+      {
+        "name": "c3_pac_owner_subject_type_hardened_chk",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((owner_subject_type IS NULL) OR (owner_subject_type = ANY (ARRAY['individual'::text, 'institution'::text, 'system'::text, 'environment'::text, 'service'::text]))))"
+      },
+      {
+        "name": "c3_pac_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (pac_key)"
+      },
+      {
+        "name": "c3_pac_registrar_role_call_fk",
+        "type": "f",
+        "parent": "c3_ci_role_call",
+        "definition": "FOREIGN KEY (registrar_role_call_key) REFERENCES c3_ci_role_call(role_call_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_pac_registrar_v1_required_fields_chk",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((registration_protocol <> 'registrar_v1'::text) OR ((schema_key IS NOT NULL) AND (owner_subject_type IS NOT NULL) AND (owner_subject_key IS NOT NULL) AND (registration_sha256 IS NOT NULL) AND (boundary_evaluation_key IS NOT NULL) AND (registered_at IS NOT NULL) AND (registrar_role_call_key IS NOT NULL) AND ((owner_subject_type <> 'institution'::text) OR (owner_environment_key IS NOT NULL)))))"
+      },
+      {
+        "name": "c3_pac_registration_protocol_chk",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((registration_protocol = ANY (ARRAY['legacy_pre_hardening'::text, 'registrar_v1'::text])))"
+      },
+      {
+        "name": "c3_pac_registration_sha_chk",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((registration_sha256 IS NULL) OR (registration_sha256 ~ '^[0-9a-f]{64}$'::text)))"
+      },
+      {
+        "name": "c3_pac_schema_key_fk",
+        "type": "f",
+        "parent": "c3_pac_schema",
+        "definition": "FOREIGN KEY (schema_key) REFERENCES c3_pac_schema(schema_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      {
+        "name": "c3_pac_supersedes_not_self_v1_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((supersedes_pac_key IS NULL) OR (supersedes_pac_key <> pac_key)))"
+      },
+      {
+        "name": "c3_pac_supersedes_pac_key_fkey",
+        "type": "f",
+        "parent": "c3_pac",
+        "definition": "FOREIGN KEY (supersedes_pac_key) REFERENCES c3_pac(pac_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+      },
+      {
+        "name": "trg_c3_pac_free_completeness_guard_v1",
+        "type": "t",
+        "parent": "-",
+        "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "name": "trg_c3_pac_registrar_v1_completeness_guard",
+        "type": "t",
+        "parent": "-",
+        "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+      }
+    ]
+  },
+  {
+    "relname": "c3_profile_pac",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "pac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "profile_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "subject_type",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "subject_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "profile_class",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "display_label",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "visibility_scope",
+        "default": "'private'::text",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_profile_pac_display_label_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(display_label)) > 0))"
+      },
+      {
+        "name": "c3_profile_pac_pac_key_fkey",
+        "type": "f",
+        "parent": "c3_pac",
+        "definition": "FOREIGN KEY (pac_key) REFERENCES c3_pac(pac_key) ON UPDATE CASCADE ON DELETE CASCADE"
+      },
+      {
+        "name": "c3_profile_pac_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (pac_key)"
+      },
+      {
+        "name": "c3_profile_pac_profile_class_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((profile_class = ANY (ARRAY['individual'::text, 'organization'::text, 'initiative'::text, 'project'::text, 'place'::text])))"
+      },
+      {
+        "name": "c3_profile_pac_subject_key_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(subject_key)) > 0))"
+      },
+      {
+        "name": "c3_profile_pac_subject_type_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((length(btrim(subject_type)) > 0))"
+      },
+      {
+        "name": "c3_profile_pac_visibility_scope_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((visibility_scope = ANY (ARRAY['private'::text, 'environment'::text, 'relational'::text, 'public'::text])))"
+      }
+    ]
+  },
+  {
+    "relname": "crs_relationship",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "relationship_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "primary_email",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "display_name",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "organization",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "relationship_standing",
+        "default": "'active_test'::text",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "source_encounter",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "boolean",
+        "column": "is_test_relationship",
+        "default": "false",
+        "notnull": true
+      },
+      {
+        "type": "boolean",
+        "column": "is_active",
+        "default": "true",
+        "notnull": true
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "crs_relationship_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (relationship_key)"
+      }
+    ]
+  },
+  {
+    "relname": "c3_pac_member",
+    "relrowsecurity": true,
+    "relforcerowsecurity": false,
+    "relacl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+    "columns": [
+      {
+        "type": "text",
+        "column": "member_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "pac_key",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "member_kind",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "member_role",
+        "default": null,
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "source_object_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "custody_provider",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "custody_identifier",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "custody_location",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "runtime_uri",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "runtime_binding_key",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "integrity_algorithm",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "integrity_value",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "version",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "text",
+        "column": "standing",
+        "default": "'active'::text",
+        "notnull": true
+      },
+      {
+        "type": "boolean",
+        "column": "required",
+        "default": "false",
+        "notnull": true
+      },
+      {
+        "type": "text",
+        "column": "release_scope",
+        "default": "'registered'::text",
+        "notnull": true
+      },
+      {
+        "type": "integer",
+        "column": "ordinal",
+        "default": null,
+        "notnull": false
+      },
+      {
+        "type": "jsonb",
+        "column": "metadata",
+        "default": "'{}'::jsonb",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "created_at",
+        "default": "now()",
+        "notnull": true
+      },
+      {
+        "type": "timestamp with time zone",
+        "column": "updated_at",
+        "default": "now()",
+        "notnull": true
+      }
+    ],
+    "constraints": [
+      {
+        "name": "c3_pac_member_custody_shape_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((((custody_identifier IS NULL) AND (custody_location IS NULL)) OR (custody_provider IS NOT NULL)))"
+      },
+      {
+        "name": "c3_pac_member_integrity_pair_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((((integrity_algorithm IS NULL) AND (integrity_value IS NULL)) OR ((integrity_algorithm IS NOT NULL) AND (integrity_value IS NOT NULL))))"
+      },
+      {
+        "name": "c3_pac_member_member_kind_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK ((member_kind = ANY (ARRAY['asset'::text, 'record'::text, 'content'::text, 'media'::text, 'derivative'::text, 'route'::text, 'relation'::text, 'destination'::text, 'evidence'::text, 'pac'::text])))"
+      },
+      {
+        "name": "c3_pac_member_ordinal_check",
+        "type": "c",
+        "parent": "-",
+        "definition": "CHECK (((ordinal IS NULL) OR (ordinal > 0)))"
+      },
+      {
+        "name": "c3_pac_member_pac_key_fkey",
+        "type": "f",
+        "parent": "c3_pac",
+        "definition": "FOREIGN KEY (pac_key) REFERENCES c3_pac(pac_key) ON UPDATE CASCADE ON DELETE CASCADE"
+      },
+      {
+        "name": "c3_pac_member_pkey",
+        "type": "p",
+        "parent": "-",
+        "definition": "PRIMARY KEY (member_key)"
+      },
+      {
+        "name": "c3_pac_member_runtime_binding_key_fkey",
+        "type": "f",
+        "parent": "c3_pac_runtime_binding",
+        "definition": "FOREIGN KEY (runtime_binding_key) REFERENCES c3_pac_runtime_binding(binding_key) ON UPDATE CASCADE ON DELETE SET NULL"
+      }
+    ]
+  }
+]

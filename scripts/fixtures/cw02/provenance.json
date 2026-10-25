@@ -1,0 +1,90 @@
+{
+  "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+  "package_type": "historically authorized RPC execution package, NOT migration ledger entry",
+  "historical_date": "UNVERIFIED",
+  "sources": [
+    {
+      "path": "docs/oar/c3_field/oar2_concordance_authority_migration_execution_authorization_v1.meta.md",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "blob": "79d1b362b1c2b42c3f2df8b4f25873b081258c29",
+      "bytes": 3863,
+      "sha256": "d7744477105bdbb42ed772f5176c1b409c379f486c1a791e60b8cb7a48797778",
+      "local": "origin/oar2_concordance_authority_migration_execution_authorization_v1.meta.md"
+    },
+    {
+      "path": "docs/oar/c3_field/oar1_concordance_authority_migration_execution_authorization_v1.meta.md",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "blob": "319502de85588ff1c4fe70fa3a483911445369e3",
+      "bytes": 6162,
+      "sha256": "eb1e60c5d5e36c2f971e35ba47206ad7ba1b45d64f79786450770de38175f048",
+      "local": "origin/oar1_concordance_authority_migration_execution_authorization_v1.meta.md"
+    },
+    {
+      "path": "docs/oar/c3_field/concordance_authority_execution_package_migration_v1.sql",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "blob": "5a5ccfeda5f026db9cf0a078afce7117090b8bce",
+      "bytes": 12201,
+      "sha256": "67ac59a6eb10e3e3cda660e43ade0f34e31edc31a4b3366cc6b3c7ed23ce90e4",
+      "local": "origin/concordance_authority_execution_package_migration_v1.sql"
+    },
+    {
+      "path": "docs/oar/c3_field/concordance_authority_execution_package_preflight_v1.sql",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "blob": "19960e6b8545f5ba92fa3c4af675c58295759427",
+      "bytes": 1107,
+      "sha256": "214f09479e9f26787dd25a3cf58c0425010ed43083836811c68bb971cf933f72",
+      "local": "origin/concordance_authority_execution_package_preflight_v1.sql"
+    },
+    {
+      "path": "docs/oar/c3_field/concordance_authority_execution_package_seed_concordance_v1_seating.sql",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "blob": "165190b65b20cdca2fca4b0e38b2044208ff5524",
+      "bytes": 9462,
+      "sha256": "5df88cbbdd1ce43bf0bf4df554f56264d9d1213e322a8254f4c29d41fc576718",
+      "local": "origin/concordance_authority_execution_package_seed_concordance_v1_seating.sql"
+    },
+    {
+      "path": "docs/oar/c3_field/concordance_authority_execution_package_post_validation_v1.sql",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "blob": "39c541977c4b568675f29f27917829146090f05f",
+      "bytes": 1795,
+      "sha256": "9a667124675b76f5901d7f5e00aad155f61d9095df8cc50c2fd45828474edb32",
+      "local": "origin/concordance_authority_execution_package_post_validation_v1.sql"
+    },
+    {
+      "path": "docs/oar/c3_field/concordance_authority_execution_package_rollback_recovery_v1.sql",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "blob": "4450744c6e414f7223587f1c4b74bd24c7651247",
+      "bytes": 1226,
+      "sha256": "5e3559b2c568f24ae033f09d21b367b1af2b2d2afaa72138ebedb4a62c94f9b6",
+      "local": "origin/concordance_authority_execution_package_rollback_recovery_v1.sql"
+    },
+    {
+      "path": "docs/oar/c3_field/concordance_authority_execution_package_order_notes_v1.md",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "blob": "5e8f6f75046b0bc5d1a1ebcdfe04d5c4341d7df2",
+      "bytes": 801,
+      "sha256": "e3eb325fe609dee83df86f87b368f94950901021b6937c663050796eb64c39f0",
+      "local": "origin/concordance_authority_execution_package_order_notes_v1.md"
+    },
+    {
+      "path": "supabase/migrations/202605140001_c3_field_oar_spine_persistence.sql",
+      "commit": "729012c179d73682cac7e95c94c4d2607939dbe8",
+      "sha256": "e22d4585336014f23a26a33f6f47af81a675b37416fbdd961be9da522ca742b1",
+      "selection": "exact c3_oar_seeded_reference CREATE TABLE statement",
+      "selected_sha256": "cc4e741ae500c98b16d872b4915fca3eaf32e189ccfa819763d0873435a763b6"
+    },
+    {
+      "path": "scripts/fixtures/r01/bootstrap.sql",
+      "commit": "1dfcbdd3fb6f6ec76c1f06dd60592da8f570e260",
+      "sha256": "cbe148e166f12a2887eeae400450b95ec0d417a66b3fd92d36c2c92363706c85",
+      "selection": "exact measures_registry captured column-shape CREATE TABLE statement; no Registry data or completeness claimed",
+      "selected_sha256": "82bff9e0c6b6f529ed48f979e3dbb985dd88c24e832f06fdf05a5aa3e026a2cb"
+    }
+  ],
+  "w02_spec": {
+    "path": "w02/isolation-test-spec.json",
+    "bytes": 9273,
+    "sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6"
+  }
+}

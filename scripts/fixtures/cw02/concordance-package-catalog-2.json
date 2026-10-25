@@ -1,0 +1,1200 @@
+{
+  "relations": [
+    {
+      "relname": "concordance_document",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_document_pkey",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_relation",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_relation_pkey",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_relation_scope_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_relation_source_ref_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_relation_target_ref_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_relation_unique",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_relation_version_key_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_term",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_term_active_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_term_pkey",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_term_version_key_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_term_version_label_unique",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_version",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_version_active_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_version_document_key_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_version_document_label_unique",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_version_one_active_per_document_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "concordance_version_pkey",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "seeded_source_snapshot",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "seeded_source_snapshot_pkey",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "seeded_source_snapshot_version_hash_unique",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    },
+    {
+      "relname": "seeded_source_snapshot_version_key_idx",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "relacl": null
+    }
+  ],
+  "columns": [
+    {
+      "table_name": "c3_oar_seeded_reference",
+      "column_name": "seeded_reference_key",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "c3_oar_seeded_reference",
+      "column_name": "seeded_reference_type",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "c3_oar_seeded_reference",
+      "column_name": "seeded_reference_path",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "c3_oar_seeded_reference",
+      "column_name": "seeded_status",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "c3_oar_seeded_reference",
+      "column_name": "created_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "c3_oar_seeded_reference",
+      "column_name": "updated_at",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "document_key",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "title",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "document_scope",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "authority_standing",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "visibility_standing",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": "'internal'::text"
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "native_order",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "source_alignment",
+      "ordinal_position": 7,
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'[]'::jsonb"
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "metadata",
+      "ordinal_position": 8,
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'{}'::jsonb"
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "created_at",
+      "ordinal_position": 9,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "concordance_document",
+      "column_name": "updated_at",
+      "ordinal_position": 10,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "relation_key",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "version_key",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "source_ref",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "target_ref",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "relation_scope",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": "'term'::text"
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "relation_type",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "relation_label",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "relation_standing",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "visibility_standing",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": "'internal'::text"
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "source_oar2_path",
+      "ordinal_position": 10,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "metadata",
+      "ordinal_position": 11,
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'{}'::jsonb"
+    },
+    {
+      "table_name": "concordance_relation",
+      "column_name": "created_at",
+      "ordinal_position": 12,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "term_key",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "version_key",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "term_label",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "canonical_definition",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "axis",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "circuit",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "role",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "resolves_to",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "term_standing",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "visibility_standing",
+      "ordinal_position": 10,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": "'internal'::text"
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "source_excerpt",
+      "ordinal_position": 11,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "metadata",
+      "ordinal_position": 12,
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'{}'::jsonb"
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "created_at",
+      "ordinal_position": 13,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "concordance_term",
+      "column_name": "updated_at",
+      "ordinal_position": 14,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "version_key",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "document_key",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "version_label",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "version_standing",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "visibility_standing",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": "'internal'::text"
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "recognized_at",
+      "ordinal_position": 6,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "source_oar2_path",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "closeout_oar1_path",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "metadata",
+      "ordinal_position": 9,
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'{}'::jsonb"
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "created_at",
+      "ordinal_position": 10,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "concordance_version",
+      "column_name": "updated_at",
+      "ordinal_position": 11,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "id",
+      "ordinal_position": 1,
+      "data_type": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "registry_key",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "display_title",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "registry_family",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "encounter_type",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "material_family",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "sequence_order",
+      "ordinal_position": 7,
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "release_state",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": "'sealed'::text"
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "access_state",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": "'gated'::text"
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "parent_registry_id",
+      "ordinal_position": 10,
+      "data_type": "uuid",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "depends_on_registry_id",
+      "ordinal_position": 11,
+      "data_type": "uuid",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "envelope_id",
+      "ordinal_position": 12,
+      "data_type": "uuid",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "phase_label",
+      "ordinal_position": 13,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "is_active",
+      "ordinal_position": 14,
+      "data_type": "boolean",
+      "is_nullable": "NO",
+      "column_default": "true"
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "metadata",
+      "ordinal_position": 15,
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'{}'::jsonb"
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "created_at",
+      "ordinal_position": 16,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "measures_registry",
+      "column_name": "updated_at",
+      "ordinal_position": 17,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "snapshot_key",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "version_key",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "snapshot_type",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "local_source_path",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "bucket_name",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "bucket_path",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "source_sha256",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "byte_size",
+      "ordinal_position": 8,
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "verification_standing",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "visibility_standing",
+      "ordinal_position": 10,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": "'internal'::text"
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "verified_at",
+      "ordinal_position": 11,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "source_oar2_path",
+      "ordinal_position": 12,
+      "data_type": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "closeout_oar1_path",
+      "ordinal_position": 13,
+      "data_type": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "metadata",
+      "ordinal_position": 14,
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'{}'::jsonb"
+    },
+    {
+      "table_name": "seeded_source_snapshot",
+      "column_name": "created_at",
+      "ordinal_position": 15,
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    }
+  ],
+  "constraints": [
+    {
+      "relation": "c3_oar_seeded_reference",
+      "conname": "c3_oar_seeded_reference_pkey",
+      "definition": "PRIMARY KEY (seeded_reference_key)"
+    },
+    {
+      "relation": "c3_oar_seeded_reference",
+      "conname": "c3_oar_seeded_reference_seeded_reference_type_check",
+      "definition": "CHECK ((seeded_reference_type = ANY (ARRAY['infrastructure'::text, 'role'::text, 'process'::text, 'validation'::text])))"
+    },
+    {
+      "relation": "c3_oar_seeded_reference",
+      "conname": "c3_oar_seeded_reference_seeded_status_check",
+      "definition": "CHECK ((seeded_status = ANY (ARRAY['seeded'::text, 'active_infrastructure_reference'::text, 'active_process_reference'::text])))"
+    },
+    {
+      "relation": "concordance_document",
+      "conname": "concordance_document_authority_standing_check",
+      "definition": "CHECK ((authority_standing = ANY (ARRAY['proposed'::text, 'active'::text, 'superseded'::text, 'blocked'::text])))"
+    },
+    {
+      "relation": "concordance_document",
+      "conname": "concordance_document_pkey",
+      "definition": "PRIMARY KEY (document_key)"
+    },
+    {
+      "relation": "concordance_document",
+      "conname": "concordance_document_visibility_standing_check",
+      "definition": "CHECK ((visibility_standing = ANY (ARRAY['public'::text, 'internal'::text, 'protected'::text, 'restricted'::text])))"
+    },
+    {
+      "relation": "concordance_relation",
+      "conname": "concordance_relation_pkey",
+      "definition": "PRIMARY KEY (relation_key)"
+    },
+    {
+      "relation": "concordance_relation",
+      "conname": "concordance_relation_relation_scope_check",
+      "definition": "CHECK ((relation_scope = ANY (ARRAY['term'::text, 'document'::text, 'version'::text, 'cross_version'::text, 'branch'::text, 'system'::text])))"
+    },
+    {
+      "relation": "concordance_relation",
+      "conname": "concordance_relation_relation_standing_check",
+      "definition": "CHECK ((relation_standing = ANY (ARRAY['active'::text, 'superseded'::text, 'blocked'::text])))"
+    },
+    {
+      "relation": "concordance_relation",
+      "conname": "concordance_relation_relation_type_check",
+      "definition": "CHECK ((relation_type = ANY (ARRAY['axis'::text, 'circuit'::text, 'role'::text, 'resolves_to'::text, 'source_alignment'::text, 'native_order'::text, 'supersedes'::text, 'aliases'::text, 'related_to'::text])))"
+    },
+    {
+      "relation": "concordance_relation",
+      "conname": "concordance_relation_unique",
+      "definition": "UNIQUE (version_key, source_ref, target_ref, relation_type)"
+    },
+    {
+      "relation": "concordance_relation",
+      "conname": "concordance_relation_version_key_fkey",
+      "definition": "FOREIGN KEY (version_key) REFERENCES concordance_version(version_key)"
+    },
+    {
+      "relation": "concordance_relation",
+      "conname": "concordance_relation_visibility_standing_check",
+      "definition": "CHECK ((visibility_standing = ANY (ARRAY['public'::text, 'internal'::text, 'protected'::text, 'restricted'::text])))"
+    },
+    {
+      "relation": "concordance_term",
+      "conname": "concordance_term_pkey",
+      "definition": "PRIMARY KEY (term_key)"
+    },
+    {
+      "relation": "concordance_term",
+      "conname": "concordance_term_term_standing_check",
+      "definition": "CHECK ((term_standing = ANY (ARRAY['proposed'::text, 'active'::text, 'superseded'::text, 'alias'::text, 'blocked'::text])))"
+    },
+    {
+      "relation": "concordance_term",
+      "conname": "concordance_term_version_key_fkey",
+      "definition": "FOREIGN KEY (version_key) REFERENCES concordance_version(version_key)"
+    },
+    {
+      "relation": "concordance_term",
+      "conname": "concordance_term_version_label_unique",
+      "definition": "UNIQUE (version_key, term_label)"
+    },
+    {
+      "relation": "concordance_term",
+      "conname": "concordance_term_visibility_standing_check",
+      "definition": "CHECK ((visibility_standing = ANY (ARRAY['public'::text, 'internal'::text, 'protected'::text, 'restricted'::text])))"
+    },
+    {
+      "relation": "concordance_version",
+      "conname": "concordance_version_document_key_fkey",
+      "definition": "FOREIGN KEY (document_key) REFERENCES concordance_document(document_key)"
+    },
+    {
+      "relation": "concordance_version",
+      "conname": "concordance_version_document_label_unique",
+      "definition": "UNIQUE (document_key, version_label)"
+    },
+    {
+      "relation": "concordance_version",
+      "conname": "concordance_version_pkey",
+      "definition": "PRIMARY KEY (version_key)"
+    },
+    {
+      "relation": "concordance_version",
+      "conname": "concordance_version_version_standing_check",
+      "definition": "CHECK ((version_standing = ANY (ARRAY['draft'::text, 'active'::text, 'superseded'::text, 'correction_required'::text, 'blocked'::text])))"
+    },
+    {
+      "relation": "concordance_version",
+      "conname": "concordance_version_visibility_standing_check",
+      "definition": "CHECK ((visibility_standing = ANY (ARRAY['public'::text, 'internal'::text, 'protected'::text, 'restricted'::text])))"
+    },
+    {
+      "relation": "seeded_source_snapshot",
+      "conname": "seeded_source_snapshot_byte_size_check",
+      "definition": "CHECK ((byte_size >= 0))"
+    },
+    {
+      "relation": "seeded_source_snapshot",
+      "conname": "seeded_source_snapshot_pkey",
+      "definition": "PRIMARY KEY (snapshot_key)"
+    },
+    {
+      "relation": "seeded_source_snapshot",
+      "conname": "seeded_source_snapshot_snapshot_type_check",
+      "definition": "CHECK ((snapshot_type = ANY (ARRAY['local_source'::text, 'bucket_snapshot'::text, 'export'::text, 'recovery_artifact'::text])))"
+    },
+    {
+      "relation": "seeded_source_snapshot",
+      "conname": "seeded_source_snapshot_verification_standing_check",
+      "definition": "CHECK ((verification_standing = ANY (ARRAY['verified'::text, 'metadata_verified'::text, 'hash_readback_unresolved'::text, 'failed'::text, 'superseded'::text])))"
+    },
+    {
+      "relation": "seeded_source_snapshot",
+      "conname": "seeded_source_snapshot_version_hash_unique",
+      "definition": "UNIQUE (version_key, source_sha256)"
+    },
+    {
+      "relation": "seeded_source_snapshot",
+      "conname": "seeded_source_snapshot_version_key_fkey",
+      "definition": "FOREIGN KEY (version_key) REFERENCES concordance_version(version_key)"
+    },
+    {
+      "relation": "seeded_source_snapshot",
+      "conname": "seeded_source_snapshot_visibility_standing_check",
+      "definition": "CHECK ((visibility_standing = ANY (ARRAY['public'::text, 'internal'::text, 'protected'::text, 'restricted'::text])))"
+    }
+  ],
+  "indexes": [
+    {
+      "tablename": "c3_oar_seeded_reference",
+      "indexname": "c3_oar_seeded_reference_pkey",
+      "indexdef": "CREATE UNIQUE INDEX c3_oar_seeded_reference_pkey ON public.c3_oar_seeded_reference USING btree (seeded_reference_key)"
+    },
+    {
+      "tablename": "concordance_document",
+      "indexname": "concordance_document_pkey",
+      "indexdef": "CREATE UNIQUE INDEX concordance_document_pkey ON public.concordance_document USING btree (document_key)"
+    },
+    {
+      "tablename": "concordance_relation",
+      "indexname": "concordance_relation_pkey",
+      "indexdef": "CREATE UNIQUE INDEX concordance_relation_pkey ON public.concordance_relation USING btree (relation_key)"
+    },
+    {
+      "tablename": "concordance_relation",
+      "indexname": "concordance_relation_scope_idx",
+      "indexdef": "CREATE INDEX concordance_relation_scope_idx ON public.concordance_relation USING btree (version_key, relation_scope)"
+    },
+    {
+      "tablename": "concordance_relation",
+      "indexname": "concordance_relation_source_ref_idx",
+      "indexdef": "CREATE INDEX concordance_relation_source_ref_idx ON public.concordance_relation USING btree (source_ref)"
+    },
+    {
+      "tablename": "concordance_relation",
+      "indexname": "concordance_relation_target_ref_idx",
+      "indexdef": "CREATE INDEX concordance_relation_target_ref_idx ON public.concordance_relation USING btree (target_ref)"
+    },
+    {
+      "tablename": "concordance_relation",
+      "indexname": "concordance_relation_unique",
+      "indexdef": "CREATE UNIQUE INDEX concordance_relation_unique ON public.concordance_relation USING btree (version_key, source_ref, target_ref, relation_type)"
+    },
+    {
+      "tablename": "concordance_relation",
+      "indexname": "concordance_relation_version_key_idx",
+      "indexdef": "CREATE INDEX concordance_relation_version_key_idx ON public.concordance_relation USING btree (version_key)"
+    },
+    {
+      "tablename": "concordance_term",
+      "indexname": "concordance_term_active_idx",
+      "indexdef": "CREATE INDEX concordance_term_active_idx ON public.concordance_term USING btree (version_key, term_standing) WHERE (term_standing = 'active'::text)"
+    },
+    {
+      "tablename": "concordance_term",
+      "indexname": "concordance_term_pkey",
+      "indexdef": "CREATE UNIQUE INDEX concordance_term_pkey ON public.concordance_term USING btree (term_key)"
+    },
+    {
+      "tablename": "concordance_term",
+      "indexname": "concordance_term_version_key_idx",
+      "indexdef": "CREATE INDEX concordance_term_version_key_idx ON public.concordance_term USING btree (version_key)"
+    },
+    {
+      "tablename": "concordance_term",
+      "indexname": "concordance_term_version_label_unique",
+      "indexdef": "CREATE UNIQUE INDEX concordance_term_version_label_unique ON public.concordance_term USING btree (version_key, term_label)"
+    },
+    {
+      "tablename": "concordance_version",
+      "indexname": "concordance_version_active_idx",
+      "indexdef": "CREATE INDEX concordance_version_active_idx ON public.concordance_version USING btree (document_key, version_standing) WHERE (version_standing = 'active'::text)"
+    },
+    {
+      "tablename": "concordance_version",
+      "indexname": "concordance_version_document_key_idx",
+      "indexdef": "CREATE INDEX concordance_version_document_key_idx ON public.concordance_version USING btree (document_key)"
+    },
+    {
+      "tablename": "concordance_version",
+      "indexname": "concordance_version_document_label_unique",
+      "indexdef": "CREATE UNIQUE INDEX concordance_version_document_label_unique ON public.concordance_version USING btree (document_key, version_label)"
+    },
+    {
+      "tablename": "concordance_version",
+      "indexname": "concordance_version_one_active_per_document_idx",
+      "indexdef": "CREATE UNIQUE INDEX concordance_version_one_active_per_document_idx ON public.concordance_version USING btree (document_key) WHERE (version_standing = 'active'::text)"
+    },
+    {
+      "tablename": "concordance_version",
+      "indexname": "concordance_version_pkey",
+      "indexdef": "CREATE UNIQUE INDEX concordance_version_pkey ON public.concordance_version USING btree (version_key)"
+    },
+    {
+      "tablename": "seeded_source_snapshot",
+      "indexname": "seeded_source_snapshot_pkey",
+      "indexdef": "CREATE UNIQUE INDEX seeded_source_snapshot_pkey ON public.seeded_source_snapshot USING btree (snapshot_key)"
+    },
+    {
+      "tablename": "seeded_source_snapshot",
+      "indexname": "seeded_source_snapshot_version_hash_unique",
+      "indexdef": "CREATE UNIQUE INDEX seeded_source_snapshot_version_hash_unique ON public.seeded_source_snapshot USING btree (version_key, source_sha256)"
+    },
+    {
+      "tablename": "seeded_source_snapshot",
+      "indexname": "seeded_source_snapshot_version_key_idx",
+      "indexdef": "CREATE INDEX seeded_source_snapshot_version_key_idx ON public.seeded_source_snapshot USING btree (version_key)"
+    }
+  ],
+  "policies": [
+    {
+      "tablename": "concordance_document",
+      "policyname": "concordance_document_public_active_read",
+      "roles": "{anon,authenticated}",
+      "cmd": "SELECT",
+      "qual": "((authority_standing = 'active'::text) AND (visibility_standing = 'public'::text))",
+      "with_check": null
+    },
+    {
+      "tablename": "concordance_relation",
+      "policyname": "concordance_relation_public_active_read",
+      "roles": "{anon,authenticated}",
+      "cmd": "SELECT",
+      "qual": "((relation_standing = 'active'::text) AND (visibility_standing = 'public'::text) AND (COALESCE(((metadata ->> 'protected'::text))::boolean, false) = false))",
+      "with_check": null
+    },
+    {
+      "tablename": "concordance_term",
+      "policyname": "concordance_term_public_active_read",
+      "roles": "{anon,authenticated}",
+      "cmd": "SELECT",
+      "qual": "((term_standing = 'active'::text) AND (visibility_standing = 'public'::text) AND (COALESCE(((metadata ->> 'protected'::text))::boolean, false) = false))",
+      "with_check": null
+    },
+    {
+      "tablename": "concordance_version",
+      "policyname": "concordance_version_public_active_read",
+      "roles": "{anon,authenticated}",
+      "cmd": "SELECT",
+      "qual": "((version_standing = 'active'::text) AND (visibility_standing = 'public'::text))",
+      "with_check": null
+    },
+    {
+      "tablename": "seeded_source_snapshot",
+      "policyname": "seeded_source_snapshot_public_verified_read",
+      "roles": "{anon,authenticated}",
+      "cmd": "SELECT",
+      "qual": "((verification_standing = ANY (ARRAY['verified'::text, 'metadata_verified'::text, 'hash_readback_unresolved'::text])) AND (visibility_standing = 'public'::text) AND (COALESCE(((metadata ->> 'protected'::text))::boolean, false) = false))",
+      "with_check": null
+    }
+  ],
+  "functions": [
+    {
+      "signature": "concordance_authority_prevent_mutation()",
+      "definition": "CREATE OR REPLACE FUNCTION public.concordance_authority_prevent_mutation()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\nbegin\n  raise exception 'concordance authority history is append-protected';\nend;\n$function$\n",
+      "proacl": null
+    },
+    {
+      "signature": "concordance_authority_protect_recognition_timestamps()",
+      "definition": "CREATE OR REPLACE FUNCTION public.concordance_authority_protect_recognition_timestamps()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\nbegin\n  if tg_table_name = 'concordance_version'\n     and old.recognized_at is not null\n     and new.recognized_at is distinct from old.recognized_at then\n    raise exception 'concordance_version.recognized_at is immutable after recognition';\n  end if;\n\n  if tg_table_name = 'seeded_source_snapshot'\n     and old.verified_at is not null\n     and new.verified_at is distinct from old.verified_at then\n    raise exception 'seeded_source_snapshot.verified_at is immutable after verification';\n  end if;\n\n  return new;\nend;\n$function$\n",
+      "proacl": null
+    },
+    {
+      "signature": "concordance_authority_set_updated_at()",
+      "definition": "CREATE OR REPLACE FUNCTION public.concordance_authority_set_updated_at()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\nbegin\n  new.updated_at = now();\n  return new;\nend;\n$function$\n",
+      "proacl": null
+    }
+  ],
+  "triggers": [
+    {
+      "relname": "concordance_document",
+      "tgname": "concordance_document_updated_at",
+      "definition": "CREATE TRIGGER concordance_document_updated_at BEFORE UPDATE ON public.concordance_document FOR EACH ROW EXECUTE FUNCTION concordance_authority_set_updated_at()"
+    },
+    {
+      "relname": "concordance_relation",
+      "tgname": "concordance_relation_no_delete",
+      "definition": "CREATE TRIGGER concordance_relation_no_delete BEFORE DELETE ON public.concordance_relation FOR EACH ROW EXECUTE FUNCTION concordance_authority_prevent_mutation()"
+    },
+    {
+      "relname": "concordance_relation",
+      "tgname": "concordance_relation_no_update",
+      "definition": "CREATE TRIGGER concordance_relation_no_update BEFORE UPDATE ON public.concordance_relation FOR EACH ROW EXECUTE FUNCTION concordance_authority_prevent_mutation()"
+    },
+    {
+      "relname": "concordance_term",
+      "tgname": "concordance_term_no_delete",
+      "definition": "CREATE TRIGGER concordance_term_no_delete BEFORE DELETE ON public.concordance_term FOR EACH ROW EXECUTE FUNCTION concordance_authority_prevent_mutation()"
+    },
+    {
+      "relname": "concordance_term",
+      "tgname": "concordance_term_updated_at",
+      "definition": "CREATE TRIGGER concordance_term_updated_at BEFORE UPDATE ON public.concordance_term FOR EACH ROW EXECUTE FUNCTION concordance_authority_set_updated_at()"
+    },
+    {
+      "relname": "concordance_version",
+      "tgname": "concordance_version_no_delete",
+      "definition": "CREATE TRIGGER concordance_version_no_delete BEFORE DELETE ON public.concordance_version FOR EACH ROW EXECUTE FUNCTION concordance_authority_prevent_mutation()"
+    },
+    {
+      "relname": "concordance_version",
+      "tgname": "concordance_version_recognized_at_immutable",
+      "definition": "CREATE TRIGGER concordance_version_recognized_at_immutable BEFORE UPDATE ON public.concordance_version FOR EACH ROW EXECUTE FUNCTION concordance_authority_protect_recognition_timestamps()"
+    },
+    {
+      "relname": "concordance_version",
+      "tgname": "concordance_version_updated_at",
+      "definition": "CREATE TRIGGER concordance_version_updated_at BEFORE UPDATE ON public.concordance_version FOR EACH ROW EXECUTE FUNCTION concordance_authority_set_updated_at()"
+    },
+    {
+      "relname": "seeded_source_snapshot",
+      "tgname": "seeded_source_snapshot_no_delete",
+      "definition": "CREATE TRIGGER seeded_source_snapshot_no_delete BEFORE DELETE ON public.seeded_source_snapshot FOR EACH ROW EXECUTE FUNCTION concordance_authority_prevent_mutation()"
+    },
+    {
+      "relname": "seeded_source_snapshot",
+      "tgname": "seeded_source_snapshot_no_update",
+      "definition": "CREATE TRIGGER seeded_source_snapshot_no_update BEFORE UPDATE ON public.seeded_source_snapshot FOR EACH ROW EXECUTE FUNCTION concordance_authority_prevent_mutation()"
+    },
+    {
+      "relname": "seeded_source_snapshot",
+      "tgname": "seeded_source_snapshot_verified_at_immutable",
+      "definition": "CREATE TRIGGER seeded_source_snapshot_verified_at_immutable BEFORE UPDATE ON public.seeded_source_snapshot FOR EACH ROW EXECUTE FUNCTION concordance_authority_protect_recognition_timestamps()"
+    }
+  ]
+}

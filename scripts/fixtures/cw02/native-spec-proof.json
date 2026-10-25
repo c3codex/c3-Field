@@ -1,0 +1,8 @@
+{
+  "archive_sha256": "8f32878b8b638e8bdf2a48187ef7ee31a4cfcf5a26b28648c0e4ce07144bafb1",
+  "archive_bytes": 279998,
+  "spec_path": "w02/isolation-test-spec.json",
+  "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+  "spec_bytes": 9273,
+  "native_return": "c3field_tis_w01_access_authority_20261024_001"
+}

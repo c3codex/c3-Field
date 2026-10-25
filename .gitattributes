@@ -2,5 +2,9 @@
 scripts/fixtures/r01/*.sql -text whitespace=cr-at-eol
 scripts/fixtures/r02/*.sql -text whitespace=cr-at-eol
 scripts/fixtures/integration/*.sql -text whitespace=cr-at-eol
+scripts/fixtures/cw02/*.sql -text whitespace=cr-at-eol
+scripts/fixtures/cw02/origin/*.sql -text whitespace=cr-at-eol
+scripts/fixtures/cw02/isolation-test-spec.json -text
+scripts/fixtures/cw02/*.ts -text
 supabase/migrations/20261025001210_r01_access_authority_candidate.sql -text whitespace=cr-at-eol
 supabase/migrations/20261024215507_r02_computational_oar_disposition_candidate.sql -text

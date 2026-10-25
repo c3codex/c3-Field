@@ -1,0 +1,234 @@
+{
+  "environment": {
+    "host": "127.0.0.1",
+    "port": 55474,
+    "user": "postgres",
+    "database": "postgres"
+  },
+  "postgres": "PostgreSQL 17.6 on x86_64-windows, compiled by msvc-19.44.35213, 64-bit",
+  "scope": "exact historically authorized package prerequisite; no official Seed Concordance seated",
+  "attempts": [
+    {
+      "attempt": 1,
+      "preflight": [
+        [
+          {
+            "existing_concordance_document": null
+          }
+        ],
+        [
+          {
+            "existing_concordance_version": null
+          }
+        ],
+        [
+          {
+            "existing_concordance_term": null
+          }
+        ],
+        [
+          {
+            "existing_concordance_relation": null
+          }
+        ],
+        [
+          {
+            "existing_seeded_source_snapshot": null
+          }
+        ],
+        [],
+        []
+      ],
+      "post_validation": [
+        [
+          {
+            "concordance_document": "concordance_document"
+          }
+        ],
+        [
+          {
+            "concordance_version": "concordance_version"
+          }
+        ],
+        [
+          {
+            "concordance_term": "concordance_term"
+          }
+        ],
+        [
+          {
+            "concordance_relation": "concordance_relation"
+          }
+        ],
+        [
+          {
+            "seeded_source_snapshot": "seeded_source_snapshot"
+          }
+        ],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [
+          {
+            "public_visible_internal_terms": "0"
+          }
+        ]
+      ],
+      "official_seed_seating": "NOT_EXECUTED_SYNTHETIC_ANALOGUE_ONLY",
+      "package_schema_sha256": "acd2e3e38540e9ba2210e505f1aaaac06498df8297fbc1022c425147902a5295",
+      "repaired_scope_sha256": "5846b438c0076830fdf7fc4b77e8aa1240d4bc61dd7bceb06f9ec7732c8f94ce",
+      "rollback_sha256": "8cbf522f104066c1b5495934bc123b81f54b754f8fcc8f9d7f1c1943fc9a9225",
+      "rollback": "PASS",
+      "negative_append_and_unique": "PASS",
+      "obsidian_0001": "PASS",
+      "obsidian_0002": {
+        "standing": "HLD",
+        "file": "202606080002_obsidian_contract_seating.sql",
+        "code": "23514",
+        "message": "new row for relation \"concordance_relation\" violates check constraint \"concordance_relation_relation_scope_check\"",
+        "detail": "Failing row contains (obsidian_src_capture_table_binding, obsidian_contact_src_capture_contract_v1, obsidian_contact_src_capture_contract_v1, obsidian_src_continuity, obsidian, source_alignment, Runtime table: obsidian_src_continuity — SRC/SRC1 continuity i..., active, internal, docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_emai..., {\"table\": \"obsidian_src_continuity\", \"contract_domain\": \"src_cap..., 2026-10-24 22:25:57.069538-05)."
+      },
+      "first_remaining_blocker": {
+        "file": "202606080002_obsidian_contract_seating.sql",
+        "code": "23514",
+        "message": "new row for relation \"concordance_relation\" violates check constraint \"concordance_relation_relation_scope_check\"",
+        "detail": "Failing row contains (obsidian_src_capture_table_binding, obsidian_contact_src_capture_contract_v1, obsidian_contact_src_capture_contract_v1, obsidian_src_continuity, obsidian, source_alignment, Runtime table: obsidian_src_continuity — SRC/SRC1 continuity i..., active, internal, docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_emai..., {\"table\": \"obsidian_src_continuity\", \"contract_domain\": \"src_cap..., 2026-10-24 22:25:57.654827-05)."
+      },
+      "chronological_files_completed": [
+        "202605120001_expand_codex_media_asset_storage_provider.sql",
+        "202605140001_c3_field_oar_spine_persistence.sql",
+        "202605180001_process_registry_and_oar_queue_foundation.sql",
+        "202605310001_c3_key_temp_alternate_payment_route.sql",
+        "202605310002_temp_c3_key_issuance_route.sql",
+        "202605310003_temp_c3_key_operator_issuance_packet.sql",
+        "202605310004_temp_c3_key_communication_trace_surface.sql",
+        "202605310005_temp_c3_key_communication_trace_runtime_read_model.sql",
+        "202606010001_c3_key_system_function_audit_surface.sql",
+        "202606010002_c3_key_permission_map_storage_contract.sql",
+        "202606010003_c3_key_permission_map_support_read_model.sql",
+        "202606010004_c3_key_assign_temporary_system_function_implementation.sql",
+        "202606010005_c3_key_assign_temporary_source_binding_hardening.sql",
+        "202606010006_c3_key_source_oar_binding_operator_seating_packet.sql",
+        "202606010007_c3_non_wallet_payment_standing_contract.sql",
+        "202606080001_obsidian_src_oar1_eval_email_marble_contracts.sql"
+      ]
+    },
+    {
+      "attempt": 2,
+      "preflight": [
+        [
+          {
+            "existing_concordance_document": null
+          }
+        ],
+        [
+          {
+            "existing_concordance_version": null
+          }
+        ],
+        [
+          {
+            "existing_concordance_term": null
+          }
+        ],
+        [
+          {
+            "existing_concordance_relation": null
+          }
+        ],
+        [
+          {
+            "existing_seeded_source_snapshot": null
+          }
+        ],
+        [],
+        []
+      ],
+      "post_validation": [
+        [
+          {
+            "concordance_document": "concordance_document"
+          }
+        ],
+        [
+          {
+            "concordance_version": "concordance_version"
+          }
+        ],
+        [
+          {
+            "concordance_term": "concordance_term"
+          }
+        ],
+        [
+          {
+            "concordance_relation": "concordance_relation"
+          }
+        ],
+        [
+          {
+            "seeded_source_snapshot": "seeded_source_snapshot"
+          }
+        ],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [
+          {
+            "public_visible_internal_terms": "0"
+          }
+        ]
+      ],
+      "official_seed_seating": "NOT_EXECUTED_SYNTHETIC_ANALOGUE_ONLY",
+      "package_schema_sha256": "acd2e3e38540e9ba2210e505f1aaaac06498df8297fbc1022c425147902a5295",
+      "repaired_scope_sha256": "5846b438c0076830fdf7fc4b77e8aa1240d4bc61dd7bceb06f9ec7732c8f94ce",
+      "rollback_sha256": "8cbf522f104066c1b5495934bc123b81f54b754f8fcc8f9d7f1c1943fc9a9225",
+      "rollback": "PASS",
+      "negative_append_and_unique": "PASS",
+      "obsidian_0001": "PASS",
+      "obsidian_0002": {
+        "standing": "HLD",
+        "file": "202606080002_obsidian_contract_seating.sql",
+        "code": "23514",
+        "message": "new row for relation \"concordance_relation\" violates check constraint \"concordance_relation_relation_scope_check\"",
+        "detail": "Failing row contains (obsidian_src_capture_table_binding, obsidian_contact_src_capture_contract_v1, obsidian_contact_src_capture_contract_v1, obsidian_src_continuity, obsidian, source_alignment, Runtime table: obsidian_src_continuity — SRC/SRC1 continuity i..., active, internal, docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_emai..., {\"table\": \"obsidian_src_continuity\", \"contract_domain\": \"src_cap..., 2026-10-24 22:25:57.957373-05)."
+      },
+      "first_remaining_blocker": {
+        "file": "202606080002_obsidian_contract_seating.sql",
+        "code": "23514",
+        "message": "new row for relation \"concordance_relation\" violates check constraint \"concordance_relation_relation_scope_check\"",
+        "detail": "Failing row contains (obsidian_src_capture_table_binding, obsidian_contact_src_capture_contract_v1, obsidian_contact_src_capture_contract_v1, obsidian_src_continuity, obsidian, source_alignment, Runtime table: obsidian_src_continuity — SRC/SRC1 continuity i..., active, internal, docs/oar/measures_registry/oar2_seat_obsidian_src_oar1_eval_emai..., {\"table\": \"obsidian_src_continuity\", \"contract_domain\": \"src_cap..., 2026-10-24 22:25:58.692806-05)."
+      },
+      "chronological_files_completed": [
+        "202605120001_expand_codex_media_asset_storage_provider.sql",
+        "202605140001_c3_field_oar_spine_persistence.sql",
+        "202605180001_process_registry_and_oar_queue_foundation.sql",
+        "202605310001_c3_key_temp_alternate_payment_route.sql",
+        "202605310002_temp_c3_key_issuance_route.sql",
+        "202605310003_temp_c3_key_operator_issuance_packet.sql",
+        "202605310004_temp_c3_key_communication_trace_surface.sql",
+        "202605310005_temp_c3_key_communication_trace_runtime_read_model.sql",
+        "202606010001_c3_key_system_function_audit_surface.sql",
+        "202606010002_c3_key_permission_map_storage_contract.sql",
+        "202606010003_c3_key_permission_map_support_read_model.sql",
+        "202606010004_c3_key_assign_temporary_system_function_implementation.sql",
+        "202606010005_c3_key_assign_temporary_source_binding_hardening.sql",
+        "202606010006_c3_key_source_oar_binding_operator_seating_packet.sql",
+        "202606010007_c3_non_wallet_payment_standing_contract.sql",
+        "202606080001_obsidian_src_oar1_eval_email_marble_contracts.sql"
+      ]
+    }
+  ],
+  "repaired_scope": "PASS",
+  "full_history": "HLD"
+}

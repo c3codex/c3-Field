@@ -1,0 +1,277 @@
+{
+  "tables": 16,
+  "policy_count": 0,
+  "omitted_foreign_keys": [
+    {
+      "table": "c3_current_state",
+      "constraint": {
+        "name": "c3_current_state_registrar_role_fk",
+        "type": "f",
+        "parent": "c3_ci_role",
+        "definition": "FOREIGN KEY (registrar_role_key) REFERENCES c3_ci_role(role_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      "standing": "HLD_EXTERNAL_PARENT_OMITTED"
+    },
+    {
+      "table": "c3_env_native_connection",
+      "constraint": {
+        "name": "c3_env_native_connection_formed_from_share_reference_fkey",
+        "type": "f",
+        "parent": "c3_env_share_reference",
+        "definition": "FOREIGN KEY (formed_from_share_reference) REFERENCES c3_env_share_reference(share_reference) ON UPDATE CASCADE"
+      },
+      "standing": "HLD_EXTERNAL_PARENT_OMITTED"
+    },
+    {
+      "table": "c3_pac",
+      "constraint": {
+        "name": "c3_pac_boundary_evaluation_fk",
+        "type": "f",
+        "parent": "c3_pac_boundary_evaluation",
+        "definition": "FOREIGN KEY (boundary_evaluation_key) REFERENCES c3_pac_boundary_evaluation(evaluation_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      "standing": "HLD_EXTERNAL_PARENT_OMITTED"
+    },
+    {
+      "table": "c3_pac",
+      "constraint": {
+        "name": "c3_pac_contract_key_fkey",
+        "type": "f",
+        "parent": "c3_pac_type_contract",
+        "definition": "FOREIGN KEY (contract_key) REFERENCES c3_pac_type_contract(contract_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+      },
+      "standing": "HLD_EXTERNAL_PARENT_OMITTED"
+    },
+    {
+      "table": "c3_pac",
+      "constraint": {
+        "name": "c3_pac_registrar_role_call_fk",
+        "type": "f",
+        "parent": "c3_ci_role_call",
+        "definition": "FOREIGN KEY (registrar_role_call_key) REFERENCES c3_ci_role_call(role_call_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      "standing": "HLD_EXTERNAL_PARENT_OMITTED"
+    },
+    {
+      "table": "c3_pac",
+      "constraint": {
+        "name": "c3_pac_schema_key_fk",
+        "type": "f",
+        "parent": "c3_pac_schema",
+        "definition": "FOREIGN KEY (schema_key) REFERENCES c3_pac_schema(schema_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+      },
+      "standing": "HLD_EXTERNAL_PARENT_OMITTED"
+    },
+    {
+      "table": "c3_pac_member",
+      "constraint": {
+        "name": "c3_pac_member_runtime_binding_key_fkey",
+        "type": "f",
+        "parent": "c3_pac_runtime_binding",
+        "definition": "FOREIGN KEY (runtime_binding_key) REFERENCES c3_pac_runtime_binding(binding_key) ON UPDATE CASCADE ON DELETE SET NULL"
+      },
+      "standing": "HLD_EXTERNAL_PARENT_OMITTED"
+    },
+    {
+      "table": "c3_current_evidence_ref",
+      "trigger": "trg_c3_current_evidence_no_delete",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_current_evidence_no_delete BEFORE DELETE ON public.c3_current_evidence_ref FOR EACH ROW EXECUTE FUNCTION c3_current_prevent_evidence_mutation()",
+      "function_sha256": "f1e993bbcaa315d6d97e6b06db3083c5670a47e3a6cf790fb4577ea21a044add"
+    },
+    {
+      "table": "c3_current_evidence_ref",
+      "trigger": "trg_c3_current_evidence_no_update",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_current_evidence_no_update BEFORE UPDATE ON public.c3_current_evidence_ref FOR EACH ROW EXECUTE FUNCTION c3_current_prevent_evidence_mutation()",
+      "function_sha256": "f1e993bbcaa315d6d97e6b06db3083c5670a47e3a6cf790fb4577ea21a044add"
+    },
+    {
+      "table": "c3_current_evidence_ref",
+      "trigger": "trg_c3_current_snapshot_asset_evidence",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_current_snapshot_asset_evidence BEFORE INSERT ON public.c3_current_evidence_ref FOR EACH ROW EXECUTE FUNCTION c3_current_snapshot_asset_evidence()",
+      "function_sha256": "16f76b49172acffd2a1db87601d419b7e2468479036469ffc96a3067b4d85e44"
+    },
+    {
+      "table": "c3_current_state",
+      "trigger": "trg_c3_current_guard_state_update",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_current_guard_state_update BEFORE UPDATE ON public.c3_current_state FOR EACH ROW EXECUTE FUNCTION c3_current_guard_state_update()",
+      "function_sha256": "75d8e27d4d4e9220be852ff617f89dba0d7f6621d9fcbbe1a1eaeebf15d2f3f8"
+    },
+    {
+      "table": "c3_current_state",
+      "trigger": "trg_c3_current_require_successor",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE CONSTRAINT TRIGGER trg_c3_current_require_successor AFTER UPDATE OF is_current ON public.c3_current_state DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION c3_current_require_successor()",
+      "function_sha256": "ef42499042427292eba8b448c01bbd637ac041c266541f7c25ff86cc343bbdbf"
+    },
+    {
+      "table": "c3_current_state",
+      "trigger": "trg_c3_current_state_no_delete",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_current_state_no_delete BEFORE DELETE ON public.c3_current_state FOR EACH ROW EXECUTE FUNCTION c3_current_prevent_state_delete()",
+      "function_sha256": "833d6ded6696f1541657edffdc717cfae2375ec31237aa881b069beae5f39581"
+    },
+    {
+      "table": "c3_current_state",
+      "trigger": "trg_c3_current_validate_lineage",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_current_validate_lineage BEFORE INSERT ON public.c3_current_state FOR EACH ROW EXECUTE FUNCTION c3_current_validate_lineage()",
+      "function_sha256": "91fbb4a861e1686b7c47681565405d322c88c7df45816c0107da17bf15099b6d"
+    },
+    {
+      "table": "c3_env_initiative_visibility",
+      "trigger": "retain_initiative_visibility_current_after_change",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER retain_initiative_visibility_current_after_change AFTER INSERT OR UPDATE OF standing, revoked_at ON public.c3_env_initiative_visibility FOR EACH ROW EXECUTE FUNCTION retain_initiative_visibility_current_trigger()",
+      "function_sha256": "5da5ba5c0c1dde7f4b89f672ec5216dfcd1f64e7fbb075a2ecb8f8df5c96acef"
+    },
+    {
+      "table": "c3_env_initiative_visibility",
+      "trigger": "trg_apply_47pct_c2_consumer_grant",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_apply_47pct_c2_consumer_grant AFTER INSERT OR UPDATE OF standing, revoked_at, initiative_envpac_key, target_environment_key ON public.c3_env_initiative_visibility FOR EACH ROW EXECUTE FUNCTION apply_47pct_c2_consumer_grant_from_visibility()",
+      "function_sha256": "bd8a31933bda75c41f99a1ed3b11cb3c0ab8d5545bd83111665b6ac024e4d99f"
+    },
+    {
+      "table": "c3_env_initiative_visibility",
+      "trigger": "trg_apply_47pct_env_presentation",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_apply_47pct_env_presentation AFTER INSERT OR UPDATE OF standing, revoked_at, envpac_key ON public.c3_env_initiative_visibility FOR EACH ROW EXECUTE FUNCTION apply_47pct_env_presentation_from_visibility()",
+      "function_sha256": "d3f6c0458a5b936006e419c863e2730c7f6a5bcc7baff13838b27233240c5821"
+    },
+    {
+      "table": "c3_env_native_connection",
+      "trigger": "retain_native_connection_current_after_change",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER retain_native_connection_current_after_change AFTER INSERT OR UPDATE OF standing, revoked_at ON public.c3_env_native_connection FOR EACH ROW EXECUTE FUNCTION retain_native_connection_current_trigger()",
+      "function_sha256": "42ce64431a65e8326c6d81a9063667d7f0973a423767e14ddede43e57e792c44"
+    },
+    {
+      "table": "c3_pac",
+      "trigger": "c3_profile_pac_envpac_rebind_guard",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER c3_profile_pac_envpac_rebind_guard BEFORE UPDATE OF envpac_key ON public.c3_pac FOR EACH ROW WHEN ((old.pac_type = 'ProfilePAC'::text)) EXECUTE FUNCTION c3_guard_profile_pac_envpac_rebind()",
+      "function_sha256": "82eda91c6e095eb4b322b63c86a8d3f94b94a44cd98293456d24d7b3e1d5bdf4"
+    },
+    {
+      "table": "c3_pac",
+      "trigger": "guard_measures_registry_registered_pac_snapshot_v1",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER guard_measures_registry_registered_pac_snapshot_v1 BEFORE UPDATE ON public.c3_pac FOR EACH ROW EXECUTE FUNCTION guard_measures_registry_registered_pac_snapshot_v1()",
+      "function_sha256": "5706d33053ad6255e2d334d6c0ed9a4c5e89e33f6764cf8467b07f8a34c0c9ee"
+    },
+    {
+      "table": "c3_pac",
+      "trigger": "trg_c3_hardened_pac_immutable_guard_v1",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_hardened_pac_immutable_guard_v1 BEFORE DELETE OR UPDATE ON public.c3_pac FOR EACH ROW EXECUTE FUNCTION c3_hardened_pac_immutable_guard_v1()",
+      "function_sha256": "c792174b078326b8fc4c7ef4df4093c36eacd8dc9a1353f9c9c9446f541e5af8"
+    },
+    {
+      "table": "c3_pac",
+      "trigger": "trg_c3_pac_free_completeness_guard_v1",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE CONSTRAINT TRIGGER trg_c3_pac_free_completeness_guard_v1 AFTER INSERT OR UPDATE ON public.c3_pac DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION c3_pac_free_completeness_guard_v1()",
+      "function_sha256": "b559cffb4fff82354aaed081437e56069882f20d49a9acb994a2cf0b3abaf484"
+    },
+    {
+      "table": "c3_pac",
+      "trigger": "trg_c3_pac_registrar_supersession_guard_v1",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_pac_registrar_supersession_guard_v1 BEFORE INSERT ON public.c3_pac FOR EACH ROW WHEN (((new.registration_protocol = 'registrar_v1'::text) AND (new.supersedes_pac_key IS NOT NULL))) EXECUTE FUNCTION c3_guard_registrar_pac_supersession_v1()",
+      "function_sha256": "26501c298a2934b41f9c1e8543cb6cdfb5cc3f66efca5e40dd6e9b1cae02a355"
+    },
+    {
+      "table": "c3_pac",
+      "trigger": "trg_c3_pac_registrar_v1_completeness_guard",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE CONSTRAINT TRIGGER trg_c3_pac_registrar_v1_completeness_guard AFTER INSERT OR UPDATE OF registration_protocol, registration_sha256, boundary_evaluation_key, owner_subject_type, owner_subject_key, owner_environment_key, contract_key ON public.c3_pac DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION c3_pac_registrar_v1_completeness_guard()",
+      "function_sha256": "deacdc168b11eb17c3d1613947d8239a7f329ca6dd3af667c36d1d6724b296dc"
+    },
+    {
+      "table": "c3_pac_member",
+      "trigger": "c3_pac_member_set_updated_at",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER c3_pac_member_set_updated_at BEFORE UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION set_updated_at()",
+      "function_sha256": "199f5c02bd7c5ee76f3d2ba98482eddd62afcaa2b4915baed2a47fe3383b428e"
+    },
+    {
+      "table": "c3_pac_member",
+      "trigger": "guard_measures_registry_registered_pac_member_v1",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER guard_measures_registry_registered_pac_member_v1 BEFORE DELETE OR UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION guard_measures_registry_registered_pac_member_v1()",
+      "function_sha256": "e66303bab406543bec6f8bc48df8853b24ef499ab2545b0b91a72ee0d8f5dec6"
+    },
+    {
+      "table": "c3_pac_member",
+      "trigger": "trg_c3_pac_member_hardened_guard",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER trg_c3_pac_member_hardened_guard BEFORE INSERT OR DELETE OR UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION c3_hardened_pac_child_guard_v1('pac_key')",
+      "function_sha256": "4c9890b4a4ae09dce64d3d5b8de1d038fdc9bf2f128271816b075decca6374eb"
+    },
+    {
+      "table": "c3_profile_pac",
+      "trigger": "c3_profile_pac_chain_guard",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER c3_profile_pac_chain_guard BEFORE INSERT OR UPDATE ON public.c3_profile_pac FOR EACH ROW EXECUTE FUNCTION c3_guard_profile_pac_chain()",
+      "function_sha256": "047d8b6b5e7edb26dcacc1b58b22886d7e12f0c651a726056ba607bc04f62d13"
+    },
+    {
+      "table": "c3_profile_pac",
+      "trigger": "c3_profile_pac_set_updated_at",
+      "standing": "HLD_ANCILLARY_TRIGGER_NOT_INSTALLED",
+      "definition": "CREATE TRIGGER c3_profile_pac_set_updated_at BEFORE UPDATE ON public.c3_profile_pac FOR EACH ROW EXECUTE FUNCTION set_updated_at()",
+      "function_sha256": "199f5c02bd7c5ee76f3d2ba98482eddd62afcaa2b4915baed2a47fe3383b428e"
+    }
+  ],
+  "ancillary_triggers": "not copied; exact runtime source functions and included constraints only",
+  "captured_function_sources": [
+    {
+      "signature": "c3_pac_public_payload_v1(text)",
+      "sha256": "b9c55828cadfdc3937b5dd9ba1b514701952bbd73120e7a689ad256e1122ac9a"
+    },
+    {
+      "signature": "c3_pac_review_payload_v1(text)",
+      "sha256": "6f2339106d120b728a36ad22d6250e2eaff442fc79ffb11f24c1956077141c07"
+    },
+    {
+      "signature": "c3_pac_review_sha256_v1(text)",
+      "sha256": "8ad35a19d00f0ea3ab2c4565dccf4737d003b6482d0a738e34decec9156375d2"
+    },
+    {
+      "signature": "c3_pac_set_personal_disposition_v1(text,text,text,text)",
+      "sha256": "06da918788bafcbe66623157919dc5793901b7d308cbf77c6dd750aba3ca6dc8"
+    },
+    {
+      "signature": "c3_pac_set_personal_review_v1(text,text,text,text)",
+      "sha256": "fdf72a86dff80c5571f8d5b96a2b545ced3ed339d8723b58e1a5fbc0f9fa669a"
+    },
+    {
+      "signature": "resolve_c1me_current_internal(text)",
+      "sha256": "608d8da6564c73f43c18a2942c7bd3f34eeadf8f5c8f656fafe6a7f8a7d0ef19"
+    },
+    {
+      "signature": "resolve_c1me_envpac_primitives_internal(text)",
+      "sha256": "0bbf9c0660209de5a59604158633f50e73259f15a68f33526ca0e5aee19c9512"
+    },
+    {
+      "signature": "resolve_cancom_connection_devices_internal(text,text)",
+      "sha256": "9050249477d5fac495e7b618bf4410839890dce17f4694544f550ecb9b14075b"
+    },
+    {
+      "signature": "c3_pac_review_candidate_v1(text)",
+      "sha256": "28793475c3fe28773893e0f0e9bc2d3f529e0fd5564002eb48596a5e3f05a48a"
+    },
+    {
+      "signature": "c3_pac_set_personal_encounter_projection_v1(text,text,text,text,text)",
+      "sha256": "29fb0b821f7337a0b5e41dc871c4ee63ecbeb94205f6e66c031f75d5525f02f5"
+    },
+    {
+      "signature": "c3_pac_set_personal_encounter_projection_v1(text,text,text,text)",
+      "sha256": "f949432385ce7346e0fb3f597a84ad20464be91c37850d91bc5de330e82fad00"
+    }
+  ]
+}

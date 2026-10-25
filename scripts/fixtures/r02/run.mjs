@@ -50,7 +50,7 @@ const record=async(f,r,c=verifier)=>rpc(c,'record_cancom_acceptance_receipt_v1',
 let registrar,executor,verifier;
 try {
  await admin.query('drop schema public cascade; create schema public; drop schema if exists extensions cascade; drop role if exists service_role; drop role if exists anon; drop role if exists authenticated;');
- await admin.query(process.env.C3_INTEGRATED ? readFileSync(new URL('../integration/bootstrap.sql',import.meta.url),'utf8') : file('bootstrap.sql'));
+ await admin.query(process.env.C3_INTEGRATED ? readFileSync(new URL('../integration/bootstrap.sql',import.meta.url),'utf8') : file('bootstrap.sql'));if(process.env.C3_W02_SCHEMA==='1')await admin.query(readFileSync(new URL('../cw02/w02-bootstrap.sql',import.meta.url),'utf8'));
  await admin.query(readFileSync(new URL('supabase/migrations/'+migration,root),'utf8'));
  if(process.env.C3_INTEGRATED){const other=readdirSync(new URL('supabase/migrations/',root)).find(x=>x.includes('_r01_')&&x.endsWith('_candidate.sql'));await admin.query(readFileSync(new URL('supabase/migrations/'+other,root),'utf8'));}
  if(process.env.C3_INTEGRATED)await admin.query("insert into c3_environment(env_key,system_key,environment_name,environment_class,standing,source_authority_ref,is_canonical) values('fixture_env','c3ops','Fixture','fixture','fixture','fixture://authority',false);insert into c3_envpac(envpac_key,env_key,version,standing,owner_subject_type,owner_subject_key,custodian_subject_type,custodian_subject_key,custody_uri,custody_provider) values('fixture_env','fixture_env','1','active','individual','fixture_c3_native_operator','individual','fixture_c3_native_operator','fixture://local','fixture')");

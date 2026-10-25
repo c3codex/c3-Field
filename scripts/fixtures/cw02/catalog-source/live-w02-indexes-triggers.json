@@ -1,0 +1,598 @@
+[
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c1_environment_connection_thr_env_key_owner_relationship_ke_key ON public.c1_environment_connection_thread USING btree (env_key, owner_relationship_key)",
+      "indexname": "c1_environment_connection_thr_env_key_owner_relationship_ke_key",
+      "tablename": "c1_environment_connection_thread"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c1_environment_connection_thread_pkey ON public.c1_environment_connection_thread USING btree (thread_key)",
+      "indexname": "c1_environment_connection_thread_pkey",
+      "tablename": "c1_environment_connection_thread"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c1_environment_connection_thread_entry_pkey ON public.c1_environment_connection_thread_entry USING btree (entry_key)",
+      "indexname": "c1_environment_connection_thread_entry_pkey",
+      "tablename": "c1_environment_connection_thread_entry"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c1_environment_connection_thread_entry_thread_idx ON public.c1_environment_connection_thread_entry USING btree (thread_key, created_at DESC)",
+      "indexname": "c1_environment_connection_thread_entry_thread_idx",
+      "tablename": "c1_environment_connection_thread_entry"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_cancom_device_key_pkey ON public.c3_cancom_device_key USING btree (device_key)",
+      "indexname": "c3_cancom_device_key_pkey",
+      "tablename": "c3_cancom_device_key"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_cancom_device_key_relationship_idx ON public.c3_cancom_device_key USING btree (relationship_key, standing, last_seen_at DESC)",
+      "indexname": "c3_cancom_device_key_relationship_idx",
+      "tablename": "c3_cancom_device_key"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_current_evidence_asset_idx ON public.c3_current_evidence_ref USING btree (asset_key) WHERE (asset_key IS NOT NULL)",
+      "indexname": "c3_current_evidence_asset_idx",
+      "tablename": "c3_current_evidence_ref"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_current_evidence_identity_unique ON public.c3_current_evidence_ref USING btree (current_state_key, evidence_key, content_hash)",
+      "indexname": "c3_current_evidence_identity_unique",
+      "tablename": "c3_current_evidence_ref"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_current_evidence_ref_pkey ON public.c3_current_evidence_ref USING btree (current_evidence_ref_key)",
+      "indexname": "c3_current_evidence_ref_pkey",
+      "tablename": "c3_current_evidence_ref"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_current_evidence_state_idx ON public.c3_current_evidence_ref USING btree (current_state_key)",
+      "indexname": "c3_current_evidence_state_idx",
+      "tablename": "c3_current_evidence_ref"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_current_state_env_history_idx ON public.c3_current_state USING btree (env_key, state_version DESC)",
+      "indexname": "c3_current_state_env_history_idx",
+      "tablename": "c3_current_state"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_current_state_env_version_unique ON public.c3_current_state USING btree (env_key, state_version)",
+      "indexname": "c3_current_state_env_version_unique",
+      "tablename": "c3_current_state"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_current_state_one_current_per_env ON public.c3_current_state USING btree (env_key) WHERE (is_current IS TRUE)",
+      "indexname": "c3_current_state_one_current_per_env",
+      "tablename": "c3_current_state"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_current_state_pkey ON public.c3_current_state USING btree (current_state_key)",
+      "indexname": "c3_current_state_pkey",
+      "tablename": "c3_current_state"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_current_state_predecessor_idx ON public.c3_current_state USING btree (predecessor_current_state_key) WHERE (predecessor_current_state_key IS NOT NULL)",
+      "indexname": "c3_current_state_predecessor_idx",
+      "tablename": "c3_current_state"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_env_initiative_visibility_pkey ON public.c3_env_initiative_visibility USING btree (visibility_key)",
+      "indexname": "c3_env_initiative_visibility_pkey",
+      "tablename": "c3_env_initiative_visibility"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_env_initiative_visibility_relationship_key_initiative_ke_key ON public.c3_env_initiative_visibility USING btree (relationship_key, initiative_key)",
+      "indexname": "c3_env_initiative_visibility_relationship_key_initiative_ke_key",
+      "tablename": "c3_env_initiative_visibility"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_env_native_connection_pair_key_key ON public.c3_env_native_connection USING btree (pair_key)",
+      "indexname": "c3_env_native_connection_pair_key_key",
+      "tablename": "c3_env_native_connection"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_env_native_connection_pkey ON public.c3_env_native_connection USING btree (connection_key)",
+      "indexname": "c3_env_native_connection_pkey",
+      "tablename": "c3_env_native_connection"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_env_native_connection_source_idx ON public.c3_env_native_connection USING btree (source_relationship_key, standing, formed_at DESC)",
+      "indexname": "c3_env_native_connection_source_idx",
+      "tablename": "c3_env_native_connection"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_env_native_connection_target_idx ON public.c3_env_native_connection USING btree (target_relationship_key, standing, formed_at DESC)",
+      "indexname": "c3_env_native_connection_target_idx",
+      "tablename": "c3_env_native_connection"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_env_runtime_session_envpac_idx ON public.c3_env_runtime_session USING btree (envpac_key)",
+      "indexname": "c3_env_runtime_session_envpac_idx",
+      "tablename": "c3_env_runtime_session"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_env_runtime_session_pkey ON public.c3_env_runtime_session USING btree (session_key)",
+      "indexname": "c3_env_runtime_session_pkey",
+      "tablename": "c3_env_runtime_session"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_env_runtime_session_subject_idx ON public.c3_env_runtime_session USING btree (subject_key)",
+      "indexname": "c3_env_runtime_session_subject_idx",
+      "tablename": "c3_env_runtime_session"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_env_runtime_session_token_sha256_key ON public.c3_env_runtime_session USING btree (token_sha256)",
+      "indexname": "c3_env_runtime_session_token_sha256_key",
+      "tablename": "c3_env_runtime_session"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_envpac_access_grant_pkey ON public.c3_envpac_access_grant USING btree (grant_key)",
+      "indexname": "c3_envpac_access_grant_pkey",
+      "tablename": "c3_envpac_access_grant"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_envpac_access_subject_idx ON public.c3_envpac_access_grant USING btree (subject_type, subject_key, standing)",
+      "indexname": "c3_envpac_access_subject_idx",
+      "tablename": "c3_envpac_access_grant"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_envpac_canopy_event_envpac_idx ON public.c3_envpac_canopy_event USING btree (envpac_key, created_at DESC)",
+      "indexname": "c3_envpac_canopy_event_envpac_idx",
+      "tablename": "c3_envpac_canopy_event"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_envpac_canopy_event_pkey ON public.c3_envpac_canopy_event USING btree (event_key)",
+      "indexname": "c3_envpac_canopy_event_pkey",
+      "tablename": "c3_envpac_canopy_event"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_envpac_canopy_reference_active_url_uq ON public.c3_envpac_canopy_reference USING btree (envpac_key, lower(external_url)) WHERE (reference_state = 'active'::text)",
+      "indexname": "c3_envpac_canopy_reference_active_url_uq",
+      "tablename": "c3_envpac_canopy_reference"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_envpac_canopy_reference_owner_idx ON public.c3_envpac_canopy_reference USING btree (envpac_key, owner_subject_key, reference_state, sort_order, created_at)",
+      "indexname": "c3_envpac_canopy_reference_owner_idx",
+      "tablename": "c3_envpac_canopy_reference"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_envpac_canopy_reference_pkey ON public.c3_envpac_canopy_reference USING btree (reference_key)",
+      "indexname": "c3_envpac_canopy_reference_pkey",
+      "tablename": "c3_envpac_canopy_reference"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_envpac_runtime_primitive_envpac_key_primitive_key_key ON public.c3_envpac_runtime_primitive USING btree (envpac_key, primitive_key)",
+      "indexname": "c3_envpac_runtime_primitive_envpac_key_primitive_key_key",
+      "tablename": "c3_envpac_runtime_primitive"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_envpac_runtime_primitive_pkey ON public.c3_envpac_runtime_primitive USING btree (binding_key)",
+      "indexname": "c3_envpac_runtime_primitive_pkey",
+      "tablename": "c3_envpac_runtime_primitive"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_pac_contract_key_idx ON public.c3_pac USING btree (contract_key)",
+      "indexname": "c3_pac_contract_key_idx",
+      "tablename": "c3_pac"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_pac_envpac_key_pac_key_version_key ON public.c3_pac USING btree (envpac_key, pac_key, version)",
+      "indexname": "c3_pac_envpac_key_pac_key_version_key",
+      "tablename": "c3_pac"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_pac_pkey ON public.c3_pac USING btree (pac_key)",
+      "indexname": "c3_pac_pkey",
+      "tablename": "c3_pac"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_pac_supersedes_pac_key_idx ON public.c3_pac USING btree (supersedes_pac_key)",
+      "indexname": "c3_pac_supersedes_pac_key_idx",
+      "tablename": "c3_pac"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_pac_member_pac_key_idx ON public.c3_pac_member USING btree (pac_key)",
+      "indexname": "c3_pac_member_pac_key_idx",
+      "tablename": "c3_pac_member"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_pac_member_pac_role_idx ON public.c3_pac_member USING btree (pac_key, member_role)",
+      "indexname": "c3_pac_member_pac_role_idx",
+      "tablename": "c3_pac_member"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_pac_member_pkey ON public.c3_pac_member USING btree (member_key)",
+      "indexname": "c3_pac_member_pkey",
+      "tablename": "c3_pac_member"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_pac_member_source_object_idx ON public.c3_pac_member USING btree (source_object_key) WHERE (source_object_key IS NOT NULL)",
+      "indexname": "c3_pac_member_source_object_idx",
+      "tablename": "c3_pac_member"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX c3_profile_pac_pkey ON public.c3_profile_pac USING btree (pac_key)",
+      "indexname": "c3_profile_pac_pkey",
+      "tablename": "c3_profile_pac"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_profile_pac_profile_key_idx ON public.c3_profile_pac USING btree (profile_key)",
+      "indexname": "c3_profile_pac_profile_key_idx",
+      "tablename": "c3_profile_pac"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE INDEX c3_profile_pac_subject_idx ON public.c3_profile_pac USING btree (subject_type, subject_key)",
+      "indexname": "c3_profile_pac_subject_idx",
+      "tablename": "c3_profile_pac"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX crs_relationship_pkey ON public.crs_relationship USING btree (relationship_key)",
+      "indexname": "crs_relationship_pkey",
+      "tablename": "crs_relationship"
+    }
+  },
+  {
+    "kind": "index",
+    "object": {
+      "indexdef": "CREATE UNIQUE INDEX crs_relationship_primary_email_normalized_uidx ON public.crs_relationship USING btree (lower(btrim(primary_email)))",
+      "indexname": "crs_relationship_primary_email_normalized_uidx",
+      "tablename": "crs_relationship"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_current_evidence_no_delete",
+      "table": "c3_current_evidence_ref",
+      "function": "c3_current_prevent_evidence_mutation()",
+      "definition": "CREATE TRIGGER trg_c3_current_evidence_no_delete BEFORE DELETE ON public.c3_current_evidence_ref FOR EACH ROW EXECUTE FUNCTION c3_current_prevent_evidence_mutation()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_current_prevent_evidence_mutation()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\nbegin\n  raise exception 'c3 Current evidence references are immutable';\nend;\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_current_evidence_no_update",
+      "table": "c3_current_evidence_ref",
+      "function": "c3_current_prevent_evidence_mutation()",
+      "definition": "CREATE TRIGGER trg_c3_current_evidence_no_update BEFORE UPDATE ON public.c3_current_evidence_ref FOR EACH ROW EXECUTE FUNCTION c3_current_prevent_evidence_mutation()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_current_prevent_evidence_mutation()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\nbegin\n  raise exception 'c3 Current evidence references are immutable';\nend;\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_current_snapshot_asset_evidence",
+      "table": "c3_current_evidence_ref",
+      "function": "c3_current_snapshot_asset_evidence()",
+      "definition": "CREATE TRIGGER trg_c3_current_snapshot_asset_evidence BEFORE INSERT ON public.c3_current_evidence_ref FOR EACH ROW EXECUTE FUNCTION c3_current_snapshot_asset_evidence()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_current_snapshot_asset_evidence()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_content_hash text;\n  v_hash_algorithm text;\n  v_asset_standing text;\n  v_custody_type text;\n  v_custody_provider text;\n  v_custody_identifier text;\n  v_custody_location text;\n  v_tokenization_standing text;\n  v_external_anchor jsonb;\nbegin\n  if new.asset_key is null or length(btrim(new.asset_key)) = 0 then\n    return new;\n  end if;\n\n  if to_regclass('public.c3ops_asset_record') is null then\n    raise exception 'HOLD_C3OPS_ASSET_AUTHORITY_UNAVAILABLE';\n  end if;\n\n  execute $asset$\n    select\n      content_hash,\n      hash_algorithm,\n      standing,\n      authoritative_custody_type,\n      authoritative_custody_provider,\n      authoritative_custody_identifier,\n      authoritative_custody_location,\n      tokenization_standing,\n      nullif(\n        jsonb_strip_nulls(\n          jsonb_build_object(\n            'external_anchor_type', external_anchor_type,\n            'network_identifier', network_identifier,\n            'smart_contract_identifier', contract_identifier,\n            'token_identifier', token_identifier,\n            'anchor_standing', anchor_standing\n          )\n        ),\n        '{}'::jsonb\n      )\n    from public.c3ops_asset_record\n    where asset_key = $1\n  $asset$\n  into\n    v_content_hash,\n    v_hash_algorithm,\n    v_asset_standing,\n    v_custody_type,\n    v_custody_provider,\n    v_custody_identifier,\n    v_custody_location,\n    v_tokenization_standing,\n    v_external_anchor\n  using btrim(new.asset_key);\n\n  if v_content_hash is null then\n    raise exception 'HOLD_ASSET_EVIDENCE_UNRESOLVED: %', new.asset_key;\n  end if;\n\n  new.content_hash := v_content_hash;\n  new.hash_algorithm := coalesce(nullif(v_hash_algorithm, ''), 'sha256');\n  new.authoritative_custody_type := v_custody_type;\n  new.authoritative_custody_provider := v_custody_provider;\n  new.authoritative_custody_identifier := v_custody_identifier;\n  new.authoritative_custody_location := v_custody_location;\n  new.evidence_standing := v_asset_standing;\n  new.tokenization_standing_at_attest := v_tokenization_standing;\n  new.external_anchor_ref_at_attest := v_external_anchor;\n\n  return new;\nend;\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_current_guard_state_update",
+      "table": "c3_current_state",
+      "function": "c3_current_guard_state_update()",
+      "definition": "CREATE TRIGGER trg_c3_current_guard_state_update BEFORE UPDATE ON public.c3_current_state FOR EACH ROW EXECUTE FUNCTION c3_current_guard_state_update()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_current_guard_state_update()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\nbegin\n  if old.current_state_key is distinct from new.current_state_key\n     or old.env_key is distinct from new.env_key\n     or old.state_version is distinct from new.state_version\n     or old.standing is distinct from new.standing\n     or old.effective_at is distinct from new.effective_at\n     or old.formation_authority_ref is distinct from new.formation_authority_ref\n     or old.advance_disposition_ref is distinct from new.advance_disposition_ref\n     or old.predecessor_current_state_key is distinct from new.predecessor_current_state_key\n     or old.source_grammar_key is distinct from new.source_grammar_key\n     or old.metadata is distinct from new.metadata\n     or old.created_by is distinct from new.created_by\n     or old.created_at is distinct from new.created_at then\n    raise exception 'c3 Current state core fields are immutable';\n  end if;\n\n  if old.is_current is true\n     and new.is_current is false\n     and old.superseded_at is null\n     and new.superseded_at is not null then\n    return new;\n  end if;\n\n  raise exception 'c3 Current state may only transition once from current to historical';\nend;\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_current_require_successor",
+      "table": "c3_current_state",
+      "function": "c3_current_require_successor()",
+      "definition": "CREATE CONSTRAINT TRIGGER trg_c3_current_require_successor AFTER UPDATE OF is_current ON public.c3_current_state DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION c3_current_require_successor()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_current_require_successor()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\nbegin\n  if old.is_current is true and new.is_current is false then\n    if not exists (\n      select 1\n      from public.c3_current_state successor\n      where successor.predecessor_current_state_key = old.current_state_key\n        and successor.env_key = old.env_key\n        and successor.is_current is true\n    ) then\n      raise exception 'superseded Current state % requires a current successor', old.current_state_key;\n    end if;\n  end if;\n\n  return null;\nend;\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_current_state_no_delete",
+      "table": "c3_current_state",
+      "function": "c3_current_prevent_state_delete()",
+      "definition": "CREATE TRIGGER trg_c3_current_state_no_delete BEFORE DELETE ON public.c3_current_state FOR EACH ROW EXECUTE FUNCTION c3_current_prevent_state_delete()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_current_prevent_state_delete()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\nbegin\n  raise exception 'c3 Current state lineage may not be deleted';\nend;\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_current_validate_lineage",
+      "table": "c3_current_state",
+      "function": "c3_current_validate_lineage()",
+      "definition": "CREATE TRIGGER trg_c3_current_validate_lineage BEFORE INSERT ON public.c3_current_state FOR EACH ROW EXECUTE FUNCTION c3_current_validate_lineage()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_current_validate_lineage()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  predecessor public.c3_current_state%rowtype;\nbegin\n  if new.predecessor_current_state_key is null then\n    if new.state_version <> 1 then\n      raise exception 'initial Current state must use state_version 1';\n    end if;\n\n    if exists (\n      select 1 from public.c3_current_state s where s.env_key = new.env_key\n    ) then\n      raise exception 'Current history already exists for env_key %', new.env_key;\n    end if;\n\n    return new;\n  end if;\n\n  select *\n    into predecessor\n  from public.c3_current_state\n  where current_state_key = new.predecessor_current_state_key;\n\n  if not found then\n    raise exception 'predecessor Current state not found: %', new.predecessor_current_state_key;\n  end if;\n\n  if predecessor.env_key <> new.env_key then\n    raise exception 'Current predecessor env_key mismatch';\n  end if;\n\n  if new.state_version <> predecessor.state_version + 1 then\n    raise exception 'Current successor state_version must equal predecessor + 1';\n  end if;\n\n  if predecessor.is_current is true or predecessor.superseded_at is null then\n    raise exception 'Current predecessor must be superseded before successor insertion';\n  end if;\n\n  if new.advance_disposition_ref is null\n     or length(btrim(new.advance_disposition_ref)) = 0 then\n    raise exception 'Current successor requires governed advance_disposition_ref';\n  end if;\n\n  return new;\nend;\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "retain_initiative_visibility_current_after_change",
+      "table": "c3_env_initiative_visibility",
+      "function": "retain_initiative_visibility_current_trigger()",
+      "definition": "CREATE TRIGGER retain_initiative_visibility_current_after_change AFTER INSERT OR UPDATE OF standing, revoked_at ON public.c3_env_initiative_visibility FOR EACH ROW EXECUTE FUNCTION retain_initiative_visibility_current_trigger()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.retain_initiative_visibility_current_trigger()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public', 'pg_temp'\nAS $function$\ndeclare v_relation_standing text;\nbegin\n  v_relation_standing:=case when new.revoked_at is not null then 'revoked' else coalesce(new.standing,'active') end;\n  perform public.retain_current_token_internal(\n    'CURRENT:'||new.envpac_key||':initiative:'||new.visibility_key,\n    new.relationship_key,new.env_key,new.envpac_key,\n    'initiative','initiative_visibility',new.visibility_key,null,v_relation_standing,\n    jsonb_build_object(\n      'initiative_key',new.initiative_key,\n      'initiative_envpac_key',new.initiative_envpac_key,\n      'target_environment_key',new.target_environment_key,\n      'visibility_source',new.visibility_source,\n      'source_ref',new.source_ref,\n      'visible_at',new.visible_at,\n      'source','c3_env_initiative_visibility'\n    )\n  );\n  return new;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_apply_47pct_c2_consumer_grant",
+      "table": "c3_env_initiative_visibility",
+      "function": "apply_47pct_c2_consumer_grant_from_visibility()",
+      "definition": "CREATE TRIGGER trg_apply_47pct_c2_consumer_grant AFTER INSERT OR UPDATE OF standing, revoked_at, initiative_envpac_key, target_environment_key ON public.c3_env_initiative_visibility FOR EACH ROW EXECUTE FUNCTION apply_47pct_c2_consumer_grant_from_visibility()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.apply_47pct_c2_consumer_grant_from_visibility()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public', 'pg_temp'\nAS $function$\ndeclare v_grant_key text;\nbegin\n  if new.initiative_key<>'47pct' then return new; end if;\n\n  v_grant_key:='grant_47pct_c2_'||substr(md5(new.relationship_key),1,24);\n\n  if new.standing='active'\n     and new.revoked_at is null\n     and new.initiative_envpac_key='c3envpac_c2me_v0_1'\n     and new.target_environment_key='env_c3_community_contribute' then\n\n    insert into public.c3_envpac_access_grant(\n      grant_key,envpac_key,subject_type,subject_key,relation_role,scope,standing,\n      granted_by_type,granted_by_key,expires_at,revoked_at,evidence_ref,metadata\n    ) values (\n      v_grant_key,\n      new.initiative_envpac_key,\n      'individual',\n      new.relationship_key,\n      'consumer',\n      jsonb_build_object(\n        'initiative_key','47pct',\n        'environment_key','env_c3_community_contribute',\n        'rights',jsonb_build_array(\n          'inspect_runtime_components',\n          'read_verified_evidence',\n          'read_current',\n          'read_ground_map',\n          'read_money_view',\n          'write_ledger_when_authorized'\n        ),\n        'ownership_created',false,\n        'custody_transfer',false,\n        'standing_created',false\n      ),\n      'active',\n      'system','c3_field',\n      null,null,\n      new.visibility_key,\n      jsonb_build_object(\n        'source','c3_env_initiative_visibility',\n        'visibility_key',new.visibility_key,\n        'visibility_source',new.visibility_source,\n        'source_personal_env_key',new.env_key,\n        'source_personal_envpac_key',new.envpac_key,\n        'initiative_key','47pct',\n        'target_environment_key','env_c3_community_contribute',\n        'grant_effect','bounded_c2_consumer_access_only'\n      )\n    )\n    on conflict (grant_key) do update\n      set envpac_key=excluded.envpac_key,\n          subject_type=excluded.subject_type,\n          subject_key=excluded.subject_key,\n          relation_role=excluded.relation_role,\n          scope=excluded.scope,\n          standing='active',\n          revoked_at=null,\n          evidence_ref=excluded.evidence_ref,\n          metadata=excluded.metadata;\n  else\n    update public.c3_envpac_access_grant\n    set standing='revoked',revoked_at=now(),\n        metadata=metadata||jsonb_build_object('revoked_from_visibility',true)\n    where grant_key=v_grant_key and standing='active';\n  end if;\n\n  return new;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_apply_47pct_env_presentation",
+      "table": "c3_env_initiative_visibility",
+      "function": "apply_47pct_env_presentation_from_visibility()",
+      "definition": "CREATE TRIGGER trg_apply_47pct_env_presentation AFTER INSERT OR UPDATE OF standing, revoked_at, envpac_key ON public.c3_env_initiative_visibility FOR EACH ROW EXECUTE FUNCTION apply_47pct_env_presentation_from_visibility()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.apply_47pct_env_presentation_from_visibility()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public', 'pg_temp'\nAS $function$\nbegin\n  if new.initiative_key='47pct'\n     and new.standing='active'\n     and new.revoked_at is null then\n\n    insert into public.c3_envpac_presentation(\n      envpac_key,opening_visual_asset_key,opening_visual_url,source_webpac_key,\n      owner_changeable,selection_standing,selected_by_type,selected_by_key,\n      selected_at,updated_at,metadata\n    ) values (\n      new.envpac_key,\n      '47pct_emblem_environment_backdrop_v1',\n      '/assets/47pct/47pct-emblem-watermark-v1.svg',\n      '47pct_c1_connect_c3webpac_v1',\n      true,'active','initiative','47pct',\n      now(),now(),\n      jsonb_build_object(\n        'initiative_key','47pct',\n        'presentation_role','initiative_environment_backdrop',\n        'presentation_source','c3_env_initiative_visibility',\n        'visibility_key',new.visibility_key,\n        'formation_default',true,\n        'owner_changeable',true,\n        'custody_transfer',false\n      )\n    )\n    on conflict (envpac_key) do update\n      set opening_visual_asset_key=excluded.opening_visual_asset_key,\n          opening_visual_url=excluded.opening_visual_url,\n          source_webpac_key=excluded.source_webpac_key,\n          owner_changeable=true,\n          selection_standing='active',\n          selected_by_type='initiative',\n          selected_by_key='47pct',\n          selected_at=now(),\n          updated_at=now(),\n          metadata=coalesce(public.c3_envpac_presentation.metadata,'{}'::jsonb) || excluded.metadata\n      where public.c3_envpac_presentation.selected_by_type <> 'individual';\n  end if;\n\n  return new;\nend\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "retain_native_connection_current_after_change",
+      "table": "c3_env_native_connection",
+      "function": "retain_native_connection_current_trigger()",
+      "definition": "CREATE TRIGGER retain_native_connection_current_after_change AFTER INSERT OR UPDATE OF standing, revoked_at ON public.c3_env_native_connection FOR EACH ROW EXECUTE FUNCTION retain_native_connection_current_trigger()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.retain_native_connection_current_trigger()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public', 'pg_temp'\nAS $function$\ndeclare v_relation_standing text;\nbegin\n  v_relation_standing:=case when new.revoked_at is not null then 'revoked' else coalesce(new.standing,'active') end;\n\n  perform public.retain_current_token_internal(\n    'CURRENT:'||new.source_envpac_key||':connection:'||new.connection_key,\n    new.source_relationship_key,new.source_env_key,new.source_envpac_key,\n    'connection','native_connection',new.connection_key,null,v_relation_standing,\n    jsonb_build_object(\n      'counterpart_relationship_key',new.target_relationship_key,\n      'counterpart_env_key',new.target_env_key,\n      'counterpart_envpac_key',new.target_envpac_key,\n      'formed_at',new.formed_at,\n      'source','c3_env_native_connection'\n    )\n  );\n\n  perform public.retain_current_token_internal(\n    'CURRENT:'||new.target_envpac_key||':connection:'||new.connection_key,\n    new.target_relationship_key,new.target_env_key,new.target_envpac_key,\n    'connection','native_connection',new.connection_key,null,v_relation_standing,\n    jsonb_build_object(\n      'counterpart_relationship_key',new.source_relationship_key,\n      'counterpart_env_key',new.source_env_key,\n      'counterpart_envpac_key',new.source_envpac_key,\n      'formed_at',new.formed_at,\n      'source','c3_env_native_connection'\n    )\n  );\n  return new;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "c3_profile_pac_envpac_rebind_guard",
+      "table": "c3_pac",
+      "function": "c3_guard_profile_pac_envpac_rebind()",
+      "definition": "CREATE TRIGGER c3_profile_pac_envpac_rebind_guard BEFORE UPDATE OF envpac_key ON public.c3_pac FOR EACH ROW WHEN ((old.pac_type = 'ProfilePAC'::text)) EXECUTE FUNCTION c3_guard_profile_pac_envpac_rebind()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_guard_profile_pac_envpac_rebind()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\n  begin\n    if old.pac_type = 'ProfilePAC'\n       and new.envpac_key is distinct from old.envpac_key then\n      raise exception 'DNR_PROFILE_CHAIN: formed ProfilePAC cannot move between EnvPACs';\n    end if;\n    return new;\n  end;\n  $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "guard_measures_registry_registered_pac_snapshot_v1",
+      "table": "c3_pac",
+      "function": "guard_measures_registry_registered_pac_snapshot_v1()",
+      "definition": "CREATE TRIGGER guard_measures_registry_registered_pac_snapshot_v1 BEFORE UPDATE ON public.c3_pac FOR EACH ROW EXECUTE FUNCTION guard_measures_registry_registered_pac_snapshot_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.guard_measures_registry_registered_pac_snapshot_v1()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$ begin if old.pac_key like 'measures_registry_home_c3webpac_v0_%' and old.is_effective is true and old.standing='active' then if new.pac_key is distinct from old.pac_key or new.pac_type is distinct from old.pac_type or new.version is distinct from old.version or new.custody_uri is distinct from old.custody_uri or new.content_sha256 is distinct from old.content_sha256 or new.custody_provider is distinct from old.custody_provider or new.custodian_subject_type is distinct from old.custodian_subject_type or new.custodian_subject_key is distinct from old.custodian_subject_key then raise exception 'DNR: registered MR PAC snapshot is immutable while active/effective; form/supersede PAC instead'; end if; end if; return new; end $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_hardened_pac_immutable_guard_v1",
+      "table": "c3_pac",
+      "function": "c3_hardened_pac_immutable_guard_v1()",
+      "definition": "CREATE TRIGGER trg_c3_hardened_pac_immutable_guard_v1 BEFORE DELETE OR UPDATE ON public.c3_pac FOR EACH ROW EXECUTE FUNCTION c3_hardened_pac_immutable_guard_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_hardened_pac_immutable_guard_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_context text:=current_setting('c3.pac_registrar_context',true);\nbegin\n  if old.registration_protocol<>'registrar_v1' then\n    return new;\n  end if;\n\n  if nullif(v_context,'') is null then\n    raise exception 'registrar_v1 PAC is immutable; supersede through Registrar';\n  end if;\n\n  if (\n    new.pac_key is distinct from old.pac_key\n    or new.envpac_key is distinct from old.envpac_key\n    or new.pac_type is distinct from old.pac_type\n    or new.version is distinct from old.version\n    or new.standing is distinct from old.standing\n    or new.custody_uri is distinct from old.custody_uri\n    or new.content_sha256 is distinct from old.content_sha256\n    or new.source_authority is distinct from old.source_authority\n    or new.metadata is distinct from old.metadata\n    or new.schema_key is distinct from old.schema_key\n    or new.owner_subject_type is distinct from old.owner_subject_type\n    or new.owner_subject_key is distinct from old.owner_subject_key\n    or new.owner_environment_key is distinct from old.owner_environment_key\n    or new.registration_sha256 is distinct from old.registration_sha256\n    or new.boundary_evaluation_key is distinct from old.boundary_evaluation_key\n    or new.registered_at is distinct from old.registered_at\n    or new.registrar_role_call_key is distinct from old.registrar_role_call_key\n  ) then\n    raise exception 'registrar_v1 PAC registered content cannot be mutated in place';\n  end if;\n\n  return new;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_pac_free_completeness_guard_v1",
+      "table": "c3_pac",
+      "function": "c3_pac_free_completeness_guard_v1()",
+      "definition": "CREATE CONSTRAINT TRIGGER trg_c3_pac_free_completeness_guard_v1 AFTER INSERT OR UPDATE ON public.c3_pac DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION c3_pac_free_completeness_guard_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_pac_free_completeness_guard_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_missing_scope integer;\n  v_missing_snapshot integer;\nbegin\n  if new.registration_protocol<>'registrar_v1'\n     or new.is_effective is not true\n     or new.superseded_at is not null then\n    return null;\n  end if;\n\n  select count(*) into v_missing_scope\n  from public.c3_pac_encounter_scope s\n  where s.pac_key=new.pac_key\n    and s.standing='active'\n    and (\n      s.free_call_key is null\n      or s.selector_type is null\n      or not exists(\n        select 1 from public.c3_free_call c\n        where c.free_call_key=s.free_call_key and c.standing='active'\n      )\n    );\n\n  if v_missing_scope>0 then\n    raise exception 'registrar_v1 FREE call binding required';\n  end if;\n\n  select count(*) into v_missing_snapshot\n  from public.c3_pac_encounter_scope s\n  join public.c3_free_call c on c.free_call_key=s.free_call_key and c.standing='active'\n  where s.pac_key=new.pac_key\n    and s.standing='active'\n    and c.requires_projection=true\n    and not exists(\n      select 1 from public.c3_free_pac_snapshot fs\n      where fs.pac_key=s.pac_key\n        and fs.free_call_key=s.free_call_key\n        and fs.encounter_key=s.encounter_key\n        and fs.standing='active'\n        and fs.registration_sha256=new.registration_sha256\n    );\n\n  if v_missing_snapshot>0 then\n    raise exception 'registrar_v1 FREE projection snapshot required';\n  end if;\n\n  return null;\nend\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_pac_registrar_supersession_guard_v1",
+      "table": "c3_pac",
+      "function": "c3_guard_registrar_pac_supersession_v1()",
+      "definition": "CREATE TRIGGER trg_c3_pac_registrar_supersession_guard_v1 BEFORE INSERT ON public.c3_pac FOR EACH ROW WHEN (((new.registration_protocol = 'registrar_v1'::text) AND (new.supersedes_pac_key IS NOT NULL))) EXECUTE FUNCTION c3_guard_registrar_pac_supersession_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_guard_registrar_pac_supersession_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public', 'pg_temp'\nAS $function$\ndeclare\n  v_result jsonb;\nbegin\n  if new.registration_protocol='registrar_v1'\n     and new.supersedes_pac_key is not null then\n    v_result:=public.c3_validate_pac_supersession_v1(to_jsonb(new),true);\n\n    if coalesce(v_result->>'standing','HLD')<>'PASS' then\n      raise exception 'HLD_PAC_SUPERSESSION:%',\n        coalesce(v_result->>'reason','supersession_unresolved');\n    end if;\n  end if;\n\n  return new;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_pac_registrar_v1_completeness_guard",
+      "table": "c3_pac",
+      "function": "c3_pac_registrar_v1_completeness_guard()",
+      "definition": "CREATE CONSTRAINT TRIGGER trg_c3_pac_registrar_v1_completeness_guard AFTER INSERT OR UPDATE OF registration_protocol, registration_sha256, boundary_evaluation_key, owner_subject_type, owner_subject_key, owner_environment_key, contract_key ON public.c3_pac DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION c3_pac_registrar_v1_completeness_guard()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_pac_registrar_v1_completeness_guard()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_eval public.c3_pac_boundary_evaluation%rowtype;\n  v_call public.c3_ci_role_call%rowtype;\nbegin\n  if new.registration_protocol<>'registrar_v1' then return null; end if;\n\n  select * into v_eval from public.c3_pac_boundary_evaluation where evaluation_key=new.boundary_evaluation_key;\n  if not found or v_eval.notchazz_result<>'PASS' or v_eval.presented_registration_sha256<>new.registration_sha256 then\n    raise exception 'registrar_v1_boundary_pass_exact_match_required';\n  end if;\n\n  if not exists(\n    select 1 from public.c3_pac_schema\n    where schema_key=new.schema_key and pac_type=new.pac_type and standing='active' and is_active=true\n  ) then\n    raise exception 'registrar_v1_active_schema_required';\n  end if;\n\n  if coalesce((select requires_c3_model_binding from public.c3_pac_schema where schema_key=new.schema_key),true)\n     and not exists(select 1 from public.c3_pac_model_binding b where b.pac_key=new.pac_key and b.standing='active') then\n    raise exception 'registrar_v1_model_binding_required';\n  end if;\n\n  if not exists(select 1 from public.c3_pac_encounter_scope s where s.pac_key=new.pac_key and s.standing='active') then\n    raise exception 'registrar_v1_encounter_scope_required';\n  end if;\n\n  select * into v_call\n  from public.c3_ci_role_call\n  where role_call_key=new.registrar_role_call_key;\n\n  if not found\n     or v_call.call_class<>'pac_registration'\n     or v_call.caller_role_key<>'c3_notchazz_boundary_v1'\n     or v_call.callee_role_key<>'c3_registrar_ci_v1'\n     or v_call.standing<>'RETURNED'\n     or v_call.boundary_evaluation_key<>new.boundary_evaluation_key\n     or v_call.presented_sha256<>new.registration_sha256 then\n    raise exception 'registrar_v1_role_call_required';\n  end if;\n\n  if not exists(\n    select 1 from public.c3_pac_registration_receipt r\n    where r.pac_key=new.pac_key\n      and r.registration_sha256=new.registration_sha256\n      and r.registrar_role_call_key=new.registrar_role_call_key\n      and r.standing='registered'\n  ) then\n    raise exception 'registrar_v1_registration_receipt_required';\n  end if;\n\n  if new.owner_subject_type='institution'\n     and coalesce((public.resolve_institutional_pac_eligibility_v1(new.owner_subject_key,new.owner_environment_key)->>'standing'),'HLD')<>'PASS' then\n    raise exception 'HLD_INSTITUTIONAL_SEAT_REQUIRED';\n  end if;\n  return null;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "c3_pac_member_set_updated_at",
+      "table": "c3_pac_member",
+      "function": "set_updated_at()",
+      "definition": "CREATE TRIGGER c3_pac_member_set_updated_at BEFORE UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION set_updated_at()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.set_updated_at()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$\r\nbegin\r\n  new.updated_at = now();\r\n  return new;\r\nend;\r\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "guard_measures_registry_registered_pac_member_v1",
+      "table": "c3_pac_member",
+      "function": "guard_measures_registry_registered_pac_member_v1()",
+      "definition": "CREATE TRIGGER guard_measures_registry_registered_pac_member_v1 BEFORE DELETE OR UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION guard_measures_registry_registered_pac_member_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.guard_measures_registry_registered_pac_member_v1()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$ declare v_pac_key text:=coalesce(new.pac_key,old.pac_key); v_effective boolean; v_standing text; begin if v_pac_key not like 'measures_registry_home_c3webpac_v0_%' then return coalesce(new,old); end if; select is_effective,standing into v_effective,v_standing from public.c3_pac where pac_key=v_pac_key; if coalesce(v_effective,false) and v_standing='active' then if tg_op='DELETE' then raise exception 'DNR: required registered MR PAC member cannot be removed while PAC is active/effective'; end if; if old.required is true and old.standing='registered' and (new.pac_key is distinct from old.pac_key or new.member_kind is distinct from old.member_kind or new.member_role is distinct from old.member_role or new.source_object_key is distinct from old.source_object_key or new.custody_provider is distinct from old.custody_provider or new.custody_identifier is distinct from old.custody_identifier or new.custody_location is distinct from old.custody_location or new.runtime_binding_key is distinct from old.runtime_binding_key or new.required is distinct from old.required or new.release_scope is distinct from old.release_scope or new.standing is distinct from old.standing) then raise exception 'DNR: registered MR PAC member declaration is immutable while PAC is active/effective; form/supersede PAC instead'; end if; end if; return coalesce(new,old); end $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "trg_c3_pac_member_hardened_guard",
+      "table": "c3_pac_member",
+      "function": "c3_hardened_pac_child_guard_v1()",
+      "definition": "CREATE TRIGGER trg_c3_pac_member_hardened_guard BEFORE INSERT OR DELETE OR UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION c3_hardened_pac_child_guard_v1('pac_key')",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_hardened_pac_child_guard_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_parent_column text := nullif(TG_ARGV[0],'');\n  v_old_pac_key text;\n  v_new_pac_key text;\n  v_old_protocol text;\n  v_new_protocol text;\n  v_context text := current_setting('c3.pac_registrar_context',true);\nbegin\n  if v_parent_column is null then\n    raise exception 'hardened PAC child guard parent key argument is required';\n  end if;\n\n  if TG_OP in ('UPDATE','DELETE') then\n    v_old_pac_key := nullif(to_jsonb(OLD)->>v_parent_column,'');\n    if v_old_pac_key is null then\n      raise exception 'hardened PAC child guard old parent unresolved for table % column %',\n        TG_TABLE_NAME, v_parent_column;\n    end if;\n\n    select registration_protocol\n      into v_old_protocol\n    from public.c3_pac\n    where pac_key=v_old_pac_key;\n  end if;\n\n  if TG_OP in ('INSERT','UPDATE') then\n    v_new_pac_key := nullif(to_jsonb(NEW)->>v_parent_column,'');\n    if v_new_pac_key is null then\n      raise exception 'hardened PAC child guard new parent unresolved for table % column %',\n        TG_TABLE_NAME, v_parent_column;\n    end if;\n\n    select registration_protocol\n      into v_new_protocol\n    from public.c3_pac\n    where pac_key=v_new_pac_key;\n  end if;\n\n  if nullif(v_context,'') is null\n     and (v_old_protocol='registrar_v1' or v_new_protocol='registrar_v1') then\n    raise exception 'registrar_v1 PAC child state is immutable; supersede through Registrar';\n  end if;\n\n  if TG_OP='DELETE' then\n    return OLD;\n  end if;\n  return NEW;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "c3_profile_pac_chain_guard",
+      "table": "c3_profile_pac",
+      "function": "c3_guard_profile_pac_chain()",
+      "definition": "CREATE TRIGGER c3_profile_pac_chain_guard BEFORE INSERT OR UPDATE ON public.c3_profile_pac FOR EACH ROW EXECUTE FUNCTION c3_guard_profile_pac_chain()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_guard_profile_pac_chain()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_envpac_key text;\n  v_owner_type text;\n  v_owner_key text;\n  v_formed_from_c1 boolean;\n  v_primitive_ok boolean;\n  v_registration_protocol text;\n  v_schema_key text;\n  v_contract_key text;\n  v_environment_class text;\n  v_parent_environment text;\nbegin\n  select p.envpac_key,p.registration_protocol,p.schema_key,p.contract_key\n    into v_envpac_key,v_registration_protocol,v_schema_key,v_contract_key\n  from public.c3_pac p\n  where p.pac_key=new.pac_key\n    and p.pac_type='ProfilePAC'\n    and p.is_effective=true;\n\n  if v_envpac_key is null then\n    raise exception 'DNR_PROFILE_CHAIN: effective ProfilePAC base record not resolved';\n  end if;\n\n  if v_registration_protocol='registrar_v1' then\n    if not exists(\n      select 1\n      from public.c3_pac_schema s\n      where s.schema_key=v_schema_key\n        and s.pac_type='ProfilePAC'\n        and s.standing='active'\n        and s.is_active=true\n    ) then\n      raise exception 'DNR_PROFILE_CHAIN: active ProfilePAC schema not resolved';\n    end if;\n  elsif v_contract_key is distinct from 'pac_contract_profilepac_v1' then\n    raise exception 'DNR_PROFILE_CHAIN: legacy ProfilePAC contract not resolved';\n  end if;\n\n  select e.owner_subject_type,\n         e.owner_subject_key,\n         coalesce((e.metadata->>'formed_from_c1')::boolean,false),\n         ce.environment_class,\n         ce.metadata->>'parent_environment'\n    into v_owner_type,v_owner_key,v_formed_from_c1,v_environment_class,v_parent_environment\n  from public.c3_envpac e\n  join public.c3_environment ce on ce.env_key=e.env_key and ce.is_active=true\n  where e.envpac_key=v_envpac_key\n    and e.is_effective=true;\n\n  if v_owner_key is null then\n    raise exception 'DNR_PROFILE_CHAIN: effective ProfilePAC EnvPAC not resolved';\n  end if;\n\n  if v_registration_protocol='registrar_v1' then\n    if v_owner_type<>'individual'\n       or not v_formed_from_c1\n       or v_environment_class<>'c3me_individual_environment'\n       or v_parent_environment<>'env_c3_community_connect' then\n      raise exception 'DNR_PROFILE_CHAIN: hardened ProfilePAC requires current personal c1My_Env lineage';\n    end if;\n  else\n    if not v_formed_from_c1 then\n      raise exception 'DNR_PROFILE_CHAIN: ProfilePAC requires effective personal c1My_Env formed from Connect';\n    end if;\n\n    select exists(\n      select 1\n      from public.c3_envpac_runtime_primitive rp\n      where rp.envpac_key=v_envpac_key\n        and rp.primitive_key='profile_pac'\n        and rp.primitive_class='participant_formable_pac'\n        and rp.standing='active'\n        and rp.config->>'contract_key'='pac_contract_profilepac_v1'\n    ) into v_primitive_ok;\n\n    if not v_primitive_ok then\n      raise exception 'DNR_PROFILE_CHAIN: active ProfilePAC primitive not resolved from c1My_Env';\n    end if;\n  end if;\n\n  if new.subject_type is distinct from v_owner_type\n     or new.subject_key is distinct from v_owner_key then\n    raise exception 'DNR_PROFILE_CHAIN: ProfilePAC subject must equal c1My_Env owner';\n  end if;\n\n  if tg_op='UPDATE' then\n    if new.subject_type is distinct from old.subject_type\n       or new.subject_key is distinct from old.subject_key\n       or new.profile_class is distinct from old.profile_class then\n      raise exception 'DNR_PROFILE_CHAIN: ProfilePAC identity binding is immutable after formation';\n    end if;\n  end if;\n\n  return new;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "object": {
+      "name": "c3_profile_pac_set_updated_at",
+      "table": "c3_profile_pac",
+      "function": "set_updated_at()",
+      "definition": "CREATE TRIGGER c3_profile_pac_set_updated_at BEFORE UPDATE ON public.c3_profile_pac FOR EACH ROW EXECUTE FUNCTION set_updated_at()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.set_updated_at()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$\r\nbegin\r\n  new.updated_at = now();\r\n  return new;\r\nend;\r\n$function$\n"
+    }
+  }
+]

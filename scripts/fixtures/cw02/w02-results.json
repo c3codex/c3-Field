@@ -1,0 +1,1582 @@
+{
+  "environment": {
+    "host": "127.0.0.1",
+    "port": 55474,
+    "user": "postgres",
+    "database": "postgres"
+  },
+  "source_base": "1dfcbdd3fb6f6ec76c1f06dd60592da8f570e260",
+  "run_bindings": {
+    "runner_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+    "bootstrap_sha256": "51d5b3ed02e3b37ce561a176ada9946802e54dc6eecec2fe9af6761f5dab88a4",
+    "combined_baseline_sha256": "6013354b18b3ff6d201300254a202c96fa52e045270de7e7ea93e2d8faef49d3",
+    "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+    "postgres_version": "PostgreSQL 17.6 on x86_64-windows, compiled by msvc-19.44.35213, 64-bit",
+    "original_handler_files": {
+      "functions/api/c1me-current.ts": "fc819f6f3ab4b7f4af63a8a7106eb5417dcbcbace5059a40cf5367941e529048",
+      "functions/api/my-environment-pacs.ts": "74ec77b220b159a7d794256461e29672ad9ac53e60cb4b7d3d248c33069f5582",
+      "functions/api/my-environment-canopy.ts": "ceb0bd28e4317211217ed4410006f9792ba64688bcc59d71e8dca79dbd40f37d",
+      "functions/api/my-environment-connections.ts": "36971ccfe120578473ec209b8e4aa4e0671a66d5d5d28bf031ecfc22c4e5ef92",
+      "functions/_lib/env-session.ts": "0c10508e0f5e15c51532c0324e25467c481bf91ca4068761fda7d6afd7848c86",
+      "functions/_lib/c1-passage.ts": "737d368ed9dbb10c1f389f42fb08926dadbd637ca796a6e1f776be1b5fcf853f"
+    }
+  },
+  "fixture_identities": {
+    "a": {
+      "subject": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "env": "env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+      "envpac": "c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1",
+      "token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "pac": "fixture_profile_a",
+      "current": "fixture_current_a"
+    },
+    "b": {
+      "subject": "crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "env": "env_person_bbbbbbbbbbbbbbbbbbbbbbbb",
+      "envpac": "c3envpac_person_bbbbbbbbbbbbbbbbbbbbbbbb_v0_1",
+      "token": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "pac": "fixture_profile_b",
+      "current": "fixture_current_b"
+    },
+    "c": {
+      "subject": "crs_cccccccccccccccccccccccccccccccc",
+      "env": "env_person_cccccccccccccccccccccccc",
+      "envpac": "c3envpac_person_cccccccccccccccccccccccc_v0_1",
+      "token": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "pac": "fixture_profile_c",
+      "current": "fixture_current_c"
+    }
+  },
+  "limitations": [
+    "In-process fetch-to-PG adapter, not PostgREST or signed JWT",
+    "Actual service_role/ordinary SQL roles and original handlers/functions",
+    "External FK parents and ancillary triggers omitted in indexed source",
+    "No private production rows or real credentials",
+    "Synthetic CURRENT is test data only, never Registry standing"
+  ],
+  "receipts": [
+    {
+      "case_id": "I01",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I01",
+        "name": "A own Current",
+        "request": {
+          "method": "GET",
+          "path": "/api/c1me-current"
+        },
+        "setup": "A active owner session, one effective EnvPAC/Current",
+        "expected": "existing_c1, correct current_ref; no B fields",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "3b3a445da413485be7626b97b2770a6b78bb91999e4c56975b51ac6ef0de1a9e",
+      "response_digest": "3f8d0a5b6b95b6ad47bc3242bfb554620c4028d876620d4fbc0fd055039b02d7",
+      "response_status": 200,
+      "reason_code": null,
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:09.947Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 200,
+        "body": {
+          "resolution": "existing_c1",
+          "next_encounter": "enter_existing_environment",
+          "current_ref": "fixture_current_a",
+          "may_create_personal_environment": false
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "I02",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I02",
+        "name": "B own Current",
+        "request": {
+          "method": "GET",
+          "path": "/api/c1me-current"
+        },
+        "setup": "B independent fixture",
+        "expected": "existing_c1 with B only",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "634614cb1e61532b7d2e748849bd4917d2dad41f201ecf64ac49130ab9193db9",
+      "response_digest": "62cc3276972ab787958842b0c8482e2b075374029a4a11b0be9e4c205df8761e",
+      "response_status": 200,
+      "reason_code": null,
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:09.979Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 200,
+        "body": {
+          "resolution": "existing_c1",
+          "next_encounter": "enter_existing_environment",
+          "current_ref": "fixture_current_b",
+          "may_create_personal_environment": false
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.a0fab1377f49a759b57f63318262ebe89fabfc990e8e93ceac2984561482b9d4&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_bbbbbbbbbbbbbbbbbbbbbbbb_v0_1&subject_key=eq.crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "I03",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I03",
+        "name": "A tampers env/owner in body/query",
+        "request": {
+          "method": "GET",
+          "path": "/api/c1me-current?env_key=synthetic_B"
+        },
+        "setup": "A cookie, B request claim",
+        "expected": "server-derived A or request denied; never B",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "5067c4ae57c8a5817665d888ead53d6c0c9309f506cc8abd6ab2de503f2fc49a",
+      "response_digest": "3f8d0a5b6b95b6ad47bc3242bfb554620c4028d876620d4fbc0fd055039b02d7",
+      "response_status": 200,
+      "reason_code": null,
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.008Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 200,
+        "body": {
+          "resolution": "existing_c1",
+          "next_encounter": "enter_existing_environment",
+          "current_ref": "fixture_current_a",
+          "may_create_personal_environment": false
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "I04",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I04",
+        "name": "cross-owner PAC review",
+        "request": {
+          "method": "POST",
+          "path": "/api/my-environment-pacs"
+        },
+        "setup": "A session, B pac_key, review_snapshot",
+        "expected": "DNR/HLD; B review/approval unchanged",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "018824ef2a9295b08d14c4a67457b32d87f221713425096218369c63803eb9e0",
+      "response_digest": "892aa9f668d8a0444b8aa690ab7c01423bf436d52bef7a380f430592b6a5aa51",
+      "response_status": 409,
+      "reason_code": "personal_owner_custody_required",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.040Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 409,
+        "body": {
+          "reason": "personal_owner_custody_required",
+          "standing": "DNR"
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/c3_pac_set_personal_review_v1",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_pac_key": "fixture_profile_b",
+            "p_subject_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "p_disposition": "REVIEWED",
+            "p_candidate_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "I05",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I05",
+        "name": "cross-owner Canopy reference",
+        "request": {
+          "method": "POST",
+          "path": "/api/my-environment-canopy"
+        },
+        "setup": "A session, B reference_key edit/remove/open",
+        "expected": "404/denial; no B URL/body returned",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "103973b41cd191db7bac9e1b0ef9bf263b7b19e2a9644e54f321106bceb0ec3d",
+      "response_digest": "59413b69a6b0c4b91d6024cd2de2891354e0fcb217c4663de30c8d63f73f8aad",
+      "response_status": 404,
+      "reason_code": null,
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.086Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 404,
+        "body": [
+          {
+            "status": 404,
+            "body": {
+              "standing": "canopy_reference_unavailable",
+              "message": "That Canopy reference is unavailable."
+            }
+          },
+          {
+            "status": 404,
+            "body": {
+              "standing": "canopy_reference_unavailable",
+              "message": "That Canopy reference is unavailable."
+            }
+          },
+          {
+            "status": 404,
+            "body": {
+              "standing": "canopy_reference_unavailable",
+              "message": "That Canopy reference is unavailable."
+            }
+          }
+        ]
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_envpac_primitives_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac_canopy_reference",
+          "method": "GET",
+          "query": "?select=reference_key%2Csurface_label%2Cdisplay_label%2Cexternal_url%2Chandle%2Csort_order%2Creference_state&reference_key=eq.bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&reference_state=eq.active&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_envpac_primitives_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac_canopy_reference",
+          "method": "GET",
+          "query": "?select=reference_key%2Csurface_label%2Cdisplay_label%2Cexternal_url%2Chandle%2Csort_order%2Creference_state&reference_key=eq.bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&reference_state=eq.active&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_envpac_primitives_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        {
+          "path": "c3_envpac_canopy_reference",
+          "method": "GET",
+          "query": "?select=reference_key%2Csurface_label%2Cdisplay_label%2Cexternal_url%2Chandle%2Csort_order%2Creference_state&reference_key=eq.bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&owner_subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&reference_state=eq.active&limit=1",
+          "body": null
+        }
+      ]
+    },
+    {
+      "case_id": "I06",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I06",
+        "name": "foreign connection message/device",
+        "request": {
+          "method": "POST",
+          "path": "/api/my-environment-connections"
+        },
+        "setup": "A session, connection with neither endpoint A",
+        "expected": "HLD/DNR; no ciphertext, device detail or new message",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "08052eadbf6b407f8057db191ededae2cbc2fd8394071f5708cc1e2acb6c98a0",
+      "response_digest": "f7dcbdf5738fef946466704adf060e0f8add518f7f49e7e8d84f1825b3408cea",
+      "response_status": 409,
+      "reason_code": "connection_message_not_authorized",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.113Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 409,
+        "body": {
+          "ok": false,
+          "standing": "HLD",
+          "reason": "connection_message_not_authorized",
+          "devices": []
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_cancom_connection_devices_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_connection_key": "fixture_foreign_connection",
+            "p_requester_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "I07",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I07",
+        "name": "revoked owner grant",
+        "request": {
+          "method": "GET",
+          "path": "/api/my-environment-pacs"
+        },
+        "setup": "A formerly valid session, grant revoked in disposable fixture",
+        "expected": "401/403/held; no private payload",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "4d5b6d32b6ce35203b932dddc088f5adaaa869d7b9aed98f40b39b18bc328934",
+      "response_digest": "387d98386bc89e7310bbf1e6720902c8dff3d0dca1c02949d4d9074e3309cd4c",
+      "response_status": null,
+      "reason_code": "revoked_owner_denied",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "3e9d01eb22437d2996e737ef04cae1d984766a8094d20fbd7f0fee093fbf6486",
+      "table_mutation_accounting": [
+        {
+          "table": "c3_envpac_access_grant",
+          "before": {
+            "rows": 3,
+            "sha256": "948755cdcff3f435c12c46692e07470b94aa79412c775ec7ef3c8d004fd8cb80"
+          },
+          "after": {
+            "rows": 3,
+            "sha256": "6da1fd220557f6bcf5fb855594aac960fd9ce79c5737ecfa057acb3f20d9fa64"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.146Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "reason": "revoked_owner_denied"
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        }
+      ]
+    },
+    {
+      "case_id": "I08",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I08",
+        "name": "expired or revoked session",
+        "request": {
+          "method": "GET",
+          "path": "/api/my-environment"
+        },
+        "setup": "A session expiry before clock / revoked_at set",
+        "expected": "401/held; no private payload",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "eceab1de353e1294d576a01e602fcfff247e7859dd241783be2e0b2cf994d106",
+      "response_digest": "122b3d35e2ba9d4b6f7fc298f6435a391a709798472c57b20d81856ea6f661ba",
+      "response_status": null,
+      "reason_code": "expired_session_denied",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "66c66d152a5a2b911ae19e1e209e00f32e90774c4220697b37da3eec16e73590",
+      "table_mutation_accounting": [
+        {
+          "table": "c3_env_runtime_session",
+          "before": {
+            "rows": 3,
+            "sha256": "ab008124a87f43ed471f326a3755b1d28b6c44367f58bc3f555c13ad5ff46086"
+          },
+          "after": {
+            "rows": 3,
+            "sha256": "8dbd7ab38e46643d848674178f7ab621eb99f8b76b1781f8175de186a3120a81"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.172Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "reason": "expired_session_denied"
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        }
+      ]
+    },
+    {
+      "case_id": "I09",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I09",
+        "name": "ambiguous grant/EnvPAC/Current",
+        "request": {
+          "method": "GET",
+          "path": "/api/c1me-current"
+        },
+        "setup": "two qualifying fixture rows",
+        "expected": "409 reconciliation_hold; no arbitrary first row authority",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "3b3a445da413485be7626b97b2770a6b78bb91999e4c56975b51ac6ef0de1a9e",
+      "response_digest": "c0235c2c5c2141c04a5ae8dfb4b01282ef574dc7c6c2177781c4adcd72b5ef40",
+      "response_status": 409,
+      "reason_code": "owner_grant_missing_or_ambiguous",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "49a583a8c9fb6638519be4872003a962e77f466052bcab3042e174592b849082",
+      "table_mutation_accounting": [
+        {
+          "table": "c3_envpac_access_grant",
+          "before": {
+            "rows": 3,
+            "sha256": "948755cdcff3f435c12c46692e07470b94aa79412c775ec7ef3c8d004fd8cb80"
+          },
+          "after": {
+            "rows": 4,
+            "sha256": "40ded2202dccde7aa8a34e4813ecbeae13a9eaf4461011d670b6a9c90a9ae1b5"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.195Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 409,
+        "body": {
+          "resolution": "reconciliation_hold",
+          "reason_code": "owner_grant_missing_or_ambiguous",
+          "may_create_personal_environment": false
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/resolve_c1me_current_internal",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "I10",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I10",
+        "name": "scoped C2 session wrong target",
+        "request": {
+          "method": "GET",
+          "path": "qualified_scoped_test_adapter"
+        },
+        "setup": "A scoped session for X presented to Y",
+        "expected": "scoped_session_target_mismatch; no X/Y leak",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "28bb909861b574c6ea8c28a4f116d3617c8538e8b1e6ca2c9da97356158d0779",
+      "response_digest": "318e4025fc92fc0e2b582d135fb96c15b9d674749347c296113bdaaeefa73681",
+      "response_status": null,
+      "reason_code": "scoped_session_target_mismatch",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "a84f41a84aeb377dcee8aba2cac4c8bbfd336f8bfc4ca3dba682cc8417406507",
+      "table_mutation_accounting": [
+        {
+          "table": "c3_env_runtime_session",
+          "before": {
+            "rows": 3,
+            "sha256": "ab008124a87f43ed471f326a3755b1d28b6c44367f58bc3f555c13ad5ff46086"
+          },
+          "after": {
+            "rows": 3,
+            "sha256": "eb4df3f07ca1e0cf65566cc21677b25764a305b70e2451158e4d1e7782315837"
+          }
+        },
+        {
+          "table": "c3_envpac_access_grant",
+          "before": {
+            "rows": 3,
+            "sha256": "948755cdcff3f435c12c46692e07470b94aa79412c775ec7ef3c8d004fd8cb80"
+          },
+          "after": {
+            "rows": 4,
+            "sha256": "f91ca2dd3a93cd374f79c1a0c5bbcc80c054321b6922dee39920085a69df194a"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.222Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "reason": "scoped_session_target_mismatch"
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at%2Cevidence_ref%2Cmetadata&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        }
+      ]
+    },
+    {
+      "case_id": "I11",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I11",
+        "name": "scoped grant mismatch",
+        "request": {
+          "method": "GET",
+          "path": "qualified_scoped_test_adapter"
+        },
+        "setup": "same env but evidence_ref, role or initiative mismatch",
+        "expected": "scoped_session_grant_mismatch/contract_mismatch",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "28bb909861b574c6ea8c28a4f116d3617c8538e8b1e6ca2c9da97356158d0779",
+      "response_digest": "9f653892cdd3c06d1b3f1ffc2f795710bc62d4e640d28c6d631103738a99e005",
+      "response_status": null,
+      "reason_code": "scoped_session_contract_mismatch",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "c70643a197ecf2084826944dc0c24cf44afe0dbaaa538e9fcf0711a8aea6ff41",
+      "table_mutation_accounting": [
+        {
+          "table": "c3_env_runtime_session",
+          "before": {
+            "rows": 3,
+            "sha256": "ab008124a87f43ed471f326a3755b1d28b6c44367f58bc3f555c13ad5ff46086"
+          },
+          "after": {
+            "rows": 3,
+            "sha256": "0cfaaa66be8cd0ededc9cb0ea98e88a17dede245e075008704d10fc7ded81db3"
+          }
+        },
+        {
+          "table": "c3_envpac_access_grant",
+          "before": {
+            "rows": 3,
+            "sha256": "948755cdcff3f435c12c46692e07470b94aa79412c775ec7ef3c8d004fd8cb80"
+          },
+          "after": {
+            "rows": 4,
+            "sha256": "d8cd54a69997578cf5ee96f35969bd7f5dc0e40ce76dab502176647a12a643e6"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.246Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "reason": "scoped_session_contract_mismatch"
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at%2Cevidence_ref%2Cmetadata&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        }
+      ]
+    },
+    {
+      "case_id": "I12",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I12",
+        "name": "stale source after approval",
+        "request": {
+          "method": "POST",
+          "path": "/api/my-environment-pacs"
+        },
+        "setup": "owner approval hash differs from source snapshot",
+        "expected": "HLD stale approval; projection denied",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "119cf416de23c6bfe5ef5c2507f45bf51e7020f3a8d6ab7bf17da330a1213c4e",
+      "response_digest": "eb435a4c819422ba3dcf60f8230ddb7c98e121029d527bbf631daf6eeeb01ef5",
+      "response_status": 409,
+      "reason_code": "current_reviewed_approval_required",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "317723bc3beb195cf9b46c240e51420a3748266a7ecb95cd821ccae29cf144e2",
+      "table_mutation_accounting": [
+        {
+          "table": "c3_pac",
+          "before": {
+            "rows": 6,
+            "sha256": "1558e374a89a5af25696a76c43cd62e3f5e98e44d138569a17fb2550ffe4e861"
+          },
+          "after": {
+            "rows": 6,
+            "sha256": "4f7513a7367402fa9337a98813a584263e60fd5f80b83d380dba7c8f721d158f"
+          }
+        },
+        {
+          "table": "c3_profile_pac",
+          "before": {
+            "rows": 3,
+            "sha256": "2e15b14925e81e1c46fc8b0ffea13857e82cdb07007c16c832a4d3d6263e78bf"
+          },
+          "after": {
+            "rows": 3,
+            "sha256": "667302cc57e05c84b9db9b1bee56af2ffd4158e84f8121a846552705f2d970c9"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.276Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 409,
+        "body": {
+          "reason": "current_reviewed_approval_required",
+          "standing": "DNR",
+          "review_snapshot_hash": "33ddad9218d3e56b3cbacc3489509870d98427e58de599fd5719f59d4c464cf3",
+          "current_snapshot_hash": "076a720ea4e4aa4a31eb68d9ed3ddd6da384d491dde6e6d728b5f132d4e2c44d",
+          "approval_snapshot_hash": "33ddad9218d3e56b3cbacc3489509870d98427e58de599fd5719f59d4c464cf3"
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/c3_pac_set_personal_encounter_projection_v1",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_pac_key": "fixture_profile_a",
+            "p_subject_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "p_action": "AUTHORIZE",
+            "p_encounter_key": "c3envpac_c2me_v0_1",
+            "p_surface_scope": "c3field_only"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "I13",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I13",
+        "name": "owner authorizes exact projection",
+        "request": {
+          "method": "POST",
+          "path": "/api/my-environment-pacs"
+        },
+        "setup": "A owns exact current reviewed PAC and has qualified target",
+        "expected": "only qualified synthetic projection; receipt attributed A",
+        "allowed_staging_business_effects": 1,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "65916b551a18d5ad8e1cf255294f2889499a3d485d3b41e5a9ce7726a95ddb2f",
+      "response_digest": "4ec83bc79f802b283f24a7b2b92ba9a3905faa58cc8599e948d93568e57f7e33",
+      "response_status": 200,
+      "reason_code": null,
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "9e9c2fddd54c4f91d27725d46cff4b9ee63b846f9afe678baa9dae2d3d2ec560",
+      "table_mutation_accounting": [
+        {
+          "table": "c3_pac",
+          "before": {
+            "rows": 6,
+            "sha256": "1558e374a89a5af25696a76c43cd62e3f5e98e44d138569a17fb2550ffe4e861"
+          },
+          "after": {
+            "rows": 6,
+            "sha256": "4951bb81de8b1563ad21b64f2648bca6af9971c3dd2290c6ba326b8530ea00f3"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.317Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "status": 200,
+        "body": {
+          "pac_key": "fixture_profile_a",
+          "standing": "ACT",
+          "resolved_at": "2026-10-24T22:37:10.284046-05:00",
+          "encounter_key": "c3envpac_c2me_v0_1",
+          "presentation_scope": "c3field_only",
+          "authorized_by_owner": true,
+          "surface_projections": [
+            "c3field"
+          ],
+          "authorization_snapshot_hash": "33ddad9218d3e56b3cbacc3489509870d98427e58de599fd5719f59d4c464cf3",
+          "encounter_projection_standing": "AUTHORIZED"
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/c3_pac_set_personal_review_v1",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_pac_key": "fixture_profile_a",
+            "p_subject_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "p_disposition": "REVIEWED",
+            "p_candidate_hash": "33ddad9218d3e56b3cbacc3489509870d98427e58de599fd5719f59d4c464cf3"
+          }
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/c3_pac_set_personal_disposition_v1",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_pac_key": "fixture_profile_a",
+            "p_subject_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "p_disposition": "APPROVED",
+            "p_note": null
+          }
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "rpc/c3_pac_set_personal_encounter_projection_v1",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "p_pac_key": "fixture_profile_a",
+            "p_subject_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "p_action": "AUTHORIZE",
+            "p_encounter_key": "c3envpac_c2me_v0_1",
+            "p_surface_scope": "c3field_only"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "I14",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I14",
+        "name": "projection revoke and cached replay",
+        "request": {
+          "method": "GET",
+          "path": "qualified_projection_adapter"
+        },
+        "setup": "grant revoked after initial permitted projection",
+        "expected": "no private replay, renewed authorization required",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "08e7bab9749ebe6980842d714999dd39b7e901011ed51021ab6861e35b3ed723",
+      "response_digest": "19a94d0f21d2caaa3a19b8f9c7742b8a9189f6202dfee00a9a0ff68985f9024d",
+      "response_status": null,
+      "reason_code": "revocation_recorded_cache_adapter_not_qualified",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "29abc5055297bcaf844db5675c700bb916f2a197c07281751729b86fe6a29ef0",
+      "table_mutation_accounting": [
+        {
+          "table": "c3_pac",
+          "before": {
+            "rows": 6,
+            "sha256": "1558e374a89a5af25696a76c43cd62e3f5e98e44d138569a17fb2550ffe4e861"
+          },
+          "after": {
+            "rows": 6,
+            "sha256": "3650d8ad9967cef26511c5f4eb0bbe18837f21c878e55672c1277f128f86b9ea"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.355Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Exact spec projection adapter/cache route is abstract; no route invented. Real cache and renewed Auth gateway observation required.",
+      "observed": {
+        "reason": "revocation_recorded_cache_adapter_not_qualified",
+        "body": {
+          "pac_key": "fixture_profile_a",
+          "standing": "HLD",
+          "resolved_at": "2026-10-24T22:37:10.326815-05:00",
+          "encounter_key": "c3envpac_c2me_v0_1",
+          "presentation_scope": "none",
+          "authorized_by_owner": false,
+          "surface_projections": [],
+          "authorization_snapshot_hash": null,
+          "encounter_projection_standing": "REVOKED"
+        }
+      },
+      "transport_calls": []
+    },
+    {
+      "case_id": "I15",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I15",
+        "name": "ordinary role direct private data",
+        "request": {
+          "method": "GET",
+          "path": "staging Data API only"
+        },
+        "setup": "anon/auth role, synthetic private PAC/session/grant fixtures",
+        "expected": "no rows or permission denied; service_role results excluded",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "c309a8e499cf3e0168b8208663d357b09baee42eee7ca7207311027406963061",
+      "response_digest": "26351c4687352fd337f83ab6174182b79be20f00754c9b4719b139e02a27e9bc",
+      "response_status": null,
+      "reason_code": "ordinary_roles_no_private_rows",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.402Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "reason": "ordinary_roles_no_private_rows",
+        "tested": [
+          "anon:c3_pac",
+          "anon:c3_env_runtime_session",
+          "anon:c3_envpac_access_grant",
+          "authenticated:c3_pac",
+          "authenticated:c3_env_runtime_session",
+          "authenticated:c3_envpac_access_grant"
+        ]
+      },
+      "transport_calls": []
+    },
+    {
+      "case_id": "I16",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I16",
+        "name": "owner-rights view exposure regression",
+        "request": {
+          "method": "GET",
+          "path": "staging c3_envpac_effective_graph and seat review views"
+        },
+        "setup": "anon/auth, synthetic A/B only",
+        "expected": "no unauthorized owner/custody/contact columns",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "8a5faf89222d9358ba671a2dc5d12b621dd1295d38002fbe6e8eda5a31a545f3",
+      "response_digest": "0c03c34fe28c57db0c9d60c9bbeb73e4f22484e9a4e26cf6b25d5c4bdcd80e2a",
+      "response_status": null,
+      "reason_code": "r01_view_denial_on_composed_baseline",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.428Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "reason": "r01_view_denial_on_composed_baseline",
+        "checked": [
+          "anon:c3_envpac_effective_graph",
+          "anon:measures_seat_hold_notification_review_v1",
+          "authenticated:c3_envpac_effective_graph",
+          "authenticated:measures_seat_hold_notification_review_v1"
+        ]
+      },
+      "transport_calls": []
+    },
+    {
+      "case_id": "I17",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I17",
+        "name": "legacy privileged RPC bypass regression",
+        "request": {
+          "method": "POST",
+          "path": "staging legacy queue/transition RPC"
+        },
+        "setup": "ordinary role, synthetic queue only",
+        "expected": "permission denied or explicit authorized identity match required",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "feee1e63b0c8684991d95c33c474e93a6593cf27f0aaae5978063e942923f63e",
+      "response_digest": "a53ad8d95b25e3ef2f8efe092f7c80aae27485593a7f93d00b1032452fa8690f",
+      "response_status": null,
+      "reason_code": "r01_all_four_rpc_acl_denied",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.452Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "LOCAL_SUBSET_ONLY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Real Auth/PostgREST/edge request path and provider egress have not been observed",
+      "observed": {
+        "reason": "r01_all_four_rpc_acl_denied"
+      },
+      "transport_calls": []
+    },
+    {
+      "case_id": "I18",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I18",
+        "name": "forged HMAC owner claim/replay",
+        "request": {
+          "method": "POST",
+          "path": "qualified claim exchange fixture"
+        },
+        "setup": "tampered signature/expired ticket/wrong env or reuse",
+        "expected": "refusal, no session/relationship creation",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "aa8e236945570efc987b96b69f06bf3db58cd37d1db7716c71f34d75cbfa8fb7",
+      "response_digest": "43d8404aa18acce539b74dec37e8479d8d97ce0683a5c96c18920ef70d363c95",
+      "response_status": null,
+      "reason_code": "tamper_expiry_deny_valid_claim_reusable",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.475Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "HLD_CLAIM_EXCHANGE_AND_REPLAY",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Original contract names an abstract claim exchange fixture. Pure HMAC parser exercised; one-use exchange and wrong-target runtime are unqualified, no PASS inferred.",
+      "observed": {
+        "reason": "tamper_expiry_deny_valid_claim_reusable",
+        "replay_observation": "HMAC reader is stateless; valid repeat parses. Exchange/replay binding requires qualified claim exchange fixture."
+      },
+      "transport_calls": []
+    },
+    {
+      "case_id": "I19",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I19",
+        "name": "GET bookkeeping",
+        "request": {
+          "method": "GET",
+          "path": "/api/my-environment-connections"
+        },
+        "setup": "A active session, no existing synthetic thread",
+        "expected": "record last_seen/thread writes; fail strict zero-write variant unless separately allowed",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "caab8a404a887ef61d6e183a268074dce4f19c9fac6f1851168a40bd88ce47ee",
+      "response_digest": "a3b8075f6a407b24c0fdeca97aaa1a06fa349ed5199fb6972ad182642e7c4529",
+      "response_status": 200,
+      "reason_code": null,
+      "forbidden_field_matches": [],
+      "db_write_count": 1,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "f60db9231943f78409a197630065d4e497b5445790302197fdc265d6f78cf75c",
+      "table_mutation_accounting": [
+        {
+          "table": "c1_environment_connection_thread",
+          "before": {
+            "rows": 0,
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "after": {
+            "rows": 1,
+            "sha256": "9e34ab5c8680c4d072c06ebc441a556bc3019970eccfe19b42ddca90c64aaaab"
+          }
+        }
+      ],
+      "observed_at": "2026-10-25T03:37:10.512Z",
+      "local_assertions": "PASS",
+      "strict_contract_result": "FAIL_STRICT_ZERO_WRITE",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Observed strict zero-write variant fails: first GET creates one owner thread. This source does not authorize production behavior remediation; hosted observation remains required.",
+      "observed": {
+        "status": 200,
+        "body": {
+          "standing": "connections_ready",
+          "strict_zero_write": "FAIL",
+          "thread_writes": 1,
+          "last_seen_writes": 0,
+          "retry_created_threads": 0
+        }
+      },
+      "transport_calls": [
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&limit=1",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "POST",
+          "query": "",
+          "body": {
+            "thread_key": "connections:env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "env_key": "env_person_aaaaaaaaaaaaaaaaaaaaaaaa",
+            "envpac_key": "c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1",
+            "owner_relationship_key": "crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "title": "Connections",
+            "standing": "active",
+            "visibility": "owner_private",
+            "metadata": {
+              "source": "my_environment",
+              "thread_is_authority": false,
+              "thread_is_relationship_registry": false
+            }
+          }
+        },
+        {
+          "path": "c1_environment_connection_thread_entry",
+          "method": "GET",
+          "query": "?select=entry_key%2Centry_type%2Ctitle%2Cbody%2Crelated_type%2Crelated_key%2Crelated_route%2Cstanding%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&order=created_at.desc&limit=200",
+          "body": null
+        },
+        {
+          "path": "c3_env_native_connection",
+          "method": "GET",
+          "query": "?select=connection_key%2Csource_relationship_key%2Csource_env_key%2Csource_envpac_key%2Ctarget_relationship_key%2Ctarget_env_key%2Ctarget_envpac_key%2Cstanding%2Cformed_at%2Cmetadata&standing=eq.active&revoked_at=is.null&or=%28source_relationship_key.eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%2Ctarget_relationship_key.eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%29&order=formed_at.desc",
+          "body": null
+        },
+        {
+          "path": "c3_env_initiative_visibility",
+          "method": "GET",
+          "query": "?select=visibility_key%2Cinitiative_key%2Cinitiative_envpac_key%2Ctarget_environment_key%2Cvisibility_source%2Csource_ref%2Cstanding%2Cvisible_at%2Cmetadata&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active&revoked_at=is.null&order=visible_at.desc",
+          "body": null
+        },
+        {
+          "path": "c3_env_runtime_session",
+          "method": "GET",
+          "query": "?select=session_key%2Cenvpac_key%2Cenv_key%2Csubject_type%2Csubject_key%2Cstanding%2Cexpires_at%2Crevoked_at&token_sha256=eq.ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c3_envpac_access_grant",
+          "method": "GET",
+          "query": "?select=grant_key%2Csubject_type%2Csubject_key%2Crelation_role%2Cstanding%2Cexpires_at%2Crevoked_at&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&subject_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&relation_role=eq.owner&standing=eq.active&revoked_at=is.null&limit=1",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread",
+          "method": "GET",
+          "query": "?select=thread_key%2Cenv_key%2Cenvpac_key%2Cowner_relationship_key%2Ctitle%2Cstanding%2Cvisibility%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&limit=1",
+          "body": null
+        },
+        {
+          "path": "c1_environment_connection_thread_entry",
+          "method": "GET",
+          "query": "?select=entry_key%2Centry_type%2Ctitle%2Cbody%2Crelated_type%2Crelated_key%2Crelated_route%2Cstanding%2Cmetadata%2Ccreated_at%2Cupdated_at&thread_key=eq.connections%3Aenv_person_aaaaaaaaaaaaaaaaaaaaaaaa&owner_relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&order=created_at.desc&limit=200",
+          "body": null
+        },
+        {
+          "path": "c3_env_native_connection",
+          "method": "GET",
+          "query": "?select=connection_key%2Csource_relationship_key%2Csource_env_key%2Csource_envpac_key%2Ctarget_relationship_key%2Ctarget_env_key%2Ctarget_envpac_key%2Cstanding%2Cformed_at%2Cmetadata&standing=eq.active&revoked_at=is.null&or=%28source_relationship_key.eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%2Ctarget_relationship_key.eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%29&order=formed_at.desc",
+          "body": null
+        },
+        {
+          "path": "c3_env_initiative_visibility",
+          "method": "GET",
+          "query": "?select=visibility_key%2Cinitiative_key%2Cinitiative_envpac_key%2Ctarget_environment_key%2Cvisibility_source%2Csource_ref%2Cstanding%2Cvisible_at%2Cmetadata&relationship_key=eq.crs_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&env_key=eq.env_person_aaaaaaaaaaaaaaaaaaaaaaaa&envpac_key=eq.c3envpac_person_aaaaaaaaaaaaaaaaaaaaaaaa_v0_1&standing=eq.active&revoked_at=is.null&order=visible_at.desc",
+          "body": null
+        }
+      ]
+    },
+    {
+      "case_id": "I20",
+      "execution_instance": "c3field_concordance_lineage_w02_local_acceptance_20261024_001",
+      "source_sha256": "8b92f38576cf269066b8070de6a930109995ef8061012d4d4547f31a9bda99c2",
+      "spec_sha256": "3810eb7c108c8cc3e423450cb48ffda6f4913e74ed3f872d6b27e6de5ce3fbc6",
+      "contract": {
+        "id": "I20",
+        "name": "model/provider/send denied",
+        "request": {
+          "method": "POST",
+          "path": "qualified no-effect test adapter"
+        },
+        "setup": "any fixture request for inference/send/publish/spend",
+        "expected": "DNR_EFFECT_NOT_AUTHORIZED, network/provider spy zero",
+        "allowed_staging_business_effects": 0,
+        "status": "SPECIFIED_NOT_RUN"
+      },
+      "role": "actual service_role SQL plus real handler owner validation; ordinary SQL role negatives where stated",
+      "environment_alias": "localhost_pg17_6_synthetic",
+      "grant_revision": "fixture_v1",
+      "request_digest": "c1576518f6e4b64b8c86e3aacb88c1a7041b726f230f72450f0b41d7652bc5ea",
+      "response_digest": "3f1c778627ffc1587213029a3aab1d670ad82d32fb876a4906d0bb1491192e2b",
+      "response_status": null,
+      "reason_code": "HLD_NO_QUALIFIED_NO_EFFECT_ADAPTER",
+      "forbidden_field_matches": [],
+      "db_write_count": 0,
+      "db_write_count_basis": "Rows affected by actual handler REST writes only; RPC effects and deliberate fixture SQL are additionally reflected by complete before/after DB digest",
+      "fixture_and_rpc_mutations_in_digest": true,
+      "provider_call_count": 0,
+      "before_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "after_digest": "26ff6052945e27d9e299c78dee80ba97821180eca433874b762697b3a22685b9",
+      "table_mutation_accounting": [],
+      "observed_at": "2026-10-25T03:37:10.539Z",
+      "local_assertions": "NOT_EXECUTED_NO_QUALIFIED_ADAPTER",
+      "strict_contract_result": "HLD_EFFECT_ADAPTER",
+      "standing": "HLD_HOSTED_OBSERVATION",
+      "hosted_reason": "Exact original method/path is an abstract qualified no-effect test adapter; no production adapter/routed denial exists in this fixture. Real provider/model/send deny and egress instrumentation remain held.",
+      "observed": {
+        "reason": "HLD_NO_QUALIFIED_NO_EFFECT_ADAPTER",
+        "allowed_effects": [],
+        "provider_calls": 0
+      },
+      "transport_calls": []
+    }
+  ]
+}

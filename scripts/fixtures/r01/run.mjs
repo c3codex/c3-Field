@@ -28,7 +28,7 @@ async function seed(){
 let before,after;
 try{
  await admin.query('drop schema public cascade;create schema public;drop schema if exists extensions cascade;drop role if exists anon;drop role if exists authenticated;drop role if exists service_role;drop role if exists fixture_accidental;');
- await admin.query(process.env.C3_INTEGRATED ? readFileSync(new URL('../integration/bootstrap.sql',import.meta.url),'utf8') : local('bootstrap.sql'));if(process.env.C3_INTEGRATED){const other=readdirSync(new URL('supabase/migrations/',root)).find(x=>x.includes('_r02_')&&x.endsWith('_candidate.sql'));await admin.query(readFileSync(new URL('supabase/migrations/'+other,root),'utf8'));}
+ await admin.query(process.env.C3_INTEGRATED ? readFileSync(new URL('../integration/bootstrap.sql',import.meta.url),'utf8') : local('bootstrap.sql'));if(process.env.C3_W02_SCHEMA==='1')await admin.query(readFileSync(new URL('../cw02/w02-bootstrap.sql',import.meta.url),'utf8'));if(process.env.C3_INTEGRATED){const other=readdirSync(new URL('supabase/migrations/',root)).find(x=>x.includes('_r02_')&&x.endsWith('_candidate.sql'));await admin.query(readFileSync(new URL('supabase/migrations/'+other,root),'utf8'));}
  await seed();before=await snapshot();writeFileSync(new URL('before-matrix.json',import.meta.url),JSON.stringify(before,null,2)+'\n');
  const anon=await session('anon'),auth=await session('authenticated'),service=await session();
  await test('synthetic preimage demonstrates broad ordinary-role reads before correction',async()=>{assert.equal((await anon.query('select count(*)::int n from c3ops_partner')).rows[0].n,1);assert.equal((await auth.query('select count(*)::int n from c3_envpac_effective_graph')).rows[0].n,2);});
