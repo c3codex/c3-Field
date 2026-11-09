@@ -284,7 +284,7 @@ function bearerToken(authorization: string) {
     : null
 }
 
-async function isAuthorizedOperator(request: Request, key: string) {
+export async function isAuthorizedOperator(request: Request, key: string, allowLegacyCookie = true) {
   const authorization = request.headers.get("authorization") ?? ""
   const candidates = [
     request.headers.get("x-operator-dispatch-key"),
@@ -292,7 +292,7 @@ async function isAuthorizedOperator(request: Request, key: string) {
     basicPassword(authorization),
   ]
   if (candidates.some((candidate) => candidate === key)) return true
-  return cookieValue(request, OPERATOR_COOKIE) === await sha256Hex(key)
+  return allowLegacyCookie && cookieValue(request, OPERATOR_COOKIE) === await sha256Hex(key)
 }
 
 function denied(request: Request) {
@@ -314,25 +314,38 @@ function denied(request: Request) {
   })
 }
 
+function privateResponse(response: Response, clearCookie = false) {
+  const headers = new Headers(response.headers)
+  headers.set("cache-control", "private, no-store")
+  headers.set("cdn-cache-control", "no-store")
+  headers.set("cloudflare-cdn-cache-control", "no-store")
+  const vary = new Set((headers.get("vary") ?? "").split(",").map(x => x.trim()).filter(Boolean))
+  vary.add("Authorization"); vary.add("Cookie")
+  headers.set("vary", [...vary].join(", "))
+  if (clearCookie) headers.append("set-cookie", OPERATOR_COOKIE + "=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0")
+  return new Response(response.body, {status:response.status,statusText:response.statusText,headers})
+}
+
 export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   const requestUrl = new URL(request.url)
   const pathname = requestUrl.pathname.replace(/\/$/, "") || "/"
-  const c3OpsRoom = requestUrl.hostname === "c3ops.c3field.online" &&
-    ["/systems-access", "/relational-operations", "/c3optics"].some(p => pathname === p || pathname.startsWith(p + "/"))
-
-  if (!isProtectedPath(pathname) && !c3OpsRoom) {
+  const c3OpsHost = requestUrl.hostname === "c3ops.c3field.online"
+  const c3OpsRoomPath = ["/systems-access", "/relational-operations", "/c3optics"].some(p => pathname === p || pathname.startsWith(p + "/"))
+  if (!c3OpsHost && c3OpsRoomPath) return privateResponse(new Response("not found", {status:404}))
+  if (!isProtectedPath(pathname) && !c3OpsHost) {
     const response = await next()
     return project47PctSocialHead(request, await projectMdmSocialHead(request, await projectOwnerCustodiedSocialHead(request,response).catch(()=>response)))
   }
   if (!env.OPERATOR_DISPATCH_KEY) {
-    return new Response(JSON.stringify({ error: "operator access not configured" }), {
+    return privateResponse(new Response(JSON.stringify({ error: "operator access not configured" }), {
       status: 503,
       headers: { "content-type": "application/json; charset=utf-8" },
-    })
+    }), c3OpsHost)
   }
-  if (!(await isAuthorizedOperator(request, env.OPERATOR_DISPATCH_KEY))) return denied(request)
+  if (!(await isAuthorizedOperator(request, env.OPERATOR_DISPATCH_KEY, !c3OpsHost))) return privateResponse(denied(request), c3OpsHost)
 
   const response = await next()
+  if (c3OpsHost) return privateResponse(response, true)
   const headers = new Headers(response.headers)
   headers.append(
     "set-cookie",

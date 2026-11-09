@@ -1,6 +1,12 @@
+import {recognizeOperatorRead} from '../../_lib/recognition'
 import { resolveMEEnvironments, readLapzuli, readC3OpsCurrentState, type ReadRows } from "../../_lib/me-environment"
-import { handleLapzuliAction, preflightLapzuliRoute } from "./lapzuli"
+
+import {isAuthorizedOperator} from "../../_middleware"
+import {readC3OpsOperatorAuthority} from '../../_lib/c3ops-operator-authority'
 export type Env = {
+  SUPABASE_ANON_KEY?: string
+  VITE_SUPABASE_ANON_KEY?: string
+  OPERATOR_DISPATCH_KEY?: string
   SUPABASE_URL?: string
   VITE_SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
@@ -30,26 +36,26 @@ export function createRegistryReader(env: Env): ReadRows {
     throw new Error("Registry pagination limit reached; no partial success")
   }
 }
-export async function handleRead(request: Request, env: Env) {
-  if(new URL(request.url).hostname!=="c3ops.c3field.online") return new Response(JSON.stringify({error:"not_found"}),{status:404,headers})
-  const params = new URL(request.url).searchParams
-  const view=params.get("view")
-  if(request.method==="POST" && view==="lapzuli_action") return handleLapzuliAction(request,env)
-  if(request.method!=="GET") return new Response(JSON.stringify({error:"read_only"}),{status:405,headers:{...headers,allow:"GET, POST"}})
-  const envKey = params.get("env_key") ?? undefined
-  if(envKey && !/^[a-zA-Z0-9_-]{1,160}$/.test(envKey)) return new Response(JSON.stringify({error:"invalid_env_key"}),{status:400,headers})
-  try {
-    if(view==="lapzuli_free"){
-      const routeKey=params.get("route_key")
-      if(!routeKey || !/^[a-zA-Z0-9_-]{1,200}$/.test(routeKey))return new Response(JSON.stringify({standing:"HLD",reason:"exact_route_key_required",external_publication_effects:0}),{status:400,headers})
-      const result=await preflightLapzuliRoute(env,routeKey)
-      return new Response(JSON.stringify(result),{status:result.standing==="EXECUTABLE"?200:409,headers})
-    }
-    const read = createRegistryReader(env)
-    const result = view==="lapzuli" ? await readLapzuli(read) : view==="current_state" ? await readC3OpsCurrentState(read) : await resolveMEEnvironments(read,envKey)
-    return new Response(JSON.stringify(result),{headers})
-  } catch {
-    return new Response(JSON.stringify({standing:"HLD",error:"Registry readback unavailable",external_effects:0}),{status:503,headers})
-  }
+export async function handleRead(request:Request,env:Env){
+ const url=new URL(request.url)
+ const held=(reason:string,status=403)=>new Response(JSON.stringify({standing:'HLD',reason,mutation_authority:false,external_effects:0}),{status,headers})
+ if(url.origin!=='https://c3ops.c3field.online')return held('not_found',404)
+ if(request.method!=='GET')return held('read_only',405)
+ const view=url.searchParams.get('view')
+ if(view!==null&&view!=='current_state')return held('read_view_not_admitted')
+ if(url.searchParams.has('env_key')&&url.searchParams.get('env_key')!=='env_c3ops')return held('foreign_environment')
+ try{
+  if(!env.OPERATOR_DISPATCH_KEY||!await isAuthorizedOperator(request,env.OPERATOR_DISPATCH_KEY,false))return held('operator_access_denied')
+  const actor=await recognizeOperatorRead(request,env)
+  if(actor.standing!=='VERIFIED')return held(actor.reason,401)
+  const read=createRegistryReader(env)
+  // Only fixed qualification-record reads occur before authorization succeeds.
+  const authority=await readC3OpsOperatorAuthority(read,'env_c3ops',actor)
+  const right=view==='current_state'?'read_preflight_evidence':'inspect_governed_status'
+  if(authority.authenticated_actor.standing!=='VERIFIED'||!authority.eligible_read_effects.includes(right))return held('registered_read_authority_unavailable')
+  const body=view==='current_state'?await readC3OpsCurrentState(read):{...await resolveMEEnvironments(read,'env_c3ops'),operator_authority:authority}
+  if(Date.parse(actor.expiresAt)<=Date.now())return held('recognition_expired',401)
+  return new Response(JSON.stringify(body),{headers})
+ }catch{return held('readback_unavailable',503)}
 }
-export const onRequest: PagesFunction<Env> = ({request,env}) => handleRead(request,env)
+export const onRequest:PagesFunction<Env>=({request,env})=>handleRead(request,env)

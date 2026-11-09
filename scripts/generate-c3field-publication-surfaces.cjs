@@ -101,16 +101,7 @@ function main() {
   fs.writeFileSync(path.join(outDir, "robots.txt"), "User-agent: *\nAllow: /\n\nSitemap: https://c3field.online/sitemap.xml\n")
   fs.writeFileSync(path.join(outDir, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://c3field.online/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>\n  <url><loc>' + canonical + '</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>\n  <url><loc>' + livingCircuitCanonical + '</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>\n</urlset>\n')
   fs.writeFileSync(path.join(outDir, "llms.txt"), '# c3 Community Partners\n\n> c3 Community Partners creates structure and conditions for participation through Connect, Contribute, Create.\n\n## Public Pages\n\n- [c3 Field](https://c3field.online/): Public c3 Community entry.\n- [Community Potential](' + canonical + '): Public Release 1.0 white paper on participation, contribution, creation, shared value, and community return.\n- [The Living Circuit](' + livingCircuitCanonical + '): Public orientation encounter for the c3 Field living circuit.\n- [Related: Governed Environments](' + related + '): Measures Registry white paper on operational systems governance for AI and computational action.\n\n## People and Systems\n\nOne begins with people. The other begins with computation. Both begin with the environment.\n')
-  const redirectsPath = path.join(outDir, "_redirects")
-  const existing = fs.existsSync(redirectsPath) ? fs.readFileSync(redirectsPath, "utf8") : ""
-  let routeRedirects = existing
-  if (!routeRedirects.includes("/living-circuit")) {
-    routeRedirects = "/living-circuit /living-circuit/index.html 200\n/living-circuit/ /living-circuit/index.html 200\n" + routeRedirects
-  }
-  if (!routeRedirects.includes("/community-potential")) {
-    routeRedirects = "/community-potential /community-potential/index.html 200\n/community-potential/ /community-potential/index.html 200\n" + routeRedirects
-  }
-  fs.writeFileSync(redirectsPath, routeRedirects)
+  // Native directory-index and SPA fallback serving avoids self-rewriting loops.
   console.log("Generated c3 Community Potential and Living Circuit discovery surfaces.")
 }
 

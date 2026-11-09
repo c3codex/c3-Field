@@ -1,9 +1,26 @@
-import { useEffect, useState } from "react"
+import {OperatorSignIn} from './OperatorSignIn'
+import { useEffect, useState, useCallback, useRef } from "react"
 import type { ManifestResponse, LapzuliReadback, C3OpsCurrentStateReadback } from "../../functions/_lib/me-environment"
+import type {C3OpsOperatorAuthority} from '../../functions/_lib/c3ops-operator-authority'
 import { c3OpsRoute, portals } from "./c3OpsRoutes"
 import "./c3OpsDoor.css"
 
 type Manifest = ManifestResponse["environments"][number]
+type OperatorManifest=ManifestResponse&{operator_authority?:C3OpsOperatorAuthority}
+
+export function OperatorAuthority({authority}:{authority?:C3OpsOperatorAuthority}){
+  if(!authority)return <section aria-label="Operator authority"><h2>Operator access</h2><p>HOLD — operator authority readback unavailable.</p></section>
+  return <section aria-label="Operator authority">
+    <h2>Operator access · op044</h2>
+    <p>Registered standing: {authority.registered_operator.standing}. Environmental qualification: {authority.environmental_qualification}.</p>
+    <p>Access grant: {authority.effective_access_grant.standing}. Expires: {authority.effective_access_grant.expires_at??'unresolved'}.</p>
+    <p>Registered rights: {authority.registered_rights.join(', ')||'none'}.</p>
+    <p>Identity continuity: {authority.identity_continuity.standing}. This record does not authenticate a session.</p>
+    <p>Authenticated recognition: {authority.authenticated_actor.standing}. {authority.authenticated_actor.standing==='HOLD'?'HOLD — an independently verified operator session is required.':''}</p>
+    <p>Eligible read effects: {authority.eligible_read_effects.join(', ')||'none'}. This view runs no actions.</p>
+    {authority.refusals.length>0&&<p role="status">HOLD — current operator authority could not be qualified.</p>}
+  </section>
+}
 type CurrentStateComponent = C3OpsCurrentStateReadback["components"][number]
 type LapzuliCampaign = LapzuliReadback["campaigns"][number]
 type LapzuliAsset = LapzuliCampaign["assets"][number]
@@ -215,12 +232,15 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
 
 export default function C3OpsDoor() {
   const route=c3OpsRoute(window.location.pathname)
-  const [state,setState]=useState<ManifestResponse|null>(null)
+  const [operatorProof,setOperatorProof]=useState("")
+  const [state,setState]=useState<OperatorManifest|null>(null)
   const [lapzuli,setLapzuli]=useState<LapzuliReadback|null>(null)
   const [currentState,setCurrentState]=useState<C3OpsCurrentStateReadback|null>(null)
   const [error,setError]=useState("")
   const [assetError,setAssetError]=useState(false)
 
+  const readGeneration=useRef(0)
+  const changeProof=useCallback((proof:string)=>{readGeneration.current++;setState(null);setLapzuli(null);setCurrentState(null);setOperatorProof(proof)},[])
   async function refreshLapzuli() {
     const response=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin"})
     if(!response.ok) throw new Error("Lapzuli evidence readback unavailable.")
@@ -232,37 +252,39 @@ export default function C3OpsDoor() {
   useEffect(()=>{
     document.title="c3Ops"
     if(route==="/" || route===null) return
+    setState(null);setLapzuli(null);setCurrentState(null);setError("")
+    const requestGeneration=++readGeneration.current
     const controller=new AbortController()
     async function load() {
       try {
-        const response=await fetch("/api/c3ops/manifest",{credentials:"same-origin",signal:controller.signal})
+        const response=await fetch("/api/c3ops/manifest",{credentials:"same-origin",headers:operatorProof?{"x-c3ops-session-proof":operatorProof}:{},signal:controller.signal})
         if(!response.ok) throw new Error(response.status===403 ? "Operator access is required." : "Registry readback unavailable.")
-        const body=await response.json() as ManifestResponse
+        const body=await response.json() as OperatorManifest
         if(body.contract!=="me_environment_manifest_v1" || !Array.isArray(body.environments)) throw new Error("Registry response is not a manifest.")
-        setState(body)
+        if(controller.signal.aborted||requestGeneration!==readGeneration.current)return;setState(body)
 
         if(route==="/systems-access/current"){
-          const currentResponse=await fetch("/api/c3ops/manifest?view=current_state",{credentials:"same-origin",signal:controller.signal})
+          const currentResponse=await fetch("/api/c3ops/manifest?view=current_state",{credentials:"same-origin",headers:operatorProof?{"x-c3ops-session-proof":operatorProof}:{},signal:controller.signal})
           if(!currentResponse.ok) throw new Error("c3Ops Current State readback unavailable.")
           const currentBody=await currentResponse.json() as C3OpsCurrentStateReadback
           if(currentBody.contract!=="c3ops_current_state_v1" || !Array.isArray(currentBody.components)) throw new Error("Current State projection is not governed.")
-          setCurrentState(currentBody)
+          if(controller.signal.aborted||requestGeneration!==readGeneration.current)return;setCurrentState(currentBody)
         }
 
-        if(route==="/relational-operations/lapzuli" || route==="/c3optics"){
-          const r=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin",signal:controller.signal})
+        if(false){
+          const r=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin",headers:operatorProof?{"x-c3ops-session-proof":operatorProof}:{},signal:controller.signal})
           if(!r.ok) throw new Error("Lapzuli evidence readback unavailable.")
           const lapzuliBody=await r.json() as LapzuliReadback
           if(lapzuliBody.contract!=="lapzuli_distribution_desk_v1") throw new Error("Lapzuli distribution contract unresolved.")
-          setLapzuli(lapzuliBody)
+          if(controller.signal.aborted||requestGeneration!==readGeneration.current)return;setLapzuli(lapzuliBody)
         }
       } catch(e) {
-        if(!controller.signal.aborted) setError(e instanceof Error?e.message:"Readback unavailable.")
+        if(!controller.signal.aborted&&requestGeneration===readGeneration.current) setError(e instanceof Error?e.message:"Readback unavailable.")
       }
     }
     void load()
     return ()=>controller.abort()
-  },[route])
+  },[route,operatorProof])
 
   if(route==="/") return <main className="ops-door">
     <header className="ops-entry-mast">
@@ -324,11 +346,14 @@ export default function C3OpsDoor() {
         <h1>{route.includes("lapzuli")?"Lapzuli · Distribution Canopy":route==="/c3optics"?"c3Optics":route.startsWith("/relational")?"Relational Operations":"Systems Access"}</h1>
       </div>
 
+      <OperatorSignIn onProof={changeProof}/>
+      <p>Read-only access. Distribution and operational actions are unavailable in this release.</p>
       {error && <p role="alert" className="ops-unresolved ops-alert">HLD — {error} <a href={window.location.pathname}>Retry readback</a></p>}
       {!state && !error && <p role="status" className="ops-reading"><span className="ops-presence-pulse" aria-hidden="true"/> Reading registered environments…</p>}
 
       {state && <>
         <p className="ops-caption">Readback {new Date(state.observed_at).toLocaleString()} · Observation grants no action authority.</p>
+        <OperatorAuthority authority={state.operator_authority}/>
         {state.missing_environments?.length>0 && <p className="ops-unresolved">Environment readback missing: {state.missing_environments.join(", ")}</p>}
 
         {route.startsWith("/systems-access") && <nav className="ops-architecture" aria-label="Operational architecture">{[["Current","/systems-access/current"],["Build","/systems-access/build"],["Work","/systems-access/work"],["Systems","/systems-access"],["Registry","/systems-access/registry"],["Evidence","/c3optics"]].map(([label,path])=><a key={path} href={path}>{label}</a>)}</nav>}
@@ -379,7 +404,7 @@ export default function C3OpsDoor() {
           <h3>Open holds</h3><Rows records={[e.holds]}/><Current env={e}/><h3>Unresolved coverage</h3><ul>{e.unresolved.map(u=><li key={u}>{u}</li>)}</ul></details></>}
         </article>)}</section>}
 
-        {lapzuli && route==="/relational-operations/lapzuli" && <LapzuliDesk lapzuli={lapzuli} onRefresh={refreshLapzuli}/>}
+        {false && lapzuli && route==="/relational-operations/lapzuli" && <LapzuliDesk lapzuli={lapzuli} onRefresh={refreshLapzuli}/>}
         {lapzuli && route==="/c3optics" && <><LapzuliProjectionOptics lapzuli={lapzuli}/><section aria-label="Lapzuli returned encounters"><h2>Lapzuli returned encounters</h2><p>Provider outcomes are evidence; resulting Current requires its own registered relation.</p><div className="ops-env-grid">{lapzuli.routes.map(r=><article className="ops-env" key={text(r.route_key)}><p className="ops-kicker">{text(r.desk_key)} · {text(r.outlet_key)}</p><h3>{text(r.publication_object_key)}</h3><p>Route: {text(r.route_key)} · {text(r.route_status)}</p><Rows records={lapzuli.evidence.filter(e=>e.route_key===r.route_key)}/></article>)}</div></section></>}
       </>}
     </>}
