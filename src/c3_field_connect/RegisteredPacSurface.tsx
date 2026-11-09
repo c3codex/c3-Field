@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useMemo,useState} from "react"
 
 export type PacSnapshot={
@@ -108,10 +109,7 @@ export default function RegisteredPacSurface(){
 
   if(!truth) return <main style={{maxWidth:900,margin:"0 auto",padding:"64px 24px",fontFamily:"Georgia, serif"}}><p>Loading…</p></main>
 
-  if(truth.status!=="available"||!truth.presentation) return <main style={{maxWidth:900,margin:"0 auto",padding:"64px 24px",fontFamily:"Georgia, serif"}}>
-    <p style={{textTransform:"uppercase",letterSpacing:".14em",fontSize:12}}>c3 Field</p>
-    <h1>This encounter is not currently available.</h1>
-  </main>
+  if(truth.status!=="available"||!truth.presentation) return <DnrBackdrop/>
 
   return <PacSnapshotSurface snapshot={truth.presentation} mode="runtime"/>
 }

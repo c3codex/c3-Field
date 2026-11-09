@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useMemo,useState} from "react"
 import "./LivingCircuitEncounter.css"
 
@@ -95,7 +96,7 @@ export default function LivingCircuitEncounter(){
     [mechanics]
   )
 
-  if(held)return <main className="lc-shell lc-held"><p>The Living Circuit encounter is temporarily held because its registered presentation authority could not be resolved.</p><a href="/">Return to c3 Field</a></main>
+  if(held)return <DnrBackdrop/>
   if(!encounter)return <main className="lc-shell lc-held"><p>Resolving the Living Circuit…</p></main>
 
   if(!entered){

@@ -1,3 +1,5 @@
+import {DnrBoundary} from "./shared/DnrBackdrop"
+import {isC3FieldHost} from "./shared/dnrPresentation"
 import React from "react"
 import ReactDOM from "react-dom/client"
 import App from "./app/App"
@@ -29,7 +31,7 @@ async function loadSystemStyles() {
 void loadSystemStyles().then(() => {
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-      <App />
+      {isC3FieldHost(window.location.hostname)?<DnrBoundary><App/></DnrBoundary>:<App/>}
     </React.StrictMode>
   )
 })

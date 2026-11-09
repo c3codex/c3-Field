@@ -1,0 +1,32 @@
+{
+  "asset_key": "c3_tree",
+  "asset_path": "public/c3ops/c3-tree-source-v1.png",
+  "sha256": "c7a4a90b62014783bc1f1dcf30dd6a36f94a228440abd531ec61ef3beea41c7d",
+  "source_of_restriction": "Operator instruction in this chat, November 9, 2026",
+  "allowed_purposes": [
+    "environment_entry",
+    "unresolved_surface_boundary"
+  ],
+  "other_purposes_require_separate_operator_authorization": true,
+  "native_registration": "unverified",
+  "locator_source": "src/shared/dnrPresentation.ts",
+  "renderers": [
+    "src/shared/DnrBackdrop.tsx",
+    "functions/_middleware.ts"
+  ],
+  "reviewed_consumers": [
+    "src/main.tsx",
+    "src/c3_field_connect/C3CommunityConnect.tsx",
+    "src/c3_field_connect/C3FieldRoot.tsx",
+    "src/c3_field_connect/C3PublicDocumentPage.tsx",
+    "src/c3_field_connect/FieldReporterEncounter.tsx",
+    "src/c3_field_connect/LivingCircuitEncounter.tsx",
+    "src/c3_field_connect/MyEnvironmentEncounter.tsx",
+    "src/c3_field_connect/RegisteredPacSurface.tsx",
+    "src/c3_field_connect/RegisteredPublicationProjectionDoor.tsx",
+    "src/c3_field_contribution/C247PctEncounter.tsx",
+    "src/c3_field_contribution/C2EnvironmentShell.tsx",
+    "src/c3_field_contribution/C2PacEncounter.tsx",
+    "src/c3ops/C3OpsDoor.tsx"
+  ]
+}

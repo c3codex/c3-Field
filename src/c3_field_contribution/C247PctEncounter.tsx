@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useMemo,useState} from "react"
 import EternalFlame from "../c3_field_connect/EternalFlame"
 import "./c247PctEncounter.css"
@@ -72,13 +73,7 @@ export default function C247PctEncounter(){
   const mappedMeasured=useMemo(()=>data?.components?.find(row=>row.component_key==="mapped_measured_cost_claim"&&row.standing==="active")||null,[data])
 
   if(!data) return <main className="pct47-c2 pct47-c2--held"><p className="pct47-c2-kicker">c2ME.env · 4.7%</p><h1>Resolving the encounter…</h1></main>
-  if(!data.authenticated) return <main className="pct47-c2 pct47-c2--held">
-    <p className="pct47-c2-kicker">c2ME.env · 4.7%</p>
-    <h1>This encounter resolves through My Environment.</h1>
-    <p>Your active 4.7% relation must be resolved before C2 opens.</p>
-    <a href="/">RETURN TO MY ENVIRONMENT</a>
-    <small>{data.standing}{data.reason?" · "+data.reason:""}</small>
-  </main>
+  if(!data.authenticated) return <DnrBackdrop/>
 
   return <main className="pct47-c2">
     <CurrentConstellation tokens={currentTokens} mode="c2"/>

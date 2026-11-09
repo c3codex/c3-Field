@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useRef,useState} from "react"
 import {startIntroPlayback} from "./introPlayback"
 import "./publicIntroStage.css"
@@ -26,7 +27,7 @@ export default function C3FieldRoot(){
     setSound(enabled)
     if(enabled)void player.play().catch(()=>{player.muted=true;setSound(false)})
   }
-  if(held)return <main style={{minHeight:"100vh",display:"grid",placeItems:"center",background:"#111",color:"#eee",fontFamily:"system-ui",padding:"2rem"}}><p>c3 Field presentation temporarily unavailable.</p></main>
+  if(held)return <DnrBackdrop/>
   if(!state)return <main style={{minHeight:"100vh",display:"grid",placeItems:"center",background:"#111",color:"#eee",fontFamily:"system-ui"}}><p>Opening c3 Field…</p></main>
   const c=state.manifest.composition
   const sections=c.sections||[]

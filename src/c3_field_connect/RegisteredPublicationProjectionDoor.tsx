@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useState} from "react"
 import MeasuresRegistryOrchestrator from "../measures_registry/encounter_renderer/MeasuresRegistryOrchestrator"
 import {resolveRegisteredUndriftedProjection,type RegisteredPublicationProjection} from "./registeredPublicationProjection"
@@ -32,7 +33,7 @@ export default function RegisteredPublicationProjectionDoor(){
     return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Resolving registered publication projection…</p></main>
 
   if(state.standing==="held")
-    return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width">This c3 Field publication projection is not currently resolvable.</p></main>
+    return <DnrBackdrop/>
 
   return <>
     <aside

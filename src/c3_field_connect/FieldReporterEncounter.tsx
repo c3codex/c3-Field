@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useState} from "react"
 import "./c3CommunityConnect.css"
 import "./FieldReporterEncounter.css"
@@ -22,6 +23,7 @@ export default function FieldReporterEncounter(){
       }).catch(()=>{if(active)setDecision({standing:"HLD",reason:"publication_decision_unverified"})})
     return()=>{active=false}
   },[])
+  if(decision) return <DnrBackdrop/>
   return <main className="c3-connect-shell pct47-field-reporter">
     <div className="c3-connect-width">
       <header><a href="/">4.7%</a>{decision?.publicationLabel&&<p>{decision.publicationLabel}</p>}</header>

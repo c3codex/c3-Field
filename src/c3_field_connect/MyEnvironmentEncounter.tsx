@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {FormEvent,useEffect,useRef,useState} from "react"
 import EternalFlame from "./EternalFlame"
 import {type ProfileContract} from "./ProfilePacPanel"
@@ -1432,8 +1433,9 @@ export default function MyEnvironmentEncounter(){
     return null
   }
 
-  if(state==="held"||state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
-    return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p>{state==="held"&&<a href="https://c3field.online/api/my-environment-session-handoff">Continue existing My Environment</a>}</section></main>
+  if(state==="held" || (state!=="claiming" && state!=="loading" && (!data?.environment || !data.envpac))) return <DnrBackdrop/>
+  if(state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
+    return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p></section></main>
   }
   if(state==="intro"){
     return <main className="myenv-shell myenv-arrival" aria-label="Entering your environment"><video className="myenv-arrival-video" src={ARRIVAL_VIDEO} autoPlay muted playsInline preload="auto" onEnded={()=>setState("ready")} onError={()=>setState("ready")}/></main>

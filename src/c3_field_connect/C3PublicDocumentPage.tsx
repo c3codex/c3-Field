@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useState} from "react"
 import {loadC3PublicPresentation,type C3PublicDocument,type C3PublicPresentation} from "./c3PublicPresentation"
 
@@ -9,7 +10,7 @@ export default function C3PublicDocumentPage({kind}:{kind:"privacy"|"terms"|"con
     loadC3PublicPresentation().then(value=>{if(active)setPresentation(value)}).catch(()=>{if(active)setFailed(true)})
     return()=>{active=false}
   },[])
-  if(failed) return <main className="c3-public-doc"><div className="c3-connect-width"><p>Public document authority is temporarily unavailable.</p></div></main>
+  if(failed) return <DnrBackdrop/>
   if(!presentation) return <main className="c3-public-doc"><div className="c3-connect-width"><p>Loading…</p></div></main>
   const document:C3PublicDocument=kind==="privacy"?presentation.privacy_document:kind==="terms"?presentation.terms_document:presentation.contact_document
   const identity=presentation.public_identity

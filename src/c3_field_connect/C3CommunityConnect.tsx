@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
 import MdmEntryIntro from "./MdmEntryIntro"
@@ -101,8 +102,8 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
   if (!environment && !loadFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading…</p></main>
   if (!environment?.available) return <HeldUnknownC3FieldRoute pathname="/" />
   const pct47StandaloneReady=initiativeSurface?.initiativeKey==="47pct"&&!!initiativeSurface.publicPresentation
-  if (publicStage!=="intro" && !pct47StandaloneReady && !presentation && !presentationFailed) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Loading public presentation…</p></main>
-  if (publicStage!=="intro" && !pct47StandaloneReady && (!presentation || presentationFailed)) return <main className="c3-connect-shell c3-connect-held"><p className="c3-connect-width" role="status">Public presentation authority is temporarily unavailable.</p></main>
+  if (publicStage!=="intro" && !pct47StandaloneReady && !presentation && !presentationFailed) return <DnrBackdrop/>
+  if (publicStage!=="intro" && !pct47StandaloneReady && (!presentation || presentationFailed)) return <DnrBackdrop/>
   const { copy, assets } = environment
   // Initiative projection remains held until independently registered; ordinary individual Connect stays available.
   const initiatives: typeof environment.initiatives = []
@@ -294,5 +295,5 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
 }
 
 export function HeldUnknownC3FieldRoute({ pathname }: { pathname: string }) {
-  return <main className="c3-connect-shell c3-connect-held" data-c3-route={pathname} data-operations-exposed="false"><section className="c3-connect-width"><h1>This page is not available yet.</h1><p>Please return later.</p></section></main>
+  return <DnrBackdrop/>
 }

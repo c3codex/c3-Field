@@ -1,4 +1,5 @@
 import {resolveRegisteredInitiativeProjection} from "../src/c3_field_connect/registeredInitiativeProjection"
+import {dnrDocument,isC3FieldHost} from "../src/shared/dnrPresentation"
 
 type Env = {
   OPERATOR_DISPATCH_KEY?: string
@@ -326,10 +327,12 @@ function privateResponse(response: Response, clearCookie = false) {
   return new Response(response.body, {status:response.status,statusText:response.statusText,headers})
 }
 
-export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
+const handleRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   const requestUrl = new URL(request.url)
   const pathname = requestUrl.pathname.replace(/\/$/, "") || "/"
   const c3OpsHost = requestUrl.hostname === "c3ops.c3field.online"
+  // The sole public artwork exception; other assets keep the whole-host guard.
+  if (c3OpsHost && pathname === "/c3ops/c3-tree-source-v1.png" && ["GET","HEAD"].includes(request.method)) return next()
   const c3OpsRoomPath = ["/systems-access", "/relational-operations", "/c3optics"].some(p => pathname === p || pathname.startsWith(p + "/"))
   if (!c3OpsHost && c3OpsRoomPath) return privateResponse(new Response("not found", {status:404}))
   if (!isProtectedPath(pathname) && !c3OpsHost) {
@@ -344,6 +347,10 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   }
   if (!(await isAuthorizedOperator(request, env.OPERATOR_DISPATCH_KEY, !c3OpsHost))) return privateResponse(denied(request), c3OpsHost)
 
+  // Explicit entry uses the existing Basic check. Its root-level path gives the
+  // browser the same protection space for the page and its protected API reads.
+  if (c3OpsHost && pathname === "/operator-entry" && ["GET","HEAD"].includes(request.method)) return privateResponse(new Response(null,{status:303,headers:{location:"/"}}),true)
+
   const response = await next()
   if (c3OpsHost) return privateResponse(response, true)
   const headers = new Headers(response.headers)
@@ -353,4 +360,30 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   )
   headers.set("cache-control", "private, no-store")
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
+}
+
+// Only visitor navigation is restyled. JSON, API, assets and action responses
+// preserve their original contracts; denial/unavailable HTTP status is retained.
+export const onRequest: PagesFunction<Env> = async context => {
+  const request=context.request
+  const url=new URL(request.url)
+  const operatorEntry=url.hostname==="c3ops.c3field.online" && url.pathname==="/operator-entry"
+  const visitorPage=isC3FieldHost(url.hostname) && ["GET","HEAD"].includes(request.method)
+    && !url.pathname.startsWith("/api/") && url.pathname!=="/api" && !operatorEntry
+    && (request.headers.get("sec-fetch-dest")==="document" || (request.headers.get("accept")??"").includes("text/html"))
+  let response:Response
+  try { response=await handleRequest(context) }
+  catch(error) {
+    if(!visitorPage) throw error
+    console.error("c3field_navigation_failed")
+    response=new Response(null,{status:503})
+  }
+  if(!visitorPage || response.status<400) return response
+  const headers=new Headers(response.headers)
+  for(const name of ["www-authenticate","content-length","content-encoding","etag"])headers.delete(name)
+  headers.set("content-type","text/html; charset=utf-8")
+  headers.set("cache-control","private, no-store")
+  headers.set("cdn-cache-control","no-store")
+  headers.set("cloudflare-cdn-cache-control","no-store")
+  return new Response(request.method==="HEAD"?null:dnrDocument(),{status:response.status,headers})
 }

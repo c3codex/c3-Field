@@ -1,9 +1,11 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
+import {PortalHome} from "./PortalHome"
 import {OperatorSignIn} from './OperatorSignIn'
 import { useEffect, useState, useCallback, useRef } from "react"
 import type { ManifestResponse, LapzuliReadback, C3OpsCurrentStateReadback } from "../../functions/_lib/me-environment"
 import type {C3OpsOperatorAuthority} from '../../functions/_lib/c3ops-operator-authority'
 import { c3OpsRoute, portals } from "./c3OpsRoutes"
-import "./c3OpsDoor.css"
+import "./opsPortal.css"
 
 type Manifest = ManifestResponse["environments"][number]
 type OperatorManifest=ManifestResponse&{operator_authority?:C3OpsOperatorAuthority}
@@ -231,16 +233,29 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
 }
 
 export default function C3OpsDoor() {
-  const route=c3OpsRoute(window.location.pathname)
+  const [pathname,setPathname]=useState(window.location.pathname)
+  const route=c3OpsRoute(pathname)
   const [operatorProof,setOperatorProof]=useState("")
   const [state,setState]=useState<OperatorManifest|null>(null)
   const [lapzuli,setLapzuli]=useState<LapzuliReadback|null>(null)
   const [currentState,setCurrentState]=useState<C3OpsCurrentStateReadback|null>(null)
   const [error,setError]=useState("")
-  const [assetError,setAssetError]=useState(false)
 
   const readGeneration=useRef(0)
-  const changeProof=useCallback((proof:string)=>{readGeneration.current++;setState(null);setLapzuli(null);setCurrentState(null);setOperatorProof(proof)},[])
+  useEffect(()=>{
+    const pop=()=>setPathname(window.location.pathname)
+    const navigate=(event:MouseEvent)=>{
+      if(event.defaultPrevented || event.button!==0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)return
+      const anchor=(event.target as Element)?.closest?.('a')
+      if(!anchor || anchor.target || anchor.hasAttribute('download'))return
+      const url=new URL(anchor.href,window.location.href)
+      if(url.origin!==window.location.origin || url.search || url.hash || c3OpsRoute(url.pathname)===null || url.pathname===window.location.pathname)return
+      event.preventDefault();window.history.pushState(null,'',url.pathname);setPathname(url.pathname)
+    }
+    window.addEventListener('popstate',pop);document.addEventListener('click',navigate)
+    return()=>{window.removeEventListener('popstate',pop);document.removeEventListener('click',navigate)}
+  },[])
+  const changeProof=useCallback((proof:string)=>{readGeneration.current++;setState(null);setLapzuli(null);setCurrentState(null);setError("");setOperatorProof(proof)},[])
   async function refreshLapzuli() {
     const response=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin"})
     if(!response.ok) throw new Error("Lapzuli evidence readback unavailable.")
@@ -251,7 +266,7 @@ export default function C3OpsDoor() {
 
   useEffect(()=>{
     document.title="c3Ops"
-    if(route==="/" || route===null) return
+    if(route===null || !operatorProof) return
     setState(null);setLapzuli(null);setCurrentState(null);setError("")
     const requestGeneration=++readGeneration.current
     const controller=new AbortController()
@@ -286,57 +301,18 @@ export default function C3OpsDoor() {
     return ()=>controller.abort()
   },[route,operatorProof])
 
-  if(route==="/") return <main className="ops-door">
-    <header className="ops-entry-mast">
-      <div>
-        <p className="ops-entry-eyebrow">c3Ops</p>
-        <p className="ops-entry-sub">governed operations environment</p>
-      </div>
-      <div className="ops-entry-presence" aria-label="Chazz systems presence">
-        <span className="ops-presence-pulse" aria-hidden="true"/>
-        <div><strong>CHAZZ</strong><small>systems presence</small></div>
-      </div>
-    </header>
-
-    <div className="ops-tree-stage">
-      <div className="ops-tree-halo" aria-hidden="true"/>
-      <img
-        className="ops-tree"
-        src="https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c3tree.webp"
-        alt="c3 Tree"
-        onError={()=>setAssetError(true)}
-      />
-      <div className="ops-entry-copy">
-        <p>CURRENT IN · EVIDENCE OUT</p>
-        <h1>Systems come here to work.</h1>
-        <span>Registry state resolves the room. Nothing here invents authority.</span>
-      </div>
-      {assetError && <p className="ops-tree-hold" role="alert">HLD — c3 Tree artwork unavailable.</p>}
-    </div>
-
-    <nav className="ops-portals" aria-label="c3Ops entrances">
-      {portals.map((p,i)=><a key={p.path} href={p.path}>
-        <span className="ops-portal-index">0{i+1}</span>
-        <h2>{p.label}</h2>
-        <p>{p.subtitle}</p>
-        <span className="ops-portal-arrow" aria-hidden="true">↗</span>
-      </a>)}
-    </nav>
-
-    <footer className="ops-entry-footer">
-      <span>ACT · Accrued Current Trace</span>
-      <span>HLD · Held Live Disposition</span>
-      <span>DNR · Did Not Resolve</span>
-    </footer>
-  </main>
-
+  if(route===null) return <DnrBackdrop/>
   const currentComponent=currentState?.components.find(component=>component.key==="current")
   const stations=currentState?.components.filter(component=>component.key!=="current") ?? []
 
-  return <main className="ops-room">
+  return <>
+    <section className="ops-entry-auth"><OperatorSignIn onProof={changeProof} readComplete={!!state}/>
+      {route==="/" && operatorProof && !state && !error && <p role="status">Checking registered read permissions…</p>}
+      {route==="/" && error && <p role="alert">HLD — {error}</p>}
+    </section>
+    {route==="/" ? state && <PortalHome/> : <main className="ops-room">
     <header className="ops-room-header">
       <a href="/" className="ops-brand"><span>c3</span>Ops</a>
-      <div className="ops-room-presence"><span className="ops-presence-pulse" aria-hidden="true"/><span>CHAZZ / SYSTEMS</span></div>
       <nav aria-label="Environment navigation">{portals.map(p=><a key={p.path} href={p.path} aria-current={route?.startsWith(p.path)?"page":undefined}>{p.label}</a>)}</nav>
     </header>
 
@@ -346,10 +322,9 @@ export default function C3OpsDoor() {
         <h1>{route.includes("lapzuli")?"Lapzuli · Distribution Canopy":route==="/c3optics"?"c3Optics":route.startsWith("/relational")?"Relational Operations":"Systems Access"}</h1>
       </div>
 
-      <OperatorSignIn onProof={changeProof}/>
       <p>Read-only access. Distribution and operational actions are unavailable in this release.</p>
       {error && <p role="alert" className="ops-unresolved ops-alert">HLD — {error} <a href={window.location.pathname}>Retry readback</a></p>}
-      {!state && !error && <p role="status" className="ops-reading"><span className="ops-presence-pulse" aria-hidden="true"/> Reading registered environments…</p>}
+      {operatorProof && !state && !error && <p role="status" className="ops-reading">Reading registered environments…</p>}
 
       {state && <>
         <p className="ops-caption">Readback {new Date(state.observed_at).toLocaleString()} · Observation grants no action authority.</p>
@@ -408,5 +383,6 @@ export default function C3OpsDoor() {
         {lapzuli && route==="/c3optics" && <><LapzuliProjectionOptics lapzuli={lapzuli}/><section aria-label="Lapzuli returned encounters"><h2>Lapzuli returned encounters</h2><p>Provider outcomes are evidence; resulting Current requires its own registered relation.</p><div className="ops-env-grid">{lapzuli.routes.map(r=><article className="ops-env" key={text(r.route_key)}><p className="ops-kicker">{text(r.desk_key)} · {text(r.outlet_key)}</p><h3>{text(r.publication_object_key)}</h3><p>Route: {text(r.route_key)} · {text(r.route_status)}</p><Rows records={lapzuli.evidence.filter(e=>e.route_key===r.route_key)}/></article>)}</div></section></>}
       </>}
     </>}
-  </main>
+  </main>}
+  </>
 }

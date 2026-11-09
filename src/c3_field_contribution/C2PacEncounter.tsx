@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useState} from "react"
 import "./c2Environment.css"
 
@@ -72,13 +73,7 @@ export default function C2PacEncounter(){
 
   if(!data) return <main className="c2-shell"><p className="c2-shell-label">C2ME_env · operator PAC governance</p><p>Resolving governed encounter…</p></main>
 
-  if(!data.authenticated||data.standing==="DNR") return <main className="c2-shell c2-held">
-    <nav className="c2-home-nav"><a className="c2-home-link" href="/c3ops">← C3OPS</a><a href="/">c3 FIELD</a></nav>
-    <p className="c2-shell-label">C2ME_env · operator PAC governance</p>
-    <h1>Encounter did not resolve.</h1>
-    <p>{data.reason||"Governed operator context, persisted CURRENT, and C2 passage are required."}</p>
-    <p className="c2-small">Standing: DNR</p>
-  </main>
+  if(!data.authenticated||data.standing==="DNR") return <DnrBackdrop/>
 
   const pacs=data.pacs||[]
   return <main className="c2-shell">

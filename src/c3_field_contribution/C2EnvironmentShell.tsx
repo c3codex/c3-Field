@@ -1,3 +1,4 @@
+import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {FormEvent, useEffect, useMemo, useState} from "react"
 import "./c2Environment.css"
 import CurrentConstellation,{type CurrentToken} from "../c3_field_connect/CurrentConstellation"
@@ -139,20 +140,7 @@ export default function C2EnvironmentShell(){
 
   if(!data) return <main className="c2-shell"><p className="c2-shell-label">c2ME.env</p><p>Opening the Million Dollar Mission…</p></main>
 
-  if(!data.authenticated) return <main className="c2-shell c2-held">
-    <nav className="c2-home-nav" aria-label="Environment navigation">
-      <a className="c2-home-link" href="/my-environment">← MY ENVIRONMENT</a>
-      <a href="/">c3 FIELD</a>
-    </nav>
-    <p className="c2-shell-label">c2ME.env · Million Dollar Mission</p>
-    <h1>Connect before entering the mission.</h1>
-    <p>The Million Dollar Mission environment is available after your c1 relationship has been persisted.</p>
-    <div className="c2-held-actions">
-      <a className="c2-primary-link" href="/my-environment">GO TO MY ENVIRONMENT</a>
-      <a className="c2-secondary-link" href="/">RETURN TO C3 FIELD</a>
-    </div>
-    <p className="c2-small">Standing: {data.standing}{data.reason?" · "+data.reason:""}</p>
-  </main>
+  if(!data.authenticated) return <DnrBackdrop/>
 
   return <main className="c2-shell" aria-labelledby="c2-title">
     <CurrentConstellation tokens={currentTokens} mode="c2"/>
