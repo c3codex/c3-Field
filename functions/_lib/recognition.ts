@@ -13,6 +13,6 @@ export async function recognizeOperatorRead(request:Request,env:Env):Promise<Ope
  const text=await response.text();if(text.length>4096)return hold('recognition_response_oversized')
  const r=JSON.parse(text),a=r?.actor
  if(r.verification!=='authenticated_operator_read'||r.mutation_authority!==false||r.external_effects!==0||typeof r.mapping_ref!=='string'||!r.mapping_ref||JSON.stringify(r.rights)!=='["inspect_governed_status","read_preflight_evidence"]'||a?.standing!=='VERIFIED'||a.operatorKey!=='op044_operator_standing'||a.carrierKey!=='stephanie_joanne__op044__binding'||a.namedIndividualKey!=='stephanie_joanne_gaffney'||a.environmentKey!=='env_c3ops'||!Number.isFinite(Date.parse(a.expiresAt))||Date.parse(a.expiresAt)<=Date.now())return hold('native_recognition_binding_mismatch')
- return {standing:'VERIFIED',operatorKey:a.operatorKey,carrierKey:a.carrierKey,namedIndividualKey:a.namedIndividualKey,environmentKey:a.environmentKey,expiresAt:a.expiresAt}
+ return {standing:'VERIFIED',proofSource:'native_supabase_operator_read_rpc',operatorKey:a.operatorKey,carrierKey:a.carrierKey,namedIndividualKey:a.namedIndividualKey,environmentKey:a.environmentKey,expiresAt:a.expiresAt}
  }catch{return hold('native_recognition_unavailable')}
 }

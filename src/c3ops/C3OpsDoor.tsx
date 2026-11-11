@@ -255,7 +255,8 @@ export default function C3OpsDoor() {
     window.addEventListener('popstate',pop);document.addEventListener('click',navigate)
     return()=>{window.removeEventListener('popstate',pop);document.removeEventListener('click',navigate)}
   },[])
-  const changeProof=useCallback((proof:string)=>{readGeneration.current++;setState(null);setLapzuli(null);setCurrentState(null);setError("");setOperatorProof(proof)},[])
+  const [readEpoch,setReadEpoch]=useState(0)
+  const changeProof=useCallback((proof:string)=>{readGeneration.current++;setState(null);setLapzuli(null);setCurrentState(null);setError("");setOperatorProof(proof);setReadEpoch(n=>n+1)},[])
   async function refreshLapzuli() {
     const response=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin"})
     if(!response.ok) throw new Error("Lapzuli evidence readback unavailable.")
@@ -299,14 +300,14 @@ export default function C3OpsDoor() {
     }
     void load()
     return ()=>controller.abort()
-  },[route,operatorProof])
+  },[route,operatorProof,readEpoch])
 
   if(route===null) return <DnrBackdrop/>
   const currentComponent=currentState?.components.find(component=>component.key==="current")
   const stations=currentState?.components.filter(component=>component.key!=="current") ?? []
 
   return <>
-    <section className="ops-entry-auth"><OperatorSignIn onProof={changeProof} readComplete={!!state}/>
+    <section className="ops-entry-auth"><OperatorSignIn onProof={changeProof} readComplete={!!state} readHeld={!!error}/>
       {route==="/" && operatorProof && !state && !error && <p role="status">Checking registered read permissions…</p>}
       {route==="/" && error && <p role="alert">HLD — {error}</p>}
     </section>
