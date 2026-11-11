@@ -1,0 +1,31 @@
+name: c3Ops canonical entrance and no-backdoor checks
+on:
+  pull_request:
+    paths:
+      - 'functions/_middleware.ts'
+      - 'functions/api/c3ops/manifest.ts'
+      - 'src/c3ops/**'
+      - 'functions/portal-boundary.test.ts'
+      - 'functions/api/c3ops/manifest.test.ts'
+      - 'tests/c3ops-fallback-entry.test.ts'
+      - '.github/workflows/c3ops-canonical-portal-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  canonical-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Portal, unauthorized route, native read and legacy fallback tests
+        run: npx --no-install tsx --test functions/portal-boundary.test.ts functions/api/c3ops/manifest.test.ts tests/c3ops-fallback-entry.test.ts tests/c3ops-authorization-optics.test.ts
+      - name: TypeScript static check
+        run: npx --no-install tsc --noEmit
+      - name: Generic Vite build (not production deployment)
+        run: npm run build
