@@ -33,7 +33,7 @@ test('GET returns bounded login-only document with private headers',async()=>{
  assert.match(html,/READ_PREFLIGHT_CONFIRMED/)
  assert.match(html,/workroom_admission_authorized/)
  assert.match(html,/registrar_execution_authorized/)
- assert.match(html,/Read continuation unavailable \\(HLD\\)/)
+ assert.match(html,/Read continuation unavailable \(HLD\)/)
  assert.match(html,/test-public-key/)
  assert.doesNotMatch(html,/service_role|SUPABASE_SERVICE_ROLE_KEY|OPERATOR_DISPATCH_KEY/)
  assert.doesNotMatch(html,/localStorage|sessionStorage/)
