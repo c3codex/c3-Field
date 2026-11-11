@@ -28,5 +28,23 @@
     "src/c3_field_contribution/C2EnvironmentShell.tsx",
     "src/c3_field_contribution/C2PacEncounter.tsx",
     "src/c3ops/C3OpsDoor.tsx"
-  ]
+  ],
+  "current_dnr_still": {
+    "provider": "supabase_storage",
+    "bucket": "c3-field-media",
+    "object_path": "c1ME_c3tree.webp",
+    "object_existence": "verified_2026-11-11",
+    "source_locator": "src/shared/dnrPresentation.ts",
+    "native_media_binding": "not_verified",
+    "runtime_acceptance": "not_verified"
+  },
+  "legacy_repo_artwork": {
+    "path": "public/c3ops/c3-tree-source-v1.png",
+    "sha256": "c7a4a90b62014783bc1f1dcf30dd6a36f94a228440abd531ec61ef3beea41c7d",
+    "standing": "preserved_for_source_custody_not_active_dnr_locator"
+  },
+  "entrance_video": {
+    "standing": "unchanged_by_this_correction",
+    "identity": "requires_separate_registration_readback"
+  }
 }
