@@ -364,7 +364,7 @@ export default function C3OpsDoor() {
 
         {(route==="/systems-access/build"||route==="/systems-access/work") && <p className="ops-unresolved">HLD — this passage provides environment readback. Formation and work execution require their own routed authority.</p>}
 
-        {route.startsWith("/relational-operations") && <><p>Resolve registered relationships and inspect their returned evidence.</p><a className="ops-canopy-link" href="/relational-operations/lapzuli">Lapzuli → Distribution Canopy</a></>}
+        {route.startsWith("/relational-operations") && <p className="ops-unresolved" role="status">HLD — Interops requires its own registered interoperability observation or execution authority. Operator read-preflight scope does not grant it.</p>}
 
         {route==="/systems-access/current" && currentState && <section className="ops-command-room" aria-label="c3Ops Current State">
           <div className="ops-command-mast">
@@ -397,7 +397,7 @@ export default function C3OpsDoor() {
           </footer>
         </section>}
 
-        {route!=="/systems-access/current" && route!=="/relational-operations/lapzuli" && <section className="ops-env-grid" aria-label="Persisted environment state">{state.environments.map(e=><article className="ops-env" key={text(e.identity.env_key)}>
+        {route!=="/systems-access/current" && !route.startsWith("/relational-operations") && <section className="ops-env-grid" aria-label="Persisted environment state">{state.environments.map(e=><article className="ops-env" key={text(e.identity.env_key)}>
           <p className="ops-kicker">{text(e.identity.system_key)}</p><h2>{text(e.identity.environment_name)}</h2>
           <dl><div><dt>Environment key</dt><dd>{text(e.identity.env_key)}</dd></div><div><dt>Class</dt><dd>{text(e.identity.environment_class)}</dd></div><div><dt>Standing</dt><dd>{text(e.standing)}</dd></div>{e.formation&&<div><dt>Formation</dt><dd>{e.formation}</dd></div>}<div><dt>Active / canonical</dt><dd>{text(e.active)} / {text(e.canonical)}</dd></div>{e.domain&&<div><dt>Domain</dt><dd>{e.domain}</dd></div>}</dl>
           {route==="/c3optics" ? <Current env={e}/> : <>
