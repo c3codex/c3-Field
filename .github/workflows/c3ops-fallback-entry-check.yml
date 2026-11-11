@@ -1,0 +1,26 @@
+name: c3Ops fallback entry source checks
+on:
+  pull_request:
+    paths:
+      - 'functions/_lib/c3ops-fallback-entry.ts'
+      - 'functions/_middleware.ts'
+      - 'tests/c3ops-fallback-entry.test.ts'
+      - '.github/workflows/c3ops-fallback-entry-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Unit boundary tests
+        run: npx --no-install tsx --test tests/c3ops-fallback-entry.test.ts
+      - name: TypeScript static check
+        run: npx --no-install tsc --noEmit
