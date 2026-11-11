@@ -54,68 +54,26 @@ test('public key cannot inject script into document',async()=>{
 })
 
 
-test('middleware allows only the exact fallback entry without the dispatch credential',async()=>{
+test('legacy standalone HTML route retires to the canonical portal',async()=>{
  const {onRequest}=await import('../functions/_middleware')
- const next=async()=>new Response('protected workroom content')
+ const next=async()=>new Response('shell')
  const entry=await onRequest({
-   request:new Request('https://c3ops.c3field.online/operator-entry',{headers:{accept:'text/html'}}),
-   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
-   next
+  request:new Request('https://c3ops.c3field.online/operator-entry',{headers:{accept:'text/html'}}),
+  env:{OPERATOR_DISPATCH_KEY:'legacy-dispatch'},next
  } as never)
- assert.equal(entry.status,200)
- assert.match(await entry.text(),/Sign in and request/)
- const api=await onRequest({
-   request:new Request('https://c3ops.c3field.online/api/c3ops/manifest',{headers:{accept:'application/json'}}),
-   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
-   next
+ assert.equal(entry.status,308)
+ assert.equal(entry.headers.get('location'),'/')
+ const post=await onRequest({
+  request:new Request('https://c3ops.c3field.online/operator-entry',{method:'POST'}),
+  env:{OPERATOR_DISPATCH_KEY:'legacy-dispatch'},next
  } as never)
- assert.equal(api.status,403)
- assert.doesNotMatch(await api.text(),/protected workroom content/)
- const staticAsset=await onRequest({
-   request:new Request('https://c3ops.c3field.online/assets/entry.js',{headers:{accept:'application/json'}}),
-   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
-   next
- } as never)
- assert.equal(staticAsset.status,403)
+ assert.equal(post.status,405)
 })
-
-test('middleware refuses unauthenticated protected host and never exposes protected content',async()=>{
+test('legacy standalone component is no longer reachable through middleware',async()=>{
  const {onRequest}=await import('../functions/_middleware')
- const response=await onRequest({
-   request:new Request('https://c3ops.c3field.online/',{headers:{accept:'text/html','sec-fetch-dest':'document'}}),
-   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
-   next:async()=>new Response('protected workroom content')
+ const entry=await onRequest({
+  request:new Request('https://c3ops.c3field.online/operator-entry',{headers:{accept:'text/html'}}),
+  env:{SUPABASE_ANON_KEY:'test-public-key'},next:async()=>new Response('other')
  } as never)
- assert.equal(response.status,401)
- assert.doesNotMatch(await response.text(),/protected workroom content/)
-})
-
-test('operator entry method exceptions never reach protected application',async()=>{
- const {onRequest}=await import('../functions/_middleware')
- let passed=false
- const response=await onRequest({
-   request:new Request('https://c3ops.c3field.online/operator-entry',{method:'POST'}),
-   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
-   next:async()=>{passed=true;return new Response('unprotected')}
- } as never)
- assert.equal(response.status,405)
- assert.equal(passed,false)
-})
-
-test('operator path exception is exact and host-bound',async()=>{
- const {onRequest}=await import('../functions/_middleware')
- const next=async()=>new Response('downstream')
- const guarded=await onRequest({
-   request:new Request('https://c3ops.c3field.online/operator-entry/extra',{headers:{accept:'application/json'}}),
-   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
-   next
- } as never)
- assert.equal(guarded.status,403)
- const otherHost=await onRequest({
-   request:new Request('https://c3field.online/operator-entry',{headers:{accept:'application/json'}}),
-   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
-   next
- } as never)
- assert.equal(otherHost.status,200)
- assert.equal(await otherHost.text(),'downstream')
+ assert.doesNotMatch(await entry.text(),/Sign in and request/)
 })
