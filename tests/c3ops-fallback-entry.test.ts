@@ -47,3 +47,40 @@ test('public key cannot inject script into document',async()=>{
  assert.doesNotMatch(html,/<\/script><script>alert\(1\)/)
  assert.match(html,/\\u003c\/script>/)
 })
+
+
+test('middleware allows only the exact fallback entry without the dispatch credential',async()=>{
+ const {onRequest}=await import('../functions/_middleware')
+ const next=async()=>new Response('protected workroom content')
+ const entry=await onRequest({
+   request:new Request('https://c3ops.c3field.online/operator-entry',{headers:{accept:'text/html'}}),
+   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
+   next
+ } as never)
+ assert.equal(entry.status,200)
+ assert.match(await entry.text(),/Sign in and request/)
+ const api=await onRequest({
+   request:new Request('https://c3ops.c3field.online/api/c3ops/manifest',{headers:{accept:'application/json'}}),
+   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
+   next
+ } as never)
+ assert.equal(api.status,403)
+ assert.doesNotMatch(await api.text(),/protected workroom content/)
+ const staticAsset=await onRequest({
+   request:new Request('https://c3ops.c3field.online/assets/entry.js',{headers:{accept:'application/json'}}),
+   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
+   next
+ } as never)
+ assert.equal(staticAsset.status,403)
+})
+
+test('middleware refuses unauthenticated protected host and never exposes protected content',async()=>{
+ const {onRequest}=await import('../functions/_middleware')
+ const response=await onRequest({
+   request:new Request('https://c3ops.c3field.online/',{headers:{accept:'text/html','sec-fetch-dest':'document'}}),
+   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
+   next:async()=>new Response('protected workroom content')
+ } as never)
+ assert.equal(response.status,401)
+ assert.doesNotMatch(await response.text(),/protected workroom content/)
+})
