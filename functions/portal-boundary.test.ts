@@ -33,7 +33,7 @@ test('API still prevents direct data access and all action routes remain protect
  assert.notEqual(keyOnly.status,200)
  for(const path of ['/api/c3ops/lapzuli','/api/chazz','/other']) {
   const denied=await run(path)
-  assert.equal(denied.called,false);assert.ok([401,403].includes(denied.response.status))
+  assert.equal(denied.called,false);assert.equal(denied.response.status,path==='/other'?404:403)
  }
 })
 test('unrelated hosts cannot access c3Ops rooms',async()=>{
