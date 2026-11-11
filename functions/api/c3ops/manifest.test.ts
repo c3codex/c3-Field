@@ -42,7 +42,7 @@ test("route evidence preserves history without turning publication into Current"
  const r=await readLapzuli(async table=>table==="lapzuli_route"?[{route_key:"r1"}]:[{route_key:"r1",observed_outcome:"held"},{route_key:"r1",observed_outcome:"published",external_id:"p1"}])
  assert.equal(r.evidence.length,2)
  assert.equal(r.current_status,"registry_backed_distribution_readback")
- assert.equal(r.mutation_authority,false)
+ assert.equal(r.mutation_authority,'protected_c3ops_action_required')
 })
 test("FREE resolves Registrar PubPAC work onto Lapzuli without a Measures distribution asset",async()=>{
  const read:ReadRows=async table=>{
@@ -59,7 +59,7 @@ test("FREE resolves Registrar PubPAC work onto Lapzuli without a Measures distri
  assert.ok(card);assert.equal(card.campaign_name,"The Cost of a Claim")
  assert.equal(card.publication_authority,"c3_registrar");assert.equal(card.publication_surface,"c3 Registrar - Field Reporter")
  assert.equal(card.campaign_pac_key,null);assert.equal(card.free_resolution,"pubpac_resolved_to_lapzuli_surface")
- assert.equal(card.counts.assets,1);assert.equal(card.counts.ready,1)
+ assert.equal(card.counts.assets,1);assert.equal(card.counts.ready,0);assert.equal(card.counts.held,1)
 })
 
 test("current state projection resolves only its six registered authority groups",async()=>{
