@@ -1,6 +1,8 @@
 import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {PortalHome} from "./PortalHome"
 import {OperatorSignIn} from './OperatorSignIn'
+import {AuthorizationOptics} from './AuthorizationOptics'
+import type {AuthorizationOpticsReadback} from '../../functions/_lib/c3ops-authorization-optics'
 import { useEffect, useState, useCallback, useRef } from "react"
 import type { ManifestResponse, LapzuliReadback, C3OpsCurrentStateReadback } from "../../functions/_lib/me-environment"
 import type {C3OpsOperatorAuthority} from '../../functions/_lib/c3ops-operator-authority'
@@ -239,6 +241,7 @@ export default function C3OpsDoor() {
   const [state,setState]=useState<OperatorManifest|null>(null)
   const [lapzuli,setLapzuli]=useState<LapzuliReadback|null>(null)
   const [currentState,setCurrentState]=useState<C3OpsCurrentStateReadback|null>(null)
+  const [authorizationOptics,setAuthorizationOptics]=useState<AuthorizationOpticsReadback|null>(null)
   const [error,setError]=useState("")
 
   const readGeneration=useRef(0)
@@ -256,7 +259,7 @@ export default function C3OpsDoor() {
     return()=>{window.removeEventListener('popstate',pop);document.removeEventListener('click',navigate)}
   },[])
   const [readEpoch,setReadEpoch]=useState(0)
-  const changeProof=useCallback((proof:string)=>{readGeneration.current++;setState(null);setLapzuli(null);setCurrentState(null);setError("");setOperatorProof(proof);setReadEpoch(n=>n+1)},[])
+  const changeProof=useCallback((proof:string)=>{readGeneration.current++;setState(null);setLapzuli(null);setCurrentState(null);setAuthorizationOptics(null);setError("");setOperatorProof(proof);setReadEpoch(n=>n+1)},[])
   async function refreshLapzuli() {
     const response=await fetch("/api/c3ops/manifest?view=lapzuli",{credentials:"same-origin"})
     if(!response.ok) throw new Error("Lapzuli evidence readback unavailable.")
@@ -268,7 +271,7 @@ export default function C3OpsDoor() {
   useEffect(()=>{
     document.title="c3Ops"
     if(route===null || !operatorProof) return
-    setState(null);setLapzuli(null);setCurrentState(null);setError("")
+    setState(null);setLapzuli(null);setCurrentState(null);setAuthorizationOptics(null);setError("")
     const requestGeneration=++readGeneration.current
     const controller=new AbortController()
     async function load() {
@@ -279,6 +282,20 @@ export default function C3OpsDoor() {
         if(body.contract!=="me_environment_manifest_v1" || !Array.isArray(body.environments)) throw new Error("Registry response is not a manifest.")
         if(controller.signal.aborted||requestGeneration!==readGeneration.current)return;setState(body)
 
+        if(route==="/c3optics"){
+          const opticsResponse=await fetch("/api/c3ops/manifest?view=authorizations",{
+            credentials:"same-origin",headers:operatorProof?{"x-c3ops-session-proof":operatorProof}:{},signal:controller.signal
+          })
+          if(!opticsResponse.ok) throw new Error("Authorization Optics live Registry readback HLD.")
+          const opticsBody=await opticsResponse.json() as AuthorizationOpticsReadback
+          if(opticsBody.contract!=="c3ops_authorization_optics_v1"
+            ||opticsBody.environment!=="env_c3ops"
+            ||opticsBody.execution_authority!==false
+            ||opticsBody.mutation_authority!==false
+            ||!Array.isArray(opticsBody.requests)) throw new Error("Authorization Optics contract unresolved.")
+          if(controller.signal.aborted||requestGeneration!==readGeneration.current)return
+          setAuthorizationOptics(opticsBody)
+        }
         if(route==="/systems-access/current"){
           const currentResponse=await fetch("/api/c3ops/manifest?view=current_state",{credentials:"same-origin",headers:operatorProof?{"x-c3ops-session-proof":operatorProof}:{},signal:controller.signal})
           if(!currentResponse.ok) throw new Error("c3Ops Current State readback unavailable.")
@@ -302,6 +319,11 @@ export default function C3OpsDoor() {
     return ()=>controller.abort()
   },[route,operatorProof,readEpoch])
 
+  useEffect(()=>{
+    if(route!=="/c3optics"||!operatorProof)return
+    const timer=window.setInterval(()=>setReadEpoch(n=>n+1),60000)
+    return ()=>window.clearInterval(timer)
+  },[route,operatorProof])
   if(route===null) return <DnrBackdrop/>
   const currentComponent=currentState?.components.find(component=>component.key==="current")
   const stations=currentState?.components.filter(component=>component.key!=="current") ?? []
@@ -330,6 +352,8 @@ export default function C3OpsDoor() {
       {state && <>
         <p className="ops-caption">Readback {new Date(state.observed_at).toLocaleString()} · Observation grants no action authority.</p>
         <OperatorAuthority authority={state.operator_authority}/>
+        {route==="/c3optics" && authorizationOptics && <AuthorizationOptics data={authorizationOptics} onRefresh={()=>setReadEpoch(n=>n+1)}/>}
+        {route==="/c3optics" && !authorizationOptics && <p role="status" className="ops-unresolved">HLD — live authorization Optics has not resolved.</p>}
         {state.missing_environments?.length>0 && <p className="ops-unresolved">Environment readback missing: {state.missing_environments.join(", ")}</p>}
 
         {route.startsWith("/systems-access") && <nav className="ops-architecture" aria-label="Operational architecture">{[["Current","/systems-access/current"],["Build","/systems-access/build"],["Work","/systems-access/work"],["Systems","/systems-access"],["Registry","/systems-access/registry"],["Evidence","/c3optics"]].map(([label,path])=><a key={path} href={path}>{label}</a>)}</nav>}
