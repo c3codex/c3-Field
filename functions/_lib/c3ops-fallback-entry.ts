@@ -96,6 +96,10 @@ export function fallbackEntry(request: Request, publicKey?: string): Response {
       if(!disposition.ok){report("REQUESTED · Read continuation unavailable (HLD). No Registrar action occurred.");return;}
       const decision=await disposition.json();
       if(decision.standing!=="READ_PREFLIGHT_CONFIRMED"
+        ||decision.request_id!==result.request_id
+        ||typeof decision.expires_at!=="string"
+        ||!Number.isFinite(Date.parse(decision.expires_at))
+        ||Date.parse(decision.expires_at)<=Date.now()
         ||decision.registrar_execution_authorized!==false
         ||decision.installation_authorized!==false
         ||decision.workroom_admission_authorized!==false){
