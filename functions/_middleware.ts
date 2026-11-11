@@ -345,8 +345,12 @@ const handleRequest: PagesFunction<Env> = async ({ request, env, next }) => {
     return privateResponse(await next(),true)
   // The read-only manifest is the sole browser API exception. Legacy action
   // APIs are still blocked by their separate authorization boundary.
-  if(c3OpsHost && pathname==="/api/c3ops/manifest" && request.method==="GET")
+  if(c3OpsHost && pathname==="/api/c3ops/manifest")
     return privateResponse(await next(),true)
+  // No legacy dispatch-secret backdoor into action APIs from the c3Ops host.
+  // Future route-level effects require separately registered per-capability authority.
+  if(c3OpsHost && (pathname==="/api" || pathname.startsWith("/api/")))
+    return privateResponse(new Response(JSON.stringify({standing:"HLD",reason:"capability_not_admitted",mutation_authority:false}),{status:403,headers:{"content-type":"application/json; charset=utf-8"}}),true)
   if (!c3OpsHost && c3OpsRoomPath) return privateResponse(new Response("not found", {status:404}))
   if (!isProtectedPath(pathname) && !c3OpsHost) {
     const response = await next()
