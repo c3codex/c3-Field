@@ -236,6 +236,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
 
 export default function C3OpsDoor() {
   const [pathname,setPathname]=useState(window.location.pathname)
+  const [showAuth,setShowAuth]=useState(false)
   const route=c3OpsRoute(pathname)
   const [operatorProof,setOperatorProof]=useState("")
   const [state,setState]=useState<OperatorManifest|null>(null)
@@ -329,23 +330,24 @@ export default function C3OpsDoor() {
   const stations=currentState?.components.filter(component=>component.key!=="current") ?? []
 
   return <>
-    <section className="ops-entry-auth"><OperatorSignIn onProof={changeProof} readComplete={!!state} readHeld={!!error}/>
+    {(route!=="/" || showAuth) && <section className="ops-entry-auth"><OperatorSignIn onProof={changeProof} readComplete={!!state} readHeld={!!error}/>
       {route==="/" && operatorProof && !state && !error && <p role="status">Checking registered read permissions…</p>}
       {route==="/" && error && <p role="alert">HLD — {error}</p>}
-    </section>
-    {route==="/" ? state && <PortalHome/> : <main className="ops-room">
-    <header className="ops-room-header">
+    </section>}
+    {route==="/" ? <PortalHome onEnter={()=>setShowAuth(true)} authorized={Boolean(state)}/> : <main className="ops-room">
+    {state && <header className="ops-room-header">
       <a href="/" className="ops-brand"><span>c3</span>Ops</a>
       <nav aria-label="Environment navigation">{portals.map(p=><a key={p.path} href={p.path} aria-current={route?.startsWith(p.path)?"page":undefined}>{p.label}</a>)}</nav>
-    </header>
+    </header>}
 
     {!route ? <><h1>Route unresolved</h1><p>This route has no c3Ops passage.</p></> : <>
-      <div className="ops-room-title">
+      {!state && <p role="status" className="ops-unresolved">Operator authentication and registered read standing required. No workroom content is available.</p>}
+      {state && <div className="ops-room-title">
         <p className="ops-kicker">c3Ops / operator environment</p>
         <h1>{route.includes("lapzuli")?"Lapzuli · Distribution Canopy":route==="/c3optics"?"c3Optics":route.startsWith("/relational")?"Relational Operations":"Systems Access"}</h1>
-      </div>
+      </div>}
 
-      <p>Read-only access. Distribution and operational actions are unavailable in this release.</p>
+      {state && <p>Read-only access. Distribution and operational actions are unavailable in this release.</p>}
       {error && <p role="alert" className="ops-unresolved ops-alert">HLD — {error} <a href={window.location.pathname}>Retry readback</a></p>}
       {operatorProof && !state && !error && <p role="status" className="ops-reading">Reading registered environments…</p>}
 
