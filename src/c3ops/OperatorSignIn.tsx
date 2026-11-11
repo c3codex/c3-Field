@@ -50,7 +50,21 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
    const result=data as Record<string,unknown>
    if(result.standing!=='REQUESTED'||typeof result.request_id!=='string'||typeof result.expires_at!=='string'||result.registrar_execution_authorized!==false||result.installation_authorized!==false)throw Error('unexpected')
    setFallbackRequest({requestId:result.request_id,expiresAt:result.expires_at})
-   setFallbackMessage('Request recorded. Registrar execution and installation remain held.')
+   setFallbackMessage('REQUESTED · Checking existing bounded read standing...')
+   // The canonical portal consumes the same existing, append-only Registry
+   // continuation. This is NOT workroom admission or Registrar execution.
+   const decision=await client.rpc('c3ops_resolve_fallback_read_v1',{p_request_id:result.request_id})
+   if(!mounted.current||generation.current!==attempt)return
+   const value=decision.data as Record<string,unknown>|null
+   if(decision.error||!value||value.standing!=='READ_PREFLIGHT_CONFIRMED'
+      ||value.request_id!==result.request_id||typeof value.expires_at!=='string'
+      ||!Number.isFinite(Date.parse(value.expires_at))||Date.parse(value.expires_at)<=Date.now()
+      ||value.registrar_execution_authorized!==false||value.installation_authorized!==false
+      ||value.workroom_admission_authorized!==false){
+     setFallbackMessage('REQUESTED · Read continuation HLD. No Registrar execution or workroom admission.')
+     return
+   }
+   setFallbackMessage('READ PREFLIGHT CONFIRMED · Existing read rights recognized. Registrar execution and workroom admission remain held.')
   }catch{
    if(mounted.current&&generation.current===attempt)setFallbackMessage('Request could not be verified. No Registrar execution is authorized. Check current Operator standing and sign in again if needed.')
   }finally{if(mounted.current&&generation.current===attempt)setFallbackBusy(false)}

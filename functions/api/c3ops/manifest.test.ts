@@ -41,8 +41,8 @@ test("read failure cannot masquerade as complete coverage",async()=>{
 test("route evidence preserves history without turning publication into Current",async()=>{
  const r=await readLapzuli(async table=>table==="lapzuli_route"?[{route_key:"r1"}]:[{route_key:"r1",observed_outcome:"held"},{route_key:"r1",observed_outcome:"published",external_id:"p1"}])
  assert.equal(r.evidence.length,2)
- assert.equal(r.current_status,"unresolved_without_explicit_current_relation")
- assert.equal(r.mutation_authority,false)
+ assert.equal(r.current_status,"registry_backed_distribution_readback")
+ assert.equal(r.mutation_authority,'protected_c3ops_action_required')
 })
 test("FREE resolves Registrar PubPAC work onto Lapzuli without a Measures distribution asset",async()=>{
  const read:ReadRows=async table=>{
@@ -58,8 +58,8 @@ test("FREE resolves Registrar PubPAC work onto Lapzuli without a Measures distri
  const card=r.campaigns.find((x:any)=>x.campaign_key==="reg1") as any
  assert.ok(card);assert.equal(card.campaign_name,"The Cost of a Claim")
  assert.equal(card.publication_authority,"c3_registrar");assert.equal(card.publication_surface,"c3 Registrar - Field Reporter")
- assert.equal(card.campaign_pac_key,"pac1");assert.equal(card.free_resolution,"pubpac_resolved_to_lapzuli_surface")
- assert.equal(card.counts.assets,1);assert.equal(card.counts.ready,1)
+ assert.equal(card.campaign_pac_key,null);assert.equal(card.free_resolution,"pubpac_resolved_to_lapzuli_surface")
+ assert.equal(card.counts.assets,1);assert.equal(card.counts.ready,0);assert.equal(card.counts.held,1)
 })
 
 test("current state projection resolves only its six registered authority groups",async()=>{
@@ -72,7 +72,7 @@ test("current state projection resolves only its six registered authority groups
   return []
  }
  const r=await readC3OpsCurrentState(read)
- assert.deepEqual(r.components.map(c=>c.key),["prism","lapzuli","optics","c3_model","current","chazz"])
+ assert.deepEqual(r.components.map(c=>c.key),["prism","lapzuli","optics","c3_model","current","oar_lifecycle","chazz"])
  assert.equal(r.mutation_authority,false);assert.equal(r.external_effects,0)
  assert.equal(r.standing_definitions.ACT,"Accrued Current Trace")
  assert.ok(calls.some(c=>c.table==="c3_current_state"&&c.filters?.env_key==="eq.env_c3ops"&&c.filters?.is_current==="eq.true"))
@@ -95,10 +95,10 @@ test("write methods are rejected before any Registry access",async()=>{
   assert.equal(response.status,405)
  }
 })
-test("invalid env filters and missing configuration fail closed",async()=>{
- assert.equal((await handleRead(new Request("https://c3ops.c3field.online/api/c3ops/manifest?env_key=x%26or=evil"),{})).status,400)
+test("foreign environment and missing native session fail closed",async()=>{
+ assert.equal((await handleRead(new Request("https://c3ops.c3field.online/api/c3ops/manifest?env_key=x%26or=evil"),{})).status,403)
  const r=await handleRead(new Request("https://c3ops.c3field.online/api/c3ops/manifest"),{})
- assert.equal(r.status,503);assert.match(r.headers.get("cache-control")! ,/no-store/)
+ assert.equal(r.status,401);assert.match(r.headers.get("cache-control")!,/no-store/)
 })
 test("pagination reads every page using GET and rejects upstream errors",async()=>{
  const original=globalThis.fetch
@@ -106,12 +106,17 @@ test("pagination reads every page using GET and rejects upstream errors",async()
  globalThis.fetch=(async(_url,init)=>{assert.equal(init?.method,undefined); count++;return Response.json(count===1?Array.from({length:500},(_,i)=>({i})):[{i:500}])}) as typeof fetch
  try {assert.equal((await createRegistryReader({SUPABASE_URL:"https://fixture.invalid",SUPABASE_SERVICE_ROLE_KEY:"test"})("c3_environment","env_key")).length,501)} finally {globalThis.fetch=original}
 })
-test("all new private surfaces require existing operator authorization",async()=>{
- for(const path of ["/systems-access","/c3optics","/relational-operations/lapzuli","/api/c3ops/manifest"]){
+test("public shell cannot give unauthorized access to Registry data or other action APIs",async()=>{
+ for(const path of ["/systems-access","/c3optics","/relational-operations/lapzuli"]){
   let accessed=false
-  const result=await middleware({request:new Request("https://c3ops.c3field.online"+path),env:{OPERATOR_DISPATCH_KEY:"test"},next:async()=>{accessed=true;return new Response("private")}} as never)
-  assert.equal(accessed,false);assert.ok([401,403].includes(result.status))
+  const result=await middleware({request:new Request("https://c3ops.c3field.online"+path),env:{},next:async()=>{accessed=true;return new Response("public shell")}} as never)
+  assert.equal(accessed,true);assert.equal(result.status,200)
  }
+ const api=await handleRead(new Request("https://c3ops.c3field.online/api/c3ops/manifest",{headers:{"x-operator-dispatch-key":"legacy"}}),{OPERATOR_DISPATCH_KEY:"legacy"})
+ assert.notEqual(api.status,200)
+ let advanced=false
+ const actions=await middleware({request:new Request("https://c3ops.c3field.online/api/c3ops/lapzuli",{headers:{"x-operator-dispatch-key":"legacy"}}),env:{OPERATOR_DISPATCH_KEY:"legacy"},next:async()=>{advanced=true;return new Response("action")}} as never)
+ assert.equal(advanced,false);assert.equal(actions.status,403)
 })
 test("authenticated operator read is private and unrelated hosts retain routes",async()=>{
  let count=0

@@ -236,6 +236,7 @@ function LapzuliDesk({lapzuli,onRefresh}:{lapzuli:LapzuliReadback;onRefresh:()=>
 
 export default function C3OpsDoor() {
   const [pathname,setPathname]=useState(window.location.pathname)
+  const [showAuth,setShowAuth]=useState(false)
   const route=c3OpsRoute(pathname)
   const [operatorProof,setOperatorProof]=useState("")
   const [state,setState]=useState<OperatorManifest|null>(null)
@@ -329,23 +330,26 @@ export default function C3OpsDoor() {
   const stations=currentState?.components.filter(component=>component.key!=="current") ?? []
 
   return <>
-    <section className="ops-entry-auth"><OperatorSignIn onProof={changeProof} readComplete={!!state} readHeld={!!error}/>
+    <section hidden={route==="/"&&!showAuth} className={"ops-entry-auth"+(route==="/"?" ops-auth-dialog":"")} role={route==="/"&&showAuth?"dialog":undefined} aria-modal={route==="/"&&showAuth?true:undefined} aria-label={route==="/"&&showAuth?"Operator authentication":undefined}>
+      {route==="/" && <button type="button" className="ops-auth-close" onClick={()=>setShowAuth(false)} aria-label="Close authentication">✕</button>}
+      <OperatorSignIn onProof={changeProof} readComplete={!!state} readHeld={!!error}/>
       {route==="/" && operatorProof && !state && !error && <p role="status">Checking registered read permissions…</p>}
       {route==="/" && error && <p role="alert">HLD — {error}</p>}
     </section>
-    {route==="/" ? state && <PortalHome/> : <main className="ops-room">
-    <header className="ops-room-header">
+    {route==="/" ? <PortalHome onEnter={()=>setShowAuth(true)} authorized={Boolean(state)}/> : <main className="ops-room">
+    {state && <header className="ops-room-header">
       <a href="/" className="ops-brand"><span>c3</span>Ops</a>
       <nav aria-label="Environment navigation">{portals.map(p=><a key={p.path} href={p.path} aria-current={route?.startsWith(p.path)?"page":undefined}>{p.label}</a>)}</nav>
-    </header>
+    </header>}
 
     {!route ? <><h1>Route unresolved</h1><p>This route has no c3Ops passage.</p></> : <>
-      <div className="ops-room-title">
+      {!state && <p role="status" className="ops-unresolved">Operator authentication and registered read standing required. No workroom content is available.</p>}
+      {state && <div className="ops-room-title">
         <p className="ops-kicker">c3Ops / operator environment</p>
         <h1>{route.includes("lapzuli")?"Lapzuli · Distribution Canopy":route==="/c3optics"?"c3Optics":route.startsWith("/relational")?"Relational Operations":"Systems Access"}</h1>
-      </div>
+      </div>}
 
-      <p>Read-only access. Distribution and operational actions are unavailable in this release.</p>
+      {state && <p>Read-only access. Distribution and operational actions are unavailable in this release.</p>}
       {error && <p role="alert" className="ops-unresolved ops-alert">HLD — {error} <a href={window.location.pathname}>Retry readback</a></p>}
       {operatorProof && !state && !error && <p role="status" className="ops-reading">Reading registered environments…</p>}
 
@@ -360,7 +364,7 @@ export default function C3OpsDoor() {
 
         {(route==="/systems-access/build"||route==="/systems-access/work") && <p className="ops-unresolved">HLD — this passage provides environment readback. Formation and work execution require their own routed authority.</p>}
 
-        {route.startsWith("/relational-operations") && <><p>Resolve registered relationships and inspect their returned evidence.</p><a className="ops-canopy-link" href="/relational-operations/lapzuli">Lapzuli → Distribution Canopy</a></>}
+        {route.startsWith("/relational-operations") && <p className="ops-unresolved" role="status">HLD — Interops requires its own registered interoperability observation or execution authority. Operator read-preflight scope does not grant it.</p>}
 
         {route==="/systems-access/current" && currentState && <section className="ops-command-room" aria-label="c3Ops Current State">
           <div className="ops-command-mast">
@@ -393,7 +397,7 @@ export default function C3OpsDoor() {
           </footer>
         </section>}
 
-        {route!=="/systems-access/current" && route!=="/relational-operations/lapzuli" && <section className="ops-env-grid" aria-label="Persisted environment state">{state.environments.map(e=><article className="ops-env" key={text(e.identity.env_key)}>
+        {route!=="/systems-access/current" && !route.startsWith("/relational-operations") && <section className="ops-env-grid" aria-label="Persisted environment state">{state.environments.map(e=><article className="ops-env" key={text(e.identity.env_key)}>
           <p className="ops-kicker">{text(e.identity.system_key)}</p><h2>{text(e.identity.environment_name)}</h2>
           <dl><div><dt>Environment key</dt><dd>{text(e.identity.env_key)}</dd></div><div><dt>Class</dt><dd>{text(e.identity.environment_class)}</dd></div><div><dt>Standing</dt><dd>{text(e.standing)}</dd></div>{e.formation&&<div><dt>Formation</dt><dd>{e.formation}</dd></div>}<div><dt>Active / canonical</dt><dd>{text(e.active)} / {text(e.canonical)}</dd></div>{e.domain&&<div><dt>Domain</dt><dd>{e.domain}</dd></div>}</dl>
           {route==="/c3optics" ? <Current env={e}/> : <>

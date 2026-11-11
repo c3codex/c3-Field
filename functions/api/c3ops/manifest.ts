@@ -1,7 +1,6 @@
 import {recognizeOperatorRead} from '../../_lib/recognition'
 import { resolveMEEnvironments, readLapzuli, readC3OpsCurrentState, type ReadRows } from "../../_lib/me-environment"
 
-import {isAuthorizedOperator} from "../../_middleware"
 import {readC3OpsOperatorAuthority} from '../../_lib/c3ops-operator-authority'
 import {readAuthorizationOptics} from '../../_lib/c3ops-authorization-optics'
 export type Env = {
@@ -46,7 +45,8 @@ export async function handleRead(request:Request,env:Env){
  if(view!==null&&view!=='current_state'&&view!=='authorizations')return held('read_view_not_admitted')
  if(url.searchParams.has('env_key')&&url.searchParams.get('env_key')!=='env_c3ops')return held('foreign_environment')
  try{
-  if(!env.OPERATOR_DISPATCH_KEY||!await isAuthorizedOperator(request,env.OPERATOR_DISPATCH_KEY,false))return held('operator_access_denied')
+  // Registered native Operator recognition, not the legacy dispatch secret,
+  // is the sole authorization proof for this GET-only projection.
   const actor=await recognizeOperatorRead(request,env)
   if(actor.standing!=='VERIFIED')return held(actor.reason,401)
   const read=createRegistryReader(env)

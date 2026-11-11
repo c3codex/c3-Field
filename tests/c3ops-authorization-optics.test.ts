@@ -49,7 +49,7 @@ test('authorization optics view stays host-bound and operator-guarded',async()=>
  const other=await handleRead(new Request('https://c3field.online/api/c3ops/manifest?view=authorizations'),{})
  assert.equal(other.status,404)
  const missing=await handleRead(new Request('https://c3ops.c3field.online/api/c3ops/manifest?view=authorizations'),{})
- assert.equal(missing.status,403)
+ assert.equal(missing.status,401)
  const invalid=await handleRead(new Request('https://c3ops.c3field.online/api/c3ops/manifest?view=authorizations&env_key=other'),{})
  assert.equal(invalid.status,403)
 })
