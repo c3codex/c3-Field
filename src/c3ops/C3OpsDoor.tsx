@@ -330,7 +330,9 @@ export default function C3OpsDoor() {
   const stations=currentState?.components.filter(component=>component.key!=="current") ?? []
 
   return <>
-    {(route!=="/" || showAuth) && <section className="ops-entry-auth"><OperatorSignIn onProof={changeProof} readComplete={!!state} readHeld={!!error}/>
+    {(route!=="/" || showAuth) && <section className={"ops-entry-auth"+(route==="/"?" ops-auth-dialog":"")} role={route==="/"?"dialog":undefined} aria-modal={route==="/"?true:undefined} aria-label={route==="/"?"Operator authentication":undefined}>
+      {route==="/" && <button type="button" className="ops-auth-close" onClick={()=>setShowAuth(false)} aria-label="Close authentication">✕</button>}
+      <OperatorSignIn onProof={changeProof} readComplete={!!state} readHeld={!!error}/>
       {route==="/" && operatorProof && !state && !error && <p role="status">Checking registered read permissions…</p>}
       {route==="/" && error && <p role="alert">HLD — {error}</p>}
     </section>}
