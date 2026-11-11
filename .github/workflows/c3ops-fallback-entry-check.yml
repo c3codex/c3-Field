@@ -1,0 +1,32 @@
+name: c3Ops fallback entry source checks
+on:
+  pull_request:
+    paths:
+      - 'functions/_lib/c3ops-fallback-entry.ts'
+      - 'functions/_middleware.ts'
+      - 'src/c3ops/OperatorSignIn.tsx'
+      - 'scripts/check-c3ops-operator-entry-hosted.mjs'
+      - 'tests/c3ops-fallback-entry.test.ts'
+      - '.github/workflows/c3ops-fallback-entry-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Hosted smoke script syntax (no network effect)
+        run: node --check scripts/check-c3ops-operator-entry-hosted.mjs
+      - name: Unit boundary tests
+        run: npx --no-install tsx --test tests/c3ops-fallback-entry.test.ts
+      - name: TypeScript static check
+        run: npx --no-install tsc --noEmit
+      - name: Unprivileged Vite build (not governed deployment qualification)
+        run: npm run build
