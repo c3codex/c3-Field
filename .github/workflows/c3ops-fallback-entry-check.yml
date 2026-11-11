@@ -24,3 +24,5 @@ jobs:
         run: npx --no-install tsx --test tests/c3ops-fallback-entry.test.ts
       - name: TypeScript static check
         run: npx --no-install tsc --noEmit
+      - name: Unprivileged Vite build (not governed deployment qualification)
+        run: npm run build
