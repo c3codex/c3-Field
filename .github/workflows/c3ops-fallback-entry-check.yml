@@ -5,6 +5,7 @@ on:
       - 'functions/_lib/c3ops-fallback-entry.ts'
       - 'functions/_middleware.ts'
       - 'src/c3ops/OperatorSignIn.tsx'
+      - 'scripts/check-c3ops-operator-entry-hosted.mjs'
       - 'tests/c3ops-fallback-entry.test.ts'
       - '.github/workflows/c3ops-fallback-entry-check.yml'
   workflow_dispatch:
@@ -21,6 +22,8 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci --ignore-scripts
+      - name: Hosted smoke script syntax (no network effect)
+        run: node --check scripts/check-c3ops-operator-entry-hosted.mjs
       - name: Unit boundary tests
         run: npx --no-install tsx --test tests/c3ops-fallback-entry.test.ts
       - name: TypeScript static check
