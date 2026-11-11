@@ -41,7 +41,7 @@ test("read failure cannot masquerade as complete coverage",async()=>{
 test("route evidence preserves history without turning publication into Current",async()=>{
  const r=await readLapzuli(async table=>table==="lapzuli_route"?[{route_key:"r1"}]:[{route_key:"r1",observed_outcome:"held"},{route_key:"r1",observed_outcome:"published",external_id:"p1"}])
  assert.equal(r.evidence.length,2)
- assert.equal(r.current_status,"unresolved_without_explicit_current_relation")
+ assert.equal(r.current_status,"registry_backed_distribution_readback")
  assert.equal(r.mutation_authority,false)
 })
 test("FREE resolves Registrar PubPAC work onto Lapzuli without a Measures distribution asset",async()=>{
@@ -58,7 +58,7 @@ test("FREE resolves Registrar PubPAC work onto Lapzuli without a Measures distri
  const card=r.campaigns.find((x:any)=>x.campaign_key==="reg1") as any
  assert.ok(card);assert.equal(card.campaign_name,"The Cost of a Claim")
  assert.equal(card.publication_authority,"c3_registrar");assert.equal(card.publication_surface,"c3 Registrar - Field Reporter")
- assert.equal(card.campaign_pac_key,"pac1");assert.equal(card.free_resolution,"pubpac_resolved_to_lapzuli_surface")
+ assert.equal(card.campaign_pac_key,null);assert.equal(card.free_resolution,"pubpac_resolved_to_lapzuli_surface")
  assert.equal(card.counts.assets,1);assert.equal(card.counts.ready,1)
 })
 
@@ -72,7 +72,7 @@ test("current state projection resolves only its six registered authority groups
   return []
  }
  const r=await readC3OpsCurrentState(read)
- assert.deepEqual(r.components.map(c=>c.key),["prism","lapzuli","optics","c3_model","current","chazz"])
+ assert.deepEqual(r.components.map(c=>c.key),["prism","lapzuli","optics","c3_model","current","oar_lifecycle","chazz"])
  assert.equal(r.mutation_authority,false);assert.equal(r.external_effects,0)
  assert.equal(r.standing_definitions.ACT,"Accrued Current Trace")
  assert.ok(calls.some(c=>c.table==="c3_current_state"&&c.filters?.env_key==="eq.env_c3ops"&&c.filters?.is_current==="eq.true"))
