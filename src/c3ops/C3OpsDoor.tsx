@@ -283,7 +283,7 @@ export default function C3OpsDoor() {
           // expose raw Registry errors, tokens, or server configuration.
           const failure=await response.json().catch(()=>null) as {standing?:unknown;reason?:unknown}|null
           const reason=typeof failure?.reason==="string"&&/^(readback_unavailable:(native_recognition|registry_configuration|registered_authority|registered_projection)|native_session_required|native_auth_configuration|native_recognition_denied|native_recognition_binding_mismatch|native_recognition_unavailable|registered_read_authority_unavailable)$/.test(failure.reason)?failure.reason:null
-          throw new Error(reason?`HLD — ${reason}`:response.status===403?"Operator read authority is held.":response.status===401?"Native Operator recognition held.":"Registry readback unavailable.")
+          throw new Error(reason?reason:response.status===403?"Operator read authority is held.":response.status===401?"Native Operator recognition held.":"Registry readback unavailable.")
         }
         const body=await response.json() as OperatorManifest
         if(body.contract!=="me_environment_manifest_v1" || !Array.isArray(body.environments)) throw new Error("Registry response is not a manifest.")
