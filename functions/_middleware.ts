@@ -1,6 +1,5 @@
 import {resolveRegisteredInitiativeProjection} from "../src/c3_field_connect/registeredInitiativeProjection"
 import {dnrDocument,isC3FieldHost} from "../src/shared/dnrPresentation"
-import {fallbackEntry} from "./_lib/c3ops-fallback-entry"
 
 type Env = {
   OPERATOR_DISPATCH_KEY?: string
@@ -334,13 +333,20 @@ const handleRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   const requestUrl = new URL(request.url)
   const pathname = requestUrl.pathname.replace(/\/$/, "") || "/"
   const c3OpsHost = requestUrl.hostname === "c3ops.c3field.online"
-  // The sole unauthenticated c3Ops HTML entry: an isolated login + REQUEST-only
-  // intake. All existing workroom routes, static assets and APIs stay guarded.
-  if (c3OpsHost && pathname === "/operator-entry")
-    return fallbackEntry(request, env.SUPABASE_ANON_KEY ?? env.VITE_SUPABASE_ANON_KEY)
-  // The sole public artwork exception; other assets keep the whole-host guard.
-  if (c3OpsHost && pathname === "/c3ops/c3-tree-source-v1.png" && ["GET","HEAD"].includes(request.method)) return next()
+  // Canonical entrance: a public UI shell, never private data. Every protected
+  // read still requires native Operator proof and registered scope in its API.
+  if(c3OpsHost && pathname==="/operator-entry")
+    return privateResponse(new Response(null,{status:308,headers:{location:"/"}}),true)
   const c3OpsRoomPath = ["/systems-access", "/relational-operations", "/c3optics"].some(p => pathname === p || pathname.startsWith(p + "/"))
+  const shellPath = pathname==="/" || c3OpsRoomPath
+  const staticPath = pathname==="/favicon.ico" || pathname==="/robots.txt" || pathname==="/manifest.webmanifest"
+    || pathname.startsWith("/assets/") || pathname.startsWith("/c3ops/")
+  if(c3OpsHost && ["GET","HEAD"].includes(request.method) && (shellPath || staticPath))
+    return privateResponse(await next(),true)
+  // The read-only manifest is the sole browser API exception. Legacy action
+  // APIs are still blocked by their separate authorization boundary.
+  if(c3OpsHost && pathname==="/api/c3ops/manifest" && request.method==="GET")
+    return privateResponse(await next(),true)
   if (!c3OpsHost && c3OpsRoomPath) return privateResponse(new Response("not found", {status:404}))
   if (!isProtectedPath(pathname) && !c3OpsHost) {
     const response = await next()
