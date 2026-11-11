@@ -82,9 +82,27 @@ export function fallbackEntry(request: Request, publicKey?: string): Response {
       if(!rpc.ok)throw Error("registrar_request_held");
       const result=await rpc.json();
       if(result.standing!=="REQUESTED"||typeof result.request_id!=="string"||typeof result.expires_at!=="string"||result.registrar_execution_authorized!==false||result.installation_authorized!==false)throw Error("invalid_request_receipt");
-      report("REQUESTED · Recorded only; Registrar execution and installation remain held.");
+      // Native bounded continuation: a read-preflight determination, NEVER a
+      // Registrar role call or a new authorization. A missing resolver fails closed.
+      report("REQUESTED · Recorded. Checking existing bounded read standing...");
       receipt.textContent="Request: "+result.request_id+" · Expires: "+new Date(result.expires_at).toLocaleString();
       form.hidden=true;
+      const disposition=await fetch(url+"/rest/v1/rpc/c3ops_resolve_fallback_read_v1",{
+        method:"POST",cache:"no-store",credentials:"omit",
+        headers:{"apikey":apiKey,"authorization":"Bearer "+token,"content-type":"application/json"},
+        body:JSON.stringify({p_request_id:result.request_id})
+      });
+      if(!disposition.ok){report("REQUESTED · Read continuation unavailable (HLD). No Registrar action occurred.");return;}
+      const decision=await disposition.json();
+      if(decision.standing!=="READ_PREFLIGHT_CONFIRMED"
+        ||decision.registrar_execution_authorized!==false
+        ||decision.installation_authorized!==false
+        ||decision.workroom_admission_authorized!==false){
+        report("REQUESTED · Read continuation held. No Registrar execution or workroom access.");
+        return;
+      }
+      report("READ PREFLIGHT CONFIRMED · Existing read scope recognized. Registrar execution and workroom access remain held.");
+      receipt.textContent="Request: "+result.request_id+" · Read standing valid through: "+new Date(decision.expires_at).toLocaleString();
     }catch{
       report("Request not confirmed. Check the Operator credentials, active c3Ops grant, and current authorization window. No execution authority was granted.");
     }finally{
