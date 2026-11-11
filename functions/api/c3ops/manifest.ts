@@ -44,19 +44,27 @@ export async function handleRead(request:Request,env:Env){
  const view=url.searchParams.get('view')
  if(view!==null&&view!=='current_state'&&view!=='authorizations')return held('read_view_not_admitted')
  if(url.searchParams.has('env_key')&&url.searchParams.get('env_key')!=='env_c3ops')return held('foreign_environment')
+ let stage:'native_recognition'|'registry_configuration'|'registered_authority'|'registered_projection'='native_recognition'
  try{
   // Registered native Operator recognition, not the legacy dispatch secret,
   // is the sole authorization proof for this GET-only projection.
   const actor=await recognizeOperatorRead(request,env)
   if(actor.standing!=='VERIFIED')return held(actor.reason,401)
+  stage='registry_configuration'
   const read=createRegistryReader(env)
+  stage='registered_authority'
   // Only fixed qualification-record reads occur before authorization succeeds.
   const authority=await readC3OpsOperatorAuthority(read,'env_c3ops',actor)
   const right=view==='current_state'?'read_preflight_evidence':'inspect_governed_status'
   if(authority.authenticated_actor.standing!=='VERIFIED'||!authority.eligible_read_effects.includes(right))return held('registered_read_authority_unavailable')
+  stage='registered_projection'
   const body=view==='authorizations'?await readAuthorizationOptics(env):view==='current_state'?await readC3OpsCurrentState(read):{...await resolveMEEnvironments(read,'env_c3ops'),operator_authority:authority}
   if(Date.parse(actor.expiresAt)<=Date.now())return held('recognition_expired',401)
   return new Response(JSON.stringify(body),{headers})
- }catch{return held('readback_unavailable',503)}
+ }catch{
+  // The precise exception remains server-side; never expose schema names,
+  // configuration values, session contents, or upstream errors to the client.
+  return held('readback_unavailable:'+stage,503)
+ }
 }
 export const onRequest:PagesFunction<Env>=({request,env})=>handleRead(request,env)
