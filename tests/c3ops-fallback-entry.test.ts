@@ -26,7 +26,7 @@ test('GET returns bounded login-only document with private headers',async()=>{
  assert.match(response.headers.get('content-security-policy')??'',/frame-ancestors 'none'/)
  assert.match(response.headers.get('content-security-policy')??'',/connect-src https:\/\/zfihrspxvennjzazxcbj\.supabase\.co/)
  const html=await response.text()
- assert.match(html,/Request Registrar/)
+ assert.match(html,/Sign in and request/)
  assert.match(html,/c3ops_request_registrar_fallback_v1/)
  assert.match(html,/REQUESTED/)
  assert.match(html,/test-public-key/)
