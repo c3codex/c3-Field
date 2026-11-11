@@ -90,3 +90,8 @@
 @media(max-width:760px){.ops-auth-dialog{padding:35px 16px 16px}}
 
 .ops-entry-auth[hidden]{display:none!important}
+
+/* Navigation must remain available even while private room readback is HLD. */
+.ops-return-nav{max-width:1228px;margin:0 auto 12px;padding:8px 0;font-size:.87rem}
+.ops-return-nav a{color:#e1c587;text-decoration:underline;text-underline-offset:4px}
+.ops-return-nav a:focus-visible{outline:3px solid #e4c889;outline-offset:4px}

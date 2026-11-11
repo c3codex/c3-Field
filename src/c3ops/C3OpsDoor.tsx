@@ -330,20 +330,21 @@ export default function C3OpsDoor() {
   const stations=currentState?.components.filter(component=>component.key!=="current") ?? []
 
   return <>
-    <section hidden={route==="/"&&!showAuth} className={"ops-entry-auth"+(route==="/"?" ops-auth-dialog":"")} role={route==="/"&&showAuth?"dialog":undefined} aria-modal={route==="/"&&showAuth?true:undefined} aria-label={route==="/"&&showAuth?"Operator authentication":undefined}>
+    <section hidden={(route==="/"&&!showAuth)||(route!=="/"&&Boolean(state))} className={"ops-entry-auth"+(route==="/"?" ops-auth-dialog":"")} role={route==="/"&&showAuth?"dialog":undefined} aria-modal={route==="/"&&showAuth?true:undefined} aria-label={route==="/"&&showAuth?"Operator authentication":undefined}>
       {route==="/" && <button type="button" className="ops-auth-close" onClick={()=>setShowAuth(false)} aria-label="Close authentication">✕</button>}
       <OperatorSignIn onProof={changeProof} readComplete={!!state} readHeld={!!error}/>
       {route==="/" && operatorProof && !state && !error && <p role="status">Checking registered read permissions…</p>}
       {route==="/" && error && <p role="alert">HLD — {error}</p>}
     </section>
     {route==="/" ? <PortalHome onEnter={()=>setShowAuth(true)} authorized={Boolean(state)}/> : <main className="ops-room">
-    {state && <header className="ops-room-header">
+    <nav className="ops-return-nav" aria-label="c3Ops navigation"><a href="/">← Return to c3Ops portal</a></nav>
+    <header className="ops-room-header">
       <a href="/" className="ops-brand"><span>c3</span>Ops</a>
       <nav aria-label="Environment navigation">{portals.map(p=><a key={p.path} href={p.path} aria-current={route?.startsWith(p.path)?"page":undefined}>{p.label}</a>)}</nav>
-    </header>}
+    </header>
 
     {!route ? <><h1>Route unresolved</h1><p>This route has no c3Ops passage.</p></> : <>
-      {!state && <p role="status" className="ops-unresolved">Operator authentication and registered read standing required. No workroom content is available.</p>}
+      {!state && <p role="status" className="ops-unresolved">Operator authentication is separate from Registry read qualification. This room remains held until the registered readback succeeds. You can return to the portal without requesting or renewing authority.</p>}
       {state && <div className="ops-room-title">
         <p className="ops-kicker">c3Ops / operator environment</p>
         <h1>{route.includes("lapzuli")?"Lapzuli · Distribution Canopy":route==="/c3optics"?"c3Optics":route.startsWith("/relational")?"Relational Operations":"Systems Access"}</h1>
