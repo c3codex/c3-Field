@@ -1,0 +1,30 @@
+name: c3Ops authorization optics source checks
+on:
+  pull_request:
+    paths:
+      - 'functions/_lib/c3ops-authorization-optics.ts'
+      - 'functions/api/c3ops/manifest.ts'
+      - 'src/c3ops/C3OpsDoor.tsx'
+      - 'src/c3ops/AuthorizationOptics.tsx'
+      - 'tests/c3ops-authorization-optics.test.ts'
+      - '.github/workflows/c3ops-authorization-optics-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Authorization optics unit and negative boundary tests
+        run: npx --no-install tsx --test tests/c3ops-authorization-optics.test.ts
+      - name: TypeScript static check
+        run: npx --no-install tsc --noEmit
+      - name: Unprivileged Vite build (not a production deployment)
+        run: npm run build
