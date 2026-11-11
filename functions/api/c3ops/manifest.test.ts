@@ -95,10 +95,10 @@ test("write methods are rejected before any Registry access",async()=>{
   assert.equal(response.status,405)
  }
 })
-test("invalid env filters and missing configuration fail closed",async()=>{
- assert.equal((await handleRead(new Request("https://c3ops.c3field.online/api/c3ops/manifest?env_key=x%26or=evil"),{})).status,400)
+test("foreign environment and missing native session fail closed",async()=>{
+ assert.equal((await handleRead(new Request("https://c3ops.c3field.online/api/c3ops/manifest?env_key=x%26or=evil"),{})).status,403)
  const r=await handleRead(new Request("https://c3ops.c3field.online/api/c3ops/manifest"),{})
- assert.equal(r.status,503);assert.match(r.headers.get("cache-control")! ,/no-store/)
+ assert.equal(r.status,401);assert.match(r.headers.get("cache-control")!,/no-store/)
 })
 test("pagination reads every page using GET and rejects upstream errors",async()=>{
  const original=globalThis.fetch
@@ -106,12 +106,17 @@ test("pagination reads every page using GET and rejects upstream errors",async()
  globalThis.fetch=(async(_url,init)=>{assert.equal(init?.method,undefined); count++;return Response.json(count===1?Array.from({length:500},(_,i)=>({i})):[{i:500}])}) as typeof fetch
  try {assert.equal((await createRegistryReader({SUPABASE_URL:"https://fixture.invalid",SUPABASE_SERVICE_ROLE_KEY:"test"})("c3_environment","env_key")).length,501)} finally {globalThis.fetch=original}
 })
-test("all new private surfaces require existing operator authorization",async()=>{
- for(const path of ["/systems-access","/c3optics","/relational-operations/lapzuli","/api/c3ops/manifest"]){
+test("public shell cannot give unauthorized access to Registry data or other action APIs",async()=>{
+ for(const path of ["/systems-access","/c3optics","/relational-operations/lapzuli"]){
   let accessed=false
-  const result=await middleware({request:new Request("https://c3ops.c3field.online"+path),env:{OPERATOR_DISPATCH_KEY:"test"},next:async()=>{accessed=true;return new Response("private")}} as never)
-  assert.equal(accessed,false);assert.ok([401,403].includes(result.status))
+  const result=await middleware({request:new Request("https://c3ops.c3field.online"+path),env:{},next:async()=>{accessed=true;return new Response("public shell")}} as never)
+  assert.equal(accessed,true);assert.equal(result.status,200)
  }
+ const api=await handleRead(new Request("https://c3ops.c3field.online/api/c3ops/manifest",{headers:{"x-operator-dispatch-key":"legacy"}}),{OPERATOR_DISPATCH_KEY:"legacy"})
+ assert.notEqual(api.status,200)
+ let advanced=false
+ const actions=await middleware({request:new Request("https://c3ops.c3field.online/api/c3ops/lapzuli",{headers:{"x-operator-dispatch-key":"legacy"}}),env:{OPERATOR_DISPATCH_KEY:"legacy"},next:async()=>{advanced=true;return new Response("action")}} as never)
+ assert.equal(advanced,false);assert.equal(actions.status,403)
 })
 test("authenticated operator read is private and unrelated hosts retain routes",async()=>{
  let count=0
