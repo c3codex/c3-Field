@@ -278,7 +278,13 @@ export default function C3OpsDoor() {
     async function load() {
       try {
         const response=await fetch("/api/c3ops/manifest",{credentials:"same-origin",headers:operatorProof?{"x-c3ops-session-proof":operatorProof}:{},signal:controller.signal})
-        if(!response.ok) throw new Error(response.status===403 ? "Operator access is required." : "Registry readback unavailable.")
+        if(!response.ok){
+          // Display only the bounded native handler refusal category. Never
+          // expose raw Registry errors, tokens, or server configuration.
+          const failure=await response.json().catch(()=>null) as {standing?:unknown;reason?:unknown}|null
+          const reason=typeof failure?.reason==="string"&&/^(readback_unavailable:(native_recognition|registry_configuration|registered_authority|registered_projection)|native_session_required|native_auth_configuration|native_recognition_denied|native_recognition_binding_mismatch|native_recognition_unavailable|registered_read_authority_unavailable)$/.test(failure.reason)?failure.reason:null
+          throw new Error(reason?`HLD — ${reason}`:response.status===403?"Operator read authority is held.":response.status===401?"Native Operator recognition held.":"Registry readback unavailable.")
+        }
         const body=await response.json() as OperatorManifest
         if(body.contract!=="me_environment_manifest_v1" || !Array.isArray(body.environments)) throw new Error("Registry response is not a manifest.")
         if(controller.signal.aborted||requestGeneration!==readGeneration.current)return;setState(body)
