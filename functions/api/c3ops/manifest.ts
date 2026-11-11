@@ -3,6 +3,7 @@ import { resolveMEEnvironments, readLapzuli, readC3OpsCurrentState, type ReadRow
 
 import {isAuthorizedOperator} from "../../_middleware"
 import {readC3OpsOperatorAuthority} from '../../_lib/c3ops-operator-authority'
+import {readAuthorizationOptics} from '../../_lib/c3ops-authorization-optics'
 export type Env = {
   SUPABASE_ANON_KEY?: string
   VITE_SUPABASE_ANON_KEY?: string
@@ -42,7 +43,7 @@ export async function handleRead(request:Request,env:Env){
  if(url.origin!=='https://c3ops.c3field.online')return held('not_found',404)
  if(request.method!=='GET')return held('read_only',405)
  const view=url.searchParams.get('view')
- if(view!==null&&view!=='current_state')return held('read_view_not_admitted')
+ if(view!==null&&view!=='current_state'&&view!=='authorizations'return held('read_view_not_admitted')
  if(url.searchParams.has('env_key')&&url.searchParams.get('env_key')!=='env_c3ops')return held('foreign_environment')
  try{
   if(!env.OPERATOR_DISPATCH_KEY||!await isAuthorizedOperator(request,env.OPERATOR_DISPATCH_KEY,false))return held('operator_access_denied')
@@ -53,7 +54,7 @@ export async function handleRead(request:Request,env:Env){
   const authority=await readC3OpsOperatorAuthority(read,'env_c3ops',actor)
   const right=view==='current_state'?'read_preflight_evidence':'inspect_governed_status'
   if(authority.authenticated_actor.standing!=='VERIFIED'||!authority.eligible_read_effects.includes(right))return held('registered_read_authority_unavailable')
-  const body=view==='current_state'?await readC3OpsCurrentState(read):{...await resolveMEEnvironments(read,'env_c3ops'),operator_authority:authority}
+  const body=view==='authorizations'?await readAuthorizationOptics(env):view==='current_state'?await readC3OpsCurrentState(read):{...await resolveMEEnvironments(read,'env_c3ops'),operator_authority:authority}
   if(Date.parse(actor.expiresAt)<=Date.now())return held('recognition_expired',401)
   return new Response(JSON.stringify(body),{headers})
  }catch{return held('readback_unavailable',503)}
