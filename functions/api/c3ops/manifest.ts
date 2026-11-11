@@ -43,7 +43,7 @@ export async function handleRead(request:Request,env:Env){
  if(url.origin!=='https://c3ops.c3field.online')return held('not_found',404)
  if(request.method!=='GET')return held('read_only',405)
  const view=url.searchParams.get('view')
- if(view!==null&&view!=='current_state'&&view!=='authorizations'return held('read_view_not_admitted')
+ if(view!==null&&view!=='current_state'&&view!=='authorizations')return held('read_view_not_admitted')
  if(url.searchParams.has('env_key')&&url.searchParams.get('env_key')!=='env_c3ops')return held('foreign_environment')
  try{
   if(!env.OPERATOR_DISPATCH_KEY||!await isAuthorizedOperator(request,env.OPERATOR_DISPATCH_KEY,false))return held('operator_access_denied')
