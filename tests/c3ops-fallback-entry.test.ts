@@ -84,3 +84,33 @@ test('middleware refuses unauthenticated protected host and never exposes protec
  assert.equal(response.status,401)
  assert.doesNotMatch(await response.text(),/protected workroom content/)
 })
+
+test('operator entry method exceptions never reach protected application',async()=>{
+ const {onRequest}=await import('../functions/_middleware')
+ let passed=false
+ const response=await onRequest({
+   request:new Request('https://c3ops.c3field.online/operator-entry',{method:'POST'}),
+   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
+   next:async()=>{passed=true;return new Response('unprotected')}
+ } as never)
+ assert.equal(response.status,405)
+ assert.equal(passed,false)
+})
+
+test('operator path exception is exact and host-bound',async()=>{
+ const {onRequest}=await import('../functions/_middleware')
+ const next=async()=>new Response('downstream')
+ const guarded=await onRequest({
+   request:new Request('https://c3ops.c3field.online/operator-entry/extra',{headers:{accept:'application/json'}}),
+   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
+   next
+ } as never)
+ assert.equal(guarded.status,403)
+ const otherHost=await onRequest({
+   request:new Request('https://c3field.online/operator-entry',{headers:{accept:'application/json'}}),
+   env:{OPERATOR_DISPATCH_KEY:'test-private-dispatch',SUPABASE_ANON_KEY:'test-public-key'},
+   next
+ } as never)
+ assert.equal(otherHost.status,200)
+ assert.equal(await otherHost.text(),'downstream')
+})
