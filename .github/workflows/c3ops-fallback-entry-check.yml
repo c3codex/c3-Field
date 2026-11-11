@@ -4,6 +4,7 @@ on:
     paths:
       - 'functions/_lib/c3ops-fallback-entry.ts'
       - 'functions/_middleware.ts'
+      - 'src/c3ops/OperatorSignIn.tsx'
       - 'tests/c3ops-fallback-entry.test.ts'
       - '.github/workflows/c3ops-fallback-entry-check.yml'
   workflow_dispatch:
