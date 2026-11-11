@@ -351,6 +351,10 @@ const handleRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   // Future route-level effects require separately registered per-capability authority.
   if(c3OpsHost && (pathname==="/api" || pathname.startsWith("/api/")))
     return privateResponse(new Response(JSON.stringify({standing:"HLD",reason:"capability_not_admitted",mutation_authority:false}),{status:403,headers:{"content-type":"application/json; charset=utf-8"}}),true)
+  // No alternate HTML or method-based entrance, including if a legacy
+  // dispatch key is supplied. Only the canonical portal and fixed rooms exist.
+  if(c3OpsHost)
+    return privateResponse(new Response("not found",{status:["GET","HEAD"].includes(request.method)?404:405}),true)
   if (!c3OpsHost && c3OpsRoomPath) return privateResponse(new Response("not found", {status:404}))
   if (!isProtectedPath(pathname) && !c3OpsHost) {
     const response = await next()
