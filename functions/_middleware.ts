@@ -336,11 +336,11 @@ const handleRequest: PagesFunction<Env> = async ({ request, env, next }) => {
   // Canonical entrance: a public UI shell, never private data. Every protected
   // read still requires native Operator proof and registered scope in its API.
   if(c3OpsHost && pathname==="/operator-entry")
-    return privateResponse(new Response(null,{status:308,headers:{location:"/"}}),true)
+    return privateResponse(["GET","HEAD"].includes(request.method)?new Response(null,{status:308,headers:{location:"/"}}):new Response("retired entry",{status:405}),true)
   const c3OpsRoomPath = ["/systems-access", "/relational-operations", "/c3optics"].some(p => pathname === p || pathname.startsWith(p + "/"))
   const shellPath = pathname==="/" || c3OpsRoomPath
   const staticPath = pathname==="/favicon.ico" || pathname==="/robots.txt" || pathname==="/manifest.webmanifest"
-    || pathname.startsWith("/assets/") || pathname.startsWith("/c3ops/")
+    || pathname.startsWith("/assets/") || pathname==="/c3ops/c3-tree-source-v1.png"
   if(c3OpsHost && ["GET","HEAD"].includes(request.method) && (shellPath || staticPath))
     return privateResponse(await next(),true)
   // The read-only manifest is the sole browser API exception. Legacy action
