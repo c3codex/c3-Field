@@ -87,6 +87,7 @@ export function fallbackEntry(request: Request, publicKey?: string): Response {
       report("REQUESTED · Recorded. Checking existing bounded read standing...");
       receipt.textContent="Request: "+result.request_id+" · Expires: "+new Date(result.expires_at).toLocaleString();
       form.hidden=true;
+      try {
       const disposition=await fetch(url+"/rest/v1/rpc/c3ops_resolve_fallback_read_v1",{
         method:"POST",cache:"no-store",credentials:"omit",
         headers:{"apikey":apiKey,"authorization":"Bearer "+token,"content-type":"application/json"},
@@ -103,6 +104,9 @@ export function fallbackEntry(request: Request, publicKey?: string): Response {
       }
       report("READ PREFLIGHT CONFIRMED · Existing read scope recognized. Registrar execution and workroom access remain held.");
       receipt.textContent="Request: "+result.request_id+" · Read standing valid through: "+new Date(decision.expires_at).toLocaleString();
+      }catch{
+        report("REQUESTED · Read continuation unavailable (HLD). No Registrar action occurred.");
+      }
     }catch{
       report("Request not confirmed. Check the Operator credentials, active c3Ops grant, and current authorization window. No execution authority was granted.");
     }finally{
