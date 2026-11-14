@@ -25,6 +25,9 @@ function pickup() {
     work_class: "executor_security_review_continuation",
     operator_final_disposition_reserved: true,
     execution_instance: instance,
+    oar2_key: "oar2_" + instance,
+    continuation_event_key: instance + ":security_review_continuation:v1",
+    original_oar1_path: "registry://cancom/oar1_return/" + instance,
     outbox_event_key: event,
     lease_token: token,
     original_oar1_sha256: hash,
@@ -57,6 +60,10 @@ test("rejects missing, forged or mismatched binding values",async()=>{
     {lease_token:"not-a-uuid"},
     {original_oar1_sha256:"0"},
     {operator_final_disposition_reserved:false},
+    {oar2_key:"oar2_WRONG"},
+    {outbox_event_key:"another_instance:codex_security_review:outbox:v1"},
+    {continuation_event_key:"another_instance:security_review_continuation:v1"},
+    {original_oar1_path:"registry://cancom/oar1_return/another_instance"},
   ]) {
     await assert.rejects(
       mockClient({...pickup(),...mutation},[]).pickup(instance),
@@ -104,4 +111,23 @@ test("gateway non-200 responses fail closed",async()=>{
   fetchImpl:async()=>({ok:false,status:401}),
  });
  await assert.rejects(client.discover(),CanComReviewHold);
+});
+
+test("rejects mismatched OAR2 and event identities even when response says success",async()=>{
+  const invalid={...pickup(),
+    oar2_key:"oar2_other_instance",
+    outbox_event_key:"other_instance:codex_security_review:outbox:v1",
+    continuation_event_key:"other_instance:security_review_continuation:v1"};
+  await assert.rejects(mockClient(invalid,[]).pickup(instance),CanComReviewHold);
+});
+test("bounded renewal uses current token, rejects stale or mutation authority",async()=>{
+  const traces=[];
+  const renewed={standing:"renewed",event_key:event,lease_token:token,
+    lease_until:"2026-11-14T22:00:00Z",allowed_effect:"none"};
+  await mockClient(renewed,traces).renew(event,token,120);
+  assert.match(traces[0].url,/\/cancom_codex_review_renew_v1$/);
+  assert.equal(JSON.parse(traces[0].init.body).p_extension_seconds,120);
+  await assert.rejects(mockClient({...renewed,lease_token:"different"},[]).renew(event,token,120),CanComReviewHold);
+  await assert.rejects(mockClient({...renewed,allowed_effect:"deploy"},[]).renew(event,token,120),CanComReviewHold);
+  await assert.rejects(mockClient(renewed,[]).renew(event,token,301),CanComReviewHold);
 });
