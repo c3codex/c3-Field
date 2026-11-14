@@ -37,7 +37,7 @@ export async function probe({ env = process.env, fetchImpl = globalThis.fetch } 
     // but NOT independent proof of active session or grant revocation.
     let userValid = false;
     try {
-      const user = await fetchImpl(`${url.replace(/\\/$/, "")}/auth/v1/user`, {
+      const user = await fetchImpl(`${url.endsWith("/") ? url.slice(0, -1) : url}/auth/v1/user`, {
         headers: { apikey: key, authorization: `Bearer ${token}` },
         signal: AbortSignal.timeout(15_000),
       });
