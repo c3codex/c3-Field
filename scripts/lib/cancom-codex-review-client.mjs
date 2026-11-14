@@ -31,6 +31,7 @@ const RPC = Object.freeze({
   discover: "cancom_codex_review_discover_v1",
   pickup: "cancom_codex_review_pickup_v1",
   ack: "cancom_codex_review_ack_v1",
+  renew: "cancom_codex_review_renew_v1",
   returned: "cancom_codex_review_return_v1",
 });
 
@@ -100,15 +101,21 @@ export function createCanComCodexReviewClient({
       const result = await call(RPC.pickup, {
         p_key_type: "execution_instance", p_key: instance, p_executor: "codex",
       });
+      const expectedOar = `oar2_${instance}`;
+      const expectedOutbox = `${instance}:codex_security_review:outbox:v1`;
+      const expectedContinuation = `${instance}:security_review_continuation:v1`;
       if (result.standing !== "resolved_and_claimed_for_review" ||
           result.work_class !== "executor_security_review_continuation" ||
           result.allowed_effect !== "none" ||
           result.operator_final_disposition_reserved !== true ||
           result.execution_instance !== instance ||
+          result.oar2_key !== expectedOar ||
+          result.outbox_event_key !== expectedOutbox ||
+          result.continuation_event_key !== expectedContinuation ||
+          result.original_oar1_path !== `registry://cancom/oar1_return/${instance}` ||
           !UUID.test(result.lease_token || "") ||
           !SHA256.test(result.original_oar1_sha256 || "") ||
-          !requiredText(result.outbox_event_key, "outbox_event_key").endsWith(
-            ":codex_security_review:outbox:v1")) {
+          typeof result.outbox_event_key !== "string") {
         throw new CanComReviewHold(String(result.reason ?? "review_pickup_boundary"), result);
       }
       return result;
@@ -124,6 +131,26 @@ export function createCanComCodexReviewClient({
       });
       if (result.standing !== "acknowledged") {
         throw new CanComReviewHold(String(result.reason ?? "acknowledgement_held"), result);
+      }
+      return result;
+    },
+
+    async renew(outboxEventKey, leaseToken, extensionSeconds = 120) {
+      if (!UUID.test(requiredText(leaseToken, "lease_token")) ||
+          !Number.isInteger(extensionSeconds) ||
+          extensionSeconds < 30 || extensionSeconds > 300) {
+        throw new CanComReviewHold("invalid_lease_renewal");
+      }
+      const result = await call(RPC.renew, {
+        p_event_key: requiredText(outboxEventKey, "outbox_event_key"),
+        p_lease_token: leaseToken,
+        p_extension_seconds: extensionSeconds,
+      });
+      if (result.standing !== "renewed" ||
+          result.event_key !== outboxEventKey ||
+          result.lease_token !== leaseToken ||
+          result.allowed_effect !== "none") {
+        throw new CanComReviewHold(String(result.reason ?? "renewal_held"), result);
       }
       return result;
     },
