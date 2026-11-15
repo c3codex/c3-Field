@@ -1,55 +1,88 @@
 /**
- * SEAT-08 bounded LIVE authentication probe. READ-ONLY.
+ * SEAT-08 source candidate: READ-ONLY Supabase signed-user/authz probe.
+ * Three distinct actual authenticated user IDs are required, NOT merely
+ * three different tokens. A separate trusted Registry verifier must verify
+ * exact revoked-worker binding evidence before any success standing.
  *
- * No SQL installation, worker pickup/ACK, lease, grant, review return,
- * deployment, signup, or operator disposition is performed.
- * Requires three distinct platform-issued user access tokens:
- *   CANCOM_WORKER_JWT   actively enrolled Codex reviewer (expected discoverable)
- *   CANCOM_UNBOUND_JWT  signed-in user with no worker standing (expected denied)
- *   CANCOM_REVOKED_JWT  previously enrolled worker, subsequently revoked
- * Obtain tokens through authorized sign-in and registrar processes only.
- * DO NOT use service_role, fabricate JWTs, or put tokens in source or logs.
- *
- * The revoked case does not itself revoke any grant/session; the tester
- * must independently establish and document the revocation before running.
- * Discovery is non-mutating and cannot establish worker operational acceptance.
+ * This does not issue grants, install RPCs, run workers, or establish M3.
+ * Do not expose credentials in logs, source, or return evidence.
  */
 import { createCanComCodexReviewClient, CanComReviewHold } from "./lib/cancom-codex-review-client.mjs";
 
-export async function probe({ env = process.env, fetchImpl = globalThis.fetch } = {}) {
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const DENIAL_REASON = "worker_standing_unqualified";
+
+export async function probe({
+  env = process.env,
+  fetchImpl = globalThis.fetch,
+  // Supplied only by an independently authorized Registry evidence verifier;
+  // never satisfied by an environment variable or the tested user's claims.
+  verifyRevocation = null,
+} = {}) {
   const keys = ["SUPABASE_URL", "SUPABASE_PUBLISHABLE_KEY", "CANCOM_WORKER_JWT", "CANCOM_UNBOUND_JWT", "CANCOM_REVOKED_JWT"];
   const missing = keys.filter(k => !env[k] || typeof env[k] !== "string");
   if (missing.length) return { standing: "HLD", reason: "missing_real_auth_inputs", missing, executed: false };
 
   const { SUPABASE_URL: url, SUPABASE_PUBLISHABLE_KEY: key } = env;
-  const tokens = [
+  const roles = [
     ["worker", env.CANCOM_WORKER_JWT, true],
     ["unbound", env.CANCOM_UNBOUND_JWT, false],
     ["revoked", env.CANCOM_REVOKED_JWT, false],
   ];
-  // Prevent success when one privileged token is reused as a negative case.
-  if (new Set(tokens.map(([,token]) => token)).size !== 3) {
-    return { standing: "HLD", reason: "distinct_signed_principals_required", executed: false };
+  if (new Set(roles.map(([, token]) => token)).size !== roles.length) {
+    return { standing: "HLD", reason: "distinct_access_tokens_required", executed: false };
   }
-  const results = [];
-  for (const [caseName, token, expectedAllowed] of tokens) {
-    // A successful user endpoint call is a useful signed-session signal,
-    // but NOT independent proof of active session or grant revocation.
-    let userValid = false;
+
+  const base = url.endsWith("/") ? url.slice(0, -1) : url;
+  const auth = [];
+  for (const [caseName, token, expectedAllowed] of roles) {
+    let response;
     try {
-      const user = await fetchImpl(`${url.endsWith("/") ? url.slice(0, -1) : url}/auth/v1/user`, {
+      response = await fetchImpl(`${base}/auth/v1/user`, {
         headers: { apikey: key, authorization: `Bearer ${token}` },
         signal: AbortSignal.timeout(15_000),
       });
-      userValid = user.ok;
     } catch {
-      results.push({ case: caseName, standing: "HLD", reason: "auth_endpoint_unavailable" });
-      continue;
+      return { standing: "HLD", reason: "auth_endpoint_unavailable", case: caseName, executed: true };
     }
-    if (!userValid) {
-      results.push({ case: caseName, standing: "HLD", reason: "platform_auth_user_not_validated" });
-      continue;
+    if (!response.ok) {
+      return { standing: "HLD", reason: "platform_auth_user_not_validated", case: caseName, executed: true };
     }
+    let user;
+    try { user = await response.json(); } catch {
+      return { standing: "HLD", reason: "platform_auth_identity_invalid", case: caseName, executed: true };
+    }
+    if (!user || typeof user !== "object" || Array.isArray(user) || !UUID.test(user.id || "")) {
+      return { standing: "HLD", reason: "platform_auth_identity_invalid", case: caseName, executed: true };
+    }
+    auth.push({ caseName, token, expectedAllowed, principalId: user.id.toLowerCase() });
+  }
+  if (new Set(auth.map(x => x.principalId)).size !== roles.length) {
+    return { standing: "HLD", reason: "distinct_authenticated_principals_required", executed: true };
+  }
+
+  // A declared external reference is not sufficient: the verifier must
+  // independently check a real Registry event, principal and standing.
+  if (typeof verifyRevocation !== "function") {
+    return { standing: "HLD", reason: "independent_revocation_evidence_unverified", executed: true };
+  }
+  let verified;
+  try {
+    verified = await verifyRevocation({
+      principalId: auth[2].principalId,
+      expectedStanding: "revoked",
+    });
+  } catch {
+    return { standing: "HLD", reason: "independent_revocation_evidence_unverified", executed: true };
+  }
+  if (verified?.standing !== "verified" ||
+      verified.principalId?.toLowerCase() !== auth[2].principalId ||
+      typeof verified.evidenceRef !== "string" || !verified.evidenceRef.trim()) {
+    return { standing: "HLD", reason: "independent_revocation_evidence_unverified", executed: true };
+  }
+
+  const results = [];
+  for (const { caseName, token, expectedAllowed } of auth) {
     const client = createCanComCodexReviewClient({
       supabaseUrl: url, publishableKey: key,
       getAccessToken: async () => token, fetchImpl,
@@ -59,24 +92,28 @@ export async function probe({ env = process.env, fetchImpl = globalThis.fetch } 
       results.push({ case: caseName, standing: expectedAllowed ? "PASS" : "FAIL", outcome: "discoverable" });
     } catch (err) {
       const reason = err instanceof CanComReviewHold ? err.reason : "unexpected_probe_error";
-      // A 404, 401, gateway error, parse issue, or missing RPC is NEVER
-      // interpreted as authorization denial. Only a completed RPC that
-      // explicitly returns an HLD standing can establish a negative test.
-      const confirmedDenied = err instanceof CanComReviewHold &&
-        err.evidence?.standing === "HLD";
-      results.push({ case: caseName,
-        standing: !expectedAllowed && confirmedDenied ? "PASS" : "HLD",
-        outcome: confirmedDenied ? "rpc_denied" : "unverified",
-        reason: String(reason).slice(0,100),
+      // Exact, independently scoped authorization denial only; gateway errors,
+      // RPC errors, invalid session, unrelated HLD reasons all remain HOLD.
+      const bindingDenied = err instanceof CanComReviewHold &&
+        err.evidence?.standing === "HLD" &&
+        err.evidence.reason === DENIAL_REASON;
+      results.push({
+        case: caseName,
+        standing: !expectedAllowed && bindingDenied ? "PASS" : "HLD",
+        outcome: bindingDenied ? "worker_binding_denied" : "unverified",
+        reason: String(reason).slice(0, 100),
       });
     }
   }
   return {
-    standing: results.length === 3 && results.every(r => r.standing === "PASS") ? "PROBE_PASS" : "HLD",
-    scope: "read_only_discovery_authentication_probe_not_operational_acceptance",
-    results, executed: true,
+    standing: results.length === 3 && results.every(x => x.standing === "PASS") ? "PROBE_PASS" : "HLD",
+    scope: "read_only_discovery_probe_not_operational_acceptance",
+    results,
+    executed: true,
+    revocationEvidenceRef: verified.evidenceRef,
   };
 }
+
 if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) {
   const result = await probe();
   console.log(JSON.stringify(result, null, 2));
