@@ -2,7 +2,7 @@
 // No credentials, enrollment, scheduler or privileged action implementation.
 export function createNativeGatewayClient({url,publishableKey,getAccessToken,fetchImpl=fetch}) {
  if(typeof getAccessToken!=='function'||typeof url!=='string'||!url.startsWith('https://')||!publishableKey)throw Error('HLD_transport_configuration');
- const operations=new Set(['discover','resolve','claim','ack','start','renew','prepare','return']);
+ const operations=new Set(['discover','resolve','claim','ack','start','renew','prepare','return','status','check']);
  return Object.freeze({async call(operation,{instance=null,token=null,fence=null,payload=null,envelope=null}={}) {
   if(!operations.has(operation))throw Error('HLD_unknown_native_operation');
   const jwt=await getAccessToken();
