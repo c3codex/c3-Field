@@ -18,7 +18,7 @@ const verifyRevocation = async ({principalId,expectedStanding}) => ({
 });
 const denying = reason => ({standing:"HLD",reason});
 function mockFetch({
-  authStatus = 200, authBody = null, denialReason = "worker_standing_unqualified",
+  authStatus = 200, authBody = undefined, denialReason = "worker_standing_unqualified",
   samePrincipal = false, malformedUser = false, discovery = null, traces = [],
 } = {}) {
   return async (url, opts) => {
@@ -26,7 +26,7 @@ function mockFetch({
     traces.push({url,token});
     if (url.endsWith("/auth/v1/user")) return {
       ok:authStatus === 200,status:authStatus,
-      json:async()=>malformedUser?{}:(authBody ?? {id:samePrincipal ? ids["worker-test-token"] : ids[token]}),
+      json:async()=>malformedUser?{}:(authBody === undefined ? {id:samePrincipal ? ids["worker-test-token"] : ids[token]} : authBody),
     };
     if (!url.endsWith("/rest/v1/rpc/cancom_codex_review_discover_v1")) throw Error("mutating RPC forbidden");
     if (discovery) return discovery(token);
