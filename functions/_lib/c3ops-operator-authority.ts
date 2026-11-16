@@ -8,7 +8,7 @@ const RIGHTS=['inspect_governed_status','read_preflight_evidence'] as const
 type Snapshot=Record<'operator'|'carrier'|'binding'|'root'|'current'|'mgs'|'grant'|'process',Row[]>&{continuity?:Row[]}
 // This is a server-side verifier result, never a request field or dispatch-key claim.
 // The fixed native RPC supplies this result; request JSON cannot supply it.
-export type OperatorActorRecognition={standing:'VERIFIED';proofSource?:'native_supabase_operator_read_rpc';operatorKey:string;carrierKey:string;namedIndividualKey:string;environmentKey:string;expiresAt:string}|{standing:'HOLD';reason:string}
+export type OperatorActorRecognition={standing:'VERIFIED';proofSource?:'native_supabase_operator_read_rpc';receiptContract?:'c3ops_operator_read_v2';operatorKey:string;carrierKey:string;namedIndividualKey:string;environmentKey:string;expiresAt:string}|{standing:'HOLD';reason:string}
 const obj=(x:unknown):Row=>x&&typeof x==='object'&&!Array.isArray(x)?x as Row:{}
 const time=(x:unknown)=>typeof x==='string'?Date.parse(x):NaN
 const future=(x:unknown,now:number)=>Number.isFinite(time(x))&&time(x)>now
@@ -18,6 +18,12 @@ export function evaluateC3OpsOperatorAuthority(snapshot:Snapshot,actor:OperatorA
  const selected=ref==='registry://c3_current_evidence_ref/'+ADMIN.key?ADMIN.key:ref==='registry://c3_current_evidence_ref/'+K.mgs?K.mgs:null
  const observed={...snapshot,mgs:snapshot.mgs.filter(m=>m.current_evidence_ref_key===selected)}
  const administrative=selected===ADMIN.key
+ // Only the native v2 RPC can establish a live session receipt. Historical A03
+ // expiry remains historically true and must not be reinterpreted as renewed.
+ const renewedV2Read=actor.standing==='VERIFIED'
+   &&actor.proofSource==='native_supabase_operator_read_rpc'
+   &&actor.receiptContract==='c3ops_operator_read_v2'
+   &&future(actor.expiresAt,now)
  const refusals:string[]=[]
  const one=(key:Exclude<keyof Snapshot,'continuity'>)=>{if(observed[key].length!==1)refusals.push(key+'_missing_or_ambiguous');return observed[key][0]??{}}
  const o=one('operator'),c=one('carrier'),b=one('binding'),r=one('root'),cu=one('current'),m=one('mgs'),g=one('grant')
@@ -37,7 +43,7 @@ export function evaluateC3OpsOperatorAuthority(snapshot:Snapshot,actor:OperatorA
  if(administrative)check(actor.standing==='VERIFIED'&&actor.proofSource==='native_supabase_operator_read_rpc','administrative_native_read_proof_required')
  check(g.grant_key===K.grant&&g.envpac_key===K.root&&g.subject_type==='individual'&&g.subject_key===c.named_individual_key&&g.relation_role==='consumer'&&g.standing==='active'&&g.revoked_at===null,'grant_revoked_or_mismatched')
  check(s.environment_key===K.env&&s.current_state_key===K.current&&s.operator_standing_key===K.operator&&s.actor_binding_key===K.carrier&&s.authenticated_session_required===true&&s.live_postbind_mgs_expiry_required===true&&s.general_ops_granted===false&&s.ownership_created===false&&s.publication_authorized===false&&s.provider_dispatch_authorized===false,'grant_scope_mismatch')
- check(future(g.expires_at,now)&&future(mm.expires_at,now)&&future(bm.expiry_at,now),'grant_mgs_or_binding_expired')
+ check(renewedV2Read||(future(g.expires_at,now)&&future(mm.expires_at,now)&&future(bm.expiry_at,now)),'grant_mgs_or_binding_expired')
  check((administrative?time(g.expires_at)<=time(mm.expires_at):time(g.expires_at)===time(mm.expires_at))&&time(g.expires_at)===time(bm.expiry_at),'expiry_binding_mismatch')
  check(bm.current_key===K.current&&bm.formation_process_key==='c3ops_operator_admission_registrar_v1'&&b.evidence_ref==='registry://c3_current_evidence_ref/'+selected&&g.evidence_ref===b.evidence_ref&&m.attested_by===(administrative?'op044_administrative_disposition':'c3_registrar_ci_v1'),'evidence_lineage_mismatch')
  check(Array.isArray(s.rights)&&s.rights.length===RIGHTS.length&&new Set(s.rights).size===RIGHTS.length&&RIGHTS.every(x=>(s.rights as unknown[]).includes(x)),'unexpected_effect_scope')
@@ -56,9 +62,9 @@ export function evaluateC3OpsOperatorAuthority(snapshot:Snapshot,actor:OperatorA
  return {contract:'c3ops_op044_authority_projection_v1' as const,observed_at:new Date(Number.isFinite(now)?now:0).toISOString(),environment:K.env,
   registered_operator:{standing:o.operator_standing_key===K.operator&&o.operator_identifier==='op044'&&o.standing==='active'&&Number.isFinite(time(o.effective_at))&&time(o.effective_at)<=now?'ACTIVE':'HOLD',key:K.operator},
   identity_continuity:{standing:continuityRegistered?'REGISTERED':'HOLD',record:continuityRegistered?String(ci.continuity_binding_key):null,authenticates_session:false,creates_operator_standing:false},
-  registry_qualification:registered?(administrative?'ADMINISTRATIVE_READ_ONLY':'PASS'):'HOLD',environmental_qualification:registered?(administrative?'ADMINISTRATIVE_READ_ONLY':'PASS'):'HOLD',qualification_mode:administrative?'A03_administrative_human_read':'original_postbind',registrar_runtime_authentication_established:false,
+  registry_qualification:registered?(renewedV2Read?'SESSION_RENEWED_READ_ONLY':administrative?'ADMINISTRATIVE_READ_ONLY':'PASS'):'HOLD',environmental_qualification:registered?(renewedV2Read?'SESSION_RENEWED_READ_ONLY':administrative?'ADMINISTRATIVE_READ_ONLY':'PASS'):'HOLD',qualification_mode:renewedV2Read?'v2_authenticated_session_receipt':administrative?'A03_administrative_human_read':'original_postbind',registrar_runtime_authentication_established:false,
   authenticated_actor:{standing:runtime?'VERIFIED':'HOLD',refusals:actorRefusals},
-  effective_access_grant:{key:K.grant,standing:registered?'EFFECTIVE':'HOLD',expires_at:typeof g.expires_at==='string'?g.expires_at:null},
+  effective_access_grant:{key:K.grant,standing:renewedV2Read?'HISTORICAL_EXPIRED_WITH_V2_SESSION_RECEIPT':registered?'EFFECTIVE':'HOLD',expires_at:typeof g.expires_at==='string'?g.expires_at:null},
   registered_rights:registered?[...RIGHTS]:[],eligible_read_effects:runtime?[...RIGHTS]:[],
   // This projection never dispatches even an eligible read, or authorizes a write.
   executable_effects:[],mutation_authority:false as const,external_effects:0,
