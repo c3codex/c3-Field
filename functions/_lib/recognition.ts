@@ -8,7 +8,7 @@ export async function recognizeOperatorRead(request:Request,env:Env):Promise<Ope
  const base=env.SUPABASE_URL??env.VITE_SUPABASE_URL,key=env.SUPABASE_ANON_KEY??env.VITE_SUPABASE_ANON_KEY
  if(base?.replace(/\/$/,'')!=='https://zfihrspxvennjzazxcbj.supabase.co'||!key)return hold('native_auth_configuration')
  try{
- const response=await fetch(base.replace(/\/$/,'')+'/rest/v1/rpc/c3ops_recognize_operator_read_v1',{method:'POST',redirect:'manual',signal:AbortSignal.timeout(5000),headers:{apikey:key,authorization:'Bearer '+proof,'content-type':'application/json'},body:'{}'})
+ const response=await fetch(base.replace(/\/$/,'')+'/rest/v1/rpc/c3ops_recognize_operator_read_v2',{method:'POST',redirect:'manual',signal:AbortSignal.timeout(5000),headers:{apikey:key,authorization:'Bearer '+proof,'content-type':'application/json'},body:'{}'})
  if(!response.ok||!response.headers.get('content-type')?.includes('application/json'))return hold('native_recognition_denied')
  const text=await response.text();if(text.length>4096)return hold('recognition_response_oversized')
  const r=JSON.parse(text),a=r?.actor
