@@ -1,4 +1,3 @@
-import {prepareReadRenewal,sessionReference,isRenewalReceipt,type ReadRenewalAttempt} from './readRenewalAttempt'
 import {useEffect,useState,useRef} from 'react'
 import {createClient} from '@supabase/supabase-js'
 // Dedicated memory-only human session; never use the app's persisted owner session.
@@ -9,11 +8,10 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
  const [fallbackRequest,setFallbackRequest]=useState<{requestId:string;expiresAt:string}|null>(null)
  const [fallbackMessage,setFallbackMessage]=useState('')
  const [fallbackBusy,setFallbackBusy]=useState(false)
- const renewal=useRef<ReadRenewalAttempt|null>(null)
  const generation=useRef(0),mounted=useRef(true)
  useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;generation.current++}},[])
  useEffect(()=>{if(!expires)return;const timeout=setTimeout(()=>{onProof('');setExpires(0);setMessage('Your session expired. Sign in again.')},Math.max(0,expires*1000-Date.now()));return()=>clearTimeout(timeout)},[expires,onProof])
- async function submit(event:React.FormEvent){event.preventDefault();const attempt=++generation.current;renewal.current=null;setFallbackRequest(null);setFallbackMessage('');setBusy(true);onProof('');try{
+ async function submit(event:React.FormEvent){event.preventDefault();const attempt=++generation.current;setFallbackRequest(null);setFallbackMessage('');setBusy(true);onProof('');try{
   if(!client)throw Error('configuration')
   const {data,error}=await client.auth.signInWithPassword({email,password});if(!mounted.current||generation.current!==attempt)return;setPassword('');if(error||!data.session)throw Error('signin')
   const checked=await client.auth.getUser();if(checked.error||checked.data.user?.id!=='1cd2c032-7ef0-4537-8b08-e99b68895eb0'||!checked.data.user.email_confirmed_at||!data.session.expires_at||data.session.expires_at*1000<=Date.now())throw Error('identity')
@@ -25,14 +23,13 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
    const {data:{session}}=await client.auth.getSession();if(!session||!session.expires_at||session.expires_at*1000<=Date.now())throw Error('identity')
    const checked=await client.auth.getUser(session.access_token);if(checked.error||checked.data.user?.id!=='1cd2c032-7ef0-4537-8b08-e99b68895eb0'||!checked.data.user.email_confirmed_at)throw Error('identity')
    if(!mounted.current||generation.current!==attempt)return
-   renewal.current=prepareReadRenewal(renewal.current,sessionReference(session.access_token));const reference=renewal.current
-   const result=await client.rpc('c3ops_activate_operator_read_once_v1',{p_request_id:reference.requestId})
+   const result=await client.rpc('c3ops_renew_operator_read_v2')
    if(!mounted.current||generation.current!==attempt)return
    if(result.error)throw Error('uncertain')
-   if(result.data?.standing==='held'){setMessage('Read renewal is held. The bounded activation may not be open.');return}
-   if(!isRenewalReceipt(result.data,reference))throw Error('uncertain')
+   const r=result.data as {standing?:unknown;renewed?:unknown;expires_at?:unknown;rights?:unknown}|null
+   if(!r||r.standing!=='renewed'||typeof r.renewed!=='boolean'||typeof r.expires_at!=='string'||!Number.isFinite(Date.parse(r.expires_at))||Date.parse(r.expires_at)<=Date.now()||JSON.stringify(r.rights)!=='[\"inspect_governed_status\",\"read_preflight_evidence\"]')throw Error('uncertain')
    setMessage('Read renewal recorded. Checking current permissions.');onProof(session.access_token)
-  }catch{if(mounted.current&&generation.current===attempt)setMessage('Renewal could not be confirmed. Retrying keeps the same request reference.')}
+  }catch{if(mounted.current&&generation.current===attempt)setMessage('Read renewal could not be confirmed. The native authorization remains held.')}
   finally{if(mounted.current&&generation.current===attempt)setBusy(false)}
  }
  async function requestRegistrarFallback(){
@@ -76,5 +73,5 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
       <button type="button" disabled={busy||fallbackBusy||Boolean(fallbackRequest)} onClick={()=>void requestRegistrarFallback()}>{fallbackBusy?'Submitting request…':fallbackRequest?'Request recorded':'Request Registrar Fallback'}</button>
       {fallbackMessage&&<p role="status">{fallbackMessage}</p>}
       {fallbackRequest&&<p>Request reference: <code>{fallbackRequest.requestId}</code><br/>Expires: {new Date(fallbackRequest.expiresAt).toLocaleString()}</p>}
-    </div>{readHeld&&!readComplete&&<><p>This one-use read renewal stays bound to this signed-in session. Keep this page open during activation.</p><button type="button" disabled={busy} onClick={renew}>{busy?'Checking renewal…':'Renew read access'}</button></>}</>:<form onSubmit={submit}><label>Email<input type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} required/></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><button disabled={busy} type="submit">{busy?'Signing in…':'Sign in'}</button></form>}</section>
+    </div>{readHeld&&!readComplete&&<><p>Renew read access for this authenticated session. No Registrar or deployment authority is granted.</p><button type="button" disabled={busy} onClick={renew}>{busy?'Checking renewal…':'Renew read access'}</button></>}</>:<form onSubmit={submit}><label>Email<input type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} required/></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><button disabled={busy} type="submit">{busy?'Signing in…':'Sign in'}</button></form>}</section>
 }
