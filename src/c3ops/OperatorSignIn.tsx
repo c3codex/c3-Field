@@ -66,7 +66,7 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
    if(mounted.current&&generation.current===attempt)setFallbackMessage('Request could not be verified. No Registrar execution is authorized. Check current Operator standing and sign in again if needed.')
   }finally{if(mounted.current&&generation.current===attempt)setFallbackBusy(false)}
  }
- async function signOut(){generation.current++;renewal.current=null;setFallbackRequest(null);setFallbackMessage('');setFallbackBusy(false);onProof('');setExpires(0);setPassword('');setBusy(false);await client?.auth.signOut({scope:'local'});if(mounted.current)setMessage('Signed out of this page.')}
+ async function signOut(){generation.current++;setFallbackRequest(null);setFallbackMessage('');setFallbackBusy(false);onProof('');setExpires(0);setPassword('');setBusy(false);await client?.auth.signOut({scope:'local'});if(mounted.current)setMessage('Signed out of this page.')}
  return <section aria-label="Operator sign in"><h2>Operator sign in</h2><p role="status">{expires&&readComplete?'Signed in.':message}</p>{expires?<><button type="button" onClick={signOut}>Sign out</button>
     <div aria-label="Registrar fallback request" className="ops-fallback-request">
       <p>Request a bounded Registrar thread-fallback intake for c3Ops. This records Operator intent only; it does not authorize execution or installation.</p>
