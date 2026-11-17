@@ -90,7 +90,7 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
   finally{if(mounted.current&&generation.current===attempt)setEnrollmentBusy(false)}
  }
  async function signOut(){generation.current++;setEnrollmentIntent(null);setEnrollmentMessage('');setEnrollmentBusy(false);setFallbackRequest(null);setFallbackMessage('');setFallbackBusy(false);onProof('');setExpires(0);setPassword('');setBusy(false);await client?.auth.signOut({scope:'local'});if(mounted.current)setMessage('Signed out of this page.')}
- return <section aria-label="Operator sign in"><h2>Operator sign in</h2><p role="status">{expires&&readComplete?'Signed in.':message}</p>{expires?<><button type="button" onClick={signOut}>Sign out</button>
+ return <section aria-label="Operator sign in"><h2>Operator sign in</h2><p role="status">{expires&&readComplete?'Signed in.':message}</p>{expires?<><button type="button" onClick={signOut}>Sign out</button><NotChazzInbox expires={expires}/>
     {<section aria-label="OAR026 worker enrollment review request" className="ops-fallback-request">
       <h3>Worker enrollment · OAR026</h3><p>Request Registrar review of registrar-worker@c3field.online, for one supervised identity enrollment. This records intent only, not approval or execution authority.</p>
       <button type="button" disabled={busy||enrollmentBusy||Boolean(enrollmentIntent)} onClick={()=>void requestEnrollmentReview()}>{enrollmentBusy?'Submitting…':enrollmentIntent?'Review requested':'Submit enrollment review request'}</button>
@@ -103,4 +103,24 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
       {fallbackMessage&&<p role="status">{fallbackMessage}</p>}
       {fallbackRequest&&<p>Request reference: <code>{fallbackRequest.requestId}</code><br/>Expires: {new Date(fallbackRequest.expiresAt).toLocaleString()}</p>}
     </div>{readHeld&&!readComplete&&<><p>Renew read access for this authenticated session. No Registrar or deployment authority is granted.</p><button type="button" disabled={busy} onClick={renew}>{busy?'Checking renewal…':'Renew read access'}</button></>}</>:<form onSubmit={submit}><label>Email<input type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} required/></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><button disabled={busy} type="submit">{busy?'Signing in…':'Sign in'}</button></form>}</section>
+}
+
+
+function NotChazzInbox({expires}:{expires:number}){
+ const [row,setRow]=useState<{request_key:string;requested_effect:string;exclusions:string;disposition:string}|null>(null)
+ const [status,setStatus]=useState(''),[busy,setBusy]=useState(false)
+ const live=useRef(true)
+ useEffect(()=>{live.current=true;return()=>{live.current=false}},[])
+ async function act(disposition?:'ACCEPT'|'DECLINE'|'DISPUTE'){
+  if(!client||busy||expires*1000<=Date.now())return
+  setBusy(true);setStatus('')
+  try{
+   const {data,error}=await client.rpc('c3ops_notchazz_inbox_v1',{p_disposition:disposition??null})
+   if(!live.current)return
+   if(error||!data||data.request_key!=='notchazz_oar026_native_dependency_closure_20261117_001'||typeof data.requested_effect!=='string'||typeof data.exclusions!=='string'||!['AWAITING_OPERATOR','ACCEPT','DECLINE','DISPUTE'].includes(data.disposition)||data.grants_authority!==false||data.execution_authorized!==false|| (disposition&&data.disposition!==disposition))throw Error('unverified')
+   setRow(data);setStatus(disposition?'Decision recorded. No execution authority granted.':'Registry request confirmed.')
+  }catch{if(live.current)setStatus('HLD · Registry response not confirmed. Refresh to reconcile before retrying.')}
+  finally{if(live.current)setBusy(false)}
+ }
+ return <section aria-label="NotChazz authorization inbox" className="ops-fallback-request"><h3>Authorization inbox · NotChazz</h3><button type="button" disabled={busy} onClick={()=>void act()}>{busy?'Checking…':'Refresh authorization requests'}</button>{row&&<><p>{row.requested_effect}</p><p>{row.exclusions}</p><p>Standing: {row.disposition}</p>{row.disposition==='AWAITING_OPERATOR'&&(['ACCEPT','DECLINE','DISPUTE'] as const).map(d=><button type="button" key={d} disabled={busy} onClick={()=>void act(d)}>{d}</button>)}</>}{status&&<p role="status">{status}</p>}</section>
 }
