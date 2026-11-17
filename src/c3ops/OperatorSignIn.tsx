@@ -18,7 +18,7 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
   if(!client)throw Error('configuration')
   const {data,error}=await client.auth.signInWithPassword({email,password});if(!mounted.current||generation.current!==attempt)return;setPassword('');if(error||!data.session)throw Error('signin')
   const checked=await client.auth.getUser();if(checked.error||checked.data.user?.id!=='1cd2c032-7ef0-4537-8b08-e99b68895eb0'||!checked.data.user.email_confirmed_at||!data.session.expires_at||data.session.expires_at*1000<=Date.now())throw Error('identity')
-  if(!mounted.current||generation.current!==attempt)return;setExpires(data.session.expires_at);onProof(data.session.access_token);setMessage('Signed in. Checking your registered read permissions.')
+  if(!mounted.current||generation.current!==attempt)return;setExpires(data.session.expires_at);onProof(data.session.access_token);setMessage('Signed in. Checking your registered read permissions. Submission authority is evaluated separately.')
  }catch{if(mounted.current&&generation.current===attempt){onProof('');setMessage('Sign-in could not be verified. Check your account details and try again.')}}finally{if(mounted.current&&generation.current===attempt){setPassword('');setBusy(false)}}}
  async function renew(){
   if(!client||busy)return;const attempt=++generation.current;setBusy(true)
@@ -70,7 +70,7 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
   }finally{if(mounted.current&&generation.current===attempt)setFallbackBusy(false)}
  }
  async function requestEnrollmentReview(){
-  if(!client||!readComplete||busy||enrollmentBusy||enrollmentIntent)return
+  if(!client||!expires||expires*1000<=Date.now()||busy||enrollmentBusy||enrollmentIntent)return
   const attempt=generation.current
   setEnrollmentBusy(true);setEnrollmentMessage('')
   try{
@@ -91,7 +91,7 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
  }
  async function signOut(){generation.current++;setEnrollmentIntent(null);setEnrollmentMessage('');setEnrollmentBusy(false);setFallbackRequest(null);setFallbackMessage('');setFallbackBusy(false);onProof('');setExpires(0);setPassword('');setBusy(false);await client?.auth.signOut({scope:'local'});if(mounted.current)setMessage('Signed out of this page.')}
  return <section aria-label="Operator sign in"><h2>Operator sign in</h2><p role="status">{expires&&readComplete?'Signed in.':message}</p>{expires?<><button type="button" onClick={signOut}>Sign out</button>
-    {readComplete&&<section aria-label="OAR026 worker enrollment review request" className="ops-fallback-request">
+    {<section aria-label="OAR026 worker enrollment review request" className="ops-fallback-request">
       <h3>Worker enrollment · OAR026</h3><p>Request Registrar review of registrar-worker@c3field.online, for one supervised identity enrollment. This records intent only, not approval or execution authority.</p>
       <button type="button" disabled={busy||enrollmentBusy||Boolean(enrollmentIntent)} onClick={()=>void requestEnrollmentReview()}>{enrollmentBusy?'Submitting…':enrollmentIntent?'Review requested':'Submit enrollment review request'}</button>
       {enrollmentMessage&&<p role="status">{enrollmentMessage}</p>}
