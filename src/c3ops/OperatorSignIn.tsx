@@ -107,20 +107,29 @@ export function OperatorSignIn({onProof,readComplete=false,readHeld=false}:{onPr
 
 
 function NotChazzInbox({expires}:{expires:number}){
- const [row,setRow]=useState<{request_key:string;requested_effect:string;exclusions:string;disposition:string}|null>(null)
+ type Row={request_key:string;requested_effect:string;exclusions:string;disposition:string;grants_authority:false;execution_authorized:false}
+ const [rows,setRows]=useState<Row[]>([])
  const [status,setStatus]=useState(''),[busy,setBusy]=useState(false)
- const live=useRef(true)
+ const live=useRef(true),pending=useRef(false)
  useEffect(()=>{live.current=true;return()=>{live.current=false}},[])
- async function act(disposition?:'ACCEPT'|'DECLINE'|'DISPUTE'){
-  if(!client||busy||expires*1000<=Date.now())return
-  setBusy(true);setStatus('')
+ function valid(x:any):x is Row{return !!x&&typeof x.request_key==='string'&&typeof x.requested_effect==='string'&&typeof x.exclusions==='string'&&['AWAITING_OPERATOR','ACCEPT','DECLINE','DISPUTE'].includes(x.disposition)&&x.grants_authority===false&&x.execution_authorized===false}
+ async function act(requestKey?:string,disposition?:'ACCEPT'|'DECLINE'|'DISPUTE'){
+  if(!client||pending.current||expires*1000<=Date.now())return
+  pending.current=true;setBusy(true);setStatus('')
   try{
-   const {data,error}=await client.rpc('c3ops_notchazz_inbox_v1',{p_disposition:disposition??null})
+   const {data,error}=await client.rpc('c3ops_notchazz_inbox_v2',{p_request_key:requestKey??null,p_disposition:disposition??null})
    if(!live.current)return
-   if(error||!data||data.request_key!=='notchazz_oar026_native_dependency_closure_20261117_001'||typeof data.requested_effect!=='string'||typeof data.exclusions!=='string'||!['AWAITING_OPERATOR','ACCEPT','DECLINE','DISPUTE'].includes(data.disposition)||data.grants_authority!==false||data.execution_authorized!==false|| (disposition&&data.disposition!==disposition))throw Error('unverified')
-   setRow(data);setStatus(disposition?'Decision recorded. No execution authority granted.':'Registry request confirmed.')
-  }catch{if(live.current)setStatus('HLD · Registry response not confirmed. Refresh to reconcile before retrying.')}
-  finally{if(live.current)setBusy(false)}
+   if(error||!data)throw Error('unverified')
+   if(disposition){
+    if(!valid(data)||data.request_key!==requestKey||data.disposition!==disposition)throw Error('unverified')
+    setRows(prev=>prev.map(x=>x.request_key===requestKey?data:x))
+   }else{
+    if(data.grants_authority!==false||data.execution_authorized!==false||!Array.isArray(data.requests)||!data.requests.every(valid)||new Set(data.requests.map((x:Row)=>x.request_key)).size!==data.requests.length)throw Error('unverified')
+    setRows(data.requests)
+   }
+   setStatus(disposition?'Decision recorded. No execution authority granted.':data.requests.length?'Registry requests confirmed.':'No requests within current decision authority.')
+  }catch{if(live.current){setRows([]);setStatus('HLD · Registry response not confirmed. Refresh to reconcile before retrying.')}}
+  finally{pending.current=false;if(live.current)setBusy(false)}
  }
- return <section aria-label="NotChazz authorization inbox" className="ops-fallback-request"><h3>Authorization inbox · NotChazz</h3><button type="button" disabled={busy} onClick={()=>void act()}>{busy?'Checking…':'Refresh authorization requests'}</button>{row&&<><p>{row.requested_effect}</p><p>{row.exclusions}</p><p>Standing: {row.disposition}</p>{row.disposition==='AWAITING_OPERATOR'&&(['ACCEPT','DECLINE','DISPUTE'] as const).map(d=><button type="button" key={d} disabled={busy} onClick={()=>void act(d)}>{d}</button>)}</>}{status&&<p role="status">{status}</p>}</section>
+ return <section aria-label="NotChazz authorization inbox" className="ops-fallback-request"><h3>Authorization inbox · NotChazz</h3><button type="button" disabled={busy} onClick={()=>void act()}>{busy?'Checking…':'Refresh authorization requests'}</button>{rows.map(row=><div key={row.request_key}><p>{row.requested_effect}</p><p>{row.exclusions}</p><p>Standing: {row.disposition}</p>{row.disposition==='AWAITING_OPERATOR'&&(['ACCEPT','DECLINE','DISPUTE'] as const).map(d=><button type="button" key={d} disabled={busy} onClick={()=>void act(row.request_key,d)}>{d}</button>)}</div>)}{status&&<p role="status">{status}</p>}</section>
 }
