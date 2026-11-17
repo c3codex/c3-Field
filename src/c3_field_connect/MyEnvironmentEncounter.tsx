@@ -4,6 +4,8 @@ import EternalFlame from "./EternalFlame"
 import {type ProfileContract} from "./ProfilePacPanel"
 import MyPacsPanel from "./MyPacsPanel"
 import CurrentConstellation,{type CurrentToken} from "./CurrentConstellation"
+import CurrentStateGround from "./CurrentStateGround"
+import {matchesGround,type GroundPresentation} from "./current-state-ground"
 import OperationsPanel from "./OperationsPanel"
 import {readCanComEmailResponse} from "../lib/cancom-email-response"
 import {
@@ -22,6 +24,8 @@ type EnvPayload={
   environment?:{env_key:string;environment_name:string;environment_class:string;standing:string;is_active:boolean;is_canonical:boolean}
   envpac?:{envpac_key:string;version:string;standing:string;owner_subject_type:string;custodian_subject_type:string;custodian_subject_key:string;custody_provider:string;portable:boolean;environment_bindings:unknown;rooted_systems:unknown;packages:unknown;profile_pac?:ProfileTruth|null}
   presentation?:{opening_visual_asset_key:string;opening_visual_url:string;source_webpac_key:string;owner_changeable:boolean;selection_standing:string;selected_at?:string;updated_at?:string}|null
+  // Optional future native DesignPAC response; no client-created admission.
+  ground_design?:GroundPresentation|null
   operator_context?:{
     resolution:"operator_context_resolved"|"operator_context_none"|"operator_context_held"
     operator_count?:number
@@ -213,6 +217,27 @@ export default function MyEnvironmentEncounter(){
   const [inviteNotice,setInviteNotice]=useState("")
   const [inviteCopy,setInviteCopy]=useState("")
   const [activePanel,setActivePanel]=useState<string|null>(null)
+  const [groundUnavailable,setGroundUnavailable]=useState(false)
+  const groundTrigger=useRef<HTMLElement|null>(null)
+  useEffect(()=>{
+    if(!groundTrigger.current)return
+    if(activePanel){
+      const dialog=document.querySelector<HTMLElement>(".myenv-panel[role=dialog]")
+      dialog?.querySelector<HTMLElement>(".myenv-panel-close")?.focus()
+      const trap=(event:KeyboardEvent)=>{
+        if(event.key!=="Tab"||!dialog)return
+        const elements=Array.from(dialog.querySelectorAll<HTMLElement>("button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex='0']")).filter(el=>el.getClientRects().length>0)
+        if(!elements.length)return
+        const first=elements[0],last=elements[elements.length-1]
+        if(event.shiftKey&&(document.activeElement===first||!dialog.contains(document.activeElement))){event.preventDefault();last.focus()}
+        else if(!event.shiftKey&&(document.activeElement===last||!dialog.contains(document.activeElement))){event.preventDefault();first.focus()}
+      }
+      document.addEventListener("keydown",trap)
+      return ()=>document.removeEventListener("keydown",trap)
+    }
+    groundTrigger.current.focus()
+    groundTrigger.current=null
+  },[activePanel])
   const [environmentIndexOpen,setEnvironmentIndexOpen]=useState(false)
   const [runtimeNotice,setRuntimeNotice]=useState("")
   const [canopyLoaded,setCanopyLoaded]=useState(false)
@@ -1463,18 +1488,20 @@ export default function MyEnvironmentEncounter(){
     (data.operator_context.operator_count||0)>0 &&
     (data.operator_context.operators||[]).some(operator=>operator.operator_role==="operator"&&operator.boundary==="notchazz_pass")
   const environmentItemCount=availableComponents.length+initiatives.length
+  const showGround=genericBackdrop&&!groundUnavailable&&matchesGround(data.ground_design)
 
   return <main className="myenv-shell myenv-environment" aria-label="My Environment" data-runtime-contract={runtimeComponentContract}>
     {backdrop&&<img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>}
     <CurrentConstellation tokens={currentTokens}/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
+    {showGround&&data.ground_design?<CurrentStateGround presentation={data.ground_design} admitted={runtimeComponents} onOpen={destination=>{groundTrigger.current=document.activeElement instanceof HTMLElement?document.activeElement:null;setEnvironmentIndexOpen(false);setActivePanel(destination)}} onUnavailable={()=>setGroundUnavailable(true)}/>:
     <section className="myenv-place" aria-label="c1ME environment">
       <div className="myenv-presence">
         <p className="myenv-kicker">c1ME.env</p>
         <h1>{data.owner?.display_name?.trim()||"My Environment"}</h1>
         <p className="myenv-presence-hint">{environmentItemCount} things are available in this environment · open the Environment Index</p>
       </div>
-    </section>
+    </section>}
 
     {runtimeNotice&&<p className="myenv-runtime-notice" role="status">{runtimeNotice}</p>}
     {initiatives.some(initiative=>initiative.initiative_key==="47pct")&&<aside className="myenv-runtime-notice myenv-eternal-flame" aria-label="Eternal Flame memorial"><EternalFlame compact /></aside>}
