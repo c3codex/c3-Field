@@ -2,7 +2,7 @@ import {json,type PassageEnv} from "../_lib/c1-passage"
 import {resolveEnvironmentSession,type EnvironmentSession} from "../_lib/env-session"
 
 type Row=Record<string,any>
-type LifecycleEnv=PassageEnv
+type LifecycleEnv=PassageEnv & {OWNER_CONSENT_DELIVERY?:{fetch:(request:Request)=>Promise<Response>}}
 
 class LifecycleError extends Error{
   status:number
@@ -85,6 +85,9 @@ export const onRequestGet:PagesFunction<LifecycleEnv>=async({request,env})=>{
 }
 export const onRequestPost:PagesFunction<LifecycleEnv>=async({request,env})=>{
   try{
+    // Same-origin owner actions only; no caller-selected target or recipient.
+    if(request.headers.get("origin")!==new URL(request.url).origin||!request.headers.get("content-type")?.startsWith("application/json"))
+      throw new LifecycleError("That owner action is not available.",403,"owner_origin_required")
     const s=await session(request,env)
     const body=await request.json().catch(()=>null) as Row|null
     if(!body||typeof body.action!=="string")throw new LifecycleError("That owner action is not available.",400,"invalid_owner_action")
@@ -103,7 +106,7 @@ export const onRequestPost:PagesFunction<LifecycleEnv>=async({request,env})=>{
       })
     }
 
-    if(body.action==="terminate"){
+    if(body.action==="request_termination_consent"||body.action==="terminate"){
       if(body.confirmation!=="TERMINATE MY ENVIRONMENT")
         throw new LifecycleError("Type TERMINATE MY ENVIRONMENT exactly to continue.",400,"termination_confirmation_required")
       if(body.understands_history_preserved!==true||body.understands_reentry_required!==true)
@@ -112,10 +115,25 @@ export const onRequestPost:PagesFunction<LifecycleEnv>=async({request,env})=>{
       if(!["retain_c3_field_custody","portable_export","custody_transferred"].includes(disposition))
         throw new LifecycleError("Choose what happens to your owned PACs before terminating.",400,"pac_disposition_required")
 
-      const result=await rpc(env,"terminate_my_env_owner_v1",exactOwnerRequest(s,"terminate",{
-        disposition,
-        portability_receipt_key:typeof body.portability_receipt_key==="string"?body.portability_receipt_key:null
-      }))
+      const prior=disposition==="retain_c3_field_custody"?null:typeof body.portability_receipt_key==="string"?body.portability_receipt_key:null
+      if(disposition!=="retain_c3_field_custody"&&!prior)throw new LifecycleError("A verified portability receipt is required.",409,"prior_receipt_required")
+      const effect=exactOwnerRequest(s,"terminate",{owner_session_token:s.token,disposition,portability_receipt_key:prior})
+      if(body.action==="request_termination_consent"){
+        if(!env.OWNER_CONSENT_DELIVERY)throw new LifecycleError("Owner confirmation is not available yet.",503,"consent_delivery_held")
+        const {action:_,...deliveryPayload}=effect
+        const delivered=await env.OWNER_CONSENT_DELIVERY.fetch(new Request("https://owner-consent.internal/owner-consent",{
+          method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(deliveryPayload),signal:AbortSignal.timeout(20000)
+        }))
+        const receipt=await delivered.json().catch(()=>null) as Row|null
+        if(delivered.status!==202||receipt?.standing!=="confirmation_sent"||
+          typeof receipt.challenge_key!=="string"||!/^[0-9a-f-]{36}$/i.test(receipt.challenge_key)||
+          !Number.isFinite(Date.parse(receipt.expires_at)))throw new LifecycleError("Owner confirmation is unavailable. No termination was performed.",409,"consent_delivery_held")
+        return json({standing:"confirmation_sent",challenge_key:receipt.challenge_key,expires_at:receipt.expires_at},202)
+      }
+      if(typeof body.owner_consent_token!=="string"||!/^[a-f0-9]{64}$/.test(body.owner_consent_token)||
+        typeof body.owner_consent_key!=="string"||!/^[0-9a-f-]{36}$/i.test(body.owner_consent_key))
+        throw new LifecycleError("Enter the confirmation code sent to your verified contact.",400,"owner_effect_consent_required")
+      const result=await rpc(env,"terminate_my_env_owner_v3",{...effect,owner_consent_key:body.owner_consent_key,owner_consent_token:body.owner_consent_token})
       if(result.standing!=="terminated")
         throw new LifecycleError("My Env termination was held.",409,String(result.reason||"owner_termination_held"))
       return clearSession({
