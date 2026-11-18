@@ -41,7 +41,7 @@ export function verifiedGroundSnapshot(value:unknown):GroundPresentation|null{
     !Array.isArray(result.ACT)||result.ACT.length===0||
     snapshot.presentation_scope!=="authenticated_my_env_default"||
     snapshot.authority_effect!=="none"||
-    !matchesGround(snapshot as GroundPresentation))return null
+    !matchesGround(snapshot as unknown as GroundPresentation))return null
   return {designpac_key:GROUND_KEY,standing:"resolved",asset_key:GROUND_ASSET,
     asset_sha256:GROUND_SHA256,media_url:GROUND_MEDIA,width:1672,height:941}
 }
