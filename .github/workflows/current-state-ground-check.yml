@@ -1,0 +1,42 @@
+name: Current State Ground source qualification
+on:
+  pull_request:
+    paths:
+      - 'functions/_lib/current-state-ground.ts'
+      - 'functions/api/my-environment.ts'
+      - 'functions/api/free-media.ts'
+      - 'src/c3_field_connect/current-state-ground*'
+      - 'src/c3_field_connect/CurrentStateGround.tsx'
+      - 'src/c3_field_connect/MyEnvironmentEncounter.tsx'
+      - 'scripts/current-state-ground*.test.ts'
+      - '.github/workflows/current-state-ground-check.yml'
+permissions:
+  contents: read
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Ground unit and refusal tests
+        run: npx --no-install tsx --test scripts/current-state-ground.test.ts scripts/current-state-ground-native.test.ts
+      - name: TypeScript
+        run: npx --no-install tsc --noEmit
+      - name: Generic Vite build (no deployment)
+        run: npm run build
+  media-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Read operator-uploaded public artwork and verify exact bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --max-time 40 --max-filesize 2094840 'https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/current_state_ground_v1.webp' -o "$RUNNER_TEMP/ground.webp"
+          test "$(wc -c < "$RUNNER_TEMP/ground.webp")" -eq 2094840
+          printf '%s  %s\n' '45217142b957b3e057294c9390c03e059fa9c6e3a7fe0e32447621cceb6dab14' "$RUNNER_TEMP/ground.webp" | sha256sum -c -
