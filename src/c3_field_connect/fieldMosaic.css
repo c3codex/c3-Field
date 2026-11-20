@@ -11,7 +11,7 @@
   border-radius: 1rem;
 }
 
-.c3-field-mosaic a {
+.c3-field-mosaic :is(a, .c3-field-mosaic-held) {
   position: absolute;
   display: grid;
   place-items: center;
@@ -21,7 +21,7 @@
   text-decoration: none;
 }
 
-.c3-field-mosaic a span {
+.c3-field-mosaic :is(a, .c3-field-mosaic-held) span {
   padding: .45rem .7rem;
   border-radius: .4rem;
   background: #fff5dc;
@@ -34,7 +34,7 @@
 }
 
 @media (max-width: 560px) {
-  .c3-field-mosaic a {
+  .c3-field-mosaic :is(a, .c3-field-mosaic-held) {
     position: static;
     display: flex;
     min-height: 44px;
