@@ -1,3 +1,4 @@
+import ConnectPavilion from "./ConnectPavilion"
 import {DnrBackdrop} from "../shared/DnrBackdrop"
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { loadC1EnvironmentPackage } from "./c1EnvironmentPackage"
@@ -252,6 +253,7 @@ function C3CommunityConnectSurface({initiativeSurface}:{initiativeSurface:Initia
         </nav>
       </header>
 
+      <ConnectPavilion />
       <section id="connect" className="c3-connect-panel c3-connect-width" aria-labelledby="c3-connect-form-title">
         <div className="c3-connect-form-intro" style={presentation?.media_roles.connect_room ? {backgroundImage:`linear-gradient(90deg,rgba(9,12,14,.88),rgba(9,12,14,.58)),url("/api/free-media?asset=${presentation.media_roles.connect_room}")`} : undefined}>
           <p className="c3-connect-kicker">CONNECT</p>

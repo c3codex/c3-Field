@@ -2,6 +2,7 @@ import {json,type PassageEnv} from "../_lib/c1-passage"
 import {resolveInitiativeSurfaceHost} from "../_lib/initiative-surface-host"
 
 const receivers = {
+  "/connect":"c3field_connect_receiver_c3webpac_v1",
   "/contribute":"c3field_contribute_receiver_c3webpac_v1",
   "/create":"c3field_create_receiver_c3webpac_v1",
 } as const
@@ -10,7 +11,7 @@ export const onRequestGet:PagesFunction<PassageEnv> = async ({request,env}) => {
   const url = new URL(request.url)
   const path = url.searchParams.get("path")
   if (!["c3field.online","www.c3field.online"].includes(url.hostname) ||
-      (path !== "/contribute" && path !== "/create")) return json({standing:"DNR"},404)
+      (path !== "/connect" && path !== "/contribute" && path !== "/create")) return json({standing:"DNR"},404)
 
   try {
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return json({standing:"HLD"},503)
@@ -38,6 +39,13 @@ export const onRequestGet:PagesFunction<PassageEnv> = async ({request,env}) => {
     const rows = await release.json()
     if (!Array.isArray(rows) || rows.length !== 1 || rows[0]?.pac_key !== receivers[path]) return json({standing:"DNR"},404)
 
+    if (path === "/connect") {
+      const pavilion = projection.snapshot?.connect_pavilion
+      return json({
+        standing:"ACT",pac_key:receivers[path],path,
+        pavilion:pavilion?{asset_key:pavilion.asset_key,width:pavilion.width,height:pavilion.height,bounds:pavilion.bounds}:null,
+      })
+    }
     if (path === "/create") return json({standing:"ACT",pac_key:receivers[path],path})
 
     const publicInitiatives = [

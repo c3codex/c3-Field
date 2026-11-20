@@ -66,3 +66,34 @@
 .c3-field-receiver-card::backdrop {
   background: rgb(20 16 12 / 70%);
 }
+
+.c3-connect-pavilion > button {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: #252016;
+  border: 0;
+  background: transparent;
+}
+
+.c3-connect-pavilion > button > span {
+  padding: .45rem .7rem;
+  border-radius: .4rem;
+  background: #fff5dc;
+  font-weight: 700;
+}
+
+.c3-connect-pavilion > button:focus-visible {
+  outline: 2px solid #fff5dc;
+  outline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .c3-connect-pavilion > button {
+    position: static;
+    width: auto !important;
+    margin-top: .5rem;
+  }
+}
