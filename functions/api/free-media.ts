@@ -1,3 +1,5 @@
+import {resolveGroundPresentation,groundBytesVerified} from "../_lib/current-state-ground"
+import {GROUND_ASSET} from "../../src/c3_field_connect/current-state-ground"
 import {json, type PassageEnv} from "../_lib/c1-passage"
 import {resolveEnvironmentSession} from "../_lib/env-session"
 import {
@@ -390,6 +392,18 @@ export const onRequestGet:PagesFunction<FreeMediaEnv>=async({request,env})=>{
     if(!assetKey) return json({standing:"free_media_asset_required"},400)
 
     const asset=await readAsset(env,assetKey)
+    // Ground is a separate, session-bound design encounter. Never fall into public delivery.
+    if(assetKey===GROUND_ASSET){
+      const raw=cookie(request,"c3_env_session")
+      if(!raw)return json({standing:"environment_claim_required"},401)
+      const session=await resolveEnvironmentSession(raw,env)
+      if(!await resolveGroundPresentation(env,session))return json({standing:"ground_design_held"},423)
+      const media=await resolveSupabase(asset,env)
+      if(!media.ok||media.headers.get("content-length")!=="2094840")return json({standing:"ground_media_held"},423)
+      const bytes=await media.arrayBuffer()
+      if(!await groundBytesVerified(bytes))return json({standing:"ground_integrity_held"},423)
+      return new Response(bytes,{headers:{"content-type":"image/webp","cache-control":"private, no-store","x-content-type-options":"nosniff"}})
+    }
     if(asset.standing!=="operator_approved_webpac_reference"&&asset.standing!=="operator_approved_default_environment_visual")
       return json({standing:"free_media_standing_held"},409)
 

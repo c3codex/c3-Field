@@ -1,3 +1,4 @@
+import {resolveGroundPresentation} from "../_lib/current-state-ground"
 import {json, readOwnerClaim, type PassageEnv} from "../_lib/c1-passage"
 import {createEnvironmentSession,environmentSessionCookie,resolveEnvironmentSession,type EnvironmentSession} from "../_lib/env-session"
 import {resolveC1MeOperatorContext} from "../_lib/c1me-operator-context"
@@ -103,8 +104,10 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
     if(!graph || !environment || !owner || graph.envpac_key!==session.envpacKey ||
       environment.env_key!==session.envKey || owner.relationship_key!==session.subjectKey)
       return json({authenticated:true,standing:"environment_unavailable"},404)
+    const groundDesign=await resolveGroundPresentation(env,session)
     const response=json({
       authenticated:true,
+      ground_design:groundDesign,
       standing:"environment_ready",
       owner:{
         display_name:typeof owner.display_name==="string" && owner.display_name.trim()?owner.display_name.trim():null
