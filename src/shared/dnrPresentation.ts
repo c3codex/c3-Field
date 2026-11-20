@@ -1,4 +1,8 @@
-export const C3_TREE_BACKDROP = "/c3ops/c3-tree-source-v1.png"
+// Bounded DNR presentation correction: preserve the Operator-selected still artwork
+// at its existing Supabase Storage custody location. This is a source locator,
+// not evidence that a native Registry media binding has been qualified.
+// The entrance video and resolver standing are intentionally unchanged.
+export const C3_TREE_BACKDROP = "https://zfihrspxvennjzazxcbj.supabase.co/storage/v1/object/public/c3-field-media/c1ME_c3tree.webp"
 export const DNR_BACKDROP_STYLE = "html,body{margin:0;width:100%;height:100%;background:#000}main{height:100svh}img{display:block;width:100%;height:100%;object-fit:contain}"
 export function isC3FieldHost(hostname:string) {
   return hostname === "c3field.online" || hostname.endsWith(".c3field.online")
