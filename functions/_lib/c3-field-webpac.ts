@@ -14,7 +14,7 @@ export async function readFieldRows(env:FieldWebPacEnv,table:string,filters:Reco
   url.search=new URLSearchParams(filters).toString()
   const response=await fetch(url,{headers:{
     apikey:env.SUPABASE_SERVICE_ROLE_KEY,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY,
-  },redirect:"error",signal:AbortSignal.timeout(12000)})
+  },redirect:"manual",signal:AbortSignal.timeout(12000)})
   if (!response.ok) throw new Error("registry_read_failed")
   const rows:unknown=await response.json()
   if (!Array.isArray(rows)) throw new Error("registry_read_failed")

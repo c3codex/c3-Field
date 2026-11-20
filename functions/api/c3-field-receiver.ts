@@ -18,7 +18,7 @@ export const onRequestGet:PagesFunction<PassageEnv> = async ({request,env}) => {
     }
     const base = env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1"
     const resolveFree = (type:string,value:string)=>fetch(base+"/rpc/free_resolve_pac_encounter_v1",{
-      method:"POST",headers,redirect:"error",signal:AbortSignal.timeout(10000),
+      method:"POST",headers,redirect:"manual",signal:AbortSignal.timeout(10000),
       body:JSON.stringify({p_free_call_key:"c3_public_webpac_encounter",p_selector_type:type,p_selector_value:value}),
     })
     const [pacs,manifests]=await Promise.all([
