@@ -32,6 +32,8 @@ export const onRequestGet:PagesFunction<Env>=async({env,request})=>{
         }
       }
     }
+    delete composition.receiving_positions
+    delete composition.webpac_source_ref
     const footerKey=typeof composition?.footer_source==="string"?composition.footer_source:""
     if(!footerKey)return json({standing:"root_footer_authority_missing"},409)
     const footer=await rows(env,"codex_source_reference",{select:"source_key,source_status,metadata",source_key:"eq."+footerKey,source_status:"eq.committed"})
