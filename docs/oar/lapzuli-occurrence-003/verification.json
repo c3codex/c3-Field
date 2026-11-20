@@ -1,0 +1,65 @@
+{
+  "execution_instance": "registrar_lapzuli_native_occurrence_claim_binder_codex_003",
+  "source_base": "729012c179d73682cac7e95c94c4d2607939dbe8",
+  "standing": "source_candidate_installation_held",
+  "files": {
+    "docs/oar/lapzuli-occurrence-003/README.md": {
+      "bytes": 5883,
+      "sha256": "21bac6736d8a4f68cb5ae296e8defa54f9078f06266c0fbe2951c1eabbc3ca84"
+    },
+    "docs/oar/lapzuli-occurrence-003/claim-historical-occurrence.candidate.sql": {
+      "bytes": 18150,
+      "sha256": "f4a057224ccdf5eb0ab470004dddee72be67f45ba60c4641c13b332b16954295"
+    },
+    "functions/_lib/lapzuli-historical-claim.ts": {
+      "bytes": 3520,
+      "sha256": "1745d4ef77560b3b8f08dfed165a18167363ba9f4e3ea0354cf4c022e27629f7"
+    },
+    "functions/_lib/lapzuli-historical-claim.test.ts": {
+      "bytes": 9584,
+      "sha256": "dfb4418a415c183455587f29d8196d423b2e64684f50a17d70fe091e31115411"
+    },
+    "functions/api/c3ops/lapzuli.ts": {
+      "bytes": 34179,
+      "sha256": "92afa632ddeb31b1c9ff8fe4a5a1c8918a8aa7029f6a5b990cb208e753b3af33"
+    },
+    "scripts/test-lapzuli-occurrence-003.mjs": {
+      "bytes": 11696,
+      "sha256": "22f8492103372b7c33a82bdbfda07dc23b1f2472f53263bf6d8240eba0b9df06"
+    },
+    "workers/lapzuli-distribution-worker/src/historical-claim.js": {
+      "bytes": 1468,
+      "sha256": "3f6f25d12f49b809e7adb465017901e1b2fed28ed555497f8642c19f25ecf8dd"
+    },
+    "workers/lapzuli-distribution-worker/src/index.js": {
+      "bytes": 18882,
+      "sha256": "a7016b90372d55f69740cd57a18abe7157c8a934d6b2f1066c29b934ea368644"
+    },
+    "workers/lapzuli-distribution-worker/test/historical-claim.test.js": {
+      "bytes": 2434,
+      "sha256": "9f47be7987215fba4036a2b9b10594b068adc6bfabe269aef1a70c788b10e241"
+    }
+  },
+  "validation": {
+    "new_api_tests_passed": 10,
+    "new_worker_tests_passed": 4,
+    "existing_free_route_tests_passed": 10,
+    "existing_worker_regression_tests_passed": 13,
+    "isolated_postgres_version": "17.6",
+    "isolated_sql_assertions_passed": 27,
+    "native_admission_test_doubles_only": true,
+    "production_schema_installation_qualified": false,
+    "typescript": "passed",
+    "source_integrity": "passed",
+    "preexisting_campaign_projection_failure": "reproduced_on_unchanged_base"
+  },
+  "live": {
+    "sql_installations": 0,
+    "historical_occurrences": 0,
+    "claims": 0,
+    "worker_deployments": 0,
+    "provider_dispatches": 0,
+    "external_effects": 0,
+    "fresh_provider_preflight": "not_attempted_no_effect_authority_or_configured_individual_access"
+  }
+}
