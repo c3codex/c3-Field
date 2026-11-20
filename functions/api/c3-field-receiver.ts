@@ -1,11 +1,7 @@
 import {json,type PassageEnv} from "../_lib/c1-passage"
 import {resolveInitiativeSurfaceHost} from "../_lib/initiative-surface-host"
 
-const receivers = {
-  "/connect":"c3field_connect_receiver_c3webpac_v1",
-  "/contribute":"c3field_contribute_receiver_c3webpac_v1",
-  "/create":"c3field_create_receiver_c3webpac_v1",
-} as const
+import {fieldRecord,fieldWebPacKey,fieldWebPacManifestKey,qualifiedFieldWebPacSource,readFieldRows,resolveFieldReceiver} from "../_lib/c3-field-webpac"
 
 export const onRequestGet:PagesFunction<PassageEnv> = async ({request,env}) => {
   const url = new URL(request.url)
@@ -25,28 +21,37 @@ export const onRequestGet:PagesFunction<PassageEnv> = async ({request,env}) => {
       method:"POST",headers,redirect:"error",signal:AbortSignal.timeout(10000),
       body:JSON.stringify({p_free_call_key:"c3_public_webpac_encounter",p_selector_type:type,p_selector_value:value}),
     })
-    const resolved = await resolveFree("route",path)
-    if (!resolved.ok) return json({standing:"HLD"},503)
-    const projection = await resolved.json()
-    if (projection?.standing !== "ACT" || projection.pac_key !== receivers[path]) return json({standing:"DNR"},404)
-
-    const filters = new URLSearchParams({
-      select:"pac_key",pac_key:"eq."+receivers[path],is_effective:"eq.true",release_state:"eq.public_release_authorized",
-      registration_sha256:"eq."+projection.registration_sha256,
-    })
-    const release = await fetch(base+"/c3_pac?"+filters,{headers,redirect:"error",signal:AbortSignal.timeout(10000)})
-    if (!release.ok) return json({standing:"HLD"},503)
-    const rows = await release.json()
-    if (!Array.isArray(rows) || rows.length !== 1 || rows[0]?.pac_key !== receivers[path]) return json({standing:"DNR"},404)
+    const [pacs,manifests]=await Promise.all([
+      readFieldRows(env,"c3_pac",{
+        select:"pac_key,is_effective,release_state",pac_key:"eq."+fieldWebPacKey,
+        is_effective:"eq.true",release_state:"eq.public_release_authorized",
+      }),
+      readFieldRows(env,"c3_webpac_presentation_manifest",{
+        select:"manifest_key,pac_key,canonical_host,canonical_path,composition",
+        manifest_key:"eq."+fieldWebPacManifestKey,pac_key:"eq."+fieldWebPacKey,
+        canonical_host:"eq.c3field.online",canonical_path:"eq./",
+      }),
+    ])
+    const pac=pacs[0],manifest=manifests[0]
+    if (pacs.length!==1 || pac.pac_key!==fieldWebPacKey || pac.is_effective!==true ||
+        pac.release_state!=="public_release_authorized" || manifests.length!==1 ||
+        manifest.manifest_key!==fieldWebPacManifestKey || manifest.pac_key!==fieldWebPacKey ||
+        manifest.canonical_host!=="c3field.online" || manifest.canonical_path!=="/") {
+      return json({standing:"DNR"},404)
+    }
+    const composition=fieldRecord(manifest.composition)
+    const receiver=resolveFieldReceiver(composition,path)
+    if (!receiver || !await qualifiedFieldWebPacSource(env,composition)) return json({standing:"DNR"},404)
+    const identity={standing:"ACT",pac_key:fieldWebPacKey,manifest_key:fieldWebPacManifestKey,path}
 
     if (path === "/connect") {
-      const pavilion = projection.snapshot?.connect_pavilion
+      const pavilion=fieldRecord(receiver.connect_pavilion)
       return json({
-        standing:"ACT",pac_key:receivers[path],path,
-        pavilion:pavilion?{asset_key:pavilion.asset_key,width:pavilion.width,height:pavilion.height,bounds:pavilion.bounds}:null,
+        ...identity,
+        pavilion:{asset_key:pavilion.asset_key,width:pavilion.width,height:pavilion.height,bounds:pavilion.bounds},
       })
     }
-    if (path === "/create") return json({standing:"ACT",pac_key:receivers[path],path})
+    if (path === "/create") return json(identity)
 
     const publicInitiatives = [
       {name:"Million Dollar Mission",host:"mdm.c3field.online",key:"million_dollar_mission"},
@@ -69,7 +74,7 @@ export const onRequestGet:PagesFunction<PassageEnv> = async ({request,env}) => {
       })(),
     ])
     return json({
-      standing:"ACT",pac_key:receivers[path],path,
+      ...identity,
       destinations:Object.fromEntries(destinations.flatMap(result=>result.status==="fulfilled"?[result.value]:[])),
     })
   } catch {
