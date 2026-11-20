@@ -1,11 +1,12 @@
 import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {useEffect,useRef,useState} from "react"
+import FieldMosaic,{type FieldMosaicPresentation} from "./FieldMosaic"
 import {startIntroPlayback} from "./introPlayback"
 import "./publicIntroStage.css"
 
 type Section={key:string;title?:string;headline?:string;body?:string;descriptor?:string;role?:string;items?:string[];points?:string[]}
 type PublicEncounter={route:string;title:string;hero?:string;root_entry_label?:string;root_entry_summary?:string;standing_created?:boolean}
-type RootPresentation={standing:string;manifest:{composition:{header?:{owner?:string};sections?:Section[];community_potential_whitepaper?:{label?:string;route_state?:string};public_encounters?:{living_circuit?:PublicEncounter}};og_share_presentation?:{title?:string;description?:string;canonical_url?:string;image_runtime_uri?:string}};runtimeMedia:{opening:{runtime_uri:string};backdrop:{runtime_uri:string}};publicIdentity:Record<string,string>}
+type RootPresentation={standing:string;manifest:{composition:{interactive_mosaic?:FieldMosaicPresentation;header?:{owner?:string};sections?:Section[];community_potential_whitepaper?:{label?:string;route_state?:string};public_encounters?:{living_circuit?:PublicEncounter}};og_share_presentation?:{title?:string;description?:string;canonical_url?:string;image_runtime_uri?:string}};runtimeMedia:{opening:{runtime_uri:string};backdrop:{runtime_uri:string}};publicIdentity:Record<string,string>}
 
 export default function C3FieldRoot(){
   const [state,setState]=useState<RootPresentation|null>(null)
@@ -45,6 +46,7 @@ export default function C3FieldRoot(){
       <header style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"1rem",paddingBottom:"12vh"}}>
         <strong>c3 Field</strong><span style={{fontSize:".8rem",opacity:.7}}>{c.header?.owner}</span>
       </header>
+      {videoDone&&<FieldMosaic presentation={c.interactive_mosaic}/>}
       {sections.map(section=><section key={section.key} style={{padding:"clamp(2.5rem,8vh,6rem) 0",borderTop:"1px solid rgba(255,255,255,.16)"}}>
         {section.headline&&<h1 style={{fontSize:"clamp(2.4rem,7vw,5.6rem)",lineHeight:.98,maxWidth:"14ch",margin:"0 0 1.5rem"}}>{section.headline}</h1>}
         {section.title&&<h2 style={{fontSize:"clamp(1.8rem,4vw,3.2rem)",margin:"0 0 1rem"}}>{section.title}</h2>}

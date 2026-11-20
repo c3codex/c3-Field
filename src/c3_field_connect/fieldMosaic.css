@@ -1,0 +1,43 @@
+.c3-field-mosaic {
+  position: relative;
+  isolation: isolate;
+  margin-bottom: 3rem;
+}
+
+.c3-field-mosaic img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+
+.c3-field-mosaic a {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  min-height: 24px;
+  color: #252016;
+  text-decoration: none;
+}
+
+.c3-field-mosaic a span {
+  padding: .45rem .7rem;
+  border-radius: .4rem;
+  background: #fff5dc;
+  font-weight: 700;
+}
+
+.c3-field-mosaic a:is(:hover, :focus-visible) {
+  outline: 2px solid #fff5dc;
+  outline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .c3-field-mosaic a {
+    position: static;
+    display: flex;
+    min-height: 44px;
+    margin-top: .5rem;
+  }
+}
