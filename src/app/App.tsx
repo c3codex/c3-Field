@@ -8,6 +8,7 @@ const RegisteredPublicationProjectionDoor = lazy(() => import("../c3_field_conne
 const C3OpsDoor = lazy(() => import("../c3ops/C3OpsDoor"))
 const C3InitiativeSurfaceDoor = lazy(() => import("../c3_field_connect/C3InitiativeSurfaceDoor"))
 const FieldReporterEncounter = lazy(() => import("../c3_field_connect/FieldReporterEncounter"))
+const FieldReceiver = lazy(() => import("../c3_field_connect/FieldReceiver"))
 const C3FieldRoot = lazy(() => import("../c3_field_connect/C3FieldRoot"))
 import C3CommunityConnect, { HeldUnknownC3FieldRoute } from "../c3_field_connect/C3CommunityConnect"
 import { resolveC3FieldRoute } from "../c3_field_connect/c3FieldRouting"
@@ -562,6 +563,9 @@ export default function App() {
     if (c3Route.kind === "publication") return <PublicWhitePaperLanding paper={communityPotential} />
     if (c3Route.kind === "encounter") return <Suspense fallback={<p>Opening the Living Circuit…</p>}><LivingCircuitEncounter /></Suspense>
     if (c3Route.kind === "public_document") return <Suspense fallback={<p>Loading document…</p>}><C3PublicDocumentPage kind={c3Route.pathname === "/privacy" ? "privacy" : c3Route.pathname === "/terms" ? "terms" : "contact"} /></Suspense>
+    if (c3Route.pathname === "/contribute" || c3Route.pathname === "/create") {
+      return <Suspense fallback={<p>Resolving encounter…</p>}><FieldReceiver key={c3Route.pathname} path={c3Route.pathname} /></Suspense>
+    }
     if (c3Route.kind === "held_unknown") return <HeldUnknownC3FieldRoute pathname={c3Route.pathname} />
     if (c3Route.kind === "connect" && c3Route.pathname === "/connect") return <C3CommunityConnect />
     return <Suspense fallback={<p>Opening c3 Field…</p>}><C3FieldRoot /></Suspense>

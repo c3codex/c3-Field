@@ -41,3 +41,28 @@
     margin-top: .5rem;
   }
 }
+
+.c3-field-receiver {
+  min-height: 100vh;
+  padding: clamp(1.25rem, 5vw, 4rem);
+  color: #fff5dc;
+  background: #252016;
+}
+
+.c3-field-receiver a {
+  color: inherit;
+}
+
+.c3-field-receiver-card {
+  width: min(32rem, calc(100% - 2rem));
+  margin: clamp(1rem, 8vh, 4rem) auto auto;
+  padding: 1.5rem;
+  color: #252016;
+  background: #fff5dc;
+  border: 1px solid #8e7c58;
+  border-radius: .75rem;
+}
+
+.c3-field-receiver-card::backdrop {
+  background: rgb(20 16 12 / 70%);
+}
