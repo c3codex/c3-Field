@@ -1,0 +1,7 @@
+{
+  "name": "cancom-executor-inert-staging",
+  "private": true,
+  "type": "module",
+  "scripts": {"test": "node --test test/*.test.mjs", "check": "tsc --noEmit"},
+  "devDependencies": {"wrangler": "4.50.0", "typescript": "5.5.4"}
+}
