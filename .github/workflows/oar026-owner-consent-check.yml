@@ -1,0 +1,32 @@
+name: OAR026 owner consent application qualification
+on:
+  pull_request:
+    paths:
+      - 'workers/owner-consent/**'
+      - 'functions/api/my-environment-owner-lifecycle*.ts'
+      - 'src/c3_field_connect/MyEnvironmentEncounter.tsx'
+      - 'scripts/owner-consent-delivery.test.mjs'
+      - '.github/workflows/oar026-owner-consent-check.yml'
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Private delivery adapter tests
+        run: node --test scripts/owner-consent-delivery.test.mjs
+      - name: Worker entry syntax and dependency resolution
+        run: node --check workers/owner-consent/index.mjs && node -e "import('./workers/owner-consent/index.mjs')"
+      - name: Owner lifecycle API integration fixtures
+        run: npx --no-install tsx --test functions/api/my-environment-owner-lifecycle.test.ts
+      - name: TypeScript source check
+        run: npx --no-install tsc --noEmit
+      - name: Application build only
+        run: npm run build

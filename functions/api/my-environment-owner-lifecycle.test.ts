@@ -45,7 +45,7 @@ function fixtureFetch(calls:Call[],mode:"preview"|"export"|"terminate"|"held"="p
         manifest_sha256:"b".repeat(64),manifest:{manifest_version:"fixture"},owned_pac_count:2,non_owned_reference_count:1
       })
     }
-    if(url.endsWith("rpc/terminate_my_env_owner_v1")){
+    if(url.endsWith("rpc/terminate_my_env_owner_v3")){
       if(mode!=="terminate")return reply({standing:"held",reason:"fixture_hold"})
       return reply({
         standing:"terminated",
@@ -81,7 +81,7 @@ test("export ignores caller identity and uses the owner session",async()=>{
   globalThis.fetch=fixtureFetch(calls,"export")
   try{
     const request=new Request("https://fixture.invalid/api/my-environment-owner-lifecycle",{
-      method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json"},
+      method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json",origin:"https://fixture.invalid"},
       body:JSON.stringify({action:"export",relationship_key:"attacker",env_key:"wrong",envpac_key:"wrong"})
     })
     const response=await onRequestPost({request,env:{SUPABASE_URL:"https://fixture.supabase.co",SUPABASE_SERVICE_ROLE_KEY:"fixture-only"}} as any)
@@ -100,12 +100,12 @@ test("termination requires exact confirmation before Registry mutation",async()=
   globalThis.fetch=fixtureFetch(calls,"terminate")
   try{
     const request=new Request("https://fixture.invalid/api/my-environment-owner-lifecycle",{
-      method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json"},
+      method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json",origin:"https://fixture.invalid"},
       body:JSON.stringify({action:"terminate",confirmation:"terminate",disposition:"retain_c3_field_custody",understands_history_preserved:true,understands_reentry_required:true})
     })
     const response=await onRequestPost({request,env:{SUPABASE_URL:"https://fixture.supabase.co",SUPABASE_SERVICE_ROLE_KEY:"fixture-only"}} as any)
     assert.equal(response.status,400)
-    assert.equal(calls.some(call=>call.url.endsWith("rpc/terminate_my_env_owner_v1")),false)
+    assert.equal(calls.some(call=>call.url.endsWith("rpc/terminate_my_env_owner_v3")),false)
   }finally{globalThis.fetch=original}
 })
 
@@ -114,9 +114,11 @@ test("successful termination is session-bound and clears the My Env cookie",asyn
   globalThis.fetch=fixtureFetch(calls,"terminate")
   try{
     const request=new Request("https://fixture.invalid/api/my-environment-owner-lifecycle",{
-      method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json"},
+      method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json",origin:"https://fixture.invalid"},
       body:JSON.stringify({
         action:"terminate",
+        owner_consent_key:"33333333-3333-4333-8333-333333333333",
+        owner_consent_token:"b".repeat(64),
         relationship_key:"attacker",
         env_key:"wrong",
         envpac_key:"wrong",
@@ -131,9 +133,46 @@ test("successful termination is session-bound and clears the My Env cookie",asyn
     assert.equal(response.status,200)
     assert.equal(body.standing,"terminated")
     assert.match(response.headers.get("set-cookie")||"",/c3_env_session=;/)
-    const rpc=calls.find(call=>call.url.endsWith("rpc/terminate_my_env_owner_v1"))!
+    const rpc=calls.find(call=>call.url.endsWith("rpc/terminate_my_env_owner_v3"))!
     assert.equal(rpc.body.p_request.relationship_key,"fixture-owner")
     assert.equal(rpc.body.p_request.env_key,"fixture-env")
     assert.equal(rpc.body.p_request.envpac_key,"fixture-envpac")
   }finally{globalThis.fetch=original}
 })
+
+test("consent request uses session target, returns receipt only and performs no termination",async()=>{
+ const original=globalThis.fetch,calls:Call[]=[];
+ globalThis.fetch=fixtureFetch(calls,"terminate");
+ try{
+  const proofId="33333333-3333-4333-8333-333333333333";
+  const request=new Request("https://fixture.invalid/api/my-environment-owner-lifecycle",{
+    method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json",origin:"https://fixture.invalid"},
+    body:JSON.stringify({action:"request_termination_consent",confirmation:"TERMINATE MY ENVIRONMENT",disposition:"retain_c3_field_custody",understands_history_preserved:true,understands_reentry_required:true,relationship_key:"ignored",delivery_email:"ignored@example.invalid"})
+  });
+  const env={SUPABASE_URL:"https://fixture.supabase.co",SUPABASE_SERVICE_ROLE_KEY:"fixture-only",OWNER_CONSENT_DELIVERY:{fetch:async(req:Request)=>{
+   const p=await req.json() as any;
+   assert.equal(p.relationship_key,"fixture-owner");assert.equal(p.env_key,"fixture-env");assert.equal(p.envpac_key,"fixture-envpac");
+   assert.equal(p.owner_session_token,"a".repeat(64));assert.equal(p.delivery_email,undefined);
+   return new Response(JSON.stringify({standing:"confirmation_sent",challenge_key:proofId,expires_at:new Date(Date.now()+300000).toISOString()}),{status:202});
+  }}};
+  const response=await onRequestPost({request,env} as any);
+  assert.equal(response.status,202);
+  const body=await response.json() as any;assert.equal(body.challenge_key,proofId);
+  assert.equal(response.headers.get("set-cookie"),null);
+  assert.equal(calls.some(c=>c.url.includes("rpc/terminate_my_env_owner")),false);
+ }finally{globalThis.fetch=original}
+});
+test("missing owner proof and cross origin are refused before termination",async()=>{
+ const original=globalThis.fetch,calls:Call[]=[];globalThis.fetch=fixtureFetch(calls,"terminate");
+ try{
+  for(const [origin,status] of [["https://fixture.invalid",400],["https://unrelated.invalid",403]] as const){
+   const request=new Request("https://fixture.invalid/api/my-environment-owner-lifecycle",{
+    method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json",origin},
+    body:JSON.stringify({action:"terminate",confirmation:"TERMINATE MY ENVIRONMENT",disposition:"retain_c3_field_custody",understands_history_preserved:true,understands_reentry_required:true})
+   });
+   const response=await onRequestPost({request,env:{SUPABASE_URL:"https://fixture.supabase.co",SUPABASE_SERVICE_ROLE_KEY:"fixture-only"}} as any);
+   assert.equal(response.status,status);
+  }
+  assert.equal(calls.some(c=>c.url.includes("rpc/terminate_my_env_owner")),false);
+ }finally{globalThis.fetch=original}
+});
