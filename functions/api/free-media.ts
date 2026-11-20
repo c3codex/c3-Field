@@ -6,6 +6,7 @@ import {
   normalizeInitiativeSurfaceHostname,
 } from "../_lib/initiative-surface-host"
 import {PublicSurfaceError,resolveRegisteredPublicSurface,resolveRegisteredNativeInitiative,readProjectionPac} from "../_lib/registered-public-surface"
+import {fieldWebPacKey,fieldWebPacManifestKey,qualifiedFieldWebPacSource,resolveFieldReceiver} from "../_lib/c3-field-webpac"
 
 type R2ObjectBody={body:ReadableStream|null;size:number;httpEtag?:string;range?:{offset:number;length:number};writeHttpMetadata?:(headers:Headers)=>void}
 type R2BucketLike={get:(key:string,options?:{range?:{offset:number;length:number}})=>Promise<R2ObjectBody|null>}
@@ -278,6 +279,22 @@ async function publicPacKeysForRequest(env:FreeMediaEnv,request:Request,assetKey
     return (initiativePac===canonicalC1Pac?[initiativePac]:[initiativePac,canonicalC1Pac]).map(pacKey=>({pacKey,member:null,nativeSource:pacKey===initiativePac}))
   }
   if(host==="c3field.online"||host==="www.c3field.online"){
+    if(assetKey==="c3_field_interactive_arrival_candidate"||assetKey==="c3_field_connect_pavilion_candidate"){
+      const manifests=await readRows(env,"c3_webpac_presentation_manifest","composition",{
+        manifest_key:"eq."+fieldWebPacManifestKey,
+        pac_key:"eq."+fieldWebPacKey,
+        canonical_host:"eq.c3field.online",
+        canonical_path:"eq./",
+      })
+      const composition=record(manifests[0]?.composition)
+      const mosaic=record(composition.interactive_mosaic)
+      const pavilion=record(resolveFieldReceiver(composition,"/connect")?.connect_pavilion)
+      if(manifests.length!==1||![mosaic.asset_key,pavilion.asset_key].includes(assetKey)||
+        !await qualifiedFieldWebPacSource(env,composition)){
+        throw new FreeMediaError("public_webpac_media_unbound",423)
+      }
+      return [{pacKey:fieldWebPacKey,member:null,nativeSource:true}]
+    }
     return [{pacKey:await canonicalPublicIntroPacKey(env),member:null,nativeSource:false}]
   }
   throw new FreeMediaError("public_media_surface_unregistered",404)
