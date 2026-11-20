@@ -11,6 +11,82 @@
   border-radius: 1rem;
 }
 
+.c3-field-scene {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.c3-field-breeze {
+  position: absolute;
+  inset: -8%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at 30% 18%, rgb(255 232 163 / 34%), transparent 48%);
+  animation: c3-field-light 5s ease-in-out both;
+}
+
+@keyframes c3-field-light {
+  from { opacity: 0; transform: translateX(-6%); }
+  38% { opacity: .85; }
+  to { opacity: 0; transform: translateX(9%); }
+}
+
+.c3-pavilion-butterfly {
+  position: absolute;
+  z-index: 1;
+  width: clamp(15px, 3.5vw, 30px);
+  aspect-ratio: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  animation: c3-pavilion-flight 5s ease-in-out;
+}
+
+.c3-pavilion-butterfly::before,
+.c3-pavilion-butterfly::after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  width: 50%;
+  height: 76%;
+  border: 1px solid #352114;
+  background: radial-gradient(circle at 70% 22%, #fff1c9 0 8%, transparent 10%),
+    linear-gradient(#f7a03b, #b84912 72%, #352114);
+  animation: c3-pavilion-flutter .23s ease-in-out 21 alternate;
+}
+
+.c3-pavilion-butterfly::before {
+  left: 0;
+  border-radius: 75% 20% 48% 55%;
+  transform-origin: right center;
+}
+
+.c3-pavilion-butterfly::after {
+  right: 0;
+  border-radius: 20% 75% 55% 48%;
+  transform-origin: left center;
+}
+
+@keyframes c3-pavilion-flight {
+  0% { left: 18%; top: 32%; transform: translate(-50%, -50%) rotate(30deg); }
+  22% { left: 39%; top: 19%; transform: translate(-50%, -50%) rotate(13deg); }
+  48% { left: 73%; top: 31%; transform: translate(-50%, -50%) rotate(48deg); }
+  71% { left: 48%; top: 60%; transform: translate(-50%, -50%) rotate(-68deg); }
+}
+
+@keyframes c3-pavilion-flutter {
+  to { transform: scaleX(.35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c3-field-breeze,
+  .c3-pavilion-butterfly,
+  .c3-pavilion-butterfly::before,
+  .c3-pavilion-butterfly::after {
+    animation: none;
+  }
+}
+
 .c3-field-mosaic :is(a, .c3-field-mosaic-held) {
   position: absolute;
   display: grid;

@@ -33,7 +33,10 @@ export default function FieldMosaic({presentation}:{presentation:FieldMosaicPres
   if (!mosaic) return null
 
   return <nav aria-label="c3 Field encounters" className="c3-field-mosaic">
-    <img src={mosaic.src} width={mosaic.width} height={mosaic.height} alt="" />
+    <div className="c3-field-scene">
+      <img src={mosaic.src} width={mosaic.width} height={mosaic.height} alt="" />
+      <div className="c3-field-breeze" aria-hidden="true" />
+    </div>
     {mosaic.zones.map(({key, label, target, bounds}) => {
       const style = {
         left:`${bounds.left * 100}%`,

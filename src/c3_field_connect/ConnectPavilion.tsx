@@ -38,7 +38,12 @@ export default function ConnectPavilion(){
   const [x,y,width,height]=pavilion.bounds
   return <section className="c3-connect-width" aria-label="Connect pavilion">
     <div className="c3-field-mosaic c3-connect-pavilion">
-      <img src={"/api/free-media?asset="+pavilion.asset_key} width={pavilion.width} height={pavilion.height} alt="" />
+      <div className="c3-field-scene">
+        <img src={"/api/free-media?asset="+pavilion.asset_key} width={pavilion.width} height={pavilion.height} alt="" />
+        <div className="c3-pavilion-butterfly" aria-hidden="true" style={{
+          left:`${(x+width*.7)*100}%`,top:`${(y+height*.25)*100}%`,
+        }} />
+      </div>
       <button ref={control} type="button" style={{
         left:`${x*100}%`,top:`${y*100}%`,width:`${width*100}%`,height:`${height*100}%`,
       }} onClick={()=>dialog.current?.showModal()}><span>Browse profiles</span></button>
