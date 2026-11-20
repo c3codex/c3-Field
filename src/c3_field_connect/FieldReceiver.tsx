@@ -9,6 +9,7 @@ export default function FieldReceiver({path}:{path:Path}){
   const dialog = useRef<HTMLDialogElement>(null)
   const opener = useRef<HTMLButtonElement>(null)
   const [preview,setPreview] = useState("")
+  const [destinations,setDestinations] = useState<Record<string,string>>({})
 
   function openPreview(name:string,control:HTMLButtonElement){
     opener.current=control
@@ -21,13 +22,19 @@ export default function FieldReceiver({path}:{path:Path}){
     fetch("/api/c3-field-receiver?"+new URLSearchParams({path}),{signal:controller.signal})
       .then(async response=>{
         const body = await response.json()
-        setStanding(response.ok && body.standing === "ACT" && body.path === path ? "ACT" : "held")
+        if (controller.signal.aborted) return
+        const available = response.ok && body.standing === "ACT" && body.path === path
+        setStanding(available ? "ACT" : "held")
+        if (available && body.destinations && typeof body.destinations === "object") {
+          setDestinations(body.destinations)
+        }
       })
       .catch(()=>{if (!controller.signal.aborted) setStanding("held")})
     return ()=>controller.abort()
   },[path])
 
   const create = path === "/create"
+  const destination = destinations[preview]
   return <main className="c3-field-receiver">
     <a href="/">c3 Field</a>
     <h1>{create ? "Create" : "Contribute"}</h1>
@@ -44,7 +51,7 @@ export default function FieldReceiver({path}:{path:Path}){
         {create ? <>
           <p>Work in progress</p>
           <p>An emerging exhibition space where independent artists can share their work on their own terms.</p>
-        </> : <p>The initiative destination is currently unavailable.</p>}
+        </> : destination ? <a href={destination}>Open initiative</a> : <p>The initiative destination is currently unavailable.</p>}
         <form method="dialog"><button>Close</button></form>
       </dialog>
     </>}

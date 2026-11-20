@@ -1,4 +1,5 @@
 import {json,type PassageEnv} from "../_lib/c1-passage"
+import {resolveInitiativeSurfaceHost} from "../_lib/initiative-surface-host"
 
 const receivers = {
   "/contribute":"c3field_contribute_receiver_c3webpac_v1",
@@ -19,10 +20,11 @@ export const onRequestGet:PagesFunction<PassageEnv> = async ({request,env}) => {
       "content-type":"application/json",
     }
     const base = env.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1"
-    const resolved = await fetch(base+"/rpc/free_resolve_pac_encounter_v1",{
+    const resolveFree = (type:string,value:string)=>fetch(base+"/rpc/free_resolve_pac_encounter_v1",{
       method:"POST",headers,redirect:"error",signal:AbortSignal.timeout(10000),
-      body:JSON.stringify({p_free_call_key:"c3_public_webpac_encounter",p_selector_type:"route",p_selector_value:path}),
+      body:JSON.stringify({p_free_call_key:"c3_public_webpac_encounter",p_selector_type:type,p_selector_value:value}),
     })
+    const resolved = await resolveFree("route",path)
     if (!resolved.ok) return json({standing:"HLD"},503)
     const projection = await resolved.json()
     if (projection?.standing !== "ACT" || projection.pac_key !== receivers[path]) return json({standing:"DNR"},404)
@@ -36,7 +38,32 @@ export const onRequestGet:PagesFunction<PassageEnv> = async ({request,env}) => {
     const rows = await release.json()
     if (!Array.isArray(rows) || rows.length !== 1 || rows[0]?.pac_key !== receivers[path]) return json({standing:"DNR"},404)
 
-    return json({standing:"ACT",pac_key:receivers[path],path})
+    if (path === "/create") return json({standing:"ACT",pac_key:receivers[path],path})
+
+    const publicInitiatives = [
+      {name:"Million Dollar Mission",host:"mdm.c3field.online",key:"million_dollar_mission"},
+      {name:"4.7%",host:"47pct.c3field.online",key:"47pct"},
+    ]
+    const destinations = await Promise.allSettled([
+      ...publicInitiatives.map(async ({name,host,key})=>{
+        const surface = await resolveInitiativeSurfaceHost(env,host)
+        if(surface.initiativeKey !== key) throw new Error("initiative_identity_mismatch")
+        return [name,surface.canonicalUrl]
+      }),
+      (async()=>{
+        const response = await resolveFree("host","undrifted.measuresregistry.com")
+        if (!response.ok) throw new Error("publication_unavailable")
+        const publication = await response.json()
+        if (publication.standing !== "ACT" || publication.pac_key !== "undrifted_field_projection_c3webpac_v2") {
+          throw new Error("publication_unresolved")
+        }
+        return ["unDrifted","https://undrifted.measuresregistry.com/"]
+      })(),
+    ])
+    return json({
+      standing:"ACT",pac_key:receivers[path],path,
+      destinations:Object.fromEntries(destinations.flatMap(result=>result.status==="fulfilled"?[result.value]:[])),
+    })
   } catch {
     return json({standing:"HLD"},503)
   }
