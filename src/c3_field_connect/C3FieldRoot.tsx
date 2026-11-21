@@ -44,7 +44,7 @@ export default function C3FieldRoot(){
     </div>}
     <div style={{position:"relative",zIndex:1,maxWidth:"960px",margin:"0 auto",padding:"2rem 1.25rem 4rem"}}>
       <header style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"1rem",paddingBottom:"12vh"}}>
-        <strong>c3 Field</strong><span style={{fontSize:".8rem",opacity:.7}}>{c.header?.owner}</span>
+        <strong>c3 Field</strong><a href="https://my.c3field.online/" style={{color:"inherit",fontSize:".8rem",textDecoration:"underline",textUnderlineOffset:"4px"}}>Return to Current State →</a>
       </header>
       {videoDone&&<FieldMosaic presentation={c.interactive_mosaic}/>}
       {sections.map(section=><section key={section.key} style={{padding:"clamp(2.5rem,8vh,6rem) 0",borderTop:"1px solid rgba(255,255,255,.16)"}}>
