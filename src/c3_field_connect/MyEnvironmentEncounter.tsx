@@ -1,3 +1,4 @@
+import type {CurrentStatePresentation} from "../../functions/_lib/current-state-presentation"
 import {DnrBackdrop} from "../shared/DnrBackdrop"
 import {FormEvent,useEffect,useRef,useState} from "react"
 import EternalFlame from "./EternalFlame"
@@ -17,6 +18,7 @@ import {
 
 type EnvPayload={
   authenticated:boolean
+  current_state_presentation?:CurrentStatePresentation|null
   standing:string
   owner?:{display_name:string|null}
   environment?:{env_key:string;environment_name:string;environment_class:string;standing:string;is_active:boolean;is_canonical:boolean}
@@ -213,6 +215,31 @@ export default function MyEnvironmentEncounter(){
   const [inviteNotice,setInviteNotice]=useState("")
   const [inviteCopy,setInviteCopy]=useState("")
   const [activePanel,setActivePanel]=useState<string|null>(null)
+  const [stashItems,setStashItems]=useState<string[]|null>(null)
+  const [stashNotice,setStashNotice]=useState("")
+  const [stashBusy,setStashBusy]=useState(false)
+
+  async function readStash(){
+    setStashBusy(true)
+    setStashItems(null)
+    setStashNotice("")
+    try{
+      const response=await fetch("/api/my-environment-stash",{
+        method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},
+        body:JSON.stringify({action:"list",request_key:crypto.randomUUID()}),
+      })
+      const body=await response.json()
+      if(!response.ok||body.standing!=="my_stash_resolved"||!Array.isArray(body.items)) throw new Error("stash_unavailable")
+      setStashItems(body.items.flatMap((item:unknown)=>{
+        const label=(item as {label?:unknown}|null)?.label
+        return typeof label==="string"&&label.trim()?[label]:[]
+      }))
+    }catch{
+      setStashNotice("My Stash is unavailable in this environment.")
+    }finally{
+      setStashBusy(false)
+    }
+  }
   const [environmentIndexOpen,setEnvironmentIndexOpen]=useState(false)
   const [runtimeNotice,setRuntimeNotice]=useState("")
   const [canopyLoaded,setCanopyLoaded]=useState(false)
@@ -1443,7 +1470,8 @@ export default function MyEnvironmentEncounter(){
 
   const has47pct=initiatives.some(initiative=>initiative.initiative_key==="47pct")
   const genericBackdrop=!data.presentation||["c3_field_c1me_live_backdrop_v1","c3_field_environment_opening_visual_v1"].includes(data.presentation.opening_visual_asset_key)
-  const backdrop=genericBackdrop?"":(data.presentation?.opening_visual_url||"")
+  const design=data.current_state_presentation
+  const backdrop=genericBackdrop?(design?.backdropUrl||""):(data.presentation?.opening_visual_url||"")
   const availableComponents=[...runtimeComponents,...contextualComponents]
   const activeComponent=activePanel?.startsWith("primitive:")
     ?availableComponents.find(primitive=>"primitive:"+primitive.primitive_key===activePanel)
@@ -1452,6 +1480,10 @@ export default function MyEnvironmentEncounter(){
     ?initiatives.find(initiative=>"initiative:"+initiative.initiative_key===activePanel)
     :null
   const activeOwnerLifecycle=activePanel==="owner:lifecycle"
+  const activeStash=Boolean(design&&activePanel==="current-state:stash")
+  const inviteComponent=availableComponents.find(component=>component.renderer_key==="c1me.invite_connection")
+  const fieldRoutes:Record<string,string>={Connect:"/connect",Contribute:"/contribute",Create:"/create"}
+  const workspaceRenderers:Record<string,string>={"My PACs":"c1me.my_pacs","My Canopy":"c1me.canopy",Connections:"c1me.native_connections"}
   const groupedComponents={
     core:availableComponents.filter(primitive=>componentGroup(primitive)==="core"),
     work:availableComponents.filter(primitive=>componentGroup(primitive)==="work"),
@@ -1468,13 +1500,30 @@ export default function MyEnvironmentEncounter(){
     {backdrop&&<img className="myenv-backdrop" src={backdrop} alt="" aria-hidden="true"/>}
     <CurrentConstellation tokens={currentTokens}/>
     <div className="myenv-environment-wash" aria-hidden="true"/>
-    <section className="myenv-place" aria-label="c1ME environment">
+    {design?<header className="current-state-heading">
+      <h1>{design.title}</h1>
+      <p>{design.tagline}</p>
+      <p>{design.line}</p>
+      <a className="current-state-field-entry" href={design.fieldEntry}>{design.fieldEntryLabel}</a>
+    </header>:<section className="myenv-place" aria-label="c1ME environment">
       <div className="myenv-presence">
         <p className="myenv-kicker">c1ME.env</p>
         <h1>{data.owner?.display_name?.trim()||"My Environment"}</h1>
         <p className="myenv-presence-hint">{environmentItemCount} things are available in this environment · open the Environment Index</p>
       </div>
-    </section>
+    </section>}
+    {design&&<nav className="current-state-navigation" aria-label="Current State">
+      <div>
+        {design.fieldNavigation.map(label=><a key={label} href={new URL(fieldRoutes[label],design.fieldEntry).href}>{label}</a>)}
+      </div>
+      <div>
+        {design.workspaceOverlays.map(label=>{
+          if(label==="My Stash") return <button key={label} type="button" onClick={()=>setActivePanel("current-state:stash")}>{label}</button>
+          const component=availableComponents.find(item=>item.renderer_key===workspaceRenderers[label])
+          return component?<button key={label} type="button" onClick={()=>setActivePanel("primitive:"+component.primitive_key)}>{label}</button>:null
+        })}
+      </div>
+    </nav>}
 
     {runtimeNotice&&<p className="myenv-runtime-notice" role="status">{runtimeNotice}</p>}
     {initiatives.some(initiative=>initiative.initiative_key==="47pct")&&<aside className="myenv-runtime-notice myenv-eternal-flame" aria-label="Eternal Flame memorial"><EternalFlame compact /></aside>}
@@ -1550,13 +1599,21 @@ export default function MyEnvironmentEncounter(){
       </section>}
     </nav>
 
-    {(activeComponent||activeInitiative||activeOwnerLifecycle)&&<div
+    {(activeComponent||activeInitiative||activeOwnerLifecycle||activeStash)&&<div
       className="myenv-overlay"
       role="presentation"
       onMouseDown={event=>{if(event.currentTarget===event.target)setActivePanel(null)}}
     >
-      <section className="myenv-panel" role="dialog" aria-modal="true" aria-label={activeOwnerLifecycle?"Ownership & Exit":(activeComponent?.display_label||"Initiative")}>
+      <section className="myenv-panel" role="dialog" aria-modal="true" aria-label={activeStash?"My Stash":activeOwnerLifecycle?"Ownership & Exit":(activeComponent?.display_label||"Initiative")}>
         <button className="myenv-panel-close" type="button" aria-label="Close" onClick={()=>setActivePanel(null)}>×</button>
+        {activeStash&&<section className="myenv-connections-thread">
+          <h2>My Stash</h2>
+          <button type="button" disabled={stashBusy} onClick={()=>void readStash()}>Load saved references</button>
+          {stashNotice&&<p role="status">{stashNotice}</p>}
+          {stashItems&&(stashItems.length?<ul>{stashItems.map((label,index)=><li key={index}>{label}</li>)}</ul>:<p>No saved references.</p>)}
+        </section>}
+        {design?.inviteConnection&&inviteComponent&&activeComponent?.renderer_key==="c1me.native_connections"&&
+          <button type="button" className="current-state-invite" onClick={()=>setActivePanel("primitive:"+inviteComponent.primitive_key)}>Invite Connection</button>}
         {activeComponent&&renderComponent(activeComponent)}
         {activeOwnerLifecycle&&<section className="myenv-connections-thread">
           <div className="myenv-thread-heading">

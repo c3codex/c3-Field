@@ -1,5 +1,6 @@
 import {json, readOwnerClaim, type PassageEnv} from "../_lib/c1-passage"
 import {createEnvironmentSession,environmentSessionCookie,resolveEnvironmentSession,type EnvironmentSession} from "../_lib/env-session"
+import {resolveCurrentStatePresentation} from "../_lib/current-state-presentation"
 import {resolveC1MeOperatorContext} from "../_lib/c1me-operator-context"
 
 function cookie(request:Request,name:string){
@@ -81,7 +82,7 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
     if(operatorContext.relationship_ref!==session.subjectKey || operatorContext.env_key!==session.envKey ||
       operatorContext.envpac_ref!==session.envpacKey || operatorContext.current_ref!==current.current_ref)
       throw new Error("operator_context_mismatch")
-    const [graphRows,envRows,grantRows,ownerRows,presentationRows,profileProjection]=await Promise.all([
+    const [graphRows,envRows,grantRows,ownerRows,presentationRows,profileProjection,currentStatePresentation]=await Promise.all([
       readRows(env,"c3_envpac_effective_graph",
         "envpac_key,registry_env_key,version,envpac_standing,owner_subject_type,custodian_subject_type,custodian_subject_key,custody_provider,portable,environment_bindings,rooted_systems,packages",
         {envpac_key:"eq."+session.envpacKey}),
@@ -97,7 +98,8 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
       readRows(env,"c3_envpac_presentation",
         "envpac_key,opening_visual_asset_key,opening_visual_url,source_webpac_key,owner_changeable,selection_standing,selected_by_type,selected_by_key,selected_at,updated_at",
         {envpac_key:"eq."+session.envpacKey,selection_standing:"eq.active"}),
-      resolveProfileFromEnvpac(session,env)
+      resolveProfileFromEnvpac(session,env),
+      resolveCurrentStatePresentation(session,env)
     ])
     const graph=graphRows[0], environment=envRows[0], owner=ownerRows[0], presentation=presentationRows[0]
     if(!graph || !environment || !owner || graph.envpac_key!==session.envpacKey ||
@@ -142,6 +144,7 @@ export const onRequestGet: PagesFunction<PassageEnv> = async ({request,env}) => 
         selected_at:presentation.selected_at,
         updated_at:presentation.updated_at
       }:null,
+      current_state_presentation:currentStatePresentation,
       access:grantRows.map(row=>({
         grant_key:row.grant_key,
         subject_type:row.subject_type,

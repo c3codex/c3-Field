@@ -300,3 +300,29 @@
   .myenv-personal-pac-card-head{flex-direction:column}
   .myenv-pac-preview-primary{width:100%}
 }
+
+.current-state-heading{
+  position:absolute;inset:0 0 auto;z-index:3;text-align:center;padding:clamp(2.5rem,7vh,5rem) 1rem 1.5rem;
+  color:#071b3c;pointer-events:none;
+  background:linear-gradient(180deg,rgba(249,242,219,.74),rgba(249,242,219,.25) 74%,transparent);
+}
+.current-state-heading h1{margin:0 0 .25rem;font:600 clamp(2.75rem,7vw,6.75rem)/1 Georgia,serif}
+.current-state-heading p{margin:.25rem 0;font:italic clamp(1.15rem,2.6vw,2.3rem)/1.15 Georgia,serif}
+.current-state-field-entry{
+  position:absolute;top:.85rem;right:1rem;color:#071b3c;background:#f6efdde8;padding:.45rem .65rem;pointer-events:auto;
+}
+.current-state-navigation{
+  position:absolute;z-index:6;inset:auto 0 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.35rem 1.3rem;
+  padding:.45rem clamp(.65rem,3vw,2.5rem);background:#f6efdf;color:#071b3c;border-top:1px solid #b8a887;
+}
+.current-state-navigation>div{display:flex;gap:.1rem .9rem;flex-wrap:wrap}
+.current-state-navigation a,.current-state-navigation button{
+  padding:.5rem .25rem;min-height:44px;display:inline-flex;align-items:center;color:inherit;
+  font:600 clamp(.92rem,1.65vw,1.35rem)/1.2 Georgia,serif;background:none;border:0;text-decoration:underline;text-underline-offset:.2em;
+}
+.current-state-navigation button{cursor:pointer}
+.current-state-invite{margin:0 0 1rem}
+.current-state-navigation ~ .myenv-index-toggle{bottom:6.5rem}
+@media(max-width:560px){
+  .current-state-navigation ~ .myenv-index-toggle{bottom:8rem}
+}
