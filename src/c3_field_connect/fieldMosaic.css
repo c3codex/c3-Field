@@ -98,10 +98,19 @@
 }
 
 .c3-field-mosaic :is(a, .c3-field-mosaic-held) span {
-  padding: .45rem .7rem;
-  border-radius: .4rem;
-  background: #fff5dc;
-  font-weight: 700;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.c3-field-mosaic a:hover {
+  background: rgb(255 245 220 / 12%);
 }
 
 .c3-field-mosaic a:is(:hover, :focus-visible) {
@@ -109,14 +118,6 @@
   outline-offset: 3px;
 }
 
-@media (max-width: 560px) {
-  .c3-field-mosaic :is(a, .c3-field-mosaic-held) {
-    position: static;
-    display: flex;
-    min-height: 44px;
-    margin-top: .5rem;
-  }
-}
 
 .c3-field-receiver {
   min-height: 100vh;
@@ -155,10 +156,19 @@
 }
 
 .c3-connect-pavilion > button > span {
-  padding: .45rem .7rem;
-  border-radius: .4rem;
-  background: #fff5dc;
-  font-weight: 700;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.c3-connect-pavilion > button:hover {
+  background: rgb(255 245 220 / 12%);
 }
 
 .c3-connect-pavilion > button:focus-visible {
@@ -166,10 +176,3 @@
   outline-offset: 3px;
 }
 
-@media (max-width: 560px) {
-  .c3-connect-pavilion > button {
-    position: static;
-    width: auto !important;
-    margin-top: .5rem;
-  }
-}
