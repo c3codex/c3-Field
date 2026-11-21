@@ -36,7 +36,7 @@ export default function FieldReceiver({path}:{path:Path}){
   const create = path === "/create"
   const destination = destinations[preview]
   return <main className="c3-field-receiver">
-    <a href="/">c3 Field</a>
+    <nav aria-label="Encounter navigation" style={{display:"flex",justifyContent:"space-between",gap:"1rem",flexWrap:"wrap"}}><a href="/">c3 Field</a><a href="https://my.c3field.online/">Return to Current State →</a></nav>
     <h1>{create ? "Create" : "Contribute"}</h1>
     {standing === "loading" && <p role="status">Resolving encounter…</p>}
     {standing === "held" && <p role="status">This encounter is currently unavailable.</p>}
