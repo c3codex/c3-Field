@@ -1,7 +1,10 @@
 import {resolveRegisteredInitiativeProjection} from "../src/c3_field_connect/registeredInitiativeProjection"
 import {dnrDocument,isC3FieldHost} from "../src/shared/dnrPresentation"
+import {fieldOfPossibilityResponse} from "./_lib/field-of-possibility"
 
 type Env = {
+  SUPABASE_URL?: string
+  SUPABASE_SERVICE_ROLE_KEY?: string
   OPERATOR_DISPATCH_KEY?: string
   SUPABASE_ANON_KEY?: string
   VITE_SUPABASE_ANON_KEY?: string
@@ -330,6 +333,8 @@ function privateResponse(response: Response, clearCookie = false) {
 }
 
 const handleRequest: PagesFunction<Env> = async ({ request, env, next }) => {
+  const fieldLanding=await fieldOfPossibilityResponse(request,env)
+  if(fieldLanding)return fieldLanding
   const requestUrl = new URL(request.url)
   const pathname = requestUrl.pathname.replace(/\/$/, "") || "/"
   const c3OpsHost = requestUrl.hostname === "c3ops.c3field.online"

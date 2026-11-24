@@ -175,6 +175,7 @@ export default function MyEnvironmentEncounter(){
   const [state,setState]=useState<"claiming"|"loading"|"intro"|"ready"|"held">("loading")
   const [data,setData]=useState<EnvPayload|null>(null)
   const [message,setMessage]=useState("Opening your environment…")
+  const [accessRequired,setAccessRequired]=useState(false)
   const [runtimeComponents,setRuntimeComponents]=useState<RuntimeComponent[]>([])
   const [contextualComponents,setContextualComponents]=useState<RuntimeComponent[]>([])
   const [runtimeComponentContract,setRuntimeComponentContract]=useState("c1me_env_runtime_components_v6")
@@ -659,6 +660,7 @@ export default function MyEnvironmentEncounter(){
         const body=await response.json() as EnvPayload
         if(!active)return
         if(!response.ok||body.standing!=="environment_ready"||!body.environment||!body.envpac){
+          setAccessRequired(response.status===401&&body.standing==="environment_claim_required")
           setMessage(response.status===401&&body.standing==="environment_claim_required"
             ?"This browser has not carried its existing c3Field session onto the canonical My Environment host yet."
             :"Your environment is not available from this browser yet.")
@@ -1460,6 +1462,7 @@ export default function MyEnvironmentEncounter(){
     return null
   }
 
+  if(state==="held"&&accessRequired)return <main className="myenv-shell myenv-held"><section aria-labelledby="current-state-access"><p className="myenv-kicker">Current State</p><h1 id="current-state-access">Open your environment</h1><p>This browser does not have an active environment session. Use the email address you connected with to receive a secure access link.</p><a href="/api/my-environment-access-link">Open my existing Current State</a></section></main>
   if(state==="held" || (state!=="claiming" && state!=="loading" && (!data?.environment || !data.envpac))) return <DnrBackdrop/>
   if(state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
     return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p></section></main>

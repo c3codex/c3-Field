@@ -30,7 +30,10 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
     })
     if(!response.ok)throw new Error("current_resolution_failed")
     const resolved=await response.json() as Record<string,unknown>
+    if(resolved.env_key!==session.envKey||resolved.envpac_ref!==session.envpacKey||resolved.relationship_ref!==session.subjectKey)
+      return json({authenticated:true,standing:"CURRENT_held",reason:"current_environment_mismatch"},409)
     const tokens=Array.isArray(resolved.tokens)?resolved.tokens:[]
+    const accruals=Array.isArray(resolved.accruals)?resolved.accruals:[]
     return json({
       authenticated:true,
       standing:resolved.CURRENT_resolution==="resolved"?"CURRENT_resolved":"CURRENT_held",
@@ -38,6 +41,9 @@ export const onRequestGet:PagesFunction<PassageEnv>=async({request,env})=>{
       current_state_ref:resolved.current_state_ref||resolved.current_ref||null,
       token_count:tokens.length,
       tokens,
+      accrual_count:accruals.length,
+      accruals,
+      authority_created:false,
       current_state_distinct:true,
       c1_projection:"relation_lights",
       c2_projection:"map_when_location_qualified",
