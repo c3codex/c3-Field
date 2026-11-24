@@ -120,6 +120,8 @@ type OwnerLifecyclePayload={
   message?:string
   receipt_key?:string
   manifest?:Record<string,unknown>
+  challenge_key?:string
+  expires_at?:string
   termination_receipt_key?:string
   terminal_manifest?:Record<string,unknown>
 }
@@ -282,6 +284,8 @@ export default function MyEnvironmentEncounter(){
   const [ownerLifecycleBusy,setOwnerLifecycleBusy]=useState(false)
   const [ownerExportReceipt,setOwnerExportReceipt]=useState("")
   const [ownerTerminationDisposition,setOwnerTerminationDisposition]=useState<"retain_c3_field_custody"|"portable_export">("retain_c3_field_custody")
+  const [ownerConsent,setOwnerConsent]=useState<{key:string;effect:string;expires:string}|null>(null)
+  const [ownerConsentCode,setOwnerConsentCode]=useState("")
   const [ownerTerminationText,setOwnerTerminationText]=useState("")
   const [ownerTerminationHistoryAck,setOwnerTerminationHistoryAck]=useState(false)
   const [ownerTerminationReentryAck,setOwnerTerminationReentryAck]=useState(false)
@@ -360,6 +364,7 @@ export default function MyEnvironmentEncounter(){
       const body=await response.json() as OwnerLifecyclePayload
       if(!response.ok||body.standing!=="export_ready"||!body.manifest||!body.receipt_key)
         throw new Error(body.message||"Your PAC package could not be prepared.")
+      setOwnerConsent(null);setOwnerConsentCode("")
       setOwnerExportReceipt(body.receipt_key)
       downloadOwnerManifest(body.manifest,"my-env-owned-pacs.json")
       setOwnerLifecycleNotice("Portable package prepared. Ownership and lineage remain intact.")
@@ -382,12 +387,19 @@ export default function MyEnvironmentEncounter(){
       setOwnerLifecycleNotice("Export your owned PAC package before terminating with the export option.")
       return
     }
-    setOwnerLifecycleBusy(true);setOwnerLifecycleNotice("Terminating this My Env…")
+    const effect=JSON.stringify([ownerTerminationDisposition,ownerTerminationDisposition==="portable_export"?ownerExportReceipt:null])
+    const confirming=!!ownerConsent&&ownerConsent.effect===effect&&Date.parse(ownerConsent.expires)>Date.now()
+    if(confirming&&!/^[a-f0-9]{64}$/.test(ownerConsentCode.trim())){
+      setOwnerLifecycleNotice("Enter the code sent to your verified contact.")
+      return
+    }
+    setOwnerLifecycleBusy(true);setOwnerLifecycleNotice(confirming?"Confirming withdrawal…":"Requesting owner confirmation…")
     try{
       const response=await fetch("/api/my-environment-owner-lifecycle",{
         method:"POST",headers:{"content-type":"application/json","accept":"application/json"},
         body:JSON.stringify({
-          action:"terminate",
+          action:confirming?"terminate":"request_termination_consent",
+          ...(confirming?{owner_consent_key:ownerConsent!.key,owner_consent_token:ownerConsentCode.trim()}:{}),
           disposition:ownerTerminationDisposition,
           portability_receipt_key:ownerTerminationDisposition==="portable_export"?ownerExportReceipt:null,
           confirmation:ownerTerminationText,
@@ -396,7 +408,15 @@ export default function MyEnvironmentEncounter(){
         })
       })
       const body=await response.json() as OwnerLifecyclePayload
+      if(!confirming){
+        if(!response.ok||body.standing!=="confirmation_sent"||!body.challenge_key||!body.expires_at)throw new Error(body.message||"Owner confirmation was held.")
+        setOwnerConsent({key:body.challenge_key,effect,expires:body.expires_at})
+        setOwnerConsentCode("")
+        setOwnerLifecycleNotice("Check your verified email and enter the confirmation code. Your environment is still active.")
+        return
+      }
       if(!response.ok||body.standing!=="terminated")throw new Error(body.message||"Termination was held.")
+      setOwnerConsent(null);setOwnerConsentCode("")
       if(body.terminal_manifest)downloadOwnerManifest(body.terminal_manifest,"my-env-terminal-manifest.json")
       setOwnerLifecycleNotice("My Env terminated. Active participation and passage are closed.")
       window.setTimeout(()=>window.location.assign("https://c3field.online/"),250)
@@ -1644,7 +1664,7 @@ export default function MyEnvironmentEncounter(){
               <h3>End this environment</h3>
               <p>This revokes active My Env sessions, initiative visibility, active connections, and new CanCom passage rooted through this environment. Historical records and PAC lineage remain.</p>
               <label>Owned PAC disposition
-                <select value={ownerTerminationDisposition} onChange={event=>setOwnerTerminationDisposition(event.target.value as "retain_c3_field_custody"|"portable_export")}>
+                <select value={ownerTerminationDisposition} disabled={ownerLifecycleBusy} onChange={event=>{setOwnerConsent(null);setOwnerConsentCode("");setOwnerTerminationDisposition(event.target.value as "retain_c3_field_custody"|"portable_export")}}>
                   <option value="retain_c3_field_custody">Leave c3 Field as custodian</option>
                   <option value="portable_export">Export my owned PAC package first</option>
                 </select>
@@ -1655,11 +1675,15 @@ export default function MyEnvironmentEncounter(){
               <label>Type TERMINATE MY ENVIRONMENT
                 <input value={ownerTerminationText} onChange={event=>setOwnerTerminationText(event.target.value)} autoComplete="off" />
               </label>
+              {ownerConsent&&<label>Owner confirmation code
+                <input type="password" value={ownerConsentCode} onChange={event=>setOwnerConsentCode(event.target.value)} autoComplete="off" spellCheck={false} maxLength={64} disabled={ownerLifecycleBusy}/>
+              </label>}
+              {ownerConsent&&<button type="button" disabled={ownerLifecycleBusy} onClick={()=>{setOwnerConsent(null);setOwnerConsentCode("")}}>REQUEST A NEW CODE</button>}
               <button
                 type="button"
                 disabled={ownerLifecycleBusy||ownerTerminationText!=="TERMINATE MY ENVIRONMENT"||!ownerTerminationHistoryAck||!ownerTerminationReentryAck||(ownerTerminationDisposition==="portable_export"&&!ownerExportReceipt)}
                 onClick={()=>void terminateMyEnv()}
-              >{ownerLifecycleBusy?"WORKING…":"TERMINATE MY ENVIRONMENT"}</button>
+              >{ownerLifecycleBusy?"WORKING…":ownerConsent?"CONFIRM TERMINATION":"REQUEST CONFIRMATION"}</button>
               <p><small>No hard delete. Ownership survives termination; custody and active standing are handled separately.</small></p>
             </article>
           </div>}
