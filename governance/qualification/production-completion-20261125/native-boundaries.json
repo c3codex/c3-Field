@@ -1,0 +1,39 @@
+{
+  "observed_on": "2026-11-25",
+  "project": "zfihrspxvennjzazxcbj",
+  "installation_pickup": {
+    "landing_installation_pickup": {
+      "count": 0,
+      "reason": "manifest_missing_or_ambiguous",
+      "standing": "HLD"
+    },
+    "reconciliation_installation_pickup": {
+      "count": 0,
+      "reason": "manifest_missing_or_ambiguous",
+      "standing": "HLD"
+    }
+  },
+  "preimages": [
+    {
+      "proname": "c3_pac_set_personal_encounter_projection_v1",
+      "args": "p_pac_key text, p_subject_key text, p_action text, p_encounter_key text, p_surface_scope text",
+      "definition_sha256": "29fb0b821f7337a0b5e41dc871c4ee63ecbeb94205f6e66c031f75d5525f02f5"
+    },
+    {
+      "proname": "terminate_my_env_owner_v1",
+      "args": "p_request jsonb",
+      "definition_sha256": "95b81d207113027b368536235bdaf33a4c0758aa12957d3bfa97c437444de844"
+    },
+    {
+      "proname": "free_resolve_pac_encounter_v1",
+      "args": "p_free_call_key text, p_selector_type text, p_selector_value text",
+      "definition_sha256": "6e960f5b9dec20f533f85a18be55c5e9e070881b4fc65fe65aef08448611802c"
+    },
+    {
+      "proname": "c3_validate_pac_supersession_v1",
+      "args": "p_presented_pac jsonb, p_lock_prior boolean",
+      "definition_sha256": "f28c9a11e3ffa035135e520f6fdcbb190dabef3e51d19647fddbf3b09f586861"
+    }
+  ],
+  "note": "Pickup refusal is installation-route evidence only, not a participant runtime prerequisite; exact native PAC registration role calls were absent in scoped readback."
+}

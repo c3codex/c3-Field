@@ -1,0 +1,21 @@
+{
+  "scope": "isolated system succession fixture; no native registration",
+  "checks": [
+    "PASS legacy requires qualified evidence",
+    "PASS unbacked Registrar reference cannot qualify transition",
+    "PASS exact evidence-qualified transition",
+    "PASS returned owner is the qualified system",
+    "PASS different successor remains held",
+    "PASS changed successor bytes remain held",
+    "PASS predecessor member drift",
+    "PASS registered system/legal-parent evidence required",
+    "PASS withdrawn qualification",
+    "PASS missing Registrar receipt",
+    "PASS locked finalization preflight",
+    "PASS predecessor unchanged",
+    "PASS concurrent member drift blocked",
+    "PASS existing hardened succession unchanged",
+    "PASS existing hardened owner refusal unchanged",
+    "{\"checks\":15,\"scope\":\"isolated-native-function-fixture-not-registration-or-production-acceptance\"}"
+  ]
+}

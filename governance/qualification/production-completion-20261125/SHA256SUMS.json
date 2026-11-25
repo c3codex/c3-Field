@@ -1,0 +1,82 @@
+[
+  {
+    "path": ".gitattributes",
+    "bytes": 94,
+    "sha256": "69a19c8761ea1a156198c880d06520dbd7fc68184142943dff6e016eb03b20a2"
+  },
+  {
+    "path": "build-candidates.mjs",
+    "bytes": 7936,
+    "sha256": "c32fa7db8e5810ec5234211a0853303e266ebde90f5cc762cdfa5ed45a5ca305"
+  },
+  {
+    "path": "free-owner-authorization.candidate.sql",
+    "bytes": 9052,
+    "sha256": "efce36e39a296e9ae9f77eb0d98c6a7f6109dd7fc976882ccd84ec4452e26714"
+  },
+  {
+    "path": "hosted-readback.json",
+    "bytes": 566,
+    "sha256": "058bee5917f7a5028700577cbc382216cec12d4c64b057fffd7e707cec40ef6b"
+  },
+  {
+    "path": "native-boundaries.json",
+    "bytes": 1506,
+    "sha256": "8a0e1d7f68825e873b1e10f024666610a2f957dcf092fa26ed5f6f5455e9fe81"
+  },
+  {
+    "path": "ONE.md",
+    "bytes": 8571,
+    "sha256": "9fbaf0463759fdd2f74074c56fc16ccbec983a28acf980309ffdf42186548ff0"
+  },
+  {
+    "path": "projection-withdrawal.candidate.sql",
+    "bytes": 9823,
+    "sha256": "eacf4d4005b722ef48fd2eb3ab8b07d869c7800af7f96493a82a5479f6fcc741"
+  },
+  {
+    "path": "qualify-runtime.mjs",
+    "bytes": 6381,
+    "sha256": "8aa7eaf54869439a780d92ac0114fb5ecf44697825f9760067b22b41bcbd0c07"
+  },
+  {
+    "path": "qualify-system-succession.mjs",
+    "bytes": 2732,
+    "sha256": "5e8f4573f70cee8734d41984ef5d34c635ac5a15161c13a618f72bca3b826953"
+  },
+  {
+    "path": "registered-21.source.md",
+    "bytes": 4820,
+    "sha256": "3248205591e47b3330a4e73a40372ac455575f50f8ef19bbc95877b21e0cd2e2"
+  },
+  {
+    "path": "runtime-qualification.json",
+    "bytes": 617,
+    "sha256": "fbd9fefb3a3f27053ed6adf8597588ed511efeff0c4dd4118486d4ef3b4fd729"
+  },
+  {
+    "path": "runtime-shapes.json",
+    "bytes": 2460,
+    "sha256": "e242740cb0a0257471c9653724b3c05f7f6eb9b6afebccc7da1f71ddabefaa6d"
+  },
+  {
+    "path": "runtime.install-candidate.sql",
+    "bytes": 30615,
+    "sha256": "37e7c865e3d362c23fc702a4cc16c3cf34e46946e533e18484b45158efa71cd8"
+  },
+  {
+    "path": "system-succession-qualification.json",
+    "bytes": 909,
+    "sha256": "7406c6c47bcc501026d155fc6b21d5162230c445a3dc574a334b65c368303ceb"
+  },
+  {
+    "path": "system-succession.candidate.sql",
+    "bytes": 10674,
+    "sha256": "566f5accb42a45936858787ebb0998f791ca90cb6be759e5f292b2ecc087aff3"
+  },
+  {
+    "path": "system-succession.install-candidate.sql",
+    "bytes": 11321,
+    "sha256": "6260562b12f345875b27e6f08a174623bd8ce0c7e99fa254325cd4a365906cec"
+  }
+]
