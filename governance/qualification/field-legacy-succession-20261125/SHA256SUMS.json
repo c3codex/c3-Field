@@ -1,0 +1,82 @@
+[
+  {
+    "path": ".gitattributes",
+    "bytes": 99,
+    "sha256": "2e0e63a46f545fb2e57b651c972a9832204797f3ca36617ceb37b061af0c720b"
+  },
+  {
+    "path": "approved-landing-content.candidate.json",
+    "bytes": 8248,
+    "sha256": "1590e0d4d2390f65e5dc328fed42930988aec91618036b660b90451114301a65"
+  },
+  {
+    "path": "compile-approved-content.mjs",
+    "bytes": 6009,
+    "sha256": "ab2489a68b49f7162f1612cb153284de349c2b180534857b81144d9b41c2c238"
+  },
+  {
+    "path": "hosted-http.observed.json",
+    "bytes": 1374,
+    "sha256": "3d47297f3c7ad8a103401988299156bf5204c2cdbb68f8dbd348b271c7d7e16c"
+  },
+  {
+    "path": "install.candidate.sql",
+    "bytes": 10883,
+    "sha256": "c84877384985337e14c70590be217bc6ddae55bb542bde8f4a5df47a87874cbd"
+  },
+  {
+    "path": "legacy-succession.candidate.sql",
+    "bytes": 10076,
+    "sha256": "1f2c3f425e215e01c7cdd4f81c925e68514fff91dadee637ae5fdc2bcbd28d58"
+  },
+  {
+    "path": "native-readback.observed.json",
+    "bytes": 811,
+    "sha256": "e6bfca027a46a335956f46eb4ab0407ba0ecb33f56c6a7fa4bb4a6153abfc1f1"
+  },
+  {
+    "path": "OAR1.md",
+    "bytes": 10179,
+    "sha256": "993bccf346a22036edfbd36af269dba9141a604a1a32602353a60b04e4cbec29"
+  },
+  {
+    "path": "package-installation.mjs",
+    "bytes": 1278,
+    "sha256": "8beb329d92615fdb8210bcabf0bf3209c720e5e28a0c9d18f2890fbf98bae41e"
+  },
+  {
+    "path": "predecessor.observed.json",
+    "bytes": 5415,
+    "sha256": "57713f21d31cbd3a836a909108e44cf8eea860ebb6d36fbb1046cca96fd50ee0"
+  },
+  {
+    "path": "preview-source.ts",
+    "bytes": 1459,
+    "sha256": "3b9bc6e936346dd1b3bd53f10b2ca221ed9c228689025ff745e34d0fb2bcb8bc"
+  },
+  {
+    "path": "qualify-succession.mjs",
+    "bytes": 8016,
+    "sha256": "2c0d0d6c4fb14542f3ad981ee70bd5b6ff3f6ae1d188c6d5be29614ae954e562"
+  },
+  {
+    "path": "rollback-validator.sql",
+    "bytes": 4636,
+    "sha256": "262abf4634d86b4fd028216483ba71e1e8bbfa3edee1851e7a6efe25f887555f"
+  },
+  {
+    "path": "sources/custody-index.json",
+    "bytes": 932,
+    "sha256": "32c24e0ed2cb3f264111517023afb78f689249034f961918a122414f0d40f4d5"
+  },
+  {
+    "path": "sources/Public-Landing-DesignPAC-v1.0.source.md",
+    "bytes": 9191,
+    "sha256": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45"
+  },
+  {
+    "path": "sources/Public-Landing-WebPAC-v1.0.source.md",
+    "bytes": 7709,
+    "sha256": "4e493faafb6ba2ebeb9045a4797a28180c0c1fdb95d3c48fdcd841e05075fc74"
+  }
+]

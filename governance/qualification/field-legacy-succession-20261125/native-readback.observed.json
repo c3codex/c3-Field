@@ -1,0 +1,26 @@
+{
+  "observed_on": "2026-11-25",
+  "project": "zfihrspxvennjzazxcbj",
+  "classification": "Observed read-only; no registration or authenticated participant acceptance",
+  "results": [
+    {
+      "accrual_rows": 11,
+      "token_rows": 10,
+      "tokens_without_link": 10,
+      "profile_pac_rows": 2,
+      "public_free": {
+        "reason": "registered_snapshot_not_resolved",
+        "standing": "DNR",
+        "free_call_key": "c3_public_webpac_encounter"
+      },
+      "institutional_eligibility": {
+        "reason": "HLD_INSTITUTIONAL_SEAT_REQUIRED",
+        "standing": "HLD",
+        "institution_key": "c3_community_partners_dao_llc",
+        "institution_environment_key": "env_c3_field"
+      },
+      "effective_landing_successor_companions": 0,
+      "exact_legacy_qualifications": 0
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# Preserve exact custody and installation bytes on Windows checkouts.
+* -text whitespace=cr-at-eol

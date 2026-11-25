@@ -165,9 +165,10 @@ async function signedFoundationalSetUrl(env: PassageEnv, deps: Dependencies) {
   })
   if (!response.ok) throw new Error("foundational_set_sign_failed")
   const result = await response.json().catch(() => null)
-  if (!result || typeof result !== "object") throw new Error("foundational_set_sign_shape")
-  const signed = typeof result.signedURL === "string" ? result.signedURL :
-    typeof result.signedUrl === "string" ? result.signedUrl : null
+  if (!result || typeof result !== "object" || Array.isArray(result)) throw new Error("foundational_set_sign_shape")
+  const signedResult = result as Record<string, unknown>
+  const signed = typeof signedResult.signedURL === "string" ? signedResult.signedURL :
+    typeof signedResult.signedUrl === "string" ? signedResult.signedUrl : null
   if (!signed) throw new Error("foundational_set_sign_shape")
   return signed.startsWith("http://") || signed.startsWith("https://") ? signed : PROJECT_URL + signed
 }

@@ -1462,7 +1462,7 @@ export default function MyEnvironmentEncounter(){
     return null
   }
 
-  if(state==="held"&&accessRequired)return <main className="myenv-shell myenv-held"><section aria-labelledby="current-state-access"><p className="myenv-kicker">Current State</p><h1 id="current-state-access">Open your environment</h1><p>This browser does not have an active environment session. Use the email address you connected with to receive a secure access link.</p><a href="/api/my-environment-access-link">Open my existing Current State</a></section></main>
+  if(state==="held"&&accessRequired)return <main className="myenv-shell myenv-held"><section aria-labelledby="current-state-access"><p className="myenv-kicker">Current State</p><h1 id="current-state-access">Open your environment</h1><p>This browser does not have an active environment session. Use the email address you connected with to receive a secure access link.</p><a href="/api/my-environment-access-link">Open my existing Current State</a><p>New to Current State? <a href="/connect">Create your Current State</a></p></section></main>
   if(state==="held" || (state!=="claiming" && state!=="loading" && (!data?.environment || !data.envpac))) return <DnrBackdrop/>
   if(state==="claiming"||state==="loading"||!data?.environment||!data.envpac){
     return <main className="myenv-shell myenv-held"><section><p className="myenv-kicker">c3 Community Partners</p><h1>My Environment</h1><p>{message}</p></section></main>

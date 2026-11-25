@@ -1,0 +1,38 @@
+[
+  {
+    "url": "https://c3field.online/",
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "body_sha256": "c4c3446d532cbd94826cea7238b154319382cac14ee5e21050aae2ad22dce2f5"
+  },
+  {
+    "url": "https://c3field.online/api/public-surface",
+    "status": 409,
+    "content_type": "application/json",
+    "body_sha256": "774a5957e1e1b76e5ba7d6a9b803e215b28d31ac0fae1df873a96758e7fb35ef"
+  },
+  {
+    "url": "https://my.c3field.online/connect",
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "body_sha256": "d2a20784f13f9422d2107d6364e8921de64c6a4ad3554f5f8786931414aaba33"
+  },
+  {
+    "url": "https://my.c3field.online/api/c3-community-connect-package",
+    "status": 200,
+    "content_type": "application/json; charset=utf-8",
+    "body_sha256": "6a26f1dd2d236aa5ec859875b743e8937514e6594f8de13a518a141c27944cbf"
+  },
+  {
+    "url": "https://my.c3field.online/api/my-environment-current",
+    "status": 401,
+    "content_type": "application/json; charset=utf-8",
+    "body_sha256": "63da9cb02e48211241528988043e51119011d4f93033c813a75ca94460e2dcdc"
+  },
+  {
+    "url": "https://my.c3field.online/api/my-environment-canopy",
+    "status": 401,
+    "content_type": "application/json; charset=utf-8",
+    "body_sha256": "0d46d80bc5964b65921ccf70065db908f5b37f41b75072a70e3df88311aa4da9"
+  }
+]
