@@ -1,0 +1,82 @@
+{
+  "pac_key": "c3field_public_landing_designpac_v1",
+  "envpac_key": "c3envpac_field_v0_1",
+  "pac_type": "DesignPac",
+  "schema_key": "pac_schema_designpac_v1_1",
+  "version": "v1",
+  "standing": "registered_complete",
+  "custody_uri": "https://github.com/c3codex/c3-Field/blob/837b720446e53c337e8b63452395c2696b09e9e5/governance/qualification/field-legacy-succession-20261125/sources/Public-Landing-DesignPAC-v1.0.source.md",
+  "content_sha256": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45",
+  "source_authority": "https://github.com/c3codex/c3-Field/blob/837b720446e53c337e8b63452395c2696b09e9e5/governance/qualification/field-legacy-succession-20261125/sources/Public-Landing-DesignPAC-v1.0.source.md",
+  "architecture_version": "c3pac_v0.1",
+  "owner_subject_type": "system",
+  "owner_subject_key": "c3_field",
+  "owner_environment_key": "env_c3_field",
+  "custodian_subject_type": "system",
+  "custodian_subject_key": "c3_field",
+  "custody_provider": "github",
+  "authority_effect": "none",
+  "release_state": "public_release_authorized",
+  "execution_authority_state": "presentation_only_no_execution_authority",
+  "formation_state": "formed",
+  "return_evidence_required": true,
+  "is_effective": true,
+  "metadata": {
+    "operator": "op044",
+    "executor": "codex",
+    "legal_parent": "c3_community_partners_dao_llc",
+    "source_sha256": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45",
+    "companion_role": "public_landing_design_source_package",
+    "scope": "presentation_only",
+    "no_participant_authority": true
+  },
+  "model_bindings": [
+    {
+      "circuit_key": "c1",
+      "env_key": "env_c3_community_connect",
+      "relation_role": "public_orientation_design"
+    }
+  ],
+  "members": [
+    {
+      "member_key": "c3field_public_landing_design_source_v1",
+      "member_kind": "record",
+      "member_role": "design_component",
+      "source_object_key": "c3field_public_landing_design_source_v1",
+      "custody_provider": "github",
+      "custody_location": "https://github.com/c3codex/c3-Field/blob/837b720446e53c337e8b63452395c2696b09e9e5/governance/qualification/field-legacy-succession-20261125/sources/Public-Landing-DesignPAC-v1.0.source.md",
+      "custody_identifier": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45",
+      "integrity_algorithm": "sha256",
+      "integrity_value": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45",
+      "standing": "active",
+      "required": true,
+      "release_scope": "registered"
+    }
+  ],
+  "relations": [],
+  "encounter_scopes": [
+    {
+      "surface_type": "c3_field",
+      "encounter_key": "c3field_public_landing_design_definition",
+      "free_call_key": "c3_public_webpac_encounter",
+      "selector_type": "encounter",
+      "selector_value": "c3field_public_landing_design_definition"
+    }
+  ],
+  "free_projections": [
+    {
+      "free_call_key": "c3_public_webpac_encounter",
+      "encounter_key": "c3field_public_landing_design_definition",
+      "projection": {
+        "projection_type": "registered_design_definition",
+        "designpac_key": "c3field_public_landing_designpac_v1",
+        "source_uri": "https://github.com/c3codex/c3-Field/blob/837b720446e53c337e8b63452395c2696b09e9e5/governance/qualification/field-legacy-succession-20261125/sources/Public-Landing-DesignPAC-v1.0.source.md",
+        "source_sha256": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45",
+        "release_state": "public",
+        "authority_effect": "none",
+        "frontend_invention": false,
+        "presentation_only": true
+      }
+    }
+  ]
+}

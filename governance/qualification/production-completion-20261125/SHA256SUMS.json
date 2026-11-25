@@ -10,6 +10,11 @@
     "sha256": "c32fa7db8e5810ec5234211a0853303e266ebde90f5cc762cdfa5ed45a5ca305"
   },
   {
+    "path": "EXECUTION-RETURN.md",
+    "bytes": 5886,
+    "sha256": "4fc56ec410257879962199f7046ae5f9cb3de5af25b47a21f8d29a8a8bcc665e"
+  },
+  {
     "path": "free-owner-authorization.candidate.sql",
     "bytes": 9052,
     "sha256": "efce36e39a296e9ae9f77eb0d98c6a7f6109dd7fc976882ccd84ec4452e26714"
@@ -18,6 +23,11 @@
     "path": "hosted-readback.json",
     "bytes": 566,
     "sha256": "058bee5917f7a5028700577cbc382216cec12d4c64b057fffd7e707cec40ef6b"
+  },
+  {
+    "path": "landing-design.presented.json",
+    "bytes": 3629,
+    "sha256": "72c2e438972038096aabe2e1de644070f935090ba1d4f9896bd0f08eb6560415"
   },
   {
     "path": "native-boundaries.json",
@@ -30,9 +40,14 @@
     "sha256": "14380cd345290a0b9339b5f70d4b8e8aff0e43d1ae02f227964e28413260dafe"
   },
   {
+    "path": "native-design-registration-receipt.json",
+    "bytes": 5287,
+    "sha256": "94f4ed99b07e4f900aea178fe7c66f03682de799d06cd5baf0a0cc9d0255d7ac"
+  },
+  {
     "path": "ONE.md",
-    "bytes": 8577,
-    "sha256": "30ec28b0e0738a689e765b6bd02faa5f55de3c9fb208beabc29865ec80a0fed3"
+    "bytes": 9012,
+    "sha256": "59d4a548ff9742a20f2d42b4efd3a9d8514a57fdb57b3ed67d849d6c47cdf21e"
   },
   {
     "path": "PRODUCTION-DEPENDENCIES.md",

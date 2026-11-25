@@ -1,5 +1,7 @@
 # Production continuation — consolidated ONE
 
+**Latest execution:** see `EXECUTION-RETURN.md` and `native-design-registration-receipt.json`. The companion DesignPAC is now natively registered and its design-definition FREE encounter returns ACT. Root succession, governing-source integrity, media qualification and hosted release remain separately unresolved. Earlier zero-native-effect statements below describe the prior source-only continuation, not this subsequent execution.
+
 Operator op044; Registrar Chazz; Executor Codex. Execution `codex_production_completion_20261125_001`, continuing PR #114 / `ca512bd8`, within the existing worksets. This delta references the existing qualification packets rather than rebuilding them.
 
 ## ACT — completed source effects

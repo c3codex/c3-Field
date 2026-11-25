@@ -69,12 +69,12 @@ export async function verifyLandingRegistration(resolved:unknown,env:Env):Promis
   const [pacs,receipts,relations,components]=await Promise.all([
     registeredRows(env,'c3_pac',{pac_key:'eq.'+designKey,is_effective:'eq.true',superseded_at:'is.null'},'pac_key,pac_type,registration_protocol,registration_sha256,boundary_evaluation_key,release_state,authority_effect'),
     registeredRows(env,'c3_pac_registration_receipt',{pac_key:'eq.'+designKey,standing:'eq.registered',registration_sha256:'eq.'+designHash},'pac_key,boundary_evaluation_key,registration_sha256'),
-    registeredRows(env,'c3_pac_relation',{source_pac_key:'eq.'+designKey,target_kind:'eq.pac',target_key:'eq.'+webpacKey,relation_type:'eq.supplements',standing:'eq.active'},'relation_key'),
+    registeredRows(env,'c3_pac_relation',{source_pac_key:'eq.'+webpacKey,target_kind:'eq.pac',target_key:'eq.'+designKey,relation_type:'eq.source_package',standing:'eq.active'},'relation_key'),
     registeredRows(env,'c3_pac_member',{pac_key:'eq.'+designKey,member_role:'eq.design_component',standing:'eq.active'},'integrity_value,custody_location')
   ])
   if(pacs.length!==1||receipts.length!==1||relations.length!==1||
     pacs[0].pac_type!=='DesignPac'||pacs[0].registration_protocol!=='registrar_v1'||pacs[0].registration_sha256!==designHash||
-    pacs[0].release_state!=='public'||pacs[0].authority_effect!=='none'||
+    pacs[0].release_state!=='public_release_authorized'||pacs[0].authority_effect!=='none'||
     pacs[0].boundary_evaluation_key!==receipts[0].boundary_evaluation_key||
     !components.some(component=>component.integrity_value===design.source_sha256&&text(component.custody_location))||
     design.source_sha256!=='2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45')return false

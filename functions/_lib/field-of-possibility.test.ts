@@ -24,7 +24,7 @@ function registeredFetch(f:any,missing=''){return async(input:RequestInfo|URL)=>
   const name=new URL(String(input)).pathname.split('/').pop()
   if(name===missing)return Response.json([])
   const hash=f.snapshot.public_landing.design.registration_sha256
-  const records:Record<string,unknown[]>={c3_pac:[{pac_type:'DesignPac',registration_protocol:'registrar_v1',registration_sha256:hash,boundary_evaluation_key:'evaluation',release_state:'public',authority_effect:'none'}],c3_pac_registration_receipt:[{registration_sha256:hash,boundary_evaluation_key:'evaluation'}],c3_pac_relation:[{relation_key:'registered-companion'}],c3_pac_boundary_evaluation:[{notchazz_result:'PASS',presented_registration_sha256:hash}],c3ops_asset_record:[{standing:'operator_approved_webpac_reference',hash_algorithm:'sha256',content_hash:'b'.repeat(64),free_eligibility:true,current_free_binding:'/api/free-media?asset=registered_social',public_retrieval_standing:'bounded_public_runtime',src_key:'registered-source',license_or_use_rights:'fixture-qualified-rights'}],codex_source_reference:[{source_key:'registered-source',source_hash:'fixture-committed-source'}]}
+  const records:Record<string,unknown[]>={c3_pac:[{pac_type:'DesignPac',registration_protocol:'registrar_v1',registration_sha256:hash,boundary_evaluation_key:'evaluation',release_state:'public_release_authorized',authority_effect:'none'}],c3_pac_registration_receipt:[{registration_sha256:hash,boundary_evaluation_key:'evaluation'}],c3_pac_relation:[{relation_key:'registered-companion'}],c3_pac_boundary_evaluation:[{notchazz_result:'PASS',presented_registration_sha256:hash}],c3ops_asset_record:[{standing:'operator_approved_webpac_reference',hash_algorithm:'sha256',content_hash:'b'.repeat(64),free_eligibility:true,current_free_binding:'/api/free-media?asset=registered_social',public_retrieval_standing:'bounded_public_runtime',src_key:'registered-source',license_or_use_rights:'fixture-qualified-rights'}],codex_source_reference:[{source_key:'registered-source',source_hash:'fixture-committed-source'}]}
   if(name==='c3_pac_member'){const role=new URL(String(input)).searchParams.get('member_role');return Response.json(role?[{integrity_value:f.snapshot.public_landing.design.source_sha256,custody_location:'fixture-custody'}]:[{integrity_algorithm:'sha256',integrity_value:'b'.repeat(64)}])}
   return Response.json(records[name!]||[])
 }}
@@ -32,6 +32,30 @@ test('companion registration, source custody, relation and media predicates are 
  const original=globalThis.fetch;const f=registrationFixture();const env={SUPABASE_URL:'https://registry.invalid',SUPABASE_SERVICE_ROLE_KEY:'fixture-only'}
  try{globalThis.fetch=registeredFetch(f);assert.equal(await verifyLandingRegistration(f,env),true)
   for(const missing of ['c3_pac','c3_pac_registration_receipt','c3_pac_relation','c3_pac_boundary_evaluation','c3ops_asset_record','codex_source_reference']){globalThis.fetch=registeredFetch(f,missing);assert.equal(await verifyLandingRegistration(f,env),false,missing)}
+ }finally{globalThis.fetch=original}
+})
+
+test('companion uses the registered release vocabulary and WebPAC source-package direction',async()=>{
+ const original=globalThis.fetch,f=registrationFixture(),env={SUPABASE_URL:'https://registry.invalid',SUPABASE_SERVICE_ROLE_KEY:'fixture-only'}
+ let relationChecked=false
+ try{
+  globalThis.fetch=async(input,init)=>{
+   const url=new URL(String(input))
+   if(url.pathname.endsWith('c3_pac_relation')){
+    assert.equal(url.searchParams.get('source_pac_key'),'eq.'+f.pac_key)
+    assert.equal(url.searchParams.get('target_key'),'eq.c3field_public_landing_designpac_v1')
+    assert.equal(url.searchParams.get('relation_type'),'eq.source_package')
+    relationChecked=true
+   }
+   return registeredFetch(f)(input,init)
+  }
+  assert.equal(await verifyLandingRegistration(f,env),true);assert.equal(relationChecked,true)
+  globalThis.fetch=async(input,init)=>{
+   const response=await registeredFetch(f)(input,init)
+   if(new URL(String(input)).pathname.endsWith('c3_pac')){const rows=await response.json() as any[];rows[0].release_state='private';return Response.json(rows)}
+   return response
+  }
+  assert.equal(await verifyLandingRegistration(f,env),false)
  }finally{globalThis.fetch=original}
 })
 test('approved source candidate retains seven chapters, full categories, navigation and truthful SEO',()=>{
