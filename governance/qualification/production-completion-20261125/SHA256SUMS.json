@@ -25,9 +25,19 @@
     "sha256": "8a0e1d7f68825e873b1e10f024666610a2f957dcf092fa26ed5f6f5455e9fe81"
   },
   {
+    "path": "native-dependency-readback.json",
+    "bytes": 14928,
+    "sha256": "14380cd345290a0b9339b5f70d4b8e8aff0e43d1ae02f227964e28413260dafe"
+  },
+  {
     "path": "ONE.md",
-    "bytes": 8571,
-    "sha256": "9fbaf0463759fdd2f74074c56fc16ccbec983a28acf980309ffdf42186548ff0"
+    "bytes": 8577,
+    "sha256": "30ec28b0e0738a689e765b6bd02faa5f55de3c9fb208beabc29865ec80a0fed3"
+  },
+  {
+    "path": "PRODUCTION-DEPENDENCIES.md",
+    "bytes": 7927,
+    "sha256": "953b91833e989a937ce25afba1c0bfaedae99be588dd694f7ffc64294ea97daf"
   },
   {
     "path": "projection-withdrawal.candidate.sql",
@@ -63,6 +73,11 @@
     "path": "runtime.install-candidate.sql",
     "bytes": 30615,
     "sha256": "37e7c865e3d362c23fc702a4cc16c3cf34e46946e533e18484b45158efa71cd8"
+  },
+  {
+    "path": "SRC-V1.1-ACCEPTANCE.md",
+    "bytes": 7258,
+    "sha256": "dd710410b5f91eaf75df60bb68f7c851624fb17a25bd2f9d1201eec90332e460"
   },
   {
     "path": "system-succession-qualification.json",
