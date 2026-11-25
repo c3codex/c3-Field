@@ -1,0 +1,25 @@
+{
+  "evidence": {
+    "oar_matches": null,
+    "receipt_indexes": [
+      "CREATE UNIQUE INDEX c3_my_env_owner_lifecycle_receipt_pkey ON public.c3_my_env_owner_lifecycle_receipt USING btree (receipt_key)",
+      "CREATE INDEX c3_my_env_owner_lifecycle_receipt_owner_idx ON public.c3_my_env_owner_lifecycle_receipt USING btree (relationship_key, envpac_key, created_at DESC)",
+      "CREATE INDEX c3_my_env_owner_lifecycle_receipt_env_idx ON public.c3_my_env_owner_lifecycle_receipt USING btree (env_key)",
+      "CREATE INDEX c3_my_env_owner_lifecycle_receipt_envpac_idx ON public.c3_my_env_owner_lifecycle_receipt USING btree (envpac_key)"
+    ],
+    "receipt_triggers": null,
+    "receipt_constraints": [
+      "CHECK ((action = ANY (ARRAY['portable_export'::text, 'custody_transfer'::text, 'terminate'::text])))",
+      "FOREIGN KEY (env_key) REFERENCES c3_environment(env_key) ON UPDATE CASCADE ON DELETE RESTRICT",
+      "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE ON DELETE RESTRICT",
+      "PRIMARY KEY (receipt_key)",
+      "FOREIGN KEY (relationship_key) REFERENCES crs_relationship(relationship_key) ON UPDATE CASCADE ON DELETE RESTRICT",
+      "CHECK ((standing = ANY (ARRAY['prepared'::text, 'completed'::text, 'held'::text, 'cancelled'::text])))"
+    ],
+    "personal_envpac_uniqueness": [
+      "CREATE UNIQUE INDEX c3_envpac_pkey ON public.c3_envpac USING btree (envpac_key)",
+      "CREATE UNIQUE INDEX c3_envpac_env_key_version_key ON public.c3_envpac USING btree (env_key, version)",
+      "CREATE UNIQUE INDEX c3_envpac_one_effective_per_env ON public.c3_envpac USING btree (env_key) WHERE (is_effective = true)"
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "evidence": {
+    "schema": {
+      "pac_type": "EvidencePac",
+      "standing": "active",
+      "is_active": true,
+      "created_at": "2026-10-07T01:06:41.763102+00:00",
+      "schema_key": "pac_schema_evidencepac_v1_1",
+      "source_ref": "governance/maturity/c3_field_system_maturity_program_v1/decisions/m1_02_executable_pac_schema_rules_v1.md",
+      "updated_at": "2026-10-07T01:06:41.763102+00:00",
+      "release_rules": {
+        "requires_effective": true,
+        "allowed_release_states_for_resolution": [
+          "private",
+          "evidence_open",
+          "public_release_authorized"
+        ]
+      },
+      "schema_version": "v1.1",
+      "required_fields": [
+        "pac_key",
+        "envpac_key",
+        "pac_type",
+        "version",
+        "standing",
+        "custody_uri",
+        "source_authority",
+        "schema_key",
+        "architecture_version",
+        "custodian_subject_type",
+        "custodian_subject_key",
+        "custody_provider",
+        "authority_effect",
+        "release_state",
+        "execution_authority_state",
+        "formation_state",
+        "return_evidence_required"
+      ],
+      "conditional_rules": [],
+      "optional_member_rules": [],
+      "required_member_rules": [
+        {
+          "min": 1,
+          "kind": "evidence",
+          "role": "evidence_source",
+          "custody_required": true,
+          "integrity_required": true
+        }
+      ],
+      "required_relation_rules": [],
+      "requires_c3_model_binding": true
+    },
+    "receipt_counts": null,
+    "scope_constraints": [
+      "CHECK ((btrim(encounter_key) <> ''::text))",
+      "FOREIGN KEY (boundary_evaluation_key) REFERENCES c3_pac_boundary_evaluation(evaluation_key) ON UPDATE RESTRICT ON DELETE RESTRICT",
+      "FOREIGN KEY (free_call_key) REFERENCES c3_free_call(free_call_key) ON UPDATE RESTRICT ON DELETE RESTRICT",
+      "FOREIGN KEY (pac_key) REFERENCES c3_pac(pac_key) ON UPDATE CASCADE ON DELETE RESTRICT",
+      "PRIMARY KEY (scope_key)",
+      "CHECK (((selector_type IS NULL) OR ((selector_type = 'none'::text) AND (selector_value IS NULL)) OR ((selector_type <> 'none'::text) AND (selector_value IS NOT NULL) AND (btrim(selector_value) <> ''::text))))",
+      "CHECK (((selector_type IS NULL) OR (selector_type = ANY (ARRAY['host'::text, 'route'::text, 'encounter'::text, 'none'::text]))))",
+      "CHECK ((standing = ANY (ARRAY['active'::text, 'superseded'::text, 'held'::text])))",
+      "CHECK (((surface_type = ANY (ARRAY['c3_field'::text, 'canopy'::text])) OR ((surface_type = 'my_env'::text) AND (pac_key = 'c1me_current_state_connect_app_experience_designpac_v1'::text) AND (encounter_key = 'my_env_current_state'::text) AND ((free_call_key IS NULL) OR (free_call_key = 'my_env_current_state_owner_presentation'::text)))))"
+    ],
+    "schema_field_constraints": [
+      "CHECK (((custodian_subject_type IS NULL) OR (custodian_subject_type = ANY (ARRAY['individual'::text, 'entity'::text, 'system'::text, 'environment'::text, 'service'::text]))))",
+      "CHECK (((owner_subject_type IS NULL) OR (owner_subject_type = ANY (ARRAY['individual'::text, 'institution'::text, 'system'::text, 'environment'::text, 'service'::text]))))",
+      "CHECK (((registration_protocol <> 'registrar_v1'::text) OR ((schema_key IS NOT NULL) AND (owner_subject_type IS NOT NULL) AND (owner_subject_key IS NOT NULL) AND (registration_sha256 IS NOT NULL) AND (boundary_evaluation_key IS NOT NULL) AND (registered_at IS NOT NULL) AND (registrar_role_call_key IS NOT NULL) AND ((owner_subject_type <> 'institution'::text) OR (owner_environment_key IS NOT NULL)))))",
+      "CHECK ((registration_protocol = ANY (ARRAY['legacy_pre_hardening'::text, 'registrar_v1'::text])))",
+      "CHECK (((registration_sha256 IS NULL) OR (registration_sha256 ~ '^[0-9a-f]{64}$'::text)))",
+      "CHECK (((supersedes_pac_key IS NULL) OR (supersedes_pac_key <> pac_key)))"
+    ]
+  }
+}

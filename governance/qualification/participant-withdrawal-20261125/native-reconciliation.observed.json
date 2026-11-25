@@ -1,0 +1,383 @@
+{
+  "evidence": {
+    "parents": [
+      {
+        "env_key": "env_c3_community_connect",
+        "version": "v0.1",
+        "metadata": {
+          "operator": "op044",
+          "package_role": "canonical_environment_root",
+          "owner_boundary": "entity_owned_c3_field_custody",
+          "external_effects": 0,
+          "formation_reason": "resolve_canonical_c1me_envpac_root_for_registered_public_webpacs",
+          "source_environment": "env_c3_community_connect",
+          "source_oar2_drive_id": "10HCKRdKX2HW43G3vvIGklm8sBSykIVptmAqTDEs0h6M",
+          "source_environment_name": "c1ME_env",
+          "formation_source_drive_id": "1v1i7fSVGjuOgZ6qtXehheC_UPJqHADvW",
+          "avatar_universal_primitive": false,
+          "initiative_projection_source": "encountered_or_invited_initiative_envpac",
+          "personal_c1me_primitive_count": 6,
+          "personal_c1me_runtime_primitive_contract": "c1me_env_primitives_v1"
+        },
+        "portable": true,
+        "standing": "effective",
+        "created_at": "2026-09-24T02:03:14.81676+00:00",
+        "envpac_key": "c3envpac_c1me_v0_1",
+        "updated_at": "2026-09-24T11:35:07.720023+00:00",
+        "custody_uri": "c3://envpac/c3envpac_c1me_v0_1",
+        "effective_at": "2026-09-24T02:03:14.81676+00:00",
+        "is_effective": true,
+        "superseded_at": null,
+        "content_sha256": null,
+        "custody_provider": "c3_field",
+        "owner_subject_key": "c3_community_partners_dao_llc",
+        "owner_subject_type": "entity",
+        "architecture_version": "c3pac_v0.1",
+        "custodian_subject_key": "c3_field",
+        "custodian_subject_type": "system"
+      },
+      {
+        "env_key": "env_c3_community_contribute",
+        "version": "v0.1",
+        "metadata": {
+          "operator": "op044",
+          "owner_boundary": "entity_owned_c3_field_custody",
+          "external_effects": 0,
+          "formation_reason": "resolve_documented_missing_c2me_envpac_root_for_mdm_campaign_pacs",
+          "source_environment": "env_c3_community_contribute",
+          "source_environment_name": "c2ME_env",
+          "formation_source_drive_id": "189LBMJytuahg__o5TYKf7Apug5NZ4BVNXxDjK8CT8PE"
+        },
+        "portable": true,
+        "standing": "effective",
+        "created_at": "2026-09-22T21:55:21.569966+00:00",
+        "envpac_key": "c3envpac_c2me_v0_1",
+        "updated_at": "2026-09-22T21:55:21.569966+00:00",
+        "custody_uri": "c3://envpac/c3envpac_c2me_v0_1",
+        "effective_at": "2026-09-22T21:55:21.569966+00:00",
+        "is_effective": true,
+        "superseded_at": null,
+        "content_sha256": "a13f54dec1dddbdcf9f32ce8c1009e10ce103a4fe1449befed7a526cc7b97797",
+        "custody_provider": "c3_field",
+        "owner_subject_key": "c3_community_partners_dao_llc",
+        "owner_subject_type": "entity",
+        "architecture_version": "c3pac_v0.1",
+        "custodian_subject_key": "c3_field",
+        "custodian_subject_type": "system"
+      },
+      {
+        "env_key": "env_c3_field",
+        "version": "v0.1",
+        "metadata": {
+          "operator": "op044",
+          "package_role": "canonical_c3_field_root",
+          "owner_boundary": "c3_field_system_owned_c3_field_custody",
+          "formation_reason": "provide canonical Field root custody without seating Field-wide principles under Measures, c1ME, c2ME, or participant EnvPACs"
+        },
+        "portable": true,
+        "standing": "effective",
+        "created_at": "2026-09-30T20:40:12.316115+00:00",
+        "envpac_key": "c3envpac_field_v0_1",
+        "updated_at": "2026-09-30T20:40:12.316115+00:00",
+        "custody_uri": "c3://envpac/c3envpac_field_v0_1",
+        "effective_at": "2026-09-30T20:40:12.316115+00:00",
+        "is_effective": true,
+        "superseded_at": null,
+        "content_sha256": null,
+        "custody_provider": "c3_field",
+        "owner_subject_key": "c3_field",
+        "owner_subject_type": "system",
+        "architecture_version": "c3pac_v0.1",
+        "custodian_subject_key": "c3_field",
+        "custodian_subject_type": "system"
+      },
+      {
+        "env_key": "env_measures_registry",
+        "version": "v0.1",
+        "metadata": {
+          "gtm_reference": {
+            "plan": "docs/strategy/c3_gtm/c3_gtm_critical_path_v0_1.meta.md",
+            "commit": "a41f6b700d175b413a2ab49243fc0e8bb40c863a",
+            "standing": "ELEVATED_GTM_PLAN",
+            "web3_scope": "deferred_until_non_web3_gtm_loop_complete"
+          },
+          "architecture_ref": "docs/architecture/c3_field/c3pac_architecture_v0_1.meta.md",
+          "portable_owner_object": true
+        },
+        "portable": true,
+        "standing": "working",
+        "created_at": "2026-09-15T19:05:52.887226+00:00",
+        "envpac_key": "c3envpac_measures_registry_v0_1",
+        "updated_at": "2026-09-15T19:22:33.825806+00:00",
+        "custody_uri": "repo://c3codex/c3-Field/docs/envpacs/measures_registry/c3envpac_measures_registry_v0_1.meta.md",
+        "effective_at": "2026-09-15T19:05:52.887226+00:00",
+        "is_effective": true,
+        "superseded_at": null,
+        "content_sha256": null,
+        "custody_provider": "github",
+        "owner_subject_key": "c3_community_partners_dao_llc",
+        "owner_subject_type": "entity",
+        "architecture_version": "c3pac_v0.1",
+        "custodian_subject_key": "c3_field",
+        "custodian_subject_type": "system"
+      }
+    ],
+    "schemas": [
+      {
+        "pac_type": "FieldPrinciplePac",
+        "standing": "active",
+        "is_active": true,
+        "created_at": "2026-10-06T21:53:52.270844+00:00",
+        "schema_key": "pac_schema_fieldprinciplepac_v1",
+        "source_ref": "pac_base_contract_v1_1",
+        "updated_at": "2026-10-06T21:53:52.270844+00:00",
+        "release_rules": {
+          "requires_effective": true,
+          "allowed_release_states_for_resolution": [
+            "field_governing"
+          ]
+        },
+        "schema_version": "v1",
+        "required_fields": [
+          "pac_key",
+          "envpac_key",
+          "pac_type",
+          "version",
+          "standing",
+          "custody_uri",
+          "source_authority",
+          "contract_key",
+          "architecture_version",
+          "custodian_subject_type",
+          "custodian_subject_key",
+          "custody_provider",
+          "authority_effect",
+          "release_state",
+          "execution_authority_state",
+          "formation_state",
+          "return_evidence_required"
+        ],
+        "conditional_rules": [],
+        "optional_member_rules": [],
+        "required_member_rules": [],
+        "required_relation_rules": [],
+        "requires_c3_model_binding": true
+      },
+      {
+        "pac_type": "EvidencePac",
+        "standing": "active",
+        "is_active": true,
+        "created_at": "2026-10-06T21:53:52.270844+00:00",
+        "schema_key": "pac_schema_evidencepac_v1",
+        "source_ref": "governance://c3/pac-schema/evidencepac-v1",
+        "updated_at": "2026-10-06T21:53:52.270844+00:00",
+        "release_rules": {
+          "requires_effective": true,
+          "allowed_release_states_for_resolution": [
+            "private",
+            "evidence_open",
+            "public_release_authorized"
+          ]
+        },
+        "schema_version": "v1",
+        "required_fields": [
+          "pac_key",
+          "envpac_key",
+          "pac_type",
+          "version",
+          "standing",
+          "custody_uri",
+          "source_authority",
+          "schema_key",
+          "architecture_version",
+          "custodian_subject_type",
+          "custodian_subject_key",
+          "custody_provider",
+          "authority_effect",
+          "release_state",
+          "execution_authority_state",
+          "formation_state",
+          "return_evidence_required"
+        ],
+        "conditional_rules": [
+          {
+            "rule": "open_evidence_corpus_may_remain_incomplete"
+          },
+          {
+            "rule": "absence_of_evidence_does_not_create_negative_finding"
+          },
+          {
+            "rule": "quantified_public_projection_requires_source_and_citation"
+          }
+        ],
+        "optional_member_rules": [],
+        "required_member_rules": [
+          {
+            "min": 1,
+            "kind": "evidence",
+            "role": "evidence_source",
+            "custody_required": true,
+            "integrity_required": true
+          }
+        ],
+        "required_relation_rules": [],
+        "requires_c3_model_binding": true
+      },
+      {
+        "pac_type": "EvidencePac",
+        "standing": "active",
+        "is_active": true,
+        "created_at": "2026-10-07T01:06:41.763102+00:00",
+        "schema_key": "pac_schema_evidencepac_v1_1",
+        "source_ref": "governance/maturity/c3_field_system_maturity_program_v1/decisions/m1_02_executable_pac_schema_rules_v1.md",
+        "updated_at": "2026-10-07T01:06:41.763102+00:00",
+        "release_rules": {
+          "requires_effective": true,
+          "allowed_release_states_for_resolution": [
+            "private",
+            "evidence_open",
+            "public_release_authorized"
+          ]
+        },
+        "schema_version": "v1.1",
+        "required_fields": [
+          "pac_key",
+          "envpac_key",
+          "pac_type",
+          "version",
+          "standing",
+          "custody_uri",
+          "source_authority",
+          "schema_key",
+          "architecture_version",
+          "custodian_subject_type",
+          "custodian_subject_key",
+          "custody_provider",
+          "authority_effect",
+          "release_state",
+          "execution_authority_state",
+          "formation_state",
+          "return_evidence_required"
+        ],
+        "conditional_rules": [],
+        "optional_member_rules": [],
+        "required_member_rules": [
+          {
+            "min": 1,
+            "kind": "evidence",
+            "role": "evidence_source",
+            "custody_required": true,
+            "integrity_required": true
+          }
+        ],
+        "required_relation_rules": [],
+        "requires_c3_model_binding": true
+      },
+      {
+        "pac_type": "FieldPrinciplePac",
+        "standing": "active",
+        "is_active": true,
+        "created_at": "2026-10-07T01:19:06.388526+00:00",
+        "schema_key": "pac_schema_fieldprinciplepac_v1_1",
+        "source_ref": "governance/maturity/c3_field_system_maturity_program_v1/decisions/m1_03_nonweb3_contract_residue_v1.md",
+        "updated_at": "2026-10-07T01:19:06.388526+00:00",
+        "release_rules": {
+          "requires_effective": true,
+          "allowed_release_states_for_resolution": [
+            "field_governing"
+          ]
+        },
+        "schema_version": "v1.1",
+        "required_fields": [
+          "pac_key",
+          "envpac_key",
+          "pac_type",
+          "version",
+          "standing",
+          "custody_uri",
+          "source_authority",
+          "architecture_version",
+          "custodian_subject_type",
+          "custodian_subject_key",
+          "custody_provider",
+          "authority_effect",
+          "release_state",
+          "execution_authority_state",
+          "formation_state",
+          "return_evidence_required",
+          "schema_key"
+        ],
+        "conditional_rules": [],
+        "optional_member_rules": [],
+        "required_member_rules": [],
+        "required_relation_rules": [],
+        "requires_c3_model_binding": true
+      }
+    ],
+    "entities": null,
+    "processes": [
+      {
+        "id": "9a7ac16f-c23d-4a1f-8b86-50cbc8325481",
+        "title": "My Env Owner Portability v1",
+        "status": "active",
+        "metadata": {
+          "ownership_rule": "custody_or_envpac_membership_does_not_create_pac_ownership",
+          "owner_authority": true,
+          "binary_asset_rule": "portable manifest carries custody references; custody transfer requires explicit per-PAC target receipt",
+          "lineage_preserved": true,
+          "non_owned_pac_rule": "other PACs export as reference index only and block whole-EnvPAC custody transfer until their custody is separately resolved",
+          "owned_pac_export_rule": "only PACs with explicit individual ownership matching the My Env owner export as owned PACs",
+          "portable_manifest_version": "c3_my_env_portable_manifest_v1_1",
+          "portable_manifest_function": "public.resolve_my_env_owner_portability_v1(jsonb)",
+          "ownership_survives_termination": true
+        },
+        "created_at": "2026-10-04T14:19:54.85528+00:00",
+        "updated_at": "2026-10-04T14:21:48.363898+00:00",
+        "process_key": "my_env_owner_portability_v1",
+        "source_path": "registry://my_env/owner_portability/v1",
+        "process_scope": "Owner-authorized inspect/export/custody-transfer lifecycle for portable My Env PACs without ownership loss or lineage break.",
+        "process_title": "My Env Owner Portability v1",
+        "process_family": "c3_field",
+        "process_status": "active",
+        "authority_level": "bounded_pac_owner_passage",
+        "authority_state": "operator_confirmed_registry_held",
+        "required_oar_type": null,
+        "requires_preflight": false,
+        "source_reference_set": [],
+        "requires_oar1_closeout": false,
+        "requires_operator_confirm": false
+      },
+      {
+        "id": "33dd8da6-4834-4a5e-806c-19f0167ec138",
+        "title": "My Env Owner Termination v1",
+        "status": "active",
+        "metadata": {
+          "hard_delete": false,
+          "cancom_effect": "revoked relations cease to resolve new passage",
+          "owner_authority": true,
+          "termination_function": "public.terminate_my_env_owner_v1(jsonb)",
+          "pac_disposition_required": true,
+          "explicit_reentry_required": true,
+          "ownership_survives_termination": true
+        },
+        "created_at": "2026-10-04T14:19:54.85528+00:00",
+        "updated_at": "2026-10-04T14:19:54.85528+00:00",
+        "process_key": "my_env_owner_termination_v1",
+        "source_path": "registry://my_env/owner_termination/v1",
+        "process_scope": "Owner-authorized termination of an active personal My Env with revocation of active passage while preserving evidence, PAC ownership, and lineage.",
+        "process_title": "My Env Owner Termination v1",
+        "process_family": "c3_field",
+        "process_status": "active",
+        "authority_level": "bounded_pac_owner_passage",
+        "authority_state": "operator_confirmed_registry_held",
+        "required_oar_type": null,
+        "requires_preflight": false,
+        "source_reference_set": [],
+        "requires_oar1_closeout": false,
+        "requires_operator_confirm": false
+      }
+    ],
+    "nug_bindings": null,
+    "entity_relationships": null
+  }
+}

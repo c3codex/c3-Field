@@ -1,0 +1,59 @@
+{
+  "pac_key": "c3field_participant_withdrawal_govpac_v1",
+  "envpac_key": "c3envpac_field_v0_1",
+  "pac_type": "EvidencePac",
+  "schema_key": "pac_schema_evidencepac_v1_1",
+  "version": "v1",
+  "standing": "source_candidate",
+  "custody_uri": "github://c3codex/measures-of-inanna-governance/910fa89b787870c41291cddbab7eec74c77c1c40/governance/standards/participant-withdrawal-govpac-candidate-v1.md",
+  "source_authority": "github_file:c3codex/measures-of-inanna-governance@910fa89b787870c41291cddbab7eec74c77c1c40:governance/standards/participant-withdrawal-govpac-candidate-v1.md",
+  "architecture_version": "c3pac_v0.1",
+  "custodian_subject_type": "system",
+  "custodian_subject_key": "c3_field",
+  "custody_provider": "github",
+  "owner_subject_type": "system",
+  "owner_subject_key": "c3_field",
+  "owner_environment_key": "env_c3_field",
+  "authority_effect": "none",
+  "release_state": "private",
+  "execution_authority_state": "none",
+  "formation_state": "candidate",
+  "return_evidence_required": true,
+  "is_effective": false,
+  "members": [
+    {
+      "member_key": "participant_withdrawal_governance_source_candidate_v1",
+      "member_kind": "evidence",
+      "member_role": "evidence_source",
+      "custody_provider": "github",
+      "custody_location": "github://c3codex/measures-of-inanna-governance/910fa89b787870c41291cddbab7eec74c77c1c40/governance/standards/participant-withdrawal-govpac-candidate-v1.md",
+      "integrity_algorithm": "sha256",
+      "integrity_value": "3dd8827c3f4a8c610938f29f7a1bf5ed62e278e6c30299f60166445c7eb136fe",
+      "required": true
+    }
+  ],
+  "metadata": {
+    "semantic_role": "internal_govPAC_candidate",
+    "legal_parent": "c3_community_partners_dao_llc",
+    "owner_basis": "proposed reuse of system-owned Field root; no ownership of individual PACs",
+    "source_blob_sha1": "d9f3f77a070db4360a56e5010a873db9e5eb7388",
+    "execution_authority_conferred": false,
+    "governance_record_classes": [
+      "constraints",
+      "agreements",
+      "resolutions",
+      "amendments",
+      "lineage",
+      "qualified_decision_evidence"
+    ],
+    "registration_standing": "HLD_NOT_REGISTERED",
+    "required_unresolved": [
+      "exact_3x3_model_bindings",
+      "source_SRC_native_qualification",
+      "NotChazz_boundary_evaluation",
+      "Registrar_role_call_and_receipt"
+    ]
+  },
+  "relations": [],
+  "model_bindings": []
+}
