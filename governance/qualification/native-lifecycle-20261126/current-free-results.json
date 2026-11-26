@@ -1,0 +1,18 @@
+{
+  "scope": "isolated actual FREE candidate and existing NUG resolver; synthetic owner/session/registration rows; native service preflight explicitly doubled; no service invoked",
+  "checks": [
+    "authenticated owner receives exact CURRENT My Stash descriptor",
+    "descriptor does not expose executor or operational authority",
+    "unrelated owner receives no cross-owner service",
+    "unknown session cannot resolve",
+    "noncurrent state removes availability",
+    "withdrawn binding removes availability",
+    "native preflight refusal removes availability",
+    "owner mismatch removes availability",
+    "external effect removes availability",
+    "expired session cannot resolve",
+    "retired environment cannot resolve",
+    "revoked session cannot resolve",
+    "unaffected owner presentation preserved"
+  ]
+}

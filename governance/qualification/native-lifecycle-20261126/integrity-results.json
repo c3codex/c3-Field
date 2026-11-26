@@ -1,0 +1,21 @@
+{
+  "scope": "isolated PostgreSQL; synthetic rows and roles; exact candidate SQL except shortened lock timeout in contention test",
+  "checks": [
+    "history preserved",
+    "anon truncate refused c3_pac",
+    "anon truncate refused c3_pac_member",
+    "anon truncate refused c3_pac_relation",
+    "authenticated truncate refused c3_pac",
+    "authenticated truncate refused c3_pac_member",
+    "authenticated truncate refused c3_pac_relation",
+    "cross-protocol competitor refused",
+    "existing_index_requires_exact_readback",
+    "inconsistent_effective_state",
+    "competing_effective_successors",
+    "inherited_truncate_privilege",
+    "failed install rolls back index",
+    "concurrent successor waits then refuses lock timeout",
+    "concurrent loser refused after winner commit",
+    "installation lock contention refuses atomically"
+  ]
+}

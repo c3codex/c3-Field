@@ -55,7 +55,13 @@ export async function resolveCurrentStatePresentation(
       backdropUrl:new URL("/storage/v1/object/public/"+backdropObject,origin).href,
       fieldEntryLabel:design.field_entry_label,fieldEntry:design.field_entry,
       fieldNavigation:names(design.field_navigation,["Connect","Contribute","Create"]),
-      workspaceOverlays:names(design.workspace_overlays,["My PACs","My Stash","My Canopy","Connections"]),
+      workspaceOverlays:names(design.workspace_overlays,["My PACs","My Stash","My Canopy","Connections"]).filter(name=>
+        name!=="My Stash"||(Array.isArray(resolved.available_nugs)&&resolved.available_nugs.some(value=>{
+          const descriptor=row(value)
+          return descriptor.service==="My Stash"&&descriptor.effect_class==="none"&&
+            typeof descriptor.nug_key==="string"&&descriptor.nug_key.length>0&&
+            typeof descriptor.current_state_key==="string"&&descriptor.current_state_key.length>0
+        }))),
       inviteConnection:Array.isArray(design.connections_actions)&&design.connections_actions.some(action=>row(action).capability==="invite_connection"),
     }
   } catch {
