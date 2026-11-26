@@ -1,0 +1,129 @@
+{
+  "operator": "op044",
+  "executor": "codex",
+  "workset": "oar2_c3field_field_of_possibility_production_20261124_001",
+  "notchazz": {
+    "evaluation": {
+      "standing": "PASS",
+      "evaluation_key": "2cccbf99-1046-4c04-b586-3072cb1a61f1",
+      "registration_sha256": "580261dfb4eacf5b5599d68b84b64c48f20655a64485625f383244a1c0a1b004",
+      "supersession_requested": false,
+      "supersession_validation": "PASS",
+      "schema_rule_language_version": "v1"
+    }
+  },
+  "role_call": {
+    "role_call": {
+      "standing": "ACT",
+      "call_class": "pac_registration",
+      "idempotent": false,
+      "result_ref": null,
+      "role_call_key": "role_call_8c18b50b00e4200f8d3f2ef6e01be508ca8b7591c3ed5ab40033c0783101def8",
+      "callee_role_key": "c3_registrar_ci_v1",
+      "caller_role_key": "c3_notchazz_boundary_v1",
+      "registered_call_standing": "OPEN"
+    }
+  },
+  "registration": {
+    "registration": {
+      "pac_key": "c3field_public_landing_designpac_v1",
+      "standing": "REGISTERED",
+      "CURRENT_accrued": true,
+      "registration_key": "pac_registration_c3field_public_landing_designpac_v1",
+      "authority_created": false,
+      "registration_sha256": "580261dfb4eacf5b5599d68b84b64c48f20655a64485625f383244a1c0a1b004",
+      "ownership_transferred": false,
+      "boundary_evaluation_key": "2cccbf99-1046-4c04-b586-3072cb1a61f1",
+      "registrar_role_call_key": "role_call_8c18b50b00e4200f8d3f2ef6e01be508ca8b7591c3ed5ab40033c0783101def8",
+      "free_snapshots_registered": 1
+    }
+  },
+  "readback": {
+    "evidence": {
+      "companion": {
+        "pac_key": "c3field_public_landing_designpac_v1",
+        "protocol": "registrar_v1",
+        "effective": true,
+        "owner_key": "c3_field",
+        "owner_type": "system",
+        "release_state": "public_release_authorized",
+        "source_sha256": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45",
+        "registration_sha256": "580261dfb4eacf5b5599d68b84b64c48f20655a64485625f383244a1c0a1b004"
+      },
+      "design_free": {
+        "ACT": [
+          {
+            "env_key": "env_c3_community_connect",
+            "standing": "governed_environment",
+            "circuit_key": "c1",
+            "effective_at": "2026-09-03T01:56:32.954862+00:00",
+            "relation_role": "public_orientation_design",
+            "state_version": 1,
+            "bound_envpac_key": "c3envpac_c1me_v0_1",
+            "current_state_key": "current_env_c3_community_connect_v1",
+            "CURRENT_accrual_count": 1
+          }
+        ],
+        "pac_key": "c3field_public_landing_designpac_v1",
+        "snapshot": {
+          "source_uri": "https://github.com/c3codex/c3-Field/blob/837b720446e53c337e8b63452395c2696b09e9e5/governance/qualification/field-legacy-succession-20261125/sources/Public-Landing-DesignPAC-v1.0.source.md",
+          "designpac_key": "c3field_public_landing_designpac_v1",
+          "release_state": "public",
+          "source_sha256": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45",
+          "projection_type": "registered_design_definition",
+          "authority_effect": "none",
+          "presentation_only": true,
+          "frontend_invention": false
+        },
+        "standing": "ACT",
+        "schema_key": "pac_schema_designpac_v1_1",
+        "surface_type": "c3_field",
+        "encounter_key": "c3field_public_landing_design_definition",
+        "free_call_key": "c3_public_webpac_encounter",
+        "registered_at": "2026-11-25T20:01:55.21808+00:00",
+        "projection_sha256": "2974e1cc42a6853d14d696d51f5deaa2549f620c171007ec894ca101603c9b30",
+        "registration_sha256": "580261dfb4eacf5b5599d68b84b64c48f20655a64485625f383244a1c0a1b004"
+      },
+      "public_root": {
+        "reason": "registered_snapshot_not_resolved",
+        "standing": "DNR",
+        "free_call_key": "c3_public_webpac_encounter"
+      },
+      "states_count": 23,
+      "accrual_count": 12,
+      "root_succession": {
+        "reason": "superseded_pac_not_hardened",
+        "standing": "HLD",
+        "prior_pac_key": "c3field_root_orientation_c3webpac_v1"
+      }
+    }
+  },
+  "integrity": {
+    "process": {
+      "expected": "e3a30de7ccba30f46e723e00946efe7ef7216c339c8c329f2239b4ba38ca3cc7",
+      "readback": "e3a30de7ccba30f46e723e00946efe7ef7216c339c8c329f2239b4ba38ca3cc7",
+      "standing": "MATCH"
+    },
+    "source_index_v18": {
+      "expected": "0ad51ec63019543594046c458c841951d55cb7b5b36250f009eeb7ce774da84a",
+      "text_readback": "8a9af1b54afbbb812c8396e3aaae7f7d0ac1e770305e0ee9d9b0d861e8c91fa0",
+      "standing": "HLD_EXACT_BYTES_OR_SERIALIZATION_UNRESOLVED"
+    },
+    "concordance_v18": {
+      "expected": "1562cb31099e9c0d308c87afa8b64b060340526cfc1d1dc80df72a5f68f9ab2d",
+      "text_readback": "71b1d74bcd41dbb90bf2d072bdd4906c33f55aaad6f195f89c2cf303c902ce13",
+      "standing": "HLD_EXACT_BYTES_OR_SERIALIZATION_UNRESOLVED"
+    }
+  },
+  "mutation_accounting": {
+    "native_boundary_evaluation": true,
+    "native_pac_role_call": true,
+    "native_pac_registration": true,
+    "native_free_snapshot": true,
+    "new_current_registration_accrual": 1,
+    "historical_current_rewritten": false,
+    "sql_migration": false,
+    "production_deployment": false,
+    "permissions_changed": false
+  }
+}

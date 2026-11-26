@@ -369,7 +369,7 @@ export function applyProvisionalMaterialDefaults(
   const next: EncounterStyleProfile = { ...profile, material_family: profile.material_family ?? materialFamily }
   for (const field of Object.keys(defaults) as (keyof ConcordanceFields)[]) {
     if (next[field] == null) {
-      next[field] = defaults[field]
+      Object.assign(next, { [field]: defaults[field] })
       provisionalFieldsApplied.push(field)
     }
   }

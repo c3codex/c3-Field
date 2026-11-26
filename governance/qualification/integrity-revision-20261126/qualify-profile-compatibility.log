@@ -1,0 +1,18 @@
+PASS owner identifiers alone refuse native formation
+PASS different authenticated owner refuses formation
+PASS baseline exact admitted contract fails generic relation evaluator
+PASS authenticated owner forms private profile using actual evaluator
+PASS formation replay creates no duplicate
+PASS authenticated owner updates private personalization
+PASS withdrawn primitive fails existing evaluator
+PASS existing chain guard refuses withdrawn primitive
+PASS unknown contract relation refuses completeness
+PASS post-persistence contract mismatch refuses effect
+PASS post-persistence mismatch rolls back profile bytes
+PASS different session refuses personalization
+PASS revoked session refuses mutation
+PASS withdrawn grant refuses mutation
+PASS appended grant mutation serializes with profile write
+PASS in-flight session withdrawal blocks owner effect
+PASS committed session withdrawal refuses replay
+PASS public execution removed

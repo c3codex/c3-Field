@@ -1,0 +1,132 @@
+{
+  "observed_on": "2026-11-25",
+  "project": "zfihrspxvennjzazxcbj",
+  "classification": "Observed, not qualification or owner resolution",
+  "predecessor_snapshot": {
+    "pac": {
+      "pac_key": "c3field_root_orientation_c3webpac_v1",
+      "version": "v1",
+      "metadata": {
+        "operator": "op044",
+        "canonical_url": "https://c3field.online/",
+        "frontend_role": "renderer",
+        "parent_envpac": "c3envpac_field_v0_1",
+        "canonical_host": "c3field.online",
+        "footer_contract": {
+          "copyright": "© 2026 c3 Community Partners DAO, LLC. All rights reserved.",
+          "source_key": "c3field_public_identity_authority_v1_0",
+          "required_links": [
+            "Privacy",
+            "Terms",
+            "Contact"
+          ],
+          "required_routes": {
+            "Terms": "https://c3field.online/terms",
+            "Contact": "https://c3field.online/contact",
+            "Privacy": "https://c3field.online/privacy"
+          },
+          "environment_line": "c3Field is the relational operations environment for structured participation.",
+          "frontend_invention": false,
+          "formal_authority_statement": "c3 Community Partners DAO, LLC operating within computational systems governance."
+        },
+        "initiative_refs": [
+          "c3field_million_dollar_mission_landing_webpac_v1_3",
+          "47pct_c1_connect_c3webpac_v1"
+        ],
+        "ownership_model": {
+          "owner_subject_key": "c3_community_partners_dao_llc",
+          "owner_subject_type": "entity"
+        },
+        "public_encounters": {
+          "living_circuit": {
+            "route": "/living-circuit",
+            "title": "The Living Circuit",
+            "standing": "operator_confirmed_public_orientation",
+            "canonical_url": "https://c3field.online/living-circuit",
+            "connect_route": "/connect",
+            "encounter_key": "c3_field_living_circuit_public_encounter_v1",
+            "frontend_role": "renderer",
+            "source_ledger": "computational_systems_governance_ledger_0001",
+            "source_section": "The Living Circuit — Reconstructed",
+            "writes_CURRENT": false,
+            "writes_current": false,
+            "authorized_under": "oar2_living_circuit_public_encounter_chazz_20261008_014",
+            "creates_standing": false,
+            "writes_participant_state": false,
+            "public_release_authorized": true,
+            "runtime_release_authorized": true
+          }
+        },
+        "maturity_statement": "working_model_built_in_use",
+        "governing_principle_refs": [
+          "field_principle_the_field_draws_itself_v1",
+          "field_principle_current_state_non_scarcity_v1"
+        ],
+        "public_release_authorized": true,
+        "runtime_release_authorized": true,
+        "community_potential_whitepaper": {
+          "owner": "c3 Community Partners DAO, LLC",
+          "route_state": "HLD_PENDING_REGISTERED_ASSET_OR_ROUTE",
+          "presentation": "link_resource"
+        }
+      },
+      "pac_type": "c3WebPac",
+      "standing": "registered_complete_runtime_release_authorized",
+      "created_at": "2026-10-02T14:09:16.559861+00:00",
+      "envpac_key": "c3envpac_field_v0_1",
+      "schema_key": "pac_schema_c3webpac_v1",
+      "updated_at": "2026-10-09T00:28:17.71637+00:00",
+      "custody_uri": "c3://pac/c3field_root_orientation_c3webpac_v1",
+      "contract_key": "pac_contract_c3webpac_v1",
+      "effective_at": "2026-10-02T14:09:16.559861+00:00",
+      "is_effective": true,
+      "registered_at": null,
+      "release_state": "public_release_authorized",
+      "superseded_at": null,
+      "content_sha256": null,
+      "formation_state": "formed",
+      "authority_effect": "none",
+      "custody_provider": "c3_field",
+      "source_authority": "c3field_public_presentation_authority_v1_2",
+      "owner_subject_key": null,
+      "owner_subject_type": null,
+      "supersedes_pac_key": null,
+      "registration_sha256": null,
+      "architecture_version": "c3pac_v0.1",
+      "custodian_subject_key": "c3_field",
+      "owner_environment_key": null,
+      "registration_protocol": "legacy_pre_hardening",
+      "custodian_subject_type": "system",
+      "boundary_evaluation_key": null,
+      "registrar_role_call_key": null,
+      "return_evidence_required": true,
+      "execution_authority_state": "bounded_renderer"
+    },
+    "members": [
+      {
+        "ordinal": 1,
+        "pac_key": "c3field_root_orientation_c3webpac_v1",
+        "version": "v1",
+        "metadata": {},
+        "required": true,
+        "standing": "active",
+        "created_at": "2026-10-02T14:09:16.559861+00:00",
+        "member_key": "c3field_root_orientation_manifest_member_v1",
+        "updated_at": "2026-10-02T14:09:16.559861+00:00",
+        "member_kind": "record",
+        "member_role": "presentation_manifest",
+        "runtime_uri": null,
+        "release_scope": "registered",
+        "integrity_value": null,
+        "custody_location": "c3://pac/c3field_root_orientation_c3webpac_v1#presentation_manifest",
+        "custody_provider": "c3_field",
+        "source_object_key": "c3field_public_presentation_authority_v1_2",
+        "custody_identifier": "c3field_root_orientation_c3webpac_v1",
+        "integrity_algorithm": null,
+        "runtime_binding_key": null
+      }
+    ],
+    "relations": [],
+    "model_bindings": []
+  }
+}

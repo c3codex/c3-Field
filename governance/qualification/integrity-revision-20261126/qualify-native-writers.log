@@ -1,0 +1,11 @@
+PASS all ten target triggers and all native target constraints installed
+PASS actual native Registrar writer and trigger succession works before candidate
+PASS actual native Registrar writer and deferred triggers work after CHECK
+PASS actual Registrar retry remains idempotent after CHECK
+PASS actual writer refuses missing exact NotChazz evidence
+PASS native writer atomic retirement satisfies persistent invariant
+PASS historical native predecessor bytes unchanged
+PASS actual legacy trigger path accepts retire-then-stamp
+PASS actual legacy trigger path refuses contradiction
+PASS actual hardened trigger path refuses contradictory state
+PASS live writer retires both columns in one statement

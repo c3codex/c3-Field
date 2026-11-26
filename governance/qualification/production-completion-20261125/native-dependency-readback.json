@@ -1,0 +1,416 @@
+{
+  "observed_on": "2026-11-25",
+  "project": "zfihrspxvennjzazxcbj",
+  "scope": "Read-only direct body/call and named trigger inspection; not universal proof over unknown dynamic SQL or every possible installation rail",
+  "functions": [
+    {
+      "name": "c3_open_ci_role_call_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "c3_ci_role_call"
+      ]
+    },
+    {
+      "name": "notchazz_evaluate_pac_registration_v2",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "notchazz_evaluate_pac_registration_v2_core",
+        "c3_validate_pac_supersession_v1"
+      ]
+    },
+    {
+      "name": "notchazz_evaluate_pac_registration_v2_core",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "notchazz_evaluate_pac_registration_v1",
+        "c3_evaluate_pac_schema_rules_v1",
+        "c3_is_current_state_presentation_only_v1"
+      ]
+    },
+    {
+      "name": "registrar_register_pac_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "registrar_register_pac_v1_core",
+        "c3_validate_pac_supersession_v1"
+      ]
+    },
+    {
+      "name": "registrar_register_pac_v1_core",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "resolve_institutional_pac_eligibility_v1",
+        "c3_pac",
+        "c3_pac_model_binding",
+        "c3_pac_encounter_scope",
+        "c3_pac_member",
+        "c3_pac_relation",
+        "c3_profile_pac",
+        "c3_pac_registration_receipt"
+      ]
+    },
+    {
+      "name": "registrar_register_pac_v2",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "c3_is_current_state_presentation_only_v1",
+        "registrar_register_pac_v1",
+        "c3_free_pac_snapshot",
+        "registrar_accrue_current_v1"
+      ]
+    },
+    {
+      "name": "c3_validate_pac_supersession_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "free_resolve_my_env_current_state_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "free_resolve_pac_encounter_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "notchazz_evaluate_pac_registration_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "c3_jsonb_path_satisfied",
+        "c3_is_current_state_presentation_only_v1",
+        "resolve_institutional_pac_eligibility_v1",
+        "c3_pac_boundary_evaluation"
+      ]
+    },
+    {
+      "name": "c3_evaluate_pac_schema_rules_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "c3_guard_registrar_pac_supersession_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "c3_validate_pac_supersession_v1"
+      ]
+    },
+    {
+      "name": "c3_is_current_state_presentation_only_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "c3_jsonb_path_satisfied",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "c3_pac_free_completeness_guard_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "c3_pac_registrar_v1_completeness_guard",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "resolve_institutional_pac_eligibility_v1"
+      ]
+    },
+    {
+      "name": "registrar_accrue_current_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "c3_validate_current_accrual_v1",
+        "c3_current_accrual"
+      ]
+    },
+    {
+      "name": "ensure_c1me_current_internal",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "registrar_bind_c3_current_v1",
+        "c3_current_evidence_ref",
+        "registrar_accrue_current_v1"
+      ]
+    },
+    {
+      "name": "evaluate_c1_relational_boundary",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "crs_relationship_event"
+      ]
+    },
+    {
+      "name": "form_c1_owner_environment",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "c3_environment",
+        "c3_envpac",
+        "c3_envpac_environment_binding",
+        "c3_envpac_access_grant",
+        "c3_envpac_rooted_system",
+        "c3_pac",
+        "c3_envpac_presentation"
+      ]
+    },
+    {
+      "name": "register_and_persist_c1_relationship",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "crs_relationship_event",
+        "env_role_call_persistence_v1"
+      ]
+    },
+    {
+      "name": "resolve_c1me_current_tokens_internal",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "resolve_c1me_current_internal"
+      ]
+    },
+    {
+      "name": "c3_validate_current_accrual_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "registrar_bind_c3_current_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "c3_current_state",
+        "registrar_accrue_current_v1"
+      ]
+    },
+    {
+      "name": "resolve_c1me_current_internal",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    },
+    {
+      "name": "resolve_institutional_pac_eligibility_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": [
+        "resolve_institutional_seat_v1"
+      ]
+    },
+    {
+      "name": "resolve_institutional_seat_v1",
+      "automated_pickup_or_seat08_reference": false,
+      "explicit_public_calls": []
+    }
+  ],
+  "native_definition_digests": [
+    {
+      "proname": "c3_evaluate_pac_schema_rules_v1",
+      "arguments": "p_schema_key text, p_presented_pac jsonb",
+      "definition_sha256": "4015f59e488200facab35686629c88e969e7132a33ac2ba553d3aefe528da4a4"
+    },
+    {
+      "proname": "c3_guard_registrar_pac_supersession_v1",
+      "arguments": "",
+      "definition_sha256": "26501c298a2934b41f9c1e8543cb6cdfb5cc3f66efca5e40dd6e9b1cae02a355"
+    },
+    {
+      "proname": "c3_is_current_state_presentation_only_v1",
+      "arguments": "p jsonb",
+      "definition_sha256": "9a09602fec4af5a866dc518fba212f0861dab60ca36483d0c9bc7ef1ee96eee3"
+    },
+    {
+      "proname": "c3_jsonb_path_satisfied",
+      "arguments": "p_document jsonb, p_dotted_path text",
+      "definition_sha256": "2749decc3172e2c8dc7ca58f2e968a2eab29d8b78aa7d0627a74b54823c75789"
+    },
+    {
+      "proname": "c3_open_ci_role_call_v1",
+      "arguments": "p_call_class text, p_source_oar2_ref text, p_boundary_evaluation_key text, p_presented_sha256 text, p_invoked_by text, p_evidence jsonb",
+      "definition_sha256": "d824004418bb860b6a08f666b204286014239fd33a3d12b4bbe0b7950cc26559"
+    },
+    {
+      "proname": "c3_pac_free_completeness_guard_v1",
+      "arguments": "",
+      "definition_sha256": "b559cffb4fff82354aaed081437e56069882f20d49a9acb994a2cf0b3abaf484"
+    },
+    {
+      "proname": "c3_pac_registrar_v1_completeness_guard",
+      "arguments": "",
+      "definition_sha256": "deacdc168b11eb17c3d1613947d8239a7f329ca6dd3af667c36d1d6724b296dc"
+    },
+    {
+      "proname": "c3_validate_current_accrual_v1",
+      "arguments": "p_subject_type text, p_subject_key text, p_env_key text, p_envpac_key text, p_current_state_key text, p_source_class text, p_source_key text, p_source_pac_key text, p_relation_standing text, p_evidence_ref text",
+      "definition_sha256": "7b75d2e87791124be880bf4d9bb700dd61f29d96d40bcc62dbba2c100155371f"
+    },
+    {
+      "proname": "c3_validate_pac_supersession_v1",
+      "arguments": "p_presented_pac jsonb, p_lock_prior boolean",
+      "definition_sha256": "f28c9a11e3ffa035135e520f6fdcbb190dabef3e51d19647fddbf3b09f586861"
+    },
+    {
+      "proname": "ensure_c1me_current_internal",
+      "arguments": "p_relationship_key text",
+      "definition_sha256": "564e9345861dc878105446c2a6e6534b7a5f971db314463a03ec61c9d66192d7"
+    },
+    {
+      "proname": "evaluate_c1_relational_boundary",
+      "arguments": "p_relationship_key text, p_env_key text, p_metadata jsonb",
+      "definition_sha256": "d26e2e2aa60b25b61b3d48c690ad8c78ed9303572b6f2662b459c5396f577f9c"
+    },
+    {
+      "proname": "form_c1_owner_environment",
+      "arguments": "p_relationship_key text, p_env_key text",
+      "definition_sha256": "ed7f2f40564e8042659931a948c5b8a58a634f3497a07a756fc777fc3b00fb22"
+    },
+    {
+      "proname": "free_resolve_my_env_current_state_v1",
+      "arguments": "p_session_sha256 text",
+      "definition_sha256": "3c0a307368ea4f62a844ee4f18ad9cdc94660f307d2492f5a394814a8c9dec91"
+    },
+    {
+      "proname": "free_resolve_pac_encounter_v1",
+      "arguments": "p_free_call_key text, p_selector_type text, p_selector_value text",
+      "definition_sha256": "6e960f5b9dec20f533f85a18be55c5e9e070881b4fc65fe65aef08448611802c"
+    },
+    {
+      "proname": "notchazz_evaluate_pac_registration_v1",
+      "arguments": "p_presented_pac jsonb, p_observed_evidence jsonb",
+      "definition_sha256": "1e32b1bfd78fe110cb46c063ef04637c35e821498f88f38a74e2c34916797a27"
+    },
+    {
+      "proname": "notchazz_evaluate_pac_registration_v2",
+      "arguments": "p_presented_pac jsonb, p_observed_evidence jsonb",
+      "definition_sha256": "23574f6d0fb8421fedc82ef92ba41146b0155b2d9982e2d225c04b481f849f02"
+    },
+    {
+      "proname": "notchazz_evaluate_pac_registration_v2_core",
+      "arguments": "p_presented_pac jsonb, p_observed_evidence jsonb",
+      "definition_sha256": "09225ff8e86520ca583ceb578edcff91cd171c7ca6d5991b800829541cab0bf5"
+    },
+    {
+      "proname": "register_and_persist_c1_relationship",
+      "arguments": "p_relationship_key text, p_env_key text, p_metadata jsonb",
+      "definition_sha256": "5664d96bd98d1b4a2ce46bbb50dd1fc0f9d2d37957e9c45e9b460e83d0a9079b"
+    },
+    {
+      "proname": "registrar_accrue_current_v1",
+      "arguments": "p_subject_type text, p_subject_key text, p_env_key text, p_envpac_key text, p_current_state_key text, p_source_class text, p_source_key text, p_source_pac_key text, p_relation_standing text, p_evidence_ref text, p_registrar_role_key text, p_metadata jsonb",
+      "definition_sha256": "91f4cb6a45c4d2720c769e3dc3da0761354a0f5bd9625e2b669d852a94ba4807"
+    },
+    {
+      "proname": "registrar_bind_c3_current_v1",
+      "arguments": "p_current_state_key text, p_env_key text, p_standing text, p_formation_authority_ref text, p_created_by text, p_effective_at timestamp with time zone, p_metadata jsonb, p_registrar_role_key text",
+      "definition_sha256": "53911ec0f2609d38cc146067770f6e1e6489930aac83566cebba2dc4ed2b1783"
+    },
+    {
+      "proname": "registrar_register_pac_v1",
+      "arguments": "p_presented_pac jsonb, p_boundary_evaluation_key text, p_registrar_role_call_key text, p_source_oar2_ref text",
+      "definition_sha256": "23e9c517aa9a2b52feeed9846fd1324c823c7015a42f97f7ea96b841bdec8c97"
+    },
+    {
+      "proname": "registrar_register_pac_v1_core",
+      "arguments": "p_presented_pac jsonb, p_boundary_evaluation_key text, p_registrar_role_call_key text, p_source_oar2_ref text",
+      "definition_sha256": "b60b142959f2055f478b8ef9708edfa877cb34dbae031d643bf0adcdb2281791"
+    },
+    {
+      "proname": "registrar_register_pac_v2",
+      "arguments": "p_presented_pac jsonb, p_boundary_evaluation_key text, p_registrar_role_call_key text, p_source_oar2_ref text",
+      "definition_sha256": "6e604eca24be9f986f5e642b0a58a9d5ccc70a43f912760a40a08ded07abba0f"
+    },
+    {
+      "proname": "resolve_c1me_current_internal",
+      "arguments": "p_relationship_key text",
+      "definition_sha256": "608d8da6564c73f43c18a2942c7bd3f34eeadf8f5c8f656fafe6a7f8a7d0ef19"
+    },
+    {
+      "proname": "resolve_c1me_current_tokens_internal",
+      "arguments": "p_relationship_key text",
+      "definition_sha256": "f4c2139c6baee10d3300986991f237c0666c3f2faed5dfe0bb284a0b03ddd362"
+    },
+    {
+      "proname": "resolve_institutional_pac_eligibility_v1",
+      "arguments": "p_institution_key text, p_institution_environment_key text",
+      "definition_sha256": "51edc7da39a62e7379768230f054c4dc05d956fab465105f882857859a443093"
+    },
+    {
+      "proname": "resolve_institutional_seat_v1",
+      "arguments": "p_institution_key text, p_institution_environment_key text",
+      "definition_sha256": "ab53f6201e678c419eadc741f1c29dd1a0de3fba028e26252b796bc45f2698ad"
+    }
+  ],
+  "pac_role_call_rule": [
+    {
+      "standing": "active",
+      "call_class": "pac_registration",
+      "source_ref": "governance://measures-of-inanna/env_role_call_elevated_v1",
+      "callee_role_key": "c3_registrar_ci_v1",
+      "caller_role_key": "c3_notchazz_boundary_v1"
+    }
+  ],
+  "ci_roles": [
+    {
+      "key": "c3_notchazz_boundary_v1",
+      "active": true,
+      "standing": "active"
+    },
+    {
+      "key": "c3_registrar_ci_v1",
+      "active": true,
+      "standing": "active"
+    }
+  ],
+  "acl": [
+    {
+      "name": "c3_open_ci_role_call_v1",
+      "owner": "postgres",
+      "anon_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "notchazz_evaluate_pac_registration_v2",
+      "owner": "postgres",
+      "anon_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "registrar_register_pac_v2",
+      "owner": "postgres",
+      "anon_execute": false,
+      "service_execute": true,
+      "authenticated_execute": false
+    }
+  ],
+  "registrar_capability": {
+    "role": "c3_registrar_ci_v1",
+    "active": true,
+    "function": "registrar_ci",
+    "standing": "active",
+    "can_accrue_current": true
+  },
+  "sql_capability_not_authority": {
+    "account": "postgres",
+    "schema_create": true,
+    "validator_owner": "postgres"
+  },
+  "verified_enrollment_persistence": {
+    "process": "env_role_call_persistence_binding_v1",
+    "status": "active",
+    "authority_state": "operator_confirmed_registered",
+    "fixed_bootstrap_key": "oar2_env_role_call_persistence_v1",
+    "bootstrap_status": "closed",
+    "bootstrap_operator_confirmed": true
+  },
+  "cloudflare": {
+    "project": "c3-field",
+    "production_branch": "c3field",
+    "source": "github",
+    "deployments_enabled": true,
+    "production_deployments_enabled": true,
+    "canonical_deployment": "6731f172-53c6-430c-8ef1-95caaf3e63e8",
+    "commit": "05852050923ec6dce0c651753c398497e23f9907",
+    "status": "success"
+  },
+  "production_mutations": 0
+}

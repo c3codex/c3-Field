@@ -15,6 +15,7 @@
     "functions/_middleware.ts"
   ],
   "reviewed_consumers": [
+    "functions/_lib/field-of-possibility.ts",
     "src/main.tsx",
     "src/c3_field_connect/C3CommunityConnect.tsx",
     "src/c3_field_connect/C3FieldRoot.tsx",

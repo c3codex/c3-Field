@@ -1,0 +1,18 @@
+✔ all seven chapters and enrollment are indexable without JavaScript (8.6714ms)
+✔ unadmitted, private and mismatched projections never render (1.187ms)
+✔ copy is escaped and unsafe navigation/media are excluded (2.592ms)
+✔ participant and operational hosts are never intercepted (48.4555ms)
+✔ missing configuration, refused or private projections return a terminal DNR response (15.0787ms)
+✔ www root redirects to the canonical registered surface (1.0813ms)
+✔ companion registration, source custody, relation and media predicates are required independently (21.6098ms)
+✔ companion uses the registered release vocabulary and WebPAC source-package direction (5.7717ms)
+✔ approved source candidate retains seven chapters, full categories, navigation and truthful SEO (8.9844ms)
+✔ hosting middleware never falls through to legacy content on landing refusal (29.1702ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 777.756

@@ -1,0 +1,86 @@
+[
+  {
+    "table_name": "c2_mdm_participation_relation",
+    "columns": "participation_key uuid, participant_relationship_key text, source_env_key text, source_envpac_key text, initiative_key text, target_environment_key text, relation_role text, standing text, passage_standing text, connected_at timestamp with time zone, revoked_at timestamp with time zone, evidence_ref text, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_cancom_device_key",
+    "columns": "device_key text, relationship_key text, env_key text, envpac_key text, encryption_public_key text, signing_public_key text, encryption_algorithm text, signing_algorithm text, key_fingerprint text, standing text, created_at timestamp with time zone, last_seen_at timestamp with time zone, revoked_at timestamp with time zone, metadata jsonb"
+  },
+  {
+    "table_name": "c3_env_directory_contact",
+    "columns": "contact_key uuid, env_key text, envpac_key text, normalized_email text, display_name text, organization text, phone text, preferred_channel text, source_class text, standing text, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_env_initiative_visibility",
+    "columns": "visibility_key text, relationship_key text, env_key text, envpac_key text, initiative_key text, initiative_envpac_key text, target_environment_key text, visibility_source text, source_ref text, standing text, visible_at timestamp with time zone, revoked_at timestamp with time zone, metadata jsonb"
+  },
+  {
+    "table_name": "c3_env_invite_acceptance",
+    "columns": "acceptance_key uuid, share_reference uuid, target_relationship_key text, acceptance_state text, created_at timestamp with time zone, accepted_at timestamp with time zone, updated_at timestamp with time zone, metadata jsonb"
+  },
+  {
+    "table_name": "c3_env_native_connection",
+    "columns": "connection_key text, pair_key text, source_relationship_key text, source_env_key text, source_envpac_key text, target_relationship_key text, target_env_key text, target_envpac_key text, standing text, formed_from_share_reference uuid, formed_at timestamp with time zone, updated_at timestamp with time zone, revoked_at timestamp with time zone, metadata jsonb"
+  },
+  {
+    "table_name": "c3_env_runtime_session",
+    "columns": "session_key uuid, token_sha256 text, envpac_key text, env_key text, subject_type text, subject_key text, standing text, created_at timestamp with time zone, last_seen_at timestamp with time zone, expires_at timestamp with time zone, revoked_at timestamp with time zone, evidence_ref text, metadata jsonb"
+  },
+  {
+    "table_name": "c3_env_share_reference",
+    "columns": "share_reference uuid, source_env_key text, source_envpac_key text, owner_subject_key text, share_state text, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone, revoked_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_environment",
+    "columns": "env_key text, system_key text, environment_name text, environment_class text, standing text, is_canonical boolean, is_active boolean, source_authority_ref text, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone, relational_circuit text, current_pair text, model_function text"
+  },
+  {
+    "table_name": "c3_envpac",
+    "columns": "envpac_key text, env_key text, version text, standing text, owner_subject_type text, owner_subject_key text, custodian_subject_type text, custodian_subject_key text, custody_uri text, custody_provider text, content_sha256 text, architecture_version text, is_effective boolean, portable boolean, metadata jsonb, effective_at timestamp with time zone, superseded_at timestamp with time zone, created_at timestamp with time zone, updated_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_envpac_access_grant",
+    "columns": "grant_key text, envpac_key text, subject_type text, subject_key text, relation_role text, scope jsonb, standing text, granted_by_type text, granted_by_key text, granted_at timestamp with time zone, expires_at timestamp with time zone, revoked_at timestamp with time zone, evidence_ref text, metadata jsonb"
+  },
+  {
+    "table_name": "c3_envpac_canopy_reference",
+    "columns": "reference_key uuid, envpac_key text, owner_subject_key text, surface_label text, display_label text, external_url text, handle text, sort_order integer, reference_state text, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone, removed_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_envpac_capability_grant",
+    "columns": "capability_key text, envpac_key text, system_key text, capability text, scope jsonb, standing text, evidence_ref text, created_at timestamp with time zone, updated_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_envpac_environment_binding",
+    "columns": "binding_key text, envpac_key text, env_key text, binding_role text, standing text, is_primary boolean, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_envpac_rooted_system",
+    "columns": "rooted_system_key text, envpac_key text, system_key text, relation_role text, standing text, authority_scope jsonb, runtime_ref text, source_ref text, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_initiative_connection_projection",
+    "columns": "projection_key text, initiative_key text, initiative_envpac_key text, connection_key text, source_relationship_key text, target_relationship_key text, source_share_reference uuid, standing text, created_at timestamp with time zone, metadata jsonb"
+  },
+  {
+    "table_name": "c3_my_env_owner_lifecycle_receipt",
+    "columns": "receipt_key uuid, relationship_key text, env_key text, envpac_key text, action text, standing text, disposition text, portable_manifest jsonb, manifest_sha256 text, target_custodian_type text, target_custodian_key text, target_custody_provider text, target_custody_uri text, metadata jsonb, created_at timestamp with time zone, completed_at timestamp with time zone"
+  },
+  {
+    "table_name": "c3_pac",
+    "columns": "pac_key text, envpac_key text, pac_type text, version text, standing text, custody_uri text, content_sha256 text, source_authority text, is_effective boolean, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone, contract_key text, architecture_version text, custodian_subject_type text, custodian_subject_key text, custody_provider text, authority_effect text, release_state text, execution_authority_state text, formation_state text, effective_at timestamp with time zone, supersedes_pac_key text, superseded_at timestamp with time zone, return_evidence_required boolean, owner_subject_type text, owner_subject_key text, owner_environment_key text, registration_protocol text, registration_sha256 text, boundary_evaluation_key text, registered_at timestamp with time zone, registrar_role_call_key text, schema_key text"
+  },
+  {
+    "table_name": "c3_pac_relation",
+    "columns": "relation_key text, source_pac_key text, relation_type text, target_kind text, target_key text, standing text, metadata jsonb, created_at timestamp with time zone"
+  },
+  {
+    "table_name": "crs_relationship",
+    "columns": "relationship_key text, primary_email text, display_name text, organization text, relationship_standing text, source_encounter text, is_test_relationship boolean, is_active boolean, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone"
+  },
+  {
+    "table_name": "crs_relationship_event",
+    "columns": "event_key text, relationship_key text, event_type text, source_system text, source_record_type text, source_record_ref text, event_standing text, next_permitted_encounter text, metadata jsonb, occurred_at timestamp with time zone, created_at timestamp with time zone"
+  }
+]

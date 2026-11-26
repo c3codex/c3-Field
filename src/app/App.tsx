@@ -543,6 +543,7 @@ export default function App() {
 
   if (isC3PersonalHost) {
     const personalPath = normalizePathname(window.location.pathname)
+    if (personalPath === "/connect") return <C3CommunityConnect />
     if (personalPath === "/" || personalPath === "/my-environment")
       return <Suspense fallback={<p>Opening your environment…</p>}><MyEnvironmentEncounter /></Suspense>
     if (personalPath === "/c2")

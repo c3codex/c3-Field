@@ -165,9 +165,10 @@ async function signedFoundationalSetUrl(env: PassageEnv, deps: Dependencies) {
   })
   if (!response.ok) throw new Error("foundational_set_sign_failed")
   const result = await response.json().catch(() => null)
-  if (!result || typeof result !== "object") throw new Error("foundational_set_sign_shape")
-  const signed = typeof result.signedURL === "string" ? result.signedURL :
-    typeof result.signedUrl === "string" ? result.signedUrl : null
+  if (!result || typeof result !== "object" || Array.isArray(result)) throw new Error("foundational_set_sign_shape")
+  const signedResult = result as Record<string, unknown>
+  const signed = typeof signedResult.signedURL === "string" ? signedResult.signedURL :
+    typeof signedResult.signedUrl === "string" ? signedResult.signedUrl : null
   if (!signed) throw new Error("foundational_set_sign_shape")
   return signed.startsWith("http://") || signed.startsWith("https://") ? signed : PROJECT_URL + signed
 }
@@ -389,6 +390,29 @@ export async function requestEnvironmentAccessLink(emailInput: unknown, env: Pas
     if (reentry.accepted === true) {
       const claim = await signedOwnerClaim(reentry.relationship_key,reentry.env_key,reentry.envpac_key,env,deps.now())
       await sendEnvironmentHandoff(reentry,claim,origin,env,deps,"reentry").catch(()=>false)
+    } else {
+      // Recovery authenticates the retained owner by email, without reopening participation.
+      const headers={apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!}
+      const query=new URLSearchParams({select:"relationship_key,primary_email",primary_email:"eq."+email,
+        relationship_standing:"eq.owner_terminated_my_env",is_active:"eq.false",is_test_relationship:"eq.false",limit:"2"})
+      const response=await deps.fetch(PROJECT_URL+"/rest/v1/crs_relationship?"+query,{headers,redirect:"error"})
+      const owners=response.ok?await response.json():[]
+      if(Array.isArray(owners)&&owners.length===1){
+        const owner=owners[0] as RecordValue
+        const receiptsQuery=new URLSearchParams({select:"relationship_key,env_key,envpac_key",relationship_key:"eq."+String(owner.relationship_key),
+          action:"eq.terminate",standing:"eq.completed",order:"completed_at.desc",limit:"1"})
+        const receiptResponse=await deps.fetch(PROJECT_URL+"/rest/v1/c3_my_env_owner_lifecycle_receipt?"+receiptsQuery,{headers,redirect:"error"})
+        const receipts=receiptResponse.ok?await receiptResponse.json():[]
+        if(Array.isArray(receipts)&&receipts.length===1&&owner.primary_email===email){
+          const receipt=receipts[0] as RecordValue
+          const issuedAt=Math.floor(deps.now()/60000)*60000
+          const claim=await signedOwnerClaim(String(owner.relationship_key),String(receipt.env_key),String(receipt.envpac_key),env,issuedAt)
+          const link=MY_ENVIRONMENT_ORIGIN+"/api/my-environment-owner-recovery#claim="+encodeURIComponent(claim)
+          await sendResend(env,deps,{to:email,subject:"Recover your retained c3Field records",idempotencyKey:"owner-recovery-"+String(receipt.envpac_key)+"-"+issuedAt,
+            text:"Retrieve your retained ownership and custody records:\n"+link+"\nThis link expires in 8 hours. Recovery does not restore participation or projection consent.",
+            html:'<p>Retrieve your retained ownership and custody records.</p><p><a href="'+esc(link)+'">Recover retained records</a></p><p>This link expires in 8 hours. Recovery does not restore participation or projection consent.</p>'})
+        }
+      }
     }
     // Deliberately identical response whether or not a matching relationship exists.
     return continuationRequired()

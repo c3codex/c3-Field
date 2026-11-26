@@ -1,0 +1,30 @@
+[
+  {
+    "url": "https://my.c3field.online/api/my-environment-owner-lifecycle",
+    "method": "GET",
+    "status": 401,
+    "body": "{\"standing\":\"environment_session_required\",\"message\":\"Open your environment again to continue.\"}",
+    "observed": "2026-11-25"
+  },
+  {
+    "url": "https://my.c3field.online/api/my-environment-pacs",
+    "method": "GET",
+    "status": 401,
+    "body": "{\"authenticated\":false,\"standing\":\"my_pacs_held\",\"reason\":\"environment_claim_required\"}",
+    "observed": "2026-11-25"
+  },
+  {
+    "url": "https://my.c3field.online/api/my-environment-current",
+    "method": "GET",
+    "status": 401,
+    "body": "{\"authenticated\":false,\"standing\":\"environment_claim_required\"}",
+    "observed": "2026-11-25"
+  },
+  {
+    "url": "https://c3field.online/api/public-surface",
+    "method": "GET",
+    "status": 409,
+    "body": "{\"status\":\"unavailable\"}",
+    "observed": "2026-11-25"
+  }
+]

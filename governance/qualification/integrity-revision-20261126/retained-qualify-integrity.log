@@ -1,0 +1,16 @@
+PASS history preserved
+PASS anon truncate refused c3_pac
+PASS anon truncate refused c3_pac_member
+PASS anon truncate refused c3_pac_relation
+PASS authenticated truncate refused c3_pac
+PASS authenticated truncate refused c3_pac_member
+PASS authenticated truncate refused c3_pac_relation
+PASS cross-protocol competitor refused
+PASS existing_index_requires_exact_readback
+PASS inconsistent_effective_state
+PASS competing_effective_successors
+PASS inherited_truncate_privilege
+PASS failed install rolls back index
+PASS concurrent successor waits then refuses lock timeout
+PASS concurrent loser refused after winner commit
+PASS installation lock contention refuses atomically

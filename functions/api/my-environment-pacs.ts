@@ -53,6 +53,9 @@ function record(value:unknown){
   return value&&typeof value==="object"&&!Array.isArray(value)?value as Record<string,unknown>:{}
 }
 async function personalPacs(env:PassageEnv,session:EnvironmentSession){
+  const grantQuery=new URLSearchParams({select:"scope",envpac_key:"eq."+session.envpacKey,
+    subject_type:"eq.individual",subject_key:"eq."+session.subjectKey,relation_role:"eq.owner"})
+  const grants=await (await rest(env,"c3_envpac_access_grant?"+grantQuery)).json() as Row[]
   const query=new URLSearchParams({
     select:"pac_key,pac_type,version,standing,release_state,custody_uri,custodian_subject_type,custodian_subject_key,custody_provider,metadata,updated_at",
     envpac_key:"eq."+session.envpacKey,
@@ -75,7 +78,12 @@ async function personalPacs(env:PassageEnv,session:EnvironmentSession){
     const metadata=record(row.metadata)
     const presentation=record(metadata.public_presentation)
     const approval=record(metadata.custody_approval)
-    const projection=record(metadata.encounter_projection)
+    const withdrawn=grants.some(grant=>{
+      const keys=record(grant.scope).withdrawn_pac_projections
+      return Array.isArray(keys)&&keys.includes(row.pac_key)
+    })
+    const projection=withdrawn?{standing:"REVOKED",authorized_by_owner:false,presentation_scope:"none",
+      surface_projections:[],authorization_snapshot_hash:null}:record(metadata.encounter_projection)
     const review=record(metadata.review_resolution)
     const distribution=record(metadata.distribution_resolution)
     const candidate=await rpc(env,"c3_pac_review_candidate_v1",{p_pac_key:row.pac_key})

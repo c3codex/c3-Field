@@ -1,0 +1,278 @@
+{
+  "shapes": [
+    {
+      "table_name": "c3_pac_member",
+      "columns": "member_key text, pac_key text, member_kind text, member_role text, source_object_key text, custody_provider text, custody_identifier text, custody_location text, runtime_uri text, runtime_binding_key text, integrity_algorithm text, integrity_value text, version text, standing text, required boolean, release_scope text, ordinal integer, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone"
+    },
+    {
+      "table_name": "c3_pac_type_contract",
+      "columns": "contract_key text, pac_type text, contract_version text, applies_to_table text, standing text, is_effective boolean, required_fields jsonb, required_member_roles jsonb, optional_member_roles jsonb, required_relations jsonb, conditional_requirements jsonb, resolver_policy jsonb, release_policy jsonb, authority_effect text, source_authority text, architecture_source_key text, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone, intake_schema jsonb, requires_c3_model_binding boolean"
+    }
+  ],
+  "dependencies": [
+    {
+      "kind": "profile_shape",
+      "value": {
+        "columns": "pac_key text, profile_key text, subject_type text, subject_key text, profile_class text, display_label text, visibility_scope text, metadata jsonb, created_at timestamp with time zone, updated_at timestamp with time zone",
+        "table_name": "c3_profile_pac"
+      }
+    },
+    {
+      "kind": "path_helper",
+      "value": "CREATE OR REPLACE FUNCTION public.c3_jsonb_path_satisfied(p_document jsonb, p_dotted_path text)\n RETURNS boolean\n LANGUAGE plpgsql\n IMMUTABLE\nAS $function$\ndeclare\n  v_value jsonb;\n  v_type text;\nbegin\n  if p_document is null or p_dotted_path is null or btrim(p_dotted_path)='' then\n    return false;\n  end if;\n\n  v_value := p_document #> string_to_array(p_dotted_path,'.');\n\n  if v_value is null or v_value = 'null'::jsonb then\n    return false;\n  end if;\n\n  v_type := jsonb_typeof(v_value);\n\n  if v_type='string' then\n    return length(btrim(v_value #>> '{}')) > 0;\n  elsif v_type='array' then\n    return jsonb_array_length(v_value) > 0;\n  elsif v_type='object' then\n    return v_value <> '{}'::jsonb;\n  end if;\n\n  return true;\nend;\n$function$\n"
+    },
+    {
+      "kind": "profile_contract",
+      "value": {
+        "metadata": {
+          "hardened_chain": "Connect EnvPAC > c1My_Env > ProfilePAC",
+          "c3_key_external": true,
+          "current_external": true,
+          "chain_hardened_at": "2026-09-27T02:28:04.556975+00:00",
+          "chain_hardened_by": "op044",
+          "membership_external": true,
+          "personalization_storage": "c3_profile_pac.metadata.personalization",
+          "operator_standing_external": true,
+          "profile_pac_dynamic_renderer": true,
+          "profile_envpac_rebinding_allowed": false,
+          "profile_does_not_create_authority": true,
+          "profile_subject_reassignment_allowed": false,
+          "personalization_fields_non_authoritative": true
+        },
+        "pac_type": "ProfilePAC",
+        "standing": "active",
+        "created_at": "2026-09-24T02:48:54.776712+00:00",
+        "updated_at": "2026-09-27T02:28:04.556975+00:00",
+        "contract_key": "pac_contract_profilepac_v1",
+        "is_effective": true,
+        "intake_schema": {
+          "fields": [
+            {
+              "key": "profile.display_label",
+              "input": "text",
+              "label": "Display name",
+              "required": true,
+              "max_length": 160,
+              "placeholder": "How should this profile be shown?"
+            },
+            {
+              "key": "profile.visibility_scope",
+              "input": "select",
+              "label": "Visibility",
+              "default": "private",
+              "options": [
+                {
+                  "label": "Private",
+                  "value": "private"
+                },
+                {
+                  "label": "This environment",
+                  "value": "environment"
+                },
+                {
+                  "label": "Relational",
+                  "value": "relational"
+                },
+                {
+                  "label": "Public",
+                  "value": "public"
+                }
+              ],
+              "required": true
+            },
+            {
+              "key": "profile.about",
+              "input": "textarea",
+              "label": "About me",
+              "required": false,
+              "max_length": 600,
+              "placeholder": "A short introduction in your own words."
+            },
+            {
+              "key": "profile.interests",
+              "input": "textarea",
+              "label": "What I’m interested in",
+              "required": false,
+              "max_length": 400,
+              "placeholder": "Ideas, work, places, communities, questions…"
+            },
+            {
+              "key": "profile.open_to",
+              "input": "multiselect",
+              "label": "What I’m open to",
+              "options": [
+                {
+                  "label": "Connect",
+                  "value": "connect"
+                },
+                {
+                  "label": "Collaborate",
+                  "value": "collaborate"
+                },
+                {
+                  "label": "Contribute",
+                  "value": "contribute"
+                },
+                {
+                  "label": "Create",
+                  "value": "create"
+                },
+                {
+                  "label": "Support",
+                  "value": "support"
+                },
+                {
+                  "label": "Learn",
+                  "value": "learn"
+                }
+              ],
+              "required": false
+            },
+            {
+              "key": "profile.location_region",
+              "input": "text",
+              "label": "Location / region",
+              "required": false,
+              "max_length": 120,
+              "placeholder": "Optional"
+            }
+          ],
+          "resolved_fields": [
+            {
+              "key": "profile.profile_class",
+              "source": "registered_subject_type"
+            },
+            {
+              "key": "profile.subject_type",
+              "source": "environment_session"
+            },
+            {
+              "key": "profile.subject_key",
+              "source": "environment_session"
+            },
+            {
+              "key": "envpac_key",
+              "source": "environment_session"
+            }
+          ]
+        },
+        "release_policy": {
+          "requires_effective": true,
+          "allowed_release_states_for_resolution": [
+            "private",
+            "environment",
+            "relational",
+            "public"
+          ]
+        },
+        "required_fields": [
+          "pac_key",
+          "envpac_key",
+          "pac_type",
+          "version",
+          "standing",
+          "custody_uri",
+          "source_authority",
+          "contract_key",
+          "architecture_version",
+          "custodian_subject_type",
+          "custodian_subject_key",
+          "custody_provider",
+          "authority_effect",
+          "release_state",
+          "execution_authority_state",
+          "formation_state",
+          "return_evidence_required",
+          "profile.profile_key",
+          "profile.subject_type",
+          "profile.subject_key",
+          "profile.profile_class",
+          "profile.display_label",
+          "profile.visibility_scope"
+        ],
+        "resolver_policy": {
+          "surface": "c1My_Env",
+          "child_of": "EnvPAC",
+          "resolver": "EnvPAC_FREE",
+          "fail_closed": true,
+          "required_chain": [
+            "Connect EnvPAC",
+            "c1My_Env",
+            "ProfilePAC"
+          ],
+          "connect_envpac_key": "c3envpac_c1me_v0_1",
+          "direct_frontend_root": false,
+          "frontend_may_not_bypass_chain": true,
+          "profile_pac_only_from_personal_c1_envpac": true
+        },
+        "applies_to_table": "c3_pac",
+        "authority_effect": "none",
+        "contract_version": "v1",
+        "source_authority": "pac_base_contract_v1_1",
+        "required_relations": [
+          {
+            "relation": "Connect EnvPAC -> c1My_Env",
+            "required": true,
+            "target_rule": "personal EnvPAC with metadata.formed_from_c1=true",
+            "source_envpac": "c3envpac_c1me_v0_1"
+          },
+          {
+            "relation": "c1My_Env -> ProfilePAC",
+            "required": true,
+            "target_pac_type": "ProfilePAC",
+            "subject_must_equal_envpac_owner": true,
+            "active_profile_primitive_required": true
+          }
+        ],
+        "optional_member_roles": [
+          {
+            "kind": "media",
+            "role": "avatar"
+          },
+          {
+            "kind": "content",
+            "role": "bio"
+          },
+          {
+            "kind": "record",
+            "role": "capacity"
+          },
+          {
+            "kind": "record",
+            "role": "interest"
+          },
+          {
+            "kind": "record",
+            "role": "contact_preference"
+          },
+          {
+            "kind": "record",
+            "role": "link"
+          },
+          {
+            "kind": "media",
+            "role": "profile_media"
+          }
+        ],
+        "required_member_roles": [],
+        "architecture_source_key": "pac_base_contract_v1_1",
+        "conditional_requirements": [],
+        "requires_c3_model_binding": true
+      }
+    }
+  ],
+  "helpers": [
+    {
+      "proname": "c3_pac_evaluate",
+      "definition": "CREATE OR REPLACE FUNCTION public.c3_pac_evaluate(p_pac_key text)\n RETURNS jsonb\n LANGUAGE plpgsql\n STABLE\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_pac public.c3_pac%rowtype;\n  v_profile public.c3_profile_pac%rowtype;\n  v_contract public.c3_pac_type_contract%rowtype;\n  v_document jsonb;\n  v_field text;\n  v_req jsonb;\n  v_role text;\n  v_kind text;\n  v_relation_type text;\n  v_target_kind text;\n  v_min integer;\n  v_count integer;\n  v_missing_fields jsonb := '[]'::jsonb;\n  v_missing_member_roles jsonb := '[]'::jsonb;\n  v_missing_relations jsonb := '[]'::jsonb;\n  v_custody_integrity_conflicts jsonb := '[]'::jsonb;\n  v_supersession_conflicts jsonb := '[]'::jsonb;\n  v_release_blockers jsonb := '[]'::jsonb;\n  v_allowed_release_states jsonb;\n  v_completeness text;\n  v_resolution text;\nbegin\n  select * into v_pac\n  from public.c3_pac\n  where pac_key = p_pac_key;\n\n  if not found then\n    return jsonb_build_object(\n      'pac_key',p_pac_key,\n      'completeness_state','held',\n      'resolution_state','held',\n      'reason','pac_not_found'\n    );\n  end if;\n\n  if v_pac.contract_key is null then\n    return jsonb_build_object(\n      'pac_key',v_pac.pac_key,\n      'pac_type',v_pac.pac_type,\n      'completeness_state','held',\n      'resolution_state','held',\n      'reason','contract_unbound_legacy',\n      'legacy_unreconciled',true\n    );\n  end if;\n\n  select * into v_contract\n  from public.c3_pac_type_contract\n  where contract_key=v_pac.contract_key\n    and pac_type=v_pac.pac_type;\n\n  if not found then\n    return jsonb_build_object(\n      'pac_key',v_pac.pac_key,\n      'pac_type',v_pac.pac_type,\n      'contract_key',v_pac.contract_key,\n      'completeness_state','held',\n      'resolution_state','held',\n      'reason','contract_type_mismatch_or_missing'\n    );\n  end if;\n\n  select * into v_profile\n  from public.c3_profile_pac\n  where pac_key=v_pac.pac_key;\n\n  v_document := to_jsonb(v_pac)\n    || jsonb_build_object(\n      'profile',\n      case\n        when v_profile.pac_key is null then 'null'::jsonb\n        else to_jsonb(v_profile)\n      end\n    );\n\n  for v_field in\n    select value\n    from jsonb_array_elements_text(v_contract.required_fields)\n  loop\n    if not public.c3_jsonb_path_satisfied(v_document,v_field) then\n      v_missing_fields := v_missing_fields || jsonb_build_array(v_field);\n    end if;\n  end loop;\n\n  for v_req in\n    select value\n    from jsonb_array_elements(v_contract.required_member_roles)\n  loop\n    v_role := nullif(v_req->>'role','');\n    v_kind := nullif(v_req->>'kind','');\n    v_min := greatest(coalesce((v_req->>'min')::integer,1),1);\n\n    select count(*)::integer into v_count\n    from public.c3_pac_member m\n    where m.pac_key=v_pac.pac_key\n      and m.standing='active'\n      and (v_role is null or m.member_role=v_role)\n      and (v_kind is null or m.member_kind=v_kind);\n\n    if v_count < v_min then\n      v_missing_member_roles := v_missing_member_roles\n        || jsonb_build_array(\n          jsonb_build_object(\n            'role',v_role,\n            'kind',v_kind,\n            'required',v_min,\n            'observed',v_count\n          )\n        );\n    else\n      if coalesce((v_req->>'custody_required')::boolean,false) then\n        if exists (\n          select 1\n          from public.c3_pac_member m\n          where m.pac_key=v_pac.pac_key\n            and m.standing='active'\n            and (v_role is null or m.member_role=v_role)\n            and (v_kind is null or m.member_kind=v_kind)\n            and (\n              m.custody_provider is null\n              or (m.custody_identifier is null and m.custody_location is null)\n            )\n        ) then\n          v_custody_integrity_conflicts := v_custody_integrity_conflicts\n            || jsonb_build_array(\n              jsonb_build_object('role',v_role,'kind',v_kind,'conflict','custody_required')\n            );\n        end if;\n      end if;\n\n      if coalesce((v_req->>'integrity_required')::boolean,false) then\n        if exists (\n          select 1\n          from public.c3_pac_member m\n          where m.pac_key=v_pac.pac_key\n            and m.standing='active'\n            and (v_role is null or m.member_role=v_role)\n            and (v_kind is null or m.member_kind=v_kind)\n            and (m.integrity_algorithm is null or m.integrity_value is null)\n        ) then\n          v_custody_integrity_conflicts := v_custody_integrity_conflicts\n            || jsonb_build_array(\n              jsonb_build_object('role',v_role,'kind',v_kind,'conflict','integrity_required')\n            );\n        end if;\n      end if;\n    end if;\n  end loop;\n\n  for v_req in\n    select value\n    from jsonb_array_elements(v_contract.required_relations)\n  loop\n    v_relation_type := nullif(v_req->>'relation_type','');\n    v_target_kind := nullif(v_req->>'target_kind','');\n    v_min := greatest(coalesce((v_req->>'min')::integer,1),1);\n\n    select count(*)::integer into v_count\n    from public.c3_pac_relation r\n    where r.source_pac_key=v_pac.pac_key\n      and r.standing='active'\n      and (v_relation_type is null or r.relation_type=v_relation_type)\n      and (v_target_kind is null or r.target_kind=v_target_kind);\n\n    if v_count < v_min then\n      v_missing_relations := v_missing_relations\n        || jsonb_build_array(\n          jsonb_build_object(\n            'relation_type',v_relation_type,\n            'target_kind',v_target_kind,\n            'required',v_min,\n            'observed',v_count\n          )\n        );\n    end if;\n  end loop;\n\n  if v_pac.superseded_at is not null and v_pac.is_effective then\n    v_supersession_conflicts := v_supersession_conflicts\n      || jsonb_build_array('superseded_pac_marked_effective');\n  end if;\n\n  if v_pac.supersedes_pac_key = v_pac.pac_key then\n    v_supersession_conflicts := v_supersession_conflicts\n      || jsonb_build_array('self_supersession');\n  end if;\n\n  if coalesce((v_contract.release_policy->>'requires_effective')::boolean,false)\n     and not v_pac.is_effective then\n    v_release_blockers := v_release_blockers || jsonb_build_array('pac_not_effective');\n  end if;\n\n  v_allowed_release_states := v_contract.release_policy->'allowed_release_states_for_resolution';\n\n  if v_allowed_release_states is not null\n     and jsonb_typeof(v_allowed_release_states)='array'\n     and jsonb_array_length(v_allowed_release_states)>0\n     and not exists (\n       select 1\n       from jsonb_array_elements_text(v_allowed_release_states) s(value)\n       where s.value = coalesce(v_pac.release_state,'')\n     ) then\n    v_release_blockers := v_release_blockers\n      || jsonb_build_array(\n        jsonb_build_object(\n          'release_state',v_pac.release_state,\n          'allowed',v_allowed_release_states\n        )\n      );\n  end if;\n\n  v_completeness := case\n    when jsonb_array_length(v_missing_fields)=0\n      and jsonb_array_length(v_missing_member_roles)=0\n      and jsonb_array_length(v_missing_relations)=0\n      and jsonb_array_length(v_custody_integrity_conflicts)=0\n      and jsonb_array_length(v_supersession_conflicts)=0\n    then 'pass'\n    else 'held'\n  end;\n\n  v_resolution := case\n    when v_completeness='pass'\n      and jsonb_array_length(v_release_blockers)=0\n    then 'pass'\n    else 'held'\n  end;\n\n  return jsonb_build_object(\n    'pac_key',v_pac.pac_key,\n    'pac_type',v_pac.pac_type,\n    'contract_key',v_contract.contract_key,\n    'contract_version',v_contract.contract_version,\n    'completeness_state',v_completeness,\n    'resolution_state',v_resolution,\n    'missing_required_fields',v_missing_fields,\n    'missing_member_roles',v_missing_member_roles,\n    'missing_relations',v_missing_relations,\n    'custody_integrity_conflicts',v_custody_integrity_conflicts,\n    'supersession_conflicts',v_supersession_conflicts,\n    'release_blockers',v_release_blockers,\n    'authority_effect',coalesce(v_pac.authority_effect,v_contract.authority_effect,'none')\n  );\nend;\n$function$\n"
+    },
+    {
+      "proname": "c3_profile_pac_truth",
+      "definition": "CREATE OR REPLACE FUNCTION public.c3_profile_pac_truth(p_pac_key text)\n RETURNS jsonb\n LANGUAGE plpgsql\n STABLE\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_pac public.c3_pac%rowtype;\n  v_profile public.c3_profile_pac%rowtype;\n  v_members jsonb;\n  v_evaluation jsonb;\n  v_personalization jsonb;\nbegin\n  select * into v_pac from public.c3_pac where pac_key=p_pac_key and pac_type='ProfilePAC';\n  if not found then return jsonb_build_object('standing','profile_pac_not_found','pac_key',p_pac_key); end if;\n  select * into v_profile from public.c3_profile_pac where pac_key=p_pac_key;\n  v_personalization:=coalesce(v_profile.metadata->'personalization','{}'::jsonb);\n\n  select coalesce(jsonb_agg(jsonb_build_object(\n    'member_key',m.member_key,'member_kind',m.member_kind,'member_role',m.member_role,\n    'source_object_key',m.source_object_key,'custody_provider',m.custody_provider,\n    'custody_identifier',m.custody_identifier,'custody_location',m.custody_location,\n    'runtime_uri',m.runtime_uri,'integrity_algorithm',m.integrity_algorithm,\n    'integrity_value',m.integrity_value,'version',m.version,'standing',m.standing,\n    'release_scope',m.release_scope,'ordinal',m.ordinal\n  ) order by m.ordinal nulls last,m.member_key),'[]'::jsonb)\n  into v_members\n  from public.c3_pac_member m\n  where m.pac_key=p_pac_key and m.standing='active';\n\n  v_evaluation:=public.c3_pac_evaluate(p_pac_key);\n\n  return jsonb_build_object(\n    'pac_key',v_pac.pac_key,'envpac_key',v_pac.envpac_key,'version',v_pac.version,\n    'standing',v_pac.standing,'is_effective',v_pac.is_effective,\n    'architecture_version',v_pac.architecture_version,'release_state',v_pac.release_state,\n    'authority_effect',coalesce(v_pac.authority_effect,'none'),\n    'profile',case when v_profile.pac_key is null then null else jsonb_build_object(\n      'profile_key',v_profile.profile_key,'subject_type',v_profile.subject_type,\n      'subject_key',v_profile.subject_key,'profile_class',v_profile.profile_class,\n      'display_label',v_profile.display_label,'visibility_scope',v_profile.visibility_scope,\n      'about',v_personalization->>'about',\n      'interests',v_personalization->>'interests',\n      'open_to',coalesce(v_personalization->'open_to','[]'::jsonb),\n      'location_region',v_personalization->>'location_region'\n    ) end,\n    'members',v_members,'evaluation',v_evaluation\n  );\nend;\n$function$\n"
+    },
+    {
+      "proname": "resolve_profile_pac_v1_internal",
+      "definition": "CREATE OR REPLACE FUNCTION public.resolve_profile_pac_v1_internal(p_envpac_key text, p_subject_type text, p_subject_key text)\n RETURNS jsonb\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_pac_key text;\nbegin\n  select p.pac_key into v_pac_key\n  from public.c3_pac p\n  join public.c3_profile_pac pr on pr.pac_key=p.pac_key\n  where p.envpac_key=p_envpac_key\n    and p.pac_type='ProfilePAC'\n    and p.is_effective=true\n    and pr.subject_type=p_subject_type\n    and pr.subject_key=p_subject_key\n  order by p.effective_at desc nulls last,p.created_at desc\n  limit 1;\n\n  if v_pac_key is null then\n    return jsonb_build_object(\n      'standing','profile_not_formed',\n      'envpac_key',p_envpac_key,\n      'authority_effect','none'\n    );\n  end if;\n\n  return public.c3_profile_pac_truth(v_pac_key);\nend;\n$function$\n"
+    }
+  ]
+}

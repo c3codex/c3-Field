@@ -1,0 +1,69 @@
+functions/_lib/c3ops-authorization-optics.ts(23,107): error TS2339: Property 'includes' does not exist on type 'unknown'.
+src/app/App.tsx(378,45): error TS2339: Property 'og_title' does not exist on type '{ kicker?: string; title?: string; header_line?: string; initiative_explanation?: string; model_descriptor?: string; model_path?: string; model_body?: string; connect_copy?: string; audience_copy?: string; ... 6 more ...; public_surface_protected_primitive_labels_allowed?: boolean; }'.
+src/app/App.tsx(379,51): error TS2339: Property 'og_description' does not exist on type '{ kicker?: string; title?: string; header_line?: string; initiative_explanation?: string; model_descriptor?: string; model_path?: string; model_body?: string; connect_copy?: string; audience_copy?: string; ... 6 more ...; public_surface_protected_primitive_labels_allowed?: boolean; }'.
+src/app/App.tsx(381,48): error TS2339: Property 'og_image_asset_key' does not exist on type '{ kicker?: string; title?: string; header_line?: string; initiative_explanation?: string; model_descriptor?: string; model_path?: string; model_body?: string; connect_copy?: string; audience_copy?: string; ... 6 more ...; public_surface_protected_primitive_labels_allowed?: boolean; }'.
+src/c3_field_connect/C3CommunityConnect.tsx(112,32): error TS2339: Property 'public_identity' does not exist on type 'C3PublicPresentation'.
+src/c3_field_connect/C3CommunityConnect.tsx(130,81): error TS2339: Property 'formal_authority_statement' does not exist on type '{ kicker?: string; title?: string; header_line?: string; initiative_explanation?: string; model_descriptor?: string; model_path?: string; model_body?: string; connect_copy?: string; audience_copy?: string; ... 6 more ...; public_surface_protected_primitive_labels_allowed?: boolean; }'.
+src/c3_field_connect/C3CommunityConnect.tsx(224,38): error TS2339: Property 'open_question' does not exist on type '{ kicker?: string; title?: string; header_line?: string; initiative_explanation?: string; model_descriptor?: string; model_path?: string; model_body?: string; connect_copy?: string; audience_copy?: string; ... 6 more ...; public_surface_protected_primitive_labels_allowed?: boolean; }'.
+src/c3_field_connect/C3CommunityConnect.tsx(225,97): error TS2339: Property 'open_question_helper' does not exist on type '{ kicker?: string; title?: string; header_line?: string; initiative_explanation?: string; model_descriptor?: string; model_path?: string; model_body?: string; connect_copy?: string; audience_copy?: string; ... 6 more ...; public_surface_protected_primitive_labels_allowed?: boolean; }'.
+src/c3_field_connect/C3PublicDocumentPage.tsx(16,31): error TS2339: Property 'public_identity' does not exist on type 'C3PublicPresentation'.
+src/c3_field_connect/MillionDollarMissionLanding.tsx(16,31): error TS2339: Property 'public_identity' does not exist on type 'C3PublicPresentation'.
+src/c3_field_connect/MyEnvironmentEncounter.tsx(843,28): error TS2304: Cannot find name 'setProfileNotice'.
+src/c3_field_connect/MyEnvironmentEncounter.tsx(844,47): error TS2304: Cannot find name 'setProfileNotice'.
+src/c3_field_connect/MyEnvironmentEncounter.tsx(853,7): error TS2304: Cannot find name 'setProfileNotice'.
+src/c3_field_connect/MyEnvironmentEncounter.tsx(854,19): error TS2304: Cannot find name 'setProfileNotice'.
+src/c3_field_convergence/branchEncounterReadiness.ts(212,5): error TS2322: Type '{ branch_key: string; readiness_state: BranchEncounterReadinessState; read_only: boolean; permission_source: string; route_visibility_permission: boolean; ... 4 more ...; optics_downstream: { ...; }; }[]' is not assignable to type 'BranchEncounterReadiness[]'.
+  Type '{ branch_key: string; readiness_state: BranchEncounterReadinessState; read_only: boolean; permission_source: string; route_visibility_permission: boolean; ... 4 more ...; optics_downstream: { ...; }; }' is not assignable to type 'BranchEncounterReadiness'.
+    Types of property 'read_only' are incompatible.
+      Type 'boolean' is not assignable to type 'true'.
+src/c3_field_convergence/operatorGatedAutomationBridge.ts(209,5): error TS2322: Type '{ branch_key: string; automation_state: AutomationTransitionState; operator_gate: "blocked" | "required" | "not_applicable" | "satisfied"; mutation_allowed: boolean; ... 5 more ...; source_standing: { ...; }; }[]' is not assignable to type 'AutomationBridgeBranch[]'.
+  Type '{ branch_key: string; automation_state: AutomationTransitionState; operator_gate: "blocked" | "required" | "not_applicable" | "satisfied"; mutation_allowed: boolean; ... 5 more ...; source_standing: { ...; }; }' is not assignable to type 'AutomationBridgeBranch'.
+    Types of property 'mutation_allowed' are incompatible.
+      Type 'boolean' is not assignable to type 'false'.
+src/lib/cancom-e2ee.ts(87,53): error TS2345: Argument of type 'Uint8Array<ArrayBufferLike>' is not assignable to parameter of type 'BufferSource'.
+  Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'ArrayBufferView<ArrayBuffer>'.
+    Types of property 'buffer' are incompatible.
+      Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+        Type 'SharedArrayBuffer' is not assignable to type 'ArrayBuffer'.
+          Types of property '[Symbol.toStringTag]' are incompatible.
+            Type '"SharedArrayBuffer"' is not assignable to type '"ArrayBuffer"'.
+src/lib/cancom-e2ee.ts(187,24): error TS2769: No overload matches this call.
+  Overload 2 of 2, '(algorithm: AlgorithmIdentifier | Pbkdf2Params | EcdhKeyDeriveParams | HkdfParams, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | ... 3 more ... | AesDerivedKeyParams, extractable: boolean, keyUsages: KeyUsage[]): Promise<...>', gave the following error.
+    Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'BufferSource'.
+      Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'ArrayBufferView<ArrayBuffer>'.
+        Types of property 'buffer' are incompatible.
+          Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+            Type 'SharedArrayBuffer' is not assignable to type 'ArrayBuffer'.
+              Types of property '[Symbol.toStringTag]' are incompatible.
+                Type '"SharedArrayBuffer"' is not assignable to type '"ArrayBuffer"'.
+  Overload 2 of 2, '(algorithm: AlgorithmIdentifier | Pbkdf2Params | EcdhKeyDeriveParams | HkdfParams, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | ... 3 more ... | AesDerivedKeyParams, extractable: boolean, keyUsages: KeyUsage[]): Promise<...>', gave the following error.
+    Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'BufferSource'.
+      Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'ArrayBufferView<ArrayBuffer>'.
+        Types of property 'buffer' are incompatible.
+          Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+            Type 'SharedArrayBuffer' is not assignable to type 'ArrayBuffer'.
+              Types of property '[Symbol.toStringTag]' are incompatible.
+                Type '"SharedArrayBuffer"' is not assignable to type '"ArrayBuffer"'.
+src/measures_of_inanna/GenericEncounter.tsx(176,45): error TS2345: Argument of type 'string' is not assignable to parameter of type '"aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"'.
+src/measures_of_inanna/GenericEncounter.tsx(176,53): error TS2322: Type 'string' is not assignable to type '"aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"'.
+src/measures_of_inanna/GenericEncounter.tsx(192,41): error TS2345: Argument of type '(this: undefined, slot: string | { role?: string; label?: string; body?: string[]; text?: string; description?: string; show_when_unseated?: boolean; showWhenUnseated?: boolean; }) => { role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of...' is not assignable to parameter of type '(this: undefined, value: string | { role?: string; label?: string; body?: string[]; text?: string; description?: string; show_when_unseated?: boolean; showWhenUnseated?: boolean; }, index: number, array: (string | { role?: string; ... 5 more ...; showWhenUnseated?: boolean; })[]) => { ...; } | readonly { ...; }[]'.
+  Type '{ role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"; label: "Original Artwork" | "Historical Significance" | "Rule Of Measure" | "Knew Album" | "Material Tone"; body: any[]; showWhenUnseated: boolean; }[] | { ...; }[]' is not assignable to type '{ role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"; label: "Original Artwork" | "Historical Significance" | "Rule Of Measure" | "Knew Album" | "Material Tone"; body: any[]; showWhenUnseated: boolean; } | readonly { ...; }[]'.
+    Type '{ role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"; label: string; body: string[]; showWhenUnseated: boolean; }[]' is not assignable to type '{ role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"; label: "Original Artwork" | "Historical Significance" | "Rule Of Measure" | "Knew Album" | "Material Tone"; body: any[]; showWhenUnseated: boolean; } | readonly { ...; }[]'.
+      Type '{ role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"; label: string; body: string[]; showWhenUnseated: boolean; }[]' is not assignable to type 'readonly { role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"; label: "Original Artwork" | "Historical Significance" | "Rule Of Measure" | "Knew Album" | "Material Tone"; body: any[]; showWhenUnseated: boolean; }[]'.
+        Type '{ role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"; label: string; body: string[]; showWhenUnseated: boolean; }' is not assignable to type '{ role: "aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"; label: "Original Artwork" | "Historical Significance" | "Rule Of Measure" | "Knew Album" | "Material Tone"; body: any[]; showWhenUnseated: boolean; }'.
+          Types of property 'label' are incompatible.
+            Type 'string' is not assignable to type '"Original Artwork" | "Historical Significance" | "Rule Of Measure" | "Knew Album" | "Material Tone"'.
+src/measures_of_inanna/GenericEncounter.tsx(193,72): error TS2345: Argument of type 'string' is not assignable to parameter of type '"aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"'.
+src/measures_of_inanna/GenericEncounter.tsx(202,78): error TS2345: Argument of type 'string' is not assignable to parameter of type '"aspect_original_artwork" | "aspect_knew_album" | "aspect_material_tone" | "aspect_historical_significance" | "aspect_rule_of_measure"'.
+src/measures_of_inanna/GenericEncounter.tsx(235,34): error TS2322: Type 'unknown[]' is not assignable to type 'ChamberplateAspectSlotDefinition[]'.
+  Type '{}' is missing the following properties from type 'ChamberplateAspectSlotDefinition': role, label, body, showWhenUnseated
+src/measures_of_inanna/GenericEncounter.tsx(347,55): error TS2552: Cannot find name 'PhaseMapNodeState'. Did you mean 'PhaseMapNode'?
+src/measures_of_inanna/GenericEncounter.tsx(1251,41): error TS2339: Property 'fade_ms' does not exist on type 'PlaybackView'.
+src/measures_of_inanna/GenericEncounter.tsx(1268,14): error TS2339: Property 'fade_ms' does not exist on type 'PlaybackView'.
+src/measures_of_inanna/GenericEncounter.tsx(1349,11): error TS2322: Type '{ phaseMap: PhaseMapContract; nodes: PhaseMapNode[]; routeViaRegistryKey: string; onNavigate: (nextRegistryKey: string, options?: { targetAfterPassage?: string; }) => void; activeRegistryKey: string; viewedRegistryKeys: string[]; governance: Oar2Governance; }' is not assignable to type 'IntrinsicAttributes & { phaseMap?: PhaseMapContract; nodes: PhaseMapNode[]; onNavigate: (registryKey: string) => void; activeRegistryKey?: string; viewedRegistryKeys?: string[]; governance: Oar2Governance; }'.
+  Property 'routeViaRegistryKey' does not exist on type 'IntrinsicAttributes & { phaseMap?: PhaseMapContract; nodes: PhaseMapNode[]; onNavigate: (registryKey: string) => void; activeRegistryKey?: string; viewedRegistryKeys?: string[]; governance: Oar2Governance; }'.
+src/measures_of_inanna/GenericEncounter.tsx(1428,9): error TS2698: Spread types may only be created from object types.
+src/measures_of_inanna/GenericEncounter.tsx(1431,42): error TS2339: Property 'fade_ms' does not exist on type 'PlaybackView'.
+src/measures_registry/encounter_renderer/publications/UnDriftedMgsRenderer.tsx(401,50): error TS2339: Property 'issue_number' does not exist on type 'EncounterIssuePageRow'.
+src/measures_registry/encounter_renderer/styles/encounterStyleProfile.ts(372,7): error TS2322: Type 'FrameProfile | SpatialProfile | ContentAnchor | TypographyProfile | MotionProfile | SurfaceDensity | VisualTension' is not assignable to type 'never'.
+  Type '"cinematic_frame"' is not assignable to type 'never'.

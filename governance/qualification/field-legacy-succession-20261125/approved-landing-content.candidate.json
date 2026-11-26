@@ -1,0 +1,230 @@
+{
+  "standing": "SOURCE_CANDIDATE_NOT_REGISTERED",
+  "public_landing": {
+    "format": "c3field_field_of_possibility_v1",
+    "source_sha256": "4e493faafb6ba2ebeb9045a4797a28180c0c1fdb95d3c48fdcd841e05075fc74",
+    "design": {
+      "pac_key": "c3field_public_landing_designpac_v1",
+      "source_sha256": "2089daf7d3a4715dd91afc2fc9f3120384d81486a9b82fb1ef9cd9ea9e3e1a45",
+      "registration_sha256": null
+    },
+    "identity": {
+      "legal_entity": "c3 Community Partners DAO, LLC",
+      "privacy_url": "https://c3field.online/privacy",
+      "terms_url": "https://c3field.online/terms",
+      "contact_url": "https://c3field.online/contact"
+    },
+    "seo": {
+      "title": "c3 Field — A Field of Possibility | Connected Environments & AI",
+      "description": "Discover c3 Field, a connected ecosystem for individuals, creators, communities and organizations. Create your Current State environment and connect, contribute and create on your own terms.",
+      "canonical_url": "https://c3field.online/",
+      "og_title": "c3 Field — A Field of Possibility",
+      "og_description": "Connect. Contribute. Create. Discover a connected ecosystem of people, ideas, intelligence and possibility.",
+      "image": null
+    },
+    "chapters": [
+      {
+        "id": "arrival",
+        "heading": "c3 Field — A Field of Possibility",
+        "headline": "Connect. Contribute. Create.",
+        "paragraphs": [
+          "A connected ecosystem where individuals, communities, organizations and intelligent systems can participate, collaborate and create without surrendering ownership of what makes them unique."
+        ],
+        "actions": [
+          {
+            "label": "Enter Current State",
+            "href": "https://my.c3field.online/connect",
+            "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+          },
+          {
+            "label": "Explore the Field",
+            "href": "#explore",
+            "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+          }
+        ]
+      },
+      {
+        "id": "current-state",
+        "heading": "Your environment. Your intelligence. Your possibilities.",
+        "paragraphs": [
+          "Current State is your personal environment within the c3 Field. A place to establish meaningful connections, develop ideas, preserve your creations and participate in a growing ecosystem on your own terms."
+        ],
+        "bullets": [
+          "Establish your presence.",
+          "Cultivate meaningful relationships.",
+          "Develop and preserve your creative work.",
+          "Discover opportunities for collaboration.",
+          "Participate in initiatives that matter to you."
+        ],
+        "actions": [
+          {
+            "label": "Create Your Current State",
+            "href": "https://my.c3field.online/connect",
+            "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+          }
+        ]
+      },
+      {
+        "id": "possibilities",
+        "heading": "A Field of Possibility",
+        "items": [
+          {
+            "heading": "Individuals",
+            "body": "Personal knowledge, relationships, creative sovereignty and opportunity."
+          },
+          {
+            "heading": "Artists & Creators",
+            "body": "Creative development, provenance, exhibitions and collaboration."
+          },
+          {
+            "heading": "Communities",
+            "body": "Local initiatives, resource sharing and collective participation."
+          },
+          {
+            "heading": "Organizations",
+            "body": "Governed collaboration, operational integrity and institutional continuity."
+          },
+          {
+            "heading": "Research & Education",
+            "body": "Shared inquiry, knowledge preservation and interdisciplinary discovery."
+          },
+          {
+            "heading": "AI & Technology",
+            "body": "Governed intelligence, interoperability and accountable AI participation."
+          }
+        ]
+      },
+      {
+        "id": "explore",
+        "heading": "Explore the Field",
+        "items": [
+          {
+            "heading": "CONNECT",
+            "body": "Discover people and environments.",
+            "bullets": [
+              "Profile encounters",
+              "Founders Ground",
+              "Connections"
+            ]
+          },
+          {
+            "heading": "CONTRIBUTE",
+            "body": "Participate in meaningful initiatives.",
+            "bullets": [
+              "Million Dollar Mission",
+              "4.7% Initiative",
+              "Plateau Commons"
+            ]
+          },
+          {
+            "heading": "CREATE",
+            "body": "Bring new possibilities into being.",
+            "bullets": [
+              "My Sparks",
+              "Priceless Gallery",
+              "Creative collaboration"
+            ]
+          }
+        ],
+        "paragraphs": [
+          "Public orientation does not confer access to private participant capabilities."
+        ]
+      },
+      {
+        "id": "principles",
+        "heading": "Coherence. Creative Sovereignty. Non-Extraction.",
+        "items": [
+          {
+            "heading": "Coherence",
+            "body": "Meaning, relationships and authority remain connected as environments evolve."
+          },
+          {
+            "heading": "Creative Sovereignty",
+            "body": "What you bring into the Field remains yours."
+          },
+          {
+            "heading": "Non-Extraction",
+            "body": "Participation is not conditioned on surrendering your identity, knowledge or creative work."
+          }
+        ],
+        "actions": [
+          {
+            "label": "Explore Integrity Governance",
+            "href": "https://measuresregistry.com/",
+            "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+          }
+        ]
+      },
+      {
+        "id": "founders-ground",
+        "heading": "Bring your own ground.",
+        "paragraphs": [
+          "An invitation to help shape an emerging ecosystem by bringing your ideas, experiences, relationships and possibilities into the Field."
+        ],
+        "actions": [
+          {
+            "label": "Join Founders Ground",
+            "href": "https://my.c3field.online/connect",
+            "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+          }
+        ]
+      },
+      {
+        "id": "closing",
+        "heading": "The Field is the invitation. Current State is your place within it.",
+        "actions": [
+          {
+            "label": "Create Your Current State",
+            "href": "https://my.c3field.online/connect",
+            "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+          }
+        ]
+      }
+    ],
+    "navigation": [
+      {
+        "label": "c3 Field",
+        "href": "#arrival",
+        "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+      },
+      {
+        "label": "Current State",
+        "href": "#current-state",
+        "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+      },
+      {
+        "label": "Possibilities",
+        "href": "#possibilities",
+        "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+      },
+      {
+        "label": "Explore",
+        "href": "#explore",
+        "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+      },
+      {
+        "label": "Founders Ground",
+        "href": "#founders-ground",
+        "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+      },
+      {
+        "label": "Sign In",
+        "href": "https://my.c3field.online/api/my-environment-access-link",
+        "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+      },
+      {
+        "label": "Get Started",
+        "href": "https://my.c3field.online/connect",
+        "receiving_qualification": "HLD_PENDING_NATIVE_RECEIVING_READBACK"
+      }
+    ]
+  },
+  "holds": [
+    "exact_legacy_succession_receipt",
+    "institutional_owner_qualification",
+    "companion_registration",
+    "per_chapter_registered_media_and_SRC",
+    "registered_1200x630_social_image",
+    "qualified_receiving_encounters"
+  ]
+}

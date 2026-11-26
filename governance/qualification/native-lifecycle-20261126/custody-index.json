@@ -1,0 +1,135 @@
+{
+  "implementation_base": "4d681ef387215a4867c6acc7427c41128b44391c",
+  "sources": [
+    {
+      "path": "EXECUTION-PACKAGE.md",
+      "repository": "c3codex/measures-of-inanna-governance",
+      "commit": "a09ea967e54fab247fa8e9cfa182b8b47b68c156",
+      "blob": "51f128a7780ee5b0acc57537b95e615d987d868f",
+      "exact_readback": "PASS"
+    },
+    {
+      "path": "inputs/c3-model-govpac-candidate-v1.md",
+      "repository": "c3codex/measures-of-inanna-governance",
+      "commit": "ead8171e01ba0c645dedc8b659c8995df86ae859",
+      "blob": "5c2cc715fe84b521334eee5d43e201e1e13cec92",
+      "exact_readback": "PASS"
+    },
+    {
+      "path": "inputs/src-environmental-reading-govpac-candidate-v1.md",
+      "repository": "c3codex/measures-of-inanna-governance",
+      "commit": "a67e13928e8f96a4b625c5ea597b0fe7225b5767",
+      "blob": "40f0516746fcb2b7596a38a129b5d6a6c9f003ff",
+      "exact_readback": "PASS"
+    },
+    {
+      "path": "inputs/THIRTEEN-FUNCTION-RECONCILIATION.md",
+      "repository": "c3codex/measures-of-inanna-governance",
+      "commit": "2726954be0c358460c8d8ef3289b60cc897b1dbb",
+      "blob": "aee0a73f4ee9b984efe793c2a75d4f221464f1c1",
+      "exact_readback": "PASS"
+    },
+    {
+      "path": "inputs/NATIVE-LIFECYCLE.md",
+      "repository": "c3codex/measures-of-inanna-governance",
+      "commit": "6952ba7c2ba4c986c9674ce634be5f5041820af7",
+      "blob": "8023e04d37867ea4ca4ea02bbebd0278b86439ac",
+      "exact_readback": "PASS"
+    },
+    {
+      "path": "inputs/integrity-foundation.candidate.sql",
+      "repository": "c3codex/measures-of-inanna-governance",
+      "commit": "3fa19aa1516be4cc80ccf64cd4a23620fb5eb689",
+      "blob": "d11939b6dba4c35d40cf30a13493b4c1ad8967e4",
+      "exact_readback": "PASS"
+    },
+    {
+      "path": "inputs/registrar-source-succession-manifest-20261126.md",
+      "repository": "c3codex/measures-of-inanna-governance",
+      "commit": "d54f065bda9104fbfe0af1c1f50ead462f12d272",
+      "blob": "b60fb4d74b8161441c3a10f98f5b54f2ba24a3fa",
+      "exact_readback": "PASS"
+    }
+  ],
+  "fingerprints": [
+    {
+      "name": "c3_free_snapshot_immutable_guard_v1",
+      "pg_get_functiondef_md5": "0c18cd6b9771c94f3a4a43ddbf9fe830",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "c3_guard_profile_pac_chain",
+      "pg_get_functiondef_md5": "805e01668e45f6855e62d790519feae2",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "c3_guard_registrar_pac_supersession_v1",
+      "pg_get_functiondef_md5": "cbee7229336543174fa9b49f1e0089c2",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "c3_hardened_pac_child_guard_v1",
+      "pg_get_functiondef_md5": "5b53a63bcecdfd9bd0bdc168844201aa",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "c3_hardened_pac_immutable_guard_v1",
+      "pg_get_functiondef_md5": "a19ebd36b8272faea30736c52b8071df",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "c3_pac_free_completeness_guard_v1",
+      "pg_get_functiondef_md5": "10bd05ad509baf76fe4d685146de055f",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "c3_pac_registrar_v1_completeness_guard",
+      "pg_get_functiondef_md5": "f80ec4d97c385ba8281c8f8505aed1ea",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "c3_validate_current_accrual_v1",
+      "pg_get_functiondef_md5": "5a5731267f0c86ace4131749fe81fbce",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "c3_validate_pac_supersession_v1",
+      "pg_get_functiondef_md5": "ce3c6fd0cb2ddd6ca2d08977731552c9",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "free_resolve_my_env_current_state_v1",
+      "pg_get_functiondef_md5": "dd21c081a915c9e29e38e90f98e62855",
+      "readback": "PASS",
+      "candidate_changed": true
+    },
+    {
+      "name": "free_resolve_pac_encounter_v1",
+      "pg_get_functiondef_md5": "90777def005e8971cc4816301c72ad30",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "registrar_register_pac_v1",
+      "pg_get_functiondef_md5": "ea9bc453a9e835c573d48dc06760085a",
+      "readback": "PASS",
+      "candidate_changed": false
+    },
+    {
+      "name": "registrar_register_pac_v1_core",
+      "pg_get_functiondef_md5": "df24a605835d695d4cb38558b0c5243d",
+      "readback": "PASS",
+      "candidate_changed": false
+    }
+  ],
+  "admission_created": false
+}

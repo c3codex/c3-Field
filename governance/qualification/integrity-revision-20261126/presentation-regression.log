@@ -1,0 +1,36 @@
+✔ review requires dev build, explicit enablement and loopback (2.6826ms)
+✔ missing copy, unexpected media and invented initiative fail closed (1.6153ms)
+✖ snapshot must retain package identity, protected terms and release holds (1.0405ms)
+✔ routes c3 Field root to C1 Connect without operations spine (3.2116ms)
+✔ routes the Registry-seated Living Circuit as a non-standing public encounter (0.6674ms)
+✔ routes c3ops to the existing operations spine (0.6547ms)
+✔ unknown c3 Field paths hold instead of exposing operations (0.4721ms)
+✔ classifies c3 Field hosts without treating ops as an initiative surface (3.1282ms)
+✔ initiative surface doors only admit root and Connect (0.788ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 893.4685
+
+✖ failing tests:
+
+test at src\c3_field_connect\c1EnvironmentPackage.test.ts:1:1112
+✖ snapshot must retain package identity, protected terms and release holds (1.0405ms)
+  Error: ENOENT: no such file or directory, open 'C:\evidence\registry-rows.json'
+      at readFileSync (node:fs:440:20)
+      at TestContext.<anonymous> (C:\c3-field-production-20261124\src\c3_field_connect\c1EnvironmentPackage.test.ts:21:27)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\evidence\\registry-rows.json'
+  }

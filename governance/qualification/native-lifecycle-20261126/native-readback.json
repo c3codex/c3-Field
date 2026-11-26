@@ -1,0 +1,37 @@
+{
+  "environment": "env_c3ops",
+  "project": "zfihrspxvennjzazxcbj",
+  "operation": "read_only",
+  "design": [
+    {
+      "pac_key": "c3field_public_landing_designpac_v1",
+      "registration_protocol": "registrar_v1",
+      "is_effective": true,
+      "registration_sha256": "580261dfb4eacf5b5599d68b84b64c48f20655a64485625f383244a1c0a1b004"
+    }
+  ],
+  "nugs": [
+    {
+      "nug_key": "myenv_cancom_email_op044_v1",
+      "standing": "active",
+      "native_resolution": "resolved_for_nug"
+    },
+    {
+      "nug_key": "my_stash_op044_v1",
+      "standing": "active",
+      "native_resolution": "resolved_for_nug"
+    }
+  ],
+  "root": [
+    {
+      "root_resolution": {
+        "reason": "registered_snapshot_not_resolved",
+        "standing": "DNR",
+        "free_call_key": "c3_public_webpac_encounter"
+      }
+    }
+  ],
+  "implementation_head_before": "4d681ef387215a4867c6acc7427c41128b44391c",
+  "delivery": "https://github.com/c3codex/c3-Field/pull/114#issuecomment-7200173724",
+  "native_cancom_pickup": "not_claimed"
+}

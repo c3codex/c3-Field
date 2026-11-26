@@ -11,6 +11,12 @@ export type InitiativeSurfaceRuntime={
   publicPresentation?:{
     kicker?:string
     title?:string
+    og_title?:string
+    og_description?:string
+    og_image_asset_key?:string
+    formal_authority_statement?:string
+    open_question?:string
+    open_question_helper?:string
     header_line?:string
     initiative_explanation?:string
     model_descriptor?:string

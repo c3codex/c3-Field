@@ -142,7 +142,7 @@ export function deriveOperatorGatedAutomationBridge(
   operatorAuthorizations: OperatorAuthorizationMap = {},
 ): OperatorGatedAutomationBridgeState {
   const branchMap = governanceByBranch(governance)
-  const branches = processInstances.map((instance) => {
+  const branches = processInstances.map((instance): AutomationBridgeBranch => {
     const branch = branchMap.get(instance.process_instance_key)
 
     if (!branch) {

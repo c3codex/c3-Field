@@ -1,0 +1,2 @@
+# Exact source custody and evidence bytes are preserved across checkouts.
+* -text whitespace=cr-at-eol

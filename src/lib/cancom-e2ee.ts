@@ -84,7 +84,7 @@ function base64ToBytes(value:string){
 }
 function bufferToBase64(buffer:ArrayBuffer){return bytesToBase64(new Uint8Array(buffer))}
 async function sha256Hex(data:Uint8Array){
-  const digest=await crypto.subtle.digest("SHA-256",data)
+  const digest=await crypto.subtle.digest("SHA-256",new Uint8Array(data))
   return Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,"0")).join("")
 }
 async function sha256Text(value:string){return sha256Hex(encoder.encode(value))}
@@ -185,7 +185,7 @@ async function deriveWrappingKey(
   )
   const ikm=await crypto.subtle.importKey("raw",shared,"HKDF",false,["deriveKey"])
   return crypto.subtle.deriveKey(
-    {name:"HKDF",hash:"SHA-256",salt,info},
+    {name:"HKDF",hash:"SHA-256",salt:new Uint8Array(salt),info:new Uint8Array(info)},
     ikm,
     {name:"AES-GCM",length:256},
     false,

@@ -1,0 +1,30 @@
+{
+  "observed_at": "2026-11-26T18:31:32.190Z",
+  "scope": "anonymous GET only; not authenticated enrollment, visual acceptance or candidate deployment",
+  "rows": [
+    {
+      "url": "https://c3field.online/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "location": null,
+      "sha256": "7a074201966629c872b400e8eb57ba9627ac7f96407d1b16173a7ad5c4d55877",
+      "bytes": 2861
+    },
+    {
+      "url": "https://c3field.online/api/c3-public-presentation",
+      "status": 200,
+      "content_type": "application/json",
+      "location": null,
+      "sha256": "962655ae451a7c2268edcbd7c67bb4795d7401eec9f2a951ee4b8897848c8c02",
+      "bytes": 11983
+    },
+    {
+      "url": "https://my.c3field.online/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "location": null,
+      "sha256": "ec44c36866d014f879dc8ab91241a61b303a28f4aaa7ea62b6cd482700742cbc",
+      "bytes": 2864
+    }
+  ]
+}

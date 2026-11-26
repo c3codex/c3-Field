@@ -1,0 +1,337 @@
+{
+  "evidence": {
+    "system": [
+      {
+        "env_key": "env_c3_field",
+        "metadata": {
+          "operator": "op044",
+          "origin_ref": "c3_field_v1",
+          "web3_state": "FUTURE_STATE_HOLD",
+          "formation_reason": "seat canonical c3 Field root environment for Field-held custody",
+          "current_state_release_map": "PRESENT_STATE -> RESOLVED_STATE -> EXPERIENTIAL_STATE -> CURRENT"
+        },
+        "standing": "registered_current",
+        "is_active": true,
+        "created_at": "2026-09-30T20:40:12.316115+00:00",
+        "system_key": "c3_field",
+        "updated_at": "2026-09-30T20:40:12.316115+00:00",
+        "current_pair": null,
+        "is_canonical": true,
+        "model_function": null,
+        "environment_name": "c3 Field",
+        "environment_class": "coherent_relational_environment",
+        "relational_circuit": null,
+        "source_authority_ref": "field_origin:c3_field_v1"
+      }
+    ],
+    "sources": [
+      {
+        "id": "ec07f05d-bfd5-4a8d-a562-106f6b66775d",
+        "aliases": [],
+        "metadata": {
+          "brand": "c3 Community Partners",
+          "operator": "op044",
+          "copyright": "© 2026 c3 Community Partners DAO, LLC. All rights reserved.",
+          "model_name": "The c3 Model",
+          "model_path": "Connect · Contribute · Create",
+          "captured_at": "2026-09-25",
+          "terms_route": "/terms",
+          "legal_entity": "c3 Community Partners DAO, LLC",
+          "merge_commit": "f91419c309b48325b03d618f4a4a2a0f39cf7274",
+          "contact_email": "connect@c3field.online",
+          "contact_phone": "615-854-7139",
+          "contact_route": "/contact",
+          "privacy_route": "/privacy",
+          "runtime_state": "MERGED_PENDING_DEPLOY",
+          "surface_scope": "all_c3field_and_c3_community_partners_public_surfaces",
+          "identity_class": "PUBLIC_CONSTANT",
+          "environment_name": "c3Field",
+          "initiative_label": "A c3 Field Initiative",
+          "model_descriptor": "A structured participation model.",
+          "contact_phone_href": "tel:+16158547139",
+          "frontend_invention": false,
+          "environment_definition": "c3Field is the relational operations environment for structured participation.",
+          "formal_authority_statement": "c3 Community Partners DAO, LLC operating within computational systems governance."
+        },
+        "readonly": true,
+        "seeded_at": null,
+        "created_at": "2026-09-25T08:19:56.832192+00:00",
+        "created_by": "op044",
+        "source_key": "c3field_public_identity_authority_v1_0",
+        "updated_at": "2026-09-25T08:22:30.235619+00:00",
+        "source_hash": "819102c92167a77895671bd2b31bd29abeb571696274b1072de33e1ccccf61cf",
+        "source_path": "c3://registry/public-identity/c3field_public_identity_authority_v1_0",
+        "source_type": "foundational_source",
+        "source_scope": "c3_field_public_identity",
+        "source_title": "c3 Field Public Identity Authority",
+        "source_status": "committed",
+        "version_label": "v1.0",
+        "authority_level": "operator",
+        "supersedes_source_id": null
+      },
+      {
+        "id": "937f419a-7767-4f1f-9ae3-d44f92fe7581",
+        "aliases": [],
+        "metadata": {
+          "seo": {
+            "title": "The Million Dollar Mission | c3 Community Partners",
+            "og_type": "website",
+            "description": "The Million Dollar Mission is a live test of what becomes possible when a community can connect the people, places, resources, and possibilities it already has.",
+            "canonical_url": "https://c3field.online",
+            "og_image_asset_key": "c3_field_mdm_c3_center_og_master_v1"
+          },
+          "brand": "c3 Community Partners",
+          "footer": {
+            "brand": "c3 Community Partners",
+            "copyright": "© 2026 c3 Community Partners DAO, LLC. All rights reserved.",
+            "brand_line": "CONNECT · CONTRIBUTE · CREATE",
+            "legal_entity": "c3 Community Partners DAO, LLC",
+            "contact_email": "connect@c3field.online",
+            "contact_phone": "615-854-7139",
+            "environment_line": "c3Field is the relational operations environment for structured participation.",
+            "contact_phone_href": "tel:+16158547139",
+            "formal_authority_statement": "c3 Community Partners DAO, LLC operating within computational systems governance."
+          },
+          "landing": {
+            "kicker": "THE MILLION DOLLAR MISSION",
+            "hero_lead": "The Million Dollar Mission is a live test of that question—starting with the people, places, resources, and possibilities already present.",
+            "hero_title": "What becomes possible when a community can see and connect what it already has?",
+            "create_body": "Turn connected contributions into useful outcomes that can be seen, reviewed, and carried forward.",
+            "primary_cta": "CONNECT TO THE MISSION",
+            "connect_body": "Make people, needs, skills, places, relationships, and resources visible to one another.",
+            "core_premise": "The resource is not just the money. The resource is the community.",
+            "create_title": "Create",
+            "connect_title": "Connect",
+            "question_body": "People, places, resources, organizations, funding, projects, and needs may already exist in the same community. The Million Dollar Mission tests what changes when those parts can become visible to one another and move together through clear participation.",
+            "capacity_title": "Communities already contain more potential than any one person or institution can see alone.",
+            "question_title": "What becomes possible when the connections work?",
+            "contribute_body": "Give people a clear way to bring time, knowledge, money, tools, labor, property, creativity, or care into a shared effort.",
+            "contribute_title": "Contribute",
+            "primary_cta_route": "/connect"
+          },
+          "operator": "op044",
+          "brand_line": "CONNECT · CONTRIBUTE · CREATE",
+          "navigation": [
+            {
+              "label": "Home",
+              "route": "/"
+            },
+            {
+              "label": "Connect",
+              "route": "/connect"
+            },
+            {
+              "label": "Community Potential",
+              "route": "/community-potential"
+            },
+            {
+              "label": "Privacy",
+              "route": "/privacy"
+            },
+            {
+              "label": "Terms",
+              "route": "/terms"
+            },
+            {
+              "label": "Contact",
+              "route": "/contact"
+            }
+          ],
+          "footer_line": "c3Field is the relational operations environment for structured participation.",
+          "media_roles": {
+            "og_master": "c3_field_mdm_c3_center_og_master_v1",
+            "connect_room": "c3_field_mdm_connect_room_backdrop_v1",
+            "public_intro": "c3_field_public_intro_current_v1",
+            "serene_place": "c3_field_mdm_serene_place_backdrop_v1",
+            "capacity_projects": "c3_field_mdm_capacity_projects_backdrop_v1",
+            "handcrafted_emblem": "c3_field_handcrafted_emblem_render_v1"
+          },
+          "terms_route": "/terms",
+          "legal_entity": "c3 Community Partners DAO, LLC",
+          "connect_route": "/connect",
+          "contact_email": "connect@c3field.online",
+          "contact_route": "/contact",
+          "privacy_route": "/privacy",
+          "git_commit_sha": "9907111258a9277a8de020f03c268e3dbe99dba0",
+          "terms_document": {
+            "intro": "c3Field is operated by c3 Community Partners DAO, LLC.",
+            "route": "/terms",
+            "title": "Terms of Site Use & Participation",
+            "sections": [
+              {
+                "body": "Public pages are informational and may describe c3 initiatives, environments, publications or participation opportunities. Viewing a page, playing media or following a public presentation transition does not create standing, partnership, ownership, governance rights or an investment relationship.",
+                "heading": "Public site use"
+              },
+              {
+                "body": "A c3 relationship is not created merely by clicking Connect. Where a Connect process requires consent, confirmation, verification or persistence, the relationship has only the standing actually established by that process.",
+                "heading": "Connecting"
+              },
+              {
+                "body": "Participation may involve explicit agreements, permissions, environment boundaries or initiative-specific conditions. Those specific conditions control where they apply.",
+                "heading": "Participation"
+              },
+              {
+                "body": "Participant-supplied content remains the participant's unless an explicit applicable agreement establishes different rights. Submitting content does not silently grant c3 unlimited commercial, ownership or derivative rights.",
+                "heading": "Participant-supplied content"
+              },
+              {
+                "body": "Site use or ordinary participation does not by itself create equity, securities, investment returns, ownership of c3 Community Partners DAO, LLC, ownership of community property, DAO governance rights, or entitlement to funding or distributions. Any such right requires a separate explicit applicable instrument or agreement.",
+                "heading": "No automatic financial or governance rights"
+              },
+              {
+                "body": "c3 may hold, restrict, correct, suspend or prevent an encounter from advancing where operation would exceed permission, misrepresent standing, expose information improperly, or otherwise conflict with governing system conditions.",
+                "heading": "System boundaries"
+              },
+              {
+                "body": "c3 aims to represent current governed state accurately, but public information may change as projects, initiatives and operating conditions change. No public page is a guarantee that a proposed initiative, property, funding source, participant opportunity or project outcome will occur.",
+                "heading": "Accuracy and availability"
+              },
+              {
+                "body": "c3 Community Partners DAO, LLC is the legal operating entity. c3Field is the relational operations environment. The c3 Community Partners brand and c3Field environment do not independently become separate legal entities merely through presentation.",
+                "heading": "Legal distinction"
+              }
+            ],
+            "effective_date": "2026-09-22"
+          },
+          "intro_state_key": "c3field_public_intro",
+          "contact_document": {
+            "body": "Contact is a communication surface. Sending a message does not itself create participation or standing.",
+            "email": "connect@c3field.online",
+            "phone": "615-854-7139",
+            "route": "/contact",
+            "title": "Contact"
+          },
+          "environment_name": "c3Field",
+          "landing_evidence": {
+            "scope": "national_context_not_local_tract_evidence",
+            "neighbor_help": {
+              "url": "https://www.census.gov/library/stories/2024/11/civic-engagement-and-volunteerism.html",
+              "source": "U.S. Census Bureau / AmeriCorps",
+              "published": "2024-11-19",
+              "population": "U.S. population age 16 and older",
+              "value_percent": 54.2,
+              "observed_period": "September 2022 through September 2023"
+            },
+            "claim_boundary": "National evidence provides context only. Local MDM/OZ claims require local evidence.",
+            "formal_volunteering": {
+              "url": "https://www.census.gov/library/stories/2024/11/civic-engagement-and-volunteerism.html",
+              "source": "U.S. Census Bureau / AmeriCorps",
+              "published": "2024-11-19",
+              "population": "U.S. population age 16 and older",
+              "value_percent": 28.3,
+              "observed_period": "September 2022 through September 2023"
+            },
+            "know_all_or_most_neighbors": {
+              "url": "https://www.pewresearch.org/short-reads/2025/05/08/how-connected-do-americans-feel-to-their-neighbors/",
+              "source": "Pew Research Center",
+              "published": "2025-05-08",
+              "population": "U.S. adults",
+              "field_period": "March 10–16, 2025",
+              "value_percent": 26
+            }
+          },
+          "privacy_document": {
+            "intro": "c3 Community Partners DAO, LLC operates c3Field.",
+            "route": "/privacy",
+            "title": "Privacy & Data Handling",
+            "sections": [
+              {
+                "body": "c3Field may process information a participant intentionally provides, including name, email address, Connect messages or responses, consent, accuracy attestation and participation-intention records, and information subsequently supplied within an authorized c3 environment. c3Field may also process limited technical and security information required to operate the service, including session identifiers, request metadata, delivery or verification records, and security or operational logs.",
+                "heading": "Information collected"
+              },
+              {
+                "body": "Information is used to process an intentional Connect request, send confirmation or continuation messages, resolve and operate an authorized participant environment, maintain permissions, session continuity and security, preserve governed evidence and operational records, and support participant-requested c3 activity.",
+                "heading": "How information is used"
+              },
+              {
+                "body": "Participant information is not treated as advertising inventory. c3 may use infrastructure and service providers where needed to operate c3Field, deliver messages, store governed records or secure the service. Provider custody or processing does not by itself transfer ownership of participant-supplied content to c3.",
+                "heading": "Sharing and custody"
+              },
+              {
+                "body": "Participation does not, by itself, transfer ownership of participant-supplied content to c3 Community Partners DAO, LLC. Any additional license, transfer or shared-rights arrangement requires an explicit applicable agreement.",
+                "heading": "Participant content"
+              },
+              {
+                "body": "Records are retained according to the applicable operational, evidence, security and legal requirements governing the relevant environment or relationship. A governed record may persist as evidence even when a later relationship or permission changes; persistence does not enlarge the meaning of the record.",
+                "heading": "Retention"
+              },
+              {
+                "body": "A c1ME.env is not automatically public. Public exposure is bounded to information and relations permitted for the applicable encounter.",
+                "heading": "Public and private boundaries"
+              },
+              {
+                "body": "Questions concerning privacy or c3Field data handling may be sent through the Contact page.",
+                "heading": "Contact"
+              }
+            ],
+            "effective_date": "2026-09-22"
+          },
+          "public_documents": [
+            {
+              "key": "community_potential_public_release_1_0",
+              "route": "/community-potential",
+              "title": "Community Potential — A Systems Model for Participation, Contribution, Creation, and Shared Value",
+              "standing": "public_release_1_0"
+            }
+          ],
+          "landing_state_key": "c3field_public_landing",
+          "integrity_algorithm": "git_blob_sha1",
+          "connect_presentation": {
+            "hero_body": "c3 Community Partners brings people together around a shared mission so community potential can become visible, connected, and useful.",
+            "hero_title": "Together, Our Potential Is Unlimited."
+          },
+          "canonical_environment": "env_c3_community_connect",
+          "content_authority_date": "2026-09-25",
+          "environment_definition": "c3Field is the relational operations environment for structured participation.",
+          "brand_authority_complete": true,
+          "content_authority_version": "v1.3",
+          "public_identity_source_key": "c3field_public_identity_authority_v1_0",
+          "legal_entity_authority_complete": true,
+          "presentation_authority_complete": true,
+          "privacy_legal_projection_complete": true,
+          "public_document_projection_complete": true
+        },
+        "readonly": true,
+        "seeded_at": null,
+        "created_at": "2026-09-22T16:35:47.502032+00:00",
+        "created_by": "op044",
+        "source_key": "c3field_public_presentation_authority_v1_2",
+        "updated_at": "2026-09-25T08:19:56.832192+00:00",
+        "source_hash": "2ab82c3e54c7b4180e4ffab97ff73a63bb0e9ec9",
+        "source_path": "github-private://c3codex/measures-of-inanna-governance/main/webpac/c3_field/c3field_public_presentation_authority_v1_2.meta.md",
+        "source_type": "foundational_source",
+        "source_scope": "c3_field_public_presentation",
+        "source_title": "c3Field Public Presentation Authority v1.2",
+        "source_status": "committed",
+        "version_label": "v1.3",
+        "authority_level": "operator",
+        "supersedes_source_id": null
+      },
+      {
+        "id": "1bf45b57-ed84-43c3-890e-ca3996fd246d",
+        "aliases": [],
+        "metadata": {
+          "initial_seed": true,
+          "seed_oar_key": "oar2_source_reference_initial_seeding_v1",
+          "source_alignment": "The 21 of Coherence"
+        },
+        "readonly": true,
+        "seeded_at": "2026-05-18T20:35:28.23881+00:00",
+        "created_at": "2026-05-18T20:35:28.23881+00:00",
+        "created_by": "op044",
+        "source_key": "the_21_of_coherence",
+        "updated_at": "2026-05-18T20:35:28.23881+00:00",
+        "source_hash": "3248205591e47b3330a4e73a40372ac455575f50f8ef19bbc95877b21e0cd2e2",
+        "source_path": "docs/_source/seed/source_21_of_coherence_v1.meta.md",
+        "source_type": "foundational_source",
+        "source_scope": "coherence foundational source set",
+        "source_title": "The 21 of Coherence",
+        "source_status": "seeded",
+        "version_label": "v1",
+        "authority_level": "system",
+        "supersedes_source_id": null
+      }
+    ],
+    "schema_rules": "CREATE OR REPLACE FUNCTION public.c3_evaluate_pac_schema_rules_v1(p_schema_key text, p_presented_pac jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'public', 'pg_temp'\nAS $function$\ndeclare\n  v_schema public.c3_pac_schema%rowtype;\n  v_rule jsonb;\n  v_rule_type text;\n  v_missing jsonb := '[]'::jsonb;\n  v_count integer;\n  v_min integer;\n  v_relations jsonb;\n  v_path text[];\n  v_actual jsonb;\n  v_envpac public.c3_envpac%rowtype;\n  v_env public.c3_environment%rowtype;\nbegin\n  if p_presented_pac is null or jsonb_typeof(p_presented_pac) <> 'object' then\n    return jsonb_build_object(\n      'standing','HLD','reason','presented_pac_object_required',\n      'rule_language_version','v1','unresolved',jsonb_build_array('presented_pac')\n    );\n  end if;\n\n  select * into v_schema\n  from public.c3_pac_schema\n  where schema_key=p_schema_key\n    and standing='active'\n    and is_active=true;\n\n  if not found or v_schema.pac_type is distinct from p_presented_pac->>'pac_type' then\n    return jsonb_build_object(\n      'standing','HLD','reason','active_schema_unresolved',\n      'rule_language_version','v1','unresolved',jsonb_build_array('active_schema')\n    );\n  end if;\n\n  if v_schema.required_fields ? 'contract_key' then\n    return jsonb_build_object(\n      'standing','HLD',\n      'reason','nonweb3_contract_schema_not_admissible',\n      'schema_key',v_schema.schema_key,\n      'rule_language_version','v1',\n      'unresolved',jsonb_build_array('contract_key:reserved_for_web3')\n    );\n  end if;\n\n  v_relations := case\n    when jsonb_typeof(p_presented_pac->'relations')='array'\n      then p_presented_pac->'relations'\n    else '[]'::jsonb\n  end;\n\n  for v_rule in\n    select value from jsonb_array_elements(v_schema.required_relation_rules)\n  loop\n    if jsonb_typeof(v_rule) <> 'object' then\n      v_missing := v_missing || jsonb_build_array('unsupported_required_relation_rule:non_object');\n      continue;\n    end if;\n\n    v_rule_type := nullif(v_rule->>'rule_type','');\n\n    if v_rule_type='presented_relation_count' then\n      if nullif(v_rule->>'relation_type','') is null\n         and nullif(v_rule->>'target_kind','') is null then\n        v_missing := v_missing || jsonb_build_array('malformed_required_relation_rule:presented_relation_count');\n        continue;\n      end if;\n\n      if v_rule ? 'min' then\n        if coalesce(v_rule->>'min','') !~ '^[1-9][0-9]*$' then\n          v_missing := v_missing || jsonb_build_array('malformed_required_relation_rule:min');\n          continue;\n        end if;\n        v_min := (v_rule->>'min')::integer;\n      else\n        v_min := 1;\n      end if;\n\n      select count(*) into v_count\n      from jsonb_array_elements(v_relations) r\n      where (nullif(v_rule->>'relation_type','') is null\n             or r.value->>'relation_type'=v_rule->>'relation_type')\n        and (nullif(v_rule->>'target_kind','') is null\n             or r.value->>'target_kind'=v_rule->>'target_kind');\n\n      if v_count < v_min then\n        v_missing := v_missing || jsonb_build_array(\n          'required_relation:'||\n          coalesce(v_rule->>'relation_type','*')||':'||\n          coalesce(v_rule->>'target_kind','*')\n        );\n      end if;\n    else\n      v_missing := v_missing || jsonb_build_array(\n        'unsupported_required_relation_rule:'||\n        coalesce(v_rule_type,nullif(v_rule->>'rule',''),'untyped')\n      );\n    end if;\n  end loop;\n\n  for v_rule in\n    select value from jsonb_array_elements(v_schema.conditional_rules)\n  loop\n    if jsonb_typeof(v_rule) <> 'object' then\n      v_missing := v_missing || jsonb_build_array('unsupported_conditional_rule:non_object');\n      continue;\n    end if;\n\n    v_rule_type := nullif(v_rule->>'rule_type','');\n\n    if v_rule_type in ('envpac_metadata_equals','environment_metadata_equals') then\n      if jsonb_typeof(v_rule->'path') is distinct from 'array'\n         or jsonb_array_length(v_rule->'path')=0\n         or not (v_rule ? 'expected')\n         or exists (\n           select 1\n           from jsonb_array_elements_text(v_rule->'path') x\n           where btrim(x.value)=''\n         ) then\n        v_missing := v_missing || jsonb_build_array('malformed_conditional_rule:'||v_rule_type);\n        continue;\n      end if;\n\n      select array_agg(x.value order by x.ord)\n        into v_path\n      from jsonb_array_elements_text(v_rule->'path') with ordinality as x(value,ord);\n\n      select * into v_envpac\n      from public.c3_envpac\n      where envpac_key=p_presented_pac->>'envpac_key'\n        and is_effective=true;\n\n      if not found then\n        v_missing := v_missing || jsonb_build_array('conditional_rule:'||v_rule_type||':envpac_unresolved');\n        continue;\n      end if;\n\n      if v_rule_type='envpac_metadata_equals' then\n        v_actual := jsonb_extract_path(v_envpac.metadata,variadic v_path);\n      else\n        select * into v_env\n        from public.c3_environment\n        where env_key=v_envpac.env_key\n          and is_active=true;\n\n        if not found then\n          v_missing := v_missing || jsonb_build_array('conditional_rule:environment_metadata_equals:environment_unresolved');\n          continue;\n        end if;\n\n        v_actual := jsonb_extract_path(v_env.metadata,variadic v_path);\n      end if;\n\n      if v_actual is distinct from v_rule->'expected' then\n        v_missing := v_missing || jsonb_build_array(\n          'conditional_rule:'||v_rule_type||':'||\n          array_to_string(v_path,'.')\n        );\n      end if;\n\n    elsif v_rule_type='envpac_environment_class_equals' then\n      if nullif(v_rule->>'expected','') is null then\n        v_missing := v_missing || jsonb_build_array('malformed_conditional_rule:envpac_environment_class_equals');\n        continue;\n      end if;\n\n      select ep.* into v_envpac\n      from public.c3_envpac ep\n      where ep.envpac_key=p_presented_pac->>'envpac_key'\n        and ep.is_effective=true;\n\n      if not found then\n        v_missing := v_missing || jsonb_build_array('conditional_rule:envpac_environment_class_equals:envpac_unresolved');\n        continue;\n      end if;\n\n      select * into v_env\n      from public.c3_environment\n      where env_key=v_envpac.env_key\n        and is_active=true;\n\n      if not found\n         or v_env.environment_class is distinct from v_rule->>'expected' then\n        v_missing := v_missing || jsonb_build_array('conditional_rule:envpac_environment_class_equals');\n      end if;\n\n    elsif v_rule_type='profile_subject_matches_owner' then\n      if v_schema.pac_type <> 'ProfilePAC' then\n        v_missing := v_missing || jsonb_build_array('malformed_conditional_rule:profile_subject_matches_owner');\n      elsif p_presented_pac#>>'{profile,subject_type}' is distinct from p_presented_pac->>'owner_subject_type'\n         or p_presented_pac#>>'{profile,subject_key}' is distinct from p_presented_pac->>'owner_subject_key' then\n        v_missing := v_missing || jsonb_build_array('conditional_rule:profile_subject_matches_owner');\n      end if;\n\n    else\n      v_missing := v_missing || jsonb_build_array(\n        'unsupported_conditional_rule:'||\n        coalesce(v_rule_type,nullif(v_rule->>'rule',''),'untyped')\n      );\n    end if;\n  end loop;\n\n  if jsonb_array_length(v_missing)>0 then\n    return jsonb_build_object(\n      'standing','HLD',\n      'reason','schema_rules_unresolved',\n      'schema_key',v_schema.schema_key,\n      'rule_language_version','v1',\n      'unresolved',v_missing\n    );\n  end if;\n\n  return jsonb_build_object(\n    'standing','PASS',\n    'schema_key',v_schema.schema_key,\n    'rule_language_version','v1',\n    'unresolved','[]'::jsonb\n  );\nend $function$\n"
+  }
+}

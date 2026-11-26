@@ -38,8 +38,12 @@ async function rpc(env:LifecycleEnv,name:string,payload:Row){
 async function session(request:Request,env:LifecycleEnv){
   const raw=cookie(request,"c3_env_session")
   if(!raw)throw new LifecycleError("Open your environment again to continue.",401,"environment_session_required")
-  try{return await resolveEnvironmentSession(raw,env)}
+  let resolved:EnvironmentSession
+  try{resolved=await resolveEnvironmentSession(raw,env)}
   catch{throw new LifecycleError("Your environment session is no longer available.",401,"environment_session_invalid")}
+  if(resolved.subjectType!=="individual")
+    throw new LifecycleError("This action requires the individual owner's environment session.",403,"individual_owner_required")
+  return resolved
 }
 function exactOwnerRequest(s:EnvironmentSession,action:string,extra:Row={}){
   return {

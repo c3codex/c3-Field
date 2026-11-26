@@ -1,7 +1,6 @@
 export type C3PublicDocumentSection={heading:string;body:string}
 export type C3PublicDocument={title:string;route:string;effective_date?:string;intro?:string;body?:string;email?:string;phone?:string;sections?:C3PublicDocumentSection[]}
 export type C3PublicIdentity={
-  public_identity:C3PublicIdentity
   brand:string
   legal_entity:string
   formal_authority_statement:string
@@ -20,6 +19,7 @@ export type C3PublicIdentity={
   copyright:string
 }
 export type C3PublicPresentation={
+  public_identity:C3PublicIdentity
   runtime_media?:{entry_intro?:string;feature_film?:string}
   brand:string
   legal_entity:string

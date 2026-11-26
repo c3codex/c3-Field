@@ -1,0 +1,15 @@
+{
+  "scope": "isolated actual function candidates and immutable guard; synthetic registrations, not production acceptance",
+  "checks": [
+    "registered owner encounter ACT before withdrawal",
+    "cross-owner withdrawal refused",
+    "cross-owner refusal leaves ACT unchanged",
+    "hardened owner withdrawal succeeds",
+    "FREE after withdrawal returns DNR",
+    "unaffected owner encounter remains ACT",
+    "replayed withdrawal has one authorization tombstone",
+    "immutable PAC bytes unchanged",
+    "CURRENT accrual history unchanged",
+    "retired individual environment cannot continue public FREE"
+  ]
+}

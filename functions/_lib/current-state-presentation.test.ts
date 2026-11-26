@@ -16,6 +16,7 @@ const backdrop={
 }
 const fixture={
   standing:"ACT",envpac_key:session.envpacKey,designpac_key:"c1me_current_state_connect_app_experience_designpac_v1",
+  available_nugs:[{service:"My Stash",effect_class:"none",nug_key:"owner-stash",current_state_key:"current-owner"}],
   projection:{
     title:"Current State",tagline:"A field of possibility",line:"Change what is possible.",
     field_entry_label:"Enter c3 Field",field_entry:"https://c3field.online/",
@@ -36,6 +37,14 @@ test("owner presentation uses a session hash and exposes only recognized control
   assert.deepEqual(design.fieldNavigation,["Connect","Contribute","Create"])
   assert.equal(design.inviteConnection,true)
   assert.equal(design.backdropUrl,"https://fixture.supabase.co/storage/v1/object/public/c3-field-media/current-state-backdrop.webp")
+})
+test("My Stash requires owner FREE availability; design alone grants no service",async t=>{
+  let available:unknown
+  t.mock.method(globalThis,"fetch",async()=>Response.json({...fixture,available_nugs:available}))
+  for(const value of [undefined,[],[{service:"My Stash",effect_class:"external_email",nug_key:"stash",current_state_key:"current"}]]){
+    available=value
+    assert.deepEqual((await resolveCurrentStatePresentation(session,env))?.workspaceOverlays,["Connections"])
+  }
 })
 test("refuses a hold, a different owner, unregistered media, and an unavailable RPC",async t=>{
   let response:Response

@@ -4,12 +4,14 @@ import type {
   EncounterResolution,
   PhaseMapContract,
   PhaseMapNode,
+  PhaseMapNodeState,
   PlaqueContract,
   ResolvedAction,
 } from "./types"
 import { resolveOar2Governance, type Oar2Governance } from "@/shared/c3/oar2Governance"
 import ConnectCaptureForm from "./ConnectCaptureForm"
 import EncounterStageMedia from "./EncounterStageMedia"
+import type { CSSProperties } from "react"
 
 type Props = {
   resolution: EncounterResolution
@@ -22,6 +24,7 @@ type Props = {
 }
 
 type PlaybackView = {
+  fade_ms?: number
   videoMode: string | null
   audioMode: string | null
   settleToStill: boolean
@@ -173,14 +176,14 @@ function chamberplateAspectSlot(
   item: EncounterResolution["media"][number],
 ): ChamberplateAspectSlotRole | null {
   const role = canonicalChamberplateRole(item)
-  return CHAMBERPLATE_ASPECT_ROLES.includes(role) ? role : null
+  return (CHAMBERPLATE_ASPECT_ROLES as readonly string[]).includes(role) ? role as ChamberplateAspectSlotRole : null
 }
 
 function normalizeAspectSlotDefinitions(
   chamberplate?: ChamberplateContract | null,
 ): ChamberplateAspectSlotDefinition[] {
   const configured = Array.isArray(chamberplate?.aspect_slots) ? chamberplate.aspect_slots : null
-  const fallback = CHAMBERPLATE_ASPECT_SLOT_ORDER.map((slot) => ({
+  const fallback: ChamberplateAspectSlotDefinition[] = CHAMBERPLATE_ASPECT_SLOT_ORDER.map((slot) => ({
     role: slot.role,
     label: slot.label,
     body: [],
@@ -189,8 +192,8 @@ function normalizeAspectSlotDefinitions(
 
   if (!configured || configured.length === 0) return fallback
 
-  const normalized = configured.flatMap((slot) => {
-    if (typeof slot === "string" && CHAMBERPLATE_ASPECT_ROLES.includes(slot)) {
+  const normalized = configured.flatMap<ChamberplateAspectSlotDefinition>((slot) => {
+    if (typeof slot === "string" && (CHAMBERPLATE_ASPECT_ROLES as readonly string[]).includes(slot)) {
       const fallbackSlot = fallback.find((entry) => entry.role === slot)
       return fallbackSlot ? [fallbackSlot] : []
     }
@@ -199,7 +202,7 @@ function normalizeAspectSlotDefinitions(
 
     const record = slot as Record<string, unknown>
     const role =
-      (typeof record.role === "string" && CHAMBERPLATE_ASPECT_ROLES.includes(record.role)
+      (typeof record.role === "string" && (CHAMBERPLATE_ASPECT_ROLES as readonly string[]).includes(record.role)
         ? record.role
         : null) as ChamberplateAspectSlotRole | null
 
@@ -655,6 +658,7 @@ function PhaseMap({
   governance,
 }: {
   phaseMap?: PhaseMapContract
+  routeViaRegistryKey?: string | null
   nodes: PhaseMapNode[]
   onNavigate: (registryKey: string) => void
   activeRegistryKey?: string | null
@@ -1050,7 +1054,7 @@ export default function GenericEncounter({
   const mediaStyle = {
     "--encounter-media-max-width": renderer?.media_max_width ?? "100vw",
     "--encounter-media-max-height": renderer?.media_max_height ?? "100svh",
-  } as never
+  } as CSSProperties
   const collapseTextForMotion =
     playback.stillFirst &&
     playback.motionAfterAction &&

@@ -15,10 +15,11 @@ function base(env:PassageEnv){
   if(!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("server_configuration")
   return env.SUPABASE_URL.replace(/\/$/,"")
 }
-async function rpc(env:PassageEnv,name:string,body:Record<string,unknown>){
+async function rpc(env:PassageEnv,name:string,body:Record<string,unknown>,ownerSession?:string){
   const response=await fetch(base(env)+"/rest/v1/rpc/"+name,{
     method:"POST",redirect:"manual",signal:AbortSignal.timeout(12000),
-    headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!,"content-type":"application/json"},
+    headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY!,authorization:"Bearer "+env.SUPABASE_SERVICE_ROLE_KEY!,"content-type":"application/json",
+      ...(ownerSession?{"x-c3-owner-session":ownerSession}:{})},
     body:JSON.stringify(body)
   })
   if(!response.ok) throw new Error(name+"_failed")
@@ -90,7 +91,7 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
     const formed=await rpc(env,"form_profile_pac_v1_internal",{
       p_envpac_key:session.envpacKey,p_subject_type:session.subjectType,p_subject_key:session.subjectKey,
       p_profile_class:"individual",p_display_label:displayLabel,p_visibility_scope:visibility
-    })
+    },session.token)
     const created=formed.created===true
     const result=await rpc(env,"update_profile_pac_personalization_internal",{
       p_envpac_key:session.envpacKey,p_subject_type:session.subjectType,p_subject_key:session.subjectKey,
@@ -102,7 +103,7 @@ export const onRequestPost:PagesFunction<PassageEnv>=async({request,env})=>{
         open_to:Array.isArray(fields.open_to)?fields.open_to:[],
         location_region:typeof fields.location_region==="string"?fields.location_region.trim():""
       }
-    })
+    },session.token)
     return json({
       ok:true,standing:created?"profile_pac_formed":"profile_pac_updated",created,
       updated:result.updated===true,next_read:"/api/my-environment",authority_effect:"none"

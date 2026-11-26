@@ -76,6 +76,29 @@ test("preview is session-bound and returns ownership counts",async()=>{
   }finally{globalThis.fetch=original}
 })
 
+test("system session cannot inherit an individual's owner authority with the same subject key",async()=>{
+  const original=globalThis.fetch,calls:Call[]=[]
+  const normal=fixtureFetch(calls,"terminate")
+  globalThis.fetch=async(input,init)=>{
+    const response=await normal(input,init)
+    if(String(input).includes("c3_env_runtime_session?")&&String(init?.method||"GET")==="GET"){
+      const rows=await response.json() as any[]
+      return Response.json(rows.map(row=>({...row,subject_type:"system"})))
+    }
+    return response
+  }
+  try{
+    const request=new Request("https://fixture.invalid/api/my-environment-owner-lifecycle",{
+      method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json"},
+      body:JSON.stringify({action:"terminate",confirmation:"TERMINATE MY ENVIRONMENT",disposition:"retain_c3_field_custody",understands_history_preserved:true,understands_reentry_required:true})
+    })
+    const response=await onRequestPost({request,env:{SUPABASE_URL:"https://fixture.supabase.co",SUPABASE_SERVICE_ROLE_KEY:"fixture-only"}} as any)
+    assert.equal(response.status,403)
+    assert.equal((await response.json() as any).standing,"individual_owner_required")
+    assert.equal(calls.some(call=>call.url.endsWith("rpc/terminate_my_env_owner_v1")),false)
+  }finally{globalThis.fetch=original}
+})
+
 test("export ignores caller identity and uses the owner session",async()=>{
   const original=globalThis.fetch,calls:Call[]=[]
   globalThis.fetch=fixtureFetch(calls,"export")
@@ -135,5 +158,31 @@ test("successful termination is session-bound and clears the My Env cookie",asyn
     assert.equal(rpc.body.p_request.relationship_key,"fixture-owner")
     assert.equal(rpc.body.p_request.env_key,"fixture-env")
     assert.equal(rpc.body.p_request.envpac_key,"fixture-envpac")
+  }finally{globalThis.fetch=original}
+})
+
+test("protective hold and restoration cannot masquerade as owner termination actions",async()=>{
+  const original=globalThis.fetch,calls:Call[]=[]
+  globalThis.fetch=fixtureFetch(calls,"terminate")
+  try{
+    for(const action of ["protective_hold","compulsory_termination","restore"]){
+      const request=new Request("https://fixture.invalid/api/my-environment-owner-lifecycle",{method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json"},body:JSON.stringify({action})})
+      const response=await onRequestPost({request,env:{SUPABASE_URL:"https://fixture.supabase.co",SUPABASE_SERVICE_ROLE_KEY:"fixture-only"}} as any)
+      assert.equal(response.status,400)
+      assert.equal(response.headers.get("set-cookie"),null)
+    }
+    assert.equal(calls.some(call=>call.url.includes("rpc/")),false)
+  }finally{globalThis.fetch=original}
+})
+
+test("native HLD is returned as held without a terminal success or session deletion",async()=>{
+  const original=globalThis.fetch,calls:Call[]=[]
+  globalThis.fetch=fixtureFetch(calls,"held")
+  try{
+    const request=new Request("https://fixture.invalid/api/my-environment-owner-lifecycle",{method:"POST",headers:{cookie:"c3_env_session="+"a".repeat(64),"content-type":"application/json"},body:JSON.stringify({action:"terminate",confirmation:"TERMINATE MY ENVIRONMENT",disposition:"retain_c3_field_custody",understands_history_preserved:true,understands_reentry_required:true})})
+    const response=await onRequestPost({request,env:{SUPABASE_URL:"https://fixture.supabase.co",SUPABASE_SERVICE_ROLE_KEY:"fixture-only"}} as any)
+    assert.equal(response.status,409)
+    assert.equal((await response.json() as any).standing,"fixture_hold")
+    assert.equal(response.headers.get("set-cookie"),null)
   }finally{globalThis.fetch=original}
 })

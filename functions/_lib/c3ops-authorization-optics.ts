@@ -20,7 +20,7 @@ export function validateAuthorizationOptics(value:unknown):AuthorizationOpticsRe
  const grant=value.grant
  if(grant!==null&&(!isRecord(grant)||grant.key!=='grant_op044_c3ops_031_read_preflight'||!['EFFECTIVE','HLD'].includes(String(grant.standing))
   ||typeof grant.revoked!=='boolean'||!isTime(grant.expires_at)||!Array.isArray(grant.rights)
-  ||grant.rights.length!==2||!['inspect_governed_status','read_preflight_evidence'].every(r=>grant.rights.includes(r))))throw Error('HLD: grant optics contract not qualified')
+  ||grant.rights.length!==2||!['inspect_governed_status','read_preflight_evidence'].every(r=>(grant.rights as unknown[]).includes(r))))throw Error('HLD: grant optics contract not qualified')
  const seen=new Set<string>()
  for(const row of value.requests){
   if(!isRecord(row)||typeof row.request_id!=='string'||seen.has(row.request_id)

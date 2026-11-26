@@ -1,0 +1,13 @@
+PASS authenticated owner receives exact CURRENT My Stash descriptor
+PASS descriptor does not expose executor or operational authority
+PASS unrelated owner receives no cross-owner service
+PASS unknown session cannot resolve
+PASS noncurrent state removes availability
+PASS withdrawn binding removes availability
+PASS native preflight refusal removes availability
+PASS owner mismatch removes availability
+PASS external effect removes availability
+PASS expired session cannot resolve
+PASS retired environment cannot resolve
+PASS revoked session cannot resolve
+PASS unaffected owner presentation preserved

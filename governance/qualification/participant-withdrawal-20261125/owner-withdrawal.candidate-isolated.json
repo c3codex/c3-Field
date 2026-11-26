@@ -1,0 +1,170 @@
+{
+  "scope": "isolated-installed-function-bodies-with-synthetic-rows-no-native-registration-or-production-acceptance",
+  "limitations": [
+    "No production participants used",
+    "Native constraints and triggers are not cloned",
+    "Historical CURRENT check is a sentinel, not actual accrual qualification",
+    "Public FREE and restoration require separate native mechanisms"
+  ],
+  "results": [
+    {
+      "name": "cross-owner native context refused",
+      "standing": "PASS",
+      "detail": {
+        "reason": "active_owner_environment_unresolved",
+        "standing": "held"
+      }
+    },
+    {
+      "name": "system identity cannot terminate individual context",
+      "standing": "PASS",
+      "detail": {
+        "reason": "active_owner_environment_unresolved",
+        "standing": "held"
+      }
+    },
+    {
+      "name": "cross-owner portable manifest refused",
+      "standing": "PASS",
+      "detail": {
+        "reason": "portable_owner_envpac_unresolved",
+        "standing": "held"
+      }
+    },
+    {
+      "name": "individual owner withdrawal succeeds",
+      "standing": "PASS",
+      "detail": {
+        "standing": "terminated",
+        "receipt": true
+      }
+    },
+    {
+      "name": "individual PAC ownership custody and projection metadata not confiscated",
+      "standing": "PASS",
+      "detail": "exact PAC row comparison"
+    },
+    {
+      "name": "historical CURRENT evidence untouched by function",
+      "standing": "PASS",
+      "detail": "synthetic sentinel table; real CURRENT triggers not reproduced"
+    },
+    {
+      "name": "unaffected relationship remains active",
+      "standing": "PASS",
+      "detail": [
+        {
+          "connection_key": "affected",
+          "standing": "revoked"
+        },
+        {
+          "connection_key": "unaffected",
+          "standing": "active"
+        }
+      ]
+    },
+    {
+      "name": "affected relationship revoked",
+      "standing": "PASS",
+      "detail": [
+        {
+          "connection_key": "affected",
+          "standing": "revoked"
+        },
+        {
+          "connection_key": "unaffected",
+          "standing": "active"
+        }
+      ]
+    },
+    {
+      "name": "sequential replay does not duplicate termination",
+      "standing": "PASS",
+      "detail": {
+        "standing": "held",
+        "reason": "active_owner_environment_unresolved"
+      }
+    },
+    {
+      "name": "post-withdrawal recovery available through same service",
+      "standing": "FAIL",
+      "detail": {
+        "standing": "held",
+        "reason": "owner_export_right_unresolved",
+        "note": "current export grant is revoked; HTTP owner session also revoked"
+      }
+    },
+    {
+      "name": "pre-withdrawal portability preserves owned PAC",
+      "standing": "PASS",
+      "detail": {
+        "standing": "export_ready",
+        "count": 1
+      }
+    },
+    {
+      "name": "receipted export permits withdrawal",
+      "standing": "PASS",
+      "detail": {
+        "standing": "terminated"
+      }
+    },
+    {
+      "name": "missing owner revoke right refuses effect",
+      "standing": "PASS",
+      "detail": {
+        "reason": "owner_termination_right_unresolved",
+        "standing": "held"
+      }
+    },
+    {
+      "name": "concurrent replay does not duplicate termination",
+      "standing": "PASS",
+      "detail": {
+        "count": 1,
+        "standings": [
+          "terminated",
+          "held"
+        ],
+        "note": "isolated delay exposes overlapping requests; native receipt table has no unique termination key"
+      }
+    },
+    {
+      "name": "cross-owner projection withdrawal refused",
+      "standing": "PASS",
+      "detail": {
+        "reason": "personal_owner_custody_required",
+        "standing": "DNR"
+      }
+    },
+    {
+      "name": "legacy owner projection withdrawal succeeds",
+      "standing": "PASS",
+      "detail": {
+        "pac_key": "pac-owner-a",
+        "standing": "HLD",
+        "resolved_at": "2026-11-25T02:47:20.36531-06:00",
+        "encounter_key": "c3envpac_c2me_v0_1",
+        "presentation_scope": "none",
+        "authorized_by_owner": false,
+        "surface_projections": [],
+        "authorization_snapshot_hash": null,
+        "encounter_projection_standing": "REVOKED"
+      }
+    },
+    {
+      "name": "legacy projection replay does not add records",
+      "standing": "PASS",
+      "detail": "same PAC retained; REVOKE remains REVOKE"
+    },
+    {
+      "name": "hardened owner projection withdrawal succeeds",
+      "standing": "FAIL",
+      "detail": {
+        "error": "registrar_v1 PAC is immutable; supersede through Registrar",
+        "note": "actual native projection body plus actual immutable trigger; no Registrar bypass"
+      }
+    }
+  ],
+  "candidateMode": true
+}

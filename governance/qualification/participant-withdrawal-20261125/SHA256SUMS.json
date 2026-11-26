@@ -1,0 +1,137 @@
+[
+  {
+    "path": ".gitattributes",
+    "bytes": 103,
+    "sha256": "ad2544c0179e00e269dc7ee484151dedba7786a82f337a835e33d7c0a10750be"
+  },
+  {
+    "path": "govpac.source-candidate.json",
+    "bytes": 2390,
+    "sha256": "5b61d04fcda43ee6953e4fe59c670c4a4d81ce05a1fb91d9cb16b83badc8c55d"
+  },
+  {
+    "path": "hosted-anonymous.observed.json",
+    "bytes": 968,
+    "sha256": "c00bf2ba34e952ac4139095502782a8d3f270fb5108f0772c61d5aa3d3f536fa"
+  },
+  {
+    "path": "native-reconciliation.observed.json",
+    "bytes": 14781,
+    "sha256": "15a1c96cd4cfdd7bc22e2072c46178a8f8361688fc21d4c24732430e08b93612"
+  },
+  {
+    "path": "native/authority-sources.observed.json",
+    "bytes": 26789,
+    "sha256": "fe8ead874fb9dc0b4fda0450c6325dafe01028041dfe681801dffd3bdd9d0480"
+  },
+  {
+    "path": "native/constraints.observed.json",
+    "bytes": 1677,
+    "sha256": "5a52599bd9b56541a644db9c01a965414110a372c01432b3141fd02f87b272e2"
+  },
+  {
+    "path": "native/free-resolver.sql",
+    "bytes": 8242,
+    "sha256": "505517cb9f2395b655a4536a9126d59cca4c403948f81a33672c4a1f589cd99a"
+  },
+  {
+    "path": "native/hardened-immutability.sql",
+    "bytes": 1627,
+    "sha256": "30f9fc5b9263dc66af62b205d6576bf9abeb29d738f762a0716e0aef071bff0d"
+  },
+  {
+    "path": "native/model-and-process-search.observed.json",
+    "bytes": 114,
+    "sha256": "1d85d7599a0fe92128e49342a6ff119cbb355f139d3f5dd19a393e6bc24fb687"
+  },
+  {
+    "path": "native/privileges-and-profile-resolver.observed.json",
+    "bytes": 8810,
+    "sha256": "c15b523105f5760fc07d74d099b04b242788933238f9f29089e2c0c9e7525364"
+  },
+  {
+    "path": "native/projection-withdrawal.sql",
+    "bytes": 7304,
+    "sha256": "2ab5eec71359293f02c60f72c3a5f3f079654c1cb878b8bb55678fec42e37eeb"
+  },
+  {
+    "path": "native/resolve_institutional_pac_eligibility_v1.sql",
+    "bytes": 874,
+    "sha256": "c6b92d28f01c4d25e49d3279213031dbf1837043203ba4896d5597a38781f8af"
+  },
+  {
+    "path": "native/resolve_institutional_seat_v1.sql",
+    "bytes": 1312,
+    "sha256": "41f45b4e2cf2d348cff82e3a2b0280af32d960378b93a322c4c306a86a24af91"
+  },
+  {
+    "path": "native/resolve_my_env_owner_portability_v1.sql",
+    "bytes": 12621,
+    "sha256": "aef55325881d79e3d1106a2f569052d5c027eb8a817a286dcb716bcfa2adf584"
+  },
+  {
+    "path": "native/schema-and-receipts.observed.json",
+    "bytes": 3923,
+    "sha256": "7aa54d81b231dc0b1338b0c7fb35d13c6b608b4137f121383ecb0ea5c340c7b4"
+  },
+  {
+    "path": "native/table-shapes.json",
+    "bytes": 8083,
+    "sha256": "9adbbefdb6c06472ed8f145a556d4632a212dfe55ae3d6c1f6ef80bdb894f0ef"
+  },
+  {
+    "path": "native/terminate_my_env_owner_v1.sql",
+    "bytes": 10100,
+    "sha256": "ce8198c8efe3d547f3c1060935146ee9064220897299bf853c2a3a6247821f0b"
+  },
+  {
+    "path": "NUG-PREFLIGHT.md",
+    "bytes": 5583,
+    "sha256": "bb51e4040224bedc1b218ec88d5474afd074a6be4171e6e2a2b49bd8648b1508"
+  },
+  {
+    "path": "OAR1-ONE.md",
+    "bytes": 15581,
+    "sha256": "598eac541a8f915c875e21c95c78ce06eeaccc71a54f606700aa762c7041c231"
+  },
+  {
+    "path": "owner-withdrawal.candidate-isolated.json",
+    "bytes": 4757,
+    "sha256": "abe28670f18374abfdf147339c15ac264afc680ea4ed8c970fe193837caefa4b"
+  },
+  {
+    "path": "owner-withdrawal.isolated.json",
+    "bytes": 4739,
+    "sha256": "0f9736b8440bdfbe1e4c9c3dd1da44ca0200d4210e2eedc7bf31c6ffce37c46f"
+  },
+  {
+    "path": "package-replay-candidate.mjs",
+    "bytes": 948,
+    "sha256": "83edf27885d8d9c392ad7fd5a5a98954ba55b640094de3d7eaedab1183b31ec5"
+  },
+  {
+    "path": "participant-withdrawal-govpac-candidate-v1.source.md",
+    "bytes": 4686,
+    "sha256": "3dd8827c3f4a8c610938f29f7a1bf5ed62e278e6c30299f60166445c7eb136fe"
+  },
+  {
+    "path": "qualify-owner-withdrawal.mjs",
+    "bytes": 10924,
+    "sha256": "b7445492a367ce551daf268e001c1eb23c066fe04873371cca65c22310410948"
+  },
+  {
+    "path": "schema-rules-only.observed.json",
+    "bytes": 162,
+    "sha256": "fb1f6aa60f966fe02d281cde8bfcfffe7b4ced8f00a3b8701245237fecf1e43b"
+  },
+  {
+    "path": "terminate-replay.candidate.sql",
+    "bytes": 10548,
+    "sha256": "21c7fe25f8c3be0a70bb5cbbbd2ec27f6d1ce45f4c0def23d17914089c186e10"
+  },
+  {
+    "path": "terminate-replay.install-candidate.sql",
+    "bytes": 11061,
+    "sha256": "c4f9aa7933141d52f24d518e978a406d73eec3199062c7d29f26275643d2afec"
+  }
+]
