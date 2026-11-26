@@ -1,0 +1,23 @@
+{
+  "scope": "isolated native function bodies, native completeness evaluator and contract, existing ProfilePAC chain trigger; synthetic rows; persistent effective-state CHECK and successor uniqueness installed; full SRC/NotChazz pipeline and all production triggers not claimed",
+  "checks": [
+    "owner identifiers alone refuse native formation",
+    "different authenticated owner refuses formation",
+    "baseline exact admitted contract fails generic relation evaluator",
+    "authenticated owner forms private profile using actual evaluator",
+    "formation replay creates no duplicate",
+    "authenticated owner updates private personalization",
+    "withdrawn primitive fails existing evaluator",
+    "existing chain guard refuses withdrawn primitive",
+    "unknown contract relation refuses completeness",
+    "post-persistence contract mismatch refuses effect",
+    "post-persistence mismatch rolls back profile bytes",
+    "different session refuses personalization",
+    "revoked session refuses mutation",
+    "withdrawn grant refuses mutation",
+    "appended grant mutation serializes with profile write",
+    "in-flight session withdrawal blocks owner effect",
+    "committed session withdrawal refuses replay",
+    "public execution removed"
+  ]
+}

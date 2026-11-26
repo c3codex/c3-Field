@@ -1,0 +1,16 @@
+{
+  "scope": "actual captured target columns/defaults/checks/unique/FKs and all ten target triggers; actual Registrar wrapper/core and validator; dependency tables column fixtures; synthetic admission evidence explicitly not native acceptance; no production writes",
+  "checks": [
+    "all ten target triggers and all native target constraints installed",
+    "actual native Registrar writer and trigger succession works before candidate",
+    "actual native Registrar writer and deferred triggers work after CHECK",
+    "actual Registrar retry remains idempotent after CHECK",
+    "actual writer refuses missing exact NotChazz evidence",
+    "native writer atomic retirement satisfies persistent invariant",
+    "historical native predecessor bytes unchanged",
+    "actual legacy trigger path accepts retire-then-stamp",
+    "actual legacy trigger path refuses contradiction",
+    "actual hardened trigger path refuses contradictory state",
+    "live writer retires both columns in one statement"
+  ]
+}

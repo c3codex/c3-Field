@@ -1,0 +1,33 @@
+PASS verified disposable instance before destructive fixture setup
+PASS historical custody bytes preserved
+PASS legacy_pre_hardening contradictory INSERT refused
+PASS legacy_pre_hardening contradictory UPDATE refused
+PASS legacy_pre_hardening inactive unsuperseded state preserved
+PASS legacy_pre_hardening contradictory reactivation refused
+PASS legacy_pre_hardening atomic retirement transition accepted
+PASS registrar_v1 contradictory INSERT refused
+PASS registrar_v1 contradictory UPDATE refused
+PASS registrar_v1 inactive unsuperseded state preserved
+PASS registrar_v1 contradictory reactivation refused
+PASS registrar_v1 atomic retirement transition accepted
+PASS persistent successor uniqueness across protocols
+PASS anon actual TRUNCATE refused c3_pac
+PASS anon failed TRUNCATE preserves c3_pac
+PASS anon actual TRUNCATE refused c3_pac_member
+PASS anon failed TRUNCATE preserves c3_pac_member
+PASS anon actual TRUNCATE refused c3_pac_relation
+PASS anon failed TRUNCATE preserves c3_pac_relation
+PASS authenticated actual TRUNCATE refused c3_pac
+PASS authenticated failed TRUNCATE preserves c3_pac
+PASS authenticated actual TRUNCATE refused c3_pac_member
+PASS authenticated failed TRUNCATE preserves c3_pac_member
+PASS authenticated actual TRUNCATE refused c3_pac_relation
+PASS authenticated failed TRUNCATE preserves c3_pac_relation
+PASS inherited privilege refuses installation
+PASS failed install rolls back index
+PASS failed install rolls back CHECK
+PASS failed install rolls back direct ACL revocations
+PASS failed install preserves custody
+PASS concurrent successor waits and times out
+PASS concurrent loser refuses after winner commit
+PASS contended installation refuses atomically

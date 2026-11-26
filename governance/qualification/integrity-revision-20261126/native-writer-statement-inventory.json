@@ -1,0 +1,98 @@
+[
+  {
+    "proname": "update_profile_pac_v1_internal",
+    "args": "p_envpac_key text, p_subject_type text, p_subject_key text, p_display_label text, p_visibility_scope text",
+    "definition_md5": "197a284aa6c0a8657a9f30d5e49a7894",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n  set release_state=p_visibility_scope,\n      metadata=metadata||jsonb_build_object(\n        'profile_visibility_updated_by_owner',true,\n        'profile_visibility_updated_at',now()\n      ),\n      updated_at=now()\n  where pac_key=v_pac_key\n    and envpac_key=p_envpac_key\n    and pac_type='ProfilePAC'\n    and is_effective=true",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "update_profile_pac_personalization_internal",
+    "args": "p_envpac_key text, p_subject_type text, p_subject_key text, p_fields jsonb",
+    "definition_md5": "bd9aafefd70d1ad89b7673240331e844",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n  set release_state=v_visibility,\n      metadata=coalesce(metadata,'{}'::jsonb)||jsonb_build_object(\n        'profile_visibility_updated_by_owner',true,\n        'profile_personalization_updated_by_owner',true,\n        'profile_personalization_updated_at',now(),\n        'authority_effect','none'\n      ),\n      updated_at=now()\n  where pac_key=v_pac_key and envpac_key=p_envpac_key and pac_type='ProfilePAC' and is_effective=true",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "c3_pac_approve_public_encounter_v1",
+    "args": "p_pac_key text, p_subject_key text",
+    "definition_md5": "d425c2e830efb06c382bb761605b0819",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n  set metadata=jsonb_set(\n        jsonb_set(\n          coalesce(metadata,'{}'::jsonb),\n          '{publication_workflow,operator_encounter_approval}',\n          '\"APPROVED\"'::jsonb,\n          true\n        ),\n        '{publication_workflow,ni_public_encounter_approval}',\n        jsonb_build_object(\n          'standing','APPROVED',\n          'subject_key',p_subject_key,\n          'operator_identifier',v_operator_identifier,\n          'context_class','operator_system',\n          'approval_surface','c3ops_pac_governance',\n          'approved_at',v_now,\n          'authority_effect','public_encounter_approval_only'\n        ),\n        true\n      ),\n      updated_at=v_now\n  where pac_key=p_pac_key",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "c3_register_public_pac_encounter_v1",
+    "args": "p_pac_key text, p_subject_key text",
+    "definition_md5": "5e956eea1520034c525d98bf532d0a49",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n  set content_sha256=v_sha,\n      release_state='public_release_authorized',\n      standing='registered_complete_public_encounter',\n      metadata=\n        coalesce(metadata,'{}'::jsonb)\n        || jsonb_build_object(\n          'registered_content_sha256',v_sha,\n          'registered_content_hash_algorithm','sha256',\n          'registered_public_snapshot',v_payload,\n          'registry_registration_state','REGISTERED',\n          'registry_registered_at',v_now,\n          'registry_registered_by_subject',p_subject_key,\n          'registry_registered_by_operator',v_operator_identifier,\n          'registry_registration_context_class','operator_system',\n          'runtime_release_authorized',true\n        )\n        || jsonb_build_object(\n          'publication_workflow',\n          coalesce(metadata->'publication_workflow','{}'::jsonb)\n          || jsonb_build_object(\n            'registry_submission_state','REGISTERED',\n            'registry_approval_state','REGISTERED',\n            'free_resolution_state','ELIGIBLE_HASH_CHECK_REQUIRED',\n            'runtime_state','HELD_UNTIL_FREE_MATCH'\n          )\n        ),\n      updated_at=v_now\n  where pac_key=p_pac_key",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "c3_pac_set_personal_encounter_projection_v1",
+    "args": "p_pac_key text, p_subject_key text, p_action text, p_encounter_key text",
+    "definition_md5": "fc3d617c7d1c332f45c22eab6fb0ff33",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n  set metadata=jsonb_set(\n        coalesce(metadata,'{}'::jsonb),\n        '{encounter_projection}',\n        jsonb_build_object(\n          'standing',v_standing,\n          'encounter_key',p_encounter_key,\n          'projection_surface','c2ME_env',\n          'owner_authorization_required',true,\n          'authorized_by_owner',v_authorized,\n          'owner_subject_key',p_subject_key,\n          'authorization_surface','my_pacs',\n          'resolved_at',v_now\n        ),\n        true\n      ),\n      updated_at=v_now\n  where pac_key=p_pac_key",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "c3_pac_set_personal_encounter_projection_v1",
+    "args": "p_pac_key text, p_subject_key text, p_action text, p_encounter_key text, p_surface_scope text",
+    "definition_md5": "43e8a29d24480886d5965bf2c904eca4",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n  set metadata=jsonb_set(\n        coalesce(metadata,'{}'::jsonb),\n        '{encounter_projection}',\n        jsonb_build_object(\n          'standing',v_standing,\n          'encounter_key',p_encounter_key,\n          'projection_surface','c2ME_env',\n          'owner_authorization_required',true,\n          'authorized_by_owner',v_authorized,\n          'owner_subject_key',p_subject_key,\n          'authorization_surface','my_pacs',\n          'presentation_scope',case when v_authorized then p_surface_scope else 'none' end,\n          'surface_projections',case\n            when not v_authorized then '[]'::jsonb\n            when p_surface_scope='c3field_plus_canopy'\n              then jsonb_build_array('c3field','canopy')\n            else jsonb_build_array('c3field')\n          end,\n          'authorization_snapshot_hash',case when v_authorized then v_current_hash else null end,\n          'resolved_at',v_now\n        ),\n        true\n      ),\n      updated_at=v_now\n  where pac_key=p_pac_key",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "c3_pac_set_personal_review_v1",
+    "args": "p_pac_key text, p_subject_key text, p_disposition text, p_candidate_hash text",
+    "definition_md5": "23292db68ce6c2e3ac2753d044bb7c81",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n  set metadata=coalesce(metadata,'{}'::jsonb)\n    || jsonb_build_object(\n      'review_resolution',jsonb_build_object(\n        'standing',p_disposition,\n        'review_snapshot_hash',v_current_hash,\n        'review_surface','my_pacs_preview',\n        'reviewed_by',p_subject_key,\n        'reviewed_at',v_now\n      ),\n      'distribution_resolution',case\n        when p_disposition='HLD' then jsonb_build_object(\n          'standing','HLD_REVIEW',\n          'review_snapshot_hash',v_current_hash,\n          'reason','owner_held_after_review'\n        )\n        when v_approval_hash is distinct from v_current_hash then jsonb_build_object(\n          'standing','HLD_APPROVAL_REFRESH_REQUIRED',\n          'review_snapshot_hash',v_current_hash,\n          'reason','review_complete_exact_approval_required'\n        )\n        else jsonb_build_object(\n          'standing','HLD_OWNER_DISTRIBUTION_DECISION_REQUIRED',\n          'review_snapshot_hash',v_current_hash,\n          'approval_snapshot_hash',v_approval_hash,\n          'reason','review_and_approval_complete_distribution_not_authorized'\n        )\n      end\n    ),\n    updated_at=v_now\n  where pac_key=p_pac_key",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "c3_pac_set_personal_disposition_v1",
+    "args": "p_pac_key text, p_subject_key text, p_disposition text, p_note text",
+    "definition_md5": "a11bf69babc75594ac1aa436ee0676fe",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n  set metadata=coalesce(metadata,'{}'::jsonb)\n    || jsonb_build_object(\n      'custody_approval',jsonb_build_object(\n        'standing',p_disposition,\n        'subject_key',p_subject_key,\n        'context_class','personal_custody',\n        'approval_surface','my_pacs',\n        'approval_snapshot_hash',case when p_disposition='APPROVED' then v_current_hash else null end,\n        'note',nullif(btrim(coalesce(p_note,'')),''),\n        'resolved_at',v_now\n      ),\n      'encounter_projection',case\n        when p_disposition='APPROVED'\n             and coalesce(v_existing_projection->>'authorized_by_owner','false')='true'\n          then v_existing_projection || jsonb_build_object(\n            'authorization_snapshot_hash',v_current_hash,\n            'reviewed_approval_bound_at',v_now\n          )\n        when p_disposition='APPROVED' then jsonb_build_object(\n          'standing','PENDING',\n          'encounter_key','c3envpac_c2me_v0_1',\n          'owner_authorization_required',true,\n          'authorized_by_owner',false,\n          'projection_surface','c2ME_env',\n          'reason','separate_owner_encounter_decision_required'\n        )\n        else jsonb_build_object(\n          'standing','HLD',\n          'encounter_key','c3envpac_c2me_v0_1',\n          'owner_authorization_required',true,\n          'authorized_by_owner',false,\n          'projection_surface','c2ME_env',\n          'reason','pac_not_approved_in_custody'\n        )\n      end,\n      'distribution_resolution',case\n        when p_disposition='APPROVED' then jsonb_build_object(\n          'standing','HLD_OWNER_DISTRIBUTION_DECISION_REQUIRED',\n          'review_snapshot_hash',v_current_hash,\n          'approval_snapshot_hash',v_current_hash,\n          'reason','approval_does_not_authorize_distribution'\n        )\n        else jsonb_build_object(\n          'standing','HLD_PAC',\n          'reason','pac_not_approved_in_custody'\n        )\n      end\n    ),\n    updated_at=v_now\n  where pac_key=p_pac_key",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "resolve_my_env_owner_portability_v1",
+    "args": "p_request jsonb",
+    "definition_md5": "14d65ec1c3144c75538e3c40c8f144bd",
+    "mentions_superseded_at": false,
+    "first_target_update": "update public.c3_pac\n      set custodian_subject_type=v_target_type,custodian_subject_key=v_target_key,\n          custody_provider=v_entry->>'custody_provider',custody_uri=v_entry->>'custody_uri',\n          metadata=metadata||jsonb_build_object('custody_transferred_at',now(),'custody_transferred_by_owner',v_relationship_key,'prior_manifest_sha256',v_hash,'lineage_preserved',true),\n          updated_at=now()\n      where pac_key=v_pac.pac_key and envpac_key=v_envpac_key",
+    "first_target_insert_columns": null
+  },
+  {
+    "proname": "registrar_register_pac_v1_core",
+    "args": "p_presented_pac jsonb, p_boundary_evaluation_key text, p_registrar_role_call_key text, p_source_oar2_ref text",
+    "definition_md5": "df24a605835d695d4cb38558b0c5243d",
+    "mentions_superseded_at": true,
+    "first_target_update": "update public.c3_pac\n    set is_effective=false,superseded_at=now(),updated_at=now()\n    where pac_key=v_supersedes and is_effective=true",
+    "first_target_insert_columns": "insert into public.c3_pac(\n    pac_key,envpac_key,pac_type,version,standing,custody_uri,content_sha256,source_authority,is_effective,metadata,\n    schema_key,contract_key,architecture_version,custodian_subject_type,custodian_subject_key,custody_provider,\n    authority_effect,release_state,execution_authority_state,formation_state,effective_at,supersedes_pac_key,\n    return_evidence_required,owner_subject_type,owner_subject_key,owner_environment_key,\n    registration_protocol,registration_sha256,boundary_evaluation_key,registered_at,registrar_role_call_key\n  )"
+  },
+  {
+    "proname": "form_c1_owner_environment",
+    "args": "p_relationship_key text, p_env_key text",
+    "definition_md5": "5a8dc780da7ca708e755480b3e7a13eb",
+    "mentions_superseded_at": false,
+    "first_target_update": null,
+    "first_target_insert_columns": "insert into public.c3_pac(pac_key,envpac_key,pac_type,version,standing,custody_uri,content_sha256,source_authority,is_effective,metadata)"
+  },
+  {
+    "proname": "form_profile_pac_v1_internal",
+    "args": "p_envpac_key text, p_subject_type text, p_subject_key text, p_profile_class text, p_display_label text, p_visibility_scope text",
+    "definition_md5": "4c0dc5429051d8270b542dea55aece0b",
+    "mentions_superseded_at": false,
+    "first_target_update": null,
+    "first_target_insert_columns": "insert into public.c3_pac (\n    pac_key,envpac_key,pac_type,version,standing,custody_uri,source_authority,is_effective,metadata,\n    contract_key,architecture_version,custodian_subject_type,custodian_subject_key,custody_provider,\n    authority_effect,release_state,execution_authority_state,formation_state,effective_at,\n    return_evidence_required\n  )"
+  }
+]

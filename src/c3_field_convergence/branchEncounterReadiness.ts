@@ -169,7 +169,7 @@ export function deriveRuntimeBranchEncounterReadiness(
 ): RuntimeBranchEncounterReadiness {
   const governanceMap = byBranch(governance.branches)
   const automationMap = byBranch(automationBridge.branches)
-  const branches = processInstances.map((instance) => {
+  const branches = processInstances.map((instance): BranchEncounterReadiness => {
     const branch = governanceMap.get(instance.process_instance_key)
     const automation = automationMap.get(instance.process_instance_key)
     const state = readinessState(instance, branch, automation)

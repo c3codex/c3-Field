@@ -1,0 +1,13 @@
+✔ owner presentation uses a session hash and exposes only recognized controls (67.2859ms)
+✔ My Stash requires owner FREE availability; design alone grants no service (7.6004ms)
+✔ refuses a hold, a different owner, unregistered media, and an unavailable RPC (5.1548ms)
+✔ owner notices use mutable authorization instead of stale immutable PAC metadata (78.7321ms)
+✔ profile writes forward only the authenticated server session and derive owner identity (73.627ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1021.8082

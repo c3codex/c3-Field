@@ -1,0 +1,29 @@
+PASS authenticated owner receives exact CURRENT My Stash descriptor
+PASS descriptor does not expose executor or operational authority
+PASS unrelated owner receives no cross-owner service
+PASS unknown session cannot resolve
+PASS noncurrent state removes availability
+PASS withdrawn binding removes availability
+PASS native preflight refusal removes availability
+PASS owner mismatch removes availability
+PASS external effect removes availability
+PASS expired session cannot resolve
+PASS retired environment cannot resolve
+PASS independently admitted reciprocal receiving scope resolves
+PASS withdrawn receiving acceptance refuses peer
+PASS peer withdrawal preserves original service
+PASS actual native preflight refuses missing origin_env_key
+PASS actual native preflight refuses missing env_key
+PASS actual native preflight refuses missing envpac_key
+PASS actual native preflight refuses missing current_state_key
+PASS actual native preflight refuses missing executor_ref
+PASS actual native preflight refuses missing execution_instance
+PASS actual native preflight refuses missing capability_ref
+PASS actual native preflight refuses missing authority_oar_key
+PASS actual native preflight refuses missing context_binding_key
+PASS actual native My Stash invocation returns evidence
+PASS native occurrence replay refuses
+PASS exact CURRENT occurrence evidence digest matches
+PASS replay creates one occurrence
+PASS revoked session cannot resolve
+PASS unaffected owner presentation preserved

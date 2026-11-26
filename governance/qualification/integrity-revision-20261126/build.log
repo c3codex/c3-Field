@@ -1,0 +1,66 @@
+
+> vite_react_shadcn_ts@0.0.0 build:c3field
+> node scripts/check-c3-tree-purpose.cjs && node scripts/check-source-integrity.cjs && node scripts/check-pages-env.cjs && vite build --mode c3field --outDir dist && node scripts/generate-c3field-publication-surfaces.cjs dist
+
+[c3-tree-purpose] PASS: unchanged artwork; reviewed entrance/boundary references only
+[source-integrity] PASS — no literal \n artifacts outside strings
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚡️ secrets for agents: https://dotenvx.com/as2
+[pages-env] CF_PAGES: missing
+[pages-env] CF_PAGES_BRANCH: missing
+[pages-env] VITE_SUPABASE_URL: missing
+[pages-env] VITE_SUPABASE_ANON_KEY: missing
+[pages-env] SUPABASE_URL: missing
+[pages-env] SUPABASE_ANON_KEY: missing
+[pages-env] VITE_C3FIELD_R2_PUBLIC_BASE_URL: missing
+[pages-env] VITE_R2_PUBLIC_BASE_URL: missing
+[pages-env] RESOLVED_SUPABASE_URL: public-fallback
+vite v7.3.2 building client environment for c3field...
+transforming...
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+/api/free-media?asset=c3_field_c1me_live_backdrop_v1 referenced in /api/free-media?asset=c3_field_c1me_live_backdrop_v1 didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 339 modules transformed.
+rendering chunks...
+[plugin vite:reporter] 
+(!) C:/c3-field-production-20261124/src/measures_registry/encounter_renderer/publications/UnDriftedMgsRenderer.tsx is dynamically imported by C:/c3-field-production-20261124/src/measures_registry/encounter_renderer/router/ChamberRouter.tsx but also statically imported by C:/c3-field-production-20261124/src/measures_registry/encounter_renderer/router/ChamberRouter.tsx, dynamic import will not move module into another chunk.
+
+computing gzip size...
+dist/index.html                                                2.62 kB │ gzip:   0.77 kB
+dist/assets/measuresRegistrySystem-CJ7k8Qqa.css                0.25 kB │ gzip:   0.20 kB
+dist/assets/CurrentConstellation-Xcc87n1q.css                  1.80 kB │ gzip:   0.72 kB
+dist/assets/LivingCircuitEncounter-DzgbQ8zA.css                7.12 kB │ gzip:   2.22 kB
+dist/assets/C3OpsDoor-txwl4GbX.css                            11.35 kB │ gzip:   3.08 kB
+dist/assets/C2EnvironmentDoor-BE-ryl12.css                    18.41 kB │ gzip:   4.41 kB
+dist/assets/FieldReporterEncounter-Bur3Jrnq.css               18.42 kB │ gzip:   4.39 kB
+dist/assets/c3FieldSystem-CW89E0uI.css                        46.89 kB │ gzip:   9.87 kB
+dist/assets/index-Bug2ZM6Q.css                               143.79 kB │ gzip:  21.24 kB
+dist/assets/index-BQqvOYtK.css                               158.76 kB │ gzip:  25.58 kB
+dist/assets/C3InitiativeSurfaceDoor-cxBEBXau.js                0.96 kB │ gzip:   0.58 kB
+dist/assets/RegisteredPublicationProjectionDoor-hcGY6xuc.js    1.54 kB │ gzip:   0.83 kB
+dist/assets/FieldReporterEncounter-C1BDbus7.js                 1.63 kB │ gzip:   0.84 kB
+dist/assets/FieldReceiver-CKzx1UIo.js                          1.96 kB │ gzip:   0.96 kB
+dist/assets/encounterStyleProfile-DjAwlogM.js                  2.01 kB │ gzip:   0.69 kB
+dist/assets/C3PublicDocumentPage-BBlh5Que.js                   2.38 kB │ gzip:   0.90 kB
+dist/assets/CurrentConstellation-BYOhXywU.js                   2.63 kB │ gzip:   1.26 kB
+dist/assets/RegisteredPacSurface-8yTriuXk.js                   4.45 kB │ gzip:   1.68 kB
+dist/assets/LivingCircuitEncounter-CP1f4rvZ.js                 5.46 kB │ gzip:   1.90 kB
+dist/assets/C3FieldRoot-HgMxjjNY.js                            7.00 kB │ gzip:   2.72 kB
+dist/assets/PublicAssessmentResult-D7HMsfv9.js                10.53 kB │ gzip:   3.01 kB
+dist/assets/MarbleChamberRenderer-CYE5maV_.js                 16.61 kB │ gzip:   4.56 kB
+dist/assets/GovernanceAuditSurface-B1X441Ai.js                19.79 kB │ gzip:   5.64 kB
+dist/assets/CrystalSeatRenderer-D4r5FXun.js                   22.46 kB │ gzip:   6.32 kB
+dist/assets/ObsidianChamberRenderer-DY3WrTrp.js               23.49 kB │ gzip:   6.26 kB
+dist/assets/C3OpsDoor-BVCDOhB7.js                             28.84 kB │ gzip:   7.96 kB
+dist/assets/C2EnvironmentDoor-DbNvwI6H.js                     34.04 kB │ gzip:   9.37 kB
+dist/assets/LapisChamberRenderer-CkxRxE6O.js                  94.87 kB │ gzip:  26.87 kB
+dist/assets/MyEnvironmentEncounter-CePzz6c1.js                97.82 kB │ gzip:  24.80 kB
+dist/assets/index-BXr9q3_g.js                                679.34 kB │ gzip: 193.66 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 21.59s
+Generated c3 Community Potential and Living Circuit discovery surfaces.

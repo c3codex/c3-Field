@@ -1,0 +1,11 @@
+{
+  "review_repository": "c3codex/measures-of-inanna-governance",
+  "review_commit": "74f4b9dc3596ec36ad6ec2dfe686b5b898f89080",
+  "review_blob": "32ac0425769e99e9541c2158d23929868cfc6e5a",
+  "implementation_base": "f0ddbd49eb0985a508307116f604152d866b416b",
+  "candidate_path": "integrity-foundation.candidate.sql",
+  "candidate_blob": "7e0158b75d6fd81a6c900068b63f226ca6f83ed4",
+  "candidate_sha256": "8f044a1978c8420c4b52789f78795caf9640ea3e5bffbb2430bc72d6cc1f497c",
+  "independently_accepted": false,
+  "production_installed": false
+}

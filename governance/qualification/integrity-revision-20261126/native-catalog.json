@@ -1,0 +1,1066 @@
+[
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_boundary_evaluation_fk",
+      "type": "f",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "FOREIGN KEY (boundary_evaluation_key) REFERENCES c3_pac_boundary_evaluation(evaluation_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_contract_key_fkey",
+      "type": "f",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "FOREIGN KEY (contract_key) REFERENCES c3_pac_type_contract(contract_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_custodian_subject_type_v1_check",
+      "type": "c",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "CHECK (((custodian_subject_type IS NULL) OR (custodian_subject_type = ANY (ARRAY['individual'::text, 'entity'::text, 'system'::text, 'environment'::text, 'service'::text]))))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_envpac_key_fkey",
+      "type": "f",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "FOREIGN KEY (envpac_key) REFERENCES c3_envpac(envpac_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_envpac_key_pac_key_version_key",
+      "type": "u",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "UNIQUE (envpac_key, pac_key, version)"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_owner_subject_type_hardened_chk",
+      "type": "c",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "CHECK (((owner_subject_type IS NULL) OR (owner_subject_type = ANY (ARRAY['individual'::text, 'institution'::text, 'system'::text, 'environment'::text, 'service'::text]))))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_pkey",
+      "type": "p",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "PRIMARY KEY (pac_key)"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_registrar_role_call_fk",
+      "type": "f",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "FOREIGN KEY (registrar_role_call_key) REFERENCES c3_ci_role_call(role_call_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_registrar_v1_required_fields_chk",
+      "type": "c",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "CHECK (((registration_protocol <> 'registrar_v1'::text) OR ((schema_key IS NOT NULL) AND (owner_subject_type IS NOT NULL) AND (owner_subject_key IS NOT NULL) AND (registration_sha256 IS NOT NULL) AND (boundary_evaluation_key IS NOT NULL) AND (registered_at IS NOT NULL) AND (registrar_role_call_key IS NOT NULL) AND ((owner_subject_type <> 'institution'::text) OR (owner_environment_key IS NOT NULL)))))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_registration_protocol_chk",
+      "type": "c",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "CHECK ((registration_protocol = ANY (ARRAY['legacy_pre_hardening'::text, 'registrar_v1'::text])))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_registration_sha_chk",
+      "type": "c",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "CHECK (((registration_sha256 IS NULL) OR (registration_sha256 ~ '^[0-9a-f]{64}$'::text)))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_schema_key_fk",
+      "type": "f",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "FOREIGN KEY (schema_key) REFERENCES c3_pac_schema(schema_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_supersedes_not_self_v1_check",
+      "type": "c",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "CHECK (((supersedes_pac_key IS NULL) OR (supersedes_pac_key <> pac_key)))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_supersedes_pac_key_fkey",
+      "type": "f",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "FOREIGN KEY (supersedes_pac_key) REFERENCES c3_pac(pac_key) ON UPDATE CASCADE ON DELETE RESTRICT"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "trg_c3_pac_free_completeness_guard_v1",
+      "type": "t",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "trg_c3_pac_registrar_v1_completeness_guard",
+      "type": "t",
+      "table": "c3_pac",
+      "validated": true,
+      "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_relation_pkey",
+      "type": "p",
+      "table": "c3_pac_relation",
+      "validated": true,
+      "definition": "PRIMARY KEY (relation_key)"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_relation_source_pac_key_fkey",
+      "type": "f",
+      "table": "c3_pac_relation",
+      "validated": true,
+      "definition": "FOREIGN KEY (source_pac_key) REFERENCES c3_pac(pac_key) ON UPDATE CASCADE ON DELETE CASCADE"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_relation_target_kind_check",
+      "type": "c",
+      "table": "c3_pac_relation",
+      "validated": true,
+      "definition": "CHECK ((target_kind = ANY (ARRAY['pac'::text, 'envpac'::text, 'environment'::text, 'system'::text, 'registry'::text, 'source'::text, 'evidence'::text])))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_member_custody_shape_check",
+      "type": "c",
+      "table": "c3_pac_member",
+      "validated": true,
+      "definition": "CHECK ((((custody_identifier IS NULL) AND (custody_location IS NULL)) OR (custody_provider IS NOT NULL)))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_member_integrity_pair_check",
+      "type": "c",
+      "table": "c3_pac_member",
+      "validated": true,
+      "definition": "CHECK ((((integrity_algorithm IS NULL) AND (integrity_value IS NULL)) OR ((integrity_algorithm IS NOT NULL) AND (integrity_value IS NOT NULL))))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_member_member_kind_check",
+      "type": "c",
+      "table": "c3_pac_member",
+      "validated": true,
+      "definition": "CHECK ((member_kind = ANY (ARRAY['asset'::text, 'record'::text, 'content'::text, 'media'::text, 'derivative'::text, 'route'::text, 'relation'::text, 'destination'::text, 'evidence'::text, 'pac'::text])))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_member_ordinal_check",
+      "type": "c",
+      "table": "c3_pac_member",
+      "validated": true,
+      "definition": "CHECK (((ordinal IS NULL) OR (ordinal > 0)))"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_member_pac_key_fkey",
+      "type": "f",
+      "table": "c3_pac_member",
+      "validated": true,
+      "definition": "FOREIGN KEY (pac_key) REFERENCES c3_pac(pac_key) ON UPDATE CASCADE ON DELETE CASCADE"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_member_pkey",
+      "type": "p",
+      "table": "c3_pac_member",
+      "validated": true,
+      "definition": "PRIMARY KEY (member_key)"
+    }
+  },
+  {
+    "kind": "constraint",
+    "value": {
+      "name": "c3_pac_member_runtime_binding_key_fkey",
+      "type": "f",
+      "table": "c3_pac_member",
+      "validated": true,
+      "definition": "FOREIGN KEY (runtime_binding_key) REFERENCES c3_pac_runtime_binding(binding_key) ON UPDATE CASCADE ON DELETE SET NULL"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "c3_profile_pac_envpac_rebind_guard",
+      "table": "c3_pac",
+      "function": "c3_guard_profile_pac_envpac_rebind",
+      "definition": "CREATE TRIGGER c3_profile_pac_envpac_rebind_guard BEFORE UPDATE OF envpac_key ON public.c3_pac FOR EACH ROW WHEN ((old.pac_type = 'ProfilePAC'::text)) EXECUTE FUNCTION c3_guard_profile_pac_envpac_rebind()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_guard_profile_pac_envpac_rebind()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\n  begin\n    if old.pac_type = 'ProfilePAC'\n       and new.envpac_key is distinct from old.envpac_key then\n      raise exception 'DNR_PROFILE_CHAIN: formed ProfilePAC cannot move between EnvPACs';\n    end if;\n    return new;\n  end;\n  $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "guard_measures_registry_registered_pac_snapshot_v1",
+      "table": "c3_pac",
+      "function": "guard_measures_registry_registered_pac_snapshot_v1",
+      "definition": "CREATE TRIGGER guard_measures_registry_registered_pac_snapshot_v1 BEFORE UPDATE ON public.c3_pac FOR EACH ROW EXECUTE FUNCTION guard_measures_registry_registered_pac_snapshot_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.guard_measures_registry_registered_pac_snapshot_v1()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$ begin if old.pac_key like 'measures_registry_home_c3webpac_v0_%' and old.is_effective is true and old.standing='active' then if new.pac_key is distinct from old.pac_key or new.pac_type is distinct from old.pac_type or new.version is distinct from old.version or new.custody_uri is distinct from old.custody_uri or new.content_sha256 is distinct from old.content_sha256 or new.custody_provider is distinct from old.custody_provider or new.custodian_subject_type is distinct from old.custodian_subject_type or new.custodian_subject_key is distinct from old.custodian_subject_key then raise exception 'DNR: registered MR PAC snapshot is immutable while active/effective; form/supersede PAC instead'; end if; end if; return new; end $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "trg_c3_hardened_pac_immutable_guard_v1",
+      "table": "c3_pac",
+      "function": "c3_hardened_pac_immutable_guard_v1",
+      "definition": "CREATE TRIGGER trg_c3_hardened_pac_immutable_guard_v1 BEFORE DELETE OR UPDATE ON public.c3_pac FOR EACH ROW EXECUTE FUNCTION c3_hardened_pac_immutable_guard_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_hardened_pac_immutable_guard_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_context text:=current_setting('c3.pac_registrar_context',true);\nbegin\n  if old.registration_protocol<>'registrar_v1' then\n    return new;\n  end if;\n\n  if nullif(v_context,'') is null then\n    raise exception 'registrar_v1 PAC is immutable; supersede through Registrar';\n  end if;\n\n  if (\n    new.pac_key is distinct from old.pac_key\n    or new.envpac_key is distinct from old.envpac_key\n    or new.pac_type is distinct from old.pac_type\n    or new.version is distinct from old.version\n    or new.standing is distinct from old.standing\n    or new.custody_uri is distinct from old.custody_uri\n    or new.content_sha256 is distinct from old.content_sha256\n    or new.source_authority is distinct from old.source_authority\n    or new.metadata is distinct from old.metadata\n    or new.schema_key is distinct from old.schema_key\n    or new.owner_subject_type is distinct from old.owner_subject_type\n    or new.owner_subject_key is distinct from old.owner_subject_key\n    or new.owner_environment_key is distinct from old.owner_environment_key\n    or new.registration_sha256 is distinct from old.registration_sha256\n    or new.boundary_evaluation_key is distinct from old.boundary_evaluation_key\n    or new.registered_at is distinct from old.registered_at\n    or new.registrar_role_call_key is distinct from old.registrar_role_call_key\n  ) then\n    raise exception 'registrar_v1 PAC registered content cannot be mutated in place';\n  end if;\n\n  return new;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "trg_c3_pac_free_completeness_guard_v1",
+      "table": "c3_pac",
+      "function": "c3_pac_free_completeness_guard_v1",
+      "definition": "CREATE CONSTRAINT TRIGGER trg_c3_pac_free_completeness_guard_v1 AFTER INSERT OR UPDATE ON public.c3_pac DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION c3_pac_free_completeness_guard_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_pac_free_completeness_guard_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_missing_scope integer;\n  v_missing_snapshot integer;\nbegin\n  if new.registration_protocol<>'registrar_v1'\n     or new.is_effective is not true\n     or new.superseded_at is not null then\n    return null;\n  end if;\n\n  select count(*) into v_missing_scope\n  from public.c3_pac_encounter_scope s\n  where s.pac_key=new.pac_key\n    and s.standing='active'\n    and (\n      s.free_call_key is null\n      or s.selector_type is null\n      or not exists(\n        select 1 from public.c3_free_call c\n        where c.free_call_key=s.free_call_key and c.standing='active'\n      )\n    );\n\n  if v_missing_scope>0 then\n    raise exception 'registrar_v1 FREE call binding required';\n  end if;\n\n  select count(*) into v_missing_snapshot\n  from public.c3_pac_encounter_scope s\n  join public.c3_free_call c on c.free_call_key=s.free_call_key and c.standing='active'\n  where s.pac_key=new.pac_key\n    and s.standing='active'\n    and c.requires_projection=true\n    and not exists(\n      select 1 from public.c3_free_pac_snapshot fs\n      where fs.pac_key=s.pac_key\n        and fs.free_call_key=s.free_call_key\n        and fs.encounter_key=s.encounter_key\n        and fs.standing='active'\n        and fs.registration_sha256=new.registration_sha256\n    );\n\n  if v_missing_snapshot>0 then\n    raise exception 'registrar_v1 FREE projection snapshot required';\n  end if;\n\n  return null;\nend\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "trg_c3_pac_registrar_supersession_guard_v1",
+      "table": "c3_pac",
+      "function": "c3_guard_registrar_pac_supersession_v1",
+      "definition": "CREATE TRIGGER trg_c3_pac_registrar_supersession_guard_v1 BEFORE INSERT ON public.c3_pac FOR EACH ROW WHEN (((new.registration_protocol = 'registrar_v1'::text) AND (new.supersedes_pac_key IS NOT NULL))) EXECUTE FUNCTION c3_guard_registrar_pac_supersession_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_guard_registrar_pac_supersession_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public', 'pg_temp'\nAS $function$\ndeclare\n  v_result jsonb;\nbegin\n  if new.registration_protocol='registrar_v1'\n     and new.supersedes_pac_key is not null then\n    v_result:=public.c3_validate_pac_supersession_v1(to_jsonb(new),true);\n\n    if coalesce(v_result->>'standing','HLD')<>'PASS' then\n      raise exception 'HLD_PAC_SUPERSESSION:%',\n        coalesce(v_result->>'reason','supersession_unresolved');\n    end if;\n  end if;\n\n  return new;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "trg_c3_pac_registrar_v1_completeness_guard",
+      "table": "c3_pac",
+      "function": "c3_pac_registrar_v1_completeness_guard",
+      "definition": "CREATE CONSTRAINT TRIGGER trg_c3_pac_registrar_v1_completeness_guard AFTER INSERT OR UPDATE OF registration_protocol, registration_sha256, boundary_evaluation_key, owner_subject_type, owner_subject_key, owner_environment_key, contract_key ON public.c3_pac DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION c3_pac_registrar_v1_completeness_guard()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_pac_registrar_v1_completeness_guard()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_eval public.c3_pac_boundary_evaluation%rowtype;\n  v_call public.c3_ci_role_call%rowtype;\nbegin\n  if new.registration_protocol<>'registrar_v1' then return null; end if;\n\n  select * into v_eval from public.c3_pac_boundary_evaluation where evaluation_key=new.boundary_evaluation_key;\n  if not found or v_eval.notchazz_result<>'PASS' or v_eval.presented_registration_sha256<>new.registration_sha256 then\n    raise exception 'registrar_v1_boundary_pass_exact_match_required';\n  end if;\n\n  if not exists(\n    select 1 from public.c3_pac_schema\n    where schema_key=new.schema_key and pac_type=new.pac_type and standing='active' and is_active=true\n  ) then\n    raise exception 'registrar_v1_active_schema_required';\n  end if;\n\n  if coalesce((select requires_c3_model_binding from public.c3_pac_schema where schema_key=new.schema_key),true)\n     and not exists(select 1 from public.c3_pac_model_binding b where b.pac_key=new.pac_key and b.standing='active') then\n    raise exception 'registrar_v1_model_binding_required';\n  end if;\n\n  if not exists(select 1 from public.c3_pac_encounter_scope s where s.pac_key=new.pac_key and s.standing='active') then\n    raise exception 'registrar_v1_encounter_scope_required';\n  end if;\n\n  select * into v_call\n  from public.c3_ci_role_call\n  where role_call_key=new.registrar_role_call_key;\n\n  if not found\n     or v_call.call_class<>'pac_registration'\n     or v_call.caller_role_key<>'c3_notchazz_boundary_v1'\n     or v_call.callee_role_key<>'c3_registrar_ci_v1'\n     or v_call.standing<>'RETURNED'\n     or v_call.boundary_evaluation_key<>new.boundary_evaluation_key\n     or v_call.presented_sha256<>new.registration_sha256 then\n    raise exception 'registrar_v1_role_call_required';\n  end if;\n\n  if not exists(\n    select 1 from public.c3_pac_registration_receipt r\n    where r.pac_key=new.pac_key\n      and r.registration_sha256=new.registration_sha256\n      and r.registrar_role_call_key=new.registrar_role_call_key\n      and r.standing='registered'\n  ) then\n    raise exception 'registrar_v1_registration_receipt_required';\n  end if;\n\n  if new.owner_subject_type='institution'\n     and coalesce((public.resolve_institutional_pac_eligibility_v1(new.owner_subject_key,new.owner_environment_key)->>'standing'),'HLD')<>'PASS' then\n    raise exception 'HLD_INSTITUTIONAL_SEAT_REQUIRED';\n  end if;\n  return null;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "trg_c3_pac_relation_hardened_guard",
+      "table": "c3_pac_relation",
+      "function": "c3_hardened_pac_child_guard_v1",
+      "definition": "CREATE TRIGGER trg_c3_pac_relation_hardened_guard BEFORE INSERT OR DELETE OR UPDATE ON public.c3_pac_relation FOR EACH ROW EXECUTE FUNCTION c3_hardened_pac_child_guard_v1('source_pac_key')",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_hardened_pac_child_guard_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_parent_column text := nullif(TG_ARGV[0],'');\n  v_old_pac_key text;\n  v_new_pac_key text;\n  v_old_protocol text;\n  v_new_protocol text;\n  v_context text := current_setting('c3.pac_registrar_context',true);\nbegin\n  if v_parent_column is null then\n    raise exception 'hardened PAC child guard parent key argument is required';\n  end if;\n\n  if TG_OP in ('UPDATE','DELETE') then\n    v_old_pac_key := nullif(to_jsonb(OLD)->>v_parent_column,'');\n    if v_old_pac_key is null then\n      raise exception 'hardened PAC child guard old parent unresolved for table % column %',\n        TG_TABLE_NAME, v_parent_column;\n    end if;\n\n    select registration_protocol\n      into v_old_protocol\n    from public.c3_pac\n    where pac_key=v_old_pac_key;\n  end if;\n\n  if TG_OP in ('INSERT','UPDATE') then\n    v_new_pac_key := nullif(to_jsonb(NEW)->>v_parent_column,'');\n    if v_new_pac_key is null then\n      raise exception 'hardened PAC child guard new parent unresolved for table % column %',\n        TG_TABLE_NAME, v_parent_column;\n    end if;\n\n    select registration_protocol\n      into v_new_protocol\n    from public.c3_pac\n    where pac_key=v_new_pac_key;\n  end if;\n\n  if nullif(v_context,'') is null\n     and (v_old_protocol='registrar_v1' or v_new_protocol='registrar_v1') then\n    raise exception 'registrar_v1 PAC child state is immutable; supersede through Registrar';\n  end if;\n\n  if TG_OP='DELETE' then\n    return OLD;\n  end if;\n  return NEW;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "c3_pac_member_set_updated_at",
+      "table": "c3_pac_member",
+      "function": "set_updated_at",
+      "definition": "CREATE TRIGGER c3_pac_member_set_updated_at BEFORE UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION set_updated_at()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.set_updated_at()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$\r\nbegin\r\n  new.updated_at = now();\r\n  return new;\r\nend;\r\n$function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "guard_measures_registry_registered_pac_member_v1",
+      "table": "c3_pac_member",
+      "function": "guard_measures_registry_registered_pac_member_v1",
+      "definition": "CREATE TRIGGER guard_measures_registry_registered_pac_member_v1 BEFORE DELETE OR UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION guard_measures_registry_registered_pac_member_v1()",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.guard_measures_registry_registered_pac_member_v1()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$ declare v_pac_key text:=coalesce(new.pac_key,old.pac_key); v_effective boolean; v_standing text; begin if v_pac_key not like 'measures_registry_home_c3webpac_v0_%' then return coalesce(new,old); end if; select is_effective,standing into v_effective,v_standing from public.c3_pac where pac_key=v_pac_key; if coalesce(v_effective,false) and v_standing='active' then if tg_op='DELETE' then raise exception 'DNR: required registered MR PAC member cannot be removed while PAC is active/effective'; end if; if old.required is true and old.standing='registered' and (new.pac_key is distinct from old.pac_key or new.member_kind is distinct from old.member_kind or new.member_role is distinct from old.member_role or new.source_object_key is distinct from old.source_object_key or new.custody_provider is distinct from old.custody_provider or new.custody_identifier is distinct from old.custody_identifier or new.custody_location is distinct from old.custody_location or new.runtime_binding_key is distinct from old.runtime_binding_key or new.required is distinct from old.required or new.release_scope is distinct from old.release_scope or new.standing is distinct from old.standing) then raise exception 'DNR: registered MR PAC member declaration is immutable while PAC is active/effective; form/supersede PAC instead'; end if; end if; return coalesce(new,old); end $function$\n"
+    }
+  },
+  {
+    "kind": "trigger",
+    "value": {
+      "name": "trg_c3_pac_member_hardened_guard",
+      "table": "c3_pac_member",
+      "function": "c3_hardened_pac_child_guard_v1",
+      "definition": "CREATE TRIGGER trg_c3_pac_member_hardened_guard BEFORE INSERT OR DELETE OR UPDATE ON public.c3_pac_member FOR EACH ROW EXECUTE FUNCTION c3_hardened_pac_child_guard_v1('pac_key')",
+      "function_definition": "CREATE OR REPLACE FUNCTION public.c3_hardened_pac_child_guard_v1()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'public'\nAS $function$\ndeclare\n  v_parent_column text := nullif(TG_ARGV[0],'');\n  v_old_pac_key text;\n  v_new_pac_key text;\n  v_old_protocol text;\n  v_new_protocol text;\n  v_context text := current_setting('c3.pac_registrar_context',true);\nbegin\n  if v_parent_column is null then\n    raise exception 'hardened PAC child guard parent key argument is required';\n  end if;\n\n  if TG_OP in ('UPDATE','DELETE') then\n    v_old_pac_key := nullif(to_jsonb(OLD)->>v_parent_column,'');\n    if v_old_pac_key is null then\n      raise exception 'hardened PAC child guard old parent unresolved for table % column %',\n        TG_TABLE_NAME, v_parent_column;\n    end if;\n\n    select registration_protocol\n      into v_old_protocol\n    from public.c3_pac\n    where pac_key=v_old_pac_key;\n  end if;\n\n  if TG_OP in ('INSERT','UPDATE') then\n    v_new_pac_key := nullif(to_jsonb(NEW)->>v_parent_column,'');\n    if v_new_pac_key is null then\n      raise exception 'hardened PAC child guard new parent unresolved for table % column %',\n        TG_TABLE_NAME, v_parent_column;\n    end if;\n\n    select registration_protocol\n      into v_new_protocol\n    from public.c3_pac\n    where pac_key=v_new_pac_key;\n  end if;\n\n  if nullif(v_context,'') is null\n     and (v_old_protocol='registrar_v1' or v_new_protocol='registrar_v1') then\n    raise exception 'registrar_v1 PAC child state is immutable; supersede through Registrar';\n  end if;\n\n  if TG_OP='DELETE' then\n    return OLD;\n  end if;\n  return NEW;\nend $function$\n"
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "pac_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "envpac_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "pac_type",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "version",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "standing",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "custody_uri",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "content_sha256",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "source_authority",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "is_effective",
+      "type": "boolean",
+      "table": "c3_pac",
+      "default": "true",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "metadata",
+      "type": "jsonb",
+      "table": "c3_pac",
+      "default": "'{}'::jsonb",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "c3_pac",
+      "default": "now()",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "c3_pac",
+      "default": "now()",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "contract_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "architecture_version",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "custodian_subject_type",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "custodian_subject_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "custody_provider",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "authority_effect",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "release_state",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "execution_authority_state",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "formation_state",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "effective_at",
+      "type": "timestamp with time zone",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "supersedes_pac_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "superseded_at",
+      "type": "timestamp with time zone",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "return_evidence_required",
+      "type": "boolean",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "owner_subject_type",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "owner_subject_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "owner_environment_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "registration_protocol",
+      "type": "text",
+      "table": "c3_pac",
+      "default": "'legacy_pre_hardening'::text",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "registration_sha256",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "boundary_evaluation_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "registered_at",
+      "type": "timestamp with time zone",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "registrar_role_call_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "schema_key",
+      "type": "text",
+      "table": "c3_pac",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "relation_key",
+      "type": "text",
+      "table": "c3_pac_relation",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "source_pac_key",
+      "type": "text",
+      "table": "c3_pac_relation",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "relation_type",
+      "type": "text",
+      "table": "c3_pac_relation",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "target_kind",
+      "type": "text",
+      "table": "c3_pac_relation",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "target_key",
+      "type": "text",
+      "table": "c3_pac_relation",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "standing",
+      "type": "text",
+      "table": "c3_pac_relation",
+      "default": "'active'::text",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "metadata",
+      "type": "jsonb",
+      "table": "c3_pac_relation",
+      "default": "'{}'::jsonb",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "c3_pac_relation",
+      "default": "now()",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "member_key",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "pac_key",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "member_kind",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "member_role",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "source_object_key",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "custody_provider",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "custody_identifier",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "custody_location",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "runtime_uri",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "runtime_binding_key",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "integrity_algorithm",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "integrity_value",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "version",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "standing",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": "'active'::text",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "required",
+      "type": "boolean",
+      "table": "c3_pac_member",
+      "default": "false",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "release_scope",
+      "type": "text",
+      "table": "c3_pac_member",
+      "default": "'registered'::text",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "ordinal",
+      "type": "integer",
+      "table": "c3_pac_member",
+      "default": null,
+      "not_null": false
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "metadata",
+      "type": "jsonb",
+      "table": "c3_pac_member",
+      "default": "'{}'::jsonb",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "table": "c3_pac_member",
+      "default": "now()",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "column",
+    "value": {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "table": "c3_pac_member",
+      "default": "now()",
+      "not_null": true
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_envpac_key text, p_subject_type text, p_subject_key text, p_display_label text, p_visibility_scope text",
+      "name": "update_profile_pac_v1_internal"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_envpac_key text, p_subject_type text, p_subject_key text, p_fields jsonb",
+      "name": "update_profile_pac_personalization_internal"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_pac_key text, p_subject_key text",
+      "name": "c3_pac_approve_public_encounter_v1"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_pac_key text, p_subject_key text",
+      "name": "c3_register_public_pac_encounter_v1"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_pac_key text, p_subject_key text, p_action text, p_encounter_key text",
+      "name": "c3_pac_set_personal_encounter_projection_v1"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_pac_key text, p_subject_key text, p_action text, p_encounter_key text, p_surface_scope text",
+      "name": "c3_pac_set_personal_encounter_projection_v1"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_pac_key text, p_subject_key text, p_disposition text, p_candidate_hash text",
+      "name": "c3_pac_set_personal_review_v1"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_pac_key text, p_subject_key text, p_disposition text, p_note text",
+      "name": "c3_pac_set_personal_disposition_v1"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_request jsonb",
+      "name": "resolve_my_env_owner_portability_v1"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_presented_pac jsonb, p_boundary_evaluation_key text, p_registrar_role_call_key text, p_source_oar2_ref text",
+      "name": "registrar_register_pac_v1_core"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_relationship_key text, p_env_key text",
+      "name": "form_c1_owner_environment"
+    }
+  },
+  {
+    "kind": "writer",
+    "value": {
+      "args": "p_envpac_key text, p_subject_type text, p_subject_key text, p_profile_class text, p_display_label text, p_visibility_scope text",
+      "name": "form_profile_pac_v1_internal"
+    }
+  }
+]

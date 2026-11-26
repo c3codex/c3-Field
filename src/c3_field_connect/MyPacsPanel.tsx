@@ -54,6 +54,7 @@ type Props={
     owner_changeable:boolean
   }|null
   presentationAsset:string
+  presentationNotice?:string
   onPresentationAssetChange:(value:string)=>void
   onSavePresentation:(event:FormEvent)=>void
 }
@@ -144,7 +145,7 @@ function ReviewPreview({pac}:{pac:PersonalPac}){
 
 export default function MyPacsPanel({
   initialProfile,profileContract,profileLoaded,profileHeld,onProfileSaved,
-  presentation,presentationAsset,onPresentationAssetChange,onSavePresentation
+  presentation,presentationAsset,presentationNotice,onPresentationAssetChange,onSavePresentation
 }:Props){
   const [pacs,setPacs]=useState<PersonalPac[]>([])
   const [loaded,setLoaded]=useState(false)
@@ -353,6 +354,7 @@ export default function MyPacsPanel({
         <p>ProfilePAC is part of your personal PAC custody. It remains subject-owned and owner-editable; it does not create standing, authority, membership, or initiative relations.</p>
       </div>
       {presentation&&<form className="myenv-thread-compose" onSubmit={onSavePresentation}>
+        {presentationNotice&&<p role="status">{presentationNotice}</p>}
         <label>Environment presentation</label>
         <input
           aria-label="Opening visual asset key"

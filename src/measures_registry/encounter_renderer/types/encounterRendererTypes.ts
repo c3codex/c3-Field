@@ -79,6 +79,7 @@ export type EncounterSurfaceAssignmentRow = {
 }
 
 export type EncounterIssuePageRow = {
+  issue_number?: string | null
   page_key: string
   publication_key: string
   issue_id: string

@@ -1,0 +1,51 @@
+{
+  "scope": "executor qualification; independent behavioral acceptance not asserted",
+  "retained_scoped_checks": 52,
+  "revised_integrity": 33,
+  "native_writer_compatibility": 11,
+  "profile_compatibility": 18,
+  "actual_native_nug": 29,
+  "results": [
+    {
+      "label": "retained-qualify-integrity",
+      "status": "PASS"
+    },
+    {
+      "label": "retained-qualify-profile-session",
+      "status": "PASS"
+    },
+    {
+      "label": "retained-qualify-current-free",
+      "status": "PASS"
+    },
+    {
+      "label": "retained-api-tests",
+      "status": "PASS"
+    },
+    {
+      "label": "qualify-integrity",
+      "status": "PASS"
+    },
+    {
+      "label": "qualify-native-writers",
+      "status": "PASS"
+    },
+    {
+      "label": "qualify-profile-compatibility",
+      "status": "PASS"
+    },
+    {
+      "label": "qualify-native-nug",
+      "status": "PASS"
+    },
+    {
+      "label": "presentation-regression",
+      "status": "DNR",
+      "reason": "missing historical ../evidence/registry-rows.json; 8 other checks pass; see exact log"
+    },
+    {
+      "label": "typecheck",
+      "status": "PASS"
+    }
+  ]
+}

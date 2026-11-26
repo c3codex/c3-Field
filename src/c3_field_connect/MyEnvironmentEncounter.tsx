@@ -210,6 +210,7 @@ export default function MyEnvironmentEncounter(){
   const [canopyNotice,setCanopyNotice]=useState("")
 
   const [profilePresentationAsset,setProfilePresentationAsset]=useState("")
+  const [profileNotice,setProfileNotice]=useState("")
 
   const [inviteMessage,setInviteMessage]=useState("")
   const [inviteInitiative,setInviteInitiative]=useState("")
@@ -1118,6 +1119,7 @@ export default function MyEnvironmentEncounter(){
           owner_changeable:data.presentation.owner_changeable
         }:null}
         presentationAsset={profilePresentationAsset}
+        presentationNotice={profileNotice}
         onPresentationAssetChange={setProfilePresentationAsset}
         onSavePresentation={savePresentation}
       />
